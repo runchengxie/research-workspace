@@ -7,7 +7,7 @@
 截至 2026-05-26，工作区正式纳入以下链路：
 
 ```text
-数据资产维护 / 盘口加工 -> 共享数据契约 -> 策略研究与回测 -> 持仓及执行前分配结果
+数据资产维护 / 盘口加工 -> 共享数据契约 -> 策略研究与回测 -> 持仓及 canonical targets 导出
 ```
 
 券商执行是下一段可选链路：
@@ -16,7 +16,7 @@
 持仓 / 分配结果 -> 目标持仓交接契约 -> 执行 preflight / paper 验证 -> 显式 live 门禁 -> 券商执行
 ```
 
-当前后半段尚未在本工作区内形成可运行的跨仓库集成，因此 `quant-execution-engine` 被记录为可选下游，而不是本仓库锁定的 submodule。
+当前 `cross-sectional-trees` 已实现 canonical `targets.json` 与 lineage sidecar 的显式导出入口；执行引擎仍被记录为可选下游，而不是本仓库锁定的 submodule，因为 paper / live 操作验证与运行门禁仍属于独立执行系统的职责。
 
 ## 模块分工
 
@@ -24,7 +24,7 @@
 | --- | --- | --- | --- |
 | 数据控制面 | `market-data-platform` | 定义共享路径、asset keys、current contract、dataset registry、health 和发布规范 | `<artifacts_root>/metadata/current_assets/<market>_current.json`、manifest |
 | 盘口资产加工 | `rqdata-hk-depth-snapshots` | 下载、检查、聚合和发布港股十档盘口资产 | `tick_depth_raw`、`tick_depth_daily`，未来 `execution_cost_model` |
-| 策略研究 | `cross-sectional-trees` | 消费发布数据，完成特征、模型、评估、回测和持仓分配 | `summary.json`、`positions_current*.csv`、snapshot / alloc |
+| 策略研究 | `cross-sectional-trees` | 消费发布数据，完成特征、模型、评估、回测、持仓分配和显式执行目标交接 | `summary.json`、`positions_current*.csv`、snapshot / alloc、canonical `targets.json` 与 lineage |
 | 交易执行（可选） | `quant-execution-engine` | 消费目标持仓，连接券商执行调仓、对账和异常恢复 | 标准化 `targets.json` 输入、订单审计输出 |
 
 ## 正式研究链路
@@ -53,6 +53,7 @@
 - 特征工程、训练与评估；
 - 历史回测、benchmark 对比和研究证据管理；
 - 当前持仓、snapshot 和执行前资金 / 手数分配输出。
+- 使用 `cstree export-targets` 将已保存且通过门禁的 long-only live 持仓导出成执行引擎输入文件，并保留 lineage sidecar。
 
 ### 3. 锁定可复现组合
 
@@ -60,22 +61,24 @@
 
 ## 可选执行链路
 
-### 当前不直接接入的原因
+### 当前接入程度
 
-研究侧当前正式交付为 `positions_current*.csv` 与 `alloc-hk` 等结果；执行引擎公开接收的是标准化 `targets.json`。两者在顶层工作区中尚无已验证的转换器、schema 版本和跨仓库 paper 验证记录。
+研究侧目前可通过 `cstree export-targets` 将 `positions_current*.csv` / live holdings 交接成执行引擎接受的标准化 `targets.json`。导出器会拒绝 short 持仓、非法权重和隐式杠杆，并将 run、输入文件、时间口径和质量门禁信息保存到独立 sidecar。
+
+尚未纳入本工作区的是：把执行引擎作为固定 submodule、针对 paper broker 的持续联调证据，以及任何 live 下单自动化。
 
 因此当前约束是：
 
-- README 可以展示执行引擎在完整平台中的位置。
-- 研究结果不得被顶层脚本默认转换并触发真实券商执行。
+- README 可以展示执行引擎在完整平台中的位置，且研究侧可以显式生成 canonical 交接文件。
+- `export-targets` 只导出文件；研究结果不得被顶层脚本默认提交给真实券商执行。
 - 执行引擎暂不加入 pinned submodule 组合，避免将未完成的集成误表示为已支持流程。
 
 ### 纳入执行引擎前的验收门槛
 
 | 门槛 | 需要形成的交付 |
 | --- | --- |
-| 目标持仓契约 | 版本化 schema，定义日期、来源、市场、symbol、目标权重、gross exposure 和校验规则 |
-| 导出能力 | 研究侧显式导出执行引擎输入文件，并保留 run / config / 数据资产 lineage |
+| 目标持仓契约 | 已落地：研究侧输出 `quant-execution-engine.targets/v2` canonical `targets.json` |
+| 导出能力 | 已落地：`cstree export-targets` 输出目标文件及 run / config / 数据资产 lineage sidecar |
 | 输入验证 | 执行侧能够在提交订单前验证 schema、symbol、市场、资金和风险约束 |
 | 联调证据 | 至少具备 dry-run 与 paper broker 的端到端验证记录 |
 | 实盘门禁 | live 下单仍要求执行引擎独立的显式启用、preflight 和人工监督流程 |
