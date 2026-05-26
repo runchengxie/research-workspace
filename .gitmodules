@@ -1,9 +1,9 @@
 [submodule "cross-sectional-trees"]
 	path = cross-sectional-trees
-	url = git@github.com:runchengxie/cross-sectional-trees.git
+	url = https://github.com/runchengxie/cross-sectional-trees.git
 [submodule "market-data-platform"]
 	path = market-data-platform
-	url = git@github.com:runchengxie/hk-data-platform.git
+	url = https://github.com/runchengxie/hk-data-platform.git
 [submodule "rqdata-hk-depth-snapshots"]
 	path = rqdata-hk-depth-snapshots
-	url = git@github.com:runchengxie/rqdata-hk-depth-snapshots.git
+	url = https://github.com/runchengxie/rqdata-hk-depth-snapshots.git
