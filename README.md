@@ -10,8 +10,8 @@
 市场数据 / 基本面                    港股盘口快照
        |                                  |
        v                                  v
-market-data-platform  <------  rqdata-hk-depth-snapshots
-数据控制面、发布契约              下载、检查、聚合、交付
+market-data-platform  ------>  rqdata-hk-depth-snapshots (transition backend)
+数据契约、CN provider、统一入口    HK depth 现存实现
        |
        v
 已发布资产 / current contract
@@ -30,9 +30,9 @@ quant-execution-engine（可选下游，已纳入 submodule）
 
 | 项目 | 当前职责 | 主要交付 |
 | --- | --- | --- |
-| [`market-data-platform`](market-data-platform/) | HK / CN 市场数据控制面，定义共享路径、current contract、dataset registry 和健康检查 / 发布规范 | 版本化数据契约与资产索引 |
-| [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | RQData 港股十档盘口快照下载、质量检查、日频聚合、对账和交付打包 | `tick_depth_raw`、`tick_depth_daily` 及未来成本模型输入 |
-| [`cross-sectional-trees`](cross-sectional-trees/) | 截面策略研究、特征工程、模型评估、历史回测、候选治理、持仓与执行前分配分析，以及显式执行目标导出 | `summary.json`、`positions_current*.csv`、snapshot / alloc 输出、canonical `targets.json` |
+| [`market-data-platform`](market-data-platform/) | HK / CN 数据平台入口；定义 contract / registry，原生承载 CN provider MVP，并调度过渡中的 HK 数据工具 | `marketdata ...`、版本化数据契约与资产索引 |
+| [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | 迁移期间保留的 HK depth backend，通过 `marketdata rqdata hk-depth -- ...` 调用 | `tick_depth_raw`、`tick_depth_daily` 及未来成本模型输入 |
+| [`cross-sectional-trees`](cross-sectional-trees/) | 策略研究与目标导出；迁移期间仍提供 HK RQData asset backend，通过 `marketdata rqdata hk-assets -- ...` 调用 | 研究输出，以及待迁移的数据维护实现 |
 | [`quant-execution-engine`](quant-execution-engine/) | 可选的券商连接执行系统，读取目标持仓后执行下单、追踪、对账和异常恢复 | 执行审计、订单状态和复查证据 |
 
 `quant-execution-engine` 现在作为可选 submodule 固定在工作区中，以便复现 `cross-sectional-trees` 的 `cstree export-targets` 到引擎 canonical `targets.json` 输入的交接。当前已验证导出文件可被引擎解析并生成离线调仓计划；港股计划要求显式配置 HKD 到 USD 汇率，券商侧的 paper / live 操作仍由执行系统独立门禁控制。

@@ -22,8 +22,8 @@
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
-| 数据控制面 | `market-data-platform` | 定义共享路径、asset keys、current contract、dataset registry、health 和发布规范 | `<artifacts_root>/metadata/current_assets/<market>_current.json`、manifest |
-| 盘口资产加工 | `rqdata-hk-depth-snapshots` | 下载、检查、聚合和发布港股十档盘口资产 | `tick_depth_raw`、`tick_depth_daily`，未来 `execution_cost_model` |
+| 数据平台入口 | `market-data-platform` | 定义共享路径、contract、registry，原生维护 CN TuShare / RQData MVP，并统一调度迁移中的 HK 数据工具 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...`、current contract |
+| 盘口迁移 backend | `rqdata-hk-depth-snapshots` | 在物理迁移完成前承载港股十档盘口的下载、检查、聚合和发布实现 | 由 `marketdata rqdata hk-depth -- ...` 调用 |
 | 策略研究 | `cross-sectional-trees` | 消费发布数据，完成特征、模型、评估、回测、持仓分配和显式执行目标交接 | `summary.json`、`positions_current*.csv`、snapshot / alloc、canonical `targets.json` 与 lineage |
 | 交易执行（可选） | `quant-execution-engine` | 消费目标持仓，连接券商执行调仓、对账和异常恢复 | 标准化 `targets.json` 输入、订单审计输出 |
 
@@ -44,7 +44,11 @@
   reports/
 ```
 
-目前 `market-data-platform` 提供控制面规范；部分日线 / PIT 等维护实现仍在 `cross-sectional-trees` 中按迁移计划过渡，盘口 raw / daily 聚合由 `rqdata-hk-depth-snapshots` 负责。
+目前 `market-data-platform` 已提供 CN provider 实现和统一数据维护入口；部分 HK
+日线 / PIT 等维护实现仍在 `cross-sectional-trees` 中作为
+`marketdata rqdata hk-assets -- ...` 的 transition backend，盘口 raw / daily
+聚合实现仍由 `rqdata-hk-depth-snapshots` 作为
+`marketdata rqdata hk-depth -- ...` 的 transition backend 承载。
 
 ### 2. 消费数据并完成研究
 
