@@ -7,3 +7,6 @@
 [submodule "rqdata-hk-depth-snapshots"]
 	path = rqdata-hk-depth-snapshots
 	url = https://github.com/runchengxie/rqdata-hk-depth-snapshots.git
+[submodule "quant-execution-engine"]
+	path = quant-execution-engine
+	url = https://github.com/runchengxie/quant-execution-engine.git

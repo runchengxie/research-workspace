@@ -2,7 +2,7 @@
 
 这是一个面向量化研发流程的可复现工作区，覆盖市场数据资产管理、盘口数据加工、策略研究与回测，以及执行前的持仓和分配结果输出。
 
-当前仓库正式纳入的是数据、研究与目标持仓导出链路。连接券商的交易执行系统作为可选下游存在；在 paper / dry-run 联调与运维门禁验证完成前，不将其锁定为本工作区的必选组成部分。
+当前仓库正式纳入的是数据、研究、目标持仓导出链路，以及作为可选执行下游固定版本的 `quant-execution-engine`。将执行引擎纳入 superproject 用于复现交接契约和联调基线，不表示 paper 或 live 已默认启用；券商连接仍需执行系统独立门禁。
 
 ## 平台能力
 
@@ -22,7 +22,7 @@ cross-sectional-trees
        |
        | canonical targets.json + lineage
        v
-quant-execution-engine（可选下游，未纳入 submodule）
+quant-execution-engine（可选下游，已纳入 submodule）
 券商下单、订单跟踪、对账、异常恢复
 ```
 
@@ -33,9 +33,9 @@ quant-execution-engine（可选下游，未纳入 submodule）
 | [`market-data-platform`](market-data-platform/) | HK / CN 市场数据控制面，定义共享路径、current contract、dataset registry 和健康检查 / 发布规范 | 版本化数据契约与资产索引 |
 | [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | RQData 港股十档盘口快照下载、质量检查、日频聚合、对账和交付打包 | `tick_depth_raw`、`tick_depth_daily` 及未来成本模型输入 |
 | [`cross-sectional-trees`](cross-sectional-trees/) | 截面策略研究、特征工程、模型评估、历史回测、候选治理、持仓与执行前分配分析，以及显式执行目标导出 | `summary.json`、`positions_current*.csv`、snapshot / alloc 输出、canonical `targets.json` |
-| [`quant-execution-engine`](https://github.com/runchengxie/quant-execution-engine) | 可选的券商连接执行系统，读取目标持仓后执行下单、追踪、对账和异常恢复 | 执行审计、订单状态和复查证据 |
+| [`quant-execution-engine`](quant-execution-engine/) | 可选的券商连接执行系统，读取目标持仓后执行下单、追踪、对账和异常恢复 | 执行审计、订单状态和复查证据 |
 
-`quant-execution-engine` 目前只作为平台链路的可选下游列出，不是本仓库的 submodule。`cross-sectional-trees` 已提供 `cstree export-targets`，用于将已保存的 long-only live 持仓导出为执行引擎的 canonical `targets.json`，并另写 lineage sidecar；券商侧的 paper / live 操作仍由执行系统独立门禁控制。
+`quant-execution-engine` 现在作为可选 submodule 固定在工作区中，以便复现 `cross-sectional-trees` 的 `cstree export-targets` 到引擎 canonical `targets.json` 输入的交接。当前已验证导出文件可被引擎解析并生成离线调仓计划；港股计划要求显式配置 HKD 到 USD 汇率，券商侧的 paper / live 操作仍由执行系统独立门禁控制。
 
 ## 典型路径
 
@@ -44,7 +44,7 @@ quant-execution-engine（可选下游，未纳入 submodule）
 3. 生成持仓快照与执行前分配结果，并显式运行 `cstree export-targets` 生成可审计的执行交接文件。
 4. 如需连接真实或模拟券商，将该目标文件交给可选执行引擎的预演 / paper 流程，并保留其独立门禁。
 
-模块执行顺序、数据契约边界、执行引擎纳入条件和未来调度原则见 [平台工作流与集成边界](docs/platform-workflow.md)。
+模块执行顺序、数据契约边界、执行验证状态和未来调度原则见 [平台工作流与集成边界](docs/platform-workflow.md)。
 
 ## 仓库组织方式
 

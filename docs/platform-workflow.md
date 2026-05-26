@@ -1,13 +1,13 @@
 # 平台工作流与集成边界
 
-本页描述 `research-workspace` 中各模块如何组成数据到研究的正式链路，以及可选交易执行系统在什么条件下可以接入。顶层仓库负责表达能力地图和锁定已确认的版本组合，不承担各模块内部业务逻辑。
+本页描述 `research-workspace` 中各模块如何组成数据到研究与执行交接链路，以及可选交易执行系统的验证边界。顶层仓库负责表达能力地图和锁定已确认的版本组合，不承担各模块内部业务逻辑。
 
 ## 当前边界
 
-截至 2026-05-26，工作区正式纳入以下链路：
+截至 2026-05-26，工作区正式锁定以下研究到执行交接链路：
 
 ```text
-数据资产维护 / 盘口加工 -> 共享数据契约 -> 策略研究与回测 -> 持仓及 canonical targets 导出
+数据资产维护 / 盘口加工 -> 共享数据契约 -> 策略研究与回测 -> canonical targets 导出 -> 可选执行引擎契约 / 离线计划验证
 ```
 
 券商执行是下一段可选链路：
@@ -16,7 +16,7 @@
 持仓 / 分配结果 -> 目标持仓交接契约 -> 执行 preflight / paper 验证 -> 显式 live 门禁 -> 券商执行
 ```
 
-当前 `cross-sectional-trees` 已实现 canonical `targets.json` 与 lineage sidecar 的显式导出入口；执行引擎仍被记录为可选下游，而不是本仓库锁定的 submodule，因为 paper / live 操作验证与运行门禁仍属于独立执行系统的职责。
+当前 `cross-sectional-trees` 已实现 canonical `targets.json` 与 lineage sidecar 的显式导出入口；`quant-execution-engine` 已作为可选 submodule 固定版本，用于复现契约交接和离线计划验证。paper / live 操作验证与运行门禁仍属于独立执行系统的职责。
 
 ## 模块分工
 
@@ -57,7 +57,7 @@
 
 ### 3. 锁定可复现组合
 
-当某组数据契约、盘口工具和策略版本已经共同验证后，顶层仓库通过 submodule commit 指针锁定这组组合。数据本体仍保存在发布目录、归档介质或 release asset 中，不写入顶层 Git 历史。
+当某组数据契约、盘口工具、策略版本和可选执行接口已经共同验证后，顶层仓库通过 submodule commit 指针锁定这组组合。数据本体仍保存在发布目录、归档介质或 release asset 中，不写入顶层 Git 历史。
 
 ## 可选执行链路
 
@@ -65,25 +65,27 @@
 
 研究侧目前可通过 `cstree export-targets` 将 `positions_current*.csv` / live holdings 交接成执行引擎接受的标准化 `targets.json`。导出器会拒绝 short 持仓、非法权重和隐式杠杆，并将 run、输入文件、时间口径和质量门禁信息保存到独立 sidecar。
 
-尚未纳入本工作区的是：把执行引擎作为固定 submodule、针对 paper broker 的持续联调证据，以及任何 live 下单自动化。
+执行引擎已作为固定 submodule 纳入工作区。当前已使用真实研究导出产物验证引擎 canonical parser 和离线调仓计划路径，包括目标列表以外持仓的清仓处理；引擎对港股等非 USD 报价要求先配置 FX 并换算至 USD 估值，避免混币种计算。
+
+尚未完成的是：使用实际 paper broker 凭证形成的端到端持续联调证据，以及任何 live 下单自动化。
 
 因此当前约束是：
 
-- README 可以展示执行引擎在完整平台中的位置，且研究侧可以显式生成 canonical 交接文件。
+- README 和 submodule 指针可以表达已验证的研究到执行交接版本组合。
 - `export-targets` 只导出文件；研究结果不得被顶层脚本默认提交给真实券商执行。
-- 执行引擎暂不加入 pinned submodule 组合，避免将未完成的集成误表示为已支持流程。
+- 执行引擎作为可选下游接入，不等同于 paper 或 live 下单路径已经放行。
 
-### 纳入执行引擎前的验收门槛
+### 执行放行门槛
 
 | 门槛 | 需要形成的交付 |
 | --- | --- |
 | 目标持仓契约 | 已落地：研究侧输出 `quant-execution-engine.targets/v2` canonical `targets.json` |
 | 导出能力 | 已落地：`cstree export-targets` 输出目标文件及 run / config / 数据资产 lineage sidecar |
-| 输入验证 | 执行侧能够在提交订单前验证 schema、symbol、市场、资金和风险约束 |
-| 联调证据 | 至少具备 dry-run 与 paper broker 的端到端验证记录 |
+| 输入验证 | 已落地：执行侧接受真实导出文件，港股 symbol 可生成计划，非 USD 报价在缺少 FX 时拒绝调仓 |
+| 联调证据 | 部分落地：已具备 parser 与离线计划验证；仍需 paper broker 的端到端验证记录 |
 | 实盘门禁 | live 下单仍要求执行引擎独立的显式启用、preflight 和人工监督流程 |
 
-满足这些条件后，可以重新评估将 `quant-execution-engine` 纳入顶层 submodule，使工作区表达从“数据与研究复现”扩展为“研究到执行交接复现”。
+当前 submodule 接入使工作区能够复现“研究到执行交接”；在 paper 证据和实盘门禁完成前，不应将其表述为已可自动执行交易。
 
 ## 调度原则
 
@@ -104,4 +106,4 @@
 | 策略研究主流程 | [`cross-sectional-trees/docs/pipeline-overview.md`](../cross-sectional-trees/docs/pipeline-overview.md) |
 | 共享 HK 数据边界 | [`cross-sectional-trees/docs/concepts/shared-hk-data-platform.md`](../cross-sectional-trees/docs/concepts/shared-hk-data-platform.md) |
 | 盘口资产处理工作流 | [`rqdata-hk-depth-snapshots/docs/workflow.md`](../rqdata-hk-depth-snapshots/docs/workflow.md) |
-| 可选交易执行系统 | [`quant-execution-engine`](https://github.com/runchengxie/quant-execution-engine) |
+| 可选交易执行系统 | [`quant-execution-engine`](../quant-execution-engine/README.md) |
