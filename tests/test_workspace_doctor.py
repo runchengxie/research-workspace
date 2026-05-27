@@ -25,7 +25,6 @@ class WorkspaceDoctorTest(unittest.TestCase):
             {
                 "cross-sectional-trees": "cross-sectional-trees",
                 "market-data-platform": "market-data-platform",
-                "rqdata-hk-depth-snapshots": "rqdata-hk-depth-snapshots",
                 "quant-execution-engine": "quant-execution-engine",
             },
             submodules,

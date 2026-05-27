@@ -1,6 +1,6 @@
 # 新机器初始化
 
-本页说明如何在新机器上拉起 `research-workspace`，并检查四个子项目是否处在顶层仓库记录的版本。各子项目的完整依赖、凭证和业务命令仍以各自 README 和 docs 为准。
+本页说明如何在新机器上拉起 `research-workspace`，并检查三个子项目是否处在顶层仓库记录的版本。各子项目的完整依赖、凭证和业务命令仍以各自 README 和 docs 为准。
 
 ## 克隆仓库
 
@@ -40,19 +40,16 @@ uv sync --extra dev
 cd ../cross-sectional-trees
 uv sync --extra dev --extra rqdata
 
-cd ../rqdata-hk-depth-snapshots
-uv sync --group dev --extra rqdata
-
 cd ../quant-execution-engine
 uv sync --group dev --extra cli
 
 cd ..
 ```
 
-`rqdata-hk-depth-snapshots` 当前是 HK tick-depth 兼容仓。日常运行优先使用
-`market-data-platform` 中的 `marketdata rqdata hk-depth -- ...` 或其安装出的
-`rqdata-hk-depth ...`；只有需要验证历史包名、历史文档或兼容入口时，才需要单独进入
-`rqdata-hk-depth-snapshots` 安装依赖。
+HK tick-depth 已完全由 `market-data-platform` 承载。日常运行使用
+`marketdata rqdata hk-depth -- ...`，或安装 `market-data-platform` 后使用其提供的
+`rqdata-hk-depth ...` 命令。工作区不再追踪 `rqdata-hk-depth-snapshots` 子模块，也不再承诺
+`rqdata_tick_data.*` 旧 Python import 路径。
 
 如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。
 

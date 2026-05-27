@@ -30,9 +30,8 @@ targets.json
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
-| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载 CN 数据入口、HK tick-depth 原生实现和过渡期 HK assets 调度 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...` |
-| 港股盘口兼容入口 | `rqdata-hk-depth-snapshots` | 保留历史包名、命令名、文档记录和切片配置；核心实现已由 `market_data_platform.hk_depth` 承载 | `rqdata-hk-depth ...` |
-| 策略研究 | `cross-sectional-trees` | 读取发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出 | `summary.json`、`positions_current*.csv`、`targets.json` |
+| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载 CN 数据入口、HK tick-depth、HK RQData assets、健康检查、current refresh 和发布工作流 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...` |
+| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；不再内置 HK 数据资产生产检查入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究主线
@@ -52,7 +51,7 @@ targets.json
   reports/
 ```
 
-`market-data-platform` 已经提供 CN 数据入口、统一维护命令和 HK tick-depth 原生实现。部分 HK 日线、PIT、估值、行业、current contract 检查和资产发布实现仍在 `cross-sectional-trees` 中，由 `marketdata rqdata hk-assets -- ...` 转发调用。港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；`rqdata-hk-depth-snapshots` 仅保留兼容入口和历史执行记录。
+`market-data-platform` 已经提供 CN 数据入口、统一维护命令、HK tick-depth 原生实现，以及 HK 日线、PIT、估值、行业、intraday、current contract 检查和资产发布实现。港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；HK RQData assets 由 `market_data_platform.hk_assets` 和 `market_data_platform.release_tools` 承载。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
 
 ### 2. 读取数据并完成研究
 
@@ -112,6 +111,6 @@ targets.json
 | 数据控制面与迁移顺序 | [`market-data-platform/docs/README.md`](../market-data-platform/docs/README.md) |
 | 策略研究主流程 | [`cross-sectional-trees/docs/pipeline-overview.md`](../cross-sectional-trees/docs/pipeline-overview.md) |
 | 共享 HK 数据边界 | [`cross-sectional-trees/docs/concepts/shared-hk-data-platform.md`](../cross-sectional-trees/docs/concepts/shared-hk-data-platform.md) |
-| 盘口资产处理工作流 | [`market-data-platform/README.md`](../market-data-platform/README.md)、[`rqdata-hk-depth-snapshots/docs/workflow.md`](../rqdata-hk-depth-snapshots/docs/workflow.md) |
+| 盘口资产处理工作流 | [`market-data-platform/README.md`](../market-data-platform/README.md) |
 | 可选交易执行系统 | [`quant-execution-engine`](../quant-execution-engine/README.md) |
 | 顶层初始化与检查 | [`bootstrap.md`](bootstrap.md)、[`contracts.md`](contracts.md)、[`release-checklist.md`](release-checklist.md)、[`version-matrix.md`](version-matrix.md) |

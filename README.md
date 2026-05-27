@@ -15,9 +15,8 @@
 
 | 模块 | 用途 | 常用入口 |
 | --- | --- | --- |
-| [`market-data-platform`](market-data-platform/) | 统一市场数据入口，维护共享数据目录、当前可用数据清单、资产索引和港股十档盘口快照数据。 | `marketdata ...`、`rqdata-hk-depth ...` |
-| [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | 港股十档盘口快照兼容仓；核心实现已迁入 `market-data-platform`。 | `marketdata rqdata hk-depth -- ...` |
-| [`cross-sectional-trees`](cross-sectional-trees/) | 运行策略研究、特征工程、模型评估、回测、持仓快照和目标持仓导出。 | `cstree ...` |
+| [`market-data-platform`](market-data-platform/) | 统一市场数据入口，维护共享数据目录、当前可用数据清单、资产索引、HK RQData assets 和港股十档盘口快照数据。 | `marketdata ...`、`rqdata-hk-depth ...`、`rqdata-hk-assets ...` |
+| [`cross-sectional-trees`](cross-sectional-trees/) | 运行策略研究、特征工程、模型评估、回测、持仓快照和目标持仓导出；只读消费数据平台发布的数据资产。 | `cstree ...` |
 | [`quant-execution-engine`](quant-execution-engine/) | 可选的交易执行系统，读取目标持仓文件后做预演、模拟盘或实盘执行。 | `qexec ...` |
 
 ## 基本流程
@@ -78,7 +77,7 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 | 更新子模块版本前做检查 | [docs/release-checklist.md](docs/release-checklist.md) |
 | 市场数据平台说明 | [market-data-platform/README.md](market-data-platform/README.md) |
 | 策略研究说明 | [cross-sectional-trees/README.md](cross-sectional-trees/README.md) |
-| 港股盘口快照说明 | [rqdata-hk-depth-snapshots/README.md](rqdata-hk-depth-snapshots/README.md) |
+| 港股盘口快照说明 | [market-data-platform/README.md](market-data-platform/README.md) |
 | 交易执行引擎说明 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
 
 ## 版本锁定方式

@@ -38,25 +38,6 @@
         "full": ["@smoke", "@lint", "@test", "@type"]
       }
     },
-    "rqdata-hk-depth-snapshots": {
-      "path": "rqdata-hk-depth-snapshots",
-      "profiles": {
-        "smoke": [
-          ["uv", "run", "--group", "dev", "rqdata-hk-depth", "--help"]
-        ],
-        "lint": [
-          ["uv", "run", "--group", "dev", "ruff", "check", "."],
-          ["uv", "run", "--group", "dev", "ruff", "format", "--check", "."]
-        ],
-        "test": [
-          ["uv", "run", "--group", "dev", "pytest"]
-        ],
-        "type": [
-          ["uv", "run", "--group", "dev", "pyright"]
-        ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
-      }
-    },
     "quant-execution-engine": {
       "path": "quant-execution-engine",
       "profiles": {

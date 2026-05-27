@@ -17,7 +17,6 @@ from pathlib import Path
 EXPECTED_SUBMODULES = {
     "market-data-platform": "marketdata",
     "cross-sectional-trees": "cstree",
-    "rqdata-hk-depth-snapshots": "rqdata-hk-depth",
     "quant-execution-engine": "qexec",
 }
 
@@ -28,7 +27,6 @@ FORBIDDEN_SCRIPT_IMPORTS = {
     "hk_data_platform",
     "market_data_platform",
     "quant_execution_engine",
-    "rqdata_tick_data",
 }
 
 

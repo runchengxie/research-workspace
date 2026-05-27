@@ -9,7 +9,6 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_PATHS = {
     "market-data-platform",
     "cross-sectional-trees",
-    "rqdata-hk-depth-snapshots",
     "quant-execution-engine",
 }
 
