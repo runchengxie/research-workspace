@@ -15,8 +15,8 @@
 
 | 模块 | 用途 | 常用入口 |
 | --- | --- | --- |
-| [`market-data-platform`](market-data-platform/) | 统一市场数据入口，维护共享数据目录、当前可用数据清单和资产索引。 | `marketdata ...` |
-| [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | 维护港股十档盘口快照数据，包括下载、检查、聚合和归档。 | `rqdata-hk-depth ...` 或 `marketdata rqdata hk-depth -- ...` |
+| [`market-data-platform`](market-data-platform/) | 统一市场数据入口，维护共享数据目录、当前可用数据清单、资产索引和港股十档盘口快照数据。 | `marketdata ...`、`rqdata-hk-depth ...` |
+| [`rqdata-hk-depth-snapshots`](rqdata-hk-depth-snapshots/) | 港股十档盘口快照兼容仓；核心实现已迁入 `market-data-platform`。 | `marketdata rqdata hk-depth -- ...` |
 | [`cross-sectional-trees`](cross-sectional-trees/) | 运行策略研究、特征工程、模型评估、回测、持仓快照和目标持仓导出。 | `cstree ...` |
 | [`quant-execution-engine`](quant-execution-engine/) | 可选的交易执行系统，读取目标持仓文件后做预演、模拟盘或实盘执行。 | `qexec ...` |
 
