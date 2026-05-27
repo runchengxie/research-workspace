@@ -7,6 +7,8 @@
 - [ ] 顶层 `git status --short` 只包含预期的文档、脚本、测试或子模块指针变更。
 - [ ] `git submodule status` 中所有子模块指针符合本次要锁定的版本。
 - [ ] `python scripts/workspace_doctor.py --strict` 通过，或所有警告都有明确记录。
+- [ ] `python scripts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
+- [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。
 

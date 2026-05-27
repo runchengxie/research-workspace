@@ -55,6 +55,19 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertTrue(any("Missing expected submodule paths" in message for message in errors))
         self.assertTrue(any("market-data-platform is missing" in message for message in errors))
 
+    def test_top_level_script_importing_submodule_package_is_an_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            scripts = root / "scripts"
+            scripts.mkdir()
+            (scripts / "bad.py").write_text(
+                "from cstree.internal.foo import Bar\n",
+                encoding="utf-8",
+            )
+            checks = workspace_doctor.check_script_import_boundaries(root)
+        self.assertEqual("ERROR", checks[0].severity)
+        self.assertIn("scripts/bad.py imports cstree.internal.foo", checks[0].message)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -56,6 +56,15 @@ python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
 ```
 
+如果需要从顶层委托各子项目运行自己的检查，可以使用：
+
+```bash
+python scripts/run_submodule_checks.py --profile smoke
+python scripts/run_submodule_checks.py --profile full --dry-run
+```
+
+`run_submodule_checks.py` 只按 manifest 进入各子项目执行命令，不读取或解释子项目内部源码结构。
+
 子项目依赖、凭证和数据根目录配置见 [新机器初始化](docs/bootstrap.md)。
 
 ## 常见任务入口

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import configparser
 import os
 import shutil
@@ -22,6 +23,13 @@ EXPECTED_SUBMODULES = {
 
 FORBIDDEN_TOP_LEVEL_PATTERNS = (".env", ".env.*", ".envrc", ".envrc.*")
 FORBIDDEN_TOP_LEVEL_DIRS = ("artifacts", "outputs", "data", "cache")
+FORBIDDEN_SCRIPT_IMPORTS = {
+    "cstree",
+    "hk_data_platform",
+    "market_data_platform",
+    "quant_execution_engine",
+    "rqdata_tick_data",
+}
 
 
 @dataclass(frozen=True)
@@ -245,6 +253,60 @@ def check_top_level_outputs(root: Path) -> list[Check]:
     return checks
 
 
+def _iter_imported_modules(path: Path) -> list[str]:
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    except SyntaxError as exc:
+        return [f"<syntax-error:{exc.lineno}>"]
+
+    modules: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            modules.extend(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom):
+            if node.module:
+                modules.append(node.module)
+    return modules
+
+
+def _is_forbidden_import(module: str) -> bool:
+    return any(
+        module == forbidden or module.startswith(f"{forbidden}.")
+        for forbidden in FORBIDDEN_SCRIPT_IMPORTS
+    )
+
+
+def check_script_import_boundaries(root: Path) -> list[Check]:
+    scripts_root = root / "scripts"
+    if not scripts_root.is_dir():
+        return [Check("WARN", "script-import-boundary", "scripts/ is missing.")]
+
+    violations: list[str] = []
+    for script in sorted(scripts_root.glob("*.py")):
+        for module in _iter_imported_modules(script):
+            if module.startswith("<syntax-error:"):
+                violations.append(f"{script.relative_to(root)} has {module}")
+            elif _is_forbidden_import(module):
+                violations.append(f"{script.relative_to(root)} imports {module}")
+
+    if violations:
+        return [
+            Check(
+                "ERROR",
+                "script-import-boundary",
+                "Top-level scripts import submodule Python packages: "
+                + "; ".join(violations),
+            )
+        ]
+    return [
+        Check(
+            "OK",
+            "script-import-boundary",
+            "Top-level scripts do not import submodule Python packages.",
+        )
+    ]
+
+
 def run_checks(root: Path) -> list[Check]:
     root = root.resolve()
     checks: list[Check] = []
@@ -254,6 +316,7 @@ def run_checks(root: Path) -> list[Check]:
     checks.extend(check_public_clis(root))
     checks.extend(check_data_platform_root())
     checks.extend(check_top_level_outputs(root))
+    checks.extend(check_script_import_boundaries(root))
     return checks
 
 

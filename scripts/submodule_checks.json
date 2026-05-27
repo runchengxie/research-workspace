@@ -1,0 +1,80 @@
+{
+  "submodules": {
+    "market-data-platform": {
+      "path": "market-data-platform",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--extra", "dev", "marketdata", "--help"]
+        ],
+        "lint": [
+          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [
+          ["uv", "run", "--extra", "dev", "pytest"]
+        ],
+        "type": [
+          ["uv", "run", "--extra", "dev", "pyright"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    },
+    "cross-sectional-trees": {
+      "path": "cross-sectional-trees",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--extra", "dev", "cstree", "--help"]
+        ],
+        "lint": [
+          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [
+          ["uv", "run", "--extra", "dev", "pytest"]
+        ],
+        "type": [
+          ["uv", "run", "--extra", "dev", "pyright"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    },
+    "rqdata-hk-depth-snapshots": {
+      "path": "rqdata-hk-depth-snapshots",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--group", "dev", "rqdata-hk-depth", "--help"]
+        ],
+        "lint": [
+          ["uv", "run", "--group", "dev", "ruff", "check", "."],
+          ["uv", "run", "--group", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [
+          ["uv", "run", "--group", "dev", "pytest"]
+        ],
+        "type": [
+          ["uv", "run", "--group", "dev", "pyright"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    },
+    "quant-execution-engine": {
+      "path": "quant-execution-engine",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--group", "dev", "--extra", "cli", "qexec", "--help"]
+        ],
+        "lint": [
+          ["uv", "run", "--group", "dev", "ruff", "check", "."],
+          ["uv", "run", "--group", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [
+          ["uv", "run", "--group", "dev", "pytest"]
+        ],
+        "type": [
+          ["uv", "run", "--group", "dev", "mypy", "src"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    }
+  }
+}

@@ -94,3 +94,16 @@ python -m unittest discover -s tests
 ```
 
 `smoke_contracts.py` 只运行无写入、无真实下单的命令行和文件约定检查。任何需要凭证、网络、下载数据或提交订单的流程，都必须在对应子项目内显式执行。
+
+## 子项目委托检查
+
+如果已经按上文安装了各子项目依赖，可以从顶层统一委托子项目自己的检查：
+
+```bash
+python scripts/run_submodule_checks.py --list-profiles
+python scripts/run_submodule_checks.py --profile smoke
+python scripts/run_submodule_checks.py --profile lint --submodule cross-sectional-trees
+python scripts/run_submodule_checks.py --profile full --dry-run
+```
+
+配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行 manifest 中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。

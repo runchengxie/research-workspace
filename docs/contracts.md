@@ -15,6 +15,7 @@
 - 不把子模块临时工作目录当作正式数据来源。
 - 不维护覆盖所有模块参数的总配置文件。
 - 不默认触发真实券商交易。
+- 不替子模块重新定义 lint、type check、coverage 或内部架构规则。
 
 ## 正式来源
 
@@ -95,3 +96,17 @@ python scripts/smoke_contracts.py
 ```
 
 这些脚本只做轻量检查。子项目测试、业务参数验证和真实交易验证仍在对应子项目中完成。
+
+`workspace_doctor.py` 还会检查 `scripts/*.py` 是否直接导入了子模块 Python 包。顶层脚本应通过公开 CLI 或文档化文件进行交接，不应写成对子模块内部实现的 import 依赖。
+
+如果需要从顶层发起子项目自己的质量检查，使用委托式入口：
+
+```bash
+python scripts/run_submodule_checks.py --profile smoke
+python scripts/run_submodule_checks.py --profile lint
+python scripts/run_submodule_checks.py --profile test
+python scripts/run_submodule_checks.py --profile type
+python scripts/run_submodule_checks.py --profile full
+```
+
+委托检查的命令定义在 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层只负责调度和汇总结果，不解析子模块内部源码，也不把 SOLID 或内聚耦合做成顶层评分。
