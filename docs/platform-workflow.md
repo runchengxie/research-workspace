@@ -111,3 +111,4 @@
 | 共享 HK 数据边界 | [`cross-sectional-trees/docs/concepts/shared-hk-data-platform.md`](../cross-sectional-trees/docs/concepts/shared-hk-data-platform.md) |
 | 盘口资产处理工作流 | [`rqdata-hk-depth-snapshots/docs/workflow.md`](../rqdata-hk-depth-snapshots/docs/workflow.md) |
 | 可选交易执行系统 | [`quant-execution-engine`](../quant-execution-engine/README.md) |
+| 顶层初始化与检查 | [`bootstrap.md`](bootstrap.md)、[`contracts.md`](contracts.md)、[`release-checklist.md`](release-checklist.md)、[`version-matrix.md`](version-matrix.md) |

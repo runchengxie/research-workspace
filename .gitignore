@@ -6,3 +6,10 @@
 !.env.example
 *.log
 tmp/
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+artifacts/
+outputs/
+data/
+cache/

@@ -46,6 +46,22 @@ quant-execution-engine（可选下游，已纳入 submodule）
 
 模块执行顺序、数据契约边界、执行验证状态和未来调度原则见 [平台工作流与集成边界](docs/platform-workflow.md)。
 
+## 顶层职责
+
+`research-workspace` 顶层只负责：
+
+- 锁定一组可复现的 submodule commit 组合。
+- 说明跨模块边界、文件契约和执行顺序。
+- 提供轻量 workspace doctor / contract smoke 验证入口。
+- 记录已验证版本矩阵和人工联调证据。
+
+它不负责：
+
+- 实现数据下载、研究、回测、下单等业务逻辑。
+- import 子模块内部 Python 包。
+- 维护替代各子项目配置系统的总配置。
+- 作为无人值守真实交易调度器。
+
 ## 仓库组织方式
 
 本仓库是一个 Git superproject，用来锁定相关项目的一组可复现版本。它不是 monorepo：各模块的代码、依赖、测试和发布仍由各自仓库维护；大型数据、缓存和运行产物也不提交到顶层 Git 仓库。
@@ -102,3 +118,15 @@ git submodule update --init --recursive
 - 可复用数据通过数据契约、manifest 和发布资产交接，不通过引用其他项目工作目录交接。
 - `cross-sectional-trees` 当前负责研究、持仓 / 分配输出和显式 `targets.json` 交接文件生成；券商侧执行必须经执行系统自身的安全门禁。
 - 在 paper / dry-run 联调和执行运维验证稳定之前，不在顶层加入自动触发真实交易的中央调度逻辑。
+
+## 顶层文档与检查
+
+| 主题 | 入口 |
+| --- | --- |
+| 新机器初始化 | [docs/bootstrap.md](docs/bootstrap.md) |
+| 跨模块文件契约 | [docs/contracts.md](docs/contracts.md) |
+| 已验证版本组合 | [docs/version-matrix.md](docs/version-matrix.md) |
+| bump submodule 前检查 | [docs/release-checklist.md](docs/release-checklist.md) |
+| workspace 健康检查 | `python scripts/workspace_doctor.py` |
+| 只读契约 smoke | `python scripts/smoke_contracts.py` |
+| 打印当前版本矩阵 | `python scripts/print_version_matrix.py` |
