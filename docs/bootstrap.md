@@ -49,6 +49,11 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
+`rqdata-hk-depth-snapshots` 当前是 HK tick-depth 兼容仓。日常运行优先使用
+`market-data-platform` 中的 `marketdata rqdata hk-depth -- ...` 或其安装出的
+`rqdata-hk-depth ...`；只有需要验证历史包名、历史文档或兼容入口时，才需要单独进入
+`rqdata-hk-depth-snapshots` 安装依赖。
+
 如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。
 
 ## 环境变量
