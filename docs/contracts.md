@@ -51,6 +51,7 @@ $DATA_PLATFORM_ROOT/
 
 - `current_assets/*.json` 指向当前推荐读取的数据资产版本。
 - `dataset_registry.csv` 用于查找和审计已发布资产。
+- 下载、镜像、健康检查、current contract refresh、registry 构建和数据资产发布都由 `market-data-platform` 负责。
 - 顶层仓库不提交数据本体、缓存、下载中间态或报告产物。
 - 子模块工作目录里的临时输出只能用于本地排查。
 

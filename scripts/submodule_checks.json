@@ -26,8 +26,8 @@
           ["uv", "run", "--extra", "dev", "cstree", "--help"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+          ["scripts/dev/run_tests.sh", "lint"],
+          ["scripts/dev/run_tests.sh", "format-all"]
         ],
         "test": [
           ["uv", "run", "--extra", "dev", "pytest"]

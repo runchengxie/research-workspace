@@ -53,6 +53,8 @@ targets.json
 
 `market-data-platform` 已经提供 CN 数据入口、统一维护命令、HK tick-depth 原生实现，以及 HK 日线、PIT、估值、行业、intraday、current contract 检查和资产发布实现。港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；HK RQData assets 由 `market_data_platform.hk_assets` 和 `market_data_platform.release_tools` 承载。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
 
+共享数据运维的新入口必须进入 `market-data-platform`。`cross-sectional-trees` 仅保留只读消费逻辑和少量兼容 wrapper；其边界清单由 `cross-sectional-trees/docs/internal/data-ops-boundary-inventory.md` 维护，避免下载、健康检查、current refresh、registry 或资产发布实现回流到研究仓库。
+
 ### 2. 读取数据并完成研究
 
 `cross-sectional-trees` 从当前数据清单解析出已发布数据资产，然后完成：
