@@ -4,7 +4,7 @@
 
 ## 当前检出状态
 
-截至 2026-05-27，本地检出状态如下。`rqdata-hk-depth-snapshots` 已从工作区 sunset；HK depth 由 `market-data-platform` 承载。
+截至 2026-05-27，本地检出状态如下。`rqdata-hk-depth-snapshots` 已从工作区 sunset；中国香港市场 depth 由 `market-data-platform` 承载。
 
 | 顶层仓库 | market-data-platform | cross-sectional-trees | quant-execution-engine | 状态 | 备注 |
 | --- | --- | --- | --- | --- | --- |

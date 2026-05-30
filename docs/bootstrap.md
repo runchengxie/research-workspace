@@ -46,7 +46,7 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
-HK tick-depth 已完全由 `market-data-platform` 承载。日常运行使用
+中国香港市场 tick-depth 已完全由 `market-data-platform` 承载。日常运行使用
 `marketdata rqdata hk-depth -- ...`，或安装 `market-data-platform` 后使用其提供的
 `rqdata-hk-depth ...` 命令。工作区不再追踪 `rqdata-hk-depth-snapshots` 子模块，也不再承诺
 `rqdata_tick_data.*` 旧 Python import 路径。
@@ -69,7 +69,7 @@ $DATA_PLATFORM_ROOT/
   metadata/
     current_assets/
       hk_current.json
-      cn_current.json
+      a_share_current.json
     dataset_registry.csv
   reports/
 ```

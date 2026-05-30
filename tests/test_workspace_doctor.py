@@ -5,6 +5,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -66,6 +67,26 @@ class WorkspaceDoctorTest(unittest.TestCase):
             checks = workspace_doctor.check_script_import_boundaries(root)
         self.assertEqual("ERROR", checks[0].severity)
         self.assertIn("scripts/bad.py imports cstree.internal.foo", checks[0].message)
+
+
+    def test_data_platform_contract_check_uses_a_share_current_name(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp)
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "hk_current.json").write_text("{}", encoding="utf-8")
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                checks = workspace_doctor.check_data_platform_root()
+
+        messages = [check.message for check in checks]
+        self.assertTrue(any("a_share_current.json" in message for message in messages))
+        self.assertFalse(any("cn_current.json" in message for message in messages))
 
 
 if __name__ == "__main__":

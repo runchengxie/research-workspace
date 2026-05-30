@@ -30,8 +30,8 @@ targets.json
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
-| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载 CN 数据入口、HK tick-depth、HK RQData assets、健康检查、current refresh 和发布工作流 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...` |
-| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；不再内置 HK 数据资产生产检查入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
+| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、中国香港市场 tick-depth、中国香港市场 RQData assets、健康检查、current refresh 和发布工作流 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...` |
+| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；不再内置中国香港市场数据资产生产检查入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究主线
@@ -46,12 +46,12 @@ targets.json
   metadata/
     current_assets/
       hk_current.json
-      cn_current.json
+      a_share_current.json
     dataset_registry.csv
   reports/
 ```
 
-`market-data-platform` 已经提供 CN 数据入口、统一维护命令、HK tick-depth 原生实现，以及 HK 日线、PIT、估值、行业、intraday、current contract 检查和资产发布实现。港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；HK RQData assets 由 `market_data_platform.hk_assets` 和 `market_data_platform.release_tools` 承载。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
+`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、中国香港市场 tick-depth 原生实现，以及中国香港市场日线、PIT、估值、行业、intraday、current contract 检查和资产发布实现。港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；中国香港市场 RQData assets 由 `market_data_platform.hk_assets` 和 `market_data_platform.release_tools` 承载。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
 
 共享数据运维的新入口必须进入 `market-data-platform`。`cross-sectional-trees` 仅保留只读消费逻辑和少量兼容 wrapper；其边界清单由 `cross-sectional-trees/docs/internal/data-ops-boundary-inventory.md` 维护，避免下载、健康检查、current refresh、registry 或资产发布实现回流到研究仓库。
 
@@ -74,7 +74,7 @@ targets.json
 
 研究侧可以通过 `cstree export-targets` 将 `positions_current*.csv` 或已保存持仓导出为标准 `targets.json`。导出器会拒绝空头持仓、非法权重和隐式杠杆，并把运行编号、输入文件、时间口径和质量检查信息写入审计附属文件。
 
-执行引擎已经作为固定子模块纳入工作区。当前已用真实研究导出文件验证了执行引擎的解析逻辑和离线调仓计划路径，包括目标列表以外持仓的清仓处理。港股等非 USD 报价需要先配置汇率并换算至 USD 估值。
+执行引擎已经作为固定子模块纳入工作区。当前已用真实研究导出文件验证了执行引擎的解析逻辑和离线调仓计划路径，包括目标列表以外持仓的清仓处理。港股等非 USD 报价需要先配置汇率并换算至 USD 估值；A 股目标解析和基础 dry-run 仍应显式配置 CNY 汇率。
 
 仍需补齐的证据：
 
@@ -93,7 +93,7 @@ targets.json
 | --- | --- |
 | 目标持仓文件 | 已落地：研究侧输出 `quant-execution-engine.targets/v2` 格式的 `targets.json` |
 | 导出能力 | 已落地：`cstree export-targets` 输出目标文件和审计附属文件 |
-| 输入验证 | 已落地：执行侧可读取真实导出文件；港股目标可生成计划；缺少汇率时会阻断非 USD 调仓 |
+| 输入验证 | 已落地：执行侧可读取真实导出文件；港股和 A 股目标可生成基础计划；缺少汇率时会阻断非 USD 调仓 |
 | 联调证据 | 部分落地：已具备解析和离线计划验证；仍需模拟盘端到端验证记录 |
 | 实盘门禁 | 实盘下单仍要求执行引擎独立启用、执行前检查和人工监督 |
 
@@ -112,7 +112,7 @@ targets.json
 | --- | --- |
 | 数据控制面与迁移顺序 | [`market-data-platform/docs/README.md`](../market-data-platform/docs/README.md) |
 | 策略研究主流程 | [`cross-sectional-trees/docs/pipeline-overview.md`](../cross-sectional-trees/docs/pipeline-overview.md) |
-| 共享 HK 数据边界 | [`cross-sectional-trees/docs/concepts/shared-hk-data-platform.md`](../cross-sectional-trees/docs/concepts/shared-hk-data-platform.md) |
+| 共享中国香港市场数据边界 | [`cross-sectional-trees/docs/concepts/shared-hk-data-platform.md`](../cross-sectional-trees/docs/concepts/shared-hk-data-platform.md) |
 | 盘口资产处理工作流 | [`market-data-platform/README.md`](../market-data-platform/README.md) |
 | 可选交易执行系统 | [`quant-execution-engine`](../quant-execution-engine/README.md) |
 | 顶层初始化与检查 | [`bootstrap.md`](bootstrap.md)、[`contracts.md`](contracts.md)、[`release-checklist.md`](release-checklist.md)、[`version-matrix.md`](version-matrix.md) |

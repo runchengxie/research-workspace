@@ -214,15 +214,15 @@ def check_data_platform_root() -> list[Check]:
     checks.append(Check("OK", "data-platform-root", f"DATA_PLATFORM_ROOT={artifact_root}"))
     current_root = artifact_root / "metadata" / "current_assets"
     hk_contract = current_root / "hk_current.json"
-    cn_contract = current_root / "cn_current.json"
+    a_share_contract = current_root / "a_share_current.json"
     if hk_contract.is_file():
         checks.append(Check("OK", "current-contract", f"Found {hk_contract}."))
     else:
         checks.append(Check("WARN", "current-contract", f"Missing {hk_contract}."))
-    if cn_contract.is_file():
-        checks.append(Check("OK", "current-contract", f"Found {cn_contract}."))
+    if a_share_contract.is_file():
+        checks.append(Check("OK", "current-contract", f"Found {a_share_contract}."))
     else:
-        checks.append(Check("WARN", "current-contract", f"Missing {cn_contract}."))
+        checks.append(Check("WARN", "current-contract", f"Missing {a_share_contract}."))
     return checks
 
 

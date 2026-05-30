@@ -15,10 +15,10 @@
 ## 数据约定
 
 - [ ] `DATA_PLATFORM_ROOT` 指向本次验证使用的共享资产根目录。
-- [ ] `metadata/current_assets/hk_current.json` 存在并指向预期 HK 资产版本。
-- [ ] 如本次涉及 CN 数据，`metadata/current_assets/cn_current.json` 存在并指向预期 CN 资产版本。
+- [ ] `metadata/current_assets/hk_current.json` 存在并指向预期中国香港市场资产版本。
+- [ ] 如本次涉及 A 股数据，`metadata/current_assets/a_share_current.json` 存在并指向预期 A 股资产版本。
 - [ ] `metadata/dataset_registry.csv` 已更新或确认无需更新。
-- [ ] `marketdata migration status --json` 可运行，并且过渡期 HK 后端状态符合预期。
+- [ ] `marketdata migration status --json` 可运行，并且过渡期中国香港市场后端状态符合预期。
 
 ## 研究交接
 

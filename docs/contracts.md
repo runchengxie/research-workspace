@@ -22,8 +22,8 @@
 | 文件或目录 | 生产方 | 消费方 | 用途 |
 | --- | --- | --- | --- |
 | `DATA_PLATFORM_ROOT` | 操作环境 | 数据平台、研究系统 | 共享资产根目录，由运行环境提供 |
-| `metadata/current_assets/hk_current.json` | `market-data-platform` / 过渡期 HK 数据流程 | `cross-sectional-trees` | HK 当前可用数据清单 |
-| `metadata/current_assets/cn_current.json` | `market-data-platform` | 下游研究或数据消费者 | CN 当前可用数据清单 |
+| `metadata/current_assets/hk_current.json` | `market-data-platform` / 过渡期中国香港市场数据流程 | `cross-sectional-trees` | 中国香港市场当前可用数据清单 |
+| `metadata/current_assets/a_share_current.json` | `market-data-platform` | 下游研究或数据消费者 | A 股当前可用数据清单 |
 | `metadata/dataset_registry.csv` | `market-data-platform` | 人工审计、研究系统 | 已发布数据资产索引 |
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
 | `summary.json` | `cross-sectional-trees` | 人工审计、后续导出 | 研究运行摘要 |
@@ -42,7 +42,7 @@ $DATA_PLATFORM_ROOT/
   metadata/
     current_assets/
       hk_current.json
-      cn_current.json
+      a_share_current.json
     dataset_registry.csv
   reports/
 ```
