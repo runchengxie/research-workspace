@@ -32,6 +32,22 @@
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
 
+## A 股等价支持的资产状态
+
+A 股正式入口使用 `metadata/current_assets/a_share_current.json`。在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
+
+- TuShare 5000 积分账户可覆盖的 raw/clean 日线类资产：`stock_basic`、`trade_cal`、`daily`、`adj_factor`、`daily_basic`、`stk_limit`，以及由这些输入生成的 `daily_clean`。
+- `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌/零成交标记、上市天数和板块粗分类；质量门禁由 `marketdata tushare validate-a-share-daily-clean ...` 执行。
+- price-only A 股研究可以先消费 `daily_clean`、`instruments`、静态股票池或人工维护的 by-date 股票池。
+
+以下能力不能假装已经等价落地，必须在对应资产可用后才进入正式研究或执行验收：
+
+- PIT universe：CSI300/500/800 或全 A 动态成分需要 point-in-time 成分来源；如果 TuShare 账户权限不足，应使用已授权 RQData/指数供应商资产或人工归档的历史成分资产，不能用当前成分回填历史。
+- PIT fundamentals：需要披露日、报告期、公告延迟和字段映射；仅有最新财报快照不满足无未来函数研究。
+- 行业 overlay：申万/中信行业最好保留历史变更；只有当前行业标签时只能作为当前截面说明，不应回填历史回测。
+- A 股深度交易规则：T+1、ST、停牌、涨跌停、新股上市 N 日和不同板块涨跌幅可作为研究侧过滤/标记；真实成交约束仍由执行系统和券商接口验证。
+- 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据；真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。
+
 ## 数据资产交接
 
 数据资产通过当前数据清单和版本化资产目录交接：
