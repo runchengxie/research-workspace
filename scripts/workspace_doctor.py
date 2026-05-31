@@ -215,6 +215,8 @@ def check_data_platform_root() -> list[Check]:
     current_root = artifact_root / "metadata" / "current_assets"
     hk_contract = current_root / "hk_current.json"
     a_share_contract = current_root / "a_share_current.json"
+    legacy_cn_contract = current_root / "cn_current.json"
+    dataset_registry = artifact_root / "metadata" / "dataset_registry.csv"
     if hk_contract.is_file():
         checks.append(Check("OK", "current-contract", f"Found {hk_contract}."))
     else:
@@ -223,6 +225,18 @@ def check_data_platform_root() -> list[Check]:
         checks.append(Check("OK", "current-contract", f"Found {a_share_contract}."))
     else:
         checks.append(Check("WARN", "current-contract", f"Missing {a_share_contract}."))
+    if legacy_cn_contract.exists():
+        checks.append(
+            Check(
+                "WARN",
+                "current-contract-alias",
+                f"Legacy alias exists; do not use as canonical A-share entry: {legacy_cn_contract}.",
+            )
+        )
+    if dataset_registry.is_file():
+        checks.append(Check("OK", "dataset-registry", f"Found {dataset_registry}."))
+    else:
+        checks.append(Check("WARN", "dataset-registry", f"Missing {dataset_registry}."))
     return checks
 
 

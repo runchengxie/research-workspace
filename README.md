@@ -56,6 +56,7 @@ python scripts/smoke_contracts.py
 | --- | --- |
 | 先把工作区跑起来 | [docs/bootstrap.md](docs/bootstrap.md) |
 | 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
+| 判断先归档港股还是推进 A 股数据 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
 | 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
 | 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |

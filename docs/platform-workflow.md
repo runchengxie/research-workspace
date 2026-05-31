@@ -38,6 +38,8 @@ targets.json
 
 当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产保留在 `market-data-platform`，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 legacy research lane。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
 
+当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：先审计 `DATA_PLATFORM_ROOT`、current contract 和 `dataset_registry.csv`，再补齐中国香港市场归档证据，然后用 A 股 `daily_clean` / `default_next` 做 staged baseline。不要在这些边界未验证前直接启动 A 股完整数据下载或把 `default` 切到 A 股。
+
 ### 1. 发布数据资产
 
 共享数据放在版本化资产目录中，并由当前数据清单指向推荐版本：

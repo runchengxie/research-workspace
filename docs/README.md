@@ -8,6 +8,7 @@
 | --- | --- |
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 先理解整体链路 | [platform-workflow.md](platform-workflow.md) |
+| 判断先归档港股还是推进 A 股数据 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
 | 维护子模块指针或顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |

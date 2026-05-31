@@ -17,8 +17,17 @@
 - [ ] `DATA_PLATFORM_ROOT` 指向本次验证使用的共享资产根目录。
 - [ ] `metadata/current_assets/hk_current.json` 存在并指向预期中国香港市场资产版本。
 - [ ] 如本次涉及 A 股数据，`metadata/current_assets/a_share_current.json` 存在并指向预期 A 股资产版本。
+- [ ] 未把历史兼容 `metadata/current_assets/cn_current.json` 当作新的 A 股权威入口。
 - [ ] `metadata/dataset_registry.csv` 已更新或确认无需更新。
 - [ ] `marketdata migration status --json` 可运行，并且过渡期中国香港市场后端状态符合预期。
+
+## 数据迁移优先级
+
+- [ ] 已按 [data-transition-playbook.md](data-transition-playbook.md) 完成数据根目录审计。
+- [ ] 如仍保留港股资产，`marketdata rqdata inspect-hk-current --artifacts-root "$DATA_PLATFORM_ROOT"` 已运行，或缺口已记录。
+- [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ...` 已通过，或质量缺口已记录。
+- [ ] 如推进 A 股研究，`cstree run --config default_next` 已产出 `summary.json`、`config.used.yml` 和持仓文件。
+- [ ] 在 PIT universe、PIT fundamentals 和行业历史未补齐前，没有把 A 股 baseline 描述成完整 PIT 研究能力。
 
 ## 研究交接
 
@@ -32,6 +41,7 @@
 
 - [ ] `quant-execution-engine` 已验证能解析本次 `targets.json`。
 - [ ] 如涉及港股，HKD 到 USD 汇率配置已显式提供，或确认执行侧会阻断。
+- [ ] 如涉及 A 股，CNY 到 USD 汇率配置已显式提供，或确认执行侧会阻断。
 - [ ] 只做预演或解析验证时，没有使用 `--execute`。
 - [ ] 模拟盘验证如已执行，证据文件和操作记录已归档。
 - [ ] 实盘券商路径未被顶层脚本自动触发。

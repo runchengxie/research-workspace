@@ -76,6 +76,10 @@ class WorkspaceDoctorTest(unittest.TestCase):
             current_root.mkdir(parents=True)
             (current_root / "hk_current.json").write_text("{}", encoding="utf-8")
             (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+            (artifact_root / "metadata" / "dataset_registry.csv").write_text(
+                "dataset_name,market\n",
+                encoding="utf-8",
+            )
 
             with mock.patch.dict(
                 workspace_doctor.os.environ,
@@ -87,6 +91,64 @@ class WorkspaceDoctorTest(unittest.TestCase):
         messages = [check.message for check in checks]
         self.assertTrue(any("a_share_current.json" in message for message in messages))
         self.assertFalse(any("cn_current.json" in message for message in messages))
+
+    def test_data_platform_contract_check_warns_on_legacy_cn_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp)
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "hk_current.json").write_text("{}", encoding="utf-8")
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+            (current_root / "cn_current.json").write_text("{}", encoding="utf-8")
+
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                checks = workspace_doctor.check_data_platform_root()
+
+        warnings = [check for check in checks if check.severity == "WARN"]
+        self.assertTrue(any(check.code == "current-contract-alias" for check in warnings))
+
+    def test_data_platform_contract_check_reports_dataset_registry(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp)
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "hk_current.json").write_text("{}", encoding="utf-8")
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                missing_checks = workspace_doctor.check_data_platform_root()
+
+            (artifact_root / "metadata" / "dataset_registry.csv").write_text(
+                "dataset_name,market\n",
+                encoding="utf-8",
+            )
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                found_checks = workspace_doctor.check_data_platform_root()
+
+        self.assertTrue(
+            any(
+                check.code == "dataset-registry" and check.severity == "WARN"
+                for check in missing_checks
+            )
+        )
+        self.assertTrue(
+            any(
+                check.code == "dataset-registry" and check.severity == "OK"
+                for check in found_checks
+            )
+        )
 
 
 if __name__ == "__main__":
