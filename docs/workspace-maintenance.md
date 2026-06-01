@@ -75,7 +75,7 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行 manifest 中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
 
 检查分为 hard、advisory 和 manual 三类。仓库级 ownership、secret scan、依赖审计 baseline
-以及执行引擎 Pyright advisory 见 [quality-governance.md](quality-governance.md)。
+以及执行引擎迁移后的 mypy advisory 见 [quality-governance.md](quality-governance.md)。
 
 ## 常见术语
 

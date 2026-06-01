@@ -11,7 +11,7 @@
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 只扫描 `scripts/` 与 `tests/`。
 - [ ] 如发布港股公开 demo，`python scripts/run_quality_checks.py --profile secrets --demo-stage <staging-dir>` 通过。
 - [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
-- [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎 `pyright_advisory`。
+- [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。
 - [ ] `python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --evidence-manifest <json> --pretty` 已运行，并保存所需 readiness 结论。

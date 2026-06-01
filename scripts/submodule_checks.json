@@ -52,10 +52,10 @@
           ["uv", "run", "--group", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--group", "dev", "mypy", "src"]
-        ],
-        "pyright_advisory": [
           ["uv", "run", "--group", "dev", "pyright"]
+        ],
+        "mypy_advisory": [
+          ["uv", "run", "--group", "dev", "mypy", "src"]
         ],
         "full": ["@smoke", "@lint", "@test", "@type"]
       }

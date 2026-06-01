@@ -35,10 +35,10 @@ python scripts/export_hk_public_demo.py --out /tmp/hk-cross-sectional-strategy-d
 python scripts/export_hk_public_demo.py --scan-only /tmp/hk-cross-sectional-strategy-demo
 ```
 
-2026-06-01 的离线复核 staging 位于：
+2026-06-01 的最新离线复核 staging 位于：
 
 ```text
-/tmp/hk-cross-sectional-strategy-demo-verify-20260601-governance
+/tmp/hk-cross-sectional-strategy-demo-verify-20260601-maintenance
 export-manifest.json: scan=passed, offline_smoke=passed
 ```
 

@@ -21,16 +21,27 @@
     "A real broker adapter, account permissions, supervised smoke evidence, reconciliation evidence, kill-switch validation, and operational approval remain pending."
   ],
   "remaining_hk_external_state_gaps": [
-    "The local workspace doctor warns that /home/richard/data/market-data-platform-cold/hk-freeze-20260526 is currently missing. Tracked restore-drill evidence remains available, but this machine cannot hydrate that cold-storage snapshot until the external archive is restored."
+    "The local workspace doctor warns that /home/richard/data/market-data-platform-cold/hk-freeze-20260526 is currently missing. Tracked restore-drill evidence remains available, but this machine cannot hydrate that cold-storage snapshot until the external archive is restored.",
+    "The local research-output archive /home/richard/data/cross-sectional-trees-cold/hk-research-freeze-20260601 is also currently missing. Do not remove restore-sensitive legacy surfaces until both external archives are restored and rechecked."
   ],
   "advisory_checks": {
     "quant_execution_engine_pyright": {
-      "status": "advisory_findings_recorded",
-      "errors": 8,
+      "status": "hard_gate_passed_with_classified_warnings",
+      "errors": 0,
       "warnings": 11,
-      "notes": "One actionable compatibility-shim type report was fixed. Remaining errors are optional IBKR and LongPort SDK dynamic-boundary normalization reports; warnings are deferred broker exports and PyYAML source visibility."
+      "notes": "Optional IBKR and LongPort SDK dynamic-boundary errors were fixed with local normalization helpers. Retained warnings are 10 deferred broker __all__ exports and one PyYAML source-visibility report."
+    },
+    "quant_execution_engine_mypy": {
+      "status": "advisory_passed_during_bake_period",
+      "notes": "mypy remains advisory for at least one release cycle after the Pyright hard-gate migration."
     }
   },
+  "verification_limitations": [
+    "Top-level delegated-profile pytest could not run because the superproject environment lacks pytest and sandbox network access could not download it from PyPI.",
+    "Top-level hard quality could not run its Ruff steps because the superproject environment lacks Ruff and sandbox network access could not download it from PyPI. The secret-scan portion passed.",
+    "market-data-platform full Ruff format check still reports 33 pre-existing files outside this change that would be reformatted. Changed files were formatted and full Ruff check passed.",
+    "workspace_doctor --strict reports expected local-worktree warnings while submodule edits are uncommitted and DATA_PLATFORM_ROOT is not exported in the shell."
+  ],
   "intentionally_retained_hk_surfaces": [
     "market-data-platform freeze/hydrate, restore-critical HK assets, and compatibility entry points",
     "cross-sectional-trees explicit hk preset, archived research provenance, and deprecated alloc-hk compatibility command",
