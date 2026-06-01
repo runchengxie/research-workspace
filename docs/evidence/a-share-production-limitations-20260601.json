@@ -37,10 +37,8 @@
     }
   },
   "verification_limitations": [
-    "Top-level delegated-profile pytest could not run because the superproject environment lacks pytest and sandbox network access could not download it from PyPI.",
-    "Top-level hard quality could not run its Ruff steps because the superproject environment lacks Ruff and sandbox network access could not download it from PyPI. The secret-scan portion passed.",
     "market-data-platform full Ruff format check still reports 33 pre-existing files outside this change that would be reformatted. Changed files were formatted and full Ruff check passed.",
-    "workspace_doctor --strict reports expected local-worktree warnings while submodule edits are uncommitted and DATA_PLATFORM_ROOT is not exported in the shell."
+    "workspace_doctor reports DATA_PLATFORM_ROOT is not set in the current shell, so current-contract checks are skipped."
   ],
   "intentionally_retained_hk_surfaces": [
     "market-data-platform freeze/hydrate, restore-critical HK assets, and compatibility entry points",

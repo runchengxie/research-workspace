@@ -43,5 +43,5 @@
 - [x] 6.2 Run data-platform Ruff, Pyright, focused tests, and the maintainability baseline check.
 - [x] 6.3 Run execution-engine Ruff, Pyright hard gate, mypy advisory, default pytest, and focused broker / CN targets-contract tests.
 - [x] 6.4 If research-repository surfaces changed, run docs-contract, path-reference, config, target-export, and minimal 港股 compatibility tests.
-- [ ] 6.5 Run top-level delegated-profile tests, quality checks, contract smoke, and workspace doctor.
+- [x] 6.5 Run top-level delegated-profile tests, quality checks, contract smoke, and workspace doctor.
 - [x] 6.6 Record final remaining limitations for A 股 PIT publication, long-window strategy evidence, real broker enablement, intentionally retained 港股 surfaces, and any unavailable external cold-storage archive.
