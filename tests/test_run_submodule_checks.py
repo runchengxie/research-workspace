@@ -52,6 +52,51 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             [item.command for item in advisory],
         )
 
+    def test_manifest_type_profiles_use_pyright_with_qexec_mypy_advisory_separate(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        type_commands = {}
+        for name in sorted(configs):
+            planned = run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="type",
+                submodules=[name],
+            )
+            type_commands[name] = [item.command for item in planned]
+
+        self.assertEqual(
+            {
+                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "pyright")],
+                "market-data-platform": [("uv", "run", "--extra", "dev", "pyright")],
+                "quant-execution-engine": [("uv", "run", "--group", "dev", "pyright")],
+            },
+            type_commands,
+        )
+
+        qexec_full = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="full",
+                submodules=["quant-execution-engine"],
+            )
+        ]
+        self.assertIn(("uv", "run", "--group", "dev", "pyright"), qexec_full)
+        self.assertNotIn(("uv", "run", "--group", "dev", "mypy", "src"), qexec_full)
+
+        qexec_advisory = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="mypy_advisory",
+                submodules=["quant-execution-engine"],
+            )
+        ]
+        self.assertEqual([("uv", "run", "--group", "dev", "mypy", "src")], qexec_advisory)
+
     def test_dry_run_does_not_execute_commands(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

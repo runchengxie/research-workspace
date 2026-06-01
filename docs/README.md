@@ -2,15 +2,19 @@
 
 这里收录 superproject 层级的说明，只覆盖跨仓库协作、contract、版本锁定和发布检查。子项目内部的依赖、业务命令、架构规则和测试要求仍以各自 README / docs 为准。
 
+当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产和研究输出按冷存储 /
+恢复边界保留；公开展示使用外部 paused-maintenance 的 synthetic demo 仓库，不作为本工作区
+submodule、依赖或必跑 CI 目标。
+
 ## 推荐阅读顺序
 
 | 场景 | 阅读 |
 | --- | --- |
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 先理解整体链路 | [platform-workflow.md](platform-workflow.md) |
-| 判断先归档港股还是推进 A 股数据 | [data-transition-playbook.md](data-transition-playbook.md) |
+| 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
-| 导出暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
+| 导出外部暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 | 查看 A 股生产 readiness 与长窗口扩展计划 | [a-share-production-readiness.md](a-share-production-readiness.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |

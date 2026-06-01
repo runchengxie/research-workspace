@@ -11,6 +11,7 @@ maintenance: paused
 
 发布必须由维护者在检查 staged tree 后显式执行。本工作区脚本不会创建远端仓库或 push。
 本工作区只把该仓库作为外部作品集 reference 链接，不把它加入 required submodule。
+它也不参与顶层 CI、release matrix、version matrix 或日常 `run_submodule_checks.py` profile。
 
 ## 导出
 
@@ -35,6 +36,42 @@ python scripts/export_hk_public_demo.py --out /tmp/hk-cross-sectional-strategy-d
 python scripts/export_hk_public_demo.py --scan-only /tmp/hk-cross-sectional-strategy-demo
 ```
 
+## 发布前 review
+
+维护者 push 到公开仓库前必须确认：
+
+- `export-manifest.json` 存在，且 `scan.status` 为 `passed`。
+- `offline_smoke.status` 为 `passed`，并包含 demo workflow 与 `unittest` 结果。
+- `python scripts/export_hk_public_demo.py --scan-only <staging-dir>` 通过。
+- `python scripts/run_quality_checks.py --profile secrets --demo-stage <staging-dir>` 通过。
+- staged tree 只包含 allowlist 文件、synthetic sample 输出和 `export-manifest.json`。
+- staged tree 不包含 `.git`、真实行情、provider cache、Parquet、pickle、压缩包、私有输出、
+  本地绝对路径或超大文件。
+- 人工敏感词复核已完成，至少覆盖：
+
+```text
+token
+secret
+password
+api_key
+access_key
+rqdata
+tushare
+longport
+ibkr
+alpaca
+/home/
+Users/
+parquet
+pickle
+zst
+tar
+zip
+```
+
+公开仓库创建、首次 push、是否立即 GitHub archive，以及后续是否保留 paused-maintenance 状态，
+都由维护者在 GitHub 侧手动完成；工作区脚本不自动操作远端。
+
 2026-06-01 的最新离线复核 staging 位于：
 
 ```text
@@ -47,3 +84,4 @@ export-manifest.json: scan=passed, offline_smoke=passed
 - 不包含真实行情、RQData / TuShare 数据、provider cache、凭证或历史收益宣传。
 - 不包含券商 adapter，不声称可用于真实交易。
 - 不与 A 股主项目双向同步需求；它是暂停维护的作品集展示和历史 reference。
+- 不作为 workspace submodule、包依赖、必跑 CI 项或 release gate。

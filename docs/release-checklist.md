@@ -9,7 +9,12 @@
 - [ ] `python scripts/workspace_doctor.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `python scripts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 只扫描 `scripts/` 与 `tests/`。
+- [ ] 如发布港股公开 demo，`python scripts/export_hk_public_demo.py --out <staging-dir>` 已生成 clean-room staged tree 和 `export-manifest.json`。
+- [ ] 如发布港股公开 demo，`export-manifest.json` 中 `scan.status` 与 `offline_smoke.status` 均为 `passed`。
+- [ ] 如发布港股公开 demo，`python scripts/export_hk_public_demo.py --scan-only <staging-dir>` 通过。
 - [ ] 如发布港股公开 demo，`python scripts/run_quality_checks.py --profile secrets --demo-stage <staging-dir>` 通过。
+- [ ] 如发布港股公开 demo，已人工复核 staged tree 中不存在敏感词、provider 痕迹、本地路径、Parquet / pickle / 压缩包、大文件、真实行情、真实输出、券商 adapter 或执行审计日志。
+- [ ] 如发布港股公开 demo，公开仓库创建、首次 push 和是否 archive 均由维护者在 GitHub 侧显式操作；工作区不把它加入 submodule、required CI 或 release matrix。
 - [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
 - [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。

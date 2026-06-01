@@ -12,6 +12,8 @@
 2. 中国香港市场资产冻结到独立冷存储，活跃根目录只保留 freeze marker。
 3. 港股历史复现、跨市场对照或明确跟踪需求出现时，先显式 hydrate。
 4. A 股仍按 staged baseline 验证；不要把现有 price-only 能力描述成完整 PIT 研究能力。
+5. 港股公开 demo 只作为外部 paused-maintenance synthetic portfolio reference，不改变冷存储
+   restore 边界，也不成为活跃工作区依赖。
 
 代码维护债应继续按各子仓库治理清单推进，但不应阻塞 A 股 baseline；它会阻塞的是“把现有下载结果包装成已成熟主线”的判断。
 

@@ -15,3 +15,6 @@ src/hk_strategy_demo/pipeline.py
 
 The demo deliberately omits data-provider adapters, historical market data,
 broker credentials, private artifacts, and production execution code.
+
+It is a standalone public reference and is not imported by the active private
+workspace, used as a submodule, or required by workspace CI.

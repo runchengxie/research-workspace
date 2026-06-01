@@ -1,7 +1,9 @@
 .github/workflows/ci.yml
 .gitignore
 LICENSE
+NOTICE.md
 README.md
+SECURITY.md
 docs/architecture.md
 fixtures/synthetic_prices.csv
 pyproject.toml
