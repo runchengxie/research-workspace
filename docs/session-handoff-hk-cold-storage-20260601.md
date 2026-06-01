@@ -29,6 +29,27 @@ metadata/dataset_registry.hk.csv
 metadata/dataset_registry.pre-freeze.csv
 ```
 
+## Release Package
+
+冻结快照已经聚合为单文件归档，并附带便于单独审阅的 sidecar 元数据：
+
+```text
+package dir: /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526
+archive: hk-freeze-20260526.tar.zst
+archive bytes: 1939478781
+archive sha256: cbbe642736c2d0f51c52cf8f0ee6113d5d85f77a1ce2c422e4fba5b82edd0184
+tar entries: 86082
+compression: tar | zstd -12 -T0 --long=27
+```
+
+主归档小于 GitHub Release 单附件 `2 GiB` 限制，不需要分片。上传前和下载后都应验证：
+
+```bash
+cd /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526
+sha256sum -c SHA256SUMS
+zstd -t hk-freeze-20260526.tar.zst
+```
+
 ## Tick-Depth 限制
 
 港股 tick-depth 平台资产只保留索引、manifest 和派生产物。manifest 中记录的原始盘口缓存路径已经不在本机：
