@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "CN",
+  "dry_run": true,
+  "execute": false,
+  "broker": "local-dry-run",
+  "account": "main",
+  "fx": {
+    "FX_CNY_USD": 0.14,
+    "required": true,
+    "source": "process environment for the recorded command"
+  },
+  "command": "FX_CNY_USD=0.14 QEXEC_LOCAL_DRY_RUN_CASH_USD=1000000 QEXEC_LOCAL_DRY_RUN_PRICE=10 UV_CACHE_DIR=/tmp/uv-cache uv run qexec rebalance /home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json --broker local-dry-run",
+  "target_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
+  "audit_log": "/home/richard/code/research-workspace/quant-execution-engine/outputs/orders/20260601-180252_paper_dry.jsonl",
+  "run_id": "35cf4aef6808",
+  "target_asof": "2026-05-29",
+  "target_source": "cross-sectional-trees:a_share_candidate_20260601_173243",
+  "order_count": 5,
+  "order_statuses": {
+    "DRY_RUN": 5
+  },
+  "symbols": [
+    "920717.BJ.CN",
+    "920931.BJ.CN",
+    "920662.BJ.CN",
+    "920807.BJ.CN",
+    "920278.BJ.CN"
+  ],
+  "capability_boundary": "file-contract dry-run only; this does not claim real A-share broker submission support"
+}

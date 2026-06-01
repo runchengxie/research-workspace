@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "market": "a_share",
+  "source_report": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/promotion_gate.json",
+  "source_csv": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/promotion_gate.csv",
+  "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "checks": {
+    "promotion_status": "rejected",
+    "is_comparable": true,
+    "missing_evidence": [
+      "benchmark"
+    ],
+    "hard_failures": [],
+    "soft_failures": [
+      "max_backtest_avg_turnover"
+    ],
+    "candidate_backtest_avg_turnover": 0.8499999999999999,
+    "max_backtest_avg_turnover": 0.7,
+    "candidate_cpcv_valid_path_count": 5,
+    "min_cpcv_path_count": 5
+  },
+  "limitations": [
+    "The candidate run summary does not contain benchmark active information ratio evidence, even though the separate benchmark ladder report was generated.",
+    "The candidate is not ready to become the default profile because turnover exceeds the promotion gate threshold."
+  ]
+}

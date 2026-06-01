@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "market": "a_share",
+  "created_at": "2026-06-01T18:12:00+08:00",
+  "daily_clean_validation_report": "a-share-daily-clean-validation-20260601.json",
+  "universe_validation_report": "a-share-universe-validation-20260601.json",
+  "research_run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "targets_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
+  "targets_lineage_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json",
+  "qexec_dry_run_report": "a-share-qexec-dry-run-20260601.json",
+  "benchmark_ladder_report": "a-share-benchmark-ladder-20260601.json",
+  "cpcv_report": "a-share-cpcv-20260601.json",
+  "feature_evidence_report": "a-share-feature-evidence-20260601.json",
+  "promotion_gate_report": "a-share-promotion-gate-20260601.json",
+  "research_profile": {
+    "configured_start_date": "20240229",
+    "universe": {
+      "mode": "pit",
+      "point_in_time": true,
+      "by_date_file": "artifacts/assets/universe/a_share_all_full_by_date.csv"
+    },
+    "fundamentals": {
+      "statement_features_enabled": false,
+      "point_in_time": true,
+      "report_period": true,
+      "disclosure_date": true,
+      "availability_delay": true,
+      "field_mapping": true
+    },
+    "industry": {
+      "historical_backtest_enabled": false,
+      "historical_membership": true,
+      "effective_date": true
+    },
+    "trading_rules": {
+      "t_plus_one": true,
+      "st_state": true,
+      "suspension": true,
+      "listing_age": true,
+      "board_lot": true,
+      "board_specific": true,
+      "limit_up_buy": true,
+      "limit_down_sell": true
+    }
+  },
+  "broker_trading": {
+    "adapter_supported": false,
+    "account_permissions_verified": false,
+    "supervised_smoke_evidence": false,
+    "operational_approval": false
+  },
+  "limitations": [
+    "The candidate run used daily valuation overlay features, but PIT statement fundamentals were disabled because the expected PIT fundamentals asset file was not present in the shared root.",
+    "Historical industry joins were disabled because the expected industry changes asset file was not present in the shared root.",
+    "The promotion gate rejected the candidate, so this evidence bundle is baseline-reproducible only and must not switch the default profile."
+  ]
+}

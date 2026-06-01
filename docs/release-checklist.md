@@ -11,6 +11,7 @@
 - [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。
+- [ ] `python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --evidence-manifest <json> --pretty` 已运行，并保存所需 readiness 结论。
 
 ## 数据约定
 
@@ -27,8 +28,10 @@
 - [ ] 如活跃根目录仍保留港股资产，`marketdata rqdata inspect-hk-current --artifacts-root "$DATA_PLATFORM_ROOT"` 已运行，或缺口已记录。
 - [ ] 如港股已冻结，`marketdata migration freeze-hk ... --json` 清单、freeze marker 和冷存储 manifest 已保留。
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ...` 已通过，或质量缺口已记录。
+- [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。
 - [ ] 如推进 A 股研究，`cstree run --config default_next` 已产出 `summary.json`、`config.used.yml` 和持仓文件。
-- [ ] 在 PIT universe、PIT fundamentals 和行业历史未补齐前，没有把 A 股 baseline 描述成完整 PIT 研究能力。
+- [ ] 切换 `default` 前，`research_default_promotable` 已通过。
+- [ ] 在 PIT fundamentals 和行业历史未补齐前，没有把 A 股 baseline 描述成完整 PIT 研究能力。
 
 ## 研究交接
 
@@ -47,6 +50,7 @@
 - [ ] 模拟盘验证如已执行，证据文件和操作记录已归档。
 - [ ] 实盘券商路径未被顶层脚本自动触发。
 - [ ] 任何实盘操作都由执行系统自己的执行前检查、`QEXEC_ENABLE_LIVE=1` 和人工监督流程控制。
+- [ ] CN 文件契约 dry-run 没有被描述成 `broker_trading_enabled`。
 
 ## 文档
 

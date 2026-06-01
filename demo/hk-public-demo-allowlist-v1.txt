@@ -1,0 +1,11 @@
+.github/workflows/ci.yml
+.gitignore
+LICENSE
+README.md
+docs/architecture.md
+fixtures/synthetic_prices.csv
+pyproject.toml
+scripts/run_demo.py
+src/hk_strategy_demo/__init__.py
+src/hk_strategy_demo/pipeline.py
+tests/test_smoke.py

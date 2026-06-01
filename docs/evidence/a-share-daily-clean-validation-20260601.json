@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "a_share",
+  "asset_key": "daily_clean",
+  "source_report": "/home/richard/data/market-data-platform/reports/a_share_current_health_20260529_after_hk_freeze_20260601.json",
+  "contract": "/home/richard/data/market-data-platform/metadata/current_assets/a_share_current.json",
+  "as_of": "20260529",
+  "manifest_status": "completed",
+  "quality_gate_status": "pass",
+  "totals": {
+    "missing_assets": 0,
+    "stale_assets": 0,
+    "quality_issue_count": 0
+  }
+}

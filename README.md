@@ -57,6 +57,8 @@ python scripts/smoke_contracts.py
 | 先把工作区跑起来 | [docs/bootstrap.md](docs/bootstrap.md) |
 | 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
 | 判断先归档港股还是推进 A 股数据 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
+| 查看港股 legacy surface inventory | [docs/hk-legacy-surface-inventory.md](docs/hk-legacy-surface-inventory.md) |
+| 导出 clean-room 港股公开 demo | [docs/hk-public-demo-export.md](docs/hk-public-demo-export.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
 | 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
 | 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |
@@ -75,12 +77,15 @@ python scripts/smoke_contracts.py
 ```bash
 python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
+python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
 python scripts/print_version_matrix.py
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
 `run_submodule_checks.py` 只按 manifest 进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
+
+`a_share_readiness.py` 只读检查 A 股迁移证据，不会下载数据、训练模型或连接券商。完整 baseline 验收时通过 `--evidence-manifest <json>` 提供研究输出、目标文件 lineage 和执行 dry-run 报告。
 
 ## 协作边界
 

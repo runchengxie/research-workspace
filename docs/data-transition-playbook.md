@@ -15,6 +15,25 @@
 
 代码维护债应继续按各子仓库治理清单推进，但不应阻塞 A 股 baseline；它会阻塞的是“把现有下载结果包装成已成熟主线”的判断。
 
+## A 股 readiness 分层
+
+顶层只读命令按三档汇报状态：
+
+```bash
+python scripts/a_share_readiness.py \
+  --artifacts-root "$DATA_PLATFORM_ROOT" \
+  --evidence-manifest /path/to/a_share_readiness_evidence.json \
+  --pretty
+```
+
+| readiness | 含义 |
+| --- | --- |
+| `baseline_reproducible` | contract、registry、`daily_clean`、by-date universe、研究输出、`targets.json` lineage 和 CN dry-run 证据齐全 |
+| `research_default_promotable` | baseline 通过，并补齐研究窗口、PIT 输入、行业语义、A 股 benchmark、CPCV、feature evidence、promotion gate 和 side-aware 交易规则 |
+| `broker_trading_enabled` | 执行系统另行证明券商 adapter、账户权限、受监督冒烟证据和操作批准；不能由 CN 文件 dry-run 自动推导 |
+
+readiness 报告不会下载数据、跑训练或连接券商。当前已发布的 A 股 `daily_clean` 中期窗口是 `2024-01-02` 到 `2026-05-29`；研究 preset 不应继续暗示已有 `2015-01-01` 起的完整资产。
+
 ## 1. 数据根目录审计
 
 先设置共享数据根目录并跑顶层检查：
@@ -110,7 +129,8 @@ cstree run --config default_next
 - `market: a_share`
 - `data.provider: tushare`
 - `data.source_mode: platform_assets`
-- `research_universe.mode: static`
+- `research_universe.mode: pit`
+- `research_universe.require_by_date: true`
 - `execution.market: a_share`
 
 ## 4. 执行 dry-run 证据
@@ -132,6 +152,7 @@ qexec rebalance <targets.json> --broker <paper-broker>
 - `daily_clean` 质量门禁通过，并且覆盖行数、证券数、估值 overlay 和涨跌停标记符合预期。
 - `default_next` 能稳定产出 `summary.json`、`config.used.yml` 和持仓文件。
 - A 股 `targets.json` 已通过执行引擎基础 dry-run。
-- PIT universe、PIT fundamentals 和行业历史仍未补齐时，文档明确声明当前仍是 price-only / static-universe baseline。
+- PIT fundamentals 和行业历史仍未补齐时，文档明确声明当前仍是
+  price-only / `daily_clean` + full-market by-date PIT universe baseline。
 
 如果任一条件不满足，优先修 contract、质量门禁或研究入口；不要用更大规模下载掩盖边界缺口。

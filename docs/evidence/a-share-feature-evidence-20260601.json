@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "a_share",
+  "source_report": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/feature_evidence.json",
+  "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "checks": {
+    "selected_candidate_present": true,
+    "feature_stability_available": true,
+    "feature_stability_top_k_hit_rate": 1.0,
+    "feature_stability_nonzero_hit_rate": 1.0,
+    "walk_forward_test_ic_mean": 0.03362774248369643
+  },
+  "limitations": [
+    "No final OOS IC is available in this medium-window candidate run."
+  ]
+}

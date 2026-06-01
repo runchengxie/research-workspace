@@ -9,6 +9,9 @@
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 先理解整体链路 | [platform-workflow.md](platform-workflow.md) |
 | 判断先归档港股还是推进 A 股数据 | [data-transition-playbook.md](data-transition-playbook.md) |
+| 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
+| 导出暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
+| 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
 | 维护子模块指针或顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |

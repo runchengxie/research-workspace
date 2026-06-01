@@ -1,0 +1,16 @@
+name: smoke
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  offline-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/run_demo.py --out-dir samples
+      - run: python -m unittest discover -s tests -v

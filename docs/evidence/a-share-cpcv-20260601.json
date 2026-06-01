@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "a_share",
+  "source_report": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/cpcv_candidate_6x2/cpcv_summary.json",
+  "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "checks": {
+    "n_groups": 6,
+    "test_groups": 2,
+    "split_count": 15,
+    "valid_split_count": 15,
+    "path_count": 5,
+    "valid_path_count": 5,
+    "min_valid_path_count": 5,
+    "sharpe_median": 1.5400211491876834,
+    "sharpe_p25": 1.2184083254316278,
+    "positive_sharpe_ratio": 1.0,
+    "ic_median": 0.002760717664667442,
+    "long_short_median": 0.008593170353419291,
+    "turnover_median": 0.9239958339930057,
+    "cost_drag_median": 0.0017326807850233349
+  },
+  "limitations": [
+    "CPCV excludes final OOS dates because this candidate run has no final OOS slice.",
+    "Turnover remains high in the CPCV path metrics and is handled by promotion-gate review."
+  ]
+}

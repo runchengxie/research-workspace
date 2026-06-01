@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "a_share",
+  "source_report": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/benchmark_ladder.json",
+  "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "checks": {
+    "all_rows_status_ok": true,
+    "benchmark_market": "a_share",
+    "primary_benchmark": "a_share_all_equalw",
+    "comparison_count": 3
+  },
+  "limitations": [
+    "The selected candidate underperformed all equal-weight benchmark cohorts in this short evidence window."
+  ]
+}

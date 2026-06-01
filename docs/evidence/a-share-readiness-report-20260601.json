@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "market": "a_share",
+  "artifacts_root": "/home/richard/data/market-data-platform",
+  "evidence_manifest": "/home/richard/code/research-workspace/docs/evidence/a-share-readiness-evidence-20260601.json",
+  "contract": {
+    "path": "/home/richard/data/market-data-platform/metadata/current_assets/a_share_current.json",
+    "legacy_cn_alias": null,
+    "assets": {
+      "instruments": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/instruments/a_share_all_instruments_latest.manifest.yml",
+        "manifest_status": "completed",
+        "start_date": null,
+        "end_date": null,
+        "totals": {
+          "rows": 5850,
+          "symbols": 5850,
+          "files": 1
+        }
+      },
+      "daily_clean": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20240101_20260529_daily_clean/manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "20240102",
+        "end_date": "20260529",
+        "totals": {
+          "rows": 3128352,
+          "symbols": 5611,
+          "files": 5611
+        }
+      },
+      "universe_by_date": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "20240229",
+        "end_date": "20260529",
+        "totals": {
+          "rows": 151105,
+          "symbols": 5582,
+          "latest_symbols": 5499,
+          "rebalance_dates": 28,
+          "files": 1
+        }
+      },
+      "universe_symbols": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_symbols.manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "20240229",
+        "end_date": "20260529",
+        "totals": {
+          "rows": 5499,
+          "symbols": 5499,
+          "files": 1
+        }
+      },
+      "universe_meta": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.meta.manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "20240229",
+        "end_date": "20260529",
+        "totals": {
+          "rows": 1,
+          "symbols": 5499,
+          "files": 1
+        }
+      }
+    },
+    "effective_start_date": "20240229",
+    "effective_end_date": "20260529"
+  },
+  "levels": {
+    "baseline_reproducible": {
+      "name": "baseline_reproducible",
+      "passed": true,
+      "failed_checks": [],
+      "checks": [
+        {
+          "id": "a_share_current_contract",
+          "passed": true,
+          "message": "canonical A-share contract is present",
+          "details": {
+            "path": "/home/richard/data/market-data-platform/metadata/current_assets/a_share_current.json",
+            "provider": "tushare",
+            "target_date": "20260529",
+            "legacy_cn_alias": null
+          }
+        },
+        {
+          "id": "asset:instruments",
+          "passed": true,
+          "message": "instruments asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/instruments/a_share_all_instruments_latest.manifest.yml",
+            "manifest_status": "completed",
+            "start_date": null,
+            "end_date": null,
+            "totals": {
+              "rows": 5850,
+              "symbols": 5850,
+              "files": 1
+            }
+          }
+        },
+        {
+          "id": "asset:daily_clean",
+          "passed": true,
+          "message": "daily_clean asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20240101_20260529_daily_clean/manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "20240102",
+            "end_date": "20260529",
+            "totals": {
+              "rows": 3128352,
+              "symbols": 5611,
+              "files": 5611
+            }
+          }
+        },
+        {
+          "id": "asset:universe_by_date",
+          "passed": true,
+          "message": "universe_by_date asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "20240229",
+            "end_date": "20260529",
+            "totals": {
+              "rows": 151105,
+              "symbols": 5582,
+              "latest_symbols": 5499,
+              "rebalance_dates": 28,
+              "files": 1
+            }
+          }
+        },
+        {
+          "id": "asset:universe_symbols",
+          "passed": true,
+          "message": "universe_symbols asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_symbols.manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "20240229",
+            "end_date": "20260529",
+            "totals": {
+              "rows": 5499,
+              "symbols": 5499,
+              "files": 1
+            }
+          }
+        },
+        {
+          "id": "asset:universe_meta",
+          "passed": true,
+          "message": "universe_meta asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.meta.manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "20240229",
+            "end_date": "20260529",
+            "totals": {
+              "rows": 1,
+              "symbols": 5499,
+              "files": 1
+            }
+          }
+        },
+        {
+          "id": "dataset_registry",
+          "passed": true,
+          "message": "registry contains a_share_current_contract",
+          "details": {
+            "path": "/home/richard/data/market-data-platform/metadata/dataset_registry.csv",
+            "rows": 11
+          }
+        },
+        {
+          "id": "daily_clean_validation_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-daily-clean-validation-20260601.json",
+            "status": "passed",
+            "totals": {
+              "missing_assets": 0,
+              "stale_assets": 0,
+              "quality_issue_count": 0
+            }
+          }
+        },
+        {
+          "id": "universe_validation_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-universe-validation-20260601.json",
+            "status": "passed",
+            "totals": {
+              "missing_assets": 0,
+              "stale_assets": 0,
+              "quality_issue_count": 0
+            }
+          }
+        },
+        {
+          "id": "research_run_outputs",
+          "passed": true,
+          "message": "research run outputs are present",
+          "details": {
+            "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+            "missing": [],
+            "positions": [
+              "positions_current.csv"
+            ]
+          }
+        },
+        {
+          "id": "targets_lineage",
+          "passed": true,
+          "message": "targets and lineage are present",
+          "details": {
+            "targets_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
+            "targets_lineage_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json",
+            "targets": 5
+          }
+        },
+        {
+          "id": "qexec_cn_dry_run",
+          "passed": true,
+          "message": "CN dry-run evidence passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-qexec-dry-run-20260601.json",
+            "status": "passed",
+            "dry_run": true,
+            "execute": false,
+            "market": "CN"
+          }
+        }
+      ]
+    },
+    "research_default_promotable": {
+      "name": "research_default_promotable",
+      "passed": false,
+      "failed_checks": [
+        "profile:pit_fundamentals",
+        "profile:historical_industry",
+        "promotion_gate_report"
+      ],
+      "checks": [
+        {
+          "id": "baseline_reproducible",
+          "passed": true,
+          "message": "baseline evidence passed"
+        },
+        {
+          "id": "research_window",
+          "passed": true,
+          "message": "configured research window is covered by required assets",
+          "details": {
+            "configured_start_date": "20240229",
+            "effective_start_date": "20240229",
+            "effective_end_date": "20260529"
+          }
+        },
+        {
+          "id": "profile:pit_universe",
+          "passed": true,
+          "message": "point-in-time by-date universe is declared",
+          "details": {
+            "mode": "pit",
+            "point_in_time": true,
+            "by_date_file": "artifacts/assets/universe/a_share_all_full_by_date.csv"
+          }
+        },
+        {
+          "id": "profile:pit_fundamentals",
+          "passed": false,
+          "message": "point-in-time fundamentals semantics are incomplete",
+          "details": {
+            "statement_features_enabled": false,
+            "point_in_time": true,
+            "report_period": true,
+            "disclosure_date": true,
+            "availability_delay": true,
+            "field_mapping": true,
+            "missing_rules": [
+              "statement_features_enabled"
+            ]
+          }
+        },
+        {
+          "id": "profile:historical_industry",
+          "passed": false,
+          "message": "historical industry semantics are incomplete",
+          "details": {
+            "historical_backtest_enabled": false,
+            "historical_membership": true,
+            "effective_date": true,
+            "missing_rules": [
+              "historical_backtest_enabled"
+            ]
+          }
+        },
+        {
+          "id": "profile:side_aware_trading",
+          "passed": true,
+          "message": "side-aware trading policies are declared",
+          "details": {
+            "missing_rules": []
+          }
+        },
+        {
+          "id": "benchmark_ladder_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-benchmark-ladder-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "cpcv_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-cpcv-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "feature_evidence_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-feature-evidence-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "promotion_gate_report",
+          "passed": false,
+          "message": "validation report did not pass",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-promotion-gate-20260601.json",
+            "status": "failed",
+            "totals": null
+          }
+        }
+      ]
+    },
+    "broker_trading_enabled": {
+      "name": "broker_trading_enabled",
+      "passed": false,
+      "failed_checks": [
+        "broker:adapter_supported",
+        "broker:account_permissions_verified",
+        "broker:supervised_smoke_evidence",
+        "broker:operational_approval"
+      ],
+      "checks": [
+        {
+          "id": "baseline_reproducible",
+          "passed": true,
+          "message": "baseline evidence passed"
+        },
+        {
+          "id": "broker:adapter_supported",
+          "passed": false,
+          "message": "adapter_supported is not verified"
+        },
+        {
+          "id": "broker:account_permissions_verified",
+          "passed": false,
+          "message": "account_permissions_verified is not verified"
+        },
+        {
+          "id": "broker:supervised_smoke_evidence",
+          "passed": false,
+          "message": "supervised_smoke_evidence is not verified"
+        },
+        {
+          "id": "broker:operational_approval",
+          "passed": false,
+          "message": "operational_approval is not verified"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "passed_levels": [
+      "baseline_reproducible"
+    ],
+    "failed_levels": [
+      "research_default_promotable",
+      "broker_trading_enabled"
+    ],
+    "legacy_cn_alias_present": false
+  }
+}
