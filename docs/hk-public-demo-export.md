@@ -10,6 +10,7 @@ maintenance: paused
 ```
 
 发布必须由维护者在检查 staged tree 后显式执行。本工作区脚本不会创建远端仓库或 push。
+本工作区只把该仓库作为外部作品集 reference 链接，不把它加入 required submodule。
 
 ## 导出
 
@@ -32,6 +33,13 @@ python scripts/export_hk_public_demo.py --out /tmp/hk-cross-sectional-strategy-d
 
 ```bash
 python scripts/export_hk_public_demo.py --scan-only /tmp/hk-cross-sectional-strategy-demo
+```
+
+2026-06-01 的离线复核 staging 位于：
+
+```text
+/tmp/hk-cross-sectional-strategy-demo-verify-20260601
+export-manifest.json: scan=passed, offline_smoke=passed
 ```
 
 ## 边界

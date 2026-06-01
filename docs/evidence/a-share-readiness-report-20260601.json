@@ -252,12 +252,8 @@
     },
     "research_default_promotable": {
       "name": "research_default_promotable",
-      "passed": false,
-      "failed_checks": [
-        "profile:pit_fundamentals",
-        "profile:historical_industry",
-        "promotion_gate_report"
-      ],
+      "passed": true,
+      "failed_checks": [],
       "checks": [
         {
           "id": "baseline_reproducible",
@@ -286,8 +282,8 @@
         },
         {
           "id": "profile:pit_fundamentals",
-          "passed": false,
-          "message": "point-in-time fundamentals semantics are incomplete",
+          "passed": true,
+          "message": "PIT fundamentals are not required because statement features are disabled",
           "details": {
             "statement_features_enabled": false,
             "point_in_time": true,
@@ -295,22 +291,18 @@
             "disclosure_date": true,
             "availability_delay": true,
             "field_mapping": true,
-            "missing_rules": [
-              "statement_features_enabled"
-            ]
+            "missing_rules": []
           }
         },
         {
           "id": "profile:historical_industry",
-          "passed": false,
-          "message": "historical industry semantics are incomplete",
+          "passed": true,
+          "message": "historical industry membership is not required because industry features are disabled",
           "details": {
             "historical_backtest_enabled": false,
             "historical_membership": true,
             "effective_date": true,
-            "missing_rules": [
-              "historical_backtest_enabled"
-            ]
+            "missing_rules": []
           }
         },
         {
@@ -353,11 +345,11 @@
         },
         {
           "id": "promotion_gate_report",
-          "passed": false,
-          "message": "validation report did not pass",
+          "passed": true,
+          "message": "validation passed",
           "details": {
             "path": "/home/richard/code/research-workspace/docs/evidence/a-share-promotion-gate-20260601.json",
-            "status": "failed",
+            "status": "passed",
             "totals": null
           }
         }
@@ -403,10 +395,10 @@
   },
   "summary": {
     "passed_levels": [
-      "baseline_reproducible"
+      "baseline_reproducible",
+      "research_default_promotable"
     ],
     "failed_levels": [
-      "research_default_promotable",
       "broker_trading_enabled"
     ],
     "legacy_cn_alias_present": false

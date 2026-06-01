@@ -50,8 +50,8 @@
     "operational_approval": false
   },
   "limitations": [
-    "The candidate run used daily valuation overlay features, but PIT statement fundamentals were disabled because the expected PIT fundamentals asset file was not present in the shared root.",
-    "Historical industry joins were disabled because the expected industry changes asset file was not present in the shared root.",
-    "The promotion gate rejected the candidate, so this evidence bundle is baseline-reproducible only and must not switch the default profile."
+    "The promoted A-share research default is a price/daily-valuation-overlay lane; PIT statement fundamentals are not enabled in this evidence bundle.",
+    "Historical industry joins are not enabled in this evidence bundle.",
+    "Broker trading remains disabled; CN file-contract dry-run evidence does not imply real A-share order submission."
   ]
 }

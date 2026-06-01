@@ -1,0 +1,47 @@
+{
+  "schema_version": "hk_research_archive_manifest.v1",
+  "recorded_at": "2026-06-01T18:55:00+08:00",
+  "strategy_repository": "cross-sectional-trees",
+  "source_revision": "8601936c792d3b68cd93aafcabecb3b4ba9c5200",
+  "source_reference": "hk_research_freeze_20260601_full",
+  "archive_manifest": {
+    "release_tag": "hk_research_freeze_20260601_full",
+    "archive": "hk-research-freeze-20260601.tar.zst",
+    "archive_sha256": "32ff3cd048eb33d5aaa067449932e4528b91700ee07995de46289565f271c6f4",
+    "manifest": "research-freeze-manifest.json",
+    "manifest_paths": 879,
+    "manifest_files": 28695,
+    "manifest_bytes": 1997093905
+  },
+  "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+  "extracted_from_active_lane": [
+    "artifacts/runs",
+    "artifacts/sweeps",
+    "artifacts/reports",
+    "artifacts/live_runs",
+    "artifacts/benchmarks",
+    "artifacts/exports",
+    "artifacts/cache/intraday",
+    "artifacts/metadata/universe/hk_*"
+  ],
+  "retained_strategy_surfaces": [
+    "configs/presets/hk.yml",
+    "configs/presets/data/hk_rqdata.yml",
+    "configs/experiments/baseline/hk_selected*.yml",
+    "configs/experiments/variants/hk_selected*.yml",
+    "configs/experiments/sweeps/hk_selected*.yml",
+    "docs/research/notes/hk-*.md",
+    "src/cstree/liveops/alloc_hk*",
+    "src/cstree/research/hk_*"
+  ],
+  "retained_surface_lifecycle": {
+    "hk_preset": "frozen_compatibility",
+    "alloc_hk": "frozen_compatibility",
+    "hk_experiment_configs": "archived_provenance",
+    "hk_research_notes": "archived_provenance",
+    "market_agnostic_pipeline": "shared_active"
+  },
+  "active_default_after_extraction": "a_share",
+  "publication_link_policy": "external_reference_only_no_required_submodule",
+  "status": "passed"
+}

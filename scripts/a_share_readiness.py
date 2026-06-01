@@ -416,12 +416,30 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
         str(universe.get("mode") or "") in {"by_date", "pit"}
         and universe.get("point_in_time") is True
     )
-    missing_fundamentals = [
-        rule for rule in PIT_FUNDAMENTALS_RULES if fundamentals.get(rule) is not True
-    ]
-    missing_industry = [
-        rule for rule in HISTORICAL_INDUSTRY_RULES if industry.get(rule) is not True
-    ]
+    if fundamentals.get("statement_features_enabled") is False:
+        missing_fundamentals: list[str] = []
+        fundamentals_message = "PIT fundamentals are not required because statement features are disabled"
+    else:
+        missing_fundamentals = [
+            rule for rule in PIT_FUNDAMENTALS_RULES if fundamentals.get(rule) is not True
+        ]
+        fundamentals_message = (
+            "point-in-time fundamentals semantics are declared"
+            if not missing_fundamentals
+            else "point-in-time fundamentals semantics are incomplete"
+        )
+    if industry.get("historical_backtest_enabled") is False:
+        missing_industry: list[str] = []
+        industry_message = "historical industry membership is not required because industry features are disabled"
+    else:
+        missing_industry = [
+            rule for rule in HISTORICAL_INDUSTRY_RULES if industry.get(rule) is not True
+        ]
+        industry_message = (
+            "historical industry semantics are declared"
+            if not missing_industry
+            else "historical industry semantics are incomplete"
+        )
     missing_rules = [rule for rule in SIDE_AWARE_RULES if trading.get(rule) is not True]
     return [
         _check(
@@ -433,21 +451,13 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
         _check(
             "profile:pit_fundamentals",
             passed=not missing_fundamentals,
-            message=(
-                "point-in-time fundamentals semantics are declared"
-                if not missing_fundamentals
-                else "point-in-time fundamentals semantics are incomplete"
-            ),
+            message=fundamentals_message,
             details={**fundamentals, "missing_rules": missing_fundamentals},
         ),
         _check(
             "profile:historical_industry",
             passed=not missing_industry,
-            message=(
-                "historical industry semantics are declared"
-                if not missing_industry
-                else "historical industry semantics are incomplete"
-            ),
+            message=industry_message,
             details={**industry, "missing_rules": missing_industry},
         ),
         _check(

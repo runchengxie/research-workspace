@@ -1,6 +1,6 @@
 {
   "schema_version": "hk_restore_drill.v1",
-  "recorded_at": "2026-06-01T17:04:00+08:00",
+  "recorded_at": "2026-06-01T18:50:00+08:00",
   "temporary_root": "/home/richard/data/hk-restore-drill-20260601",
   "active_roots_modified": false,
   "data_platform_release": {
@@ -10,23 +10,22 @@
     "archive_sha256": "cbbe642736c2d0f51c52cf8f0ee6113d5d85f77a1ce2c422e4fba5b82edd0184",
     "download": "passed",
     "sha256sums": "passed",
-        "zstd_test": "passed",
-        "summary": {
-            "paths": 330,
-            "files": 85889,
-            "symlinks": 19,
-            "bytes": 6922830594
-        },
-        "isolated_extract": "blocked",
-        "hydrate_dry_run": "not_run",
-        "hydrate_apply": "not_run",
-        "blocker": "The isolated data-disk extraction write request was rejected after the approval system reached its usage limit.",
-        "blocked_at": "2026-06-01T18:04:00+08:00",
-        "fallback_checked": {
-            "tmp_available": "3.9G",
-            "archive_uncompressed_bytes": 6922830594,
-            "tmp_is_sufficient": false
-        }
+    "zstd_test": "passed",
+    "isolated_extract": "passed",
+    "hydrate_dry_run": "passed",
+    "hydrate_apply": "passed",
+    "isolated_active_root": "/home/richard/data/hk-restore-drill-20260601/isolated-active-data",
+    "registry_rebuild": "passed",
+    "summary": {
+      "paths": 330,
+      "files": 85889,
+      "symlinks": 19,
+      "bytes": 6922830594
+    },
+    "restored_files": 85889,
+    "restored_symlinks": 19,
+    "isolated_active_total_files": 85891,
+    "isolated_registry_rows": 37
   },
   "research_outputs_release": {
     "tag": "hk_research_freeze_20260601_full",
@@ -39,6 +38,7 @@
     "isolated_extract": "passed",
     "hydrate_dry_run": "passed",
     "hydrate_apply": "passed",
+    "isolated_active_root": "/home/richard/data/hk-restore-drill-20260601/isolated-active-research",
     "summary": {
       "paths": 879,
       "files": 28695,
@@ -50,6 +50,6 @@
     "restored_symlinks": 0
   },
   "cleanup_required": true,
-  "completion_status": "partial",
-  "remaining_action": "Complete the isolated data-platform archive extraction and hydrate dry-run/apply drill, then remove the temporary restore-drill directory after retaining final evidence."
+  "completion_status": "passed",
+  "remaining_action": "Temporary restore-drill directories may be removed after this evidence file and release notes are retained."
 }
