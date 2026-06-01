@@ -47,6 +47,16 @@ sha256sum -c SHA256SUMS
 zstd -t hk-research-freeze-20260601.tar.zst
 ```
 
+## 本地清理
+
+归档已上传到 private GitHub Release：
+
+```text
+https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_research_freeze_20260601_full
+```
+
+上传复核完成后，本地解包快照和 package 副本已经删除。活跃仓库中的 freeze marker 仍保留预期解压路径；恢复前必须先下载 release 附件、校验 SHA-256，并将主归档解压回该路径。
+
 ## 与数据平台冻结的关系
 
 研究包是数据平台 release 的补充，不是替代：
@@ -56,7 +66,7 @@ data assets: /home/richard/data/market-data-platform-cold/packages/hk-freeze-202
 research outputs: /home/richard/data/cross-sectional-trees-cold/packages/hk-research-freeze-20260601
 ```
 
-`cross-sectional-trees/artifacts/migration_backups/20260525_hk_data_platform_pre_switch` 是迁移时代的平台审计备份，保留原位，不重复装入研究包。它仍有旧 symlink 拓扑的审计价值，但日常恢复优先使用数据平台 release。
+`cross-sectional-trees/artifacts/migration_backups/20260525_hk_data_platform_pre_switch` 曾是迁移时代的平台审计备份，没有重复装入研究包。该目录包含旧 symlink 拓扑的审计价值；在两个 release 上传复核完成后，本地副本已删除。
 
 ## 恢复
 

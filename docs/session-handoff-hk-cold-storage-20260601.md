@@ -50,6 +50,24 @@ sha256sum -c SHA256SUMS
 zstd -t hk-freeze-20260526.tar.zst
 ```
 
+## 本地清理
+
+归档已上传到 private GitHub Release：
+
+```text
+https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_cold_freeze_20260526_full
+```
+
+上传复核完成后，本地解包快照和 package 副本已经删除。活跃数据根目录中的 freeze marker 仍保留预期解压路径；恢复前必须先下载 release 附件、校验 SHA-256，并将主归档解压回该路径。
+
+仓库内旧 `market-data-platform/artifacts/` 也已删除，`.env.local` 已切换到 `/home/richard/data/market-data-platform`。删除前，未进入外部迁移记录的 `39` 个文件和旧目录中的 `639` 条 symlink 拓扑已经保存到：
+
+```text
+/home/richard/data/market-data-platform/metadata/archive/repo_local_artifacts_pre_cleanup_20260601
+```
+
+该目录中的 `cleanup-manifest.json` 记录了保留文件、SHA-256、迁移记录和远端港股 freeze manifest 的关联。
+
 ## Tick-Depth 限制
 
 港股 tick-depth 平台资产只保留索引、manifest 和派生产物。manifest 中记录的原始盘口缓存路径已经不在本机：
