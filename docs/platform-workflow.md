@@ -94,7 +94,7 @@ A 股 readiness 分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 - README 和子模块指针只表达已验证的研究到执行文件交接。
 - `export-targets` 只导出文件；顶层脚本不得把研究结果直接提交给真实券商。
-- 执行引擎接入工作区，不代表模拟盘或实盘路径已经放行。
+- 模拟盘或实盘路径的放行状态以执行仓库的券商证据和操作员记录为准。
 
 ### 执行放行门槛
 

@@ -18,9 +18,9 @@ quant-execution-engine
 ```
 
 当前活跃方向是 A 股数据、研究和执行交接。中国香港市场真实资产和研究输出按冷存储 /
-恢复流程保留，公开展示只通过外部 paused-maintenance 的 synthetic demo 仓库完成：
-`https://github.com/runchengxie/hk-cross-sectional-strategy-demo`。这个公开 demo 不是本工作区
-submodule，不参与顶层 CI、release matrix 或日常工作流。
+恢复流程保留；公开展示只通过外部 paused-maintenance 的 synthetic demo 仓库完成：
+`https://github.com/runchengxie/hk-cross-sectional-strategy-demo`。公开 demo 独立于本工作区，
+不会进入顶层 CI、release matrix 或日常工作流。
 
 ## 先知道什么
 
@@ -62,6 +62,7 @@ python scripts/smoke_contracts.py
 | 先把工作区跑起来 | [docs/bootstrap.md](docs/bootstrap.md) |
 | 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
 | 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
+| 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
 | 查看港股 legacy surface inventory | [docs/hk-legacy-surface-inventory.md](docs/hk-legacy-surface-inventory.md) |
 | 导出外部 clean-room 港股公开 demo | [docs/hk-public-demo-export.md](docs/hk-public-demo-export.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
@@ -77,8 +78,9 @@ python scripts/smoke_contracts.py
 | [cross-sectional-trees](cross-sectional-trees/) | 只读消费已发布数据资产，运行特征工程、模型评估、回测、持仓快照和 `targets.json` 导出。 | [cross-sectional-trees/README.md](cross-sectional-trees/README.md) |
 | [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
 
-港股公开 demo 独立于这三个子项目，仅用于作品集展示。真实港股历史复现仍以冷存储 release、
-manifest、restore drill 和对应子仓库兼容入口为准。
+港股公开 demo 独立于这三个子项目，仅用于作品集展示。真实港股历史复现以
+[中国香港市场归档](docs/archive/hk/README.md)、冷存储 release、manifest、restore drill
+和对应子仓库兼容入口为准。
 
 ## 常用顶层命令
 

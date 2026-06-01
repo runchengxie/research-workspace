@@ -61,7 +61,7 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 
 中国香港市场数据资产当前定位是 legacy / archival。除非存在明确资金、模拟盘、人工跟踪或跨市场验证需求，不应新增港股研究功能或扩大港股数据下载。
 
-2026-06-01 的实际冻结记录见 [session-handoff-hk-cold-storage-20260601.md](session-handoff-hk-cold-storage-20260601.md)。
+2026-06-01 的实际冻结记录见 [中国香港市场归档](archive/hk/README.md)。
 
 冻结前至少确认：
 

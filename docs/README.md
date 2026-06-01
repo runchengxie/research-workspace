@@ -3,8 +3,8 @@
 这里收录 superproject 层级的说明，只覆盖跨仓库协作、contract、版本锁定和发布检查。子项目内部的依赖、业务命令、架构规则和测试要求仍以各自 README / docs 为准。
 
 当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产和研究输出按冷存储 /
-恢复边界保留；公开展示使用外部 paused-maintenance 的 synthetic demo 仓库，不作为本工作区
-submodule、依赖或必跑 CI 目标。
+恢复边界保留；公开展示使用外部 paused-maintenance 的 synthetic demo 仓库，独立于本工作区
+submodule、依赖和必跑 CI 目标。
 
 ## 推荐阅读顺序
 
@@ -13,6 +13,7 @@ submodule、依赖或必跑 CI 目标。
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 先理解整体链路 | [platform-workflow.md](platform-workflow.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
+| 查看中国香港市场归档入口 | [archive/hk/README.md](archive/hk/README.md) |
 | 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
 | 导出外部暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
@@ -22,6 +23,12 @@ submodule、依赖或必跑 CI 目标。
 | 查看 hard、advisory 和 manual 质量 gate | [quality-governance.md](quality-governance.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合前检查 | [release-checklist.md](release-checklist.md) |
+
+## 文档分层
+
+- 活跃文档：初始化、当前跨仓库工作流、A 股 readiness、contract、release checklist。
+- 参考文档：长期稳定的文件约定、质量治理、维护流程和 public demo 导出。
+- 归档文档：[archive/README.md](archive/README.md) 下的交接记录、冻结记录和历史证据。
 
 ## 文档边界
 

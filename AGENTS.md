@@ -60,6 +60,7 @@ cd quant-execution-engine && uv run pytest
 
 - 先确认改动属于 superproject 还是某个子仓库；不要把子仓库内部规则复制到顶层文档。
 - 顶层 `docs/` 只写跨仓库协作、contract 和 release/checklist 事项。
+- 临时交接、冻结记录、release note 和历史复查材料应放入 `docs/archive/`，活跃文档只链接归档入口。
 - 修改 submodule 内容后，要同时注意 superproject 的 submodule gitlink 状态。
 - 不要提交 `.pytest_cache/`、`__pycache__/`、`artifacts/`、`outputs/`、provider credentials 或本地 `.env*`。
 - 文档改动至少检查路径、contract 名称和市场称谓是否一致。

@@ -21,7 +21,7 @@ SHA256SUMS
 freeze-manifest.json
 hk-frozen-marker.json
 a_share_current_health_20260529_after_hk_freeze_20260601.json
-session-handoff-hk-cold-storage-20260601.md
+../session-handoffs/hk-cold-storage-20260601.md
 ```
 
 主归档使用 `tar | zstd -12 -T0 --long=27` 生成：
@@ -49,4 +49,4 @@ zstd -t hk-freeze-20260526.tar.zst
 tar -I unzstd -xf hk-freeze-20260526.tar.zst
 ```
 
-恢复到活跃共享数据根目录前，先阅读 `session-handoff-hk-cold-storage-20260601.md` 并执行 `marketdata migration hydrate-hk` 的 dry-run。
+恢复到活跃共享数据根目录前，先阅读 [`hk-cold-storage-20260601.md`](../session-handoffs/hk-cold-storage-20260601.md)，并执行 `marketdata migration hydrate-hk` 的 dry-run。

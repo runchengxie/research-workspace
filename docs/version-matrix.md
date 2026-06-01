@@ -1,14 +1,31 @@
 # 版本矩阵
 
-本页记录已经验证或正在验证的工作区版本组合。这里是人工审计记录；真正锁定版本的仍是 Git 子模块指针。
+本页记录工作区版本组合。真正锁定版本的是 Git 子模块指针；本页只保存当前检出状态和人工验证结论。
 
 ## 当前检出状态
 
-截至 2026-05-27，本地检出状态如下。`rqdata-hk-depth-snapshots` 已从工作区 sunset；中国香港市场 depth 由 `market-data-platform` 承载。
+先用脚本生成当前状态：
 
-| 顶层仓库 | market-data-platform | cross-sectional-trees | quant-execution-engine | 状态 | 备注 |
-| --- | --- | --- | --- | --- | --- |
-| 本地工作区 | 当前子模块指针 | 当前子模块指针 | 当前子模块指针 | 本地工作状态 | 当前正在移除 depth 子模块并收口 cross 侧数据资产维护入口 |
+```bash
+python scripts/print_version_matrix.py
+```
+
+当前本地输出：
+
+| component | commit |
+| --- | --- |
+| workspace | `3039a39` + local changes |
+| market-data-platform | `ca765df` |
+| cross-sectional-trees | `6773a1f` |
+| quant-execution-engine | `3c9903f` |
+
+如果脚本报告 `not initialized`，先运行：
+
+```bash
+git submodule update --init --recursive
+```
+
+普通 zip/source snapshot 没有 `.git` 元数据，不能生成 commit matrix；这种场景只适合阅读顶层文档，不能作为版本锁定或完整链接测试依据。
 
 ## 已验证组合
 
@@ -18,7 +35,7 @@
 
 ## 更新方法
 
-先生成当前版本矩阵：
+生成当前版本矩阵：
 
 ```bash
 python scripts/print_version_matrix.py

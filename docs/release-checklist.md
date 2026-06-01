@@ -66,4 +66,5 @@
 - [ ] [contracts.md](contracts.md) 仍准确描述跨模块边界。
 - [ ] [platform-workflow.md](platform-workflow.md) 的执行验证状态没有夸大模拟盘 / 实盘成熟度。
 - [ ] [bootstrap.md](bootstrap.md) 中的初始化命令仍符合子项目当前依赖定义。
+- [ ] 临时交接、冻结记录和历史 release note 已进入 [archive/README.md](archive/README.md)，活跃文档只保留归档入口链接。
 - [ ] 本次版本组合和验证结论已写入 [version-matrix.md](version-matrix.md)。

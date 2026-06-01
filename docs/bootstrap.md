@@ -16,6 +16,9 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
+普通 zip/source snapshot 没有 Git 子模块提交信息，也通常没有子模块内容；它适合阅读顶层文档，
+不能作为完整测试、版本矩阵或文档链接检查的运行目录。
+
 确认子模块指针和本地状态：
 
 ```bash

@@ -21,7 +21,7 @@ hk-research-freeze-20260601.tar.zst
 SHA256SUMS
 research-freeze-manifest.json
 hk-research-frozen-marker.json
-session-handoff-hk-research-cold-storage-20260601.md
+../session-handoffs/hk-research-cold-storage-20260601.md
 ```
 
 主归档使用 `tar | zstd -12 -T0 --long=27` 生成：
@@ -49,7 +49,7 @@ zstd -t hk-research-freeze-20260601.tar.zst
 tar -I unzstd -xf hk-research-freeze-20260601.tar.zst
 ```
 
-恢复研究产物前，先阅读 `session-handoff-hk-research-cold-storage-20260601.md`，再运行：
+恢复研究产物前，先阅读 [`hk-research-cold-storage-20260601.md`](../session-handoffs/hk-research-cold-storage-20260601.md)，再运行：
 
 ```bash
 python scripts/internal/freeze_hk_research_outputs.py hydrate
