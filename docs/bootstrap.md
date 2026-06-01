@@ -68,11 +68,14 @@ $DATA_PLATFORM_ROOT/
   assets/
   metadata/
     current_assets/
-      hk_current.json
       a_share_current.json
+    frozen_markets/
+      hk.json
     dataset_registry.csv
   reports/
 ```
+
+`metadata/frozen_markets/hk.json` 表示港股资产已经整体移入独立冷存储。需要港股历史复现或明确跟踪时，先用 `marketdata migration hydrate-hk` 恢复。
 
 不要把以下内容提交到顶层 Git：
 

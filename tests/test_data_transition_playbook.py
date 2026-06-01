@@ -12,13 +12,16 @@ class DataTransitionPlaybookTest(unittest.TestCase):
     def test_playbook_records_current_priority_order(self) -> None:
         text = PLAYBOOK.read_text(encoding="utf-8")
         required = [
-            "当前不建议直接开始 A 股完整数据下载",
+            "截至 2026-06-01，A 股中期窗口数据已发布，港股转入冷存储",
             "DATA_PLATFORM_ROOT",
             "metadata/current_assets/hk_current.json",
             "metadata/current_assets/a_share_current.json",
+            "metadata/frozen_markets/hk.json",
             "metadata/dataset_registry.csv",
             "metadata/current_assets/cn_current.json",
             "marketdata rqdata inspect-hk-current",
+            "marketdata migration freeze-hk",
+            "marketdata migration hydrate-hk",
             "marketdata tushare validate-a-share-daily-clean",
             "cstree run --config default_next",
             "qexec rebalance",

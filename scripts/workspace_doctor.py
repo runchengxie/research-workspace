@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import ast
 import configparser
+import json
 import os
 import shutil
 import subprocess
@@ -216,9 +217,39 @@ def check_data_platform_root() -> list[Check]:
     hk_contract = current_root / "hk_current.json"
     a_share_contract = current_root / "a_share_current.json"
     legacy_cn_contract = current_root / "cn_current.json"
+    hk_freeze_marker = artifact_root / "metadata" / "frozen_markets" / "hk.json"
     dataset_registry = artifact_root / "metadata" / "dataset_registry.csv"
     if hk_contract.is_file():
         checks.append(Check("OK", "current-contract", f"Found {hk_contract}."))
+    elif hk_freeze_marker.is_file():
+        try:
+            marker = json.loads(hk_freeze_marker.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            checks.append(
+                Check(
+                    "WARN",
+                    "frozen-market",
+                    f"Invalid HK cold-storage marker {hk_freeze_marker}: {exc}",
+                )
+            )
+        else:
+            cold_snapshot = Path(str(marker.get("cold_snapshot") or "")).expanduser()
+            if cold_snapshot.is_dir():
+                checks.append(
+                    Check(
+                        "OK",
+                        "frozen-market",
+                        f"HK assets are frozen in cold storage: {cold_snapshot}.",
+                    )
+                )
+            else:
+                checks.append(
+                    Check(
+                        "WARN",
+                        "frozen-market",
+                        f"HK cold-storage snapshot is missing: {cold_snapshot}.",
+                    )
+                )
     else:
         checks.append(Check("WARN", "current-contract", f"Missing {hk_contract}."))
     if a_share_contract.is_file():

@@ -36,9 +36,9 @@ targets.json
 
 ## 研究主线
 
-当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产保留在 `market-data-platform`，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 legacy research lane。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
+当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 legacy research lane。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
 
-当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：先审计 `DATA_PLATFORM_ROOT`、current contract 和 `dataset_registry.csv`，再补齐中国香港市场归档证据，然后用 A 股 `daily_clean` / `default_next` 做 staged baseline。不要在这些边界未验证前直接启动 A 股完整数据下载或把 `default` 切到 A 股。
+当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股继续用 `daily_clean` / `default_next` 做 staged baseline。不要在验收条件未满足前把 `default` 偷偷切到 A 股。
 
 ### 1. 发布数据资产
 
@@ -49,13 +49,14 @@ targets.json
   assets/
   metadata/
     current_assets/
-      hk_current.json
       a_share_current.json
+    frozen_markets/
+      hk.json
     dataset_registry.csv
   reports/
 ```
 
-`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、中国香港市场 tick-depth 原生实现，以及中国香港市场日线、PIT、估值、行业、intraday、current contract 检查和资产发布实现。A 股主线迁移应优先读取 `metadata/current_assets/a_share_current.json` 指向的 TuShare 平台资产；港股盘口原始数据、健康检查、日频聚合、对账和打包由 `market_data_platform.hk_depth` 承载；中国香港市场 RQData assets 由 `market_data_platform.hk_assets` 和 `market_data_platform.release_tools` 承载，并作为 legacy / archival 数据资产保留。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
+`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、中国香港市场 tick-depth 原生实现，以及中国香港市场日线、PIT、估值、行业、intraday、current contract 检查、资产发布和冷存储 freeze / hydrate 实现。A 股主线迁移应优先读取 `metadata/current_assets/a_share_current.json` 指向的 TuShare 平台资产；港股长期不使用时由 `metadata/frozen_markets/hk.json` 记录冷存储位置，需要复现时再恢复。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不再作为子模块追踪。
 
 共享数据运维的新入口必须进入 `market-data-platform`。`cross-sectional-trees` 仅保留只读消费逻辑和少量兼容 wrapper；其边界清单由 `cross-sectional-trees/docs/internal/data-ops-boundary-inventory.md` 维护，避免下载、健康检查、current refresh、registry 或资产发布实现回流到研究仓库。
 

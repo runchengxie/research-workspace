@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import sys
 import tempfile
 import textwrap
@@ -147,6 +148,43 @@ class WorkspaceDoctorTest(unittest.TestCase):
             any(
                 check.code == "dataset-registry" and check.severity == "OK"
                 for check in found_checks
+            )
+        )
+
+    def test_data_platform_contract_check_accepts_frozen_hk_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp) / "active"
+            cold_snapshot = Path(tmp) / "cold" / "hk-freeze-20260526"
+            cold_snapshot.mkdir(parents=True)
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+            marker = artifact_root / "metadata" / "frozen_markets" / "hk.json"
+            marker.parent.mkdir(parents=True)
+            marker.write_text(
+                json.dumps({"cold_snapshot": str(cold_snapshot)}),
+                encoding="utf-8",
+            )
+
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                checks = workspace_doctor.check_data_platform_root()
+
+        self.assertTrue(
+            any(
+                check.code == "frozen-market" and check.severity == "OK"
+                for check in checks
+            )
+        )
+        self.assertFalse(
+            any(
+                check.code == "current-contract"
+                and check.severity == "WARN"
+                and "hk_current.json" in check.message
+                for check in checks
             )
         )
 

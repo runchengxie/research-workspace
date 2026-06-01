@@ -1,19 +1,19 @@
 # 数据迁移优先级 playbook
 
-本页解决什么：把“先审计共享数据根目录、再冻结港股、再分阶段验证 A 股”的当前决策落成可执行顺序。\
+本页解决什么：把“冻结港股到冷存储、保持 A 股活跃根目录简洁、继续分阶段验证 A 股”的当前决策落成可执行顺序。\
 本页不解决什么：不替代 `market-data-platform` 的数据下载运维手册，也不替代 `cross-sectional-trees` 的 A 股 baseline playbook。\
-适合谁：准备判断是否下载 A 股完整数据、是否先归档港股资产，或是否应先处理代码维护债的人。
+适合谁：准备维护 A 股活跃数据、冻结或恢复港股资产，或判断是否晋升 A 股研究入口的人。
 
 ## 当前决策
 
-当前不建议直接开始 A 股完整数据下载。工作区应先完成：
+截至 2026-06-01，A 股中期窗口数据已发布，港股转入冷存储。工作区按以下边界维护：
 
-1. 审计 `DATA_PLATFORM_ROOT`，确认 current contract 和 registry 的真实状态。
-2. 补齐中国香港市场 legacy / archival 数据资产的冻结证据。
-3. 用 A 股 staged baseline 验证 `daily_clean`、`a_share_current.json` 和 `default_next`。
-4. 只有 staged baseline 稳定后，才扩大到 A 股完整数据范围。
+1. 活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry。
+2. 中国香港市场资产冻结到独立冷存储，活跃根目录只保留 freeze marker。
+3. 港股历史复现、跨市场对照或明确跟踪需求出现时，先显式 hydrate。
+4. A 股仍按 staged baseline 验证；不要把现有 price-only 能力描述成完整 PIT 研究能力。
 
-代码维护债应继续按各子仓库治理清单推进，但不应阻塞小范围 A 股 baseline；它会阻塞的是“把完整下载结果包装成已成熟主线”的判断。
+代码维护债应继续按各子仓库治理清单推进，但不应阻塞 A 股 baseline；它会阻塞的是“把现有下载结果包装成已成熟主线”的判断。
 
 ## 1. 数据根目录审计
 
@@ -27,7 +27,7 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 
 必须确认：
 
-- `metadata/current_assets/hk_current.json` 存在，或明确记录为什么本轮不验证港股。
+- `metadata/current_assets/hk_current.json` 存在，或 `metadata/frozen_markets/hk.json` 明确记录港股冷存储位置。
 - `metadata/current_assets/a_share_current.json` 存在，或明确记录 A 股还没有发布 current contract。
 - `metadata/dataset_registry.csv` 存在，或计划用 `marketdata registry build --artifacts-root "$DATA_PLATFORM_ROOT"` 重建。
 - 如果存在 `metadata/current_assets/cn_current.json`，只能作为历史兼容 alias 处理，不能作为新的 A 股权威入口。
@@ -36,7 +36,9 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 
 中国香港市场数据资产当前定位是 legacy / archival。除非存在明确资金、模拟盘、人工跟踪或跨市场验证需求，不应新增港股研究功能或扩大港股数据下载。
 
-归档前至少确认：
+2026-06-01 的实际冻结记录见 [session-handoff-hk-cold-storage-20260601.md](session-handoff-hk-cold-storage-20260601.md)。
+
+冻结前至少确认：
 
 ```bash
 marketdata rqdata inspect-hk-current \
@@ -48,7 +50,31 @@ marketdata registry build \
   --market all
 ```
 
-如果检查发现缺口，优先补齐 current contract、manifest、registry 和关键研究 run 的输入锁定文件；不要先开始新的港股 sweep。
+然后先查看 freeze 计划，再显式执行：
+
+```bash
+marketdata migration freeze-hk \
+  --artifacts-root "$DATA_PLATFORM_ROOT" \
+  --cold-root /data/market-data-platform-cold \
+  --name hk-freeze-20260526 \
+  --checksum sha256 \
+  --json
+
+marketdata migration freeze-hk \
+  --artifacts-root "$DATA_PLATFORM_ROOT" \
+  --cold-root /data/market-data-platform-cold \
+  --name hk-freeze-20260526 \
+  --checksum sha256 \
+  --apply
+```
+
+如果检查发现缺口，优先补齐 current contract、manifest、registry 和关键研究 run 的输入锁定文件；不要先开始新的港股 sweep。需要恢复时运行：
+
+```bash
+marketdata migration hydrate-hk \
+  --artifacts-root "$DATA_PLATFORM_ROOT" \
+  --apply
+```
 
 ## 3. A 股 staged baseline
 
@@ -69,7 +95,7 @@ marketdata contract build \
 
 marketdata registry build \
   --artifacts-root "$DATA_PLATFORM_ROOT" \
-  --market all
+  --market a_share
 ```
 
 研究侧再验证迁移候选入口：
