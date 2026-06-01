@@ -4,7 +4,6 @@ import configparser
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_PATHS = {
     "market-data-platform",
@@ -26,6 +25,16 @@ class GitmodulesTest(unittest.TestCase):
         for section in parser.sections():
             url = parser.get(section, "url")
             self.assertTrue(url.startswith("https://"), section)
+
+    def test_public_hk_demo_remains_external_reference(self) -> None:
+        parser = configparser.ConfigParser()
+        parser.read(ROOT / ".gitmodules", encoding="utf-8")
+        urls = {parser.get(section, "url") for section in parser.sections()}
+
+        self.assertNotIn(
+            "https://github.com/runchengxie/hk-cross-sectional-strategy-demo",
+            urls,
+        )
 
     def test_readme_mentions_each_submodule(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

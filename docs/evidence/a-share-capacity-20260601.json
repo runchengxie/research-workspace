@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "status": "pending",
+  "market": "a_share",
+  "checks": {
+    "long_window_liquidity_distribution_completed": false,
+    "portfolio_participation_rate_stress_completed": false,
+    "capacity_limit_documented": false
+  },
+  "limitations": [
+    "Capacity evidence must be generated after the long-window PIT assets and shortlisted portfolio construction are fixed."
+  ]
+}

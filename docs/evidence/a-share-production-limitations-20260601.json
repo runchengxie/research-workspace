@@ -1,0 +1,40 @@
+{
+  "schema_version": "a_share.production_limitations.v1",
+  "as_of": "2026-06-01",
+  "readiness": {
+    "baseline_reproducible": "passed",
+    "complete_pit_research_data": "pending",
+    "production_strategy_evidence": "pending",
+    "broker_trading_enabled": "pending"
+  },
+  "remaining_a_share_data_gaps": [
+    "Platform-native TuShare fundamentals raw-to-normalized-to-PIT code is implemented, but production assets still need entitlement-aware backfill, validation, and publication.",
+    "Historical industry membership assets still need licensed or audited backfill and publication.",
+    "The published daily_clean and by-date universe baseline covers 2024-02-29 to 2026-05-29; the planned multi-cycle long window has not been published."
+  ],
+  "remaining_strategy_evidence_gaps": [
+    "Existing benchmark, feature-evidence, CPCV, and promotion reports prove the reproducible baseline only.",
+    "Long-window final OOS or documented substitute, turnover and cost stress, and capacity evidence still need to be regenerated after complete PIT assets are published."
+  ],
+  "remaining_broker_gaps": [
+    "CN targets.json parsing and local-dry-run evidence do not prove real A-share broker support.",
+    "A real broker adapter, account permissions, supervised smoke evidence, reconciliation evidence, kill-switch validation, and operational approval remain pending."
+  ],
+  "remaining_hk_external_state_gaps": [
+    "The local workspace doctor warns that /home/richard/data/market-data-platform-cold/hk-freeze-20260526 is currently missing. Tracked restore-drill evidence remains available, but this machine cannot hydrate that cold-storage snapshot until the external archive is restored."
+  ],
+  "advisory_checks": {
+    "quant_execution_engine_pyright": {
+      "status": "advisory_findings_recorded",
+      "errors": 8,
+      "warnings": 11,
+      "notes": "One actionable compatibility-shim type report was fixed. Remaining errors are optional IBKR and LongPort SDK dynamic-boundary normalization reports; warnings are deferred broker exports and PyYAML source visibility."
+    }
+  },
+  "intentionally_retained_hk_surfaces": [
+    "market-data-platform freeze/hydrate, restore-critical HK assets, and compatibility entry points",
+    "cross-sectional-trees explicit hk preset, archived research provenance, and deprecated alloc-hk compatibility command",
+    "quant-execution-engine shared multi-market target parsing, HKD FX, LongPort symbols, broker adapters, and retained HK execution tests",
+    "External paused-maintenance clean-room public demo reference; not a required workspace submodule"
+  ]
+}

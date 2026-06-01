@@ -12,8 +12,10 @@
 | 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
 | 导出暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
+| 查看 A 股生产 readiness 与长窗口扩展计划 | [a-share-production-readiness.md](a-share-production-readiness.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
 | 维护子模块指针或顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
+| 查看 hard、advisory 和 manual 质量 gate | [quality-governance.md](quality-governance.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合前检查 | [release-checklist.md](release-checklist.md) |
 

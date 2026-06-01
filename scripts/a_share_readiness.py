@@ -12,10 +12,10 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
-
 READINESS_LEVELS = (
     "baseline_reproducible",
-    "research_default_promotable",
+    "complete_pit_research_data",
+    "production_strategy_evidence",
     "broker_trading_enabled",
 )
 BASELINE_ASSETS = (
@@ -29,6 +29,9 @@ RESEARCH_REPORT_KEYS = (
     "benchmark_ladder_report",
     "cpcv_report",
     "feature_evidence_report",
+    "final_oos_or_substitute_report",
+    "turnover_cost_report",
+    "capacity_report",
     "promotion_gate_report",
 )
 SIDE_AWARE_RULES = (
@@ -186,10 +189,13 @@ def _registry_check(registry_path: Path) -> dict[str, Any]:
             message=f"Missing dataset registry: {registry_path}",
         )
     try:
-        rows = list(csv.DictReader(
-            line for line in registry_path.read_text(encoding="utf-8").splitlines()
-            if not line.startswith("#")
-        ))
+        rows = list(
+            csv.DictReader(
+                line
+                for line in registry_path.read_text(encoding="utf-8").splitlines()
+                if not line.startswith("#")
+            )
+        )
     except OSError as exc:
         return _check("dataset_registry", passed=False, message=str(exc))
     names = {str(row.get("dataset_name") or "") for row in rows}
@@ -314,7 +320,11 @@ def _run_output_check(
     return _check(
         "research_run_outputs",
         passed=not missing,
-        message="research run outputs are present" if not missing else "research run outputs are incomplete",
+        message=(
+            "research run outputs are present"
+            if not missing
+            else "research run outputs are incomplete"
+        ),
         details={"run_dir": str(run_dir), "missing": missing, "positions": positions},
     )
 
@@ -331,9 +341,19 @@ def _targets_check(
         "targets_lineage_file": str(lineage_path) if lineage_path else None,
     }
     if targets_path is None or not targets_path.is_file():
-        return _check("targets_lineage", passed=False, message="targets_file is missing", details=details)
+        return _check(
+            "targets_lineage",
+            passed=False,
+            message="targets_file is missing",
+            details=details,
+        )
     if lineage_path is None or not lineage_path.is_file():
-        return _check("targets_lineage", passed=False, message="targets lineage file is missing", details=details)
+        return _check(
+            "targets_lineage",
+            passed=False,
+            message="targets lineage file is missing",
+            details=details,
+        )
     try:
         targets = _read_json(targets_path)
         lineage = _read_json(lineage_path)
@@ -381,7 +401,8 @@ def _qexec_check(
     return _check(
         "qexec_cn_dry_run",
         passed=passed,
-        message=error or ("CN dry-run evidence passed" if passed else "CN dry-run evidence is invalid"),
+        message=error
+        or ("CN dry-run evidence passed" if passed else "CN dry-run evidence is invalid"),
         details=details,
     )
 
@@ -406,7 +427,11 @@ def _window_check(contract_state: Mapping[str, Any], profile: Mapping[str, Any])
     )
 
 
-def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
+def _profile_checks(
+    profile: Mapping[str, Any],
+    *,
+    require_complete: bool = False,
+) -> list[dict[str, Any]]:
     universe = _mapping(profile.get("universe"))
     fundamentals = _mapping(profile.get("fundamentals"))
     industry = _mapping(profile.get("industry"))
@@ -417,8 +442,11 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
         and universe.get("point_in_time") is True
     )
     if fundamentals.get("statement_features_enabled") is False:
-        missing_fundamentals: list[str] = []
-        fundamentals_message = "PIT fundamentals are not required because statement features are disabled"
+        missing_fundamentals = ["statement_features_enabled"] if require_complete else []
+        fundamentals_message = (
+            "PIT fundamentals are disabled for this profile; complete fundamental "
+            "strategy support remains pending"
+        )
     else:
         missing_fundamentals = [
             rule for rule in PIT_FUNDAMENTALS_RULES if fundamentals.get(rule) is not True
@@ -429,8 +457,11 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
             else "point-in-time fundamentals semantics are incomplete"
         )
     if industry.get("historical_backtest_enabled") is False:
-        missing_industry: list[str] = []
-        industry_message = "historical industry membership is not required because industry features are disabled"
+        missing_industry = ["historical_backtest_enabled"] if require_complete else []
+        industry_message = (
+            "historical industry membership is disabled for this profile; "
+            "industry-backed historical research remains pending"
+        )
     else:
         missing_industry = [
             rule for rule in HISTORICAL_INDUSTRY_RULES if industry.get(rule) is not True
@@ -445,7 +476,11 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
         _check(
             "profile:pit_universe",
             passed=universe_passed,
-            message="point-in-time by-date universe is declared" if universe_passed else "point-in-time by-date universe is not declared",
+            message=(
+                "point-in-time by-date universe is declared"
+                if universe_passed
+                else "point-in-time by-date universe is not declared"
+            ),
             details=universe,
         ),
         _check(
@@ -463,7 +498,11 @@ def _profile_checks(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
         _check(
             "profile:side_aware_trading",
             passed=not missing_rules,
-            message="side-aware trading policies are declared" if not missing_rules else "side-aware trading policies are incomplete",
+            message=(
+                "side-aware trading policies are declared"
+                if not missing_rules
+                else "side-aware trading policies are incomplete"
+            ),
             details={"missing_rules": missing_rules},
         ),
     ]
@@ -474,10 +513,7 @@ def _research_report_checks(
     *,
     base_dir: Path | None,
 ) -> list[dict[str, Any]]:
-    return [
-        _validation_check(evidence, key, base_dir=base_dir)
-        for key in RESEARCH_REPORT_KEYS
-    ]
+    return [_validation_check(evidence, key, base_dir=base_dir) for key in RESEARCH_REPORT_KEYS]
 
 
 def _broker_checks(evidence: Mapping[str, Any]) -> list[dict[str, Any]]:
@@ -505,9 +541,7 @@ def build_readiness_report(
 ) -> dict[str, Any]:
     root = Path(artifacts_root).expanduser().resolve()
     evidence_path = (
-        Path(evidence_manifest).expanduser().resolve()
-        if evidence_manifest is not None
-        else None
+        Path(evidence_manifest).expanduser().resolve() if evidence_manifest is not None else None
     )
     evidence, evidence_base = _load_evidence_manifest(evidence_path)
 
@@ -523,30 +557,59 @@ def build_readiness_report(
     ]
 
     profile = _mapping(evidence.get("research_profile"))
-    research_checks = [
+    profile_checks = _profile_checks(profile, require_complete=True)
+    complete_data_checks = [
         _check(
             "baseline_reproducible",
             passed=_all_pass(baseline_checks),
-            message="baseline evidence passed" if _all_pass(baseline_checks) else "baseline evidence is incomplete",
+            message=(
+                "baseline evidence passed"
+                if _all_pass(baseline_checks)
+                else "baseline evidence is incomplete"
+            ),
         ),
         _window_check(contract_state, profile),
-        *_profile_checks(profile),
+        *profile_checks[:3],
+    ]
+    strategy_checks = [
+        _check(
+            "complete_pit_research_data",
+            passed=_all_pass(complete_data_checks),
+            message=(
+                "complete PIT research data passed"
+                if _all_pass(complete_data_checks)
+                else "complete PIT research data is incomplete"
+            ),
+        ),
+        profile_checks[3],
         *_research_report_checks(evidence, base_dir=evidence_base),
     ]
     broker_checks = [
         _check(
             "baseline_reproducible",
             passed=_all_pass(baseline_checks),
-            message="baseline evidence passed" if _all_pass(baseline_checks) else "baseline evidence is incomplete",
+            message=(
+                "baseline evidence passed"
+                if _all_pass(baseline_checks)
+                else "baseline evidence is incomplete"
+            ),
         ),
         *_broker_checks(evidence),
     ]
 
     levels = {
         "baseline_reproducible": _status("baseline_reproducible", baseline_checks),
-        "research_default_promotable": _status("research_default_promotable", research_checks),
+        "complete_pit_research_data": _status("complete_pit_research_data", complete_data_checks),
+        "production_strategy_evidence": _status(
+            "production_strategy_evidence",
+            strategy_checks,
+        ),
         "broker_trading_enabled": _status("broker_trading_enabled", broker_checks),
     }
+    levels["research_default_promotable"] = _status(
+        "research_default_promotable",
+        strategy_checks,
+    )
     return {
         "schema_version": 1,
         "market": "a_share",

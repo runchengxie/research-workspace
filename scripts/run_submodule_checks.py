@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = Path(__file__).with_name("submodule_checks.json")
 
@@ -175,8 +174,7 @@ def run_planned_commands(
                 cwd=item.cwd,
                 check=False,
                 text=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 timeout=timeout,
             )
         except (FileNotFoundError, PermissionError) as exc:

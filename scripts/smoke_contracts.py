@@ -12,7 +12,6 @@ from pathlib import Path
 
 from workspace_doctor import resolve_public_command
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -40,7 +39,12 @@ def _module_command(root: Path, submodule: str, module: str) -> tuple[list[str],
     return command, env
 
 
-def _command_for(root: Path, submodule: str, executable: str, module: str) -> tuple[list[str], dict[str, str]] | None:
+def _command_for(
+    root: Path,
+    submodule: str,
+    executable: str,
+    module: str,
+) -> tuple[list[str], dict[str, str]] | None:
     resolved = resolve_public_command(root, submodule, executable)
     if resolved:
         return [resolved], dict(os.environ)
@@ -65,8 +69,7 @@ def _run(
             command,
             check=False,
             text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             env=env,
             timeout=timeout,
         )
@@ -87,7 +90,12 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     root = root.resolve()
     results: list[SmokeResult] = []
 
-    marketdata = _command_for(root, "market-data-platform", "marketdata", "market_data_platform.cli")
+    marketdata = _command_for(
+        root,
+        "market-data-platform",
+        "marketdata",
+        "market_data_platform.cli",
+    )
     if marketdata is None:
         results.append(_skip("marketdata", "marketdata CLI is unavailable"))
     else:

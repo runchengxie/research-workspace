@@ -8,7 +8,10 @@
 - [ ] `git submodule status` 中所有子模块指针符合本次要锁定的版本。
 - [ ] `python scripts/workspace_doctor.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `python scripts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
+- [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 只扫描 `scripts/` 与 `tests/`。
+- [ ] 如发布港股公开 demo，`python scripts/run_quality_checks.py --profile secrets --demo-stage <staging-dir>` 通过。
 - [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
+- [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎 `pyright_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。
 - [ ] `python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --evidence-manifest <json> --pretty` 已运行，并保存所需 readiness 结论。
@@ -30,7 +33,8 @@
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ...` 已通过，或质量缺口已记录。
 - [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。
 - [ ] 如推进 A 股研究，`cstree run --config default_next` 已产出 `summary.json`、`config.used.yml` 和持仓文件。
-- [ ] 切换 `default` 前，`research_default_promotable` 已通过。
+- [ ] 描述完整 PIT 研究能力前，`complete_pit_research_data` 已通过。
+- [ ] 描述 production-grade 策略证据前，`production_strategy_evidence` 已通过。
 - [ ] 在 PIT fundamentals 和行业历史未补齐前，没有把 A 股 baseline 描述成完整 PIT 研究能力。
 
 ## 研究交接

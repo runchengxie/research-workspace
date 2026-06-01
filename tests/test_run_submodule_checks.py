@@ -7,7 +7,6 @@ import tempfile
 import unittest
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "run_submodule_checks.py"
 MANIFEST = ROOT / "scripts" / "submodule_checks.json"
@@ -23,7 +22,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
     def test_default_manifest_profiles_expand(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
         self.assertEqual(
-            ["full", "lint", "smoke", "test", "type"],
+            ["full", "lint", "pyright_advisory", "smoke", "test", "type"],
             run_submodule_checks.available_profiles(configs),
         )
         planned = run_submodule_checks.plan_commands(
@@ -41,6 +40,16 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--group", "dev", "mypy", "src"),
             ],
             [item.command for item in planned],
+        )
+        advisory = run_submodule_checks.plan_commands(
+            ROOT,
+            configs,
+            profile="pyright_advisory",
+            submodules=["quant-execution-engine"],
+        )
+        self.assertEqual(
+            [("uv", "run", "--group", "dev", "pyright")],
+            [item.command for item in advisory],
         )
 
     def test_dry_run_does_not_execute_commands(self) -> None:

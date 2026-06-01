@@ -1,0 +1,39 @@
+from __future__ import annotations
+
+import importlib.util
+import sys
+import tomllib
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = ROOT / "scripts" / "run_quality_checks.py"
+
+spec = importlib.util.spec_from_file_location("run_quality_checks", SCRIPT)
+run_quality_checks = importlib.util.module_from_spec(spec)
+assert spec.loader is not None
+sys.modules[spec.name] = run_quality_checks
+spec.loader.exec_module(run_quality_checks)
+
+
+def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    ruff = config["tool"]["ruff"]
+
+    assert ruff["include"] == ["scripts/**/*.py", "tests/**/*.py"]
+    assert {
+        "market-data-platform",
+        "cross-sectional-trees",
+        "quant-execution-engine",
+    } <= set(ruff["extend-exclude"])
+
+
+def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
+    commands = run_quality_checks.plan_commands("lint")
+
+    assert commands
+    for item in commands:
+        assert "scripts" in item.command
+        assert "tests" in item.command
+        assert "market-data-platform" not in item.command
+        assert "cross-sectional-trees" not in item.command
+        assert "quant-execution-engine" not in item.command

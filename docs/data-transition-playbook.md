@@ -17,7 +17,7 @@
 
 ## A 股 readiness 分层
 
-顶层只读命令按三档汇报状态：
+顶层只读命令按四档汇报状态：
 
 ```bash
 python scripts/a_share_readiness.py \
@@ -29,10 +29,14 @@ python scripts/a_share_readiness.py \
 | readiness | 含义 |
 | --- | --- |
 | `baseline_reproducible` | contract、registry、`daily_clean`、by-date universe、研究输出、`targets.json` lineage 和 CN dry-run 证据齐全 |
-| `research_default_promotable` | baseline 通过，并补齐研究窗口、PIT 输入、行业语义、A 股 benchmark、CPCV、feature evidence、promotion gate 和 side-aware 交易规则 |
+| `complete_pit_research_data` | baseline 通过，并补齐 PIT 财务报表、历史行业 membership 和研究窗口覆盖 |
+| `production_strategy_evidence` | 完整 PIT 数据通过，并补齐长窗口、benchmark、CPCV、feature evidence、promotion gate、turnover/cost、capacity 和 side-aware 交易规则 |
 | `broker_trading_enabled` | 执行系统另行证明券商 adapter、账户权限、受监督冒烟证据和操作批准；不能由 CN 文件 dry-run 自动推导 |
 
-readiness 报告不会下载数据、跑训练或连接券商。当前已发布的 A 股 `daily_clean` 中期窗口是 `2024-01-02` 到 `2026-05-29`；研究 preset 不应继续暗示已有 `2015-01-01` 起的完整资产。
+旧键 `research_default_promotable` 保留为 `production_strategy_evidence` 的兼容 alias。
+readiness 报告不会下载数据、跑训练或连接券商。当前已发布的 A 股 `daily_clean` 中期窗口是
+`2024-01-02` 到 `2026-05-29`；研究 preset 不应继续暗示已有 `2015-01-01` 起的完整资产。
+长窗口扩展计划见 [a-share-production-readiness.md](a-share-production-readiness.md)。
 
 ## 1. 数据根目录审计
 

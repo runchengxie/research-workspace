@@ -8,7 +8,6 @@ from pathlib import Path
 
 from workspace_doctor import EXPECTED_SUBMODULES
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 

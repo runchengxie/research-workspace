@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Stage and verify the curated HK public demo without copying Git history."""
+
 from __future__ import annotations
 
 import argparse

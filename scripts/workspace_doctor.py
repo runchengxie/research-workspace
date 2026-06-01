@@ -10,10 +10,8 @@ import json
 import os
 import shutil
 import subprocess
-import sys
 from dataclasses import dataclass
 from pathlib import Path
-
 
 EXPECTED_SUBMODULES = {
     "market-data-platform": "marketdata",
@@ -60,8 +58,7 @@ def _git_status_short(path: Path) -> tuple[int, str, str]:
         ["git", "-C", str(path), "status", "--short"],
         check=False,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
     )
     return completed.returncode, completed.stdout.strip(), completed.stderr.strip()
 
@@ -165,7 +162,11 @@ def check_public_clis(root: Path) -> list[Check]:
         if resolved:
             checks.append(Check("OK", "cli", f"{command} resolves to {resolved}."))
         else:
-            existing = [candidate for candidate in _public_command_candidates(root, path, command) if candidate.is_file()]
+            existing = [
+                candidate
+                for candidate in _public_command_candidates(root, path, command)
+                if candidate.is_file()
+            ]
             broken = [
                 candidate
                 for candidate in existing
@@ -261,7 +262,8 @@ def check_data_platform_root() -> list[Check]:
             Check(
                 "WARN",
                 "current-contract-alias",
-                f"Legacy alias exists; do not use as canonical A-share entry: {legacy_cn_contract}.",
+                "Legacy alias exists; do not use as canonical A-share entry: "
+                f"{legacy_cn_contract}.",
             )
         )
     if dataset_registry.is_file():
@@ -281,7 +283,11 @@ def check_top_level_outputs(root: Path) -> list[Check]:
             leaked_files.append(candidate.name)
     if leaked_files:
         checks.append(
-            Check("ERROR", "top-level-secrets", f"Forbidden top-level env files: {', '.join(sorted(leaked_files))}")
+            Check(
+                "ERROR",
+                "top-level-secrets",
+                f"Forbidden top-level env files: {', '.join(sorted(leaked_files))}",
+            )
         )
     else:
         checks.append(Check("OK", "top-level-secrets", "No forbidden top-level env files found."))
@@ -289,10 +295,16 @@ def check_top_level_outputs(root: Path) -> list[Check]:
     leaked_dirs = [name for name in FORBIDDEN_TOP_LEVEL_DIRS if (root / name).exists()]
     if leaked_dirs:
         checks.append(
-            Check("WARN", "top-level-artifacts", f"Top-level generated/data dirs found: {', '.join(leaked_dirs)}")
+            Check(
+                "WARN",
+                "top-level-artifacts",
+                f"Top-level generated/data dirs found: {', '.join(leaked_dirs)}",
+            )
         )
     else:
-        checks.append(Check("OK", "top-level-artifacts", "No top-level data/cache/output dirs found."))
+        checks.append(
+            Check("OK", "top-level-artifacts", "No top-level data/cache/output dirs found.")
+        )
     return checks
 
 
@@ -337,8 +349,7 @@ def check_script_import_boundaries(root: Path) -> list[Check]:
             Check(
                 "ERROR",
                 "script-import-boundary",
-                "Top-level scripts import submodule Python packages: "
-                + "; ".join(violations),
+                "Top-level scripts import submodule Python packages: " + "; ".join(violations),
             )
         ]
     return [

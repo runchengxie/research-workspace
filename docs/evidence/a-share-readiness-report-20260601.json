@@ -250,10 +250,13 @@
         }
       ]
     },
-    "research_default_promotable": {
-      "name": "research_default_promotable",
-      "passed": true,
-      "failed_checks": [],
+    "complete_pit_research_data": {
+      "name": "complete_pit_research_data",
+      "passed": false,
+      "failed_checks": [
+        "profile:pit_fundamentals",
+        "profile:historical_industry"
+      ],
       "checks": [
         {
           "id": "baseline_reproducible",
@@ -282,8 +285,8 @@
         },
         {
           "id": "profile:pit_fundamentals",
-          "passed": true,
-          "message": "PIT fundamentals are not required because statement features are disabled",
+          "passed": false,
+          "message": "PIT fundamentals are disabled for this profile; complete fundamental strategy support remains pending",
           "details": {
             "statement_features_enabled": false,
             "point_in_time": true,
@@ -291,19 +294,39 @@
             "disclosure_date": true,
             "availability_delay": true,
             "field_mapping": true,
-            "missing_rules": []
+            "missing_rules": [
+              "statement_features_enabled"
+            ]
           }
         },
         {
           "id": "profile:historical_industry",
-          "passed": true,
-          "message": "historical industry membership is not required because industry features are disabled",
+          "passed": false,
+          "message": "historical industry membership is disabled for this profile; industry-backed historical research remains pending",
           "details": {
             "historical_backtest_enabled": false,
             "historical_membership": true,
             "effective_date": true,
-            "missing_rules": []
+            "missing_rules": [
+              "historical_backtest_enabled"
+            ]
           }
+        }
+      ]
+    },
+    "production_strategy_evidence": {
+      "name": "production_strategy_evidence",
+      "passed": false,
+      "failed_checks": [
+        "complete_pit_research_data",
+        "turnover_cost_report",
+        "capacity_report"
+      ],
+      "checks": [
+        {
+          "id": "complete_pit_research_data",
+          "passed": false,
+          "message": "complete PIT research data is incomplete"
         },
         {
           "id": "profile:side_aware_trading",
@@ -340,6 +363,36 @@
           "details": {
             "path": "/home/richard/code/research-workspace/docs/evidence/a-share-feature-evidence-20260601.json",
             "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "final_oos_or_substitute_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-final-oos-substitute-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "turnover_cost_report",
+          "passed": false,
+          "message": "validation report did not pass",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-turnover-cost-20260601.json",
+            "status": "pending",
+            "totals": null
+          }
+        },
+        {
+          "id": "capacity_report",
+          "passed": false,
+          "message": "validation report did not pass",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-capacity-20260601.json",
+            "status": "pending",
             "totals": null
           }
         },
@@ -391,14 +444,109 @@
           "message": "operational_approval is not verified"
         }
       ]
+    },
+    "research_default_promotable": {
+      "name": "research_default_promotable",
+      "passed": false,
+      "failed_checks": [
+        "complete_pit_research_data",
+        "turnover_cost_report",
+        "capacity_report"
+      ],
+      "checks": [
+        {
+          "id": "complete_pit_research_data",
+          "passed": false,
+          "message": "complete PIT research data is incomplete"
+        },
+        {
+          "id": "profile:side_aware_trading",
+          "passed": true,
+          "message": "side-aware trading policies are declared",
+          "details": {
+            "missing_rules": []
+          }
+        },
+        {
+          "id": "benchmark_ladder_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-benchmark-ladder-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "cpcv_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-cpcv-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "feature_evidence_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-feature-evidence-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "final_oos_or_substitute_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-final-oos-substitute-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        },
+        {
+          "id": "turnover_cost_report",
+          "passed": false,
+          "message": "validation report did not pass",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-turnover-cost-20260601.json",
+            "status": "pending",
+            "totals": null
+          }
+        },
+        {
+          "id": "capacity_report",
+          "passed": false,
+          "message": "validation report did not pass",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-capacity-20260601.json",
+            "status": "pending",
+            "totals": null
+          }
+        },
+        {
+          "id": "promotion_gate_report",
+          "passed": true,
+          "message": "validation passed",
+          "details": {
+            "path": "/home/richard/code/research-workspace/docs/evidence/a-share-promotion-gate-20260601.json",
+            "status": "passed",
+            "totals": null
+          }
+        }
+      ]
     }
   },
   "summary": {
     "passed_levels": [
-      "baseline_reproducible",
-      "research_default_promotable"
+      "baseline_reproducible"
     ],
     "failed_levels": [
+      "complete_pit_research_data",
+      "production_strategy_evidence",
       "broker_trading_enabled"
     ],
     "legacy_cn_alias_present": false

@@ -1,0 +1,47 @@
+{
+  "schema_version": "a_share.long_window_evidence_plan.v1",
+  "as_of": "2026-06-01",
+  "market": "a_share",
+  "coverage_target": {
+    "minimum_start_date": "2015-01-01",
+    "requires_complete_pit_fundamentals": true,
+    "requires_historical_industry_membership": true
+  },
+  "steps": [
+    {
+      "report": "benchmark_ladder_report",
+      "command": "cstree benchmark-ladder --config configs/experiments/sweeps/a_share__research_protocol_benchmark_ladder.yml",
+      "required_cohorts": ["a_share_all_equalw", "csi300", "csi500", "csi1000"]
+    },
+    {
+      "report": "feature_evidence_report",
+      "command": "cstree feature-evidence generate-ablation --config configs/experiments/sweeps/a_share__research_protocol_feature_evidence.yml"
+    },
+    {
+      "report": "cpcv_report",
+      "command": "cstree cpcv --config configs/experiments/sweeps/a_share__research_protocol_cpcv.yml --n-groups 8 --test-groups 2"
+    },
+    {
+      "report": "promotion_gate_report",
+      "command": "cstree promotion-gate --config configs/experiments/sweeps/a_share__research_protocol_promotion_gate.yml"
+    },
+    {
+      "report": "final_oos_or_substitute_report",
+      "requirement": "Reserve a dedicated final OOS slice or record a reviewed substitute before promotion."
+    },
+    {
+      "report": "turnover_cost_report",
+      "requirement": "Persist long-window turnover and cost stress metrics from backtest, CPCV, and promotion-gate outputs."
+    },
+    {
+      "report": "capacity_report",
+      "requirement": "Persist long-window liquidity distribution, participation-rate stress, and reviewed capacity limit."
+    }
+  ],
+  "current_status": {
+    "baseline_bundle_generated": true,
+    "complete_pit_backfill_published": false,
+    "long_window_reports_regenerated": false,
+    "production_strategy_evidence": "pending"
+  }
+}

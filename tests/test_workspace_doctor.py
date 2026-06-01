@@ -6,9 +6,8 @@ import sys
 import tempfile
 import textwrap
 import unittest
-from unittest import mock
 from pathlib import Path
-
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "workspace_doctor.py"
@@ -68,7 +67,6 @@ class WorkspaceDoctorTest(unittest.TestCase):
             checks = workspace_doctor.check_script_import_boundaries(root)
         self.assertEqual("ERROR", checks[0].severity)
         self.assertIn("scripts/bad.py imports cstree.internal.foo", checks[0].message)
-
 
     def test_data_platform_contract_check_uses_a_share_current_name(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -174,10 +172,7 @@ class WorkspaceDoctorTest(unittest.TestCase):
                 checks = workspace_doctor.check_data_platform_root()
 
         self.assertTrue(
-            any(
-                check.code == "frozen-market" and check.severity == "OK"
-                for check in checks
-            )
+            any(check.code == "frozen-market" and check.severity == "OK" for check in checks)
         )
         self.assertFalse(
             any(

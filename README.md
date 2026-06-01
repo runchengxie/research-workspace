@@ -81,6 +81,7 @@ python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pre
 python scripts/print_version_matrix.py
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_quality_checks.py --profile hard
 ```
 
 `run_submodule_checks.py` 只按 manifest 进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。

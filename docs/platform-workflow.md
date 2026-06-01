@@ -4,7 +4,7 @@
 
 ## 当前工作流
 
-截至 2026-05-27，工作区已经锁定并验证到“研究结果交给执行引擎生成离线计划”这一段：
+截至 2026-06-01，工作区已经锁定并验证到“研究结果交给执行引擎生成离线计划”这一段：
 
 ```text
 数据维护和盘口加工
@@ -25,6 +25,10 @@ targets.json
 ```
 
 当前 `cross-sectional-trees` 已经可以导出标准格式的 `targets.json` 和对应审计文件；`quant-execution-engine` 已经固定为工作区子模块，用于复现文件交接和离线计划验证。模拟盘、实盘和运行门禁仍由执行引擎自己负责。
+
+A 股 readiness 分成 `baseline_reproducible`、`complete_pit_research_data`、
+`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档；完整 PIT、
+长窗口策略证据和真实券商能力必须独立验收。
 
 ## 模块分工
 

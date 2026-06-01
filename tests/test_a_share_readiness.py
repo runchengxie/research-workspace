@@ -5,7 +5,6 @@ import json
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "a_share_readiness.py"
 
@@ -65,6 +64,9 @@ def _build_evidence(tmp_path: Path) -> Path:
         "benchmark",
         "cpcv",
         "feature",
+        "final_oos",
+        "turnover_cost",
+        "capacity",
         "promotion",
     ):
         _write_json(reports / f"{name}.json", {"status": "passed"})
@@ -73,7 +75,10 @@ def _build_evidence(tmp_path: Path) -> Path:
     (run_dir / "config.used.yml").write_text("market: a_share\n", encoding="utf-8")
     _write_json(run_dir / "inputs.lock.json", {"assets": {}})
     (run_dir / "positions_current.csv").write_text("symbol,weight\n600519.SH,1\n", encoding="utf-8")
-    _write_json(tmp_path / "targets.json", {"targets": [{"symbol": "600519.SH", "market": "CN", "target_weight": 1.0}]})
+    _write_json(
+        tmp_path / "targets.json",
+        {"targets": [{"symbol": "600519.SH", "market": "CN", "target_weight": 1.0}]},
+    )
     _write_json(tmp_path / "targets.json.lineage.json", {"run": "candidate"})
     _write_json(
         reports / "qexec.json",
@@ -91,19 +96,16 @@ def _build_evidence(tmp_path: Path) -> Path:
             "benchmark_ladder_report": "reports/benchmark.json",
             "cpcv_report": "reports/cpcv.json",
             "feature_evidence_report": "reports/feature.json",
+            "final_oos_or_substitute_report": "reports/final_oos.json",
+            "turnover_cost_report": "reports/turnover_cost.json",
+            "capacity_report": "reports/capacity.json",
             "promotion_gate_report": "reports/promotion.json",
             "research_profile": {
                 "configured_start_date": "20240229",
                 "universe": {"mode": "by_date", "point_in_time": True},
-                "fundamentals": {
-                    rule: True for rule in a_share_readiness.PIT_FUNDAMENTALS_RULES
-                },
-                "industry": {
-                    rule: True for rule in a_share_readiness.HISTORICAL_INDUSTRY_RULES
-                },
-                "trading_rules": {
-                    rule: True for rule in a_share_readiness.SIDE_AWARE_RULES
-                },
+                "fundamentals": {rule: True for rule in a_share_readiness.PIT_FUNDAMENTALS_RULES},
+                "industry": {rule: True for rule in a_share_readiness.HISTORICAL_INDUSTRY_RULES},
+                "trading_rules": {rule: True for rule in a_share_readiness.SIDE_AWARE_RULES},
             },
         },
     )
@@ -116,6 +118,8 @@ def test_readiness_uses_canonical_contract_and_keeps_broker_separate(tmp_path: P
     report = a_share_readiness.build_readiness_report(tmp_path, evidence_manifest=evidence)
 
     assert report["levels"]["baseline_reproducible"]["passed"] is True
+    assert report["levels"]["complete_pit_research_data"]["passed"] is True
+    assert report["levels"]["production_strategy_evidence"]["passed"] is True
     assert report["levels"]["research_default_promotable"]["passed"] is True
     assert report["levels"]["broker_trading_enabled"]["passed"] is False
     assert report["summary"]["legacy_cn_alias_present"] is True
@@ -132,9 +136,9 @@ def test_readiness_reports_missing_evidence(tmp_path: Path) -> None:
     assert "research_run_outputs" in baseline["failed_checks"]
     assert "targets_lineage" in baseline["failed_checks"]
     assert "qexec_cn_dry_run" in baseline["failed_checks"]
-    promotable = report["levels"]["research_default_promotable"]
-    assert "profile:pit_fundamentals" in promotable["failed_checks"]
-    assert "profile:historical_industry" in promotable["failed_checks"]
+    complete_data = report["levels"]["complete_pit_research_data"]
+    assert "profile:pit_fundamentals" in complete_data["failed_checks"]
+    assert "profile:historical_industry" in complete_data["failed_checks"]
 
 
 def test_readiness_rejects_research_window_before_required_assets(tmp_path: Path) -> None:
@@ -147,9 +151,28 @@ def test_readiness_rejects_research_window_before_required_assets(tmp_path: Path
     report = a_share_readiness.build_readiness_report(tmp_path, evidence_manifest=evidence)
 
     assert report["levels"]["baseline_reproducible"]["passed"] is True
-    promotable = report["levels"]["research_default_promotable"]
-    assert promotable["passed"] is False
-    assert "research_window" in promotable["failed_checks"]
+    complete_data = report["levels"]["complete_pit_research_data"]
+    assert complete_data["passed"] is False
+    assert "research_window" in complete_data["failed_checks"]
+
+
+def test_readiness_records_disabled_pit_and_industry_as_pending_complete_support(
+    tmp_path: Path,
+) -> None:
+    _build_contract(tmp_path)
+    evidence = _build_evidence(tmp_path)
+    payload = json.loads(evidence.read_text(encoding="utf-8"))
+    payload["research_profile"]["fundamentals"]["statement_features_enabled"] = False
+    payload["research_profile"]["industry"]["historical_backtest_enabled"] = False
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = a_share_readiness.build_readiness_report(tmp_path, evidence_manifest=evidence)
+
+    assert report["levels"]["baseline_reproducible"]["passed"] is True
+    complete_data = report["levels"]["complete_pit_research_data"]
+    assert complete_data["passed"] is False
+    assert "profile:pit_fundamentals" in complete_data["failed_checks"]
+    assert "profile:historical_industry" in complete_data["failed_checks"]
 
 
 def test_readiness_rejects_qexec_report_that_claims_execute(tmp_path: Path) -> None:
@@ -164,3 +187,17 @@ def test_readiness_rejects_qexec_report_that_claims_execute(tmp_path: Path) -> N
 
     assert report["levels"]["baseline_reproducible"]["passed"] is False
     assert "qexec_cn_dry_run" in report["levels"]["baseline_reproducible"]["failed_checks"]
+
+
+def test_readiness_requires_capacity_report_for_production_strategy(tmp_path: Path) -> None:
+    _build_contract(tmp_path)
+    evidence = _build_evidence(tmp_path)
+    payload = json.loads(evidence.read_text(encoding="utf-8"))
+    payload.pop("capacity_report")
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = a_share_readiness.build_readiness_report(tmp_path, evidence_manifest=evidence)
+
+    assert report["levels"]["complete_pit_research_data"]["passed"] is True
+    assert report["levels"]["production_strategy_evidence"]["passed"] is False
+    assert "capacity_report" in report["levels"]["production_strategy_evidence"]["failed_checks"]

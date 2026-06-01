@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "market": "a_share",
+  "evidence_type": "documented_substitute",
+  "checks": {
+    "final_oos_available": false,
+    "documented_substitute": "The current medium-window baseline uses walk-forward and CPCV evidence only. A dedicated final OOS slice must be reserved after the long-window PIT assets are published."
+  },
+  "limitations": [
+    "This substitute records the current evidence boundary; it does not make the strategy production-grade."
+  ]
+}

@@ -38,7 +38,7 @@ python scripts/export_hk_public_demo.py --scan-only /tmp/hk-cross-sectional-stra
 2026-06-01 的离线复核 staging 位于：
 
 ```text
-/tmp/hk-cross-sectional-strategy-demo-verify-20260601
+/tmp/hk-cross-sectional-strategy-demo-verify-20260601-governance
 export-manifest.json: scan=passed, offline_smoke=passed
 ```
 

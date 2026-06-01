@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "status": "pending",
+  "market": "a_share",
+  "checks": {
+    "candidate_backtest_avg_turnover": 0.8499999999999999,
+    "max_backtest_avg_turnover": 0.9,
+    "cpcv_turnover_median": 0.9239958339930057,
+    "cpcv_cost_drag_median": 0.0017326807850233349,
+    "long_window_stress_completed": false
+  },
+  "limitations": [
+    "Short-window turnover and cost metrics are recorded, but long-window stress evidence remains pending."
+  ]
+}

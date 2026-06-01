@@ -11,6 +11,9 @@
   "benchmark_ladder_report": "a-share-benchmark-ladder-20260601.json",
   "cpcv_report": "a-share-cpcv-20260601.json",
   "feature_evidence_report": "a-share-feature-evidence-20260601.json",
+  "final_oos_or_substitute_report": "a-share-final-oos-substitute-20260601.json",
+  "turnover_cost_report": "a-share-turnover-cost-20260601.json",
+  "capacity_report": "a-share-capacity-20260601.json",
   "promotion_gate_report": "a-share-promotion-gate-20260601.json",
   "research_profile": {
     "configured_start_date": "20240229",
