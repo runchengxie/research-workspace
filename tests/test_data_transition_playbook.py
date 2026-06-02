@@ -29,6 +29,22 @@ class DataTransitionPlaybookTest(unittest.TestCase):
         for phrase in required:
             self.assertIn(phrase, text)
 
+    def test_playbook_separates_baseline_holding_and_broker_readiness(self) -> None:
+        text = PLAYBOOK.read_text(encoding="utf-8")
+        required = [
+            "A 股 baseline 持仓建议验收",
+            "market-data-platform",
+            "cross-sectional-trees",
+            "quant-execution-engine",
+            "positions_current*.csv",
+            "targets.json.lineage.json",
+            "`market-data-platform` 不训练模型、不选择持仓",
+            "不能推导\n`broker_trading_enabled`",
+            "`production_strategy_evidence`",
+        ]
+        for phrase in required:
+            self.assertIn(phrase, text)
+
 
 if __name__ == "__main__":
     unittest.main()

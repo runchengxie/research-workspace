@@ -57,6 +57,39 @@ class DocsLinksTest(unittest.TestCase):
                         missing.append(f"{markdown.relative_to(ROOT)} -> {target}")
         self.assertEqual([], missing)
 
+    def test_docs_index_links_root_architecture_and_contributing(self) -> None:
+        docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
+
+        self.assertTrue((ROOT / "ARCHITECTURE.md").is_file())
+        self.assertTrue((ROOT / "CONTRIBUTING.md").is_file())
+        self.assertIn("[../ARCHITECTURE.md](../ARCHITECTURE.md)", docs_index)
+        self.assertIn("[../CONTRIBUTING.md](../CONTRIBUTING.md)", docs_index)
+
+    def test_docs_preserve_hk_public_demo_boundary(self) -> None:
+        docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
+        export_docs = (ROOT / "docs" / "hk-public-demo-export.md").read_text(encoding="utf-8")
+        inventory = (ROOT / "docs" / "hk-legacy-surface-inventory.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("synthetic / public-safe demo", docs_index)
+        self.assertIn("不承接真实 provider、broker 或 restore\n实现代码", docs_index)
+        self.assertIn("不要把真实港股业务实现原样搬入 demo", export_docs)
+        self.assertIn("hk-public-split-manifest.yml", inventory)
+        self.assertIn("restore-sensitive", inventory)
+
+    def test_docs_preserve_canonical_a_share_contract_name(self) -> None:
+        contracts = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
+        playbook = (ROOT / "docs" / "data-transition-playbook.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("metadata/current_assets/a_share_current.json", contracts)
+        self.assertIn("metadata/current_assets/a_share_current.json", playbook)
+        self.assertIn("metadata/current_assets/cn_current.json", playbook)
+        self.assertIn("历史兼容 alias", playbook)
+        self.assertIn("不能作为新的 A 股权威入口", playbook)
+
 
 if __name__ == "__main__":
     unittest.main()
