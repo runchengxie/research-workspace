@@ -4,9 +4,16 @@
 fixtures/synthetic_prices.csv
         |
         v
-src/hk_strategy_demo/pipeline.py
+src/hk_strategy_demo/data.py
+  load synthetic prices
+        |
+        v
+src/hk_strategy_demo/research.py
   rank synthetic trailing returns
-  select top symbols
+        |
+        v
+src/hk_strategy_demo/allocation.py
+  select top symbols and build targets
         |
         +--> samples/summary.json
         |

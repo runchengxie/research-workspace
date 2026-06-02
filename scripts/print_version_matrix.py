@@ -17,8 +17,7 @@ def _git(args: list[str], cwd: Path) -> tuple[int, str, str]:
         ["git", *args],
         cwd=cwd,
         text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        capture_output=True,
         check=False,
     )
     return completed.returncode, completed.stdout.strip(), completed.stderr.strip()

@@ -1,0 +1,369 @@
+{
+  "schema_version": "hk_public_split_manifest.v1",
+  "format": "json-yaml-subset",
+  "generated_from": [
+    "docs/hk-legacy-surface-inventory.md",
+    "docs/hk-public-demo-export.md",
+    "demo/hk-public-demo-allowlist-v1.txt",
+    "repo-local HK surface search on 2026-06-02"
+  ],
+  "reviewed_commands": [
+    "rg -n \"\\\\b(hk|HK|Hong Kong|longport|rqdata-hk|hkdata|alloc-hk|hk_assets|hk_depth|hk_data_platform)\\\\b\" README.md docs scripts demo market-data-platform cross-sectional-trees quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**'",
+    "find market-data-platform cross-sectional-trees quant-execution-engine demo -path '*/.git' -prune -o -type f \\( -iname '*hk*' -o -iname '*longport*' \\) -print"
+  ],
+  "actions": [
+    "keep_in_main",
+    "move_to_public_demo",
+    "archive_in_public_demo",
+    "delete_after_split",
+    "private_do_not_export"
+  ],
+  "public_safety": [
+    "public_safe",
+    "public_safe_after_review",
+    "public_safe_archive",
+    "restore_sensitive",
+    "shared_active",
+    "private_runtime"
+  ],
+  "cleanup_statuses": [
+    "not_applicable",
+    "blocked_pending_audit",
+    "follow_up_required",
+    "ready"
+  ],
+  "deletion_gate_requirements": [
+    "restore_evidence",
+    "consumer_audit",
+    "replacement_docs",
+    "rollback_notes",
+    "focused_tests",
+    "public_split_evidence"
+  ],
+  "records": [
+    {
+      "id": "top-level-hk-public-demo-staging",
+      "owner_repo": "research-workspace",
+      "paths": [
+        "demo/hk-public-demo-template-v1/**",
+        "demo/hk-public-demo-allowlist-v1.txt",
+        "demo/hk-public-demo-export-v1.json",
+        "scripts/export_hk_public_demo.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "move_to_public_demo",
+      "public_safety": "public_safe",
+      "restore_dependency": "not_required_synthetic_fixture_only",
+      "consumer_audit_status": "not_required_not_workspace_dependency",
+      "replacement_path": "future external paused-maintenance public repository",
+      "required_redactions": [],
+      "removal_condition": "After the public repository candidate is exported and manually published, keep only top-level docs and exporter evidence in the workspace unless a follow-up change removes the staging template.",
+      "deletion_gate": {
+        "status": "follow_up_required",
+        "restore_evidence": "not_required",
+        "consumer_audit": "not_required",
+        "replacement_docs": "docs/hk-public-demo-export.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "tests/test_export_hk_public_demo.py",
+        "public_split_evidence": "export-manifest.json from staged public tree"
+      }
+    },
+    {
+      "id": "top-level-hk-archive-and-restore-evidence",
+      "owner_repo": "research-workspace",
+      "paths": [
+        "docs/archive/hk/**",
+        "docs/evidence/hk-restore-drill-20260601.json",
+        "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "docs/hk-legacy-surface-inventory.md",
+        "docs/hk-public-demo-export.md"
+      ],
+      "path_kind": "repo_local",
+      "action": "keep_in_main",
+      "public_safety": "public_safe_after_review",
+      "restore_dependency": "documents remote freeze release and restore drill evidence",
+      "consumer_audit_status": "not_required_documentation_reference",
+      "replacement_path": "not_applicable",
+      "required_redactions": [
+        "do not export local absolute paths from archived handoff notes into public demo"
+      ],
+      "removal_condition": "Keep as the workspace record for restore, archive, and public-demo split decisions.",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "not_required",
+        "replacement_docs": "not_required",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "tests/test_docs_links.py",
+        "public_split_evidence": "not_required"
+      }
+    },
+    {
+      "id": "top-level-hk-doctor-and-contract-smoke",
+      "owner_repo": "research-workspace",
+      "paths": [
+        "scripts/workspace_doctor.py",
+        "scripts/smoke_contracts.py",
+        "docs/platform-workflow.md"
+      ],
+      "path_kind": "repo_local",
+      "action": "keep_in_main",
+      "public_safety": "shared_active",
+      "restore_dependency": "uses frozen HK marker and shared contract smoke references",
+      "consumer_audit_status": "active top-level checks",
+      "replacement_path": "not_applicable",
+      "required_redactions": [],
+      "removal_condition": "Keep while the workspace doctor documents HK frozen-market status and shared path contracts.",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "not_required",
+        "replacement_docs": "docs/platform-workflow.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "tests/test_workspace_doctor.py",
+        "public_split_evidence": "not_required"
+      }
+    },
+    {
+      "id": "market-data-platform-hk-assets-and-depth",
+      "owner_repo": "market-data-platform",
+      "paths": [
+        "market-data-platform/src/market_data_platform/hk_assets/**",
+        "market-data-platform/src/market_data_platform/hk_depth/**",
+        "market-data-platform/src/market_data_platform/release_tools/hk_asset_workflow*.py",
+        "market-data-platform/src/market_data_platform/hk_workflows.py",
+        "market-data-platform/configs/presets/release/hk_*.yml",
+        "market-data-platform/configs/presets/universe/hk_*.yml",
+        "market-data-platform/docs/hk-assets.md",
+        "market-data-platform/docs/operations/hk-assets.md",
+        "market-data-platform/tests/test_hk*.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "keep_in_main",
+      "public_safety": "restore_sensitive",
+      "restore_dependency": "required for cold-storage hydrate and restore-critical HK asset release troubleshooting",
+      "consumer_audit_status": "active restore and compatibility consumers remain",
+      "replacement_path": "marketdata unified commands and future public demo only for synthetic examples",
+      "required_redactions": [
+        "provider-specific paths",
+        "licensed market data assumptions",
+        "provider cache references"
+      ],
+      "removal_condition": "Do not remove in this change. Any future move or deletion requires restored cold archives, consumer audit, focused market-data-platform tests, and rollback notes.",
+      "deletion_gate": {
+        "status": "blocked_pending_audit",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "pending",
+        "replacement_docs": "market-data-platform/docs/hk-assets.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "market-data-platform/tests/test_hk_asset_workflow.py",
+        "public_split_evidence": "not_required_restore_sensitive"
+      }
+    },
+    {
+      "id": "market-data-platform-legacy-hk-entrypoints",
+      "owner_repo": "market-data-platform",
+      "paths": [
+        "market-data-platform/src/hk_data_platform/**",
+        "market-data-platform/pyproject.toml"
+      ],
+      "path_kind": "repo_local",
+      "action": "delete_after_split",
+      "public_safety": "restore_sensitive",
+      "restore_dependency": "compatibility imports and commands must remain until downstream usage is audited",
+      "consumer_audit_status": "pending repo-local and downstream audit",
+      "replacement_path": "marketdata unified CLI entrypoints",
+      "required_redactions": [
+        "do not export compatibility wrapper code into public demo"
+      ],
+      "removal_condition": "Eligible only after no repo-local or downstream callers use hkdata, hk_data_platform.*, or rqdata-hk-* wrappers for two release cycles.",
+      "deletion_gate": {
+        "status": "blocked_pending_audit",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "pending",
+        "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "market-data-platform compatibility governance tests",
+        "public_split_evidence": "not_required"
+      }
+    },
+    {
+      "id": "strategy-research-hk-allocation-compat",
+      "owner_repo": "cross-sectional-trees",
+      "paths": [
+        "cross-sectional-trees/src/cstree/liveops/alloc_hk*.py",
+        "cross-sectional-trees/tests/test_alloc_hk.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "delete_after_split",
+      "public_safety": "restore_sensitive",
+      "restore_dependency": "needed for explicit HK reproduction and deprecated alloc-hk compatibility",
+      "consumer_audit_status": "pending deprecated CLI consumer audit",
+      "replacement_path": "cstree alloc plus cstree export-targets for active flows",
+      "required_redactions": [
+        "provider assumptions",
+        "private portfolio or execution references"
+      ],
+      "removal_condition": "Eligible only after deprecated alloc-hk has no consumers, restore drill remains available, and successor allocation docs are in place.",
+      "deletion_gate": {
+        "status": "blocked_pending_audit",
+        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "consumer_audit": "pending",
+        "replacement_docs": "cross-sectional-trees docs for alloc/export-targets",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "cross-sectional-trees/tests/test_alloc_hk.py",
+        "public_split_evidence": "public demo synthetic allocation module"
+      }
+    },
+    {
+      "id": "strategy-research-hk-research-provenance",
+      "owner_repo": "cross-sectional-trees",
+      "paths": [
+        "cross-sectional-trees/src/cstree/research/hk_*.py",
+        "cross-sectional-trees/docs/research/notes/hk-*.md",
+        "cross-sectional-trees/docs/archive/vendor-rqdata/hk-stock-data-reference.md",
+        "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
+        "cross-sectional-trees/tests/test_*hk*.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "archive_in_public_demo",
+      "public_safety": "public_safe_archive",
+      "restore_dependency": "historical research provenance and cold-storage archive manifest",
+      "consumer_audit_status": "manual provenance review required before export",
+      "replacement_path": "demo archive only for public-safe excerpts; full restore remains in cold storage",
+      "required_redactions": [
+        "licensed data references",
+        "local paths",
+        "private run output names",
+        "provider-specific operational details"
+      ],
+      "removal_condition": "Archive only reviewed excerpts in the public demo candidate; do not move full historical research code in this change.",
+      "deletion_gate": {
+        "status": "follow_up_required",
+        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "consumer_audit": "manual_review_required",
+        "replacement_docs": "demo/hk-public-demo-template-v1/archive/README.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "cross-sectional-trees documentation contract tests",
+        "public_split_evidence": "reviewed public demo archive entries"
+      }
+    },
+    {
+      "id": "strategy-research-hk-configs",
+      "owner_repo": "cross-sectional-trees",
+      "paths": [
+        "cross-sectional-trees/configs/presets/hk*.yml",
+        "cross-sectional-trees/configs/presets/data/hk_rqdata.yml",
+        "cross-sectional-trees/configs/experiments/**/*hk*.yml",
+        "cross-sectional-trees/configs/local/hk*.yml",
+        "cross-sectional-trees/configs/field_profiles/hk_*"
+      ],
+      "path_kind": "repo_local",
+      "action": "archive_in_public_demo",
+      "public_safety": "public_safe_after_review",
+      "restore_dependency": "historical reproducibility and config provenance",
+      "consumer_audit_status": "manual review required before public excerpt",
+      "replacement_path": "active A-share presets in cross-sectional-trees; demo synthetic configs if needed",
+      "required_redactions": [
+        "private output names",
+        "provider-specific dataset paths",
+        "local-only assumptions"
+      ],
+      "removal_condition": "Keep repo-local compatibility configs until a follow-up archive/delete change proves no active consumers.",
+      "deletion_gate": {
+        "status": "follow_up_required",
+        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "consumer_audit": "pending",
+        "replacement_docs": "cross-sectional-trees docs archive index",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "cross-sectional-trees config and docs contract tests",
+        "public_split_evidence": "optional reviewed demo archive excerpts"
+      }
+    },
+    {
+      "id": "strategy-research-frozen-hk-marker",
+      "owner_repo": "cross-sectional-trees",
+      "paths": [
+        "cross-sectional-trees/artifacts/metadata/frozen_markets/hk_research.json"
+      ],
+      "path_kind": "repo_local",
+      "action": "keep_in_main",
+      "public_safety": "restore_sensitive",
+      "restore_dependency": "source of HK research freeze marker",
+      "consumer_audit_status": "active restore reference",
+      "replacement_path": "not_applicable",
+      "required_redactions": [
+        "do not export local cold-storage paths into public demo"
+      ],
+      "removal_condition": "Keep while HK research restore evidence is part of workspace governance.",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "consumer_audit": "not_required",
+        "replacement_docs": "docs/archive/hk/README.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "cross-sectional-trees/tests/test_freeze_hk_research_outputs.py",
+        "public_split_evidence": "not_required"
+      }
+    },
+    {
+      "id": "execution-longport-runtime",
+      "owner_repo": "quant-execution-engine",
+      "paths": [
+        "quant-execution-engine/src/quant_execution_engine/broker/longport*.py",
+        "quant-execution-engine/docs/longport*.md",
+        "quant-execution-engine/tests/**/*longport*.py",
+        "quant-execution-engine/pyproject.toml",
+        "quant-execution-engine/config/template.yaml"
+      ],
+      "path_kind": "repo_local",
+      "action": "private_do_not_export",
+      "public_safety": "private_runtime",
+      "restore_dependency": "not required for public demo; retained for execution engine broker support",
+      "consumer_audit_status": "active execution-engine responsibility",
+      "replacement_path": "public demo omits broker integration and live execution",
+      "required_redactions": [
+        "broker credentials",
+        "account semantics",
+        "live execution controls",
+        "provider package references"
+      ],
+      "removal_condition": "Never export to public demo. Keep or refactor only inside quant-execution-engine according to its broker governance.",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "restore_evidence": "not_required",
+        "consumer_audit": "active owner repo responsibility",
+        "replacement_docs": "quant-execution-engine/docs/longport-paper-failure-smoke.md",
+        "rollback_notes": "quant-execution-engine docs archive or release notes",
+        "focused_tests": "quant-execution-engine longport unit tests",
+        "public_split_evidence": "public demo scan rejects broker/runtime markers"
+      }
+    },
+    {
+      "id": "execution-shared-targets-hk-market-support",
+      "owner_repo": "quant-execution-engine",
+      "paths": [
+        "quant-execution-engine/src/quant_execution_engine/targets.py",
+        "quant-execution-engine/src/quant_execution_engine/rebalance.py",
+        "quant-execution-engine/src/quant_execution_engine/fx.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "keep_in_main",
+      "public_safety": "shared_active",
+      "restore_dependency": "standard targets.json parser supports multiple markets including HK",
+      "consumer_audit_status": "active execution-engine contract",
+      "replacement_path": "not_applicable",
+      "required_redactions": [],
+      "removal_condition": "Keep as shared execution contract support.",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "restore_evidence": "not_required",
+        "consumer_audit": "active owner repo responsibility",
+        "replacement_docs": "docs/contracts.md",
+        "rollback_notes": "quant-execution-engine docs",
+        "focused_tests": "quant-execution-engine targets and rebalance tests",
+        "public_split_evidence": "public demo emits standard synthetic targets.json only"
+      }
+    }
+  ]
+}

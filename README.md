@@ -64,6 +64,7 @@ python scripts/smoke_contracts.py
 | 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
 | 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
 | 查看港股 legacy surface inventory | [docs/hk-legacy-surface-inventory.md](docs/hk-legacy-surface-inventory.md) |
+| 查看港股 public split manifest | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
 | 导出外部 clean-room 港股公开 demo | [docs/hk-public-demo-export.md](docs/hk-public-demo-export.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
 | 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
@@ -80,7 +81,8 @@ python scripts/smoke_contracts.py
 
 港股公开 demo 独立于这三个子项目，仅用于作品集展示。真实港股历史复现以
 [中国香港市场归档](docs/archive/hk/README.md)、冷存储 release、manifest、restore drill
-和对应子仓库兼容入口为准。
+和对应子仓库兼容入口为准；迁出或删除候选面由
+[港股 public split manifest](docs/hk-public-split-manifest.yml) 记录。
 
 ## 常用顶层命令
 

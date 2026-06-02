@@ -3,6 +3,11 @@
 本页记录中国香港市场相关代码在 A 股主线迁移期间的保留边界。批量迁出港股实现前，
 必须先完成远端 freeze release 下载、校验和 restore drill。
 
+可执行 split / cleanup 决策见
+[`hk-public-split-manifest.yml`](hk-public-split-manifest.yml)。本页给维护者读边界和背景；
+manifest 记录 repo-local surface、public safety、consumer audit、replacement path 和
+removal condition。
+
 ## 分类
 
 | 分类 | 含义 | 处理方式 |
@@ -50,6 +55,19 @@
    较重的港股 optional-extra 与 legacy matrix 改为手动触发。
 6. restore-sensitive 港股实现的删除或迁出，需要先完成 source tag、archive manifest、
    restore drill 和消费者审计；公开 demo 只能作为展示面证据。
+
+## Cleanup gate
+
+当前没有 restore-sensitive 或 compatibility surface 在本轮直接删除。后续若删除
+`hkdata`、`hk_data_platform.*`、`rqdata-hk-*`、`cstree alloc-hk` 或港股历史配置，需要先在
+`hk-public-split-manifest.yml` 中把对应记录推进到 deletion gate `ready`，并补齐：
+
+- restore evidence；
+- downstream consumer audit；
+- replacement docs；
+- rollback notes；
+- owning repo focused tests；
+- 需要公开 demo 承接时的 public split evidence。
 
 ## 本机外部状态复核
 

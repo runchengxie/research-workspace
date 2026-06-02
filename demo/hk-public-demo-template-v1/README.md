@@ -21,6 +21,7 @@ Run the demo:
 ```bash
 python scripts/run_demo.py --out-dir samples
 python -m unittest discover -s tests -v
+python scripts/check_quality.py
 ```
 
 The generated files are:
@@ -31,6 +32,15 @@ samples/targets.json
 ```
 
 See [docs/architecture.md](docs/architecture.md) for the small workflow map.
+See [docs/README.md](docs/README.md) for the active docs and archive boundary.
+
+Optional CI quality checks use the dev extra:
+
+```bash
+python -m pip install -e ".[dev]"
+python -m ruff check .
+python -m pyright
+```
 
 ## Relationship To Active Work
 

@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from hk_strategy_demo.pipeline import run_demo
+from hk_strategy_demo.pipeline import run_demo  # noqa: E402
 
 
 class SmokeTest(unittest.TestCase):

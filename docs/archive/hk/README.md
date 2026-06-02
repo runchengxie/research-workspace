@@ -13,6 +13,7 @@
 | 目的 | 文档 |
 | --- | --- |
 | 查看保留的 legacy surface 和 sunset 边界 | [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md) |
+| 查看 public split manifest 和 cleanup gate | [../../hk-public-split-manifest.yml](../../hk-public-split-manifest.yml) |
 | 导出外部 clean-room 港股公开 demo | [../../hk-public-demo-export.md](../../hk-public-demo-export.md) |
 | 查看数据迁移优先级和恢复顺序 | [../../data-transition-playbook.md](../../data-transition-playbook.md) |
 
@@ -26,3 +27,12 @@
 | 研究产物 session handoff | [session-handoffs/hk-research-cold-storage-20260601.md](session-handoffs/hk-research-cold-storage-20260601.md) |
 
 恢复前先从对应 session handoff 读取冷存储路径、manifest、校验命令和已知限制。
+
+## Public split gate
+
+`../../hk-public-split-manifest.yml` 是迁出和删除判断入口。任何 restore-sensitive 或
+compatibility surface 在删除前都需要同时具备 restore evidence、consumer audit、replacement
+docs、rollback notes、focused tests，以及需要公开 demo 承接时的 public split evidence。
+
+公开 demo staging 只承接 synthetic fixture 和 public-safe demo 逻辑。真实行情、provider cache、
+券商 adapter、交易审计日志、本地路径和私有研究输出不进入公开 demo。

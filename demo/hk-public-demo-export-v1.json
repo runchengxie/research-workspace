@@ -8,5 +8,6 @@
     "publication": "explicit_maintainer_action_only"
   },
   "allowlist": "demo/hk-public-demo-allowlist-v1.txt",
+  "split_manifest": "docs/hk-public-split-manifest.yml",
   "template_root": "demo/hk-public-demo-template-v1"
 }

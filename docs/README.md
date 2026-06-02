@@ -15,6 +15,7 @@ submodule、依赖和必跑 CI 目标。
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看中国香港市场归档入口 | [archive/hk/README.md](archive/hk/README.md) |
 | 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
+| 查看港股 public split manifest | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | 导出外部暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 | 查看 A 股生产 readiness 与长窗口扩展计划 | [a-share-production-readiness.md](a-share-production-readiness.md) |
