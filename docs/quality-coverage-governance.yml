@@ -1,0 +1,120 @@
+{
+  "schema_version": "quality_coverage_governance.v1",
+  "repos": [
+    {
+      "repo": "cross-sectional-trees",
+      "ruff": {
+        "staged_select": ["E", "F", "I", "UP", "B", "C4", "RET", "SIM", "RUF", "C90"],
+        "current_hard_gate": "scripts/dev/run_tests.sh lint",
+        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/cstree/pipeline/contracts.py src/cstree/pipeline/output_context.py src/cstree/pipeline/output_artifacts.py src/cstree/liveops/export_targets.py src/cstree/liveops/alloc_core.py src/cstree/liveops/alloc_selection.py",
+        "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
+      },
+      "pyright": {
+        "current_mode": "basic",
+        "next_include_targets": [
+          "src/cstree/pipeline/contracts.py",
+          "src/cstree/pipeline/output_context.py",
+          "src/cstree/pipeline/output_artifacts.py",
+          "src/cstree/liveops/export_targets.py",
+          "src/cstree/liveops/alloc_core.py",
+          "src/cstree/liveops/alloc_selection.py"
+        ],
+        "promotion_criteria": "contract/liveops modules pass before broader research modules are added"
+      }
+    },
+    {
+      "repo": "market-data-platform",
+      "ruff": {
+        "staged_select": ["E", "F", "I", "UP", "B", "C4", "RET", "RUF100"],
+        "current_hard_gate": "uv run python -m ruff check .",
+        "first_include_targets": [
+          "src/market_data_platform/hk_assets/__init__.py",
+          "src/market_data_platform/hk_assets/_public_exports.py",
+          "src/market_data_platform/hk_assets/models.py",
+          "src/market_data_platform/hk_assets/shared.py",
+          "src/market_data_platform/hk_assets/quality_gate.py",
+          "src/market_data_platform/hk_assets/coverage_rendering.py"
+        ],
+        "promotion_criteria": "low-risk HK modules pass before heavy workflow modules are removed from excludes"
+      },
+      "pyright": {
+        "current_mode": "basic",
+        "next_include_targets": [
+          "src/market_data_platform/hk_assets/models.py",
+          "src/market_data_platform/hk_assets/shared.py",
+          "src/market_data_platform/hk_assets/quality_gate.py",
+          "src/market_data_platform/hk_assets/coverage_rendering.py"
+        ],
+        "promotion_criteria": "schema/shared/public modules pass before asset_io, manifest_ops, workflow, and downloader modules are added"
+      }
+    },
+    {
+      "repo": "quant-execution-engine",
+      "ruff": {
+        "staged_select": ["E", "F", "I", "UP", "B"],
+        "current_hard_gate": "uv run python -m ruff check .",
+        "promotion_criteria": "existing hard gate stays green"
+      },
+      "pyright": {
+        "current_mode": "basic",
+        "strict_targets": [
+          "src/quant_execution_engine/targets.py",
+          "src/quant_execution_engine/risk.py",
+          "src/quant_execution_engine/preflight.py",
+          "src/quant_execution_engine/rebalance.py",
+          "src/quant_execution_engine/execution_state.py",
+          "src/quant_execution_engine/broker/base.py",
+          "src/quant_execution_engine/execution_service.py"
+        ],
+        "promotion_criteria": "execution-critical modules pass stricter checks before optional broker adapters are tightened"
+      }
+    }
+  ],
+  "broad_exclude_register": [
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/hk_assets heavy modules",
+      "tool": "ruff",
+      "owner": "market-data-platform",
+      "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after first low-risk include",
+      "next_include_target": "hk_assets/public_api.py, asset_io.py, manifest_ops.py",
+      "review_milestone": "next quality-baseline refresh"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/hk_assets heavy modules",
+      "tool": "pyright",
+      "owner": "market-data-platform",
+      "reason": "public API and workflow modules still need import-boundary and schema cleanup after first low-risk include",
+      "next_include_target": "hk_assets/public_api.py, asset_io.py, manifest_ops.py",
+      "review_milestone": "next quality-baseline refresh"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/release_tools",
+      "tool": "pyright",
+      "owner": "market-data-platform",
+      "reason": "release workflow modules are large orchestration code and need model/path extraction first",
+      "next_include_target": "release_tools/hk_asset_workflow_state.py and hk_asset_workflow_paths.py",
+      "review_milestone": "after workflow state/path extraction"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/hk_depth/*",
+      "tool": "pyright",
+      "owner": "market-data-platform",
+      "reason": "HK depth modules are restore-sensitive and require staged quota/storage/client typing",
+      "next_include_target": "hk_depth/schema.py, symbols.py, storage.py",
+      "review_milestone": "after downloader split planning"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "configs/local",
+      "tool": "ruff",
+      "owner": "cross-sectional-trees",
+      "reason": "local override configs are personal and not active package code",
+      "next_include_target": "not_applicable",
+      "review_milestone": "keep excluded by policy"
+    }
+  ]
+}

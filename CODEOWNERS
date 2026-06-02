@@ -1,0 +1,15 @@
+# Workspace integration owner
+* @runchengxie
+
+# Submodule boundaries
+/market-data-platform/ @runchengxie
+/cross-sectional-trees/ @runchengxie
+/quant-execution-engine/ @runchengxie
+
+# Cross-repo contracts and governance
+/docs/contracts.md @runchengxie
+/docs/deprecations.* @runchengxie
+/docs/hk-public-split-manifest.yml @runchengxie
+/docs/quality-coverage-governance.yml @runchengxie
+/docs/maintainability-refactor-roadmap.yml @runchengxie
+/scripts/ @runchengxie

@@ -14,6 +14,7 @@
 | --- | --- |
 | 查看保留的 legacy surface 和 sunset 边界 | [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md) |
 | 查看 public split manifest 和 cleanup gate | [../../hk-public-split-manifest.yml](../../hk-public-split-manifest.yml) |
+| 查看 deprecated 入口 removal gate | [../../deprecations.md](../../deprecations.md) |
 | 导出外部 clean-room 港股公开 demo | [../../hk-public-demo-export.md](../../hk-public-demo-export.md) |
 | 查看数据迁移优先级和恢复顺序 | [../../data-transition-playbook.md](../../data-transition-playbook.md) |
 

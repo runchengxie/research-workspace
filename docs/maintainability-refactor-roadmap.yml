@@ -1,0 +1,446 @@
+{
+  "schema_version": "maintainability_refactor_roadmap.v1",
+  "thresholds": {
+    "large_file_loc": 500,
+    "long_function_lines": 80,
+    "complexity": 15
+  },
+  "first_safe_extraction_types": [
+    "schema_model_extraction",
+    "path_resolution",
+    "pure_validation",
+    "rendering_reporting",
+    "cli_parser_extraction",
+    "workflow_orchestration_separation"
+  ],
+  "records": [
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/asset_health.py",
+      "owner_repo": "market-data-platform",
+      "risk": "high",
+      "first_safe_extraction": "rendering_reporting",
+      "target_layout": "hk_assets/health/{model.py,checks.py,render.py,report.py}",
+      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
+      "non_goals": "do not change current contract or provider behavior"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/audit_assets.py",
+      "owner_repo": "market-data-platform",
+      "risk": "high",
+      "first_safe_extraction": "pure_validation",
+      "target_layout": "hk_assets/audit/{model.py,checks.py,render.py}",
+      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
+      "non_goals": "do not change asset schema or audit verdict semantics"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/release_tools/hk_asset_workflow.py",
+      "owner_repo": "market-data-platform",
+      "risk": "high",
+      "first_safe_extraction": "workflow_orchestration_separation",
+      "target_layout": "release_tools/hk_asset_workflow/{planning.py,execution.py,repair.py,reporting.py,state.py}",
+      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
+      "non_goals": "do not change release artifact paths"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_depth/downloader.py",
+      "owner_repo": "market-data-platform",
+      "risk": "high",
+      "first_safe_extraction": "path_resolution",
+      "target_layout": "hk_depth/downloader/{client.py,state.py,storage.py,quota.py,cli_adapter.py}",
+      "focused_tests": ["market-data-platform/tests/test_hk_depth.py"],
+      "non_goals": "do not change provider request semantics"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/eval.py",
+      "owner_repo": "cross-sectional-trees",
+      "risk": "high",
+      "first_safe_extraction": "rendering_reporting",
+      "target_layout": "pipeline/eval/{metrics.py,reporting.py,orchestration.py}",
+      "focused_tests": ["cross-sectional-trees pipeline and docs contract tests"],
+      "non_goals": "do not change evaluation metrics"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/train_eval_stage.py",
+      "owner_repo": "cross-sectional-trees",
+      "risk": "high",
+      "first_safe_extraction": "workflow_orchestration_separation",
+      "target_layout": "pipeline/train_eval/{stage.py,state.py,outputs.py}",
+      "focused_tests": ["cross-sectional-trees pipeline tests"],
+      "non_goals": "do not change run outputs or config semantics"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/summarize_runs.py",
+      "owner_repo": "cross-sectional-trees",
+      "risk": "medium",
+      "first_safe_extraction": "rendering_reporting",
+      "target_layout": "research/summarize/{model.py,collect.py,render.py}",
+      "focused_tests": ["cross-sectional-trees summarize runs tests"],
+      "non_goals": "do not change report schema"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/exposure.py",
+      "owner_repo": "cross-sectional-trees",
+      "risk": "medium",
+      "first_safe_extraction": "pure_validation",
+      "target_layout": "exposure/{model.py,analysis.py,render.py}",
+      "focused_tests": ["cross-sectional-trees exposure tests"],
+      "non_goals": "do not change exposure math"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/commands/tune.py",
+      "owner_repo": "cross-sectional-trees",
+      "risk": "medium",
+      "first_safe_extraction": "cli_parser_extraction",
+      "target_layout": "commands/tune/{parser.py,runner.py,report.py}",
+      "focused_tests": ["cross-sectional-trees CLI tests"],
+      "non_goals": "do not change command flags"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/cli.py",
+      "owner_repo": "quant-execution-engine",
+      "risk": "medium",
+      "first_safe_extraction": "cli_parser_extraction",
+      "target_layout": "cli/{parser.py,commands.py,render.py}",
+      "focused_tests": ["quant-execution-engine CLI unit tests"],
+      "non_goals": "do not change qexec command behavior"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
+      "owner_repo": "quant-execution-engine",
+      "risk": "high",
+      "first_safe_extraction": "schema_model_extraction",
+      "target_layout": "broker/longport/{credentials.py,symbols.py,account.py,orders.py,quotes.py}",
+      "focused_tests": ["quant-execution-engine longport unit tests"],
+      "non_goals": "do not change broker credentials or live execution gates"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
+      "owner_repo": "quant-execution-engine",
+      "risk": "medium",
+      "first_safe_extraction": "workflow_orchestration_separation",
+      "target_layout": "project_tools/smoke_operator/{parser.py,runner.py,evidence.py}",
+      "focused_tests": ["quant-execution-engine smoke harness tests"],
+      "non_goals": "do not change broker smoke safety switches"
+    }
+  ],
+  "accepted_hotspots": [
+    {
+      "path": "scripts/a_share_readiness.py",
+      "owner_repo": "research-workspace",
+      "reason": "top-level readiness report is stable and below submodule hotspot priority",
+      "next_action": "split report rendering if future changes expand it"
+    },
+    {
+      "path": "scripts/export_hk_public_demo.py",
+      "owner_repo": "research-workspace",
+      "reason": "new public-demo scanner is intentionally centralized for export safety",
+      "next_action": "split manifest validation if complexity grows further"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_financial.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline large-file debt outside the first refactor wave",
+      "next_action": "review after HK asset health and workflow splits"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_workflow.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline large-file debt outside the first refactor wave",
+      "next_action": "review after workflow orchestration split"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/coverage.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline large-file debt outside the first refactor wave",
+      "next_action": "review after coverage rendering and quality gate coverage expand"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/intraday_health.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline large-file debt outside the first refactor wave",
+      "next_action": "review after HK intraday health coverage is separated"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/cli.py",
+      "owner_repo": "market-data-platform",
+      "reason": "CLI dispatcher debt is lower priority than HK asset restore modules",
+      "next_action": "split command groups when new CLI work touches this file"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/build.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline large-file debt outside the first refactor wave",
+      "next_action": "review after HK asset build path extraction"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/data_providers.py",
+      "owner_repo": "market-data-platform",
+      "reason": "provider compatibility debt is lower priority than HK asset restore modules",
+      "next_action": "split provider adapters behind contract tests"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_workflows.py",
+      "owner_repo": "market-data-platform",
+      "reason": "baseline workflow debt outside the first refactor wave",
+      "next_action": "review after release workflow state/path extraction"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/release_tools/package_assets.py",
+      "owner_repo": "market-data-platform",
+      "reason": "release packaging debt is lower priority than HK asset workflow split",
+      "next_action": "split packaging validation if release changes touch this file"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/data_warehouse.py",
+      "owner_repo": "market-data-platform",
+      "reason": "warehouse compatibility debt is lower priority than current HK refactor wave",
+      "next_action": "review when data warehouse contract changes resume"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share provider module is outside the HK maintainability first wave",
+      "next_action": "split provider schema and request planning when provider work resumes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/args.py",
+      "owner_repo": "market-data-platform",
+      "reason": "argument wiring debt is lower risk than HK workflow modules",
+      "next_action": "split parser fragments after public API cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_depth/reconcile.py",
+      "owner_repo": "market-data-platform",
+      "reason": "HK depth reconciliation waits behind downloader split",
+      "next_action": "review after downloader storage/state extraction"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/clean_daily.py",
+      "owner_repo": "market-data-platform",
+      "reason": "daily cleaning debt is lower priority than asset health and audit modules",
+      "next_action": "split validation helpers when daily cleaning changes resume"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_industry_southbound.py",
+      "owner_repo": "market-data-platform",
+      "reason": "industry mirroring debt waits behind core HK asset splits",
+      "next_action": "review after industry request schema is extracted"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_depth/release_assets.py",
+      "owner_repo": "market-data-platform",
+      "reason": "HK depth release debt waits behind downloader split",
+      "next_action": "split release reporting after downloader storage/state extraction"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/current_health.py",
+      "owner_repo": "market-data-platform",
+      "reason": "current health debt is lower priority than asset_health.py first split",
+      "next_action": "merge into health package after first health model/render extraction"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/asset_io.py",
+      "owner_repo": "market-data-platform",
+      "reason": "I/O debt is deferred until model and validation coverage expand",
+      "next_action": "promote after shared/model/quality modules stay green"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_daily.py",
+      "owner_repo": "market-data-platform",
+      "reason": "daily mirroring debt is lower priority than workflow and audit modules",
+      "next_action": "split fetch planning from write path when mirror work resumes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_depth/health.py",
+      "owner_repo": "market-data-platform",
+      "reason": "HK depth health debt waits behind downloader split",
+      "next_action": "review after downloader quality/storage split"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/hk_assets/patch_merge.py",
+      "owner_repo": "market-data-platform",
+      "reason": "patch merge debt is lower priority than asset workflow split",
+      "next_action": "split merge validation when patch workflow changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_pipeline_e2e.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large fixture-heavy test file is tracked but not active production code",
+      "next_action": "split by scenario when pipeline e2e tests change"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/cpcv.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "research module debt outside first train/eval and reporting wave",
+      "next_action": "split CPCV model and runner if research workflow changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/config.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "pipeline config debt is lower priority than eval orchestration split",
+      "next_action": "split schema and resolver after contract modules stay typed"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_pipeline_filters_backtest.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large scenario test file is tracked but not active production code",
+      "next_action": "split by filter family when backtest filter tests change"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/release_tools/package_runs.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "release packaging debt is lower priority than research pipeline refactor",
+      "next_action": "split packaging checks when release tooling changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/execution_sim.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "simulation debt is lower priority than execution target contract modules",
+      "next_action": "split simulation model and report if simulation changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_pipeline_filters_file_derived.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large derived-feature scenario test file is tracked but not active production code",
+      "next_action": "split by derived feature group when tests change"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_summarize_runs.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large report test file mirrors summarize_runs.py debt",
+      "next_action": "split after summarize_runs.py reporting extraction"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/promotion_gate.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "research governance module debt outside first train/eval wave",
+      "next_action": "split gate model and report when promotion gate changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/backtest_tearsheet.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "reporting debt is lower priority than eval orchestration split",
+      "next_action": "split rendering helpers when tearsheet changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/hk_financial_details.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "HK research provenance debt waits behind public split and archive work",
+      "next_action": "archive or split after HK research config migration"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_backtest.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large backtest scenario test file is tracked but not active production code",
+      "next_action": "split by backtest scenario when tests change"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/execution.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "research-side execution helper debt is lower priority than targets.json contract path",
+      "next_action": "split after export-targets contract modules stay typed"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/commands/linear_sweep.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "CLI orchestration debt is already tracked in C901 debt registry",
+      "next_action": "split parser and runner when sweep command changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/construction_grid.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "research grid debt is lower priority than eval/reporting modules",
+      "next_action": "split grid schema and runner when construction grid changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/research/feature_evidence.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "feature evidence debt is lower priority than eval pipeline split",
+      "next_action": "split evidence model and renderer when feature evidence changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/fundamentals_enrichment.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "fundamental enrichment debt waits behind pipeline contract typing",
+      "next_action": "split enrichment schema and resolver when fundamentals work resumes"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/output_artifacts.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "output artifact module is newly included in staged Pyright coverage",
+      "next_action": "promote further only after focused typecheck stays green"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/cli/liveops.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "liveops CLI wiring debt waits behind allocation/export contract modules",
+      "next_action": "split parser wiring after alloc-hk compatibility decision"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_docs_contracts.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "large docs contract test file is tracked but not active production code",
+      "next_action": "split by contract family when docs contract tests change"
+    },
+    {
+      "path": "quant-execution-engine/tests/unit/test_execution_foundation.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large unit test file is tracked but not active production code",
+      "next_action": "split by execution foundation scenario when tests change"
+    },
+    {
+      "path": "quant-execution-engine/tests/unit/test_smoke_operator_harness.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large smoke harness test mirrors accepted project tool debt",
+      "next_action": "split after smoke operator harness extraction"
+    },
+    {
+      "path": "quant-execution-engine/tests/unit/test_cli_longport_commands.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large broker CLI test waits behind LongPort adapter split",
+      "next_action": "split by command group when LongPort CLI changes resume"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/renderers/table.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "rendering helper debt is lower priority than execution-critical modules",
+      "next_action": "split table formatters when renderer changes resume"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/state_tools.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "state tool debt waits behind execution_state typing cleanup",
+      "next_action": "split state parsing and reporting after execution_state target is tightened"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/evidence_bundle.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "evidence packaging debt is lower priority than execution service typing",
+      "next_action": "split evidence model and renderer when evidence changes resume"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/execution_service.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "execution service is a staged strictness target with current strict debt",
+      "next_action": "type cleanup after staged strict report is accepted"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/execution_service_state_reconcile_ops.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "reconcile ops debt waits behind execution_service split",
+      "next_action": "split state reconciliation operations after execution service cleanup"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/rebalance.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "rebalance is a staged strictness target with current strict debt",
+      "next_action": "annotate config dicts before strict promotion"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/execution_service_recovery_actions.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "recovery action debt waits behind execution service typing cleanup",
+      "next_action": "split recovery action model and runner when recovery work resumes"
+    }
+  ]
+}

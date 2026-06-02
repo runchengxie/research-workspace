@@ -4,6 +4,7 @@
   "generated_from": [
     "docs/hk-legacy-surface-inventory.md",
     "docs/hk-public-demo-export.md",
+    "docs/deprecations.yml",
     "demo/hk-public-demo-allowlist-v1.txt",
     "repo-local HK surface search on 2026-06-02"
   ],

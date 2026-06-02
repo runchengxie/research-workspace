@@ -20,6 +20,8 @@ submodule、依赖和必跑 CI 目标。
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 | 查看 A 股生产 readiness 与长窗口扩展计划 | [a-share-production-readiness.md](a-share-production-readiness.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
+| 查看维护债治理入口 | [maintainability-governance.md](maintainability-governance.md) |
+| 查看 deprecated 入口删除条件 | [deprecations.md](deprecations.md) |
 | 维护子模块指针或顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看 hard、advisory 和 manual 质量 gate | [quality-governance.md](quality-governance.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |

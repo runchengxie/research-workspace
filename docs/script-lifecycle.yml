@@ -1,0 +1,192 @@
+{
+  "schema_version": "script_lifecycle.v1",
+  "valid_lifecycles": [
+    "dev",
+    "ci",
+    "release",
+    "migration",
+    "archive"
+  ],
+  "records": [
+    {
+      "path": "scripts/a_share_readiness.py",
+      "owner": "research-workspace",
+      "purpose": "A-share readiness evidence aggregation",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "only when explicit output flags are used",
+      "external_dependencies": "DATA_PLATFORM_ROOT for full current-contract checks",
+      "removal_condition": "keep while A-share readiness evidence is governed at the workspace layer"
+    },
+    {
+      "path": "scripts/export_hk_public_demo.py",
+      "owner": "research-workspace",
+      "purpose": "Clean-room public demo staging and safety scan",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "staging directory passed via --out",
+      "external_dependencies": "none for scan; git optional for source revision",
+      "removal_condition": "keep until public demo staging is removed by follow-up split"
+    },
+    {
+      "path": "scripts/maintainability_baseline.py",
+      "owner": "research-workspace",
+      "purpose": "Cross-repo maintainability baseline generation",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --out is provided",
+      "external_dependencies": "none",
+      "removal_condition": "keep while maintainability governance is active"
+    },
+    {
+      "path": "scripts/print_version_matrix.py",
+      "owner": "research-workspace",
+      "purpose": "Workspace and submodule version matrix rendering",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout with initialized submodules",
+      "removal_condition": "keep while submodule version locking is active"
+    },
+    {
+      "path": "scripts/run_quality_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level quality profile dispatcher",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected profile tools",
+      "removal_condition": "keep while top-level quality profiles are active"
+    },
+    {
+      "path": "scripts/run_submodule_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Delegate smoke/full checks to submodules",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "submodule environments",
+      "removal_condition": "keep while submodule check delegation is active"
+    },
+    {
+      "path": "scripts/scan_workspace_secrets.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level secret and private path scan",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none",
+      "removal_condition": "keep while public/private boundary checks are active"
+    },
+    {
+      "path": "scripts/smoke_contracts.py",
+      "owner": "research-workspace",
+      "purpose": "Cross-repo contract smoke commands",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "submodule CLIs and optional DATA_PLATFORM_ROOT",
+      "removal_condition": "keep while cross-repo handoff contracts are active"
+    },
+    {
+      "path": "scripts/workspace_doctor.py",
+      "owner": "research-workspace",
+      "purpose": "Workspace health and boundary checks",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git and optional DATA_PLATFORM_ROOT",
+      "removal_condition": "keep while workspace health is governed at top level"
+    },
+    {
+      "path": "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
+      "owner": "cross-sectional-trees",
+      "purpose": "HK research output cold-storage freeze",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "cold-storage package and manifest paths",
+      "external_dependencies": "research output archive paths and release packaging tools",
+      "removal_condition": "move to archive after HK research freeze evidence is no longer maintained"
+    },
+    {
+      "path": "cross-sectional-trees/scripts/internal/export_repo_source.py",
+      "owner": "cross-sectional-trees",
+      "purpose": "Source export for release/provenance bundles",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit export destination",
+      "external_dependencies": "git checkout",
+      "removal_condition": "keep while source export evidence is required"
+    },
+    {
+      "path": "cross-sectional-trees/scripts/internal/package_repo.sh",
+      "owner": "cross-sectional-trees",
+      "purpose": "Package repository source for release",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit package output",
+      "external_dependencies": "shell, tar, git",
+      "removal_condition": "keep while release source packaging remains manual"
+    },
+    {
+      "path": "market-data-platform/scripts/internal/import_cross_artifacts.py",
+      "owner": "market-data-platform",
+      "purpose": "Import selected research artifacts into data-platform metadata",
+      "lifecycle": "migration",
+      "safe_to_run_locally": false,
+      "writes_files": "data-platform metadata and artifact roots",
+      "external_dependencies": "source research artifacts and DATA_PLATFORM_ROOT",
+      "removal_condition": "archive after A-share migration evidence no longer needs imports"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/export_repo_source.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Source export for execution-engine release evidence",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit export destination",
+      "external_dependencies": "git checkout",
+      "removal_condition": "keep while source export evidence is required"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/package.sh",
+      "owner": "quant-execution-engine",
+      "purpose": "Package execution-engine source for release evidence",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit package output",
+      "external_dependencies": "shell, tar, git",
+      "removal_condition": "keep while release source packaging remains manual"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Operator execution smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split after execution smoke harness modules are refactored"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_signal_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Signal handoff smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "local fixtures",
+      "removal_condition": "split after smoke harness modules are refactored"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_target_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "targets.json smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "local fixtures",
+      "removal_condition": "split after smoke harness modules are refactored"
+    }
+  ]
+}

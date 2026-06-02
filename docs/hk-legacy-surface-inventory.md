@@ -7,6 +7,8 @@
 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml)。本页给维护者读边界和背景；
 manifest 记录 repo-local surface、public safety、consumer audit、replacement path 和
 removal condition。
+Deprecated 入口的 owner、replacement、target milestone 和 removal gate 见
+[`deprecations.md`](deprecations.md)。
 
 ## 分类
 

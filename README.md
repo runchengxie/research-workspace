@@ -67,6 +67,8 @@ python scripts/smoke_contracts.py
 | 查看港股 public split manifest | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
 | 导出外部 clean-room 港股公开 demo | [docs/hk-public-demo-export.md](docs/hk-public-demo-export.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
+| 查看维护债治理入口 | [docs/maintainability-governance.md](docs/maintainability-governance.md) |
+| 查看 deprecated 入口删除条件 | [docs/deprecations.md](docs/deprecations.md) |
 | 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
 | 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |
 | 找全部顶层文档入口 | [docs/README.md](docs/README.md) |
@@ -103,6 +105,10 @@ python scripts/run_quality_checks.py --profile hard
 ## 协作边界
 
 日常开发通常在对应子项目中完成；只有当跨仓库 contract、子模块指针、顶层 doctor、release checklist 或工作区说明需要变化时，才修改 superproject。
+
+团队级协作入口见 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [ARCHITECTURE.md](ARCHITECTURE.md)。
+新增 deprecated surface、一次性脚本、质量检查 exclude、`targets.json` contract 影响或
+provider / broker 凭证读取时，先更新对应治理文档。
 
 修改文档时请保持市场称谓清晰：优先使用“中国香港市场”“港股”“港股通”“中国大陆市场”“A 股”等业务表述。当前 A 股 canonical current contract 名称是：
 

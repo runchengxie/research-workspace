@@ -1,0 +1,144 @@
+{
+  "schema_version": "deprecation_register.v1",
+  "removal_ready_requirements": [
+    "consumer_audit",
+    "replacement_docs",
+    "rollback_path",
+    "focused_tests"
+  ],
+  "records": [
+    {
+      "id": "market-data-platform-hkdata",
+      "owner_repo": "market-data-platform",
+      "entrypoint": "hkdata",
+      "kind": "console_script",
+      "replacement": "marketdata",
+      "current_consumers": "repo-local and downstream usage audit pending",
+      "target_milestone": "two releases after zero repo-local/downstream usage is recorded",
+      "removal_condition": "No repo-local or downstream usage for two releases, migration docs published, compatibility tests updated.",
+      "rollback_path": "restore console script from previous release tag and keep marketdata alias docs",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "market-data-platform compatibility governance tests",
+        "market-data-platform CLI smoke tests"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "market-data-platform-hk-data-platform-package",
+      "owner_repo": "market-data-platform",
+      "entrypoint": "src/hk_data_platform/*",
+      "kind": "compat_package",
+      "replacement": "market_data_platform public modules and marketdata CLI",
+      "current_consumers": "repo-local import and downstream usage audit pending",
+      "target_milestone": "two releases after import audit is clean",
+      "removal_condition": "No hk_data_platform imports in repo-local scans or downstream reports.",
+      "rollback_path": "restore compatibility package from previous release tag",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "market-data-platform compatibility governance tests",
+        "market-data-platform import compatibility tests"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "market-data-platform/docs/README.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "market-data-platform-rqdata-hk-depth",
+      "owner_repo": "market-data-platform",
+      "entrypoint": "rqdata-hk-depth",
+      "kind": "console_script",
+      "replacement": "marketdata rqdata hk-depth -- ...",
+      "current_consumers": "legacy script usage audit pending",
+      "target_milestone": "two releases after migration guide is published and usage is zero",
+      "removal_condition": "No legacy command usage, migration docs complete, HK depth focused tests pass.",
+      "rollback_path": "restore console script from previous release tag",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "market-data-platform/tests/test_hk_depth.py",
+        "market-data-platform compatibility governance tests"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "market-data-platform-rqdata-tick",
+      "owner_repo": "market-data-platform",
+      "entrypoint": "rqdata-tick",
+      "kind": "console_script",
+      "replacement": "marketdata rqdata hk-depth -- ...",
+      "current_consumers": "legacy script usage audit pending",
+      "target_milestone": "two releases after migration guide is published and usage is zero",
+      "removal_condition": "No legacy command usage, migration docs complete, HK depth focused tests pass.",
+      "rollback_path": "restore console script from previous release tag",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "market-data-platform/tests/test_hk_depth.py",
+        "market-data-platform compatibility governance tests"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "market-data-platform-rqdata-hk-assets",
+      "owner_repo": "market-data-platform",
+      "entrypoint": "rqdata-hk-assets",
+      "kind": "console_script",
+      "replacement": "marketdata rqdata hk-assets -- ...",
+      "current_consumers": "legacy script usage audit pending",
+      "target_milestone": "two releases after migration guide is published and usage is zero",
+      "removal_condition": "No legacy command usage, migration docs complete, HK asset workflow focused tests pass.",
+      "rollback_path": "restore console script from previous release tag",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "market-data-platform/tests/test_hk_asset_workflow.py",
+        "market-data-platform compatibility governance tests"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "cross-sectional-trees-alloc-hk",
+      "owner_repo": "cross-sectional-trees",
+      "entrypoint": "cstree alloc-hk",
+      "kind": "deprecated_cli",
+      "replacement": "cstree alloc plus cstree export-targets",
+      "current_consumers": "explicit HK reproduction and deprecated compatibility users",
+      "target_milestone": "after restore drill, consumer audit, and successor allocation docs are complete",
+      "removal_condition": "No active consumer remains, restore evidence is current, migration docs and focused tests pass.",
+      "rollback_path": "restore deprecated CLI handler from previous release tag",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "cross-sectional-trees/tests/test_alloc_hk.py",
+        "cross-sectional-trees/tests/test_cli_liveops.py"
+      ],
+      "consumer_audit": "pending",
+      "replacement_docs": "cross-sectional-trees/docs/cli.md",
+      "status": "blocked_pending_audit"
+    },
+    {
+      "id": "cross-sectional-trees-hk-historical-configs",
+      "owner_repo": "cross-sectional-trees",
+      "entrypoint": "configs/experiments/**/*hk*.yml and configs/local/hk*.yml",
+      "kind": "archived_provenance",
+      "replacement": "configs/presets/hk.yml for explicit restore plus public-safe archive excerpts",
+      "current_consumers": "manual provenance review and historical reproduction",
+      "target_milestone": "after archive manifest and restore drill remain current",
+      "removal_condition": "Configs are either moved to archive with manifest evidence or deleted after no restore consumer remains.",
+      "rollback_path": "restore historical configs from release tag or cold-storage research archive",
+      "restore_evidence_required": true,
+      "focused_tests": [
+        "cross-sectional-trees docs contract tests",
+        "cross-sectional-trees config tests"
+      ],
+      "consumer_audit": "manual_review_required",
+      "replacement_docs": "cross-sectional-trees/docs/README.md",
+      "status": "follow_up_required"
+    }
+  ]
+}

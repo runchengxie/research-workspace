@@ -23,6 +23,8 @@ fixture、public-safe demo 代码、独立 docs、archive placeholder、最小 C
 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 记录。manifest 使用
 `keep_in_main`、`move_to_public_demo`、`archive_in_public_demo`、`delete_after_split` 和
 `private_do_not_export` 分类；删除主项目兼容入口仍需要后续变更和 gate evidence。
+Deprecated 入口的具体 removal milestone 和测试要求见
+[`deprecations.md`](deprecations.md)。
 
 ## 导出
 
