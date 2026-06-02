@@ -1,0 +1,18 @@
+{
+  "schema_version": "hk_private_archive_stage_evidence.v1",
+  "recorded_at": "2026-06-02T23:55:00+08:00",
+  "archive_repository": "hk-quant-legacy-archive",
+  "maintenance": "paused",
+  "purpose": "restore_only",
+  "workspace_integration": "external_not_submodule",
+  "local_stage": "/tmp/hk-quant-legacy-archive-stage-20260602",
+  "export_manifest": "/tmp/hk-quant-legacy-archive-stage-20260602/archive-export-manifest.json",
+  "included_files": 219,
+  "files_scanned": 221,
+  "archive_sha256": "2cd35811570753bbc87f275569693ce2cfc7ed117570e9b40649935d2c48ed66",
+  "scan_status": "passed",
+  "gate_status": "passed",
+  "removal_review_status": "blocked_pending_audit",
+  "remote_publication": "pending_operator_action",
+  "notes": "Local staging evidence proves deterministic export and safety scanning. It does not replace downstream owner attestations, fresh restore drill evidence, source tags, remote private repository publication, or the zero-usage release window."
+}

@@ -18,6 +18,8 @@
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看中国香港市场归档入口 | [archive/hk/README.md](archive/hk/README.md) |
 | 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
+| 查看港股私有 legacy 归档候选和只读门禁 | [hk-private-archive.md](hk-private-archive.md) |
+| 查看港股私有归档 manifest | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 | 查看港股 public split manifest | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | 导出外部暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |

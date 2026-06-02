@@ -82,6 +82,9 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 中国香港市场数据资产当前定位是 legacy / archival。除非存在明确资金、模拟盘、人工跟踪或跨市场验证需求，不应新增港股研究功能或扩大港股数据下载。
 
 2026-06-01 的实际冻结记录见 [中国香港市场归档](archive/hk/README.md)。
+真实业务代码如需进入私有 paused-maintenance 候选，先按
+[中国香港市场私有 legacy 归档](hk-private-archive.md) 运行只读 gate 和工作区外 staging；
+不要把私有归档仓库加入 submodule，也不要把 staging 成功当成删除授权。
 
 冻结前至少确认：
 
@@ -131,7 +134,9 @@ A 股 staged baseline 只要求先把 price-only / `daily_clean` 路线跑稳，
 marketdata tushare validate-a-share-daily-clean \
   --daily-clean-dir "$DATA_PLATFORM_ROOT/assets/tushare/a_share/daily/a_share_all_daily_clean_latest" \
   --require-valuation \
-  --require-limit-status
+  --require-limit-status \
+  --profile baseline \
+  --out "$DATA_PLATFORM_ROOT/reports/a_share_daily_clean_validation.json"
 
 marketdata contract build \
   --market a_share \

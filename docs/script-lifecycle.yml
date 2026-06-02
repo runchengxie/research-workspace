@@ -29,6 +29,26 @@
       "removal_condition": "keep until public demo staging is removed by follow-up split"
     },
     {
+      "path": "scripts/export_hk_legacy_archive.py",
+      "owner": "research-workspace",
+      "purpose": "Private paused-maintenance HK legacy source archive staging",
+      "lifecycle": "archive",
+      "safe_to_run_locally": true,
+      "writes_files": "external staging directory passed via --out",
+      "external_dependencies": "git checkout with initialized submodules",
+      "removal_condition": "keep while private HK legacy restore provenance is maintained"
+    },
+    {
+      "path": "scripts/hk_archive_gate.py",
+      "owner": "research-workspace",
+      "purpose": "Read-only HK private archive evidence and removal gate",
+      "lifecycle": "archive",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --out is provided",
+      "external_dependencies": "git checkout with initialized submodules",
+      "removal_condition": "keep while HK compatibility removal requires explicit governance"
+    },
+    {
       "path": "scripts/maintainability_baseline.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo maintainability baseline generation",

@@ -9,6 +9,10 @@ manifest 记录 repo-local surface、public safety、consumer audit、replacemen
 removal condition。
 Deprecated 入口的 owner、replacement、target milestone 和 removal gate 见
 [`deprecations.md`](deprecations.md)。
+真实业务代码的私有 paused-maintenance 归档候选和只读 removal gate 见
+[`hk-private-archive.md`](hk-private-archive.md) 与
+[`hk-private-archive-manifest.yml`](hk-private-archive-manifest.yml)。私有归档和 synthetic
+public demo 是两条独立路径。
 
 ## 分类
 
@@ -57,6 +61,8 @@ Deprecated 入口的 owner、replacement、target milestone 和 removal gate 见
    较重的港股 optional-extra 与 legacy matrix 改为手动触发。
 6. restore-sensitive 港股实现的删除或迁出，需要先完成 source tag、archive manifest、
    restore drill 和消费者审计；公开 demo 只能作为展示面证据。
+7. 私有 legacy archive 只生成工作区外 staging 和 SHA-256 证据，不自动创建远端仓库、不加入
+   submodule、不删除活跃代码。LongPort 和标准多市场执行 contract 始终留在执行仓库。
 
 ## Cleanup gate
 

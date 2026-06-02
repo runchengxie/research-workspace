@@ -1,0 +1,31 @@
+{
+  "schema_version": "hk_private_archive_consumer_audit.v1",
+  "recorded_at": "2026-06-02T23:50:00+08:00",
+  "scope": [
+    "research-workspace",
+    "market-data-platform",
+    "cross-sectional-trees",
+    "quant-execution-engine"
+  ],
+  "repo_local_scan": {
+    "status": "passed_with_known_consumers",
+    "command": "rg -n \"\\\\b(hkdata|hk_data_platform|rqdata-hk|rqdata-tick|alloc-hk|freeze-hk|hydrate-hk|longport)\\\\b\" README.md docs scripts tests market-data-platform cross-sectional-trees quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**'",
+    "matching_files": 114,
+    "known_consumers": [
+      "market-data-platform deprecated hkdata and rqdata-hk compatibility entrypoints",
+      "market-data-platform freeze-hk and hydrate-hk restore control plane",
+      "cross-sectional-trees deprecated cstree alloc-hk compatibility command",
+      "quant-execution-engine LongPort broker runtime and shared multi-market execution support",
+      "top-level doctor, lifecycle docs, archive docs, and release checklist"
+    ]
+  },
+  "downstream_owner_attestations": {
+    "status": "pending",
+    "required_before_removal": true,
+    "notes": "Repo-local scan is recorded. External callers and operator-owned automation still require attestation before any compatibility surface can enter removal review."
+  },
+  "removal_review": {
+    "status": "blocked_pending_audit",
+    "reason": "Known compatibility consumers remain and downstream owner attestations are not complete."
+  }
+}

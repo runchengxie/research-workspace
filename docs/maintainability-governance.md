@@ -14,6 +14,7 @@ docs, tests, and runtime behavior.
 | Large-file and refactor roadmap | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
 | Generated maintainability baseline | [evidence/maintainability/baseline-20260602.json](evidence/maintainability/baseline-20260602.json) |
 | HK public split boundary | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
+| HK private legacy archive gate | [hk-private-archive.md](hk-private-archive.md), [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 
 ## Baseline Command
 

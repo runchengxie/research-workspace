@@ -183,6 +183,12 @@ class WorkspaceDoctorTest(unittest.TestCase):
             )
         )
 
+    def test_private_archive_governance_stays_outside_active_graph(self) -> None:
+        checks = workspace_doctor.check_hk_private_archive_governance(ROOT)
+
+        self.assertEqual(["OK"], [check.severity for check in checks])
+        self.assertIn("outside the submodule graph", checks[0].message)
+
 
 if __name__ == "__main__":
     unittest.main()

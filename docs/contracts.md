@@ -38,7 +38,7 @@
 A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `cross-sectional-trees` 的 `cstree run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
 
 - TuShare 5000 积分账户可覆盖的 raw/clean 日线类资产：`stock_basic`、`trade_cal`、`daily`、`adj_factor`、`daily_basic`、`stk_limit`，以及由这些输入生成的 `daily_clean`。
-- `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌/零成交标记、上市天数和板块粗分类；质量门禁由 `marketdata tushare validate-a-share-daily-clean ...` 执行。
+- `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌/零成交标记、上市天数和板块粗分类；发布前先执行 `marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>`，研究 readiness 再执行带交易日历的 `--profile research`。当前 ST 标记来自 latest instruments snapshot，不描述成 PIT-safe。
 - price-only A 股研究可以先消费 `daily_clean`、`instruments`、静态股票池或人工维护的 by-date 股票池。
 
 以下能力不能假装已经等价落地，必须在对应资产可用后才进入正式研究或执行验收：

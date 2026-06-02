@@ -1,0 +1,174 @@
+{
+  "schema_version": "hk_private_archive_manifest.v1",
+  "format": "json-yaml-subset",
+  "checksum_policy": "sha256",
+  "archive_repository": {
+    "name": "hk-quant-legacy-archive",
+    "remote_url": "private://pending-operator-publication/hk-quant-legacy-archive",
+    "visibility": "private",
+    "maintenance": "paused",
+    "purpose": "restore_only",
+    "workspace_integration": "external_not_submodule",
+    "access_control_owners": [
+      "workspace-maintainer"
+    ]
+  },
+  "repository_paths": {
+    "research-workspace": ".",
+    "market-data-platform": "market-data-platform",
+    "cross-sectional-trees": "cross-sectional-trees",
+    "quant-execution-engine": "quant-execution-engine"
+  },
+  "source_revisions": {
+    "research-workspace": "4c710f71ae18085a6d14bbccf4bc7943b24ab91a",
+    "market-data-platform": "2501c49148f5cd43ef1e42e7f4fcdb11c31485e1",
+    "cross-sectional-trees": "9f88c95bbedf9565fb58d91f14f764a745502595",
+    "quant-execution-engine": "775883556865a50041264e387b118a71201b1be8"
+  },
+  "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+  "consumer_audit_evidence": "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
+  "archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+  "records": [
+    {
+      "id": "market-data-platform-hk-provider-legacy",
+      "owner_repo": "market-data-platform",
+      "archive_action": "include",
+      "lifecycle": "frozen_compatibility",
+      "paths": [
+        "src/market_data_platform/hk_assets/**",
+        "src/market_data_platform/hk_depth/**",
+        "src/hk_data_platform/**",
+        "configs/presets/release/hk_*.yml",
+        "configs/presets/universe/hk_*.yml",
+        "docs/hk-assets.md",
+        "docs/operations/hk-assets.md",
+        "tests/test_hk*.py"
+      ],
+      "restore_dependency": "restore-critical provider workflows and deprecated compatibility wrappers",
+      "consumer_audit": "pending_downstream_attestation",
+      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "rollback_notes": "docs/archive/hk/README.md",
+      "focused_tests": [
+        "market-data-platform/tests/test_hk_asset_workflow.py",
+        "market-data-platform/tests/test_hk_depth.py",
+        "market-data-platform/tests/test_quality_governance.py"
+      ],
+      "archive_checksum": "generated_during_export",
+      "deletion_gate": {
+        "status": "blocked_pending_audit",
+        "source_tag": "pending_operator_tag",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "pending_downstream_attestation",
+        "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "pending_follow_up_execution",
+        "private_archive_reference": "pending_operator_publication",
+        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+        "zero_usage_release_window": "not_started"
+      }
+    },
+    {
+      "id": "cross-sectional-trees-hk-research-legacy",
+      "owner_repo": "cross-sectional-trees",
+      "archive_action": "include",
+      "lifecycle": "archived_provenance",
+      "paths": [
+        "src/cstree/liveops/alloc_hk*.py",
+        "configs/presets/hk*.yml",
+        "configs/presets/data/hk_rqdata.yml",
+        "configs/field_profiles/hk_*",
+        "configs/experiments/**/*hk*.yml",
+        "docs/research/notes/hk-*.md",
+        "tests/test_alloc_hk.py",
+        "tests/test_cli_liveops.py"
+      ],
+      "restore_dependency": "explicit HK reproduction, archived research provenance, and alloc-hk compatibility",
+      "consumer_audit": "pending_downstream_attestation",
+      "replacement_docs": "cross-sectional-trees/docs/cli.md",
+      "rollback_notes": "docs/archive/hk/README.md",
+      "focused_tests": [
+        "cross-sectional-trees/tests/test_alloc_hk.py",
+        "cross-sectional-trees/tests/test_cli_liveops.py",
+        "cross-sectional-trees/tests/test_docs_contracts.py"
+      ],
+      "archive_checksum": "generated_during_export",
+      "deletion_gate": {
+        "status": "blocked_pending_audit",
+        "source_tag": "pending_operator_tag",
+        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "consumer_audit": "pending_downstream_attestation",
+        "replacement_docs": "cross-sectional-trees/docs/cli.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "pending_follow_up_execution",
+        "private_archive_reference": "pending_operator_publication",
+        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+        "zero_usage_release_window": "not_started"
+      }
+    },
+    {
+      "id": "market-data-platform-hk-restore-control-plane",
+      "owner_repo": "market-data-platform",
+      "archive_action": "retain_active",
+      "lifecycle": "shared_active",
+      "paths": [
+        "src/market_data_platform/cold_storage.py",
+        "src/market_data_platform/cli.py",
+        "tests/test_cold_storage.py"
+      ],
+      "restore_dependency": "freeze marker, freeze-hk, and hydrate-hk remain active restore controls",
+      "consumer_audit": "active_owner_repo_responsibility",
+      "replacement_docs": "docs/data-transition-playbook.md",
+      "rollback_notes": "docs/archive/hk/README.md",
+      "focused_tests": [
+        "market-data-platform/tests/test_cold_storage.py"
+      ],
+      "archive_checksum": "not_applicable_retain_active",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "source_tag": "not_applicable",
+        "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
+        "consumer_audit": "active_owner_repo_responsibility",
+        "replacement_docs": "docs/data-transition-playbook.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "market-data-platform/tests/test_cold_storage.py",
+        "private_archive_reference": "not_required",
+        "private_archive_export_evidence": "not_required",
+        "zero_usage_release_window": "not_applicable"
+      }
+    },
+    {
+      "id": "quant-execution-engine-shared-market-runtime",
+      "owner_repo": "quant-execution-engine",
+      "archive_action": "retain_active",
+      "lifecycle": "private_runtime",
+      "paths": [
+        "src/quant_execution_engine/broker/longport*.py",
+        "src/quant_execution_engine/targets.py",
+        "src/quant_execution_engine/rebalance.py",
+        "src/quant_execution_engine/fx.py"
+      ],
+      "restore_dependency": "shared multi-market execution contract and broker runtime remain execution-engine responsibilities",
+      "consumer_audit": "active_owner_repo_responsibility",
+      "replacement_docs": "docs/contracts.md",
+      "rollback_notes": "quant-execution-engine/docs/README.md",
+      "focused_tests": [
+        "quant-execution-engine/tests/unit/test_longport_symbols.py",
+        "quant-execution-engine/tests/unit/test_longport_adapter.py",
+        "quant-execution-engine tests for targets, rebalance, and FX"
+      ],
+      "archive_checksum": "not_applicable_retain_active",
+      "deletion_gate": {
+        "status": "not_applicable",
+        "source_tag": "not_applicable",
+        "restore_evidence": "not_required",
+        "consumer_audit": "active_owner_repo_responsibility",
+        "replacement_docs": "docs/contracts.md",
+        "rollback_notes": "quant-execution-engine/docs/README.md",
+        "focused_tests": "quant-execution-engine shared contract and LongPort tests",
+        "private_archive_reference": "not_required",
+        "private_archive_export_evidence": "not_required",
+        "zero_usage_release_window": "not_applicable"
+      }
+    }
+  ]
+}
