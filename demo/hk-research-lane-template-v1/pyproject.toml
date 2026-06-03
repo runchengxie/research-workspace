@@ -1,0 +1,11 @@
+[project]
+name = "hk-cross-sectional-research-template"
+version = "0.1.0"
+description = "Synthetic-only Hong Kong equity research lane template."
+requires-python = ">=3.11"
+dependencies = [
+  "pandas",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

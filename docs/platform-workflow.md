@@ -30,6 +30,17 @@ A 股 readiness 分成 `baseline_reproducible`、`complete_pit_research_data`、
 `production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档；完整 PIT、
 长窗口策略证据和真实券商能力必须独立验收。
 
+## 六段式研究地图
+
+| 阶段 | 所有者 | 稳定对象 / 文件 |
+| --- | --- | --- |
+| Data Contract | `market-data-platform` | `metadata/current_assets/a_share_current.json`、manifest、registry |
+| Research Dataset | `cross-sectional-trees` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
+| Model | `cross-sectional-trees` | `CSTreeModel.detail()`、`feature_importance.csv`、`model_detail` summary |
+| Signal | `cross-sectional-trees` | `signals.parquet` |
+| Portfolio | `cross-sectional-trees` | named `StrategySpec`、`positions_current*.csv` |
+| Execution Handoff | `cross-sectional-trees` -> `quant-execution-engine` | `targets.json`、`targets.json.lineage.json`、`qexec rebalance` |
+
 ## 模块分工
 
 | 层级 | 模块 | 职责 | 当前接口 |
@@ -40,7 +51,7 @@ A 股 readiness 分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ## 研究主线
 
-当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 legacy research lane。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
+当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 legacy research lane，并通过 [`hk-research-lane-inventory.json`](hk-research-lane-inventory.json) 记录独立研究 lane 候选、迁出动作和保留边界。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
 
 当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股继续用 `daily_clean` / `default_next` 做 staged baseline。不要在验收条件未满足前把 `default` 偷偷切到 A 股。
 

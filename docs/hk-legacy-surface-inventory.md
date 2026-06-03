@@ -9,6 +9,9 @@ manifest 记录 repo-local surface、public safety、consumer audit、replacemen
 removal condition。
 Deprecated 入口的 owner、replacement、target milestone 和 removal gate 见
 [`deprecations.md`](deprecations.md)。
+独立港股研究 lane 候选、迁移动作和保留边界的机器可读清单见
+[`hk-research-lane-inventory.json`](hk-research-lane-inventory.json)，校验命令为
+`python scripts/hk_research_lane_inventory.py --check --format json`。
 真实业务代码的私有 paused-maintenance 归档候选和只读 removal gate 见
 [`hk-private-archive.md`](hk-private-archive.md) 与
 [`hk-private-archive-manifest.yml`](hk-private-archive-manifest.yml)。私有归档和 synthetic

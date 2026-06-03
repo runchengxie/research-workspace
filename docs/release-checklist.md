@@ -18,6 +18,7 @@
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/hk_archive_gate.py --check --format json` 已通过。
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
 - [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
+- [ ] 如推进独立港股研究 lane，`python scripts/hk_research_lane_inventory.py --check --format json` 已通过，且 `demo/hk-research-lane-template-v1` smoke 只使用 synthetic fixture。
 - [ ] 如本次需要子项目质量 gate，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
 - [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
@@ -41,6 +42,7 @@
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>` 已通过并保留报告，或质量缺口已记录。
 - [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。
 - [ ] 如推进 A 股研究，`cstree run --config default_next` 已产出 `summary.json`、`config.used.yml` 和持仓文件。
+- [ ] 如推进研究抽象收敛，run 已产出或明确跳过 `signals.parquet`，`summary.json` 包含 `dataset.lifecycle`、`signals`、`model_detail` 和 strategy lineage。
 - [ ] 描述完整 PIT 研究能力前，`complete_pit_research_data` 已通过。
 - [ ] 描述 production-grade 策略证据前，`production_strategy_evidence` 已通过。
 - [ ] 在 PIT fundamentals 和行业历史未补齐前，没有把 A 股 baseline 描述成完整 PIT 研究能力。

@@ -1,0 +1,146 @@
+{
+  "schema_version": "hk_research_lane_inventory.v1",
+  "generated_at": "2026-06-03",
+  "policy": {
+    "primary_lane": "A 股",
+    "hk_lane_status": "independent_research_lane_candidate",
+    "no_default_dependency": true,
+    "no_source_deletion_without_archive_gate": true
+  },
+  "records": [
+    {
+      "id": "cstree-shared-pipeline-target-export",
+      "path": "cross-sectional-trees/src/cstree",
+      "owner": "cross-sectional-trees",
+      "category": "research_core",
+      "lifecycle": "shared_active",
+      "action": "keep",
+      "dependencies": [
+        "market-data-platform current assets",
+        "quant-execution-engine.targets/v2"
+      ],
+      "migration_status": "retained_shared_core",
+      "deletion_gate": {
+        "status": "not_applicable"
+      }
+    },
+    {
+      "id": "cstree-hk-allocation-liveops",
+      "path": "cross-sectional-trees/src/cstree/liveops/alloc_hk*",
+      "owner": "cross-sectional-trees",
+      "category": "liveops",
+      "lifecycle": "frozen_compatibility",
+      "action": "move",
+      "dependencies": [
+        "cstree liveops shared alloc helpers",
+        "market-data-platform HK current assets"
+      ],
+      "migration_status": "stage_wrapper_then_move",
+      "deletion_gate": {
+        "status": "blocked",
+        "requires": [
+          "private_archive_gate_ready",
+          "hk_lane_smoke_passed",
+          "zero_usage_release_window",
+          "replacement_docs",
+          "focused_tests"
+        ]
+      }
+    },
+    {
+      "id": "cstree-hk-research-scripts",
+      "path": "cross-sectional-trees/src/cstree/research/hk_*.py",
+      "owner": "cross-sectional-trees",
+      "category": "research_scripts",
+      "lifecycle": "archived_provenance",
+      "action": "move",
+      "dependencies": [
+        "market-data-platform HK assets",
+        "cstree metrics and calendar helpers"
+      ],
+      "migration_status": "move_after_template_smoke",
+      "deletion_gate": {
+        "status": "blocked",
+        "requires": [
+          "private_archive_gate_ready",
+          "consumer_audit",
+          "restore_drill",
+          "focused_tests"
+        ]
+      }
+    },
+    {
+      "id": "cstree-hk-configs-and-notes",
+      "path": "cross-sectional-trees/configs/**/*hk*.yml",
+      "owner": "cross-sectional-trees",
+      "category": "config_docs",
+      "lifecycle": "archived_provenance",
+      "action": "archive",
+      "dependencies": [
+        "historical run summaries",
+        "HK freeze releases"
+      ],
+      "migration_status": "selective_baseline_copy_only",
+      "deletion_gate": {
+        "status": "blocked",
+        "requires": [
+          "replacement_docs",
+          "zero_usage_release_window"
+        ]
+      }
+    },
+    {
+      "id": "market-data-platform-hk-assets-control-plane",
+      "path": "market-data-platform/src/market_data_platform/hk_assets",
+      "owner": "market-data-platform",
+      "category": "data_platform",
+      "lifecycle": "shared_active",
+      "action": "keep",
+      "dependencies": [
+        "metadata/current_assets/hk_current.json",
+        "dataset_registry.csv",
+        "freeze-hk",
+        "hydrate-hk"
+      ],
+      "migration_status": "retained_data_owner",
+      "deletion_gate": {
+        "status": "not_applicable"
+      }
+    },
+    {
+      "id": "qexec-shared-market-execution",
+      "path": "quant-execution-engine/src/quant_execution_engine",
+      "owner": "quant-execution-engine",
+      "category": "execution_contract",
+      "lifecycle": "shared_active",
+      "action": "keep",
+      "dependencies": [
+        "standard targets.json",
+        "FX",
+        "risk gates",
+        "broker adapters",
+        "LongPort runtime"
+      ],
+      "migration_status": "retained_execution_owner",
+      "deletion_gate": {
+        "status": "not_applicable"
+      }
+    },
+    {
+      "id": "hk-research-lane-template",
+      "path": "demo/hk-research-lane-template-v1",
+      "owner": "research-workspace",
+      "category": "template",
+      "lifecycle": "independent_lane_candidate",
+      "action": "keep",
+      "dependencies": [
+        "synthetic fixtures only",
+        "standard targets.json output"
+      ],
+      "migration_status": "smoke_template",
+      "deletion_gate": {
+        "status": "not_applicable"
+      }
+    }
+  ]
+}
