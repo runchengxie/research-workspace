@@ -22,7 +22,7 @@
   "source_revisions": {
     "research-workspace": "4c710f71ae18085a6d14bbccf4bc7943b24ab91a",
     "market-data-platform": "2501c49148f5cd43ef1e42e7f4fcdb11c31485e1",
-    "cross-sectional-trees": "9f88c95bbedf9565fb58d91f14f764a745502595",
+    "cross-sectional-trees": "d1318dccae8b245619ebaf6f6db3b45ac7205894",
     "quant-execution-engine": "775883556865a50041264e387b118a71201b1be8"
   },
   "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",

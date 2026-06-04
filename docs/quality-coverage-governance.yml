@@ -6,7 +6,7 @@
       "ruff": {
         "staged_select": ["E", "F", "I", "UP", "B", "C4", "RET", "SIM", "RUF", "C90"],
         "current_hard_gate": "scripts/dev/run_tests.sh lint",
-        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/cstree/pipeline/contracts.py src/cstree/pipeline/output_context.py src/cstree/pipeline/output_artifacts.py src/cstree/liveops/export_targets.py src/cstree/liveops/alloc_core.py src/cstree/liveops/alloc_selection.py",
+        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/cstree/pipeline/contracts.py src/cstree/pipeline/output_context.py src/cstree/pipeline/output_artifacts.py src/cstree/pipeline/output.py src/cstree/pipeline/output_orchestration.py src/cstree/pipeline/output_summary.py src/cstree/liveops/export_targets.py src/cstree/liveops/alloc_core.py src/cstree/liveops/alloc_selection.py src/cstree/backtesting/types.py",
         "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
       },
       "pyright": {
@@ -15,9 +15,14 @@
           "src/cstree/pipeline/contracts.py",
           "src/cstree/pipeline/output_context.py",
           "src/cstree/pipeline/output_artifacts.py",
+          "src/cstree/pipeline/output.py",
+          "src/cstree/pipeline/output_orchestration.py",
+          "src/cstree/pipeline/output_summary.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py"
+          "src/cstree/liveops/alloc_selection.py",
+          "src/cstree/liveops/alloc.py",
+          "src/cstree/backtesting/types.py"
         ],
         "promotion_criteria": "contract/liveops modules pass before broader research modules are added"
       }
@@ -43,9 +48,11 @@
           "src/market_data_platform/hk_assets/models.py",
           "src/market_data_platform/hk_assets/shared.py",
           "src/market_data_platform/hk_assets/quality_gate.py",
-          "src/market_data_platform/hk_assets/coverage_rendering.py"
+          "src/market_data_platform/hk_assets/coverage_rendering.py",
+          "src/market_data_platform/hk_depth/storage.py",
+          "src/market_data_platform/hk_depth/symbols.py"
         ],
-        "promotion_criteria": "schema/shared/public modules pass before asset_io, manifest_ops, workflow, and downloader modules are added"
+        "promotion_criteria": "schema/shared and low-risk HK depth modules pass before workflow and remaining downloader modules are added"
       }
     },
     {
@@ -85,7 +92,7 @@
       "path": "src/market_data_platform/hk_assets heavy modules",
       "tool": "pyright",
       "owner": "market-data-platform",
-      "reason": "public API and workflow modules still need import-boundary and schema cleanup after first low-risk include",
+      "reason": "public API and workflow modules still need pandas typing and import-boundary cleanup",
       "next_include_target": "hk_assets/public_api.py, asset_io.py, manifest_ops.py",
       "review_milestone": "next quality-baseline refresh"
     },
@@ -103,9 +110,9 @@
       "path": "src/market_data_platform/hk_depth/*",
       "tool": "pyright",
       "owner": "market-data-platform",
-      "reason": "HK depth modules are restore-sensitive and require staged quota/storage/client typing",
-      "next_include_target": "hk_depth/schema.py, symbols.py, storage.py",
-      "review_milestone": "after downloader split planning"
+      "reason": "HK depth modules are restore-sensitive and require staged schema/quota/client typing",
+      "next_include_target": "hk_depth/schema.py, quota.py, rq_client.py, download_state.py",
+      "review_milestone": "after storage/symbols stay green"
     },
     {
       "repo": "cross-sectional-trees",

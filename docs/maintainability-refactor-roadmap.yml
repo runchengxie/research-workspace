@@ -203,6 +203,18 @@
       "next_action": "split provider schema and request planning when provider work resumes"
     },
     {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_clean.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share data cleaning module entered the refreshed baseline after provider work expanded",
+      "next_action": "split cleaning plan, partition I/O, and manifest reporting when TuShare cleanup resumes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_quality.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share provider quality checks are outside the HK maintainability first wave",
+      "next_action": "extract quality rule models and renderers when provider quality work resumes"
+    },
+    {
       "path": "market-data-platform/src/market_data_platform/hk_assets/args.py",
       "owner_repo": "market-data-platform",
       "reason": "argument wiring debt is lower risk than HK workflow modules",
@@ -345,6 +357,12 @@
       "owner_repo": "cross-sectional-trees",
       "reason": "CLI orchestration debt is already tracked in C901 debt registry",
       "next_action": "split parser and runner when sweep command changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/commands/run_grid.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "CLI orchestration debt is already tracked in C901 debt registry",
+      "next_action": "split parser, fixed-signal runner, and summary writer when grid command changes resume"
     },
     {
       "path": "cross-sectional-trees/src/cstree/research/construction_grid.py",

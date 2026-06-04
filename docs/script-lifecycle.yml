@@ -49,6 +49,16 @@
       "removal_condition": "keep while HK compatibility removal requires explicit governance"
     },
     {
+      "path": "scripts/hk_research_lane_inventory.py",
+      "owner": "research-workspace",
+      "purpose": "HK research lane inventory validation and public template safety scan",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none",
+      "removal_condition": "keep while HK research lane split governance is active"
+    },
+    {
       "path": "scripts/maintainability_baseline.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo maintainability baseline generation",

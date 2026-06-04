@@ -67,13 +67,9 @@ class DocsLinksTest(unittest.TestCase):
 
     def test_docs_preserve_hk_public_demo_boundary(self) -> None:
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
-        archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(
-            encoding="utf-8"
-        )
+        archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
         export_docs = (ROOT / "docs" / "hk-public-demo-export.md").read_text(encoding="utf-8")
-        inventory = (ROOT / "docs" / "hk-legacy-surface-inventory.md").read_text(
-            encoding="utf-8"
-        )
+        inventory = (ROOT / "docs" / "hk-legacy-surface-inventory.md").read_text(encoding="utf-8")
 
         self.assertIn("synthetic / public-safe demo", docs_index)
         self.assertIn("不承接真实 provider、broker 或 restore\n实现代码", docs_index)
@@ -85,9 +81,7 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("restore-sensitive", inventory)
 
     def test_hk_archive_records_are_outside_primary_path(self) -> None:
-        archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(
-            encoding="utf-8"
-        )
+        archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
 
         self.assertIn("records/hk-cold-freeze-20260526.md", archive_index)
         self.assertIn("records/hk-research-cold-storage-20260601.md", archive_index)
@@ -96,9 +90,7 @@ class DocsLinksTest(unittest.TestCase):
 
     def test_docs_preserve_canonical_a_share_contract_name(self) -> None:
         contracts = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
-        playbook = (ROOT / "docs" / "data-transition-playbook.md").read_text(
-            encoding="utf-8"
-        )
+        playbook = (ROOT / "docs" / "data-transition-playbook.md").read_text(encoding="utf-8")
 
         self.assertIn("metadata/current_assets/a_share_current.json", contracts)
         self.assertIn("metadata/current_assets/a_share_current.json", playbook)

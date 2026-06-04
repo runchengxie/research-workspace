@@ -63,7 +63,10 @@ def validate_inventory(payload: dict[str, Any]) -> dict[str, Any]:
         gate = record.get("deletion_gate")
         if not isinstance(gate, dict):
             issues.append({"check": "deletion_gate", "message": f"{record_id}: gate missing"})
-        elif record.get("action") in {"move", "archive", "delete_later"} and gate.get("status") == "ready":
+        elif (
+            record.get("action") in {"move", "archive", "delete_later"}
+            and gate.get("status") == "ready"
+        ):
             issues.append(
                 {
                     "check": "premature_deletion_gate",

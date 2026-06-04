@@ -171,17 +171,11 @@ def build_repo_report(name: str, *, thresholds: dict[str, int]) -> dict[str, Any
         file_rows.append({"path": relative, "loc": loc, "hk_related": _is_hk_related(relative)})
         function_rows.extend(_function_metrics(path, relative))
 
-    large_files = [
-        row for row in file_rows if int(row["loc"]) >= thresholds["large_file_loc"]
-    ]
+    large_files = [row for row in file_rows if int(row["loc"]) >= thresholds["large_file_loc"]]
     long_functions = [
-        row
-        for row in function_rows
-        if row.line_count >= thresholds["long_function_lines"]
+        row for row in function_rows if row.line_count >= thresholds["long_function_lines"]
     ]
-    complex_functions = [
-        row for row in function_rows if row.complexity >= thresholds["complexity"]
-    ]
+    complex_functions = [row for row in function_rows if row.complexity >= thresholds["complexity"]]
     return {
         "repo": name,
         "root": repo.relative_to(ROOT).as_posix() if repo != ROOT else ".",

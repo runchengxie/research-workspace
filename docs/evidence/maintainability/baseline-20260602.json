@@ -9,9 +9,9 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 30,
-      "python_loc": 4093,
-      "hk_related_file_count": 12,
+      "python_file_count": 39,
+      "python_loc": 5210,
+      "hk_related_file_count": 21,
       "large_files": [
         {
           "path": "scripts/a_share_readiness.py",
@@ -20,6 +20,12 @@
         }
       ],
       "long_functions": [
+        {
+          "path": "scripts/hk_archive_gate.py",
+          "name": "validate_manifest",
+          "line_count": 101,
+          "complexity": 37
+        },
         {
           "path": "scripts/a_share_readiness.py",
           "name": "build_readiness_report",
@@ -41,10 +47,22 @@
       ],
       "complexity_hotspots": [
         {
+          "path": "scripts/hk_archive_gate.py",
+          "name": "validate_manifest",
+          "line_count": 101,
+          "complexity": 37
+        },
+        {
           "path": "scripts/export_hk_public_demo.py",
           "name": "validate_split_manifest",
           "line_count": 60,
           "complexity": 24
+        },
+        {
+          "path": "scripts/hk_research_lane_inventory.py",
+          "name": "validate_inventory",
+          "line_count": 68,
+          "complexity": 20
         },
         {
           "path": "scripts/export_hk_public_demo.py",
@@ -89,7 +107,10 @@
       },
       "script_inventory": [
         "scripts/a_share_readiness.py",
+        "scripts/export_hk_legacy_archive.py",
         "scripts/export_hk_public_demo.py",
+        "scripts/hk_archive_gate.py",
+        "scripts/hk_research_lane_inventory.py",
         "scripts/maintainability_baseline.py",
         "scripts/print_version_matrix.py",
         "scripts/run_quality_checks.py",
@@ -103,8 +124,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 152,
-      "python_loc": 59168,
+      "python_file_count": 159,
+      "python_loc": 63257,
       "hk_related_file_count": 88,
       "large_files": [
         {
@@ -124,8 +145,13 @@
         },
         {
           "path": "src/market_data_platform/hk_depth/downloader.py",
-          "loc": 1767,
+          "loc": 1760,
           "hk_related": true
+        },
+        {
+          "path": "src/market_data_platform/cli.py",
+          "loc": 1616,
+          "hk_related": false
         },
         {
           "path": "src/market_data_platform/hk_assets/mirror_financial.py",
@@ -138,6 +164,11 @@
           "hk_related": true
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "loc": 1459,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/hk_assets/coverage.py",
           "loc": 1454,
           "hk_related": true
@@ -148,23 +179,18 @@
           "hk_related": true
         },
         {
-          "path": "src/market_data_platform/cli.py",
-          "loc": 1343,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/hk_assets/build.py",
           "loc": 1215,
           "hk_related": true
         },
         {
           "path": "src/market_data_platform/data_providers.py",
-          "loc": 1158,
+          "loc": 1150,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/hk_workflows.py",
-          "loc": 1143,
+          "loc": 1145,
           "hk_related": true
         },
         {
@@ -173,23 +199,23 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/data_warehouse.py",
-          "loc": 1100,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 1057,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/hk_assets/args.py",
           "loc": 1043,
           "hk_related": true
         },
         {
+          "path": "src/market_data_platform/data_warehouse.py",
+          "loc": 992,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "loc": 962,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/hk_depth/reconcile.py",
-          "loc": 882,
+          "loc": 877,
           "hk_related": true
         },
         {
@@ -204,8 +230,13 @@
         },
         {
           "path": "src/market_data_platform/hk_depth/release_assets.py",
-          "loc": 777,
+          "loc": 775,
           "hk_related": true
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "loc": 730,
+          "hk_related": false
         },
         {
           "path": "src/market_data_platform/hk_assets/current_health.py",
@@ -220,16 +251,6 @@
         {
           "path": "src/market_data_platform/hk_assets/mirror_daily.py",
           "loc": 710,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/health.py",
-          "loc": 710,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/patch_merge.py",
-          "loc": 687,
           "hk_related": true
         }
       ],
@@ -295,22 +316,28 @@
           "complexity": 55
         },
         {
-          "path": "src/market_data_platform/hk_depth/downloader.py",
-          "name": "_download_symbol_date_tick_depth",
-          "line_count": 295,
-          "complexity": 26
-        },
-        {
           "path": "src/market_data_platform/release_tools/package_assets.py",
           "name": "_build_part_specs",
           "line_count": 295,
           "complexity": 16
         },
         {
+          "path": "src/market_data_platform/hk_depth/downloader.py",
+          "name": "_download_symbol_date_tick_depth",
+          "line_count": 292,
+          "complexity": 26
+        },
+        {
           "path": "src/market_data_platform/hk_assets/mirror_financial.py",
           "name": "patch_hk_pit_financials",
           "line_count": 272,
           "complexity": 17
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "build_pit_fundamentals",
+          "line_count": 272,
+          "complexity": 43
         },
         {
           "path": "src/market_data_platform/cli.py",
@@ -377,12 +404,6 @@
           "name": "merge_asset_patch",
           "line_count": 214,
           "complexity": 42
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_health.py",
-          "name": "_build_intraday_quality_checks",
-          "line_count": 210,
-          "complexity": 38
         }
       ],
       "complexity_hotspots": [
@@ -471,6 +492,18 @@
           "complexity": 44
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "build_pit_fundamentals",
+          "line_count": 272,
+          "complexity": 43
+        },
+        {
+          "path": "src/market_data_platform/current_assets.py",
+          "name": "load_manifest_summary",
+          "line_count": 73,
+          "complexity": 42
+        },
+        {
           "path": "src/market_data_platform/hk_assets/asset_health.py",
           "name": "inspect_hk_asset_health",
           "line_count": 331,
@@ -481,12 +514,6 @@
           "name": "merge_asset_patch",
           "line_count": 214,
           "complexity": 42
-        },
-        {
-          "path": "src/market_data_platform/current_assets.py",
-          "name": "load_manifest_summary",
-          "line_count": 61,
-          "complexity": 39
         },
         {
           "path": "src/market_data_platform/hk_assets/audit_assets.py",
@@ -503,7 +530,13 @@
         {
           "path": "src/market_data_platform/hk_depth/coverage.py",
           "name": "inspect_raw_part",
-          "line_count": 160,
+          "line_count": 159,
+          "complexity": 35
+        },
+        {
+          "path": "src/market_data_platform/manifest.py",
+          "name": "load_manifest_summary",
+          "line_count": 73,
           "complexity": 35
         },
         {
@@ -523,18 +556,6 @@
           "name": "_compute_pit_coverage_series",
           "line_count": 146,
           "complexity": 34
-        },
-        {
-          "path": "src/market_data_platform/cli.py",
-          "name": "_handle_tushare",
-          "line_count": 195,
-          "complexity": 33
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/clean_daily.py",
-          "name": "_clean_daily_frame",
-          "line_count": 224,
-          "complexity": 33
         }
       ],
       "quality_config": {
@@ -622,8 +643,6 @@
           "src/market_data_platform/hk_depth/rq_client.py",
           "src/market_data_platform/hk_depth/runtime.py",
           "src/market_data_platform/hk_depth/schema.py",
-          "src/market_data_platform/hk_depth/storage.py",
-          "src/market_data_platform/hk_depth/symbols.py",
           "src/market_data_platform/hk_depth/testing.py",
           "src/market_data_platform/hk_assets/args.py",
           "src/market_data_platform/hk_assets/args_mirror.py",
@@ -684,13 +703,13 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 192,
-      "python_loc": 56620,
+      "python_file_count": 201,
+      "python_loc": 59390,
       "hk_related_file_count": 25,
       "large_files": [
         {
           "path": "tests/test_pipeline_e2e.py",
-          "loc": 1829,
+          "loc": 1856,
           "hk_related": false
         },
         {
@@ -705,112 +724,112 @@
         },
         {
           "path": "src/cstree/exposure.py",
-          "loc": 1112,
+          "loc": 1165,
           "hk_related": false
         },
         {
           "path": "src/cstree/commands/tune.py",
-          "loc": 1034,
+          "loc": 1059,
           "hk_related": false
         },
         {
           "path": "src/cstree/research/cpcv.py",
-          "loc": 982,
+          "loc": 998,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/config.py",
-          "loc": 963,
+          "loc": 955,
           "hk_related": false
         },
         {
           "path": "tests/test_pipeline_filters_backtest.py",
-          "loc": 892,
+          "loc": 924,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/train_eval_stage.py",
-          "loc": 887,
+          "loc": 905,
           "hk_related": false
         },
         {
           "path": "src/cstree/release_tools/package_runs.py",
-          "loc": 869,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/execution_sim.py",
-          "loc": 854,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_pipeline_filters_file_derived.py",
-          "loc": 822,
+          "loc": 885,
           "hk_related": false
         },
         {
           "path": "tests/test_summarize_runs.py",
-          "loc": 819,
+          "loc": 870,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/execution_sim.py",
+          "loc": 857,
           "hk_related": false
         },
         {
           "path": "src/cstree/research/promotion_gate.py",
-          "loc": 800,
+          "loc": 842,
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/backtest_tearsheet.py",
-          "loc": 771,
+          "path": "tests/test_pipeline_filters_file_derived.py",
+          "loc": 827,
           "hk_related": false
         },
         {
           "path": "src/cstree/research/hk_financial_details.py",
-          "loc": 748,
+          "loc": 798,
           "hk_related": true
         },
         {
-          "path": "tests/test_backtest.py",
-          "loc": 708,
+          "path": "src/cstree/pipeline/backtest_tearsheet.py",
+          "loc": 787,
           "hk_related": false
         },
         {
-          "path": "src/cstree/execution.py",
-          "loc": 671,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/commands/linear_sweep.py",
-          "loc": 667,
+          "path": "src/cstree/commands/run_grid.py",
+          "loc": 775,
           "hk_related": false
         },
         {
           "path": "src/cstree/research/construction_grid.py",
-          "loc": 667,
+          "loc": 709,
           "hk_related": false
         },
         {
           "path": "src/cstree/research/feature_evidence.py",
-          "loc": 656,
+          "loc": 693,
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "loc": 654,
+          "path": "tests/test_backtest.py",
+          "loc": 692,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 638,
+          "loc": 691,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/commands/linear_sweep.py",
+          "loc": 673,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/execution.py",
+          "loc": 663,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
+          "loc": 653,
           "hk_related": false
         },
         {
           "path": "src/cstree/cli/liveops.py",
-          "loc": 630,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_docs_contracts.py",
-          "loc": 614,
+          "loc": 632,
           "hk_related": false
         }
       ],
@@ -818,38 +837,38 @@
         {
           "path": "src/cstree/pipeline/train_eval_stage.py",
           "name": "_run_train_eval_stage_impl",
-          "line_count": 349,
+          "line_count": 353,
           "complexity": 29
-        },
-        {
-          "path": "src/cstree/commands/run_grid.py",
-          "name": "main",
-          "line_count": 342,
-          "complexity": 81
         },
         {
           "path": "src/cstree/exposure.py",
           "name": "compute_backtest_exposure_analysis",
-          "line_count": 314,
+          "line_count": 338,
           "complexity": 40
         },
         {
-          "path": "src/cstree/pipeline/runner.py",
-          "name": "prepare_research_context",
-          "line_count": 314,
-          "complexity": 9
+          "path": "src/cstree/commands/run_grid.py",
+          "name": "main",
+          "line_count": 336,
+          "complexity": 81
         },
         {
           "path": "src/cstree/commands/linear_sweep.py",
           "name": "run",
-          "line_count": 312,
+          "line_count": 318,
           "complexity": 41
         },
         {
           "path": "src/cstree/commands/tune.py",
           "name": "run",
-          "line_count": 303,
+          "line_count": 317,
           "complexity": 39
+        },
+        {
+          "path": "src/cstree/pipeline/runner.py",
+          "name": "prepare_research_context",
+          "line_count": 315,
+          "complexity": 9
         },
         {
           "path": "src/cstree/pipeline/eval.py",
@@ -872,7 +891,7 @@
         {
           "path": "src/cstree/liveops/holdings.py",
           "name": "main",
-          "line_count": 238,
+          "line_count": 240,
           "complexity": 56
         },
         {
@@ -894,10 +913,22 @@
           "complexity": 25
         },
         {
+          "path": "src/cstree/promotion_sidecar.py",
+          "name": "simulate_promotion_sidecar",
+          "line_count": 229,
+          "complexity": 33
+        },
+        {
           "path": "tests/test_pipeline_filters_backtest.py",
           "name": "test_pipeline_backtest_outputs_style_and_industry_exposure_artifacts",
-          "line_count": 226,
+          "line_count": 224,
           "complexity": 3
+        },
+        {
+          "path": "src/cstree/liveops/alloc_hk_allocation.py",
+          "name": "apply_secondary_fill",
+          "line_count": 208,
+          "complexity": 43
         },
         {
           "path": "src/cstree/pipeline/feature_engineering.py",
@@ -906,77 +937,65 @@
           "complexity": 42
         },
         {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "name": "apply_fundamentals_enrichment",
-          "line_count": 200,
-          "complexity": 31
-        },
-        {
           "path": "src/cstree/pipeline/runtime.py",
           "name": "_prepare_split_context",
-          "line_count": 200,
+          "line_count": 202,
           "complexity": 20
         },
         {
           "path": "tests/test_cli_research.py",
           "name": "test_cli_parses_research_commands",
-          "line_count": 198,
+          "line_count": 201,
           "complexity": 1
         },
         {
           "path": "tests/test_pipeline_filters_file_derived.py",
           "name": "test_pipeline_hk_file_fundamentals_supports_trailing_stability_features",
-          "line_count": 194,
+          "line_count": 201,
           "complexity": 1
         },
         {
-          "path": "src/cstree/pipeline/final_oos_stage.py",
-          "name": "run_final_oos_stage",
-          "line_count": 188,
-          "complexity": 13
-        },
-        {
-          "path": "src/cstree/liveops/alloc_hk_allocation.py",
-          "name": "apply_secondary_fill",
-          "line_count": 186,
-          "complexity": 43
-        },
-        {
-          "path": "src/cstree/research/construction_grid.py",
-          "name": "_evaluate_variant",
-          "line_count": 181,
-          "complexity": 22
+          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
+          "name": "apply_fundamentals_enrichment",
+          "line_count": 197,
+          "complexity": 31
         },
         {
           "path": "src/cstree/pipeline/feature_dataset.py",
           "name": "_prepare_feature_dataset",
-          "line_count": 179,
+          "line_count": 193,
           "complexity": 23
         },
         {
-          "path": "src/cstree/pipeline/eval.py",
-          "name": "_evaluate_period",
-          "line_count": 177,
-          "complexity": 7
+          "path": "src/cstree/pipeline/final_oos_stage.py",
+          "name": "run_final_oos_stage",
+          "line_count": 192,
+          "complexity": 13
         },
         {
-          "path": "src/cstree/pipeline/dataset_sampling.py",
-          "name": "build_modeling_dataset",
-          "line_count": 174,
-          "complexity": 18
+          "path": "src/cstree/research/construction_grid.py",
+          "name": "_evaluate_variant",
+          "line_count": 190,
+          "complexity": 22
+        },
+        {
+          "path": "src/cstree/liveops/alloc_hk_settings.py",
+          "name": "parse_args",
+          "line_count": 189,
+          "complexity": 2
         }
       ],
       "complexity_hotspots": [
         {
           "path": "src/cstree/commands/run_grid.py",
           "name": "main",
-          "line_count": 342,
+          "line_count": 336,
           "complexity": 81
         },
         {
           "path": "src/cstree/liveops/holdings.py",
           "name": "main",
-          "line_count": 238,
+          "line_count": 240,
           "complexity": 56
         },
         {
@@ -994,7 +1013,7 @@
         {
           "path": "src/cstree/liveops/alloc_hk_allocation.py",
           "name": "apply_secondary_fill",
-          "line_count": 186,
+          "line_count": 208,
           "complexity": 43
         },
         {
@@ -1006,44 +1025,50 @@
         {
           "path": "src/cstree/commands/linear_sweep.py",
           "name": "run",
-          "line_count": 312,
+          "line_count": 318,
           "complexity": 41
         },
         {
           "path": "src/cstree/liveops/alloc_hk_settings.py",
           "name": "resolve_settings",
-          "line_count": 144,
+          "line_count": 148,
           "complexity": 41
         },
         {
           "path": "src/cstree/exposure.py",
           "name": "compute_backtest_exposure_analysis",
-          "line_count": 314,
+          "line_count": 338,
           "complexity": 40
         },
         {
           "path": "src/cstree/pipeline/preflight.py",
           "name": "resolve_effective_data_inputs",
-          "line_count": 152,
+          "line_count": 154,
           "complexity": 40
         },
         {
           "path": "src/cstree/commands/tune.py",
           "name": "run",
-          "line_count": 303,
+          "line_count": 317,
           "complexity": 39
         },
         {
           "path": "src/cstree/research/cpcv.py",
           "name": "_path_metric_row",
-          "line_count": 98,
+          "line_count": 100,
           "complexity": 39
         },
         {
           "path": "src/cstree/pipeline/output_summary_metadata.py",
           "name": "build_inputs_lock",
-          "line_count": 113,
+          "line_count": 111,
           "complexity": 35
+        },
+        {
+          "path": "src/cstree/promotion_sidecar.py",
+          "name": "simulate_promotion_sidecar",
+          "line_count": 229,
+          "complexity": 33
         },
         {
           "path": "src/cstree/backtesting/metrics.py",
@@ -1054,7 +1079,7 @@
         {
           "path": "src/cstree/pipeline/fundamentals_enrichment.py",
           "name": "apply_fundamentals_enrichment",
-          "line_count": 200,
+          "line_count": 197,
           "complexity": 31
         },
         {
@@ -1072,19 +1097,19 @@
         {
           "path": "src/cstree/pipeline/train_eval_stage.py",
           "name": "_run_train_eval_stage_impl",
-          "line_count": 349,
+          "line_count": 353,
           "complexity": 29
         },
         {
           "path": "src/cstree/liveops/alloc_hk.py",
           "name": "main",
-          "line_count": 152,
+          "line_count": 156,
           "complexity": 28
         },
         {
           "path": "src/cstree/liveops/alloc_hk_allocation.py",
           "name": "build_allocation_table",
-          "line_count": 164,
+          "line_count": 173,
           "complexity": 28
         },
         {
@@ -1096,13 +1121,13 @@
         {
           "path": "src/cstree/exposure.py",
           "name": "_style_exposure_row",
-          "line_count": 133,
+          "line_count": 135,
           "complexity": 27
         },
         {
           "path": "src/cstree/release_tools/release_runs.py",
           "name": "main",
-          "line_count": 155,
+          "line_count": 173,
           "complexity": 27
         },
         {
@@ -1110,12 +1135,6 @@
           "name": "permutation_active_return_importance",
           "line_count": 80,
           "complexity": 27
-        },
-        {
-          "path": "src/cstree/pipeline/live.py",
-          "name": "_prepare_live_snapshot",
-          "line_count": 229,
-          "complexity": 25
         }
       ],
       "quality_config": {
@@ -1141,9 +1160,14 @@
           "src/cstree/pipeline/contracts.py",
           "src/cstree/pipeline/output_context.py",
           "src/cstree/pipeline/output_artifacts.py",
+          "src/cstree/pipeline/output.py",
+          "src/cstree/pipeline/output_orchestration.py",
+          "src/cstree/pipeline/output_summary.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py"
+          "src/cstree/liveops/alloc_selection.py",
+          "src/cstree/liveops/alloc.py",
+          "src/cstree/backtesting/types.py"
         ],
         "pyright_exclude": [
           ".venv",

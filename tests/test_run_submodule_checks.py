@@ -37,7 +37,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--group", "dev", "ruff", "check", "."),
                 ("uv", "run", "--group", "dev", "ruff", "format", "--check", "."),
                 ("uv", "run", "--group", "dev", "pytest"),
-                ("uv", "run", "--group", "dev", "pyright"),
+                ("uv", "run", "--group", "dev", "python", "-m", "pyright"),
             ],
             [item.command for item in planned],
         )
@@ -67,9 +67,15 @@ class RunSubmoduleChecksTest(unittest.TestCase):
 
         self.assertEqual(
             {
-                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "pyright")],
-                "market-data-platform": [("uv", "run", "--extra", "dev", "pyright")],
-                "quant-execution-engine": [("uv", "run", "--group", "dev", "pyright")],
+                "cross-sectional-trees": [
+                    ("uv", "run", "--extra", "dev", "python", "-m", "pyright")
+                ],
+                "market-data-platform": [
+                    ("uv", "run", "--extra", "dev", "python", "-m", "pyright")
+                ],
+                "quant-execution-engine": [
+                    ("uv", "run", "--group", "dev", "python", "-m", "pyright")
+                ],
             },
             type_commands,
         )
@@ -83,7 +89,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 submodules=["quant-execution-engine"],
             )
         ]
-        self.assertIn(("uv", "run", "--group", "dev", "pyright"), qexec_full)
+        self.assertIn(("uv", "run", "--group", "dev", "python", "-m", "pyright"), qexec_full)
         self.assertNotIn(("uv", "run", "--group", "dev", "mypy", "src"), qexec_full)
 
         qexec_advisory = [

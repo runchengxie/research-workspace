@@ -134,6 +134,9 @@ def test_maintainability_baseline_schema_and_generator() -> None:
         assert isinstance(repo["hk_related_file_count"], int)
 
     module = _load_baseline_module()
+    current = module.build_baseline(module.DEFAULT_REPOS, thresholds=module.DEFAULT_THRESHOLDS)
+    assert baseline == current
+
     root_only = module.build_baseline(["research-workspace"], thresholds=module.DEFAULT_THRESHOLDS)
 
     assert root_only["schema_version"] == "maintainability_baseline.v1"
@@ -259,9 +262,7 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
         for file_record in repo["large_files"]:
             repo_path = file_record["path"]
             path = (
-                repo_path
-                if repo["repo"] == "research-workspace"
-                else f"{repo['repo']}/{repo_path}"
+                repo_path if repo["repo"] == "research-workspace" else f"{repo['repo']}/{repo_path}"
             )
             if path not in planned and path not in accepted:
                 missing.append(path)

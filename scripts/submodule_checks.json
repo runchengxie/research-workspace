@@ -14,7 +14,7 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "pyright"]
+          ["uv", "run", "--extra", "dev", "python", "-m", "pyright"]
         ],
         "full": ["@smoke", "@lint", "@test", "@type"]
       }
@@ -33,7 +33,7 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "pyright"]
+          ["uv", "run", "--extra", "dev", "python", "-m", "pyright"]
         ],
         "full": ["@smoke", "@lint", "@test", "@type"]
       }
@@ -52,7 +52,7 @@
           ["uv", "run", "--group", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--group", "dev", "pyright"]
+          ["uv", "run", "--group", "dev", "python", "-m", "pyright"]
         ],
         "mypy_advisory": [
           ["uv", "run", "--group", "dev", "mypy", "src"]

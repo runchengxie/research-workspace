@@ -342,8 +342,7 @@ def export_demo(*, config_path: Path, out_dir: Path) -> dict[str, Any]:
     split_manifest_validation = validate_split_manifest(split_manifest)
     if split_manifest_validation["status"] != "passed":
         raise RuntimeError(
-            "HK public split manifest validation failed: "
-            f"{split_manifest_validation['issues']}"
+            f"HK public split manifest validation failed: {split_manifest_validation['issues']}"
         )
 
     if out_dir.exists():
