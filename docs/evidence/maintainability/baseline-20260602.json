@@ -125,7 +125,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 159,
-      "python_loc": 63329,
+      "python_loc": 63202,
       "hk_related_file_count": 88,
       "large_files": [
         {
@@ -607,7 +607,6 @@
           "src/market_data_platform/hk_assets/mirror_workflow.py",
           "src/market_data_platform/hk_assets/package_api.py",
           "src/market_data_platform/hk_assets/patch_merge.py",
-          "src/market_data_platform/hk_assets/public_api.py",
           "src/market_data_platform/hk_assets/rebase_metadata.py",
           "src/market_data_platform/hk_assets/request_groups.py"
         ],
@@ -675,7 +674,6 @@
           "src/market_data_platform/hk_assets/mirror_workflow.py",
           "src/market_data_platform/hk_assets/package_api.py",
           "src/market_data_platform/hk_assets/patch_merge.py",
-          "src/market_data_platform/hk_assets/public_api.py",
           "src/market_data_platform/hk_assets/rebase_metadata.py",
           "src/market_data_platform/hk_assets/request_groups.py",
           "src/market_data_platform/data_providers.py",
