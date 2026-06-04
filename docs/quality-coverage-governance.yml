@@ -42,7 +42,13 @@
           "src/market_data_platform/hk_assets/coverage_rendering.py",
           "src/market_data_platform/hk_assets/asset_io.py",
           "src/market_data_platform/hk_assets/manifest_ops.py",
-          "src/market_data_platform/hk_assets/public_api.py"
+          "src/market_data_platform/hk_assets/public_api.py",
+          "src/market_data_platform/hk_assets/rebase_metadata.py",
+          "src/market_data_platform/hk_assets/build_paths.py",
+          "src/market_data_platform/hk_assets/fetch_runtime.py",
+          "src/market_data_platform/hk_assets/request_groups.py",
+          "src/market_data_platform/hk_assets/args_shared.py",
+          "src/market_data_platform/hk_assets/health_shared.py"
         ],
         "promotion_criteria": "low-risk HK modules pass before heavy workflow modules are removed from excludes"
       },
@@ -56,6 +62,12 @@
           "src/market_data_platform/hk_assets/asset_io.py",
           "src/market_data_platform/hk_assets/manifest_ops.py",
           "src/market_data_platform/hk_assets/public_api.py",
+          "src/market_data_platform/hk_assets/rebase_metadata.py",
+          "src/market_data_platform/hk_assets/build_paths.py",
+          "src/market_data_platform/hk_assets/fetch_runtime.py",
+          "src/market_data_platform/hk_assets/request_groups.py",
+          "src/market_data_platform/hk_assets/args_shared.py",
+          "src/market_data_platform/hk_assets/health_shared.py",
           "src/market_data_platform/hk_depth/storage.py",
           "src/market_data_platform/hk_depth/symbols.py"
         ],
@@ -91,8 +103,8 @@
       "path": "src/market_data_platform/hk_assets heavy modules",
       "tool": "ruff",
       "owner": "market-data-platform",
-      "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after asset_io.py, manifest_ops.py, and public_api.py entered Ruff coverage",
-      "next_include_target": "hk_assets/rebase_metadata.py",
+      "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after low-risk support modules entered Ruff coverage",
+      "next_include_target": "hk_assets/args.py and hk_assets/args_mirror.py",
       "review_milestone": "next quality-baseline refresh"
     },
     {
@@ -100,8 +112,8 @@
       "path": "src/market_data_platform/hk_assets heavy modules",
       "tool": "pyright",
       "owner": "market-data-platform",
-      "reason": "workflow modules still need pandas typing and import-boundary cleanup after asset_io.py, manifest_ops.py, and public_api.py entered Pyright coverage",
-      "next_include_target": "hk_assets/rebase_metadata.py",
+      "reason": "workflow modules still need pandas typing and import-boundary cleanup after low-risk support modules entered Pyright coverage",
+      "next_include_target": "hk_assets/args.py and hk_assets/args_mirror.py",
       "review_milestone": "next quality-baseline refresh"
     },
     {
