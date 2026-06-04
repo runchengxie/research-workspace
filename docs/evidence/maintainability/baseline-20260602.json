@@ -125,7 +125,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 159,
-      "python_loc": 63257,
+      "python_loc": 63329,
       "hk_related_file_count": 88,
       "large_files": [
         {
@@ -234,6 +234,11 @@
           "hk_related": true
         },
         {
+          "path": "src/market_data_platform/hk_assets/asset_io.py",
+          "loc": 771,
+          "hk_related": true
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
           "loc": 730,
           "hk_related": false
@@ -241,11 +246,6 @@
         {
           "path": "src/market_data_platform/hk_assets/current_health.py",
           "loc": 724,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/asset_io.py",
-          "loc": 715,
           "hk_related": true
         },
         {
@@ -580,7 +580,6 @@
           "src/market_data_platform/hk_assets/asset_health.py",
           "src/market_data_platform/hk_assets/asset_health_daily_rules.py",
           "src/market_data_platform/hk_assets/asset_health_rendering.py",
-          "src/market_data_platform/hk_assets/asset_io.py",
           "src/market_data_platform/hk_assets/audit_assets.py",
           "src/market_data_platform/hk_assets/build.py",
           "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
@@ -598,7 +597,6 @@
           "src/market_data_platform/hk_assets/intraday_download.py",
           "src/market_data_platform/hk_assets/intraday_health.py",
           "src/market_data_platform/hk_assets/intraday_sync.py",
-          "src/market_data_platform/hk_assets/manifest_ops.py",
           "src/market_data_platform/hk_assets/mirror_daily.py",
           "src/market_data_platform/hk_assets/mirror_dated.py",
           "src/market_data_platform/hk_assets/mirror_financial.py",
@@ -650,7 +648,6 @@
           "src/market_data_platform/hk_assets/asset_health.py",
           "src/market_data_platform/hk_assets/asset_health_daily_rules.py",
           "src/market_data_platform/hk_assets/asset_health_rendering.py",
-          "src/market_data_platform/hk_assets/asset_io.py",
           "src/market_data_platform/hk_assets/audit_assets.py",
           "src/market_data_platform/hk_assets/build.py",
           "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
@@ -668,7 +665,6 @@
           "src/market_data_platform/hk_assets/intraday_download.py",
           "src/market_data_platform/hk_assets/intraday_health.py",
           "src/market_data_platform/hk_assets/intraday_sync.py",
-          "src/market_data_platform/hk_assets/manifest_ops.py",
           "src/market_data_platform/hk_assets/mirror_daily.py",
           "src/market_data_platform/hk_assets/mirror_dated.py",
           "src/market_data_platform/hk_assets/mirror_financial.py",
@@ -704,7 +700,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 201,
-      "python_loc": 59390,
+      "python_loc": 59389,
       "hk_related_file_count": 25,
       "large_files": [
         {
@@ -969,8 +965,8 @@
         {
           "path": "src/cstree/pipeline/final_oos_stage.py",
           "name": "run_final_oos_stage",
-          "line_count": 192,
-          "complexity": 13
+          "line_count": 191,
+          "complexity": 14
         },
         {
           "path": "src/cstree/research/construction_grid.py",
@@ -1163,6 +1159,7 @@
           "src/cstree/pipeline/output.py",
           "src/cstree/pipeline/output_orchestration.py",
           "src/cstree/pipeline/output_summary.py",
+          "src/cstree/pipeline/final_oos_stage.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
           "src/cstree/liveops/alloc_selection.py",
@@ -1196,7 +1193,7 @@
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
       "python_file_count": 75,
-      "python_loc": 23466,
+      "python_loc": 23442,
       "hk_related_file_count": 12,
       "large_files": [
         {
@@ -1206,7 +1203,7 @@
         },
         {
           "path": "src/quant_execution_engine/cli.py",
-          "loc": 1445,
+          "loc": 1421,
           "hk_related": false
         },
         {
@@ -1535,8 +1532,8 @@
         {
           "path": "src/quant_execution_engine/cli.py",
           "name": "run_broker_orders",
-          "line_count": 73,
-          "complexity": 19
+          "line_count": 71,
+          "complexity": 18
         },
         {
           "path": "src/quant_execution_engine/execution_service.py",
@@ -1557,16 +1554,16 @@
           "complexity": 17
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
-          "name": "run_broker_fills",
-          "line_count": 65,
-          "complexity": 17
-        },
-        {
           "path": "src/quant_execution_engine/execution_service_state_reconcile_ops.py",
           "name": "_merge_reconcile_report",
           "line_count": 54,
           "complexity": 17
+        },
+        {
+          "path": "project_tools/export_repo_source.py",
+          "name": "combine_project_files",
+          "line_count": 117,
+          "complexity": 16
         }
       ],
       "quality_config": {

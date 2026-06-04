@@ -6,6 +6,17 @@
     "rollback_path",
     "focused_tests"
   ],
+  "removal_ready_evidence": {
+    "zero_usage_required_releases": 2,
+    "required_artifacts": [
+      "dated repo-local reference scan result",
+      "downstream consumer audit result or explicit not_applicable note",
+      "replacement documentation path",
+      "focused test command output",
+      "rollback or restore evidence path when restore_evidence_required is true"
+    ],
+    "status_rule": "A record may move to removal_ready only after the required artifacts are captured for the target release and consumer_audit is no longer pending or manual_review_required."
+  },
   "records": [
     {
       "id": "market-data-platform-hkdata",

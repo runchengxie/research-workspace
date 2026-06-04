@@ -7,6 +7,15 @@
     "migration",
     "archive"
   ],
+  "removal_review_policy": {
+    "zero_usage_required_releases": 2,
+    "required_checks": [
+      "no repo-local references outside docs/script-lifecycle.yml and archival notes",
+      "no active CI, release checklist, smoke command, or restore workflow calls the script",
+      "replacement command or archive evidence path is recorded when the script has a successor",
+      "owning repo confirms the lifecycle purpose is obsolete"
+    ]
+  },
   "records": [
     {
       "path": "scripts/a_share_readiness.py",
@@ -16,7 +25,7 @@
       "safe_to_run_locally": true,
       "writes_files": "only when explicit output flags are used",
       "external_dependencies": "DATA_PLATFORM_ROOT for full current-contract checks",
-      "removal_condition": "keep while A-share readiness evidence is governed at the workspace layer"
+      "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
       "path": "scripts/export_hk_public_demo.py",
@@ -26,7 +35,7 @@
       "safe_to_run_locally": true,
       "writes_files": "staging directory passed via --out",
       "external_dependencies": "none for scan; git optional for source revision",
-      "removal_condition": "keep until public demo staging is removed by follow-up split"
+      "removal_condition": "remove only after public demo staging is removed or replaced, no release checklist calls this script for two release reviews, and the replacement export path is documented"
     },
     {
       "path": "scripts/export_hk_legacy_archive.py",
@@ -36,7 +45,7 @@
       "safe_to_run_locally": true,
       "writes_files": "external staging directory passed via --out",
       "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "keep while private HK legacy restore provenance is maintained"
+      "removal_condition": "remove only after private legacy restore provenance is archived with manifest evidence and no restore checklist calls this script for two release reviews"
     },
     {
       "path": "scripts/hk_archive_gate.py",
@@ -46,7 +55,7 @@
       "safe_to_run_locally": true,
       "writes_files": "only when --out is provided",
       "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "keep while HK compatibility removal requires explicit governance"
+      "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
     },
     {
       "path": "scripts/hk_research_lane_inventory.py",
@@ -56,7 +65,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "none",
-      "removal_condition": "keep while HK research lane split governance is active"
+      "removal_condition": "remove only after the research lane split checklist is retired and no CI or public-template safety scan calls this script for two release reviews"
     },
     {
       "path": "scripts/maintainability_baseline.py",
@@ -66,7 +75,7 @@
       "safe_to_run_locally": true,
       "writes_files": "only when --out is provided",
       "external_dependencies": "none",
-      "removal_condition": "keep while maintainability governance is active"
+      "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
     },
     {
       "path": "scripts/print_version_matrix.py",
@@ -76,7 +85,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "keep while submodule version locking is active"
+      "removal_condition": "remove only after submodule version locking no longer appears in release/doctor checks for two release reviews"
     },
     {
       "path": "scripts/run_quality_checks.py",
@@ -86,7 +95,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "selected profile tools",
-      "removal_condition": "keep while top-level quality profiles are active"
+      "removal_condition": "remove only after top-level quality profiles are replaced or retired and no CI/release checklist calls this script for two release reviews"
     },
     {
       "path": "scripts/run_submodule_checks.py",
@@ -96,7 +105,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "submodule environments",
-      "removal_condition": "keep while submodule check delegation is active"
+      "removal_condition": "remove only after submodule check delegation is replaced by explicit repo-level commands and no CI/release checklist calls this script for two release reviews"
     },
     {
       "path": "scripts/scan_workspace_secrets.py",
@@ -106,7 +115,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "none",
-      "removal_condition": "keep while public/private boundary checks are active"
+      "removal_condition": "remove only after public/private boundary checks move to another gate and two release reviews record no direct calls to this script"
     },
     {
       "path": "scripts/smoke_contracts.py",
@@ -116,7 +125,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "submodule CLIs and optional DATA_PLATFORM_ROOT",
-      "removal_condition": "keep while cross-repo handoff contracts are active"
+      "removal_condition": "remove only after cross-repo handoff smoke coverage moves to repo-local gates and no release checklist calls this script for two release reviews"
     },
     {
       "path": "scripts/workspace_doctor.py",
@@ -126,7 +135,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "git and optional DATA_PLATFORM_ROOT",
-      "removal_condition": "keep while workspace health is governed at top level"
+      "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
     },
     {
       "path": "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
@@ -136,7 +145,7 @@
       "safe_to_run_locally": false,
       "writes_files": "cold-storage package and manifest paths",
       "external_dependencies": "research output archive paths and release packaging tools",
-      "removal_condition": "move to archive after HK research freeze evidence is no longer maintained"
+      "removal_condition": "move to archive only after research freeze evidence is no longer refreshed, archive manifest coverage remains available, and no release checklist calls this script for two release reviews"
     },
     {
       "path": "cross-sectional-trees/scripts/internal/export_repo_source.py",
@@ -146,7 +155,7 @@
       "safe_to_run_locally": true,
       "writes_files": "explicit export destination",
       "external_dependencies": "git checkout",
-      "removal_condition": "keep while source export evidence is required"
+      "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
     },
     {
       "path": "cross-sectional-trees/scripts/internal/package_repo.sh",
@@ -156,7 +165,7 @@
       "safe_to_run_locally": true,
       "writes_files": "explicit package output",
       "external_dependencies": "shell, tar, git",
-      "removal_condition": "keep while release source packaging remains manual"
+      "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
     },
     {
       "path": "market-data-platform/scripts/internal/import_cross_artifacts.py",
@@ -166,7 +175,7 @@
       "safe_to_run_locally": false,
       "writes_files": "data-platform metadata and artifact roots",
       "external_dependencies": "source research artifacts and DATA_PLATFORM_ROOT",
-      "removal_condition": "archive after A-share migration evidence no longer needs imports"
+      "removal_condition": "archive only after A-share migration evidence no longer requires importing research artifacts and two release reviews record zero active calls"
     },
     {
       "path": "quant-execution-engine/project_tools/export_repo_source.py",
@@ -176,7 +185,7 @@
       "safe_to_run_locally": true,
       "writes_files": "explicit export destination",
       "external_dependencies": "git checkout",
-      "removal_condition": "keep while source export evidence is required"
+      "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
     },
     {
       "path": "quant-execution-engine/project_tools/package.sh",
@@ -186,7 +195,7 @@
       "safe_to_run_locally": true,
       "writes_files": "explicit package output",
       "external_dependencies": "shell, tar, git",
-      "removal_condition": "keep while release source packaging remains manual"
+      "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
     },
     {
       "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
@@ -196,7 +205,7 @@
       "safe_to_run_locally": false,
       "writes_files": "outputs/evidence when requested",
       "external_dependencies": "broker credentials or explicit dry-run setup",
-      "removal_condition": "split after execution smoke harness modules are refactored"
+      "removal_condition": "split or remove only after execution smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
     },
     {
       "path": "quant-execution-engine/project_tools/smoke_signal_harness.py",
@@ -206,7 +215,7 @@
       "safe_to_run_locally": true,
       "writes_files": "outputs/evidence when requested",
       "external_dependencies": "local fixtures",
-      "removal_condition": "split after smoke harness modules are refactored"
+      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
     },
     {
       "path": "quant-execution-engine/project_tools/smoke_target_harness.py",
@@ -216,7 +225,7 @@
       "safe_to_run_locally": true,
       "writes_files": "outputs/evidence when requested",
       "external_dependencies": "local fixtures",
-      "removal_condition": "split after smoke harness modules are refactored"
+      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
     }
   ]
 }

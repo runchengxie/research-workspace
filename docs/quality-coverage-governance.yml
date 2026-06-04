@@ -6,7 +6,7 @@
       "ruff": {
         "staged_select": ["E", "F", "I", "UP", "B", "C4", "RET", "SIM", "RUF", "C90"],
         "current_hard_gate": "scripts/dev/run_tests.sh lint",
-        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/cstree/pipeline/contracts.py src/cstree/pipeline/output_context.py src/cstree/pipeline/output_artifacts.py src/cstree/pipeline/output.py src/cstree/pipeline/output_orchestration.py src/cstree/pipeline/output_summary.py src/cstree/liveops/export_targets.py src/cstree/liveops/alloc_core.py src/cstree/liveops/alloc_selection.py src/cstree/backtesting/types.py",
+        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/cstree/pipeline/contracts.py src/cstree/pipeline/output_context.py src/cstree/pipeline/output_artifacts.py src/cstree/pipeline/output.py src/cstree/pipeline/output_orchestration.py src/cstree/pipeline/output_summary.py src/cstree/pipeline/final_oos_stage.py src/cstree/liveops/export_targets.py src/cstree/liveops/alloc_core.py src/cstree/liveops/alloc_selection.py src/cstree/backtesting/types.py",
         "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
       },
       "pyright": {
@@ -18,6 +18,7 @@
           "src/cstree/pipeline/output.py",
           "src/cstree/pipeline/output_orchestration.py",
           "src/cstree/pipeline/output_summary.py",
+          "src/cstree/pipeline/final_oos_stage.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
           "src/cstree/liveops/alloc_selection.py",
@@ -38,7 +39,9 @@
           "src/market_data_platform/hk_assets/models.py",
           "src/market_data_platform/hk_assets/shared.py",
           "src/market_data_platform/hk_assets/quality_gate.py",
-          "src/market_data_platform/hk_assets/coverage_rendering.py"
+          "src/market_data_platform/hk_assets/coverage_rendering.py",
+          "src/market_data_platform/hk_assets/asset_io.py",
+          "src/market_data_platform/hk_assets/manifest_ops.py"
         ],
         "promotion_criteria": "low-risk HK modules pass before heavy workflow modules are removed from excludes"
       },
@@ -49,6 +52,8 @@
           "src/market_data_platform/hk_assets/shared.py",
           "src/market_data_platform/hk_assets/quality_gate.py",
           "src/market_data_platform/hk_assets/coverage_rendering.py",
+          "src/market_data_platform/hk_assets/asset_io.py",
+          "src/market_data_platform/hk_assets/manifest_ops.py",
           "src/market_data_platform/hk_depth/storage.py",
           "src/market_data_platform/hk_depth/symbols.py"
         ],
@@ -71,7 +76,8 @@
           "src/quant_execution_engine/rebalance.py",
           "src/quant_execution_engine/execution_state.py",
           "src/quant_execution_engine/broker/base.py",
-          "src/quant_execution_engine/execution_service.py"
+          "src/quant_execution_engine/execution_service.py",
+          "src/quant_execution_engine/cli.py"
         ],
         "promotion_criteria": "execution-critical modules pass stricter checks before optional broker adapters are tightened"
       }
@@ -83,8 +89,8 @@
       "path": "src/market_data_platform/hk_assets heavy modules",
       "tool": "ruff",
       "owner": "market-data-platform",
-      "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after first low-risk include",
-      "next_include_target": "hk_assets/public_api.py, asset_io.py, manifest_ops.py",
+      "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after asset_io.py and manifest_ops.py entered Ruff coverage",
+      "next_include_target": "hk_assets/public_api.py",
       "review_milestone": "next quality-baseline refresh"
     },
     {
@@ -92,8 +98,8 @@
       "path": "src/market_data_platform/hk_assets heavy modules",
       "tool": "pyright",
       "owner": "market-data-platform",
-      "reason": "public API and workflow modules still need pandas typing and import-boundary cleanup",
-      "next_include_target": "hk_assets/public_api.py, asset_io.py, manifest_ops.py",
+      "reason": "public API and workflow modules still need pandas typing and import-boundary cleanup after asset_io.py and manifest_ops.py entered Pyright coverage",
+      "next_include_target": "hk_assets/public_api.py",
       "review_milestone": "next quality-baseline refresh"
     },
     {
