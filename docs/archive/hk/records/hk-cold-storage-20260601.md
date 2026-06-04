@@ -1,5 +1,11 @@
 # 港股冷存储冻结记录 - 2026-06-01
 
+> status: archived
+> owner: market-data-platform
+> last_verified: 2026-06-04
+> source_of_truth: no
+> superseded_by: ../README.md
+
 ## 结果
 
 中国香港市场数据资产已从活跃共享数据根目录移入独立冷存储：

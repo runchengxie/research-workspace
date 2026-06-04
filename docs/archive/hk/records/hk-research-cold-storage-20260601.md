@@ -1,5 +1,11 @@
 # 港股研究产物冷存储冻结记录 - 2026-06-01
 
+> status: archived
+> owner: cross-sectional-trees
+> last_verified: 2026-06-04
+> source_of_truth: no
+> superseded_by: ../README.md
+
 ## 结果
 
 `cross-sectional-trees` 中的中国香港市场历史研究产物已迁入独立冷存储：

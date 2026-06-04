@@ -33,6 +33,7 @@ def test_hk_public_split_manifest_validates_schema_and_paths() -> None:
         "private_do_not_export",
     } == set(manifest["actions"])
     assert {
+        "docs/archive/hk/README.md",
         "docs/hk-legacy-surface-inventory.md",
         "docs/hk-public-demo-export.md",
         "demo/hk-public-demo-allowlist-v1.txt",

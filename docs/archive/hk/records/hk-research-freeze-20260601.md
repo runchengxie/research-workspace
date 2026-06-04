@@ -1,5 +1,11 @@
 # 港股研究产物冷存储快照 - 2026-06-01
 
+> status: archived
+> owner: cross-sectional-trees
+> last_verified: 2026-06-04
+> source_of_truth: no
+> superseded_by: ../README.md
+
 ## 状态
 
 这是 `cross-sectional-trees` 中国香港市场历史研究产物的私有冷存储快照。Release 创建时暂不上传附件；待手工复核后，再上传下列文件。
@@ -21,7 +27,7 @@ hk-research-freeze-20260601.tar.zst
 SHA256SUMS
 research-freeze-manifest.json
 hk-research-frozen-marker.json
-../session-handoffs/hk-research-cold-storage-20260601.md
+hk-research-cold-storage-20260601.md
 ```
 
 主归档使用 `tar | zstd -12 -T0 --long=27` 生成：
@@ -49,7 +55,7 @@ zstd -t hk-research-freeze-20260601.tar.zst
 tar -I unzstd -xf hk-research-freeze-20260601.tar.zst
 ```
 
-恢复研究产物前，先阅读 [`hk-research-cold-storage-20260601.md`](../session-handoffs/hk-research-cold-storage-20260601.md)，再运行：
+恢复研究产物前，先阅读 [`hk-research-cold-storage-20260601.md`](hk-research-cold-storage-20260601.md)，再运行：
 
 ```bash
 python scripts/internal/freeze_hk_research_outputs.py hydrate

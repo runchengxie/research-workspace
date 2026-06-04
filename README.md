@@ -63,11 +63,10 @@ python scripts/smoke_contracts.py
 | 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
 | 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
 | 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
-| 查看港股 legacy surface inventory | [docs/hk-legacy-surface-inventory.md](docs/hk-legacy-surface-inventory.md) |
 | 查看港股 public split manifest | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
-| 导出外部 clean-room 港股公开 demo | [docs/hk-public-demo-export.md](docs/hk-public-demo-export.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
 | 查看维护债治理入口 | [docs/maintainability-governance.md](docs/maintainability-governance.md) |
+| 查看文档生命周期和归档规则 | [docs/documentation-lifecycle.md](docs/documentation-lifecycle.md) |
 | 查看 deprecated 入口删除条件 | [docs/deprecations.md](docs/deprecations.md) |
 | 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
 | 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |
@@ -84,7 +83,8 @@ python scripts/smoke_contracts.py
 港股公开 demo 独立于这三个子项目，仅用于作品集展示。真实港股历史复现以
 [中国香港市场归档](docs/archive/hk/README.md)、冷存储 release、manifest、restore drill
 和对应子仓库兼容入口为准；迁出或删除候选面由
-[港股 public split manifest](docs/hk-public-split-manifest.yml) 记录。
+[港股 public split manifest](docs/hk-public-split-manifest.yml) 记录。旧的 legacy surface 和
+public demo 说明页仍保留为兼容入口，但不再是默认阅读路径。
 
 ## 常用顶层命令
 

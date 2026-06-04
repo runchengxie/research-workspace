@@ -1,5 +1,11 @@
 # 顶层文档入口
 
+> status: active
+> owner: workspace
+> last_verified: 2026-06-04
+> source_of_truth: yes
+> superseded_by: n/a
+
 这里收录 superproject 层级的说明，只覆盖跨仓库协作、contract、版本锁定和发布检查。子项目内部的依赖、业务命令、架构规则和测试要求仍以各自 README / docs 为准。
 
 当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产和研究输出按冷存储 /
@@ -17,15 +23,12 @@
 | 了解协作和变更规则 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看中国香港市场归档入口 | [archive/hk/README.md](archive/hk/README.md) |
-| 查看港股 legacy 保留、归档和 sunset 边界 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
-| 查看港股私有 legacy 归档候选和只读门禁 | [hk-private-archive.md](hk-private-archive.md) |
 | 查看港股私有归档 manifest | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 | 查看港股 public split manifest | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
-| 导出外部暂停维护的港股公开 demo | [hk-public-demo-export.md](hk-public-demo-export.md) |
 | 查看 A 股 readiness 分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
-| 查看 A 股生产 readiness 与长窗口扩展计划 | [a-share-production-readiness.md](a-share-production-readiness.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
 | 查看维护债治理入口 | [maintainability-governance.md](maintainability-governance.md) |
+| 查看文档生命周期和归档规则 | [documentation-lifecycle.md](documentation-lifecycle.md) |
 | 查看 deprecated 入口删除条件 | [deprecations.md](deprecations.md) |
 | 维护子模块指针或顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看 hard、advisory 和 manual 质量 gate | [quality-governance.md](quality-governance.md) |
@@ -37,6 +40,11 @@
 - 活跃文档：初始化、当前跨仓库工作流、A 股 readiness、contract、release checklist。
 - 参考文档：长期稳定的文件约定、质量治理、维护流程和 public demo 导出。
 - 归档文档：[archive/README.md](archive/README.md) 下的交接记录、冻结记录和历史证据。
+- 生命周期规则：[documentation-lifecycle.md](documentation-lifecycle.md) 定义 `active`、`reference`、`archived` 和 `superseded` 的状态字段。
+- 兼容入口：`hk-legacy-surface-inventory.md`、`hk-private-archive.md`、
+  `hk-public-demo-export.md`、`a-share-production-readiness.md` 保留给旧链接，
+  当前入口分别见 [archive/hk/README.md](archive/hk/README.md) 和
+  [data-transition-playbook.md](data-transition-playbook.md)。
 
 ## 文档边界
 

@@ -2,6 +2,7 @@
   "schema_version": "hk_public_split_manifest.v1",
   "format": "json-yaml-subset",
   "generated_from": [
+    "docs/archive/hk/README.md",
     "docs/hk-legacy-surface-inventory.md",
     "docs/hk-public-demo-export.md",
     "docs/deprecations.yml",
@@ -221,8 +222,8 @@
       "owner_repo": "cross-sectional-trees",
       "paths": [
         "cross-sectional-trees/src/cstree/research/hk_*.py",
-        "cross-sectional-trees/docs/research/notes/hk-*.md",
-        "cross-sectional-trees/docs/archive/vendor-rqdata/hk-stock-data-reference.md",
+        "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md",
+        "cross-sectional-trees/docs/archive/research/hk/README.md",
         "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
         "cross-sectional-trees/tests/test_*hk*.py"
       ],
@@ -256,7 +257,6 @@
         "cross-sectional-trees/configs/presets/hk*.yml",
         "cross-sectional-trees/configs/presets/data/hk_rqdata.yml",
         "cross-sectional-trees/configs/experiments/**/*hk*.yml",
-        "cross-sectional-trees/configs/local/hk*.yml",
         "cross-sectional-trees/configs/field_profiles/hk_*"
       ],
       "path_kind": "repo_local",
@@ -285,7 +285,7 @@
       "id": "strategy-research-frozen-hk-marker",
       "owner_repo": "cross-sectional-trees",
       "paths": [
-        "cross-sectional-trees/artifacts/metadata/frozen_markets/hk_research.json"
+        "docs/evidence/hk-research-archive-manifest-20260601.json"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",

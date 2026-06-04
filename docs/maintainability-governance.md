@@ -13,8 +13,9 @@ docs, tests, and runtime behavior.
 | Quality coverage and excludes | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
 | Large-file and refactor roadmap | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
 | Generated maintainability baseline | [evidence/maintainability/baseline-20260602.json](evidence/maintainability/baseline-20260602.json) |
+| HK archive routing | [archive/hk/README.md](archive/hk/README.md) |
 | HK public split boundary | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
-| HK private legacy archive gate | [hk-private-archive.md](hk-private-archive.md), [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
+| HK private legacy archive gate | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 
 ## Baseline Command
 

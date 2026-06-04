@@ -33,4 +33,4 @@ the owning repo.
 Private legacy archive staging does not authorize deletion. Before a removal
 review, run `python scripts/hk_archive_gate.py --check --format json` and retain
 the private staging, restore-drill, consumer-audit, source-tag, and zero-usage
-release-window evidence described in [`hk-private-archive.md`](hk-private-archive.md).
+release-window evidence linked from [`archive/hk/README.md`](archive/hk/README.md).

@@ -1,5 +1,11 @@
 # 中国香港市场归档
 
+> status: active
+> owner: workspace
+> last_verified: 2026-06-04
+> source_of_truth: yes
+> superseded_by: n/a
+
 本页收口中国香港市场历史数据、研究产物和公开 demo 的归档入口。当前活跃主线是 A 股数据、研究和执行交接；港股真实资产按冷存储和显式恢复流程维护。
 
 ## 当前状态
@@ -9,26 +15,30 @@
 - 私有 legacy 代码：使用外部 private、paused-maintenance、restore-only 候选仓库治理，不作为本工作区 submodule、CI 目标或运行依赖。
 - 公开展示：仅通过外部 paused-maintenance 的 synthetic demo 仓库，不作为本工作区 submodule、CI 目标或 release matrix 成员。
 
-## 稳定入口
+## Source-of-truth routes
 
 | 目的 | 文档 |
 | --- | --- |
-| 查看保留的 legacy surface 和 sunset 边界 | [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md) |
-| 查看 public split manifest 和 cleanup gate | [../../hk-public-split-manifest.yml](../../hk-public-split-manifest.yml) |
-| 查看 private legacy archive staging 和 removal gate | [../../hk-private-archive.md](../../hk-private-archive.md) |
-| 查看 private archive manifest | [../../hk-private-archive-manifest.yml](../../hk-private-archive-manifest.yml) |
+| 查看 legacy surface、public demo split 和 cleanup gate | [../../hk-public-split-manifest.yml](../../hk-public-split-manifest.yml) |
+| 查看 private legacy archive staging 和 removal gate | [../../hk-private-archive-manifest.yml](../../hk-private-archive-manifest.yml) |
 | 查看 deprecated 入口 removal gate | [../../deprecations.md](../../deprecations.md) |
-| 导出外部 clean-room 港股公开 demo | [../../hk-public-demo-export.md](../../hk-public-demo-export.md) |
 | 查看数据迁移优先级和恢复顺序 | [../../data-transition-playbook.md](../../data-transition-playbook.md) |
+| 查看文档生命周期和兼容页 | [../../documentation-lifecycle.md](../../documentation-lifecycle.md) |
 
-## 冷存储记录
+以下页面保留为兼容入口，不再是权威清单：
+
+- [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md)
+- [../../hk-private-archive.md](../../hk-private-archive.md)
+- [../../hk-public-demo-export.md](../../hk-public-demo-export.md)
+
+## Records
 
 | 类型 | 文档 |
 | --- | --- |
-| 数据平台 release note | [release-notes/hk-cold-freeze-20260526.md](release-notes/hk-cold-freeze-20260526.md) |
-| 数据平台 session handoff | [session-handoffs/hk-cold-storage-20260601.md](session-handoffs/hk-cold-storage-20260601.md) |
-| 研究产物 release note | [release-notes/hk-research-freeze-20260601.md](release-notes/hk-research-freeze-20260601.md) |
-| 研究产物 session handoff | [session-handoffs/hk-research-cold-storage-20260601.md](session-handoffs/hk-research-cold-storage-20260601.md) |
+| 数据平台 release note | [records/hk-cold-freeze-20260526.md](records/hk-cold-freeze-20260526.md) |
+| 数据平台 session handoff | [records/hk-cold-storage-20260601.md](records/hk-cold-storage-20260601.md) |
+| 研究产物 release note | [records/hk-research-freeze-20260601.md](records/hk-research-freeze-20260601.md) |
+| 研究产物 session handoff | [records/hk-research-cold-storage-20260601.md](records/hk-research-cold-storage-20260601.md) |
 
 恢复前先从对应 session handoff 读取冷存储路径、manifest、校验命令和已知限制。
 

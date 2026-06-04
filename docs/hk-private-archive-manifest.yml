@@ -78,7 +78,7 @@
         "configs/presets/data/hk_rqdata.yml",
         "configs/field_profiles/hk_*",
         "configs/experiments/**/*hk*.yml",
-        "docs/research/notes/hk-*.md",
+        "docs/archive/research/hk/notes/hk-*.md",
         "tests/test_alloc_hk.py",
         "tests/test_cli_liveops.py"
       ],

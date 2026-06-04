@@ -1,5 +1,11 @@
 # 数据迁移优先级 playbook
 
+> status: active
+> owner: workspace
+> last_verified: 2026-06-04
+> source_of_truth: yes
+> superseded_by: n/a
+
 本页解决什么：把“冻结港股到冷存储、保持 A 股活跃根目录简洁、继续分阶段验证 A 股”的当前决策落成可执行顺序。\
 本页不解决什么：不替代 `market-data-platform` 的数据下载运维手册，也不替代 `cross-sectional-trees` 的 A 股 baseline playbook。\
 适合谁：准备维护 A 股活跃数据、冻结或恢复港股资产，或判断是否晋升 A 股研究入口的人。
@@ -38,7 +44,24 @@ python scripts/a_share_readiness.py \
 旧键 `research_default_promotable` 保留为 `production_strategy_evidence` 的兼容 alias。
 readiness 报告不会下载数据、跑训练或连接券商。当前已发布的 A 股 `daily_clean` 中期窗口是
 `2024-01-02` 到 `2026-05-29`；研究 preset 不应继续暗示已有 `2015-01-01` 起的完整资产。
-长窗口扩展计划见 [a-share-production-readiness.md](a-share-production-readiness.md)。
+
+### A 股长窗口扩展计划
+
+| 阶段 | 覆盖目标 | Provider / entitlement | 回滚点 |
+| --- | --- | --- | --- |
+| baseline | `2024-02-29` 到 `2026-05-29`，全 A by-date universe | TuShare 日线类接口 | 保留当前 `default` baseline 和已发布 alias |
+| 长窗口日线 | 至少覆盖 10 年并跨多个市场阶段 | TuShare 日线、复权、估值、涨跌停；按 segment 可恢复下载 | latest alias 只在 validation 后更新 |
+| 完整 PIT | 财报、预告、快报、分红、指标、审计、主营、披露日和历史行业 membership | 优先 VIP batch；non-VIP 只使用 spec 声明的安全 fallback | raw 可保留，normalized/PIT 未通过时不 publish |
+| 策略证据 | 至少覆盖牛熊、震荡和流动性压力窗口 | 只读消费已发布 PIT 资产 | default alias 可回滚，`default_next` 保留 A 股路径 |
+
+生产策略 evidence 至少包含全 A 等权 benchmark、可获得时的指数族 cohort、feature evidence、
+最终 OOS 或书面替代说明、CPCV、turnover/cost、capacity 和压力窗口复核。候选不优于要求
+benchmark 时，不能描述成 production-grade strategy。
+
+长窗口重跑顺序与产物要求见
+[`evidence/a-share-long-window-evidence-plan-20260601.json`](evidence/a-share-long-window-evidence-plan-20260601.json)。
+剩余缺口见
+[`evidence/a-share-production-limitations-20260601.json`](evidence/a-share-production-limitations-20260601.json)。
 
 ### A 股 baseline 持仓建议验收
 
@@ -83,7 +106,7 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 
 2026-06-01 的实际冻结记录见 [中国香港市场归档](archive/hk/README.md)。
 真实业务代码如需进入私有 paused-maintenance 候选，先按
-[中国香港市场私有 legacy 归档](hk-private-archive.md) 运行只读 gate 和工作区外 staging；
+[中国香港市场归档](archive/hk/README.md) 中的 private legacy archive gate 运行只读 gate 和工作区外 staging；
 不要把私有归档仓库加入 submodule，也不要把 staging 成功当成删除授权。
 
 冻结前至少确认：

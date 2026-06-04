@@ -1,5 +1,11 @@
 # 港股冷存储快照 - 2026-05-26
 
+> status: archived
+> owner: market-data-platform
+> last_verified: 2026-06-04
+> source_of_truth: no
+> superseded_by: ../README.md
+
 ## 状态
 
 这是中国香港市场历史生成物的私有冷存储快照。Release 创建时暂不上传附件；待本地归档复核完成后，再手工上传下列文件。
@@ -21,7 +27,7 @@ SHA256SUMS
 freeze-manifest.json
 hk-frozen-marker.json
 a_share_current_health_20260529_after_hk_freeze_20260601.json
-../session-handoffs/hk-cold-storage-20260601.md
+hk-cold-storage-20260601.md
 ```
 
 主归档使用 `tar | zstd -12 -T0 --long=27` 生成：
@@ -49,4 +55,4 @@ zstd -t hk-freeze-20260526.tar.zst
 tar -I unzstd -xf hk-freeze-20260526.tar.zst
 ```
 
-恢复到活跃共享数据根目录前，先阅读 [`hk-cold-storage-20260601.md`](../session-handoffs/hk-cold-storage-20260601.md)，并执行 `marketdata migration hydrate-hk` 的 dry-run。
+恢复到活跃共享数据根目录前，先阅读 [`hk-cold-storage-20260601.md`](hk-cold-storage-20260601.md)，并执行 `marketdata migration hydrate-hk` 的 dry-run。

@@ -1,32 +1,24 @@
 # 中国香港市场私有 legacy 归档
 
-当前活跃主线是 A 股。中国香港市场真实业务代码进入“私有归档候选 + 显式恢复”治理阶段，
-但本轮不直接删除恢复敏感实现或兼容入口。
+> status: superseded
+> owner: workspace
+> last_verified: 2026-06-04
+> source_of_truth: no
+> superseded_by: archive/hk/README.md
 
-## 仓库策略
+本页保留给旧链接和操作速查。当前权威入口是
+[中国香港市场归档](archive/hk/README.md)，真实业务代码的私有归档清单由
+[hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) 管理。
 
-私有候选仓库暂定为：
+## 当前边界
 
-```text
-hk-quant-legacy-archive
-```
-
-它必须是 private、paused-maintenance、restore-only 仓库。远端地址和访问控制 owner 在人工发布
-前显式确认；该仓库不加入 superproject submodule、默认 CI、release matrix 或 A 股运行依赖。
-
-私有归档和公开 demo 是两条不同路径：
-
-- 私有归档可以保留经过清单约束的 provider 业务代码、历史配置和测试。
-- 公开 demo 仍只承接 synthetic / public-safe clean-room 示例。
+- 私有候选仓库仍是 `hk-quant-legacy-archive`，必须保持 private、paused-maintenance、restore-only。
+- 私有归档可以保留清单约束下的 provider 业务代码、历史配置和测试。
+- 公开 demo 只承接 synthetic / public-safe clean-room 示例。
 - 两条路径都不承接凭证、行情文件、provider cache、研究 run、券商 adapter 或交易审计日志。
+- 私有 staging、restore drill 或 consumer audit 通过，都不自动授权删除活跃仓库中的 restore-sensitive 代码。
 
-## 清单和命令
-
-私有清单：
-
-```text
-docs/hk-private-archive-manifest.yml
-```
+## 操作入口
 
 只读检查：
 
@@ -46,17 +38,21 @@ python scripts/hk_archive_gate.py \
   --format json
 ```
 
-exporter 只从清单中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256；它不复制 `.git`，
-不创建远端仓库，不修改 submodule，不删除源文件。
+exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256；它不复制
+`.git`，不创建远端仓库，不修改 submodule，不删除源文件。
 
-## 保留在活跃仓库的边界
+## 删除门禁
 
-以下能力不进入 legacy 私有归档迁出范围：
+删除或迁出兼容入口前，先从 [archive/hk/README.md](archive/hk/README.md) 进入当前 gate，
+并确认下列证据齐全：
 
-- `marketdata migration freeze-hk`、`hydrate-hk` 和 freeze marker；
-- 标准 `targets.json` 多市场解析、FX、dry-run、风控和审计；
-- `quant-execution-engine` 中的 LongPort broker runtime。
+- restore evidence；
+- consumer audit；
+- replacement docs；
+- rollback notes；
+- owning repo focused tests；
+- private staging 证据；
+- zero-usage release window。
 
-任何兼容入口的实际删除必须等待 restore evidence、consumer audit、replacement docs、
-rollback notes、focused tests、私有 staging 证据和 zero-usage release window 全部完成，并在
-单独 follow-up change 中实施。
+LongPort、标准 `targets.json` 多市场解析、FX、dry-run、风控、审计，以及
+`marketdata migration freeze-hk` / `hydrate-hk` 控制面继续保留在活跃仓库。
