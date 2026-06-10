@@ -3,7 +3,7 @@
 	url = https://github.com/runchengxie/cross-sectional-trees.git
 [submodule "market-data-platform"]
 	path = market-data-platform
-	url = https://github.com/runchengxie/hk-data-platform.git
+	url = https://github.com/runchengxie/market-data-platform.git
 [submodule "quant-execution-engine"]
 	path = quant-execution-engine
 	url = https://github.com/runchengxie/quant-execution-engine.git
