@@ -1,40 +1,32 @@
-# Maintainability Governance
+# 维护债治理
 
-This page collects the active governance surfaces for maintainability debt. It
-does not replace submodule-specific rules; each submodule still owns its code,
-docs, tests, and runtime behavior.
+本页汇总维护债相关的活跃治理入口。各子模块仍分别负责自己的代码、文档、测试和运行行为。
 
-## Registers
+## 登记清单
 
-| Area | Source of truth |
+| 领域 | 权威入口 |
 | --- | --- |
-| Deprecated compatibility entrypoints | [deprecations.md](deprecations.md), [deprecations.yml](deprecations.yml) |
-| Script lifecycle and safety | [script-lifecycle.yml](script-lifecycle.yml) |
-| Quality coverage and excludes | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
-| Large-file and refactor roadmap | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
-| Generated maintainability baseline | [evidence/maintainability/baseline-20260602.json](evidence/maintainability/baseline-20260602.json) |
-| HK archive routing | [archive/hk/README.md](archive/hk/README.md) |
-| HK public split boundary | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
-| HK private legacy archive gate | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
+| 废弃兼容入口 | [deprecations.md](deprecations.md)、[deprecations.yml](deprecations.yml) |
+| 脚本生命周期和安全边界 | [script-lifecycle.yml](script-lifecycle.yml) |
+| 质量覆盖和排除项 | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
+| 大文件和重构路线图 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
+| 生成的维护债基线 | [evidence/maintainability/baseline-20260602.json](evidence/maintainability/baseline-20260602.json) |
+| 中国香港市场归档路由 | [archive/hk/README.md](archive/hk/README.md) |
+| 港股公开拆分边界 | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
+| 港股私有 legacy archive 门禁 | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 
-## Baseline Command
+## 基线命令
 
 ```bash
 python scripts/maintainability_baseline.py --out docs/evidence/maintainability/baseline-20260602.json
 ```
 
-The report uses stdlib AST parsing and records Python LOC, HK-related file
-counts, large files, long functions, approximate complexity hotspots, quality
-configuration, and script inventory.
+报告使用标准库 AST 解析，记录 Python LOC、港股相关文件数量、大文件、长函数、近似复杂度热点、质量配置和脚本清单。
 
-## Policy
+## 规则
 
-- New deprecated surfaces need an owner, replacement, removal condition, rollback
-  path, and focused tests.
-- New non-trivial scripts need lifecycle metadata before they are used by release
-  or migration workflows.
-- New broad Ruff/Pyright/mypy excludes need owner, reason, review milestone, and
-  next include target.
-- Large files and long functions should enter the roadmap before broad rewrites.
-- Actual deletion of restore-sensitive HK compatibility code requires a follow-up
-  change and evidence from the owning repository.
+- 新增 deprecated surface 需要 owner、replacement、removal condition、rollback path 和 focused tests。
+- 新增非平凡脚本并用于发布或迁移流程前，需要补齐 lifecycle 元数据。
+- 新增大范围 Ruff、Pyright 或 mypy 排除项，需要 owner、reason、review milestone 和 next include target。
+- 大文件和长函数进入大范围改写前，先进入路线图。
+- 删除 restore-sensitive 港股兼容代码需要后续变更，并附上负责仓库的证据。

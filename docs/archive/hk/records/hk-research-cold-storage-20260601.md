@@ -2,7 +2,7 @@
 
 > status: archived
 > owner: cross-sectional-trees
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: ../README.md
 
@@ -30,7 +30,7 @@ checksum: sha256
 
 迁出范围包括历史港股 runs、sweeps、reports、live runs、benchmarks、exports、残留 intraday cache 和港股 universe metadata。活跃仓库仍保留 A 股 cache、数据平台 asset symlink、`metadata/current_assets` symlink 和共享 catalog。
 
-## Package
+## 发布包
 
 快照已经压缩为单文件归档，并附带 manifest、marker 和 SHA-256 清单：
 

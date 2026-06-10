@@ -1,12 +1,12 @@
 # 工作区维护
 
-本页说明 superproject 的日常维护动作：什么时候改顶层，怎样更新子模块版本，以及发布前应该跑哪些检查。
+本页说明顶层工作区的日常维护动作：什么时候改顶层，怎样更新子模块版本，以及发布前应该跑哪些检查。
 
 ## 什么时候改顶层
 
 适合放在顶层的改动：
 
-- 跨仓库 contract、工作流、release checklist 或 doctor 规则。
+- 跨仓库文件约定、工作流、发布检查清单或 doctor 规则。
 - 子模块 gitlink，也就是锁定 `market-data-platform`、`cross-sectional-trees`、`quant-execution-engine` 的具体提交。
 - 顶层 `docs/` 中的协作说明和版本组合记录。
 - 只依赖公开 CLI 或文档化文件输出的轻量检查脚本。
@@ -14,13 +14,13 @@
 不适合放在顶层的改动：
 
 - 子项目内部架构、依赖、lint、type check 或业务参数。
-- 市场数据本体、研究输出、provider cache、交易审计日志。
+- 市场数据本体、研究输出、provider 缓存、交易审计日志。
 - 直接导入子模块内部 Python 包的顶层脚本。
 - 自动绕过执行引擎门禁的模拟盘或实盘操作。
 
 ## 子模块版本锁定
 
-本仓库通过 Git submodule 固定三个子项目的提交版本。子项目仍在各自目录里独立开发、测试和发布；顶层仓库记录的是“这几个提交可以一起使用”的组合。
+本仓库通过 Git submodule 固定三个子项目的提交版本。子项目仍在各自目录里独立开发、测试和发布；顶层仓库记录这几个提交可以一起使用的组合。
 
 日常开发通常在子项目目录中完成：
 
@@ -51,7 +51,7 @@ git push
 ```bash
 python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
-python -m unittest discover -s tests
+uv run --with pytest python -m pytest tests -q
 python scripts/run_quality_checks.py --profile hard
 ```
 
@@ -72,9 +72,9 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行 manifest 中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
+配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
 
-检查分为 hard、advisory 和 manual 三类。仓库级 ownership、secret scan、依赖审计 baseline
+检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
 以及执行引擎迁移后的 mypy advisory 见 [quality-governance.md](quality-governance.md)。
 
 ## 常见术语

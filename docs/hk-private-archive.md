@@ -2,7 +2,7 @@
 
 > status: superseded
 > owner: workspace
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: archive/hk/README.md
 

@@ -1,8 +1,8 @@
-# 港股 legacy surface inventory
+# 港股兼容面清单
 
 > status: superseded
 > owner: workspace
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: archive/hk/README.md
 
@@ -14,10 +14,10 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 
 | 清单 | 用途 |
 | --- | --- |
-| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | public demo split、archive、delete gate 和 restore-sensitive surface |
-| [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | private paused-maintenance legacy archive staging 和 removal gate |
-| [hk-research-lane-inventory.json](hk-research-lane-inventory.json) | 独立港股研究 lane 候选、迁移动作和保留边界 |
-| [deprecations.md](deprecations.md) | deprecated 入口 owner、replacement、milestone 和 removal gate |
+| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | 公开演示拆分、归档、删除门禁和 restore-sensitive surface |
+| [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | 私有 paused-maintenance legacy archive staging 和删除门禁 |
+| [hk-research-lane-inventory.json](hk-research-lane-inventory.json) | 独立港股研究线候选、迁移动作和保留边界 |
+| [deprecations.md](deprecations.md) | deprecated 入口 owner、replacement、milestone 和删除门禁 |
 
 ## 快速分类
 
@@ -25,7 +25,7 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 | --- | --- | --- |
 | `shared_active` | 多市场 contract、执行或恢复能力仍需要 | 保留并继续跑 focused tests |
 | `frozen_compatibility` | 港股复现或明确跟踪需求仍可能调用 | 保留入口，标记 deprecated，不扩展 A 股主线 |
-| `archived_provenance` | 只用于解释历史研究和 release | 通过 archive record 或 manifest 追溯 |
+| `archived_provenance` | 只用于解释历史研究和 release | 通过归档记录或 manifest 追溯 |
 | `retire_after_audit` | 已有替代入口，但仍需下游使用审计 | 审计和回滚证据完成后在 follow-up change 删除 |
 
 ## 删除门禁
@@ -41,6 +41,6 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 - owning repo focused tests；
 - 需要公开 demo 承接时的 public split evidence。
 
-港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究 lane；仓库中仍保留的
+港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究线；仓库中仍保留的
 港股配置、历史笔记和工具入口只作为 `archived_provenance` 或 `frozen_compatibility`
 兼容面存在。

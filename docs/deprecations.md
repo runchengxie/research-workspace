@@ -1,13 +1,10 @@
-# Deprecations
+# 废弃入口登记
 
-This register tracks deprecated compatibility surfaces that remain in active
-repositories. It does not authorize deletion by itself; removal requires the
-evidence listed in [`deprecations.yml`](deprecations.yml) and the split gates in
-[`hk-public-split-manifest.yml`](hk-public-split-manifest.yml).
+本页记录仍留在活跃仓库中的废弃兼容入口。登记记录本身不授权删除；删除前必须满足 [`deprecations.yml`](deprecations.yml) 中的证据要求，并通过 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 中的拆分门禁。
 
-## Current Records
+## 当前记录
 
-| Entrypoint | Owner | Replacement | Status | Target milestone |
+| 入口 | 负责仓库 | 替代入口 | 状态 | 目标里程碑 |
 | --- | --- | --- | --- | --- |
 | `hkdata` | `market-data-platform` | `marketdata` | blocked pending audit | two releases after zero usage |
 | `src/hk_data_platform/*` | `market-data-platform` | `market_data_platform` public modules | blocked pending audit | two releases after clean import audit |
@@ -17,20 +14,16 @@ evidence listed in [`deprecations.yml`](deprecations.yml) and the split gates in
 | `cstree alloc-hk` | `cross-sectional-trees` | `cstree alloc` plus `cstree export-targets` | blocked pending audit | after restore drill and consumer audit |
 | HK historical configs | `cross-sectional-trees` | `configs/presets/hk.yml` plus archive evidence | follow-up required | after archive manifest remains current |
 
-## Removal Gate
+## 删除门禁
 
-Do not mark a deprecation as removal-ready unless all required evidence exists:
+只有下列证据齐全后，才能把废弃入口标记为可进入删除评审：
 
-- downstream or repo-local consumer audit;
-- replacement documentation;
-- rollback path;
-- focused tests in the owning repository;
-- restore evidence when the surface is restore-sensitive.
+- 下游或仓库内使用审计；
+- 替代入口文档；
+- 回滚路径；
+- 负责仓库中的 focused tests；
+- restore-sensitive 入口需要恢复证据。
 
-Actual deletion must happen in a follow-up change with focused verification in
-the owning repo.
+实际删除必须放在后续变更中完成，并在负责仓库内做 focused verification。
 
-Private legacy archive staging does not authorize deletion. Before a removal
-review, run `python scripts/hk_archive_gate.py --check --format json` and retain
-the private staging, restore-drill, consumer-audit, source-tag, and zero-usage
-release-window evidence linked from [`archive/hk/README.md`](archive/hk/README.md).
+私有 legacy archive staging 不授权删除。删除评审前，运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的私有 staging、restore drill、consumer audit、source tag 和 zero-usage release window 证据。

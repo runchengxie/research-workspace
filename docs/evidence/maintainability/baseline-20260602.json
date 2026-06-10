@@ -10,12 +10,12 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 39,
-      "python_loc": 5210,
+      "python_loc": 5265,
       "hk_related_file_count": 21,
       "large_files": [
         {
           "path": "scripts/a_share_readiness.py",
-          "loc": 666,
+          "loc": 701,
           "hk_related": false
         }
       ],
@@ -29,14 +29,14 @@
         {
           "path": "scripts/a_share_readiness.py",
           "name": "build_readiness_report",
-          "line_count": 89,
+          "line_count": 90,
           "complexity": 8
         },
         {
           "path": "scripts/a_share_readiness.py",
           "name": "_contract_checks",
-          "line_count": 86,
-          "complexity": 16
+          "line_count": 88,
+          "complexity": 17
         },
         {
           "path": "scripts/workspace_doctor.py",
@@ -73,8 +73,8 @@
         {
           "path": "scripts/a_share_readiness.py",
           "name": "_contract_checks",
-          "line_count": 86,
-          "complexity": 16
+          "line_count": 88,
+          "complexity": 17
         },
         {
           "path": "scripts/run_submodule_checks.py",
@@ -124,8 +124,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 159,
-      "python_loc": 63503,
+      "python_file_count": 160,
+      "python_loc": 63892,
       "hk_related_file_count": 88,
       "large_files": [
         {
@@ -150,7 +150,7 @@
         },
         {
           "path": "src/market_data_platform/cli.py",
-          "loc": 1616,
+          "loc": 1627,
           "hk_related": false
         },
         {
@@ -165,7 +165,7 @@
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 1459,
+          "loc": 1502,
           "hk_related": false
         },
         {
@@ -673,6 +673,7 @@
         "mypy_present": false
       },
       "script_inventory": [
+        "scripts/build_a_share_tushare_sw2021_industry_changes.py",
         "scripts/dev/architecture_governance.py",
         "scripts/dev/compatibility_governance.py",
         "scripts/dev/maintainability_baseline.json",
@@ -685,18 +686,23 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 201,
-      "python_loc": 59389,
+      "python_file_count": 239,
+      "python_loc": 71387,
       "hk_related_file_count": 25,
       "large_files": [
         {
+          "path": "src/cstree/execution_sim.py",
+          "loc": 2329,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_pipeline_e2e.py",
-          "loc": 1856,
+          "loc": 1857,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/eval.py",
-          "loc": 1393,
+          "loc": 1570,
           "hk_related": false
         },
         {
@@ -706,12 +712,12 @@
         },
         {
           "path": "src/cstree/exposure.py",
-          "loc": 1165,
+          "loc": 1161,
           "hk_related": false
         },
         {
           "path": "src/cstree/commands/tune.py",
-          "loc": 1059,
+          "loc": 1064,
           "hk_related": false
         },
         {
@@ -721,17 +727,27 @@
         },
         {
           "path": "src/cstree/pipeline/config.py",
-          "loc": 955,
+          "loc": 980,
           "hk_related": false
         },
         {
           "path": "tests/test_pipeline_filters_backtest.py",
-          "loc": 924,
+          "loc": 953,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/backtest_tearsheet.py",
+          "loc": 952,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/train_eval_stage.py",
-          "loc": 905,
+          "loc": 943,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/research/promotion_gate.py",
+          "loc": 940,
           "hk_related": false
         },
         {
@@ -741,17 +757,12 @@
         },
         {
           "path": "tests/test_summarize_runs.py",
-          "loc": 870,
+          "loc": 869,
           "hk_related": false
         },
         {
-          "path": "src/cstree/execution_sim.py",
-          "loc": 857,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/research/promotion_gate.py",
-          "loc": 842,
+          "path": "src/cstree/portfolio.py",
+          "loc": 852,
           "hk_related": false
         },
         {
@@ -760,18 +771,38 @@
           "hk_related": false
         },
         {
+          "path": "src/cstree/pipeline/panel_loader.py",
+          "loc": 808,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/a_share_live_executable_oos_topk_probe.py",
+          "loc": 798,
+          "hk_related": false
+        },
+        {
           "path": "src/cstree/research/hk_financial_details.py",
           "loc": 798,
           "hk_related": true
         },
         {
-          "path": "src/cstree/pipeline/backtest_tearsheet.py",
-          "loc": 787,
+          "path": "src/cstree/commands/run_grid.py",
+          "loc": 782,
           "hk_related": false
         },
         {
-          "path": "src/cstree/commands/run_grid.py",
-          "loc": 775,
+          "path": "src/cstree/execution.py",
+          "loc": 781,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/output_artifacts.py",
+          "loc": 763,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "loc": 719,
           "hk_related": false
         },
         {
@@ -783,56 +814,20 @@
           "path": "src/cstree/research/feature_evidence.py",
           "loc": 693,
           "hk_related": false
-        },
-        {
-          "path": "tests/test_backtest.py",
-          "loc": 692,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 691,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/commands/linear_sweep.py",
-          "loc": 673,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/execution.py",
-          "loc": 663,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "loc": 653,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/cli/liveops.py",
-          "loc": 632,
-          "hk_related": false
         }
       ],
       "long_functions": [
         {
-          "path": "src/cstree/pipeline/train_eval_stage.py",
-          "name": "_run_train_eval_stage_impl",
-          "line_count": 353,
-          "complexity": 29
-        },
-        {
-          "path": "src/cstree/exposure.py",
-          "name": "compute_backtest_exposure_analysis",
-          "line_count": 338,
-          "complexity": 40
-        },
-        {
           "path": "src/cstree/commands/run_grid.py",
-          "name": "main",
-          "line_count": 336,
+          "name": "run",
+          "line_count": 332,
           "complexity": 81
+        },
+        {
+          "path": "src/cstree/pipeline/runner.py",
+          "name": "prepare_research_context",
+          "line_count": 328,
+          "complexity": 9
         },
         {
           "path": "src/cstree/commands/linear_sweep.py",
@@ -847,28 +842,10 @@
           "complexity": 39
         },
         {
-          "path": "src/cstree/pipeline/runner.py",
-          "name": "prepare_research_context",
-          "line_count": 315,
-          "complexity": 9
-        },
-        {
           "path": "src/cstree/pipeline/eval.py",
           "name": "_evaluate_walk_forward_window",
           "line_count": 293,
           "complexity": 29
-        },
-        {
-          "path": "src/cstree/backtesting/engine.py",
-          "name": "backtest_topk",
-          "line_count": 284,
-          "complexity": 22
-        },
-        {
-          "path": "src/cstree/portfolio.py",
-          "name": "build_positions_by_rebalance",
-          "line_count": 266,
-          "complexity": 46
         },
         {
           "path": "src/cstree/liveops/holdings.py",
@@ -877,22 +854,28 @@
           "complexity": 56
         },
         {
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "backtest_topk",
+          "line_count": 237,
+          "complexity": 28
+        },
+        {
           "path": "src/cstree/pipeline/config_eval.py",
           "name": "normalize_eval_settings",
           "line_count": 234,
           "complexity": 52
         },
         {
+          "path": "src/cstree/pipeline/live.py",
+          "name": "_prepare_live_snapshot",
+          "line_count": 234,
+          "complexity": 26
+        },
+        {
           "path": "src/cstree/research/cpcv.py",
           "name": "_evaluate_split",
           "line_count": 234,
           "complexity": 31
-        },
-        {
-          "path": "src/cstree/pipeline/live.py",
-          "name": "_prepare_live_snapshot",
-          "line_count": 229,
-          "complexity": 25
         },
         {
           "path": "src/cstree/promotion_sidecar.py",
@@ -905,6 +888,30 @@
           "name": "test_pipeline_backtest_outputs_style_and_industry_exposure_artifacts",
           "line_count": 224,
           "complexity": 3
+        },
+        {
+          "path": "tests/test_cli_research.py",
+          "name": "test_cli_parses_research_commands",
+          "line_count": 223,
+          "complexity": 1
+        },
+        {
+          "path": "src/cstree/pipeline/feature_dataset.py",
+          "name": "_prepare_feature_dataset",
+          "line_count": 216,
+          "complexity": 25
+        },
+        {
+          "path": "src/cstree/execution_sim.py",
+          "name": "simulate_execution_adjusted_nav",
+          "line_count": 213,
+          "complexity": 30
+        },
+        {
+          "path": "src/cstree/pipeline/dataset_sampling.py",
+          "name": "build_modeling_dataset",
+          "line_count": 210,
+          "complexity": 27
         },
         {
           "path": "src/cstree/liveops/alloc_hk_allocation.py",
@@ -925,12 +932,6 @@
           "complexity": 20
         },
         {
-          "path": "tests/test_cli_research.py",
-          "name": "test_cli_parses_research_commands",
-          "line_count": 201,
-          "complexity": 1
-        },
-        {
           "path": "tests/test_pipeline_filters_file_derived.py",
           "name": "test_pipeline_hk_file_fundamentals_supports_trailing_stability_features",
           "line_count": 201,
@@ -943,16 +944,16 @@
           "complexity": 31
         },
         {
-          "path": "src/cstree/pipeline/feature_dataset.py",
-          "name": "_prepare_feature_dataset",
-          "line_count": 193,
-          "complexity": 23
-        },
-        {
           "path": "src/cstree/pipeline/final_oos_stage.py",
           "name": "run_final_oos_stage",
-          "line_count": 191,
+          "line_count": 194,
           "complexity": 14
+        },
+        {
+          "path": "src/cstree/pipeline/panel_loader.py",
+          "name": "_load_research_panel",
+          "line_count": 193,
+          "complexity": 3
         },
         {
           "path": "src/cstree/research/construction_grid.py",
@@ -970,8 +971,8 @@
       "complexity_hotspots": [
         {
           "path": "src/cstree/commands/run_grid.py",
-          "name": "main",
-          "line_count": 336,
+          "name": "run",
+          "line_count": 332,
           "complexity": 81
         },
         {
@@ -985,12 +986,6 @@
           "name": "normalize_eval_settings",
           "line_count": 234,
           "complexity": 52
-        },
-        {
-          "path": "src/cstree/portfolio.py",
-          "name": "build_positions_by_rebalance",
-          "line_count": 266,
-          "complexity": 46
         },
         {
           "path": "src/cstree/liveops/alloc_hk_allocation.py",
@@ -1017,12 +1012,6 @@
           "complexity": 41
         },
         {
-          "path": "src/cstree/exposure.py",
-          "name": "compute_backtest_exposure_analysis",
-          "line_count": 338,
-          "complexity": 40
-        },
-        {
           "path": "src/cstree/pipeline/preflight.py",
           "name": "resolve_effective_data_inputs",
           "line_count": 154,
@@ -1039,6 +1028,12 @@
           "name": "_path_metric_row",
           "line_count": 100,
           "complexity": 39
+        },
+        {
+          "path": "scripts/a_share_500k_round_lot_probe.py",
+          "name": "simulate_variant",
+          "line_count": 174,
+          "complexity": 37
         },
         {
           "path": "src/cstree/pipeline/output_summary_metadata.py",
@@ -1071,16 +1066,22 @@
           "complexity": 31
         },
         {
+          "path": "src/cstree/execution_sim.py",
+          "name": "simulate_execution_adjusted_nav",
+          "line_count": 213,
+          "complexity": 30
+        },
+        {
           "path": "src/cstree/pipeline/eval.py",
           "name": "_evaluate_walk_forward_window",
           "line_count": 293,
           "complexity": 29
         },
         {
-          "path": "src/cstree/pipeline/train_eval_stage.py",
-          "name": "_run_train_eval_stage_impl",
-          "line_count": 353,
-          "complexity": 29
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "backtest_topk",
+          "line_count": 237,
+          "complexity": 28
         },
         {
           "path": "src/cstree/liveops/alloc_hk.py",
@@ -1107,15 +1108,15 @@
           "complexity": 27
         },
         {
-          "path": "src/cstree/release_tools/release_runs.py",
-          "name": "main",
-          "line_count": 173,
+          "path": "src/cstree/pipeline/dataset_sampling.py",
+          "name": "build_modeling_dataset",
+          "line_count": 210,
           "complexity": 27
         },
         {
-          "path": "src/cstree/research/feature_evidence.py",
-          "name": "permutation_active_return_importance",
-          "line_count": 80,
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "main",
+          "line_count": 173,
           "complexity": 27
         }
       ],
@@ -1136,7 +1137,8 @@
           "artifacts",
           "build",
           "configs/local",
-          "dist"
+          "dist",
+          "docs/archive"
         ],
         "pyright_include": [
           "src/cstree/pipeline/contracts.py",
@@ -1164,15 +1166,26 @@
       },
       "script_inventory": [
         "scripts/README.md",
+        "scripts/a_share_500k_round_lot_probe.py",
+        "scripts/a_share_live_executable_oos_topk_probe.py",
+        "scripts/a_share_live_executable_variant_top10_probe.py",
+        "scripts/a_share_live_industry_cap_top10_probe.py",
+        "scripts/a_share_live_risk_control_grid.py",
+        "scripts/a_share_small_capital_robustness.py",
+        "scripts/a_share_turnover_source_diagnostics.py",
         "scripts/dev/check_c901_debt.py",
+        "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
         "scripts/dev/install_git_hooks.sh",
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/run_tests.sh",
         "scripts/dev/test_impact.py",
+        "scripts/generate_a_share_formal_risk_grid_configs.py",
+        "scripts/generate_a_share_live15_ablation_configs.py",
         "scripts/internal/export_repo_source.py",
         "scripts/internal/freeze_hk_research_outputs.py",
-        "scripts/internal/package_repo.sh"
+        "scripts/internal/package_repo.sh",
+        "scripts/run_a_share_formal_risk_grid.py"
       ]
     },
     {

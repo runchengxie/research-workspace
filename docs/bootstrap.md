@@ -16,7 +16,7 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
-普通 zip/source snapshot 没有 Git 子模块提交信息，也通常没有子模块内容；它适合阅读顶层文档，
+普通 zip 或 source snapshot 没有 Git 子模块提交信息，也通常没有子模块内容；它适合阅读顶层文档，
 不能作为完整测试、版本矩阵或文档链接检查的运行目录。
 
 确认子模块指针和本地状态：
@@ -51,7 +51,7 @@ cd ..
 
 中国香港市场 tick-depth 已完全由 `market-data-platform` 承载。日常运行使用
 `marketdata rqdata hk-depth -- ...`，或安装 `market-data-platform` 后使用其提供的
-`rqdata-hk-depth ...` 命令。工作区不再追踪 `rqdata-hk-depth-snapshots` 子模块，也不再承诺
+`rqdata-hk-depth ...` 命令。工作区已停止追踪 `rqdata-hk-depth-snapshots` 子模块，也不承诺
 `rqdata_tick_data.*` 旧 Python import 路径。
 
 如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。
@@ -93,10 +93,10 @@ $DATA_PLATFORM_ROOT/
 ```bash
 python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
-python -m unittest discover -s tests
+uv run --with pytest python -m pytest tests -q
 ```
 
-`smoke_contracts.py` 只运行无写入、无真实下单的命令行和文件约定检查。任何需要凭证、网络、下载数据或提交订单的流程，都必须在对应子项目内显式执行。
+`smoke_contracts.py` 只运行无写入、无真实下单的命令行和文件约定检查。任何需要凭证、网络、下载数据或提交订单的流程，都必须在对应子项目内显式执行。顶层测试包含 pytest 风格函数和 fixture，完整测试入口使用 `pytest`。
 
 ## 子项目委托检查
 
@@ -109,4 +109,4 @@ python scripts/run_submodule_checks.py --profile lint --submodule cross-sectiona
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行 manifest 中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
+配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。

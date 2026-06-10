@@ -2,7 +2,7 @@
 
 > status: archived
 > owner: market-data-platform
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: ../README.md
 
@@ -35,7 +35,7 @@ metadata/dataset_registry.hk.csv
 metadata/dataset_registry.pre-freeze.csv
 ```
 
-## Release Package
+## 发布包
 
 冻结快照已经聚合为单文件归档，并附带便于单独审阅的 sidecar 元数据：
 

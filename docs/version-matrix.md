@@ -14,10 +14,10 @@ python scripts/print_version_matrix.py
 
 | component | commit |
 | --- | --- |
-| workspace | `3039a39` + local changes |
-| market-data-platform | `ca765df` |
-| cross-sectional-trees | `6773a1f` |
-| quant-execution-engine | `3c9903f` |
+| workspace | `662721c` + local changes |
+| market-data-platform | `036a56e` |
+| cross-sectional-trees | `7e07918` |
+| quant-execution-engine | `726bacd` |
 
 如果脚本报告 `not initialized`，先运行：
 
@@ -25,7 +25,7 @@ python scripts/print_version_matrix.py
 git submodule update --init --recursive
 ```
 
-普通 zip/source snapshot 没有 `.git` 元数据，不能生成 commit matrix；这种场景只适合阅读顶层文档，不能作为版本锁定或完整链接测试依据。
+普通 zip 或 source snapshot 没有 `.git` 元数据，不能生成 commit matrix；这种场景只适合阅读顶层文档，不能作为版本锁定或完整链接测试依据。
 
 ## 已验证组合
 

@@ -1,40 +1,33 @@
-# Architecture
+# 架构边界
 
-This workspace coordinates the handoff from data platform to strategy research
-to trading execution:
+本工作区协调数据平台、策略研究和交易执行之间的文件交接：
 
 ```text
 market-data-platform
-  produces and publishes data assets
+  生产并发布数据资产
         |
         v
 cross-sectional-trees
-  consumes data assets and exports targets.json
+  只读消费数据资产，并导出 targets.json
         |
         v
 quant-execution-engine
-  parses targets.json, dry-runs, gates risk, and executes under broker controls
+  解析 targets.json，执行 dry-run、风控门禁和受控券商执行
 ```
 
-## Code Boundaries
+## 代码边界
 
-- Active code: current A-share data, research, and execution flows plus shared
-  multi-market contracts.
-- Compatibility code: deprecated HK compatibility entrypoints that remain until
-  consumer audit, replacement docs, rollback notes, restore evidence, and focused
-  tests are complete.
-- Archive/provenance: dated handoffs, freeze records, restore drill evidence, and
-  historical research context.
-- Demo staging: clean-room synthetic public demo under `demo/`, independent from
-  the active workspace and not a submodule or release gate.
-- Private runtime: provider adapters, broker adapters, credentials, local data roots,
-  and execution audit logs. These do not enter the public demo.
+- 活跃代码：当前 A 股数据、研究、执行流程，以及多市场共享文件约定。
+- 兼容代码：保留中的港股 deprecated surface。删除前需要完成 consumer audit、replacement docs、rollback notes、restore evidence 和 focused tests。
+- 归档和来源说明：带日期的交接记录、冻结记录、恢复演练证据和历史研究背景。
+- 演示仓库 staging：`demo/` 下的 clean-room synthetic public demo 模板，独立于活跃工作区，不作为子模块或发布门禁。
+- 私有运行环境：provider adapter、broker adapter、凭证、本地数据根目录和执行审计日志。这些内容不进入公开演示仓库。
 
-## Governance Entrypoints
+## 治理入口
 
-- Deprecations: [docs/deprecations.md](docs/deprecations.md)
-- HK public split: [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml)
-- Script lifecycle: [docs/script-lifecycle.yml](docs/script-lifecycle.yml)
-- Quality coverage: [docs/quality-coverage-governance.yml](docs/quality-coverage-governance.yml)
-- Refactor roadmap: [docs/maintainability-refactor-roadmap.yml](docs/maintainability-refactor-roadmap.yml)
-- Current contracts: [docs/contracts.md](docs/contracts.md)
+- 废弃入口：[docs/deprecations.md](docs/deprecations.md)
+- 港股公开拆分：[docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml)
+- 脚本生命周期：[docs/script-lifecycle.yml](docs/script-lifecycle.yml)
+- 质量覆盖和排除项：[docs/quality-coverage-governance.yml](docs/quality-coverage-governance.yml)
+- 重构路线图：[docs/maintainability-refactor-roadmap.yml](docs/maintainability-refactor-roadmap.yml)
+- 当前文件约定：[docs/contracts.md](docs/contracts.md)

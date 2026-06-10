@@ -1,15 +1,14 @@
 # 工作区质量治理矩阵
 
-顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、
-pytest、coverage 和 optional dependency 配置；顶层 Ruff 只检查 `scripts/` 与 `tests/`。
+顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 只检查 `scripts/` 与 `tests/`。
 
 ## 检查分类
 
-| 仓库 | Hard gate | Advisory | Manual / release review |
+| 仓库 | 硬门禁 | 建议项 | 人工或发布复核 |
 | --- | --- | --- | --- |
-| superproject | Ruff、Ruff format、secret scan、顶层 pytest、doctor、contract smoke | `pip-audit`、`deptry`、选择性 coverage ratchet | 港股公开 demo staging scan、release checklist |
+| superproject | Ruff、Ruff format、secret scan、顶层 pytest、doctor、contract smoke | `pip-audit`、`deptry`、选择性 coverage ratchet | 港股公开演示 staging scan、发布检查清单 |
 | `market-data-platform` | Ruff、Ruff format、Pyright、pytest | `pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
-| `cross-sectional-trees` | repo 自有 lint、format、Pyright、pytest | `pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、CPCV、turnover/cost、capacity 复核 |
+| `cross-sectional-trees` | 仓库自有 lint、format、Pyright、pytest | `pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、CPCV、turnover/cost、capacity 复核 |
 | `quant-execution-engine` | Ruff、Ruff format、Pyright、pytest | mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
 顶层委托配置是 `scripts/submodule_checks.json`。`type` 始终表示各仓库当前 hard type gate；
@@ -28,13 +27,9 @@ python scripts/run_submodule_checks.py --profile mypy_advisory \
   --submodule quant-execution-engine
 ```
 
-公开 demo 发布前必须扫描 staging tree。涉及 provider 或券商凭证读取逻辑时，还应对改动所属
-子仓库执行 credential review；credential leak 属于阻塞问题，不按 advisory 处理。
+公开演示仓库发布前必须扫描 staging tree。涉及 provider 或券商凭证读取逻辑时，还应对改动所属子仓库执行 credential review；credential leak 属于阻塞问题，不按 advisory 处理。
 
-执行引擎至少保留一个发布周期的 mypy bake period。下一次 release review 只有在 mypy 没有
-独有阻塞发现、Pyright warning 分类保持稳定时，才可评估移除 advisory。若需要回滚，将
-`scripts/submodule_checks.json` 中执行引擎的 `type` 恢复为 mypy；已完成的 SDK 边界窄化
-修复继续保留。
+执行引擎至少保留一个发布周期的 mypy 观察期。下一次 release review 中，如果 mypy 没有独有阻塞发现，且 Pyright warning 分类保持稳定，可以评估移除 advisory。若需要回滚，将 `scripts/submodule_checks.json` 中执行引擎的 `type` 恢复为 mypy；已完成的 SDK 边界窄化修复继续保留。
 
 ## Advisory 依赖检查
 
@@ -47,6 +42,6 @@ uvx bandit -q -r src -lll
 ```
 
 每个仓库单独维护 baseline 或 allowlist。provider SDK、券商 SDK、UI extra、动态导入和仅在
-本地操作环境安装的依赖必须先标注 owner、用途和复核命令，再决定是否晋升 hard gate。
+本地操作环境安装的依赖必须先标注 owner、用途和复核命令，再决定是否晋升硬门禁。
 coverage 同样按 contract、manifest、target export、risk、execution state 等高风险模块逐步
 ratchet，不设置跨仓库统一阈值。

@@ -2,7 +2,7 @@
 
 > status: archived
 > owner: market-data-platform
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: ../README.md
 

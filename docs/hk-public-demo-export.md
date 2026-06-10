@@ -1,8 +1,8 @@
-# 港股公开 demo clean-room export
+# 港股公开演示仓库 clean-room export
 
 > status: superseded
 > owner: workspace
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: archive/hk/README.md
 
@@ -21,7 +21,7 @@ maintenance: paused
 发布必须由维护者在检查 staged tree 后显式执行。本工作区脚本不会创建远端仓库或 push，
 也不会把 demo 加入 submodule、CI、release matrix、version matrix 或日常检查。
 
-## Staging model
+## Staging 模型
 
 `demo/hk-public-demo-template-v1/` 只放 synthetic fixture、public-safe demo 代码、独立 docs、
 archive placeholder、最小 CI 和质量配置。不要把真实港股业务实现原样搬入 demo。

@@ -311,6 +311,30 @@
       "next_action": "split simulation model and report if simulation changes resume"
     },
     {
+      "path": "cross-sectional-trees/src/cstree/portfolio.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "portfolio construction debt entered the refreshed baseline after A-share sizing work expanded",
+      "next_action": "split sizing, constraints, and reporting when portfolio construction changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/panel_loader.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "platform asset loading debt entered the refreshed baseline after A-share panel support expanded",
+      "next_action": "split path resolution, validation, and load orchestration when panel loading changes resume"
+    },
+    {
+      "path": "cross-sectional-trees/scripts/a_share_live_executable_oos_topk_probe.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "A-share executable OOS probe is tracked as research support rather than reusable library code",
+      "next_action": "archive or delete after formal OOS evidence supersedes the probe"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/backtesting/engine.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "backtest engine debt entered the refreshed baseline after backtesting support expanded",
+      "next_action": "split cost, fill, and accounting helpers when backtest engine changes resume"
+    },
+    {
       "path": "cross-sectional-trees/tests/test_pipeline_filters_file_derived.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "large derived-feature scenario test file is tracked but not active production code",

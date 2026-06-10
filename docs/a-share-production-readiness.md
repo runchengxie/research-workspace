@@ -1,8 +1,8 @@
-# A 股生产 readiness 与长窗口扩展
+# A 股生产就绪度与长窗口扩展
 
 > status: superseded
 > owner: workspace
-> last_verified: 2026-06-04
+> last_verified: 2026-06-10
 > source_of_truth: no
 > superseded_by: data-transition-playbook.md#a-股-readiness-分层
 
@@ -11,7 +11,7 @@
 
 ## 当前口径
 
-顶层 readiness 仍分四档：
+顶层就绪度仍分四档：
 
 | 状态 | 含义 |
 | --- | --- |
