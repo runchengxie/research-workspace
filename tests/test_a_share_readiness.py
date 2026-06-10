@@ -21,9 +21,17 @@ def _write_json(path: Path, payload: dict) -> Path:
     return path
 
 
-def _build_contract(root: Path, *, legacy_alias: bool = False) -> None:
+def _build_contract(
+    root: Path,
+    *,
+    legacy_alias: bool = False,
+    include_complete_pit_assets: bool = True,
+) -> None:
     assets = {}
-    for asset_key in a_share_readiness.BASELINE_ASSETS:
+    asset_keys = list(a_share_readiness.BASELINE_ASSETS)
+    if include_complete_pit_assets:
+        asset_keys.extend(a_share_readiness.COMPLETE_PIT_ASSETS)
+    for asset_key in asset_keys:
         assets[asset_key] = {
             "exists": True,
             "manifest_path": f"/data/{asset_key}/manifest.yml",
@@ -139,6 +147,18 @@ def test_readiness_reports_missing_evidence(tmp_path: Path) -> None:
     complete_data = report["levels"]["complete_pit_research_data"]
     assert "profile:pit_fundamentals" in complete_data["failed_checks"]
     assert "profile:historical_industry" in complete_data["failed_checks"]
+
+
+def test_readiness_requires_canonical_pit_fundamentals_assets(tmp_path: Path) -> None:
+    _build_contract(tmp_path, include_complete_pit_assets=False)
+    evidence = _build_evidence(tmp_path)
+
+    report = a_share_readiness.build_readiness_report(tmp_path, evidence_manifest=evidence)
+
+    complete_data = report["levels"]["complete_pit_research_data"]
+    assert complete_data["passed"] is False
+    assert "asset:pit_fundamentals" in complete_data["failed_checks"]
+    assert "asset:industry_changes" in complete_data["failed_checks"]
 
 
 def test_readiness_rejects_research_window_before_required_assets(tmp_path: Path) -> None:

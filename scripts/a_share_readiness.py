@@ -25,6 +25,10 @@ BASELINE_ASSETS = (
     "universe_symbols",
     "universe_meta",
 )
+COMPLETE_PIT_ASSETS = (
+    "pit_fundamentals",
+    "industry_changes",
+)
 RESEARCH_REPORT_KEYS = (
     "benchmark_ladder_report",
     "cpcv_report",
@@ -261,7 +265,8 @@ def _contract_checks(artifacts_root: Path) -> tuple[list[dict[str, Any]], dict[s
     assets = _mapping(contract.get("assets"))
     starts: list[str] = []
     ends: list[str] = []
-    for asset_key in BASELINE_ASSETS:
+    all_asset_keys = (*BASELINE_ASSETS, *COMPLETE_PIT_ASSETS)
+    for asset_key in all_asset_keys:
         asset = _mapping(assets.get(asset_key))
         manifest = _mapping(asset.get("manifest"))
         start_date = _manifest_date(asset, "start")
@@ -283,18 +288,19 @@ def _contract_checks(artifacts_root: Path) -> tuple[list[dict[str, Any]], dict[s
             and bool(asset.get("manifest_path"))
             and str(manifest.get("status") or "") == "completed"
         )
-        checks.append(
-            _check(
-                f"asset:{asset_key}",
-                passed=passed,
-                message=(
-                    f"{asset_key} asset and completed manifest are present"
-                    if passed
-                    else f"{asset_key} asset or completed manifest is missing"
-                ),
-                details=state["assets"][asset_key],
+        if asset_key in BASELINE_ASSETS:
+            checks.append(
+                _check(
+                    f"asset:{asset_key}",
+                    passed=passed,
+                    message=(
+                        f"{asset_key} asset and completed manifest are present"
+                        if passed
+                        else f"{asset_key} asset or completed manifest is missing"
+                    ),
+                    details=state["assets"][asset_key],
+                )
             )
-        )
     state["effective_start_date"] = max(starts) if starts else None
     state["effective_end_date"] = min(ends) if ends else None
     return checks, state
@@ -425,6 +431,34 @@ def _window_check(contract_state: Mapping[str, Any], profile: Mapping[str, Any])
             "effective_end_date": contract_state.get("effective_end_date"),
         },
     )
+
+
+def _contract_asset_checks(
+    contract_state: Mapping[str, Any],
+    asset_keys: tuple[str, ...],
+) -> list[dict[str, Any]]:
+    assets = _mapping(contract_state.get("assets"))
+    checks: list[dict[str, Any]] = []
+    for asset_key in asset_keys:
+        asset = _mapping(assets.get(asset_key))
+        passed = (
+            bool(asset.get("exists"))
+            and bool(asset.get("manifest_path"))
+            and str(asset.get("manifest_status") or "") == "completed"
+        )
+        checks.append(
+            _check(
+                f"asset:{asset_key}",
+                passed=passed,
+                message=(
+                    f"{asset_key} canonical asset and completed manifest are present"
+                    if passed
+                    else f"{asset_key} canonical asset or completed manifest is missing"
+                ),
+                details=asset,
+            )
+        )
+    return checks
 
 
 def _profile_checks(
@@ -569,6 +603,7 @@ def build_readiness_report(
             ),
         ),
         _window_check(contract_state, profile),
+        *_contract_asset_checks(contract_state, COMPLETE_PIT_ASSETS),
         *profile_checks[:3],
     ]
     strategy_checks = [
