@@ -2,7 +2,7 @@
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
     "broad_exclude_register_max": 7,
-    "per_file_ignore_register_max": 9,
+    "per_file_ignore_register_max": 3,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
   "repos": [
@@ -208,66 +208,6 @@
       "reason": "tune command remains a large CLI orchestration surface",
       "next_action": "split command parser, runner, and report helpers",
       "review_milestone": "after tune command refactor"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/liveops/alloc_hk_allocation.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "deprecated HK allocation compatibility code is pending split/archive decisions",
-      "next_action": "archive or remove after alloc-hk consumer audit completes",
-      "review_milestone": "after HK split follow-up audit"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/liveops/holdings.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "holdings logic still mixes parsing, normalization, and reporting",
-      "next_action": "split holdings parsing and reporting helpers",
-      "review_milestone": "after liveops target export cleanup"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/pipeline/config_eval.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "config evaluation compatibility logic remains complex",
-      "next_action": "split config model validation from compatibility translation",
-      "review_milestone": "after pipeline config split"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/pipeline/feature_engineering.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "feature engineering still combines feature planning, transforms, and fallbacks",
-      "next_action": "split feature plan models and transform helpers",
-      "review_milestone": "after feature pipeline cleanup"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/pipeline/preflight.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "preflight checks remain broad orchestration code",
-      "next_action": "split rule checks and renderers",
-      "review_milestone": "after pipeline preflight cleanup"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/portfolio.py",
-      "tool": "ruff",
-      "rules": ["C901"],
-      "owner": "cross-sectional-trees",
-      "reason": "portfolio construction math and guardrails remain in one module",
-      "next_action": "split constraints, sizing, and reporting helpers",
-      "review_milestone": "after portfolio construction cleanup"
     }
   ]
 }

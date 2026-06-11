@@ -628,7 +628,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 239,
-      "python_loc": 71409,
+      "python_loc": 71995,
       "hk_related_file_count": 25,
       "large_files": [
         {
@@ -672,13 +672,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_pipeline_filters_backtest.py",
-          "loc": 953,
+          "path": "src/cstree/pipeline/backtest_tearsheet.py",
+          "loc": 952,
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/backtest_tearsheet.py",
-          "loc": 952,
+          "path": "tests/test_pipeline_filters_backtest.py",
+          "loc": 951,
           "hk_related": false
         },
         {
@@ -688,7 +688,12 @@
         },
         {
           "path": "src/cstree/research/promotion_gate.py",
-          "loc": 940,
+          "loc": 934,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/portfolio.py",
+          "loc": 890,
           "hk_related": false
         },
         {
@@ -699,11 +704,6 @@
         {
           "path": "tests/test_summarize_runs.py",
           "loc": 869,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/portfolio.py",
-          "loc": 852,
           "hk_related": false
         },
         {
@@ -738,7 +738,7 @@
         },
         {
           "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 772,
+          "loc": 770,
           "hk_related": false
         },
         {
@@ -747,13 +747,13 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/construction_grid.py",
-          "loc": 709,
+          "path": "src/cstree/liveops/holdings.py",
+          "loc": 711,
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/feature_evidence.py",
-          "loc": 693,
+          "path": "src/cstree/research/construction_grid.py",
+          "loc": 709,
           "hk_related": false
         }
       ],
@@ -789,22 +789,10 @@
           "complexity": 29
         },
         {
-          "path": "src/cstree/liveops/holdings.py",
-          "name": "main",
-          "line_count": 240,
-          "complexity": 56
-        },
-        {
           "path": "src/cstree/backtesting/engine.py",
           "name": "backtest_topk",
           "line_count": 237,
           "complexity": 28
-        },
-        {
-          "path": "src/cstree/pipeline/config_eval.py",
-          "name": "normalize_eval_settings",
-          "line_count": 234,
-          "complexity": 52
         },
         {
           "path": "src/cstree/pipeline/live.py",
@@ -851,20 +839,8 @@
         {
           "path": "src/cstree/pipeline/dataset_sampling.py",
           "name": "build_modeling_dataset",
-          "line_count": 211,
+          "line_count": 210,
           "complexity": 27
-        },
-        {
-          "path": "src/cstree/liveops/alloc_hk_allocation.py",
-          "name": "apply_secondary_fill",
-          "line_count": 208,
-          "complexity": 43
-        },
-        {
-          "path": "src/cstree/pipeline/feature_engineering.py",
-          "name": "engineer_symbol_features",
-          "line_count": 202,
-          "complexity": 42
         },
         {
           "path": "src/cstree/pipeline/runtime.py",
@@ -907,6 +883,30 @@
           "name": "parse_args",
           "line_count": 189,
           "complexity": 2
+        },
+        {
+          "path": "src/cstree/pipeline/eval.py",
+          "name": "_evaluate_period",
+          "line_count": 187,
+          "complexity": 8
+        },
+        {
+          "path": "scripts/a_share_500k_round_lot_probe.py",
+          "name": "simulate_variant",
+          "line_count": 174,
+          "complexity": 37
+        },
+        {
+          "path": "src/cstree/cli/liveops.py",
+          "name": "_register_alloc_hk_command",
+          "line_count": 173,
+          "complexity": 1
+        },
+        {
+          "path": "src/cstree/liveops/alloc_hk_allocation.py",
+          "name": "build_allocation_table",
+          "line_count": 173,
+          "complexity": 28
         }
       ],
       "complexity_hotspots": [
@@ -915,30 +915,6 @@
           "name": "run",
           "line_count": 332,
           "complexity": 81
-        },
-        {
-          "path": "src/cstree/liveops/holdings.py",
-          "name": "main",
-          "line_count": 240,
-          "complexity": 56
-        },
-        {
-          "path": "src/cstree/pipeline/config_eval.py",
-          "name": "normalize_eval_settings",
-          "line_count": 234,
-          "complexity": 52
-        },
-        {
-          "path": "src/cstree/liveops/alloc_hk_allocation.py",
-          "name": "apply_secondary_fill",
-          "line_count": 208,
-          "complexity": 43
-        },
-        {
-          "path": "src/cstree/pipeline/feature_engineering.py",
-          "name": "engineer_symbol_features",
-          "line_count": 202,
-          "complexity": 42
         },
         {
           "path": "src/cstree/commands/linear_sweep.py",
@@ -951,12 +927,6 @@
           "name": "resolve_settings",
           "line_count": 148,
           "complexity": 41
-        },
-        {
-          "path": "src/cstree/pipeline/preflight.py",
-          "name": "resolve_effective_data_inputs",
-          "line_count": 154,
-          "complexity": 40
         },
         {
           "path": "src/cstree/commands/tune.py",
@@ -1037,12 +1007,6 @@
           "complexity": 28
         },
         {
-          "path": "src/cstree/portfolio.py",
-          "name": "select_holdings",
-          "line_count": 82,
-          "complexity": 28
-        },
-        {
           "path": "src/cstree/exposure.py",
           "name": "_style_exposure_row",
           "line_count": 135,
@@ -1051,7 +1015,7 @@
         {
           "path": "src/cstree/pipeline/dataset_sampling.py",
           "name": "build_modeling_dataset",
-          "line_count": 211,
+          "line_count": 210,
           "complexity": 27
         },
         {
@@ -1059,6 +1023,42 @@
           "name": "main",
           "line_count": 173,
           "complexity": 27
+        },
+        {
+          "path": "src/cstree/research/feature_evidence.py",
+          "name": "permutation_active_return_importance",
+          "line_count": 80,
+          "complexity": 27
+        },
+        {
+          "path": "src/cstree/pipeline/live.py",
+          "name": "_prepare_live_snapshot",
+          "line_count": 234,
+          "complexity": 26
+        },
+        {
+          "path": "src/cstree/pipeline/feature_dataset.py",
+          "name": "_prepare_feature_dataset",
+          "line_count": 216,
+          "complexity": 25
+        },
+        {
+          "path": "docs/archive/research/a_share/probes/topk_style_probe.py",
+          "name": "main",
+          "line_count": 171,
+          "complexity": 24
+        },
+        {
+          "path": "src/cstree/release_tools/package_runs.py",
+          "name": "_gather_relative_files",
+          "line_count": 48,
+          "complexity": 24
+        },
+        {
+          "path": "src/cstree/research/cpcv.py",
+          "name": "run_cpcv_audit",
+          "line_count": 118,
+          "complexity": 24
         }
       ],
       "quality_config": {

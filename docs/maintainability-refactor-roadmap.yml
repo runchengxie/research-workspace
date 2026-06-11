@@ -407,6 +407,12 @@
       "next_action": "split parser wiring after alloc-hk compatibility decision"
     },
     {
+      "path": "cross-sectional-trees/src/cstree/liveops/holdings.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "holdings C901 debt was cleared, but the file remains a liveops large-file hotspot",
+      "next_action": "split parser, run selection, and output rendering when holdings changes resume"
+    },
+    {
       "path": "cross-sectional-trees/tests/test_docs_contracts.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "large docs contract test file is tracked but not active production code",
