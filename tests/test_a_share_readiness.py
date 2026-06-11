@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "a_share_readiness.py"
+sys.path.insert(0, str(SCRIPT.parent))
 
 spec = importlib.util.spec_from_file_location("a_share_readiness", SCRIPT)
 a_share_readiness = importlib.util.module_from_spec(spec)

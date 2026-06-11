@@ -58,35 +58,56 @@ def _safe_relative_path(value: Any, *, context: str) -> Path:
     return path
 
 
-def load_manifest(path: Path) -> dict[str, SubmoduleConfig]:
+def _load_manifest_payload(path: Path) -> dict[str, Any]:
     try:
-        raw = json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         raise ManifestError(f"{path} is not valid JSON: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise ManifestError("manifest must be a JSON object")
+    return payload
 
-    submodules = raw.get("submodules")
-    if not isinstance(submodules, dict) or not submodules:
-        raise ManifestError("manifest must define a non-empty 'submodules' object")
 
-    configs: dict[str, SubmoduleConfig] = {}
-    for name, value in submodules.items():
-        if not isinstance(name, str) or not name:
-            raise ManifestError("submodule names must be non-empty strings")
-        if not isinstance(value, dict):
-            raise ManifestError(f"{name} must be an object")
-        path = _safe_relative_path(value.get("path", name), context=f"{name}.path")
-        profiles = value.get("profiles")
-        if not isinstance(profiles, dict) or not profiles:
-            raise ManifestError(f"{name}.profiles must be a non-empty object")
-        normalized_profiles: dict[str, list[Any]] = {}
-        for profile, commands in profiles.items():
-            if not isinstance(profile, str) or not profile:
-                raise ManifestError(f"{name}.profiles has an invalid profile name")
-            if not isinstance(commands, list):
-                raise ManifestError(f"{name}.{profile} must be a command list")
-            normalized_profiles[profile] = commands
-        configs[name] = SubmoduleConfig(name=name, path=path, profiles=normalized_profiles)
-    return configs
+def _manifest_submodules(payload: dict[str, Any]) -> dict[str, Any]:
+    submodules = payload.get("submodules")
+    if isinstance(submodules, dict) and submodules:
+        return submodules
+    raise ManifestError("manifest must define a non-empty 'submodules' object")
+
+
+def _load_profiles(name: str, value: dict[str, Any]) -> dict[str, list[Any]]:
+    profiles = value.get("profiles")
+    if not isinstance(profiles, dict) or not profiles:
+        raise ManifestError(f"{name}.profiles must be a non-empty object")
+
+    normalized: dict[str, list[Any]] = {}
+    for profile, commands in profiles.items():
+        if not isinstance(profile, str) or not profile:
+            raise ManifestError(f"{name}.profiles has an invalid profile name")
+        if not isinstance(commands, list):
+            raise ManifestError(f"{name}.{profile} must be a command list")
+        normalized[profile] = commands
+    return normalized
+
+
+def _load_submodule_config(name: Any, value: Any) -> SubmoduleConfig:
+    if not isinstance(name, str) or not name:
+        raise ManifestError("submodule names must be non-empty strings")
+    if not isinstance(value, dict):
+        raise ManifestError(f"{name} must be an object")
+    return SubmoduleConfig(
+        name=name,
+        path=_safe_relative_path(value.get("path", name), context=f"{name}.path"),
+        profiles=_load_profiles(name, value),
+    )
+
+
+def load_manifest(path: Path) -> dict[str, SubmoduleConfig]:
+    payload = _load_manifest_payload(path)
+    return {
+        name: _load_submodule_config(name, value)
+        for name, value in _manifest_submodules(payload).items()
+    }
 
 
 def _expand_profile(

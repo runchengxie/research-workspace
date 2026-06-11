@@ -34,6 +34,10 @@
     "follow_up_required",
     "ready"
   ],
+  "follow_up_budget": {
+    "blocked_or_follow_up_records_max": 7,
+    "policy": "ratchet_only; lower this maximum after HK split follow-up records are resolved, do not raise it without explicit release review"
+  },
   "deletion_gate_requirements": [
     "restore_evidence",
     "consumer_audit",
@@ -50,7 +54,8 @@
         "demo/hk-public-demo-template-v1/**",
         "demo/hk-public-demo-allowlist-v1.txt",
         "demo/hk-public-demo-export-v1.json",
-        "scripts/export_hk_public_demo.py"
+        "scripts/export_hk_public_demo.py",
+        "scripts/hk_public_demo_scan.py"
       ],
       "path_kind": "repo_local",
       "action": "move_to_public_demo",
@@ -77,8 +82,15 @@
         "docs/archive/hk/**",
         "docs/evidence/hk-restore-drill-20260601.json",
         "docs/evidence/hk-research-archive-manifest-20260601.json",
+        "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
+        "docs/evidence/hk-private-archive-stage-20260602.json",
         "docs/hk-legacy-surface-inventory.md",
-        "docs/hk-public-demo-export.md"
+        "docs/hk-private-archive-manifest.yml",
+        "docs/hk-private-archive.md",
+        "docs/hk-public-demo-export.md",
+        "docs/hk-public-split-manifest.yml",
+        "scripts/export_hk_legacy_archive.py",
+        "scripts/hk_archive_gate.py"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",
@@ -105,6 +117,7 @@
       "owner_repo": "research-workspace",
       "paths": [
         "scripts/workspace_doctor.py",
+        "scripts/workspace_governance_hk_split.py",
         "scripts/smoke_contracts.py",
         "docs/platform-workflow.md"
       ],
@@ -127,6 +140,32 @@
       }
     },
     {
+      "id": "top-level-hk-research-lane-template",
+      "owner_repo": "research-workspace",
+      "paths": [
+        "demo/hk-research-lane-template-v1/**",
+        "docs/hk-research-lane-inventory.json",
+        "scripts/hk_research_lane_inventory.py"
+      ],
+      "path_kind": "repo_local",
+      "action": "move_to_public_demo",
+      "public_safety": "public_safe",
+      "restore_dependency": "synthetic research-lane template only",
+      "consumer_audit_status": "not_required_not_workspace_dependency",
+      "replacement_path": "future external paused-maintenance public repository",
+      "required_redactions": [],
+      "removal_condition": "After a reviewed research-lane public candidate is exported, keep only top-level docs and inventory evidence in the workspace unless a follow-up change removes the template.",
+      "deletion_gate": {
+        "status": "follow_up_required",
+        "restore_evidence": "not_required",
+        "consumer_audit": "not_required",
+        "replacement_docs": "docs/hk-public-demo-export.md",
+        "rollback_notes": "docs/archive/hk/README.md",
+        "focused_tests": "tests/test_hk_research_lane_inventory.py",
+        "public_split_evidence": "research-lane template smoke output"
+      }
+    },
+    {
       "id": "market-data-platform-hk-assets-and-depth",
       "owner_repo": "market-data-platform",
       "paths": [
@@ -137,6 +176,8 @@
         "market-data-platform/configs/presets/release/hk_*.yml",
         "market-data-platform/configs/presets/universe/hk_*.yml",
         "market-data-platform/docs/hk-assets.md",
+        "market-data-platform/docs/hk-split-boundary.md",
+        "market-data-platform/docs/hk-split-boundary.yml",
         "market-data-platform/docs/operations/hk-assets.md",
         "market-data-platform/tests/test_hk*.py"
       ],
@@ -167,6 +208,7 @@
       "owner_repo": "market-data-platform",
       "paths": [
         "market-data-platform/src/hk_data_platform/**",
+        "market-data-platform/src/hk_data_platform.egg-info/**",
         "market-data-platform/pyproject.toml"
       ],
       "path_kind": "repo_local",
@@ -224,6 +266,8 @@
         "cross-sectional-trees/src/cstree/research/hk_*.py",
         "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md",
         "cross-sectional-trees/docs/archive/research/hk/README.md",
+        "cross-sectional-trees/docs/playbooks/hk-*.md",
+        "cross-sectional-trees/docs/rqdata/hk-health-checks.md",
         "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
         "cross-sectional-trees/tests/test_*hk*.py"
       ],

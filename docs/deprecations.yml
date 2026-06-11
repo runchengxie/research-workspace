@@ -17,6 +17,10 @@
     ],
     "status_rule": "A record may move to removal_ready only after the required artifacts are captured for the target release and consumer_audit is no longer pending or manual_review_required."
   },
+  "deprecation_budget": {
+    "pending_follow_up_max": 7,
+    "policy": "ratchet_only; lower this maximum after compatibility surfaces are removed, do not raise it without explicit release review"
+  },
   "records": [
     {
       "id": "market-data-platform-hkdata",

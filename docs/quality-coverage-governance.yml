@@ -1,5 +1,10 @@
 {
   "schema_version": "quality_coverage_governance.v1",
+  "debt_budget": {
+    "broad_exclude_register_max": 7,
+    "per_file_ignore_register_max": 9,
+    "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
+  },
   "repos": [
     {
       "repo": "cross-sectional-trees",
@@ -105,7 +110,8 @@
       "owner": "market-data-platform",
       "reason": "large restore-sensitive HK asset modules still require staged lint cleanup after low-risk support modules entered Ruff coverage",
       "next_include_target": "hk_assets/args.py and hk_assets/args_mirror.py",
-      "review_milestone": "next quality-baseline refresh"
+      "review_milestone": "next quality-baseline refresh",
+      "coverage_patterns": ["src/market_data_platform/hk_assets"]
     },
     {
       "repo": "market-data-platform",
@@ -114,7 +120,8 @@
       "owner": "market-data-platform",
       "reason": "workflow modules still need pandas typing and import-boundary cleanup after low-risk support modules entered Pyright coverage",
       "next_include_target": "hk_assets/args.py and hk_assets/args_mirror.py",
-      "review_milestone": "next quality-baseline refresh"
+      "review_milestone": "next quality-baseline refresh",
+      "coverage_patterns": ["src/market_data_platform/hk_assets"]
     },
     {
       "repo": "market-data-platform",
@@ -123,7 +130,8 @@
       "owner": "market-data-platform",
       "reason": "release workflow modules are large orchestration code and need model/path extraction first",
       "next_include_target": "release_tools/hk_asset_workflow_state.py and hk_asset_workflow_paths.py",
-      "review_milestone": "after workflow state/path extraction"
+      "review_milestone": "after workflow state/path extraction",
+      "coverage_patterns": ["src/market_data_platform/release_tools"]
     },
     {
       "repo": "market-data-platform",
@@ -132,7 +140,22 @@
       "owner": "market-data-platform",
       "reason": "HK depth modules are restore-sensitive and require staged schema/quota/client typing",
       "next_include_target": "hk_depth/schema.py, quota.py, rq_client.py, download_state.py",
-      "review_milestone": "after storage/symbols stay green"
+      "review_milestone": "after storage/symbols stay green",
+      "coverage_patterns": ["src/market_data_platform/hk_depth"]
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform provider and runtime compatibility modules",
+      "tool": "pyright",
+      "owner": "market-data-platform",
+      "reason": "provider/runtime compatibility modules still need interface narrowing before Pyright coverage expands",
+      "next_include_target": "data_providers.py and rqdata_runtime.py",
+      "review_milestone": "after provider adapter contract tests are refreshed",
+      "coverage_patterns": [
+        "src/market_data_platform/data_providers.py",
+        "src/market_data_platform/data_warehouse.py",
+        "src/market_data_platform/rqdata_runtime.py"
+      ]
     },
     {
       "repo": "cross-sectional-trees",
@@ -141,7 +164,110 @@
       "owner": "cross-sectional-trees",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",
-      "review_milestone": "keep excluded by policy"
+      "review_milestone": "keep excluded by policy",
+      "coverage_patterns": ["configs/local"]
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "configs/local",
+      "tool": "pyright",
+      "owner": "cross-sectional-trees",
+      "reason": "local override configs are personal and not active package code",
+      "next_include_target": "not_applicable",
+      "review_milestone": "keep excluded by policy",
+      "coverage_patterns": ["configs/local"]
+    }
+  ],
+  "per_file_ignore_register": [
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/commands/linear_sweep.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "linear sweep command still mixes parser, run orchestration, and reporting",
+      "next_action": "split parser and runner when sweep command changes resume",
+      "review_milestone": "after command orchestration extraction"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/commands/run_grid.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "grid command still mixes parser, execution routing, and summary writing",
+      "next_action": "split parser, fixed-signal runner, and summary writer when grid command changes resume",
+      "review_milestone": "after command orchestration extraction"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/commands/tune.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "tune command remains a large CLI orchestration surface",
+      "next_action": "split command parser, runner, and report helpers",
+      "review_milestone": "after tune command refactor"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/liveops/alloc_hk_allocation.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "deprecated HK allocation compatibility code is pending split/archive decisions",
+      "next_action": "archive or remove after alloc-hk consumer audit completes",
+      "review_milestone": "after HK split follow-up audit"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/liveops/holdings.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "holdings logic still mixes parsing, normalization, and reporting",
+      "next_action": "split holdings parsing and reporting helpers",
+      "review_milestone": "after liveops target export cleanup"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/pipeline/config_eval.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "config evaluation compatibility logic remains complex",
+      "next_action": "split config model validation from compatibility translation",
+      "review_milestone": "after pipeline config split"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/pipeline/feature_engineering.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "feature engineering still combines feature planning, transforms, and fallbacks",
+      "next_action": "split feature plan models and transform helpers",
+      "review_milestone": "after feature pipeline cleanup"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/pipeline/preflight.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "preflight checks remain broad orchestration code",
+      "next_action": "split rule checks and renderers",
+      "review_milestone": "after pipeline preflight cleanup"
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "src/cstree/portfolio.py",
+      "tool": "ruff",
+      "rules": ["C901"],
+      "owner": "cross-sectional-trees",
+      "reason": "portfolio construction math and guardrails remain in one module",
+      "next_action": "split constraints, sizing, and reporting helpers",
+      "review_milestone": "after portfolio construction cleanup"
     }
   ]
 }

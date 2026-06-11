@@ -52,6 +52,42 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             [item.command for item in advisory],
         )
 
+    def test_lint_profiles_include_repo_local_governance_gates(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        market_lint = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="lint",
+                submodules=["market-data-platform"],
+            )
+        ]
+        cross_lint = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="lint",
+                submodules=["cross-sectional-trees"],
+            )
+        ]
+
+        self.assertIn(
+            (
+                "uv",
+                "run",
+                "--extra",
+                "dev",
+                "python",
+                "scripts/dev/architecture_governance.py",
+                "--check",
+            ),
+            market_lint,
+        )
+        self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), cross_lint)
+
     def test_manifest_type_profiles_use_pyright_with_qexec_mypy_advisory_separate(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
 

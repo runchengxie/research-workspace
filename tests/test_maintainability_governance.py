@@ -11,6 +11,8 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_SCRIPT = ROOT / "scripts" / "maintainability_baseline.py"
 BASELINE_PATH = ROOT / "docs" / "evidence" / "maintainability" / "baseline-20260602.json"
+QUALITY_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance_quality.py"
+WORKSPACE_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"
 REPOS = {
     "research-workspace",
     "market-data-platform",
@@ -56,7 +58,24 @@ QUALITY_REGISTER_FIELDS = {
     "reason",
     "next_include_target",
     "review_milestone",
+    "coverage_patterns",
 }
+PER_FILE_IGNORE_REGISTER_FIELDS = {
+    "repo",
+    "path",
+    "tool",
+    "rules",
+    "owner",
+    "reason",
+    "next_action",
+    "review_milestone",
+}
+QUALITY_DEBT_BUDGET_FIELDS = {
+    "broad_exclude_register_max",
+    "per_file_ignore_register_max",
+    "policy",
+}
+DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
 
 
 def _load_json_doc(relative: str) -> dict[str, Any]:
@@ -69,6 +88,35 @@ def _load_pyproject(repo: str) -> dict[str, Any]:
 
 def _load_baseline_module() -> Any:
     spec = importlib.util.spec_from_file_location("maintainability_baseline", BASELINE_SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_quality_governance_module() -> Any:
+    scripts_dir = str(QUALITY_GOVERNANCE_SCRIPT.parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    spec = importlib.util.spec_from_file_location(
+        "workspace_governance_quality",
+        QUALITY_GOVERNANCE_SCRIPT,
+    )
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_workspace_governance_module() -> Any:
+    scripts_dir = str(WORKSPACE_GOVERNANCE_SCRIPT.parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    spec = importlib.util.spec_from_file_location(
+        "workspace_governance", WORKSPACE_GOVERNANCE_SCRIPT
+    )
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     sys.modules[spec.name] = module
@@ -163,6 +211,13 @@ def test_deprecation_register_has_required_fields_and_removal_gate() -> None:
     }
 
     assert manifest["schema_version"] == "deprecation_register.v1"
+    pending_count = sum(
+        1
+        for record in manifest["records"]
+        if record["status"] in {"blocked_pending_audit", "follow_up_required"}
+    )
+    assert DEPRECATION_BUDGET_FIELDS <= set(manifest["deprecation_budget"])
+    assert manifest["deprecation_budget"]["pending_follow_up_max"] == pending_count
     assert REQUIRED_DEPRECATION_IDS <= {record["id"] for record in manifest["records"]}
     assert _deprecation_removal_issues(manifest) == []
     for record in manifest["records"]:
@@ -177,6 +232,24 @@ def test_deprecation_register_has_required_fields_and_removal_gate() -> None:
     mutated["records"][0]["focused_tests"] = []
 
     assert _deprecation_removal_issues(mutated)
+
+
+def test_deprecation_budget_blocks_new_pending_surfaces() -> None:
+    manifest = _load_json_doc("docs/deprecations.yml")
+    module = _load_workspace_governance_module()
+    mutated = copy.deepcopy(manifest)
+    extra_record = copy.deepcopy(mutated["records"][0])
+    extra_record["id"] = "new-legacy-surface"
+    mutated["records"].append(extra_record)
+
+    checks = module._check_deprecations(mutated)
+
+    assert any(
+        check.severity == "ERROR"
+        and check.code == "governance-deprecations"
+        and "pending deprecated surface count" in check.message
+        for check in checks
+    )
 
 
 def test_script_lifecycle_manifest_classifies_all_tracked_scripts() -> None:
@@ -210,6 +283,13 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     execution_config = _load_pyproject("quant-execution-engine")
 
     assert manifest["schema_version"] == "quality_coverage_governance.v1"
+    assert QUALITY_DEBT_BUDGET_FIELDS <= set(manifest["debt_budget"])
+    assert manifest["debt_budget"]["broad_exclude_register_max"] == len(
+        manifest["broad_exclude_register"]
+    )
+    assert manifest["debt_budget"]["per_file_ignore_register_max"] == len(
+        manifest["per_file_ignore_register"]
+    )
     assert set(repos) == {"cross-sectional-trees", "market-data-platform", "quant-execution-engine"}
     cross_staged_select = cross_config["tool"]["maintainability"]["quality_targets"][
         "ruff_staged_select"
@@ -234,6 +314,36 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     )
     for record in manifest["broad_exclude_register"]:
         assert QUALITY_REGISTER_FIELDS <= set(record)
+        assert record["coverage_patterns"]
+    per_file_records = {
+        (record["repo"], record["path"]): set(record["rules"])
+        for record in manifest["per_file_ignore_register"]
+    }
+    cross_ignores = cross_config["tool"]["ruff"]["lint"]["per-file-ignores"]
+    assert per_file_records == {
+        ("cross-sectional-trees", path): set(rules) for path, rules in cross_ignores.items()
+    }
+    for record in manifest["per_file_ignore_register"]:
+        assert PER_FILE_IGNORE_REGISTER_FIELDS <= set(record)
+        assert record["tool"] == "ruff"
+
+
+def test_quality_debt_budget_blocks_registered_increases() -> None:
+    manifest = _load_json_doc("docs/quality-coverage-governance.yml")
+    module = _load_quality_governance_module()
+    mutated = copy.deepcopy(manifest)
+    extra_record = copy.deepcopy(mutated["broad_exclude_register"][0])
+    extra_record["path"] = "new broad quality exclude"
+    mutated["broad_exclude_register"].append(extra_record)
+
+    checks = module.check_quality_coverage(ROOT, mutated)
+
+    assert any(
+        check.severity == "ERROR"
+        and check.code == "governance-quality"
+        and "broad_exclude_register count" in check.message
+        for check in checks
+    )
 
 
 def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:

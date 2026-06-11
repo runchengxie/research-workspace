@@ -56,6 +56,7 @@ BLOCKING_VALUES = {
     "pending_operator_publication",
 }
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
+Issue = dict[str, str]
 
 
 def load_manifest(path: Path = DEFAULT_MANIFEST) -> dict[str, Any]:
@@ -97,12 +98,16 @@ def _is_blocking(value: object) -> bool:
     return str(value or "").strip().lower() in BLOCKING_VALUES
 
 
-def validate_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any]:
-    issues: list[dict[str, str]] = []
+def _issue(path: str, check: str) -> Issue:
+    return {"path": path, "check": check}
+
+
+def _archive_repository_issues(manifest: dict[str, Any]) -> list[Issue]:
+    issues: list[Issue] = []
     if manifest.get("schema_version") != "hk_private_archive_manifest.v1":
-        issues.append({"path": "schema_version", "check": "unexpected_schema_version"})
+        issues.append(_issue("schema_version", "unexpected_schema_version"))
     if manifest.get("checksum_policy") != "sha256":
-        issues.append({"path": "checksum_policy", "check": "sha256_required"})
+        issues.append(_issue("checksum_policy", "sha256_required"))
 
     archive_repo = manifest.get("archive_repository", {})
     required_archive_values = {
@@ -113,76 +118,130 @@ def validate_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> dict[st
     }
     for key, value in required_archive_values.items():
         if archive_repo.get(key) != value:
-            issues.append({"path": f"archive_repository.{key}", "check": f"expected_{value}"})
+            issues.append(_issue(f"archive_repository.{key}", f"expected_{value}"))
     if not archive_repo.get("access_control_owners"):
-        issues.append({"path": "archive_repository", "check": "missing_access_control_owners"})
+        issues.append(_issue("archive_repository", "missing_access_control_owners"))
+    return issues
 
+
+def _revision_issues(manifest: dict[str, Any], *, root: Path) -> list[Issue]:
+    issues: list[Issue] = []
     repository_paths = manifest.get("repository_paths", {})
     source_revisions = manifest.get("source_revisions", {})
     if set(repository_paths) != REQUIRED_REPOSITORIES:
-        issues.append({"path": "repository_paths", "check": "unexpected_repository_set"})
+        issues.append(_issue("repository_paths", "unexpected_repository_set"))
     if set(source_revisions) != REQUIRED_REPOSITORIES:
-        issues.append({"path": "source_revisions", "check": "unexpected_revision_set"})
+        issues.append(_issue("source_revisions", "unexpected_revision_set"))
     for owner in sorted(REQUIRED_REPOSITORIES):
         revision = str(source_revisions.get(owner, ""))
         repo = _repo_path(root, manifest, owner)
         if not REVISION_RE.fullmatch(revision):
-            issues.append({"path": f"source_revisions.{owner}", "check": "revision_not_pinned"})
+            issues.append(_issue(f"source_revisions.{owner}", "revision_not_pinned"))
             continue
         try:
             _git_output(repo, "cat-file", "-e", f"{revision}^{{commit}}")
         except RuntimeError:
-            issues.append({"path": f"source_revisions.{owner}", "check": "revision_not_found"})
+            issues.append(_issue(f"source_revisions.{owner}", "revision_not_found"))
+    return issues
 
+
+def _record_path_issues(
+    record_id: str,
+    paths: list[Any],
+    *,
+    owner: str,
+    manifest: dict[str, Any],
+    root: Path,
+) -> list[Issue]:
+    source_revisions = manifest.get("source_revisions", {})
+    revision = str(source_revisions.get(owner, ""))
+    if not REVISION_RE.fullmatch(revision):
+        return []
+
+    repo = _repo_path(root, manifest, owner)
+    return [
+        _issue(f"{record_id}:{pattern}", "unresolved_path")
+        for pattern in paths
+        if not matching_tracked_paths(repo, revision, [str(pattern)])
+    ]
+
+
+def _single_record_issues(
+    record: dict[str, Any],
+    record_ids: set[str],
+    *,
+    manifest: dict[str, Any],
+    root: Path,
+) -> list[Issue]:
+    issues: list[Issue] = []
+    record_id = str(record.get("id", "missing-id"))
+    if record_id in record_ids:
+        issues.append(_issue(record_id, "duplicate_id"))
+    record_ids.add(record_id)
+    for field in sorted(REQUIRED_RECORD_FIELDS - set(record)):
+        issues.append(_issue(record_id, f"missing_{field}"))
+    owner = str(record.get("owner_repo", ""))
+    if owner not in REQUIRED_REPOSITORIES:
+        issues.append(_issue(record_id, "unknown_owner_repo"))
+        return issues
+    if record.get("archive_action") not in {"include", "retain_active"}:
+        issues.append(_issue(record_id, "invalid_archive_action"))
+    paths = record.get("paths", [])
+    if not isinstance(paths, list) or not paths:
+        issues.append(_issue(record_id, "empty_paths"))
+        return issues
+    issues.extend(_record_path_issues(record_id, paths, owner=owner, manifest=manifest, root=root))
+    gate = record.get("deletion_gate", {})
+    if not isinstance(gate, dict):
+        issues.append(_issue(record_id, "invalid_deletion_gate"))
+        return issues
+    for field in sorted(REQUIRED_GATE_FIELDS - set(gate)):
+        issues.append(_issue(record_id, f"missing_gate_{field}"))
+    return issues
+
+
+def _records_issues(
+    manifest: dict[str, Any],
+    *,
+    root: Path,
+) -> tuple[list[Issue], set[str], list[dict[str, Any]]]:
+    issues: list[Issue] = []
     records = manifest.get("records", [])
     if not isinstance(records, list) or not records:
-        issues.append({"path": "records", "check": "empty_records"})
+        issues.append(_issue("records", "empty_records"))
         records = []
     record_ids: set[str] = set()
+    valid_records: list[dict[str, Any]] = []
     for record in records:
-        record_id = str(record.get("id", "missing-id"))
-        if record_id in record_ids:
-            issues.append({"path": record_id, "check": "duplicate_id"})
-        record_ids.add(record_id)
-        for field in sorted(REQUIRED_RECORD_FIELDS - set(record)):
-            issues.append({"path": record_id, "check": f"missing_{field}"})
-        owner = str(record.get("owner_repo", ""))
-        if owner not in REQUIRED_REPOSITORIES:
-            issues.append({"path": record_id, "check": "unknown_owner_repo"})
+        if not isinstance(record, dict):
+            issues.append(_issue("records", "invalid_record"))
             continue
-        if record.get("archive_action") not in {"include", "retain_active"}:
-            issues.append({"path": record_id, "check": "invalid_archive_action"})
-        paths = record.get("paths", [])
-        if not isinstance(paths, list) or not paths:
-            issues.append({"path": record_id, "check": "empty_paths"})
-            continue
-        revision = str(source_revisions.get(owner, ""))
-        if REVISION_RE.fullmatch(revision):
-            repo = _repo_path(root, manifest, owner)
-            for pattern in paths:
-                if not matching_tracked_paths(repo, revision, [str(pattern)]):
-                    issues.append({"path": f"{record_id}:{pattern}", "check": "unresolved_path"})
-        gate = record.get("deletion_gate", {})
-        if not isinstance(gate, dict):
-            issues.append({"path": record_id, "check": "invalid_deletion_gate"})
-            continue
-        for field in sorted(REQUIRED_GATE_FIELDS - set(gate)):
-            issues.append({"path": record_id, "check": f"missing_gate_{field}"})
+        valid_records.append(record)
+        issues.extend(_single_record_issues(record, record_ids, manifest=manifest, root=root))
+    return issues, record_ids, valid_records
+
+
+def _retained_boundary_issues(records: list[dict[str, Any]]) -> list[Issue]:
+    issues: list[Issue] = []
     if not any(
         record.get("archive_action") == "retain_active"
         and record.get("owner_repo") == "quant-execution-engine"
         and any("longport" in path for path in record.get("paths", []))
         for record in records
     ):
-        issues.append({"path": "records", "check": "missing_retained_longport_boundary"})
+        issues.append(_issue("records", "missing_retained_longport_boundary"))
     if not any(
         record.get("archive_action") == "retain_active"
         and record.get("owner_repo") == "market-data-platform"
         and any("cold_storage.py" in path for path in record.get("paths", []))
         for record in records
     ):
-        issues.append({"path": "records", "check": "missing_retained_restore_control_plane"})
+        issues.append(_issue("records", "missing_retained_restore_control_plane"))
+    return issues
 
+
+def _active_dependency_issues(manifest: dict[str, Any], *, root: Path) -> list[Issue]:
+    archive_repo = manifest.get("archive_repository", {})
     archive_name = str(archive_repo.get("name", ""))
     integration_text = "\n".join(
         [
@@ -191,7 +250,18 @@ def validate_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> dict[st
         ]
     )
     if archive_name and archive_name in integration_text:
-        issues.append({"path": archive_name, "check": "archive_repo_must_not_be_active_dependency"})
+        return [_issue(archive_name, "archive_repo_must_not_be_active_dependency")]
+    return []
+
+
+def validate_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any]:
+    issues: list[Issue] = []
+    issues.extend(_archive_repository_issues(manifest))
+    issues.extend(_revision_issues(manifest, root=root))
+    record_issues, record_ids, records = _records_issues(manifest, root=root)
+    issues.extend(record_issues)
+    issues.extend(_retained_boundary_issues(records))
+    issues.extend(_active_dependency_issues(manifest, root=root))
     return {
         "status": "passed" if not issues else "failed",
         "schema_version": manifest.get("schema_version"),

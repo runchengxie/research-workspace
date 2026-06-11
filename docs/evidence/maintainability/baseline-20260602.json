@@ -9,80 +9,12 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 39,
-      "python_loc": 5265,
-      "hk_related_file_count": 21,
-      "large_files": [
-        {
-          "path": "scripts/a_share_readiness.py",
-          "loc": 701,
-          "hk_related": false
-        }
-      ],
-      "long_functions": [
-        {
-          "path": "scripts/hk_archive_gate.py",
-          "name": "validate_manifest",
-          "line_count": 101,
-          "complexity": 37
-        },
-        {
-          "path": "scripts/a_share_readiness.py",
-          "name": "build_readiness_report",
-          "line_count": 90,
-          "complexity": 8
-        },
-        {
-          "path": "scripts/a_share_readiness.py",
-          "name": "_contract_checks",
-          "line_count": 88,
-          "complexity": 17
-        },
-        {
-          "path": "scripts/workspace_doctor.py",
-          "name": "check_data_platform_root",
-          "line_count": 80,
-          "complexity": 12
-        }
-      ],
-      "complexity_hotspots": [
-        {
-          "path": "scripts/hk_archive_gate.py",
-          "name": "validate_manifest",
-          "line_count": 101,
-          "complexity": 37
-        },
-        {
-          "path": "scripts/export_hk_public_demo.py",
-          "name": "validate_split_manifest",
-          "line_count": 60,
-          "complexity": 24
-        },
-        {
-          "path": "scripts/hk_research_lane_inventory.py",
-          "name": "validate_inventory",
-          "line_count": 68,
-          "complexity": 20
-        },
-        {
-          "path": "scripts/export_hk_public_demo.py",
-          "name": "scan_public_tree",
-          "line_count": 39,
-          "complexity": 19
-        },
-        {
-          "path": "scripts/a_share_readiness.py",
-          "name": "_contract_checks",
-          "line_count": 88,
-          "complexity": 17
-        },
-        {
-          "path": "scripts/run_submodule_checks.py",
-          "name": "load_manifest",
-          "line_count": 29,
-          "complexity": 15
-        }
-      ],
+      "python_file_count": 48,
+      "python_loc": 6925,
+      "hk_related_file_count": 23,
+      "large_files": [],
+      "long_functions": [],
+      "complexity_hotspots": [],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -107,9 +39,13 @@
       },
       "script_inventory": [
         "scripts/a_share_readiness.py",
+        "scripts/a_share_readiness_common.py",
+        "scripts/a_share_readiness_contract.py",
+        "scripts/a_share_readiness_evidence.py",
         "scripts/export_hk_legacy_archive.py",
         "scripts/export_hk_public_demo.py",
         "scripts/hk_archive_gate.py",
+        "scripts/hk_public_demo_scan.py",
         "scripts/hk_research_lane_inventory.py",
         "scripts/maintainability_baseline.py",
         "scripts/print_version_matrix.py",
@@ -118,7 +54,12 @@
         "scripts/scan_workspace_secrets.py",
         "scripts/smoke_contracts.py",
         "scripts/submodule_checks.json",
-        "scripts/workspace_doctor.py"
+        "scripts/workspace_doctor.py",
+        "scripts/workspace_governance.py",
+        "scripts/workspace_governance_common.py",
+        "scripts/workspace_governance_hk_split.py",
+        "scripts/workspace_governance_quality.py",
+        "scripts/workspace_governance_submodules.py"
       ]
     },
     {
@@ -687,7 +628,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 239,
-      "python_loc": 71387,
+      "python_loc": 71409,
       "hk_related_file_count": 25,
       "large_files": [
         {
@@ -797,7 +738,7 @@
         },
         {
           "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 763,
+          "loc": 772,
           "hk_related": false
         },
         {
@@ -910,7 +851,7 @@
         {
           "path": "src/cstree/pipeline/dataset_sampling.py",
           "name": "build_modeling_dataset",
-          "line_count": 210,
+          "line_count": 211,
           "complexity": 27
         },
         {
@@ -1110,7 +1051,7 @@
         {
           "path": "src/cstree/pipeline/dataset_sampling.py",
           "name": "build_modeling_dataset",
-          "line_count": 210,
+          "line_count": 211,
           "complexity": 27
         },
         {
@@ -1172,7 +1113,6 @@
         "scripts/a_share_live_industry_cap_top10_probe.py",
         "scripts/a_share_live_risk_control_grid.py",
         "scripts/a_share_small_capital_robustness.py",
-        "scripts/a_share_turnover_source_diagnostics.py",
         "scripts/dev/check_c901_debt.py",
         "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
@@ -1180,12 +1120,9 @@
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/run_tests.sh",
         "scripts/dev/test_impact.py",
-        "scripts/generate_a_share_formal_risk_grid_configs.py",
-        "scripts/generate_a_share_live15_ablation_configs.py",
         "scripts/internal/export_repo_source.py",
         "scripts/internal/freeze_hk_research_outputs.py",
-        "scripts/internal/package_repo.sh",
-        "scripts/run_a_share_formal_risk_grid.py"
+        "scripts/internal/package_repo.sh"
       ]
     },
     {

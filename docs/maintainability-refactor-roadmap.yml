@@ -125,18 +125,6 @@
   ],
   "accepted_hotspots": [
     {
-      "path": "scripts/a_share_readiness.py",
-      "owner_repo": "research-workspace",
-      "reason": "top-level readiness report is stable and below submodule hotspot priority",
-      "next_action": "split report rendering if future changes expand it"
-    },
-    {
-      "path": "scripts/export_hk_public_demo.py",
-      "owner_repo": "research-workspace",
-      "reason": "new public-demo scanner is intentionally centralized for export safety",
-      "next_action": "split manifest validation if complexity grows further"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_financial.py",
       "owner_repo": "market-data-platform",
       "reason": "baseline large-file debt outside the first refactor wave",

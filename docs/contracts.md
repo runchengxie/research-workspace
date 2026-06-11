@@ -142,3 +142,4 @@ python scripts/run_submodule_checks.py --profile full
 ```
 
 委托检查的命令定义在 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层只负责调度和汇总结果，不解析子模块内部源码，也不把 SOLID 或内聚耦合做成顶层评分。
+其中 `lint` profile 包含子仓库自己定义的边界和维护债 gate；例如数据平台的港股拆分边界检查和策略研究的 maintainability ratchet。

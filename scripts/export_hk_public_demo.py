@@ -4,78 +4,19 @@
 from __future__ import annotations
 
 import argparse
-import ast
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any
 
+from hk_public_demo_scan import scan_public_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = ROOT / "demo" / "hk-public-demo-export-v1.json"
 DEFAULT_SPLIT_MANIFEST = ROOT / "docs" / "hk-public-split-manifest.yml"
-MAX_PUBLIC_FILE_BYTES = 512 * 1024
-FORBIDDEN_PARTS = {
-    ".git",
-    ".pytest_cache",
-    ".venv",
-    "__pycache__",
-    "artifacts",
-    "cache",
-    "outputs",
-}
-FORBIDDEN_SUFFIXES = {
-    ".7z",
-    ".feather",
-    ".gz",
-    ".parquet",
-    ".pickle",
-    ".pkl",
-    ".tar",
-    ".zst",
-    ".zip",
-}
-FORBIDDEN_TEXT = {
-    "absolute_local_path": re.compile(r"(?:/home/|/tmp/|/Users/|[A-Za-z]:\\\\Users\\\\)"),
-    "credential_assignment": re.compile(
-        r"(?i)(?:token|secret|password|api[_-]?key|access[_-]?key)\s*[:=]\s*[^\s<]+"
-    ),
-}
-FORBIDDEN_WORKSPACE_IMPORTS = {
-    "cstree",
-    "hk_data_platform",
-    "market_data_platform",
-    "quant_execution_engine",
-}
-FORBIDDEN_RUNTIME_IMPORTS = {
-    "alpaca",
-    "ib_insync",
-    "ibkr",
-    "longport",
-    "rqdatac",
-    "tushare",
-}
-FORBIDDEN_RUNTIME_TEXT = {
-    "broker_or_provider_runtime_marker": re.compile(
-        r"(?i)\b(rqdata|rqdatac|tushare|longport|ibkr|alpaca|provider[-_ ]?cache)\b"
-    ),
-}
-RUNTIME_TEXT_SUFFIXES = {
-    ".cfg",
-    ".csv",
-    ".ini",
-    ".json",
-    ".py",
-    ".toml",
-    ".txt",
-    ".yaml",
-    ".yml",
-}
-ARCHIVE_PARTS = {"archive"}
-ACTIVE_DEMO_PARTS = {"src", "scripts", "tests", "fixtures", "docs"}
 READY_BLOCKERS = {
     "",
     "manual_review_required",
@@ -106,6 +47,7 @@ REQUIRED_GATE_FIELDS = {
     "rollback_notes",
     "status",
 }
+Issue = dict[str, str]
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -131,8 +73,84 @@ def _path_matches(pattern: str, *, root: Path) -> list[Path]:
     return [literal] if literal.is_file() else []
 
 
+def _issue(path: str, check: str) -> Issue:
+    return {"path": path, "check": check}
+
+
+def _split_gate_issues(
+    record_id: str,
+    gate: object,
+    cleanup_statuses: set[Any],
+    gate_requirements: set[Any],
+) -> list[Issue]:
+    issues: list[Issue] = []
+    if not isinstance(gate, dict):
+        return [_issue(record_id, "invalid_deletion_gate")]
+
+    required_gate_fields = gate_requirements or REQUIRED_GATE_FIELDS
+    for field in sorted(required_gate_fields):
+        if field not in gate:
+            issues.append(_issue(record_id, f"missing_gate_{field}"))
+    if gate.get("status") not in cleanup_statuses:
+        issues.append(_issue(record_id, "invalid_cleanup_status"))
+    if gate.get("status") == "ready":
+        for field in sorted(required_gate_fields):
+            value = str(gate.get(field, "")).strip().lower()
+            if value in READY_BLOCKERS:
+                issues.append(_issue(record_id, f"ready_gate_blocked_{field}"))
+    return issues
+
+
+def _split_record_path_issues(
+    record_id: str, paths: object, path_kind: object, root: Path
+) -> list[Issue]:
+    if not isinstance(paths, list) or not paths:
+        return [_issue(record_id, "empty_paths")]
+    if path_kind != "repo_local":
+        return []
+    return [
+        _issue(f"{record_id}:{pattern}", "unresolved_path")
+        for pattern in paths
+        if not _path_matches(str(pattern), root=root)
+    ]
+
+
+def _split_record_issues(
+    record: object,
+    index: int,
+    seen_ids: set[str],
+    *,
+    actions: set[Any],
+    public_safety: set[Any],
+    cleanup_statuses: set[Any],
+    gate_requirements: set[Any],
+    root: Path,
+) -> tuple[str, list[Issue]]:
+    if not isinstance(record, dict):
+        record_id = f"record[{index}]"
+        return record_id, [_issue(record_id, "invalid_record")]
+
+    issues: list[Issue] = []
+    record_id = str(record.get("id") or f"record[{index}]")
+    for field in sorted(REQUIRED_RECORD_FIELDS - set(record)):
+        issues.append(_issue(record_id, f"missing_{field}"))
+    if record_id in seen_ids:
+        issues.append(_issue(record_id, "duplicate_id"))
+    seen_ids.add(record_id)
+
+    if record.get("action") not in actions:
+        issues.append(_issue(record_id, "invalid_action"))
+    if record.get("public_safety") not in public_safety:
+        issues.append(_issue(record_id, "invalid_public_safety"))
+    gate = record.get("deletion_gate", {})
+    issues.extend(_split_gate_issues(record_id, gate, cleanup_statuses, gate_requirements))
+    paths = record.get("paths", [])
+    issues.extend(_split_record_path_issues(record_id, paths, record.get("path_kind"), root))
+    return record_id, issues
+
+
 def validate_split_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> dict[str, Any]:
-    issues: list[dict[str, str]] = []
+    issues: list[Issue] = []
     actions = set(manifest.get("actions", []))
     public_safety = set(manifest.get("public_safety", []))
     cleanup_statuses = set(manifest.get("cleanup_statuses", []))
@@ -140,50 +158,24 @@ def validate_split_manifest(manifest: dict[str, Any], *, root: Path = ROOT) -> d
     records = manifest.get("records", [])
 
     if manifest.get("schema_version") != "hk_public_split_manifest.v1":
-        issues.append({"path": "schema_version", "check": "unexpected_schema_version"})
+        issues.append(_issue("schema_version", "unexpected_schema_version"))
     if not isinstance(records, list) or not records:
-        issues.append({"path": "records", "check": "empty_records"})
+        issues.append(_issue("records", "empty_records"))
         records = []
 
     seen_ids: set[str] = set()
     for index, record in enumerate(records):
-        record_id = str(record.get("id") or f"record[{index}]")
-        missing = REQUIRED_RECORD_FIELDS - set(record)
-        for field in sorted(missing):
-            issues.append({"path": record_id, "check": f"missing_{field}"})
-        if record_id in seen_ids:
-            issues.append({"path": record_id, "check": "duplicate_id"})
-        seen_ids.add(record_id)
-
-        action = record.get("action")
-        if action not in actions:
-            issues.append({"path": record_id, "check": "invalid_action"})
-        if record.get("public_safety") not in public_safety:
-            issues.append({"path": record_id, "check": "invalid_public_safety"})
-
-        gate = record.get("deletion_gate", {})
-        if not isinstance(gate, dict):
-            issues.append({"path": record_id, "check": "invalid_deletion_gate"})
-            gate = {}
-        missing_gate = (gate_requirements or REQUIRED_GATE_FIELDS) - set(gate)
-        for field in sorted(missing_gate):
-            issues.append({"path": record_id, "check": f"missing_gate_{field}"})
-        if gate.get("status") not in cleanup_statuses:
-            issues.append({"path": record_id, "check": "invalid_cleanup_status"})
-        if gate.get("status") == "ready":
-            for field in sorted(gate_requirements or REQUIRED_GATE_FIELDS):
-                value = str(gate.get(field, "")).strip().lower()
-                if value in READY_BLOCKERS:
-                    issues.append({"path": record_id, "check": f"ready_gate_blocked_{field}"})
-
-        paths = record.get("paths", [])
-        if not isinstance(paths, list) or not paths:
-            issues.append({"path": record_id, "check": "empty_paths"})
-            paths = []
-        if record.get("path_kind") == "repo_local":
-            for pattern in paths:
-                if not _path_matches(str(pattern), root=root):
-                    issues.append({"path": f"{record_id}:{pattern}", "check": "unresolved_path"})
+        record_id, record_issues = _split_record_issues(
+            record,
+            index,
+            seen_ids,
+            actions=actions,
+            public_safety=public_safety,
+            cleanup_statuses=cleanup_statuses,
+            gate_requirements=gate_requirements,
+            root=root,
+        )
+        issues.extend(record_issues)
 
     return {
         "status": "passed" if not issues else "failed",
@@ -216,79 +208,6 @@ def _read_allowlist(path: Path) -> list[Path]:
     if not rows:
         raise ValueError("HK public demo allowlist is empty")
     return rows
-
-
-def _is_active_demo_file(relative: Path) -> bool:
-    if any(part in ARCHIVE_PARTS for part in relative.parts):
-        return False
-    return bool(relative.parts and relative.parts[0] in ACTIVE_DEMO_PARTS)
-
-
-def _module_root(name: str) -> str:
-    return name.split(".", 1)[0]
-
-
-def _scan_python_imports(path: Path, relative: Path) -> list[dict[str, str]]:
-    try:
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(relative))
-    except SyntaxError:
-        return [{"path": relative.as_posix(), "check": "python_syntax_error"}]
-
-    issues: list[dict[str, str]] = []
-    for node in ast.walk(tree):
-        imported: list[str] = []
-        if isinstance(node, ast.Import):
-            imported = [alias.name for alias in node.names]
-        elif isinstance(node, ast.ImportFrom) and node.module:
-            imported = [node.module]
-        for module in imported:
-            root = _module_root(module)
-            if root in FORBIDDEN_WORKSPACE_IMPORTS:
-                issues.append({"path": relative.as_posix(), "check": "workspace_import"})
-            if root in FORBIDDEN_RUNTIME_IMPORTS:
-                issues.append({"path": relative.as_posix(), "check": "runtime_dependency_import"})
-    return issues
-
-
-def scan_public_tree(root: Path) -> dict[str, Any]:
-    issues: list[dict[str, str]] = []
-    files: list[str] = []
-    for path in sorted(root.rglob("*")):
-        if not path.is_file():
-            continue
-        relative = path.relative_to(root)
-        relative_text = relative.as_posix()
-        files.append(relative_text)
-        if any(part.startswith(".env") or part in FORBIDDEN_PARTS for part in relative.parts):
-            issues.append({"path": relative_text, "check": "forbidden_path"})
-        if path.suffix.lower() in FORBIDDEN_SUFFIXES:
-            issues.append({"path": relative_text, "check": "licensed_or_archive_suffix"})
-        if path.stat().st_size > MAX_PUBLIC_FILE_BYTES:
-            issues.append({"path": relative_text, "check": "oversized_file"})
-        try:
-            text = path.read_text(encoding="utf-8")
-        except UnicodeDecodeError:
-            issues.append({"path": relative_text, "check": "non_utf8_file"})
-            continue
-        for check, pattern in FORBIDDEN_TEXT.items():
-            if pattern.search(text):
-                issues.append({"path": relative_text, "check": check})
-        if _is_active_demo_file(relative) and path.suffix.lower() == ".py":
-            issues.extend(_scan_python_imports(path, relative))
-        if (
-            _is_active_demo_file(relative)
-            and path.suffix.lower() in RUNTIME_TEXT_SUFFIXES
-            and relative_text != "export-manifest.json"
-        ):
-            for check, pattern in FORBIDDEN_RUNTIME_TEXT.items():
-                if pattern.search(text):
-                    issues.append({"path": relative_text, "check": check})
-    return {
-        "status": "passed" if not issues else "failed",
-        "files_scanned": len(files),
-        "files": files,
-        "issues": issues,
-    }
 
 
 def _run_quality_checks(root: Path) -> dict[str, Any]:

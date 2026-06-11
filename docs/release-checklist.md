@@ -20,7 +20,7 @@
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
 - [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
 - [ ] 如推进独立港股研究线，`python scripts/hk_research_lane_inventory.py --check --format json` 已通过，且 `demo/hk-research-lane-template-v1` smoke 只使用 synthetic fixture。
-- [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；失败项能定位到具体子项目和命令。
+- [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台港股拆分边界 gate 和策略研究 maintainability ratchet，失败项能定位到具体子项目和命令。
 - [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。

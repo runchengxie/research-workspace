@@ -110,3 +110,4 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
 配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
+`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台港股拆分边界 gate 与策略研究 maintainability ratchet。

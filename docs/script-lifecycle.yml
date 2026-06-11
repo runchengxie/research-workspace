@@ -28,6 +28,36 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
+      "path": "scripts/a_share_readiness_common.py",
+      "owner": "research-workspace",
+      "purpose": "Shared constants and primitives for A-share readiness checks",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by a_share_readiness.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
+    },
+    {
+      "path": "scripts/a_share_readiness_contract.py",
+      "owner": "research-workspace",
+      "purpose": "A-share current contract, asset, and registry readiness checks",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by a_share_readiness.py",
+      "external_dependencies": "DATA_PLATFORM_ROOT for full current-contract checks",
+      "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
+    },
+    {
+      "path": "scripts/a_share_readiness_evidence.py",
+      "owner": "research-workspace",
+      "purpose": "A-share research, target, and execution evidence aggregation",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by a_share_readiness.py",
+      "external_dependencies": "DATA_PLATFORM_ROOT and optional evidence manifest paths",
+      "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
+    },
+    {
       "path": "scripts/export_hk_public_demo.py",
       "owner": "research-workspace",
       "purpose": "Clean-room public demo staging and safety scan",
@@ -36,6 +66,16 @@
       "writes_files": "staging directory passed via --out",
       "external_dependencies": "none for scan; git optional for source revision",
       "removal_condition": "remove only after public demo staging is removed or replaced, no release checklist calls this script for two release reviews, and the replacement export path is documented"
+    },
+    {
+      "path": "scripts/hk_public_demo_scan.py",
+      "owner": "research-workspace",
+      "purpose": "Public-demo safety scan shared by export and scan-only workflows",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after public demo staging is removed or replaced, no release checklist calls the public-demo scanner for two release reviews"
     },
     {
       "path": "scripts/export_hk_legacy_archive.py",
@@ -136,6 +176,56 @@
       "writes_files": "stdout only",
       "external_dependencies": "git and optional DATA_PLATFORM_ROOT",
       "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance.py",
+      "owner": "research-workspace",
+      "purpose": "Maintainability governance register validation used by workspace doctor",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_common.py",
+      "owner": "research-workspace",
+      "purpose": "Shared Check type for workspace governance modules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace governance modules",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_hk_split.py",
+      "owner": "research-workspace",
+      "purpose": "HK split manifest path coverage validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after HK split governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_submodules.py",
+      "owner": "research-workspace",
+      "purpose": "Submodule delegated-check governance validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "scripts/submodule_checks.json",
+      "removal_condition": "remove only after delegated submodule governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_quality.py",
+      "owner": "research-workspace",
+      "purpose": "Ruff and Pyright exclude-register drift validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "submodule pyproject.toml files",
+      "removal_condition": "remove only after quality coverage governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
     },
     {
       "path": "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",

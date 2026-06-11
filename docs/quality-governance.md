@@ -11,7 +11,9 @@
 | `cross-sectional-trees` | 仓库自有 lint、format、Pyright、pytest | `pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、CPCV、turnover/cost、capacity 复核 |
 | `quant-execution-engine` | Ruff、Ruff format、Pyright、pytest | mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
-顶层委托配置是 `scripts/submodule_checks.json`。`type` 始终表示各仓库当前 hard type gate；
+顶层委托配置是 `scripts/submodule_checks.json`。`lint` 会同时运行子仓库自己的边界与维护债
+ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，策略研究包含
+`scripts/dev/run_tests.sh maintainability`。`type` 始终表示各仓库当前 hard type gate；
 执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内单独运行，不替代 Pyright。
 当前 Pyright 允许保留已分类 warning：延迟导出列表和 optional dependency source visibility；
 任何 error 都会阻塞 hard gate。

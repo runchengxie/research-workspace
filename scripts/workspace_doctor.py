@@ -10,8 +10,12 @@ import json
 import os
 import shutil
 import subprocess
-from dataclasses import dataclass
 from pathlib import Path
+
+from workspace_governance import (
+    Check,
+    check_maintainability_governance,
+)
 
 EXPECTED_SUBMODULES = {
     "market-data-platform": "marketdata",
@@ -19,6 +23,10 @@ EXPECTED_SUBMODULES = {
     "quant-execution-engine": "qexec",
 }
 
+DATA_PLATFORM_ROOT_CANDIDATES = (
+    Path.home() / "data" / "market-data-platform",
+    Path("/data/market-data-platform"),
+)
 FORBIDDEN_TOP_LEVEL_PATTERNS = (".env", ".env.*", ".envrc", ".envrc.*")
 FORBIDDEN_TOP_LEVEL_DIRS = ("artifacts", "outputs", "data", "cache")
 FORBIDDEN_SCRIPT_IMPORTS = {
@@ -28,13 +36,6 @@ FORBIDDEN_SCRIPT_IMPORTS = {
     "quant_execution_engine",
 }
 HK_PRIVATE_ARCHIVE_MANIFEST = "docs/hk-private-archive-manifest.yml"
-
-
-@dataclass(frozen=True)
-class Check:
-    severity: str
-    code: str
-    message: str
 
 
 def parse_gitmodules(root: Path) -> dict[str, str]:
@@ -192,14 +193,57 @@ def check_public_clis(root: Path) -> list[Check]:
     return checks
 
 
+def _check_hk_current_or_freeze(hk_contract: Path, hk_freeze_marker: Path) -> list[Check]:
+    if hk_contract.is_file():
+        return [Check("OK", "current-contract", f"Found {hk_contract}.")]
+    if not hk_freeze_marker.is_file():
+        return [Check("WARN", "current-contract", f"Missing {hk_contract}.")]
+
+    try:
+        marker = json.loads(hk_freeze_marker.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [
+            Check(
+                "WARN",
+                "frozen-market",
+                f"Invalid HK cold-storage marker {hk_freeze_marker}: {exc}",
+            )
+        ]
+
+    cold_snapshot = Path(str(marker.get("cold_snapshot") or "")).expanduser()
+    if cold_snapshot.is_dir():
+        return [
+            Check(
+                "OK",
+                "frozen-market",
+                f"HK assets are frozen in cold storage: {cold_snapshot}.",
+            )
+        ]
+    return [
+        Check(
+            "WARN",
+            "frozen-market",
+            f"HK cold-storage snapshot is missing: {cold_snapshot}.",
+        )
+    ]
+
+
 def check_data_platform_root() -> list[Check]:
     root_text = os.environ.get("DATA_PLATFORM_ROOT", "").strip()
     if not root_text:
+        existing_candidates = [
+            str(candidate) for candidate in DATA_PLATFORM_ROOT_CANDIDATES if candidate.exists()
+        ]
+        hint = (
+            f" Candidate: export DATA_PLATFORM_ROOT={existing_candidates[0]}."
+            if existing_candidates
+            else " Common candidates: ~/data/market-data-platform or /data/market-data-platform."
+        )
         return [
             Check(
                 "WARN",
                 "data-platform-root",
-                "DATA_PLATFORM_ROOT is not set; current contract checks are skipped.",
+                "DATA_PLATFORM_ROOT is not set; current contract checks are skipped." + hint,
             )
         ]
 
@@ -221,39 +265,7 @@ def check_data_platform_root() -> list[Check]:
     legacy_cn_contract = current_root / "cn_current.json"
     hk_freeze_marker = artifact_root / "metadata" / "frozen_markets" / "hk.json"
     dataset_registry = artifact_root / "metadata" / "dataset_registry.csv"
-    if hk_contract.is_file():
-        checks.append(Check("OK", "current-contract", f"Found {hk_contract}."))
-    elif hk_freeze_marker.is_file():
-        try:
-            marker = json.loads(hk_freeze_marker.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError) as exc:
-            checks.append(
-                Check(
-                    "WARN",
-                    "frozen-market",
-                    f"Invalid HK cold-storage marker {hk_freeze_marker}: {exc}",
-                )
-            )
-        else:
-            cold_snapshot = Path(str(marker.get("cold_snapshot") or "")).expanduser()
-            if cold_snapshot.is_dir():
-                checks.append(
-                    Check(
-                        "OK",
-                        "frozen-market",
-                        f"HK assets are frozen in cold storage: {cold_snapshot}.",
-                    )
-                )
-            else:
-                checks.append(
-                    Check(
-                        "WARN",
-                        "frozen-market",
-                        f"HK cold-storage snapshot is missing: {cold_snapshot}.",
-                    )
-                )
-    else:
-        checks.append(Check("WARN", "current-contract", f"Missing {hk_contract}."))
+    checks.extend(_check_hk_current_or_freeze(hk_contract, hk_freeze_marker))
     if a_share_contract.is_file():
         checks.append(Check("OK", "current-contract", f"Found {a_share_contract}."))
     else:
@@ -428,6 +440,7 @@ def run_checks(root: Path) -> list[Check]:
     checks.extend(check_top_level_outputs(root))
     checks.extend(check_script_import_boundaries(root))
     checks.extend(check_hk_private_archive_governance(root))
+    checks.extend(check_maintainability_governance(root))
     return checks
 
 

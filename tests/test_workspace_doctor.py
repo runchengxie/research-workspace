@@ -11,12 +11,20 @@ from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "workspace_doctor.py"
+GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"
+sys.path.insert(0, str(SCRIPT.parent))
 
 spec = importlib.util.spec_from_file_location("workspace_doctor", SCRIPT)
 workspace_doctor = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
 sys.modules[spec.name] = workspace_doctor
 spec.loader.exec_module(workspace_doctor)
+
+governance_spec = importlib.util.spec_from_file_location("workspace_governance", GOVERNANCE_SCRIPT)
+workspace_governance = importlib.util.module_from_spec(governance_spec)
+assert governance_spec.loader is not None
+sys.modules[governance_spec.name] = workspace_governance
+governance_spec.loader.exec_module(workspace_governance)
 
 
 class WorkspaceDoctorTest(unittest.TestCase):
@@ -90,6 +98,22 @@ class WorkspaceDoctorTest(unittest.TestCase):
         messages = [check.message for check in checks]
         self.assertTrue(any("a_share_current.json" in message for message in messages))
         self.assertFalse(any("cn_current.json" in message for message in messages))
+
+    def test_data_platform_contract_check_suggests_existing_candidate_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp)
+            with (
+                mock.patch.dict(workspace_doctor.os.environ, {}, clear=True),
+                mock.patch.object(
+                    workspace_doctor,
+                    "DATA_PLATFORM_ROOT_CANDIDATES",
+                    (artifact_root,),
+                ),
+            ):
+                checks = workspace_doctor.check_data_platform_root()
+
+        self.assertEqual("WARN", checks[0].severity)
+        self.assertIn(f"export DATA_PLATFORM_ROOT={artifact_root}", checks[0].message)
 
     def test_data_platform_contract_check_warns_on_legacy_cn_alias(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -188,6 +212,73 @@ class WorkspaceDoctorTest(unittest.TestCase):
 
         self.assertEqual(["OK"], [check.severity for check in checks])
         self.assertIn("outside the submodule graph", checks[0].message)
+
+    def test_submodule_governance_gates_are_visible_to_doctor(self) -> None:
+        checks = workspace_governance.check_submodule_governance_gates(ROOT)
+
+        self.assertEqual(["OK"], [check.severity for check in checks])
+        self.assertIn("repo-local governance gates", checks[0].message)
+
+    def test_submodule_governance_gates_require_lint_and_full_wiring(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            scripts_dir = root / "scripts"
+            scripts_dir.mkdir()
+            (scripts_dir / "submodule_checks.json").write_text(
+                json.dumps(
+                    {
+                        "submodules": {
+                            "market-data-platform": {
+                                "profiles": {
+                                    "lint": [],
+                                    "full": ["@smoke", "@test", "@type"],
+                                }
+                            },
+                            "cross-sectional-trees": {
+                                "profiles": {
+                                    "lint": [["scripts/dev/run_tests.sh", "maintainability"]],
+                                    "full": ["@smoke", "@lint", "@test", "@type"],
+                                }
+                            },
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            checks = workspace_governance.check_submodule_governance_gates(root)
+
+        self.assertEqual(["ERROR"], [check.severity for check in checks])
+        self.assertIn("market-data-platform:lint", checks[0].message)
+        self.assertIn("market-data-platform:full does not include @lint", checks[0].message)
+
+    def test_maintainability_governance_is_visible_to_doctor(self) -> None:
+        checks = workspace_doctor.check_maintainability_governance(ROOT)
+
+        errors = [check.message for check in checks if check.severity == "ERROR"]
+        codes = {check.code for check in checks}
+
+        self.assertEqual([], errors)
+        self.assertIn("governance-docs", codes)
+        self.assertIn("governance-deprecations", codes)
+        self.assertIn("governance-script-lifecycle", codes)
+        self.assertIn("governance-quality", codes)
+        self.assertIn("governance-refactor-roadmap", codes)
+        self.assertIn("governance-hk-public-split", codes)
+        self.assertTrue(
+            any(
+                check.severity == "WARN" and check.code == "governance-deprecations"
+                for check in checks
+            )
+        )
+
+    def test_maintainability_governance_reports_missing_docs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            checks = workspace_doctor.check_maintainability_governance(Path(tmp))
+
+        errors = [check for check in checks if check.severity == "ERROR"]
+        self.assertTrue(errors)
+        self.assertTrue(any("Missing docs/deprecations.yml" in check.message for check in errors))
 
 
 if __name__ == "__main__":

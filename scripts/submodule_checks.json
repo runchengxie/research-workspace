@@ -8,7 +8,8 @@
         ],
         "lint": [
           ["uv", "run", "--extra", "dev", "ruff", "check", "."],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."],
+          ["uv", "run", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
         ],
         "test": [
           ["uv", "run", "--extra", "dev", "pytest"]
@@ -27,7 +28,8 @@
         ],
         "lint": [
           ["scripts/dev/run_tests.sh", "lint"],
-          ["scripts/dev/run_tests.sh", "format-all"]
+          ["scripts/dev/run_tests.sh", "format-all"],
+          ["scripts/dev/run_tests.sh", "maintainability"]
         ],
         "test": [
           ["uv", "run", "--extra", "dev", "pytest"]

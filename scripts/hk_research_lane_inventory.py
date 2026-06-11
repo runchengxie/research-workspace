@@ -29,6 +29,7 @@ SECRET_MARKERS = {
     "TUSHARE_TOKEN",
 }
 IGNORED_PARTS = {".venv", "__pycache__", ".pytest_cache", ".ruff_cache"}
+Issue = dict[str, str]
 
 
 def load_inventory(path: Path = DEFAULT_INVENTORY) -> dict[str, Any]:
@@ -38,69 +39,76 @@ def load_inventory(path: Path = DEFAULT_INVENTORY) -> dict[str, Any]:
     return payload
 
 
+def _issue(check: str, message: str) -> Issue:
+    return {"check": check, "message": message}
+
+
+def _record_issues(record: object, index: int, seen: set[str]) -> list[Issue]:
+    if not isinstance(record, dict):
+        return [_issue("record_type", f"record {index} is not an object")]
+
+    issues: list[Issue] = []
+    record_id = str(record.get("id") or f"record_{index}")
+    if record_id in seen:
+        issues.append(_issue("duplicate_id", record_id))
+    seen.add(record_id)
+
+    missing = sorted(REQUIRED_FIELDS - set(record))
+    if missing:
+        issues.append(_issue("missing_fields", f"{record_id}: {missing}"))
+    if record.get("action") not in ALLOWED_ACTIONS:
+        issues.append(_issue("action", f"{record_id}: invalid action"))
+    gate = record.get("deletion_gate")
+    if not isinstance(gate, dict):
+        issues.append(_issue("deletion_gate", f"{record_id}: gate missing"))
+    elif (
+        record.get("action") in {"move", "archive", "delete_later"}
+        and gate.get("status") == "ready"
+    ):
+        issues.append(
+            _issue(
+                "premature_deletion_gate",
+                f"{record_id}: ready gates require a separate removal change",
+            )
+        )
+    return issues
+
+
+def _has_retained_owner(records: list[Any], owner: str) -> bool:
+    return any(
+        isinstance(record, dict) and record.get("owner") == owner and record.get("action") == "keep"
+        for record in records
+    )
+
+
+def _boundary_issues(records: list[Any]) -> list[Issue]:
+    issues: list[Issue] = []
+    if not _has_retained_owner(records, "quant-execution-engine"):
+        issues.append(
+            _issue("execution_boundary", "standard execution contract must remain retained")
+        )
+    if not _has_retained_owner(records, "market-data-platform"):
+        issues.append(
+            _issue(
+                "data_platform_boundary",
+                "HK data production must remain with market-data-platform",
+            )
+        )
+    return issues
+
+
 def validate_inventory(payload: dict[str, Any]) -> dict[str, Any]:
-    issues: list[dict[str, str]] = []
+    issues: list[Issue] = []
     if payload.get("schema_version") != "hk_research_lane_inventory.v1":
-        issues.append({"check": "schema_version", "message": "unsupported schema_version"})
+        issues.append(_issue("schema_version", "unsupported schema_version"))
     records = payload.get("records")
     if not isinstance(records, list) or not records:
-        issues.append({"check": "records", "message": "records must be a non-empty list"})
+        issues.append(_issue("records", "records must be a non-empty list"))
         records = []
     seen: set[str] = set()
     for index, record in enumerate(records):
-        if not isinstance(record, dict):
-            issues.append({"check": "record_type", "message": f"record {index} is not an object"})
-            continue
-        record_id = str(record.get("id") or f"record_{index}")
-        if record_id in seen:
-            issues.append({"check": "duplicate_id", "message": record_id})
-        seen.add(record_id)
-        missing = sorted(REQUIRED_FIELDS - set(record))
-        if missing:
-            issues.append({"check": "missing_fields", "message": f"{record_id}: {missing}"})
-        if record.get("action") not in ALLOWED_ACTIONS:
-            issues.append({"check": "action", "message": f"{record_id}: invalid action"})
-        gate = record.get("deletion_gate")
-        if not isinstance(gate, dict):
-            issues.append({"check": "deletion_gate", "message": f"{record_id}: gate missing"})
-        elif (
-            record.get("action") in {"move", "archive", "delete_later"}
-            and gate.get("status") == "ready"
-        ):
-            issues.append(
-                {
-                    "check": "premature_deletion_gate",
-                    "message": f"{record_id}: ready gates require a separate removal change",
-                }
-            )
-    retained_execution = [
-        record
-        for record in records
-        if isinstance(record, dict)
-        and record.get("owner") == "quant-execution-engine"
-        and record.get("action") == "keep"
-    ]
-    if not retained_execution:
-        issues.append(
-            {
-                "check": "execution_boundary",
-                "message": "standard execution contract must remain retained",
-            }
-        )
-    retained_data = [
-        record
-        for record in records
-        if isinstance(record, dict)
-        and record.get("owner") == "market-data-platform"
-        and record.get("action") == "keep"
-    ]
-    if not retained_data:
-        issues.append(
-            {
-                "check": "data_platform_boundary",
-                "message": "HK data production must remain with market-data-platform",
-            }
-        )
+        issues.extend(_record_issues(record, index, seen))
+    issues.extend(_boundary_issues(records))
     return {
         "status": "passed" if not issues else "failed",
         "issues": issues,
