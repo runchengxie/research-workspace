@@ -10,7 +10,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 48,
-      "python_loc": 6925,
+      "python_loc": 6926,
       "hk_related_file_count": 23,
       "large_files": [],
       "long_functions": [],
@@ -65,9 +65,9 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 160,
-      "python_loc": 63892,
-      "hk_related_file_count": 88,
+      "python_file_count": 154,
+      "python_loc": 63770,
+      "hk_related_file_count": 82,
       "large_files": [
         {
           "path": "src/market_data_platform/hk_assets/asset_health.py",
@@ -546,8 +546,7 @@
           "src/market_data_platform/hk_assets/patch_merge.py"
         ],
         "pyright_include": [
-          "src/market_data_platform",
-          "src/hk_data_platform"
+          "src/market_data_platform"
         ],
         "pyright_exclude": [
           ".venv",
@@ -628,7 +627,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 240,
-      "python_loc": 72175,
+      "python_loc": 71664,
       "hk_related_file_count": 25,
       "large_files": [
         {
@@ -897,16 +896,16 @@
           "complexity": 37
         },
         {
-          "path": "src/cstree/cli/liveops.py",
-          "name": "_register_alloc_hk_command",
-          "line_count": 173,
-          "complexity": 1
-        },
-        {
           "path": "src/cstree/liveops/alloc_hk_allocation.py",
           "name": "build_allocation_table",
           "line_count": 173,
           "complexity": 28
+        },
+        {
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "main",
+          "line_count": 173,
+          "complexity": 27
         }
       ],
       "complexity_hotspots": [

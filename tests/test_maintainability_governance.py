@@ -240,6 +240,7 @@ def test_deprecation_budget_blocks_new_pending_surfaces() -> None:
     mutated = copy.deepcopy(manifest)
     extra_record = copy.deepcopy(mutated["records"][0])
     extra_record["id"] = "new-legacy-surface"
+    extra_record["status"] = "blocked_pending_audit"
     mutated["records"].append(extra_record)
 
     checks = module._check_deprecations(mutated)

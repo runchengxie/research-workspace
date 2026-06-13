@@ -44,7 +44,7 @@
         "docs/operations/hk-assets.md",
         "tests/test_hk*.py"
       ],
-      "restore_dependency": "restore-critical provider workflows and deprecated compatibility wrappers",
+      "restore_dependency": "restore-critical provider workflows and deleted compatibility wrappers retained in hk-freeze-20260613",
       "consumer_audit": "pending_downstream_attestation",
       "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
       "rollback_notes": "docs/archive/hk/README.md",
@@ -61,7 +61,7 @@
         "consumer_audit": "pending_downstream_attestation",
         "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "pending_follow_up_execution",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_transitions.py tests/test_hk_depth.py tests/test_paths.py tests/test_quality_governance.py -q",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "not_started"
@@ -82,7 +82,7 @@
         "tests/test_alloc_hk.py",
         "tests/test_cli_liveops.py"
       ],
-      "restore_dependency": "explicit HK reproduction, archived research provenance, and alloc-hk compatibility",
+      "restore_dependency": "explicit HK reproduction, archived research provenance, and alloc_hk module restoration",
       "consumer_audit": "pending_downstream_attestation",
       "replacement_docs": "cross-sectional-trees/docs/cli.md",
       "rollback_notes": "docs/archive/hk/README.md",
@@ -99,7 +99,7 @@
         "consumer_audit": "pending_downstream_attestation",
         "replacement_docs": "cross-sectional-trees/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "pending_follow_up_execution",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_cli_liveops.py tests/test_docs_contracts.py tests/test_alloc_hk.py -q",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "not_started"

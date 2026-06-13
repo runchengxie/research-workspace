@@ -18,7 +18,7 @@
     "status_rule": "A record may move to removal_ready only after the required artifacts are captured for the target release and consumer_audit is no longer pending or manual_review_required."
   },
   "deprecation_budget": {
-    "pending_follow_up_max": 7,
+    "pending_follow_up_max": 1,
     "policy": "ratchet_only; lower this maximum after compatibility surfaces are removed, do not raise it without explicit release review"
   },
   "records": [
@@ -28,18 +28,19 @@
       "entrypoint": "hkdata",
       "kind": "console_script",
       "replacement": "marketdata",
-      "current_consumers": "repo-local and downstream usage audit pending",
-      "target_milestone": "two releases after zero repo-local/downstream usage is recorded",
-      "removal_condition": "No repo-local or downstream usage for two releases, migration docs published, compatibility tests updated.",
+      "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
+      "target_milestone": "completed in active A-share workspace cleanup",
+      "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag and keep marketdata alias docs",
       "restore_evidence_required": true,
       "focused_tests": [
         "market-data-platform compatibility governance tests",
         "market-data-platform CLI smoke tests"
       ],
-      "consumer_audit": "pending",
-      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
-      "status": "blocked_pending_audit"
+      "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+      "replacement_docs": "market-data-platform/docs/compatibility.md",
+      "restore_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
+      "status": "removed"
     },
     {
       "id": "market-data-platform-hk-data-platform-package",
@@ -47,18 +48,19 @@
       "entrypoint": "src/hk_data_platform/*",
       "kind": "compat_package",
       "replacement": "market_data_platform public modules and marketdata CLI",
-      "current_consumers": "repo-local import and downstream usage audit pending",
-      "target_milestone": "two releases after import audit is clean",
-      "removal_condition": "No hk_data_platform imports in repo-local scans or downstream reports.",
+      "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
+      "target_milestone": "completed in active A-share workspace cleanup",
+      "removal_condition": "No active package exposure; rollback restores compatibility package from previous release tag.",
       "rollback_path": "restore compatibility package from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
         "market-data-platform compatibility governance tests",
         "market-data-platform import compatibility tests"
       ],
-      "consumer_audit": "pending",
-      "replacement_docs": "market-data-platform/docs/README.md",
-      "status": "blocked_pending_audit"
+      "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+      "replacement_docs": "market-data-platform/docs/compatibility.md",
+      "restore_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
+      "status": "removed"
     },
     {
       "id": "market-data-platform-rqdata-hk-depth",
@@ -66,18 +68,19 @@
       "entrypoint": "rqdata-hk-depth",
       "kind": "console_script",
       "replacement": "marketdata rqdata hk-depth -- ...",
-      "current_consumers": "legacy script usage audit pending",
-      "target_milestone": "two releases after migration guide is published and usage is zero",
-      "removal_condition": "No legacy command usage, migration docs complete, HK depth focused tests pass.",
+      "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
+      "target_milestone": "completed in active A-share workspace cleanup",
+      "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
         "market-data-platform/tests/test_hk_depth.py",
         "market-data-platform compatibility governance tests"
       ],
-      "consumer_audit": "pending",
-      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
-      "status": "blocked_pending_audit"
+      "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+      "replacement_docs": "market-data-platform/docs/compatibility.md",
+      "restore_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
+      "status": "removed"
     },
     {
       "id": "market-data-platform-rqdata-tick",
@@ -85,18 +88,19 @@
       "entrypoint": "rqdata-tick",
       "kind": "console_script",
       "replacement": "marketdata rqdata hk-depth -- ...",
-      "current_consumers": "legacy script usage audit pending",
-      "target_milestone": "two releases after migration guide is published and usage is zero",
-      "removal_condition": "No legacy command usage, migration docs complete, HK depth focused tests pass.",
+      "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
+      "target_milestone": "completed in active A-share workspace cleanup",
+      "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
         "market-data-platform/tests/test_hk_depth.py",
         "market-data-platform compatibility governance tests"
       ],
-      "consumer_audit": "pending",
-      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
-      "status": "blocked_pending_audit"
+      "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+      "replacement_docs": "market-data-platform/docs/compatibility.md",
+      "restore_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
+      "status": "removed"
     },
     {
       "id": "market-data-platform-rqdata-hk-assets",
@@ -104,18 +108,19 @@
       "entrypoint": "rqdata-hk-assets",
       "kind": "console_script",
       "replacement": "marketdata rqdata hk-assets -- ...",
-      "current_consumers": "legacy script usage audit pending",
-      "target_milestone": "two releases after migration guide is published and usage is zero",
-      "removal_condition": "No legacy command usage, migration docs complete, HK asset workflow focused tests pass.",
+      "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
+      "target_milestone": "completed in active A-share workspace cleanup",
+      "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
         "market-data-platform/tests/test_hk_asset_workflow.py",
         "market-data-platform compatibility governance tests"
       ],
-      "consumer_audit": "pending",
-      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
-      "status": "blocked_pending_audit"
+      "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+      "replacement_docs": "market-data-platform/docs/compatibility.md",
+      "restore_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
+      "status": "removed"
     },
     {
       "id": "cross-sectional-trees-alloc-hk",
@@ -123,18 +128,19 @@
       "entrypoint": "cstree alloc-hk",
       "kind": "deprecated_cli",
       "replacement": "cstree alloc plus cstree export-targets",
-      "current_consumers": "explicit HK reproduction and deprecated compatibility users",
-      "target_milestone": "after restore drill, consumer audit, and successor allocation docs are complete",
-      "removal_condition": "No active consumer remains, restore evidence is current, migration docs and focused tests pass.",
+      "current_consumers": "active cstree CLI entry removed on 2026-06-13; alloc_hk module retained for restore-only reproduction",
+      "target_milestone": "CLI removal completed; module deletion remains a separate follow-up",
+      "removal_condition": "No active cstree CLI exposure; rollback restores deprecated CLI handler from previous release tag.",
       "rollback_path": "restore deprecated CLI handler from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
         "cross-sectional-trees/tests/test_alloc_hk.py",
         "cross-sectional-trees/tests/test_cli_liveops.py"
       ],
-      "consumer_audit": "pending",
+      "consumer_audit": "active CLI removed; module-level restore consumer audit remains in hk-public-split manifest",
       "replacement_docs": "cross-sectional-trees/docs/cli.md",
-      "status": "blocked_pending_audit"
+      "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
+      "status": "removed"
     },
     {
       "id": "cross-sectional-trees-hk-historical-configs",

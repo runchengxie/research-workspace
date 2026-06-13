@@ -32,10 +32,11 @@
     "not_applicable",
     "blocked_pending_audit",
     "follow_up_required",
-    "ready"
+    "ready",
+    "removed"
   ],
   "follow_up_budget": {
-    "blocked_or_follow_up_records_max": 7,
+    "blocked_or_follow_up_records_max": 6,
     "policy": "ratchet_only; lower this maximum after HK split follow-up records are resolved, do not raise it without explicit release review"
   },
   "deletion_gate_requirements": [
@@ -209,27 +210,25 @@
       "id": "market-data-platform-legacy-hk-entrypoints",
       "owner_repo": "market-data-platform",
       "paths": [
-        "market-data-platform/src/hk_data_platform/**",
-        "market-data-platform/src/hk_data_platform.egg-info/**",
         "market-data-platform/pyproject.toml"
       ],
       "path_kind": "repo_local",
       "action": "delete_after_split",
       "public_safety": "restore_sensitive",
-      "restore_dependency": "compatibility imports and commands must remain until downstream usage is audited",
-      "consumer_audit_status": "pending repo-local and downstream audit",
+      "restore_dependency": "compatibility imports and commands are retained in hk-freeze-20260613 and private restore-only archives",
+      "consumer_audit_status": "repo-local focused audit passed; active package no longer exposes hkdata, hk_data_platform.*, or rqdata-hk-* wrappers",
       "replacement_path": "marketdata unified CLI entrypoints",
       "required_redactions": [
         "do not export compatibility wrapper code into public demo"
       ],
-      "removal_condition": "Eligible only after no repo-local or downstream callers use hkdata, hk_data_platform.*, or rqdata-hk-* wrappers for two release cycles.",
+      "removal_condition": "Removed from the active package on 2026-06-13 after private archive and freeze tag were recorded; restore from hk-freeze-20260613 if needed.",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "removed",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
-        "consumer_audit": "pending",
-        "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+        "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+        "replacement_docs": "market-data-platform/docs/compatibility.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "market-data-platform compatibility governance tests",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_transitions.py tests/test_hk_depth.py tests/test_paths.py tests/test_quality_governance.py -q",
         "public_split_evidence": "not_required"
       }
     },
@@ -243,21 +242,21 @@
       "path_kind": "repo_local",
       "action": "delete_after_split",
       "public_safety": "restore_sensitive",
-      "restore_dependency": "needed for explicit HK reproduction and deprecated alloc-hk compatibility",
-      "consumer_audit_status": "pending deprecated CLI consumer audit",
+      "restore_dependency": "needed for explicit HK reproduction; active cstree alloc-hk CLI entry was removed on 2026-06-13",
+      "consumer_audit_status": "active CLI removed; module-level restore consumers still require follow-up audit",
       "replacement_path": "cstree alloc plus cstree export-targets for active flows",
       "required_redactions": [
         "provider assumptions",
         "private portfolio or execution references"
       ],
-      "removal_condition": "Eligible only after deprecated alloc-hk has no consumers, restore drill remains available, and successor allocation docs are in place.",
+      "removal_condition": "Eligible only after alloc_hk module has no restore consumers, restore drill remains available, and successor allocation docs are in place.",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "follow_up_required",
         "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "pending",
+        "consumer_audit": "module-level restore consumer audit pending",
         "replacement_docs": "cross-sectional-trees docs for alloc/export-targets",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "cross-sectional-trees/tests/test_alloc_hk.py",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_cli_liveops.py tests/test_docs_contracts.py tests/test_alloc_hk.py -q",
         "public_split_evidence": "public demo synthetic allocation module"
       }
     },
