@@ -12,7 +12,8 @@
 
 ## 当前边界
 
-- 私有候选仓库仍是 `hk-quant-legacy-archive`，必须保持 private、paused-maintenance、restore-only。
+- 私有仓库是 `git@github.com:runchengxie/hk-quant-legacy-archive.git`，必须保持
+  private、paused-maintenance、restore-only。
 - 私有归档可以保留清单约束下的 provider 业务代码、历史配置和测试。
 - 公开 demo 只承接 synthetic / public-safe clean-room 示例。
 - 两条路径都不承接凭证、行情文件、provider cache、研究 run、券商 adapter 或交易审计日志。

@@ -627,8 +627,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 239,
-      "python_loc": 71995,
+      "python_file_count": 240,
+      "python_loc": 72175,
       "hk_related_file_count": 25,
       "large_files": [
         {
@@ -638,7 +638,7 @@
         },
         {
           "path": "tests/test_pipeline_e2e.py",
-          "loc": 1857,
+          "loc": 1859,
           "hk_related": false
         },
         {
@@ -662,13 +662,13 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/cpcv.py",
-          "loc": 998,
+          "path": "src/cstree/pipeline/config.py",
+          "loc": 1039,
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/config.py",
-          "loc": 980,
+          "path": "src/cstree/research/cpcv.py",
+          "loc": 998,
           "hk_related": false
         },
         {
@@ -738,7 +738,7 @@
         },
         {
           "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 770,
+          "loc": 774,
           "hk_related": false
         },
         {

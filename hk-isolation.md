@@ -38,6 +38,7 @@ research-workspace
 
 hk-research-workspace-archive
   status: private, paused-maintenance, restore-only
+  remote: git@github.com:runchengxie/hk-research-workspace-archive.git
   focus: 港股历史复现
   submodules:
     market-data-platform @ hk freeze tag or commit
@@ -65,6 +66,11 @@ hk-cross-sectional-strategy-demo
 如果维护者只需要“未来能恢复”，`hk-quant-legacy-archive` 这类 private archive 就足够；
 如果维护者希望保留完整子模块组合和恢复顺序，再新增 `hk-research-workspace-archive`
 作为港股 superproject 更清晰。
+
+截至 2026-06-13，这两条线都已落地为 private restore-only 仓库：
+
+- `git@github.com:runchengxie/hk-quant-legacy-archive.git`
+- `git@github.com:runchengxie/hk-research-workspace-archive.git`
 
 ## 当前证据
 
@@ -126,10 +132,10 @@ git push origin hk-freeze-20260613
 
 ### 阶段 2：建立港股 restore-only workspace
 
-如果决定保留完整子模块组合，创建新的 private repo，例如：
+完整子模块组合已创建为新的 private repo：
 
 ```text
-hk-research-workspace-archive
+git@github.com:runchengxie/hk-research-workspace-archive.git
 ```
 
 初始化方式：

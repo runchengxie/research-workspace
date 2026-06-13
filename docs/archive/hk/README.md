@@ -12,7 +12,15 @@
 
 - 数据平台资产：冻结到独立冷存储，活跃 `DATA_PLATFORM_ROOT` 保留 `metadata/frozen_markets/hk.json`。
 - 研究产物：历史 run、sweep、report 和导出文件进入研究侧冷存储。
-- 私有 legacy 代码：使用外部 private、paused-maintenance、restore-only 候选仓库治理，不作为本工作区 submodule、CI 目标或运行依赖。
+- 代码组合：`hk-freeze-20260613` 已在 `research-workspace`、`market-data-platform`、
+  `cross-sectional-trees`、`quant-execution-engine` 推送，用作后续港股 restore-only
+  workspace 的源版本。
+- 私有 legacy 代码：已发布到外部 private、paused-maintenance、restore-only 仓库
+  `git@github.com:runchengxie/hk-quant-legacy-archive.git`，不作为本工作区 submodule、
+  CI 目标或运行依赖。
+- 港股 restore-only workspace：已发布到外部 private 仓库
+  `git@github.com:runchengxie/hk-research-workspace-archive.git`，仅 pin 三个子模块到
+  `hk-freeze-20260613`。
 - 公开展示：仅通过外部 paused-maintenance 的 synthetic demo 仓库，不作为本工作区 submodule、CI 目标或 release matrix 成员。
 
 ## 权威入口
@@ -24,6 +32,8 @@
 | 查看 deprecated 入口删除门禁 | [../../deprecations.md](../../deprecations.md) |
 | 查看数据迁移优先级和恢复顺序 | [../../data-transition-playbook.md](../../data-transition-playbook.md) |
 | 查看文档生命周期和兼容页 | [../../documentation-lifecycle.md](../../documentation-lifecycle.md) |
+| 查看港股隔离迁移方案 | [../../../hk-isolation.md](../../../hk-isolation.md) |
+| 查看 freeze tag 版本矩阵 | [../../version-matrix.md](../../version-matrix.md) |
 
 以下页面保留为兼容入口，权威清单见上表：
 
@@ -39,6 +49,8 @@
 | 数据平台 session handoff | [records/hk-cold-storage-20260601.md](records/hk-cold-storage-20260601.md) |
 | 研究产物发布说明 | [records/hk-research-freeze-20260601.md](records/hk-research-freeze-20260601.md) |
 | 研究产物 session handoff | [records/hk-research-cold-storage-20260601.md](records/hk-research-cold-storage-20260601.md) |
+| 私有 legacy archive staging 证据 | [../../evidence/hk-private-archive-stage-20260613.json](../../evidence/hk-private-archive-stage-20260613.json) |
+| 港股 restore-only workspace 证据 | [../../evidence/hk-research-workspace-archive-20260613.json](../../evidence/hk-research-workspace-archive-20260613.json) |
 
 恢复前先从对应 session handoff 读取冷存储路径、manifest、校验命令和已知限制。
 
@@ -53,7 +65,7 @@ docs、rollback notes、focused tests，以及需要公开 demo 承接时的 pub
 
 ## 私有 legacy archive 门禁
 
-`../../hk-private-archive-manifest.yml` 管理真实业务代码的私有归档候选。它和 public demo 分离：
+`../../hk-private-archive-manifest.yml` 管理真实业务代码的私有归档。它和 public demo 分离：
 只从 pin 的 Git revision 导出 allowlist 源码，保留 SHA-256 和本地 staging 证据，不自动创建远端、
-不修改 submodule、不删除源文件。LongPort、标准 `targets.json` 多市场解析、FX、风控和
+不修改 active workspace submodule、不删除源文件。LongPort、标准 `targets.json` 多市场解析、FX、风控和
 `freeze-hk` / `hydrate-hk` 控制面继续留在活跃仓库。

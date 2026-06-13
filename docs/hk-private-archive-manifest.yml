@@ -4,7 +4,7 @@
   "checksum_policy": "sha256",
   "archive_repository": {
     "name": "hk-quant-legacy-archive",
-    "remote_url": "private://pending-operator-publication/hk-quant-legacy-archive",
+    "remote_url": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
     "visibility": "private",
     "maintenance": "paused",
     "purpose": "restore_only",
@@ -20,10 +20,10 @@
     "quant-execution-engine": "quant-execution-engine"
   },
   "source_revisions": {
-    "research-workspace": "4c710f71ae18085a6d14bbccf4bc7943b24ab91a",
-    "market-data-platform": "2501c49148f5cd43ef1e42e7f4fcdb11c31485e1",
-    "cross-sectional-trees": "d1318dccae8b245619ebaf6f6db3b45ac7205894",
-    "quant-execution-engine": "775883556865a50041264e387b118a71201b1be8"
+    "research-workspace": "8d2f5fd2a7a52f68ee7b0fc763398aff8c7171a1",
+    "market-data-platform": "e802f12c042ca6dcc756805412c7fe7ee3efe08e",
+    "cross-sectional-trees": "b6e4cadd9a283fa80ac12d003db805fb1d510488",
+    "quant-execution-engine": "dc520cf7bce386c59c20a88466cd434bce0eae9e"
   },
   "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
   "consumer_audit_evidence": "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
@@ -56,14 +56,14 @@
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
         "status": "blocked_pending_audit",
-        "source_tag": "pending_operator_tag",
+        "source_tag": "hk-freeze-20260613",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
         "consumer_audit": "pending_downstream_attestation",
         "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "pending_follow_up_execution",
-        "private_archive_reference": "pending_operator_publication",
-        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+        "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
+        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "not_started"
       }
     },
@@ -94,14 +94,14 @@
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
         "status": "blocked_pending_audit",
-        "source_tag": "pending_operator_tag",
+        "source_tag": "hk-freeze-20260613",
         "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
         "consumer_audit": "pending_downstream_attestation",
         "replacement_docs": "cross-sectional-trees/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "pending_follow_up_execution",
-        "private_archive_reference": "pending_operator_publication",
-        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+        "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
+        "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "not_started"
       }
     },

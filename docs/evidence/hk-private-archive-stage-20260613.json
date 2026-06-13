@@ -1,0 +1,33 @@
+{
+  "schema_version": "hk_private_archive_stage_evidence.v1",
+  "recorded_at": "2026-06-13T00:00:00+08:00",
+  "archive_repository": "hk-quant-legacy-archive",
+  "maintenance": "paused",
+  "purpose": "restore_only",
+  "workspace_integration": "external_not_submodule",
+  "source_tag": "hk-freeze-20260613",
+  "source_revisions": {
+    "research-workspace": "8d2f5fd2a7a52f68ee7b0fc763398aff8c7171a1",
+    "market-data-platform": "e802f12c042ca6dcc756805412c7fe7ee3efe08e",
+    "cross-sectional-trees": "b6e4cadd9a283fa80ac12d003db805fb1d510488",
+    "quant-execution-engine": "dc520cf7bce386c59c20a88466cd434bce0eae9e"
+  },
+  "local_stage": "/tmp/hk-quant-legacy-archive-export-20260613",
+  "export_manifest": "/tmp/hk-quant-legacy-archive-export-20260613/archive-export-manifest.json",
+  "included_files": 219,
+  "files_scanned": 221,
+  "archive_sha256": "9442e327a026fdd96b5192028307f89dcd0a3ffd48c1e9ad38141bb6d45c58c0",
+  "scan_status": "passed",
+  "gate_status": "passed",
+  "export_validation_status": "passed",
+  "removal_review_status": "blocked_pending_audit",
+  "remaining_blockers": [
+    "consumer_audit",
+    "focused_tests",
+    "zero_usage_release_window",
+    "status"
+  ],
+  "remote_publication": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
+  "remote_commit": "192d25a7bdc95e6113cb5f23ad2e1f021feec6a8",
+  "notes": "Local staging was regenerated from hk-freeze-20260613 and passed safety scanning plus archive gate export validation. This evidence does not authorize deleting restore-sensitive code until downstream owner attestations, focused tests, private repository reference, and zero-usage release window are complete."
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "hk_research_workspace_archive_evidence.v1",
+  "recorded_at": "2026-06-13T00:00:00+08:00",
+  "archive_repository": "hk-research-workspace-archive",
+  "remote_url": "git@github.com:runchengxie/hk-research-workspace-archive.git",
+  "visibility": "private",
+  "maintenance": "paused",
+  "purpose": "restore_only",
+  "workspace_integration": "external_not_submodule",
+  "default_branch": "main",
+  "archive_commit": "1ddd5dea741bed29fafd4fb75679f7459426c81a",
+  "source_tag": "hk-freeze-20260613",
+  "submodules": {
+    "market-data-platform": {
+      "url": "git@github.com:runchengxie/market-data-platform.git",
+      "tag": "hk-freeze-20260613",
+      "commit": "e802f12c042ca6dcc756805412c7fe7ee3efe08e"
+    },
+    "cross-sectional-trees": {
+      "url": "git@github.com:runchengxie/cross-sectional-trees.git",
+      "tag": "hk-freeze-20260613",
+      "commit": "b6e4cadd9a283fa80ac12d003db805fb1d510488"
+    },
+    "quant-execution-engine": {
+      "url": "git@github.com:runchengxie/quant-execution-engine.git",
+      "tag": "hk-freeze-20260613",
+      "commit": "dc520cf7bce386c59c20a88466cd434bce0eae9e"
+    }
+  },
+  "validation": {
+    "github_repo_private": true,
+    "submodule_status": "matched_freeze_commits",
+    "working_tree": "clean_after_push"
+  },
+  "notes": "Private restore-only superproject created outside the active A-share workspace. It is not a submodule, CI target, release matrix member, or runtime dependency of research-workspace."
+}
