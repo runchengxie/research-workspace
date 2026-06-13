@@ -21,8 +21,11 @@ def test_hk_research_lane_inventory_keeps_data_and_execution_boundaries() -> Non
     records = {row["id"]: row for row in inventory["records"]}
     assert records["market-data-platform-hk-assets-control-plane"]["action"] == "keep"
     assert records["qexec-shared-market-execution"]["action"] == "keep"
-    assert records["cstree-hk-allocation-liveops"]["action"] == "move"
-    assert records["cstree-hk-allocation-liveops"]["deletion_gate"]["status"] == "blocked"
+    assert records["cstree-hk-allocation-liveops"]["action"] == "removed"
+    assert records["cstree-hk-allocation-liveops"]["deletion_gate"]["status"] == "removed"
+    assert records["cstree-hk-research-scripts"]["action"] == "removed"
+    assert records["cstree-hk-configs-and-notes"]["action"] == "archive"
+    assert records["cstree-hk-configs-and-notes"]["deletion_gate"]["status"] == "follow_up_required"
 
 
 def test_hk_research_lane_template_scan_rejects_runtime_artifacts(tmp_path: Path) -> None:

@@ -19,7 +19,7 @@ REQUIRED_FIELDS = {
     "migration_status",
     "deletion_gate",
 }
-ALLOWED_ACTIONS = {"move", "keep", "archive", "delete_later"}
+ALLOWED_ACTIONS = {"move", "keep", "archive", "delete_later", "removed"}
 FORBIDDEN_SUFFIXES = {".parquet", ".zip", ".tar", ".gz", ".zst", ".jsonl"}
 FORBIDDEN_NAMES = {".env", ".env.local", ".envrc"}
 SECRET_MARKERS = {

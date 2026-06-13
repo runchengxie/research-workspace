@@ -45,7 +45,13 @@ def test_private_archive_gate_reports_pending_audits_without_failing_manifest() 
     }
     assert "consumer_audit" in blocked["market-data-platform-hk-provider-legacy"]
     assert "private_archive_reference" not in blocked["market-data-platform-hk-provider-legacy"]
-    assert "zero_usage_release_window" in blocked["cross-sectional-trees-hk-research-legacy"]
+    assert blocked["cross-sectional-trees-hk-research-legacy"] == []
+    eligible = {
+        row["id"]
+        for row in report["records"]
+        if row["eligible_for_removal_review"]
+    }
+    assert "cross-sectional-trees-hk-research-legacy" in eligible
     retained = [row for row in report["records"] if row["archive_action"] == "retain_active"]
     assert all(not row["eligible_for_removal_review"] for row in retained)
 
