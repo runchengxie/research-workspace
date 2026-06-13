@@ -32,10 +32,11 @@
     "not_applicable",
     "blocked_pending_audit",
     "follow_up_required",
-    "ready"
+    "ready",
+    "removed"
   ],
   "follow_up_budget": {
-    "blocked_or_follow_up_records_max": 7,
+    "blocked_or_follow_up_records_max": 5,
     "policy": "ratchet_only; lower this maximum after HK split follow-up records are resolved, do not raise it without explicit release review"
   },
   "deletion_gate_requirements": [
@@ -209,27 +210,25 @@
       "id": "market-data-platform-legacy-hk-entrypoints",
       "owner_repo": "market-data-platform",
       "paths": [
-        "market-data-platform/src/hk_data_platform/**",
-        "market-data-platform/src/hk_data_platform.egg-info/**",
         "market-data-platform/pyproject.toml"
       ],
       "path_kind": "repo_local",
       "action": "delete_after_split",
       "public_safety": "restore_sensitive",
-      "restore_dependency": "compatibility imports and commands must remain until downstream usage is audited",
-      "consumer_audit_status": "pending repo-local and downstream audit",
+      "restore_dependency": "compatibility imports and commands are retained in hk-freeze-20260613 and private restore-only archives",
+      "consumer_audit_status": "repo-local focused audit passed; active package no longer exposes hkdata, hk_data_platform.*, or rqdata-hk-* wrappers",
       "replacement_path": "marketdata unified CLI entrypoints",
       "required_redactions": [
         "do not export compatibility wrapper code into public demo"
       ],
-      "removal_condition": "Eligible only after no repo-local or downstream callers use hkdata, hk_data_platform.*, or rqdata-hk-* wrappers for two release cycles.",
+      "removal_condition": "Removed from the active package on 2026-06-13 after private archive and freeze tag were recorded; restore from hk-freeze-20260613 if needed.",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "removed",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
-        "consumer_audit": "pending",
-        "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+        "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+        "replacement_docs": "market-data-platform/docs/compatibility.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "market-data-platform compatibility governance tests",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_transitions.py tests/test_hk_depth.py tests/test_paths.py tests/test_quality_governance.py -q",
         "public_split_evidence": "not_required"
       }
     },
@@ -240,24 +239,24 @@
         "cross-sectional-trees/src/cstree/liveops/alloc_hk*.py",
         "cross-sectional-trees/tests/test_alloc_hk.py"
       ],
-      "path_kind": "repo_local",
+      "path_kind": "historical_git",
       "action": "delete_after_split",
       "public_safety": "restore_sensitive",
-      "restore_dependency": "needed for explicit HK reproduction and deprecated alloc-hk compatibility",
-      "consumer_audit_status": "pending deprecated CLI consumer audit",
+      "restore_dependency": "previous implementation retained in hk-freeze-20260613 and private restore-only archives",
+      "consumer_audit_status": "repo-local focused audit passed; active cstree alloc-hk CLI and alloc_hk modules removed on 2026-06-13",
       "replacement_path": "cstree alloc plus cstree export-targets for active flows",
       "required_redactions": [
         "provider assumptions",
         "private portfolio or execution references"
       ],
-      "removal_condition": "Eligible only after deprecated alloc-hk has no consumers, restore drill remains available, and successor allocation docs are in place.",
+      "removal_condition": "Removed from the active package on 2026-06-13 after private archive and freeze tag were recorded; restore from hk-freeze-20260613 if needed.",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
-        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "pending",
-        "replacement_docs": "cross-sectional-trees docs for alloc/export-targets",
+        "status": "removed",
+        "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
+        "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
+        "replacement_docs": "cross-sectional-trees/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "cross-sectional-trees/tests/test_alloc_hk.py",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_cli_liveops.py tests/test_docs_contracts.py tests/test_cstree_namespace.py -q; uv run python -m pytest tests -q",
         "public_split_evidence": "public demo synthetic allocation module"
       }
     },
@@ -265,7 +264,6 @@
       "id": "strategy-research-hk-research-provenance",
       "owner_repo": "cross-sectional-trees",
       "paths": [
-        "cross-sectional-trees/src/cstree/research/hk_*.py",
         "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md",
         "cross-sectional-trees/docs/archive/research/hk/README.md",
         "cross-sectional-trees/docs/playbooks/hk-*.md",
@@ -277,7 +275,7 @@
       "action": "archive_in_public_demo",
       "public_safety": "public_safe_archive",
       "restore_dependency": "historical research provenance and cold-storage archive manifest",
-      "consumer_audit_status": "manual provenance review required before export",
+      "consumer_audit_status": "active HK research implementation modules removed on 2026-06-13; manual provenance review remains only before public excerpt export",
       "replacement_path": "demo archive only for public-safe excerpts; full restore remains in cold storage",
       "required_redactions": [
         "licensed data references",
@@ -285,14 +283,14 @@
         "private run output names",
         "provider-specific operational details"
       ],
-      "removal_condition": "Archive only reviewed excerpts in the public demo candidate; do not move full historical research code in this change.",
+      "removal_condition": "Active HK research implementation modules were removed on 2026-06-13; archive only reviewed excerpts in the public demo candidate.",
       "deletion_gate": {
         "status": "follow_up_required",
         "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "manual_review_required",
+        "consumer_audit": "repo-local active-code audit passed; public excerpt review remains manual_review_required",
         "replacement_docs": "demo/hk-public-demo-template-v1/archive/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "cross-sectional-trees documentation contract tests",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_docs_contracts.py tests/test_cli_research.py tests/test_repo_path_references.py -q",
         "public_split_evidence": "reviewed public demo archive entries"
       }
     },
@@ -302,28 +300,28 @@
       "paths": [
         "cross-sectional-trees/configs/presets/hk*.yml",
         "cross-sectional-trees/configs/presets/data/hk_rqdata.yml",
-        "cross-sectional-trees/configs/experiments/**/*hk*.yml",
+        "cross-sectional-trees/docs/archive/research/hk/configs/experiments/**/*hk*.yml",
         "cross-sectional-trees/configs/field_profiles/hk_*"
       ],
       "path_kind": "repo_local",
       "action": "archive_in_public_demo",
       "public_safety": "public_safe_after_review",
-      "restore_dependency": "historical reproducibility and config provenance",
-      "consumer_audit_status": "manual review required before public excerpt",
+      "restore_dependency": "historical reproducibility, explicit restore presets, and archived config provenance",
+      "consumer_audit_status": "active experiment configs moved to docs/archive/research/hk/configs/experiments on 2026-06-13; manual review required only before public excerpt",
       "replacement_path": "active A-share presets in cross-sectional-trees; demo synthetic configs if needed",
       "required_redactions": [
         "private output names",
         "provider-specific dataset paths",
         "local-only assumptions"
       ],
-      "removal_condition": "Keep repo-local compatibility configs until a follow-up archive/delete change proves no active consumers.",
+      "removal_condition": "Active HK experiment configs were removed from configs/experiments and catalog on 2026-06-13; remaining explicit restore presets require separate compatibility review before deletion.",
       "deletion_gate": {
         "status": "follow_up_required",
-        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "pending",
-        "replacement_docs": "cross-sectional-trees docs archive index",
+        "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
+        "consumer_audit": "repo-local active config audit passed; public excerpt review remains pending",
+        "replacement_docs": "cross-sectional-trees/docs/archive/research/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "cross-sectional-trees config and docs contract tests",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_config_lifecycle.py tests/test_config_utils.py tests/test_linear_sweep.py tests/test_docs_contracts.py -q",
         "public_split_evidence": "optional reviewed demo archive excerpts"
       }
     },

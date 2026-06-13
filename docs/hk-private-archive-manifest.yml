@@ -27,7 +27,7 @@
   },
   "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
   "consumer_audit_evidence": "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
-  "archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260602.json",
+  "archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
   "records": [
     {
       "id": "market-data-platform-hk-provider-legacy",
@@ -44,7 +44,7 @@
         "docs/operations/hk-assets.md",
         "tests/test_hk*.py"
       ],
-      "restore_dependency": "restore-critical provider workflows and deprecated compatibility wrappers",
+      "restore_dependency": "restore-critical provider workflows and deleted compatibility wrappers retained in hk-freeze-20260613",
       "consumer_audit": "pending_downstream_attestation",
       "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
       "rollback_notes": "docs/archive/hk/README.md",
@@ -61,7 +61,7 @@
         "consumer_audit": "pending_downstream_attestation",
         "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "pending_follow_up_execution",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_transitions.py tests/test_hk_depth.py tests/test_paths.py tests/test_quality_governance.py -q",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "not_started"
@@ -82,27 +82,27 @@
         "tests/test_alloc_hk.py",
         "tests/test_cli_liveops.py"
       ],
-      "restore_dependency": "explicit HK reproduction, archived research provenance, and alloc-hk compatibility",
-      "consumer_audit": "pending_downstream_attestation",
+      "restore_dependency": "explicit HK reproduction, archived research provenance, and deleted alloc_hk module restoration from hk-freeze-20260613",
+      "consumer_audit": "repo-local focused audit passed for active A-share workspace cleanup",
       "replacement_docs": "cross-sectional-trees/docs/cli.md",
       "rollback_notes": "docs/archive/hk/README.md",
       "focused_tests": [
-        "cross-sectional-trees/tests/test_alloc_hk.py",
         "cross-sectional-trees/tests/test_cli_liveops.py",
-        "cross-sectional-trees/tests/test_docs_contracts.py"
+        "cross-sectional-trees/tests/test_docs_contracts.py",
+        "cross-sectional-trees full pytest"
       ],
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "ready",
         "source_tag": "hk-freeze-20260613",
-        "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "pending_downstream_attestation",
+        "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
+        "consumer_audit": "repo-local focused audit passed; previous implementation retained in private restore-only archive",
         "replacement_docs": "cross-sectional-trees/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "pending_follow_up_execution",
+        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_docs_contracts.py tests/test_repo_path_references.py tests/test_data_ops_boundary.py tests/test_cstree_namespace.py tests/test_cli_liveops.py tests/test_cli_research.py -q; uv run python -m pytest tests -q",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
-        "zero_usage_release_window": "not_started"
+        "zero_usage_release_window": "completed_for_active_workspace_cleanup"
       }
     },
     {

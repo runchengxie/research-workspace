@@ -10,7 +10,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 48,
-      "python_loc": 6925,
+      "python_loc": 6937,
       "hk_related_file_count": 23,
       "large_files": [],
       "long_functions": [],
@@ -65,9 +65,9 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 160,
-      "python_loc": 63892,
-      "hk_related_file_count": 88,
+      "python_file_count": 154,
+      "python_loc": 63773,
+      "hk_related_file_count": 82,
       "large_files": [
         {
           "path": "src/market_data_platform/hk_assets/asset_health.py",
@@ -546,8 +546,7 @@
           "src/market_data_platform/hk_assets/patch_merge.py"
         ],
         "pyright_include": [
-          "src/market_data_platform",
-          "src/hk_data_platform"
+          "src/market_data_platform"
         ],
         "pyright_exclude": [
           ".venv",
@@ -627,9 +626,9 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 240,
-      "python_loc": 72175,
-      "hk_related_file_count": 25,
+      "python_file_count": 215,
+      "python_loc": 63395,
+      "hk_related_file_count": 2,
       "large_files": [
         {
           "path": "src/cstree/execution_sim.py",
@@ -683,7 +682,7 @@
         },
         {
           "path": "src/cstree/pipeline/train_eval_stage.py",
-          "loc": 943,
+          "loc": 944,
           "hk_related": false
         },
         {
@@ -722,11 +721,6 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/hk_financial_details.py",
-          "loc": 798,
-          "hk_related": true
-        },
-        {
           "path": "src/cstree/commands/run_grid.py",
           "loc": 782,
           "hk_related": false
@@ -754,6 +748,11 @@
         {
           "path": "src/cstree/research/construction_grid.py",
           "loc": 709,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/research/feature_evidence.py",
+          "loc": 693,
           "hk_related": false
         }
       ],
@@ -821,7 +820,7 @@
         {
           "path": "tests/test_cli_research.py",
           "name": "test_cli_parses_research_commands",
-          "line_count": 223,
+          "line_count": 220,
           "complexity": 1
         },
         {
@@ -879,12 +878,6 @@
           "complexity": 22
         },
         {
-          "path": "src/cstree/liveops/alloc_hk_settings.py",
-          "name": "parse_args",
-          "line_count": 189,
-          "complexity": 2
-        },
-        {
           "path": "src/cstree/pipeline/eval.py",
           "name": "_evaluate_period",
           "line_count": 187,
@@ -897,16 +890,22 @@
           "complexity": 37
         },
         {
-          "path": "src/cstree/cli/liveops.py",
-          "name": "_register_alloc_hk_command",
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "main",
           "line_count": 173,
+          "complexity": 27
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_offline",
+          "line_count": 172,
           "complexity": 1
         },
         {
-          "path": "src/cstree/liveops/alloc_hk_allocation.py",
-          "name": "build_allocation_table",
-          "line_count": 173,
-          "complexity": 28
+          "path": "docs/archive/research/a_share/probes/topk_style_probe.py",
+          "name": "main",
+          "line_count": 171,
+          "complexity": 24
         }
       ],
       "complexity_hotspots": [
@@ -920,12 +919,6 @@
           "path": "src/cstree/commands/linear_sweep.py",
           "name": "run",
           "line_count": 318,
-          "complexity": 41
-        },
-        {
-          "path": "src/cstree/liveops/alloc_hk_settings.py",
-          "name": "resolve_settings",
-          "line_count": 148,
           "complexity": 41
         },
         {
@@ -995,18 +988,6 @@
           "complexity": 28
         },
         {
-          "path": "src/cstree/liveops/alloc_hk.py",
-          "name": "main",
-          "line_count": 156,
-          "complexity": 28
-        },
-        {
-          "path": "src/cstree/liveops/alloc_hk_allocation.py",
-          "name": "build_allocation_table",
-          "line_count": 173,
-          "complexity": 28
-        },
-        {
           "path": "src/cstree/exposure.py",
           "name": "_style_exposure_row",
           "line_count": 135,
@@ -1059,6 +1040,24 @@
           "name": "run_cpcv_audit",
           "line_count": 118,
           "complexity": 24
+        },
+        {
+          "path": "scripts/a_share_live_risk_control_grid.py",
+          "name": "apply_trade_controls",
+          "line_count": 42,
+          "complexity": 23
+        },
+        {
+          "path": "src/cstree/commands/run_grid.py",
+          "name": "_run_fixed_signal_grid",
+          "line_count": 157,
+          "complexity": 23
+        },
+        {
+          "path": "src/cstree/execution_sim.py",
+          "name": "simulate_capacity_execution",
+          "line_count": 128,
+          "complexity": 23
         }
       ],
       "quality_config": {

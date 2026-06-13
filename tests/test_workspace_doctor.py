@@ -267,7 +267,9 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertIn("governance-hk-public-split", codes)
         self.assertTrue(
             any(
-                check.severity == "WARN" and check.code == "governance-deprecations"
+                check.severity == "OK"
+                and check.code == "governance-deprecations"
+                and "pending_follow_up=0/0" in check.message
                 for check in checks
             )
         )
