@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-06-10
+> last_verified: 2026-06-13
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -10,6 +10,7 @@
 
 | 主题 | 入口 |
 | --- | --- |
+| A 股迁移机器交接和 WSL 恢复记录 | [migration-handoff-20260605.md](migration-handoff-20260605.md) |
 | 中国香港市场数据和研究冷存储记录 | [hk/README.md](hk/README.md) |
 
 活跃工作流仍从上一级 [docs/README.md](../README.md) 开始。

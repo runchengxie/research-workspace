@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-06-10
+> last_verified: 2026-06-13
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -53,6 +53,7 @@
 
 | 类型 | 当前入口 |
 | --- | --- |
+| A 股迁移机器交接、WSL 恢复和一次性迁移包记录 | [archive/migration-handoff-20260605.md](archive/migration-handoff-20260605.md) |
 | 中国香港市场冷存储、恢复、公开/私有拆分和清理门禁 | [archive/hk/README.md](archive/hk/README.md) |
 | 冻结发布说明、session handoff 和历史复核记录 | `archive/hk/records/` |
 | 证据 JSON | `evidence/`，由对应脚本或 manifest 引用 |
