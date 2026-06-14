@@ -29,10 +29,8 @@ REQUIRED_DEPRECATION_IDS = {
     "cross-sectional-trees-hk-historical-configs",
 }
 REQUIRED_ROADMAP_PATHS = {
-    "market-data-platform/src/market_data_platform/hk_assets/asset_health.py",
-    "market-data-platform/src/market_data_platform/hk_assets/audit_assets.py",
-    "market-data-platform/src/market_data_platform/release_tools/hk_asset_workflow.py",
-    "market-data-platform/src/market_data_platform/hk_depth/downloader.py",
+    "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
+    "market-data-platform/src/market_data_platform/tushare_cli.py",
     "cross-sectional-trees/src/cstree/pipeline/eval.py",
     "cross-sectional-trees/src/cstree/pipeline/train_eval_stage.py",
     "cross-sectional-trees/src/cstree/research/summarize_runs.py",
@@ -41,14 +39,6 @@ REQUIRED_ROADMAP_PATHS = {
     "quant-execution-engine/src/quant_execution_engine/cli.py",
     "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
     "quant-execution-engine/project_tools/smoke_operator_harness.py",
-}
-FIRST_HK_RUFF_TARGETS = {
-    "src/market_data_platform/hk_assets/__init__.py",
-    "src/market_data_platform/hk_assets/_public_exports.py",
-    "src/market_data_platform/hk_assets/models.py",
-    "src/market_data_platform/hk_assets/shared.py",
-    "src/market_data_platform/hk_assets/quality_gate.py",
-    "src/market_data_platform/hk_assets/coverage_rendering.py",
 }
 QUALITY_REGISTER_FIELDS = {
     "repo",
@@ -303,12 +293,10 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     market_ruff_excludes = set(market_config["tool"]["ruff"]["extend-exclude"])
     market_pyright_excludes = set(market_config["tool"]["pyright"]["exclude"])
     assert "src/market_data_platform/hk_assets" not in market_ruff_excludes
+    assert "src/market_data_platform/hk_depth" not in market_ruff_excludes
     assert "src/market_data_platform/hk_assets" not in market_pyright_excludes
-    assert FIRST_HK_RUFF_TARGETS <= set(
-        market_config["tool"]["maintainability"]["quality_targets"]["ruff_hk_first_include"]
-    )
-    assert FIRST_HK_RUFF_TARGETS.isdisjoint(market_ruff_excludes)
-    assert FIRST_HK_RUFF_TARGETS.isdisjoint(market_pyright_excludes)
+    assert "src/market_data_platform/hk_depth" not in market_pyright_excludes
+    assert "maintainability" not in market_config["tool"]
 
     assert set(repos["quant-execution-engine"]["pyright"]["strict_targets"]) == set(
         execution_config["tool"]["maintainability"]["quality_targets"]["pyright_strict_targets"]

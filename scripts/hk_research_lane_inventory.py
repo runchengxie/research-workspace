@@ -91,7 +91,7 @@ def _boundary_issues(records: list[Any]) -> list[Issue]:
         issues.append(
             _issue(
                 "data_platform_boundary",
-                "HK data production must remain with market-data-platform",
+                "HK restore control plane must remain with market-data-platform",
             )
         )
     return issues

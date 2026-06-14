@@ -36,7 +36,7 @@
     "removed"
   ],
   "follow_up_budget": {
-    "blocked_or_follow_up_records_max": 5,
+    "blocked_or_follow_up_records_max": 4,
     "policy": "ratchet_only; lower this maximum after HK split follow-up records are resolved, do not raise it without explicit release review"
   },
   "deletion_gate_requirements": [
@@ -86,6 +86,7 @@
         "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
         "docs/evidence/hk-private-archive-stage-20260602.json",
         "docs/evidence/hk-private-archive-stage-20260613.json",
+        "docs/evidence/hk-provider-legacy-removal-20260613.json",
         "docs/evidence/hk-research-workspace-archive-20260613.json",
         "docs/hk-legacy-surface-inventory.md",
         "docs/hk-private-archive-manifest.yml",
@@ -184,33 +185,34 @@
         "market-data-platform/docs/operations/hk-assets.md",
         "market-data-platform/tests/test_hk*.py"
       ],
-      "path_kind": "repo_local",
-      "action": "keep_in_main",
+      "path_kind": "historical_git",
+      "action": "delete_after_split",
       "public_safety": "restore_sensitive",
-      "restore_dependency": "required for cold-storage hydrate and restore-critical HK asset release troubleshooting",
-      "consumer_audit_status": "active restore and compatibility consumers remain",
-      "replacement_path": "marketdata unified commands and future public demo only for synthetic examples",
+      "restore_dependency": "provider production modules are retained in hk-freeze-20260613 and private restore-only archives",
+      "consumer_audit_status": "owner attested no active downstream dependency on 港股 provider legacy on 2026-06-13; restore control plane remains active",
+      "replacement_path": "marketdata migration hydrate-hk plus market-data-platform/docs/operations/hk-archive-restore.md",
       "required_redactions": [
         "provider-specific paths",
         "licensed market data assumptions",
         "provider cache references"
       ],
-      "removal_condition": "Do not remove in this change. Any future move or deletion requires restored cold archives, consumer audit, focused market-data-platform tests, and rollback notes.",
+      "removal_condition": "Removed from the active market-data-platform package on 2026-06-13 after private archive, freeze tag, owner attestation, and focused validation were recorded.",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "removed",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
-        "consumer_audit": "pending",
-        "replacement_docs": "market-data-platform/docs/hk-assets.md",
+        "consumer_audit": "owner_attested_no_active_downstream_dependency_2026-06-13",
+        "replacement_docs": "market-data-platform/docs/operations/hk-archive-restore.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "market-data-platform/tests/test_hk_asset_workflow.py",
-        "public_split_evidence": "not_required_restore_sensitive"
+        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m pyright",
+        "public_split_evidence": "docs/evidence/hk-provider-legacy-removal-20260613.json"
       }
     },
     {
       "id": "market-data-platform-legacy-hk-entrypoints",
       "owner_repo": "market-data-platform",
       "paths": [
-        "market-data-platform/pyproject.toml"
+        "market-data-platform/pyproject.toml",
+        "market-data-platform/docs/operations/hk-archive-restore.md"
       ],
       "path_kind": "repo_local",
       "action": "delete_after_split",
@@ -298,15 +300,13 @@
       "id": "strategy-research-hk-configs",
       "owner_repo": "cross-sectional-trees",
       "paths": [
-        "cross-sectional-trees/configs/presets/hk*.yml",
-        "cross-sectional-trees/configs/presets/data/hk_rqdata.yml",
         "cross-sectional-trees/docs/archive/research/hk/configs/experiments/**/*hk*.yml",
-        "cross-sectional-trees/configs/field_profiles/hk_*"
+        "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md"
       ],
       "path_kind": "repo_local",
       "action": "archive_in_public_demo",
       "public_safety": "public_safe_after_review",
-      "restore_dependency": "historical reproducibility, explicit restore presets, and archived config provenance",
+      "restore_dependency": "historical reproducibility, deleted restore presets in private archive, and archived config provenance",
       "consumer_audit_status": "active experiment configs moved to docs/archive/research/hk/configs/experiments on 2026-06-13; manual review required only before public excerpt",
       "replacement_path": "active A-share presets in cross-sectional-trees; demo synthetic configs if needed",
       "required_redactions": [
@@ -314,7 +314,7 @@
         "provider-specific dataset paths",
         "local-only assumptions"
       ],
-      "removal_condition": "Active HK experiment configs were removed from configs/experiments and catalog on 2026-06-13; remaining explicit restore presets require separate compatibility review before deletion.",
+      "removal_condition": "Active HK experiment configs, explicit restore presets, data presets, and field profiles were removed from active configs on 2026-06-13; public excerpt review only covers archive copies.",
       "deletion_gate": {
         "status": "follow_up_required",
         "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",

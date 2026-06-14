@@ -95,7 +95,7 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 
 必须确认：
 
-- `metadata/current_assets/hk_current.json` 存在，或 `metadata/frozen_markets/hk.json` 明确记录港股冷存储位置。
+- `metadata/frozen_markets/hk.json` 明确记录港股冷存储位置，或本次完全不涉及港股归档复现。
 - `metadata/current_assets/a_share_current.json` 存在，或明确记录 A 股还没有发布 current contract。
 - `metadata/dataset_registry.csv` 存在，或计划用 `marketdata registry build --artifacts-root "$DATA_PLATFORM_ROOT"` 重建。
 - 如果存在 `metadata/current_assets/cn_current.json`，只能作为历史兼容 alias 处理，不能作为新的 A 股权威入口。
@@ -107,18 +107,17 @@ UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
 2026-06-01 的实际冻结记录见 [中国香港市场归档](archive/hk/README.md)。
 真实业务代码如需进入私有 paused-maintenance 候选，先按
 [中国香港市场归档](archive/hk/README.md) 中的私有 legacy archive gate 运行只读 gate 和工作区外 staging；
-私有归档仓库不加入 submodule，staging 成功也不代表可以删除活跃仓库代码。
+私有归档仓库不加入 submodule。港股 provider 生产面已从活跃 `market-data-platform` 主线删除；需要复现时从 freeze tag 或 restore-only archive 恢复。
 
-冻结前至少确认：
+冻结或恢复前至少确认：
 
 ```bash
-marketdata rqdata inspect-hk-current \
-  --artifacts-root "$DATA_PLATFORM_ROOT" \
-  --fail-on-severity warning
+marketdata migration freeze-hk --help
+marketdata migration hydrate-hk --help
 
 marketdata registry build \
   --artifacts-root "$DATA_PLATFORM_ROOT" \
-  --market all
+  --market a_share
 ```
 
 然后先查看 freeze 计划，再显式执行：

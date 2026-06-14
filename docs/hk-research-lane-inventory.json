@@ -83,19 +83,18 @@
       }
     },
     {
-      "id": "market-data-platform-hk-assets-control-plane",
-      "path": "market-data-platform/src/market_data_platform/hk_assets",
+      "id": "market-data-platform-hk-restore-control-plane",
+      "path": "market-data-platform/src/market_data_platform/cold_storage.py",
       "owner": "market-data-platform",
       "category": "data_platform",
       "lifecycle": "shared_active",
       "action": "keep",
       "dependencies": [
-        "metadata/current_assets/hk_current.json",
-        "dataset_registry.csv",
+        "metadata/frozen_markets/hk.json",
         "freeze-hk",
         "hydrate-hk"
       ],
-      "migration_status": "retained_data_owner",
+      "migration_status": "retained_restore_control_plane",
       "deletion_gate": {
         "status": "not_applicable"
       }

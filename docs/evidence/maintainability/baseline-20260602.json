@@ -10,10 +10,17 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 48,
-      "python_loc": 6937,
+      "python_loc": 6931,
       "hk_related_file_count": 23,
       "large_files": [],
-      "long_functions": [],
+      "long_functions": [
+        {
+          "path": "scripts/smoke_contracts.py",
+          "name": "run_smoke",
+          "line_count": 87,
+          "complexity": 5
+        }
+      ],
       "complexity_hotspots": [],
       "quality_config": {
         "ruff_select": [
@@ -65,64 +72,14 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 154,
-      "python_loc": 63773,
-      "hk_related_file_count": 82,
+      "python_file_count": 64,
+      "python_loc": 21845,
+      "hk_related_file_count": 0,
       "large_files": [
-        {
-          "path": "src/market_data_platform/hk_assets/asset_health.py",
-          "loc": 2791,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/release_tools/hk_asset_workflow.py",
-          "loc": 1938,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/audit_assets.py",
-          "loc": 1819,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/downloader.py",
-          "loc": 1760,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/cli.py",
-          "loc": 1627,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_financial.py",
-          "loc": 1613,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_workflow.py",
-          "loc": 1538,
-          "hk_related": true
-        },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "loc": 1502,
           "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "loc": 1454,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_health.py",
-          "loc": 1367,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/build.py",
-          "loc": 1215,
-          "hk_related": true
         },
         {
           "path": "src/market_data_platform/data_providers.py",
@@ -130,19 +87,9 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/hk_workflows.py",
-          "loc": 1145,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/release_tools/package_assets.py",
-          "loc": 1133,
+          "path": "src/market_data_platform/cli.py",
+          "loc": 1077,
           "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/args.py",
-          "loc": 1043,
-          "hk_related": true
         },
         {
           "path": "src/market_data_platform/data_warehouse.py",
@@ -155,125 +102,52 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/hk_depth/reconcile.py",
-          "loc": 877,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/clean_daily.py",
-          "loc": 868,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-          "loc": 816,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/release_assets.py",
-          "loc": 775,
-          "hk_related": true
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/asset_io.py",
-          "loc": 771,
-          "hk_related": true
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
           "loc": 730,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/hk_assets/current_health.py",
-          "loc": 724,
-          "hk_related": true
+          "path": "tests/test_data_providers_cache.py",
+          "loc": 687,
+          "hk_related": false
         },
         {
-          "path": "src/market_data_platform/hk_assets/mirror_daily.py",
-          "loc": 710,
-          "hk_related": true
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "loc": 684,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 643,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+          "loc": 578,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+          "loc": 556,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share_clean.py",
+          "loc": 530,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_cli.py",
+          "loc": 506,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share_fundamentals.py",
+          "loc": 504,
+          "hk_related": false
         }
       ],
       "long_functions": [
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_instrument_industry.py",
-          "name": "mirror_hk_instrument_industry",
-          "line_count": 349,
-          "complexity": 56
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_industry_changes.py",
-          "name": "mirror_hk_industry_changes",
-          "line_count": 347,
-          "complexity": 52
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/asset_health.py",
-          "name": "inspect_hk_asset_health",
-          "line_count": 331,
-          "complexity": 42
-        },
-        {
-          "path": "src/market_data_platform/release_tools/hk_asset_workflow.py",
-          "name": "_build_refresh_steps",
-          "line_count": 325,
-          "complexity": 21
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-          "name": "mirror_hk_southbound",
-          "line_count": 324,
-          "complexity": 49
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/clean_daily.py",
-          "name": "build_hk_daily_clean_layer",
-          "line_count": 312,
-          "complexity": 67
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "name": "_build_pit_health_section",
-          "line_count": 306,
-          "complexity": 53
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "name": "inspect_hk_pit_coverage",
-          "line_count": 305,
-          "complexity": 78
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
-          "name": "main",
-          "line_count": 302,
-          "complexity": 57
-        },
-        {
-          "path": "src/market_data_platform/release_tools/package_assets.py",
-          "name": "_resolve_assets",
-          "line_count": 297,
-          "complexity": 55
-        },
-        {
-          "path": "src/market_data_platform/release_tools/package_assets.py",
-          "name": "_build_part_specs",
-          "line_count": 295,
-          "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/downloader.py",
-          "name": "_download_symbol_date_tick_depth",
-          "line_count": 292,
-          "complexity": 26
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_financial.py",
-          "name": "patch_hk_pit_financials",
-          "line_count": 272,
-          "complexity": 17
-        },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "name": "build_pit_fundamentals",
@@ -281,151 +155,151 @@
           "complexity": 43
         },
         {
-          "path": "src/market_data_platform/cli.py",
-          "name": "_add_rqdata_parser",
-          "line_count": 268,
-          "complexity": 2
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "validate_a_share_daily_clean",
+          "line_count": 166,
+          "complexity": 20
         },
         {
-          "path": "src/market_data_platform/release_tools/hk_asset_workflow_parser.py",
-          "name": "build_parser",
-          "line_count": 261,
-          "complexity": 1
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "fetch_daily",
+          "line_count": 157,
+          "complexity": 44
         },
         {
-          "path": "src/market_data_platform/hk_depth/reconcile.py",
-          "name": "inspect_tick_daily_reconciliation",
-          "line_count": 255,
-          "complexity": 12
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_workflow.py",
-          "name": "_mirror_dated_dataset",
-          "line_count": 253,
-          "complexity": 8
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_health.py",
-          "name": "_build_daily_reconciliation",
-          "line_count": 250,
+          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+          "name": "download_a_share_industry_membership",
+          "line_count": 147,
           "complexity": 27
         },
         {
-          "path": "src/market_data_platform/hk_assets/build.py",
-          "name": "build_hk_pit_fundamentals_file",
-          "line_count": 236,
-          "complexity": 62
+          "path": "src/market_data_platform/data_warehouse.py",
+          "name": "materialize_standardized",
+          "line_count": 131,
+          "complexity": 22
         },
         {
-          "path": "src/market_data_platform/hk_assets/intraday_asset.py",
-          "name": "build_hk_intraday_asset",
-          "line_count": 234,
-          "complexity": 84
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "name": "build_a_share_daily_clean",
+          "line_count": 129,
+          "complexity": 13
         },
         {
-          "path": "src/market_data_platform/hk_assets/mirror_workflow.py",
-          "name": "_mirror_dataset",
-          "line_count": 225,
-          "complexity": 6
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_pit_fundamentals",
+          "line_count": 124,
+          "complexity": 16
         },
         {
-          "path": "src/market_data_platform/hk_assets/args.py",
-          "name": "add_hk_intraday_sync_args",
-          "line_count": 224,
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "_build_checks",
+          "line_count": 122,
+          "complexity": 13
+        },
+        {
+          "path": "src/market_data_platform/tushare_cli.py",
+          "name": "_add_tushare_fundamentals_parsers",
+          "line_count": 114,
           "complexity": 1
         },
         {
-          "path": "src/market_data_platform/hk_assets/clean_daily.py",
-          "name": "_clean_daily_frame",
-          "line_count": 224,
-          "complexity": 33
+          "path": "tests/test_tushare_a_share_research_assets.py",
+          "name": "test_download_a_share_industry_membership_source_then_build_changes",
+          "line_count": 106,
+          "complexity": 1
         },
         {
-          "path": "src/market_data_platform/hk_assets/patch_merge.py",
-          "name": "merge_asset_patch",
-          "line_count": 214,
-          "complexity": 42
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "_record_common_checks",
+          "line_count": 97,
+          "complexity": 14
+        },
+        {
+          "path": "tests/test_backup_data.py",
+          "name": "test_backup_data_hk_current_preset_prunes_universe_file_and_directory_overlap",
+          "line_count": 96,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_data_warehouse.py",
+          "name": "test_refresh_catalog_scans_manifest_backed_artifacts",
+          "line_count": 93,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_tushare_a_share_clean.py",
+          "name": "test_build_a_share_daily_clean_merges_adjustment_valuation_and_limit_status",
+          "line_count": 93,
+          "complexity": 1
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+          "name": "validate_a_share_universe",
+          "line_count": 92,
+          "complexity": 19
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "inspect_current_contract",
+          "line_count": 89,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "fetch_fundamentals",
+          "line_count": 89,
+          "complexity": 25
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_trade_date_dataset",
+          "line_count": 87,
+          "complexity": 11
+        },
+        {
+          "path": "src/market_data_platform/data_warehouse.py",
+          "name": "_catalog_artifact_from_manifest",
+          "line_count": 86,
+          "complexity": 27
+        },
+        {
+          "path": "scripts/dev/architecture_governance.py",
+          "name": "check_hk_split_boundaries",
+          "line_count": 85,
+          "complexity": 12
+        },
+        {
+          "path": "src/market_data_platform/config_utils.py",
+          "name": "resolve_config",
+          "line_count": 83,
+          "complexity": 17
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+          "name": "build_a_share_pit_fundamentals",
+          "line_count": 82,
+          "complexity": 13
+        },
+        {
+          "path": "src/market_data_platform/data_warehouse.py",
+          "name": "refresh_catalog",
+          "line_count": 81,
+          "complexity": 7
+        },
+        {
+          "path": "scripts/dev/quality_debt.py",
+          "name": "main",
+          "line_count": 80,
+          "complexity": 12
+        },
+        {
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "_load_basic_rqdata",
+          "line_count": 80,
+          "complexity": 20
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "src/market_data_platform/release_tools/hk_asset_workflow_health.py",
-          "name": "extract_health_repair_candidates",
-          "line_count": 150,
-          "complexity": 88
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_asset.py",
-          "name": "build_hk_intraday_asset",
-          "line_count": 234,
-          "complexity": 84
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "name": "inspect_hk_pit_coverage",
-          "line_count": 305,
-          "complexity": 78
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/clean_daily.py",
-          "name": "build_hk_daily_clean_layer",
-          "line_count": 312,
-          "complexity": 67
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/build.py",
-          "name": "build_hk_pit_fundamentals_file",
-          "line_count": 236,
-          "complexity": 62
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
-          "name": "main",
-          "line_count": 302,
-          "complexity": 57
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_instrument_industry.py",
-          "name": "mirror_hk_instrument_industry",
-          "line_count": 349,
-          "complexity": 56
-        },
-        {
-          "path": "src/market_data_platform/release_tools/package_assets.py",
-          "name": "_resolve_assets",
-          "line_count": 297,
-          "complexity": 55
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "name": "_build_pit_health_section",
-          "line_count": 306,
-          "complexity": 53
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_sync.py",
-          "name": "sync_hk_intraday",
-          "line_count": 179,
-          "complexity": 53
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_industry_changes.py",
-          "name": "mirror_hk_industry_changes",
-          "line_count": 347,
-          "complexity": 52
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-          "name": "mirror_hk_southbound",
-          "line_count": 324,
-          "complexity": 49
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/health.py",
-          "name": "inspect_raw_health",
-          "line_count": 190,
-          "complexity": 46
-        },
         {
           "path": "src/market_data_platform/data_providers.py",
           "name": "fetch_daily",
@@ -445,58 +319,136 @@
           "complexity": 42
         },
         {
-          "path": "src/market_data_platform/hk_assets/asset_health.py",
-          "name": "inspect_hk_asset_health",
-          "line_count": 331,
-          "complexity": 42
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/patch_merge.py",
-          "name": "merge_asset_patch",
-          "line_count": 214,
-          "complexity": 42
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/audit_assets.py",
-          "name": "verify_etf_daily_completeness",
-          "line_count": 145,
-          "complexity": 38
-        },
-        {
-          "path": "src/market_data_platform/hk_assets/intraday_health.py",
-          "name": "_build_intraday_quality_checks",
-          "line_count": 210,
-          "complexity": 38
-        },
-        {
-          "path": "src/market_data_platform/hk_depth/coverage.py",
-          "name": "inspect_raw_part",
-          "line_count": 159,
-          "complexity": 35
-        },
-        {
           "path": "src/market_data_platform/manifest.py",
           "name": "load_manifest_summary",
           "line_count": 73,
           "complexity": 35
         },
         {
-          "path": "src/market_data_platform/hk_assets/audit_assets.py",
-          "name": "collect_inventory",
-          "line_count": 76,
-          "complexity": 34
+          "path": "src/market_data_platform/data_warehouse.py",
+          "name": "_catalog_artifact_from_manifest",
+          "line_count": 86,
+          "complexity": 27
         },
         {
-          "path": "src/market_data_platform/hk_assets/build.py",
-          "name": "_compute_pit_feature_series",
+          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+          "name": "download_a_share_industry_membership",
           "line_count": 147,
-          "complexity": 34
+          "complexity": 27
         },
         {
-          "path": "src/market_data_platform/hk_assets/coverage.py",
-          "name": "_compute_pit_coverage_series",
-          "line_count": 146,
-          "complexity": 34
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "fetch_fundamentals",
+          "line_count": 89,
+          "complexity": 25
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "_summarize_quality_checks",
+          "line_count": 73,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/data_warehouse.py",
+          "name": "materialize_standardized",
+          "line_count": 131,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "_load_basic_rqdata",
+          "line_count": 80,
+          "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "validate_a_share_daily_clean",
+          "line_count": 166,
+          "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+          "name": "validate_a_share_universe",
+          "line_count": 92,
+          "complexity": 19
+        },
+        {
+          "path": "src/market_data_platform/rqdata_runtime.py",
+          "name": "patch_rqdatac_adjust_price_readonly",
+          "line_count": 78,
+          "complexity": 19
+        },
+        {
+          "path": "src/market_data_platform/backup_data.py",
+          "name": "run_backup",
+          "line_count": 78,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/data_providers.py",
+          "name": "_fetch_daily_rqdata",
+          "line_count": 47,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/registry.py",
+          "name": "build_dataset_registry_rows",
+          "line_count": 53,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/config_utils.py",
+          "name": "resolve_config",
+          "line_count": 83,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/dev/compatibility_governance.py",
+          "name": "inventory_issues",
+          "line_count": 38,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/backup_data.py",
+          "name": "_current_contract_backup_paths",
+          "line_count": 50,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/cli.py",
+          "name": "_dispatch",
+          "line_count": 23,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/cold_storage.py",
+          "name": "_inventory",
+          "line_count": 42,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "inspect_current_contract",
+          "line_count": 89,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "build_normalized_fundamentals",
+          "line_count": 68,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_pit_fundamentals",
+          "line_count": 124,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/rqdata_runtime.py",
+          "name": "wrapped",
+          "line_count": 59,
+          "complexity": 16
         }
       ],
       "quality_config": {
@@ -514,36 +466,7 @@
           ".venv",
           "artifacts",
           "data",
-          "reports",
-          "src/market_data_platform/hk_assets/args.py",
-          "src/market_data_platform/hk_assets/args_mirror.py",
-          "src/market_data_platform/hk_assets/asset_health.py",
-          "src/market_data_platform/hk_assets/asset_health_daily_rules.py",
-          "src/market_data_platform/hk_assets/asset_health_rendering.py",
-          "src/market_data_platform/hk_assets/audit_assets.py",
-          "src/market_data_platform/hk_assets/build.py",
-          "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
-          "src/market_data_platform/hk_assets/build_hk_daily_asset_universe.py",
-          "src/market_data_platform/hk_assets/clean_daily.py",
-          "src/market_data_platform/hk_assets/cli.py",
-          "src/market_data_platform/hk_assets/command_registry.py",
-          "src/market_data_platform/hk_assets/coverage.py",
-          "src/market_data_platform/hk_assets/current_health.py",
-          "src/market_data_platform/hk_assets/industry_ops.py",
-          "src/market_data_platform/hk_assets/intraday_asset.py",
-          "src/market_data_platform/hk_assets/intraday_download.py",
-          "src/market_data_platform/hk_assets/intraday_health.py",
-          "src/market_data_platform/hk_assets/intraday_sync.py",
-          "src/market_data_platform/hk_assets/mirror_daily.py",
-          "src/market_data_platform/hk_assets/mirror_dated.py",
-          "src/market_data_platform/hk_assets/mirror_financial.py",
-          "src/market_data_platform/hk_assets/mirror_industry.py",
-          "src/market_data_platform/hk_assets/mirror_industry_changes.py",
-          "src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-          "src/market_data_platform/hk_assets/mirror_instrument_industry.py",
-          "src/market_data_platform/hk_assets/mirror_workflow.py",
-          "src/market_data_platform/hk_assets/package_api.py",
-          "src/market_data_platform/hk_assets/patch_merge.py"
+          "reports"
         ],
         "pyright_include": [
           "src/market_data_platform"
@@ -553,60 +476,8 @@
           "artifacts",
           "data",
           "reports",
-          "src/market_data_platform/hk_depth/__init__.py",
-          "src/market_data_platform/hk_depth/aggregate.py",
-          "src/market_data_platform/hk_depth/assets.py",
-          "src/market_data_platform/hk_depth/audit.py",
-          "src/market_data_platform/hk_depth/cli.py",
-          "src/market_data_platform/hk_depth/compact.py",
-          "src/market_data_platform/hk_depth/coverage.py",
-          "src/market_data_platform/hk_depth/download_state.py",
-          "src/market_data_platform/hk_depth/exceptions.py",
-          "src/market_data_platform/hk_depth/fields.py",
-          "src/market_data_platform/hk_depth/health.py",
-          "src/market_data_platform/hk_depth/progress.py",
-          "src/market_data_platform/hk_depth/quality.py",
-          "src/market_data_platform/hk_depth/quota.py",
-          "src/market_data_platform/hk_depth/raw_duplicates.py",
-          "src/market_data_platform/hk_depth/recompress.py",
-          "src/market_data_platform/hk_depth/reconcile.py",
-          "src/market_data_platform/hk_depth/release_assets.py",
-          "src/market_data_platform/hk_depth/rq_client.py",
-          "src/market_data_platform/hk_depth/runtime.py",
-          "src/market_data_platform/hk_depth/schema.py",
-          "src/market_data_platform/hk_depth/testing.py",
-          "src/market_data_platform/hk_assets/args.py",
-          "src/market_data_platform/hk_assets/args_mirror.py",
-          "src/market_data_platform/hk_assets/asset_health.py",
-          "src/market_data_platform/hk_assets/asset_health_daily_rules.py",
-          "src/market_data_platform/hk_assets/asset_health_rendering.py",
-          "src/market_data_platform/hk_assets/audit_assets.py",
-          "src/market_data_platform/hk_assets/build.py",
-          "src/market_data_platform/hk_assets/build_hk_connect_universe.py",
-          "src/market_data_platform/hk_assets/build_hk_daily_asset_universe.py",
-          "src/market_data_platform/hk_assets/clean_daily.py",
-          "src/market_data_platform/hk_assets/cli.py",
-          "src/market_data_platform/hk_assets/command_registry.py",
-          "src/market_data_platform/hk_assets/coverage.py",
-          "src/market_data_platform/hk_assets/current_health.py",
-          "src/market_data_platform/hk_assets/industry_ops.py",
-          "src/market_data_platform/hk_assets/intraday_asset.py",
-          "src/market_data_platform/hk_assets/intraday_download.py",
-          "src/market_data_platform/hk_assets/intraday_health.py",
-          "src/market_data_platform/hk_assets/intraday_sync.py",
-          "src/market_data_platform/hk_assets/mirror_daily.py",
-          "src/market_data_platform/hk_assets/mirror_dated.py",
-          "src/market_data_platform/hk_assets/mirror_financial.py",
-          "src/market_data_platform/hk_assets/mirror_industry.py",
-          "src/market_data_platform/hk_assets/mirror_industry_changes.py",
-          "src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-          "src/market_data_platform/hk_assets/mirror_instrument_industry.py",
-          "src/market_data_platform/hk_assets/mirror_workflow.py",
-          "src/market_data_platform/hk_assets/package_api.py",
-          "src/market_data_platform/hk_assets/patch_merge.py",
           "src/market_data_platform/data_providers.py",
           "src/market_data_platform/data_warehouse.py",
-          "src/market_data_platform/release_tools",
           "src/market_data_platform/rqdata_runtime.py"
         ],
         "pyright_type_checking_mode": "basic",
@@ -619,15 +490,14 @@
         "scripts/dev/maintainability_baseline.json",
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/quality_baseline.json",
-        "scripts/dev/quality_debt.py",
-        "scripts/internal/import_cross_artifacts.py"
+        "scripts/dev/quality_debt.py"
       ]
     },
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 215,
-      "python_loc": 63395,
+      "python_loc": 63265,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -826,7 +696,7 @@
         {
           "path": "src/cstree/pipeline/feature_dataset.py",
           "name": "_prepare_feature_dataset",
-          "line_count": 216,
+          "line_count": 215,
           "complexity": 25
         },
         {
@@ -942,8 +812,8 @@
         {
           "path": "src/cstree/pipeline/output_summary_metadata.py",
           "name": "build_inputs_lock",
-          "line_count": 111,
-          "complexity": 35
+          "line_count": 110,
+          "complexity": 34
         },
         {
           "path": "src/cstree/promotion_sidecar.py",
@@ -1020,7 +890,7 @@
         {
           "path": "src/cstree/pipeline/feature_dataset.py",
           "name": "_prepare_feature_dataset",
-          "line_count": 216,
+          "line_count": 215,
           "complexity": 25
         },
         {

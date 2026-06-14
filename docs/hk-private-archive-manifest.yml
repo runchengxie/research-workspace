@@ -26,14 +26,14 @@
     "quant-execution-engine": "dc520cf7bce386c59c20a88466cd434bce0eae9e"
   },
   "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
-  "consumer_audit_evidence": "docs/evidence/hk-private-archive-consumer-audit-20260602.json",
+  "consumer_audit_evidence": "docs/evidence/hk-provider-legacy-removal-20260613.json",
   "archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
   "records": [
     {
       "id": "market-data-platform-hk-provider-legacy",
       "owner_repo": "market-data-platform",
       "archive_action": "include",
-      "lifecycle": "frozen_compatibility",
+      "lifecycle": "archived_provenance",
       "paths": [
         "src/market_data_platform/hk_assets/**",
         "src/market_data_platform/hk_depth/**",
@@ -44,27 +44,27 @@
         "docs/operations/hk-assets.md",
         "tests/test_hk*.py"
       ],
-      "restore_dependency": "restore-critical provider workflows and deleted compatibility wrappers retained in hk-freeze-20260613",
-      "consumer_audit": "pending_downstream_attestation",
-      "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+      "restore_dependency": "restore-critical provider workflows and deleted production modules retained in hk-freeze-20260613 and private restore-only archive",
+      "consumer_audit": "owner_attested_no_active_downstream_dependency_2026-06-13",
+      "replacement_docs": "market-data-platform/docs/operations/hk-archive-restore.md",
       "rollback_notes": "docs/archive/hk/README.md",
       "focused_tests": [
-        "market-data-platform/tests/test_hk_asset_workflow.py",
-        "market-data-platform/tests/test_hk_depth.py",
-        "market-data-platform/tests/test_quality_governance.py"
+        "market-data-platform full pytest",
+        "market-data-platform ruff",
+        "market-data-platform pyright"
       ],
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
-        "status": "blocked_pending_audit",
+        "status": "removed",
         "source_tag": "hk-freeze-20260613",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
-        "consumer_audit": "pending_downstream_attestation",
-        "replacement_docs": "market-data-platform/docs/operations/hk-assets.md",
+        "consumer_audit": "owner attested no active downstream dependency on 港股 provider legacy; active restore controls retained",
+        "replacement_docs": "market-data-platform/docs/operations/hk-archive-restore.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "2026-06-13: uv run python -m pytest tests/test_transitions.py tests/test_hk_depth.py tests/test_paths.py tests/test_quality_governance.py -q",
+        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m pyright",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
-        "zero_usage_release_window": "not_started"
+        "zero_usage_release_window": "waived_by_owner_attestation_2026-06-13"
       }
     },
     {

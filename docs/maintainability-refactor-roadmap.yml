@@ -15,40 +15,26 @@
   ],
   "records": [
     {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/asset_health.py",
-      "owner_repo": "market-data-platform",
-      "risk": "high",
-      "first_safe_extraction": "rendering_reporting",
-      "target_layout": "hk_assets/health/{model.py,checks.py,render.py,report.py}",
-      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
-      "non_goals": "do not change current contract or provider behavior"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/audit_assets.py",
-      "owner_repo": "market-data-platform",
-      "risk": "high",
-      "first_safe_extraction": "pure_validation",
-      "target_layout": "hk_assets/audit/{model.py,checks.py,render.py}",
-      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
-      "non_goals": "do not change asset schema or audit verdict semantics"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/release_tools/hk_asset_workflow.py",
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
       "owner_repo": "market-data-platform",
       "risk": "high",
       "first_safe_extraction": "workflow_orchestration_separation",
-      "target_layout": "release_tools/hk_asset_workflow/{planning.py,execution.py,repair.py,reporting.py,state.py}",
-      "focused_tests": ["market-data-platform/tests/test_hk_asset_workflow.py"],
-      "non_goals": "do not change release artifact paths"
+      "target_layout": "providers/tushare_a_share/{client.py,calendar.py,pricing.py,adjustments.py,manifest.py}",
+      "focused_tests": [
+        "market-data-platform/tests/test_tushare_a_share.py"
+      ],
+      "non_goals": "do not change A-share asset contract, output schema, or TuShare request semantics"
     },
     {
-      "path": "market-data-platform/src/market_data_platform/hk_depth/downloader.py",
+      "path": "market-data-platform/src/market_data_platform/tushare_cli.py",
       "owner_repo": "market-data-platform",
-      "risk": "high",
-      "first_safe_extraction": "path_resolution",
-      "target_layout": "hk_depth/downloader/{client.py,state.py,storage.py,quota.py,cli_adapter.py}",
-      "focused_tests": ["market-data-platform/tests/test_hk_depth.py"],
-      "non_goals": "do not change provider request semantics"
+      "risk": "medium",
+      "first_safe_extraction": "cli_parser_extraction",
+      "target_layout": "tushare_cli/{parser.py,runner.py,render.py}",
+      "focused_tests": [
+        "market-data-platform TuShare CLI and provider tests"
+      ],
+      "non_goals": "do not change public CLI flags or A-share artifact paths"
     },
     {
       "path": "cross-sectional-trees/src/cstree/pipeline/eval.py",
@@ -56,7 +42,9 @@
       "risk": "high",
       "first_safe_extraction": "rendering_reporting",
       "target_layout": "pipeline/eval/{metrics.py,reporting.py,orchestration.py}",
-      "focused_tests": ["cross-sectional-trees pipeline and docs contract tests"],
+      "focused_tests": [
+        "cross-sectional-trees pipeline and docs contract tests"
+      ],
       "non_goals": "do not change evaluation metrics"
     },
     {
@@ -65,7 +53,9 @@
       "risk": "high",
       "first_safe_extraction": "workflow_orchestration_separation",
       "target_layout": "pipeline/train_eval/{stage.py,state.py,outputs.py}",
-      "focused_tests": ["cross-sectional-trees pipeline tests"],
+      "focused_tests": [
+        "cross-sectional-trees pipeline tests"
+      ],
       "non_goals": "do not change run outputs or config semantics"
     },
     {
@@ -74,7 +64,9 @@
       "risk": "medium",
       "first_safe_extraction": "rendering_reporting",
       "target_layout": "research/summarize/{model.py,collect.py,render.py}",
-      "focused_tests": ["cross-sectional-trees summarize runs tests"],
+      "focused_tests": [
+        "cross-sectional-trees summarize runs tests"
+      ],
       "non_goals": "do not change report schema"
     },
     {
@@ -83,7 +75,9 @@
       "risk": "medium",
       "first_safe_extraction": "pure_validation",
       "target_layout": "exposure/{model.py,analysis.py,render.py}",
-      "focused_tests": ["cross-sectional-trees exposure tests"],
+      "focused_tests": [
+        "cross-sectional-trees exposure tests"
+      ],
       "non_goals": "do not change exposure math"
     },
     {
@@ -92,7 +86,9 @@
       "risk": "medium",
       "first_safe_extraction": "cli_parser_extraction",
       "target_layout": "commands/tune/{parser.py,runner.py,report.py}",
-      "focused_tests": ["cross-sectional-trees CLI tests"],
+      "focused_tests": [
+        "cross-sectional-trees CLI tests"
+      ],
       "non_goals": "do not change command flags"
     },
     {
@@ -101,7 +97,9 @@
       "risk": "medium",
       "first_safe_extraction": "cli_parser_extraction",
       "target_layout": "cli/{parser.py,commands.py,render.py}",
-      "focused_tests": ["quant-execution-engine CLI unit tests"],
+      "focused_tests": [
+        "quant-execution-engine CLI unit tests"
+      ],
       "non_goals": "do not change qexec command behavior"
     },
     {
@@ -110,7 +108,9 @@
       "risk": "high",
       "first_safe_extraction": "schema_model_extraction",
       "target_layout": "broker/longport/{credentials.py,symbols.py,account.py,orders.py,quotes.py}",
-      "focused_tests": ["quant-execution-engine longport unit tests"],
+      "focused_tests": [
+        "quant-execution-engine longport unit tests"
+      ],
       "non_goals": "do not change broker credentials or live execution gates"
     },
     {
@@ -119,35 +119,13 @@
       "risk": "medium",
       "first_safe_extraction": "workflow_orchestration_separation",
       "target_layout": "project_tools/smoke_operator/{parser.py,runner.py,evidence.py}",
-      "focused_tests": ["quant-execution-engine smoke harness tests"],
+      "focused_tests": [
+        "quant-execution-engine smoke harness tests"
+      ],
       "non_goals": "do not change broker smoke safety switches"
     }
   ],
   "accepted_hotspots": [
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_financial.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline large-file debt outside the first refactor wave",
-      "next_action": "review after HK asset health and workflow splits"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_workflow.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline large-file debt outside the first refactor wave",
-      "next_action": "review after workflow orchestration split"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/coverage.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline large-file debt outside the first refactor wave",
-      "next_action": "review after coverage rendering and quality gate coverage expand"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/intraday_health.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline large-file debt outside the first refactor wave",
-      "next_action": "review after HK intraday health coverage is separated"
-    },
     {
       "path": "market-data-platform/src/market_data_platform/cli.py",
       "owner_repo": "market-data-platform",
@@ -155,28 +133,10 @@
       "next_action": "split command groups when new CLI work touches this file"
     },
     {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/build.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline large-file debt outside the first refactor wave",
-      "next_action": "review after HK asset build path extraction"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/data_providers.py",
       "owner_repo": "market-data-platform",
       "reason": "provider compatibility debt is lower priority than HK asset restore modules",
       "next_action": "split provider adapters behind contract tests"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_workflows.py",
-      "owner_repo": "market-data-platform",
-      "reason": "baseline workflow debt outside the first refactor wave",
-      "next_action": "review after release workflow state/path extraction"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/release_tools/package_assets.py",
-      "owner_repo": "market-data-platform",
-      "reason": "release packaging debt is lower priority than HK asset workflow split",
-      "next_action": "split packaging validation if release changes touch this file"
     },
     {
       "path": "market-data-platform/src/market_data_platform/data_warehouse.py",
@@ -201,66 +161,6 @@
       "owner_repo": "market-data-platform",
       "reason": "A-share provider quality checks are outside the HK maintainability first wave",
       "next_action": "extract quality rule models and renderers when provider quality work resumes"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/args.py",
-      "owner_repo": "market-data-platform",
-      "reason": "argument wiring debt is lower risk than HK workflow modules",
-      "next_action": "split parser fragments after public API cleanup"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_depth/reconcile.py",
-      "owner_repo": "market-data-platform",
-      "reason": "HK depth reconciliation waits behind downloader split",
-      "next_action": "review after downloader storage/state extraction"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/clean_daily.py",
-      "owner_repo": "market-data-platform",
-      "reason": "daily cleaning debt is lower priority than asset health and audit modules",
-      "next_action": "split validation helpers when daily cleaning changes resume"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_industry_southbound.py",
-      "owner_repo": "market-data-platform",
-      "reason": "industry mirroring debt waits behind core HK asset splits",
-      "next_action": "review after industry request schema is extracted"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_depth/release_assets.py",
-      "owner_repo": "market-data-platform",
-      "reason": "HK depth release debt waits behind downloader split",
-      "next_action": "split release reporting after downloader storage/state extraction"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/current_health.py",
-      "owner_repo": "market-data-platform",
-      "reason": "current health debt is lower priority than asset_health.py first split",
-      "next_action": "merge into health package after first health model/render extraction"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/asset_io.py",
-      "owner_repo": "market-data-platform",
-      "reason": "I/O debt is deferred until model and validation coverage expand",
-      "next_action": "promote after shared/model/quality modules stay green"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/mirror_daily.py",
-      "owner_repo": "market-data-platform",
-      "reason": "daily mirroring debt is lower priority than workflow and audit modules",
-      "next_action": "split fetch planning from write path when mirror work resumes"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_depth/health.py",
-      "owner_repo": "market-data-platform",
-      "reason": "HK depth health debt waits behind downloader split",
-      "next_action": "review after downloader quality/storage split"
-    },
-    {
-      "path": "market-data-platform/src/market_data_platform/hk_assets/patch_merge.py",
-      "owner_repo": "market-data-platform",
-      "reason": "patch merge debt is lower priority than asset workflow split",
-      "next_action": "split merge validation when patch workflow changes resume"
     },
     {
       "path": "cross-sectional-trees/tests/test_pipeline_e2e.py",
@@ -477,6 +377,42 @@
       "owner_repo": "quant-execution-engine",
       "reason": "recovery action debt waits behind execution service typing cleanup",
       "next_action": "split recovery action model and runner when recovery work resumes"
+    },
+    {
+      "path": "market-data-platform/tests/test_data_providers_cache.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large provider cache scenario test is tracked but not active production code",
+      "next_action": "split by provider/cache family when cache tests change"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large A-share provider scenario test mirrors tushare_a_share.py debt",
+      "next_action": "split by calendar, price, adjustment, and manifest scenarios when provider tests change"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_universe.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share universe provider debt is lower priority than main TuShare provider extraction",
+      "next_action": "split universe request planning and membership validation when universe work resumes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_research.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share research helper debt is lower priority than production asset contract modules",
+      "next_action": "split research-only request helpers when research support changes resume"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share_clean.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large A-share cleaning scenario test mirrors provider cleaning debt",
+      "next_action": "split by cleaning rule family when tests change"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share_fundamentals.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large A-share fundamentals scenario test mirrors provider fundamentals debt",
+      "next_action": "split by endpoint and cache behavior when tests change"
     }
   ]
 }

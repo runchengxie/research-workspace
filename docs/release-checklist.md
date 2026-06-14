@@ -20,7 +20,7 @@
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
 - [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
 - [ ] 如推进独立港股研究线，`python scripts/hk_research_lane_inventory.py --check --format json` 已通过，且 `demo/hk-research-lane-template-v1` smoke 只使用 synthetic fixture。
-- [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台港股拆分边界 gate 和策略研究 maintainability ratchet，失败项能定位到具体子项目和命令。
+- [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台质量治理和策略研究 maintainability ratchet，失败项能定位到具体子项目和命令。
 - [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容。
@@ -29,16 +29,16 @@
 ## 数据约定
 
 - [ ] `DATA_PLATFORM_ROOT` 指向本次验证使用的共享资产根目录。
-- [ ] `metadata/current_assets/hk_current.json` 存在并指向预期港股资产版本，或 `metadata/frozen_markets/hk.json` 明确记录冷存储位置。
+- [ ] 如本次涉及港股归档复现，`metadata/frozen_markets/hk.json` 明确记录冷存储位置；活跃 A 股发布不要求 `hk_current.json`。
 - [ ] 如本次涉及 A 股数据，`metadata/current_assets/a_share_current.json` 存在并指向预期 A 股资产版本。
 - [ ] 未把历史兼容 `metadata/current_assets/cn_current.json` 当作新的 A 股权威入口。
 - [ ] `metadata/dataset_registry.csv` 已更新或确认无需更新。
-- [ ] `marketdata migration status --json` 可运行，并且过渡期中国香港市场后端状态符合预期。
+- [ ] `marketdata migration freeze-hk --help` 和 `marketdata migration hydrate-hk --help` 可运行；港股 provider 生产命令不作为活跃发布入口。
 
 ## 数据迁移优先级
 
 - [ ] 已按 [data-transition-playbook.md](data-transition-playbook.md) 完成数据根目录审计。
-- [ ] 如活跃根目录仍保留港股资产，`marketdata rqdata inspect-hk-current --artifacts-root "$DATA_PLATFORM_ROOT"` 已运行，或缺口已记录。
+- [ ] 如需要港股历史复现，先通过 `marketdata migration hydrate-hk --artifacts-root "$DATA_PLATFORM_ROOT" --apply` 恢复归档资产，并记录恢复证据。
 - [ ] 如港股已冻结，`marketdata migration freeze-hk ... --json` 清单、freeze marker 和冷存储 manifest 已保留。
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>` 已通过并保留报告，或质量缺口已记录。
 - [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。

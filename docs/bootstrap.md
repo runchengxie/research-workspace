@@ -49,10 +49,10 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
-中国香港市场 tick-depth 已完全由 `market-data-platform` 承载。日常运行使用
-`marketdata rqdata hk-depth -- ...`，或安装 `market-data-platform` 后使用其提供的
-`rqdata-hk-depth ...` 命令。工作区已停止追踪 `rqdata-hk-depth-snapshots` 子模块，也不承诺
-`rqdata_tick_data.*` 旧 Python import 路径。
+中国香港市场 provider 生产面已从活跃 `market-data-platform` 主线归档。日常运行不再使用
+`marketdata rqdata hk-*` 或旧 `rqdata-hk-*` 命令；需要历史复现时，先通过
+`marketdata migration hydrate-hk` 从 restore-only archive 恢复。工作区已停止追踪
+`rqdata-hk-depth-snapshots` 子模块，也不承诺 `rqdata_tick_data.*` 旧 Python import 路径。
 
 如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。
 
@@ -110,4 +110,4 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
 配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
-`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台港股拆分边界 gate 与策略研究 maintainability ratchet。
+`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台质量治理与策略研究 maintainability ratchet。

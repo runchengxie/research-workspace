@@ -33,18 +33,17 @@ def test_private_archive_manifest_is_pinned_and_retains_execution_runtime() -> N
     assert "market-data-platform-hk-restore-control-plane" in retained
 
 
-def test_private_archive_gate_reports_pending_audits_without_failing_manifest() -> None:
+def test_private_archive_gate_reports_completed_removal_review() -> None:
     report = hk_archive_gate.build_report(hk_archive_gate.load_manifest())
 
     assert report["status"] == "passed"
-    assert report["removal_review_status"] == "blocked_pending_audit"
+    assert report["removal_review_status"] == "eligible_for_removal_review"
     blocked = {
         row["id"]: row["blockers"]
         for row in report["records"]
         if row["archive_action"] == "include"
     }
-    assert "consumer_audit" in blocked["market-data-platform-hk-provider-legacy"]
-    assert "private_archive_reference" not in blocked["market-data-platform-hk-provider-legacy"]
+    assert blocked["market-data-platform-hk-provider-legacy"] == []
     assert blocked["cross-sectional-trees-hk-research-legacy"] == []
     eligible = {
         row["id"]

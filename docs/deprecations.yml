@@ -67,15 +67,16 @@
       "owner_repo": "market-data-platform",
       "entrypoint": "rqdata-hk-depth",
       "kind": "console_script",
-      "replacement": "marketdata rqdata hk-depth -- ...",
+      "replacement": "marketdata migration hydrate-hk plus restore-only archive",
       "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
       "target_milestone": "completed in active A-share workspace cleanup",
       "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
-        "market-data-platform/tests/test_hk_depth.py",
-        "market-data-platform compatibility governance tests"
+        "market-data-platform full pytest",
+        "market-data-platform ruff",
+        "market-data-platform pyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",
@@ -87,15 +88,16 @@
       "owner_repo": "market-data-platform",
       "entrypoint": "rqdata-tick",
       "kind": "console_script",
-      "replacement": "marketdata rqdata hk-depth -- ...",
+      "replacement": "marketdata migration hydrate-hk plus restore-only archive",
       "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
       "target_milestone": "completed in active A-share workspace cleanup",
       "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
-        "market-data-platform/tests/test_hk_depth.py",
-        "market-data-platform compatibility governance tests"
+        "market-data-platform full pytest",
+        "market-data-platform ruff",
+        "market-data-platform pyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",
@@ -107,15 +109,16 @@
       "owner_repo": "market-data-platform",
       "entrypoint": "rqdata-hk-assets",
       "kind": "console_script",
-      "replacement": "marketdata rqdata hk-assets -- ...",
+      "replacement": "marketdata migration hydrate-hk plus restore-only archive",
       "current_consumers": "removed from active package on 2026-06-13; restore-only archive retains previous implementation",
       "target_milestone": "completed in active A-share workspace cleanup",
       "removal_condition": "No active package exposure; rollback restores console script from previous release tag.",
       "rollback_path": "restore console script from previous release tag",
       "restore_evidence_required": true,
       "focused_tests": [
-        "market-data-platform/tests/test_hk_asset_workflow.py",
-        "market-data-platform compatibility governance tests"
+        "market-data-platform full pytest",
+        "market-data-platform ruff",
+        "market-data-platform pyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",
@@ -148,7 +151,7 @@
       "owner_repo": "cross-sectional-trees",
       "entrypoint": "configs/experiments/**/*hk*.yml",
       "kind": "archived_provenance",
-      "replacement": "docs/archive/research/hk/configs/experiments plus configs/presets/hk.yml for explicit restore",
+      "replacement": "docs/archive/research/hk/configs/experiments plus restore-only archive",
       "current_consumers": "active experiment configs removed from configs/experiments and catalog on 2026-06-13; archive copies retained under docs/archive/research/hk/configs/experiments",
       "target_milestone": "completed in active A-share workspace cleanup",
       "removal_condition": "Historical experiment configs are no longer active config entries; rollback restores them from hk-freeze-20260613 or archive copies.",

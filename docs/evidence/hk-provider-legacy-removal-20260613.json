@@ -1,0 +1,81 @@
+{
+  "schema_version": "hk_provider_legacy_removal_audit.v1",
+  "recorded_at": "2026-06-13T00:00:00+08:00",
+  "scope": [
+    "market-data-platform",
+    "cross-sectional-trees",
+    "research-workspace"
+  ],
+  "owner_attestation": {
+    "status": "completed",
+    "recorded_from": "workspace maintainer confirmed 港股 provider legacy is no longer needed and deletion may include production code removal",
+    "effective_date": "2026-06-13"
+  },
+  "restore_boundary": {
+    "source_tag": "hk-freeze-20260613",
+    "private_archive": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
+    "restore_controls_retained": [
+      "marketdata migration freeze-hk",
+      "marketdata migration hydrate-hk",
+      "metadata/frozen_markets/hk.json",
+      "docs/archive/hk/README.md"
+    ],
+    "execution_runtime_retained": [
+      "quant-execution-engine standard targets.json",
+      "FX handling",
+      "broker adapters",
+      "risk and audit runtime"
+    ]
+  },
+  "removed_active_surface": {
+    "market-data-platform": [
+      "src/market_data_platform/hk_assets/**",
+      "src/market_data_platform/hk_depth/**",
+      "src/market_data_platform/release_tools/**",
+      "configs/presets/release/hk_*.yml",
+      "configs/presets/universe/hk_*.yml",
+      "marketdata rqdata refresh-hk/inspect-hk/hk-assets/hk-depth production commands",
+      "rqdatac-hk and rqsdk optional dependencies"
+    ],
+    "cross-sectional-trees": [
+      "configs/presets/hk.yml",
+      "configs/presets/hk_quarterly_pit_hybrid.yml",
+      "configs/presets/data/hk_rqdata.yml",
+      "configs/presets/universe/pit_selected.yml",
+      "configs/field_profiles/hk_*",
+      "fundamentals provider overlay mode"
+    ]
+  },
+  "active_workspace_scan": {
+    "status": "passed_with_expected_records",
+    "command": "rg -n \"marketdata rqdata (refresh-hk|inspect-hk|hk-assets|hk-depth)|src/market_data_platform/hk_assets|src/market_data_platform/hk_depth|market_data_platform\\\\.hk_assets|market_data_platform\\\\.hk_depth|configs/presets/release/hk_|configs/presets/universe/hk_|configs/presets/hk\\\\.yml|hk_quarterly_pit_hybrid|hk_rqdata|rqdatac-hk|rqsdk|HK_DATA_PLATFORM_ROOT|hk_data_platform_root\" README.md docs scripts tests market-data-platform cross-sectional-trees quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**' --glob '!docs/archive/**' --glob '!cross-sectional-trees/docs/archive/**'",
+    "expected_remaining_categories": [
+      "archive manifests and evidence",
+      "deprecation register entries for removed commands",
+      "tests and governance fixtures asserting removed HK imports stay blocked",
+      "HK_DATA_PLATFORM_ROOT compatibility alias for legacy callers",
+      "marketdata migration freeze-hk / hydrate-hk restore controls",
+      "quant-execution-engine multi-market execution runtime"
+    ]
+  },
+  "validation": {
+    "market-data-platform": [
+      ".venv/bin/python -m pytest -q",
+      ".venv/bin/python -m ruff check .",
+      ".venv/bin/python -m pyright"
+    ],
+    "cross-sectional-trees": [
+      ".venv/bin/python -m pytest -q",
+      ".venv/bin/python -m ruff check .",
+      ".venv/bin/python -m pyright"
+    ],
+    "research-workspace": [
+      "UV_CACHE_DIR=/tmp/uv-cache uv run --with pytest python -m pytest tests/test_hk_private_archive.py tests/test_hk_public_split_manifest.py tests/test_hk_research_lane_inventory.py tests/test_data_transition_playbook.py tests/test_maintainability_governance.py -q"
+    ]
+  },
+  "removal_review": {
+    "status": "eligible_for_removal_review",
+    "zero_usage_release_window": "waived_by_owner_attestation_2026-06-13",
+    "notes": "The active A 股 workspace no longer exposes 港股 provider production entrypoints. Restore-only recovery remains available through the private archive and retained migration controls."
+  }
+}
