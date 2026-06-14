@@ -26,6 +26,7 @@ public demo 或独立港股研究线 staging。
 | 查看港股公开拆分清单 | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | 查看 A 股就绪度分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
+| 查看跨仓库研究完整性和防过拟合边界 | [platform-workflow.md](platform-workflow.md#研究完整性和防过拟合边界) |
 | 查看维护债治理入口 | [maintainability-governance.md](maintainability-governance.md) |
 | 查看文档生命周期和归档规则 | [documentation-lifecycle.md](documentation-lifecycle.md) |
 | 查看废弃入口删除条件 | [deprecations.md](deprecations.md) |

@@ -49,6 +49,18 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；港股只作为历史归档复现入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
+## 研究完整性和防过拟合边界
+
+三仓库共同覆盖研究完整性，但职责不同：
+
+| 层级 | 仓库 | 负责的防线 | 文档入口 |
+| --- | --- | --- | --- |
+| 数据防泄漏 | `market-data-platform` | current contract、manifest、PIT universe、PIT fundamentals、历史行业、research validation、current health 和 release evidence | [`market-data-platform/docs/research-integrity.md`](../market-data-platform/docs/research-integrity.md) |
+| 研究防过拟合 | `cross-sectional-trees` | time-series CV、rolling / walk-forward、final OOS、CPCV、purge / embargo、feature evidence、DSR、promotion gate 和候选晋升证据 | [`cross-sectional-trees/docs/concepts/overfitting-controls.md`](../cross-sectional-trees/docs/concepts/overfitting-controls.md) |
+| 执行隔离和审计 | `quant-execution-engine` | 标准 `targets.json` 输入、dry-run / paper / live 分层、风控预检、订单审计、对账和 evidence bundle | [`quant-execution-engine/docs/research-handoff-governance.md`](../quant-execution-engine/docs/research-handoff-governance.md) |
+
+数据平台不读取研究 run 指标；研究仓库不生产市场数据资产或提交券商订单；执行引擎不重新评估模型，也不把 lineage sidecar 作为下单参数。这样可以避免数据发布、模型选择和真实执行互相污染。
+
 ## 研究主线
 
 当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 restore-only 历史研究线，工作区内 public demo 和独立港股研究线 staging 已退役。迁出动作和保留边界见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 与 [`archive/hk/README.md`](archive/hk/README.md)。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
