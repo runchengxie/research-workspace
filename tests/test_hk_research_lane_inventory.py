@@ -19,7 +19,7 @@ def test_hk_research_lane_inventory_keeps_data_and_execution_boundaries() -> Non
 
     assert report["status"] == "passed"
     records = {row["id"]: row for row in inventory["records"]}
-    assert records["market-data-platform-hk-assets-control-plane"]["action"] == "keep"
+    assert records["market-data-platform-hk-restore-control-plane"]["action"] == "keep"
     assert records["qexec-shared-market-execution"]["action"] == "keep"
     assert records["cstree-hk-allocation-liveops"]["action"] == "removed"
     assert records["cstree-hk-allocation-liveops"]["deletion_gate"]["status"] == "removed"

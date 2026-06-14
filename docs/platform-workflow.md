@@ -45,8 +45,8 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
-| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、中国香港市场 tick-depth、中国香港市场 RQData 资产、健康检查、current refresh 和发布工作流 | `marketdata tushare ...`、`marketdata rqdata hk-{depth,assets} -- ...` |
-| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；中国香港市场数据资产生产检查入口由数据平台负责 | `summary.json`、`positions_current*.csv`、`targets.json` |
+| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、A 股资产发布和港股归档 freeze / hydrate 恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
+| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；港股只作为历史归档复现入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究主线
@@ -71,13 +71,13 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
   reports/
 ```
 
-`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、中国香港市场 tick-depth 原生实现，以及中国香港市场日线、PIT、估值、行业、intraday、current contract 检查、资产发布和冷存储 freeze / hydrate 实现。A 股主线迁移应优先读取 `metadata/current_assets/a_share_current.json` 指向的 TuShare 平台资产；港股长期不使用时由 `metadata/frozen_markets/hk.json` 记录冷存储位置，需要复现时再恢复。`rqdata-hk-depth-snapshots` 已从本工作区 sunset，不作为子模块追踪。
+`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、A 股资产发布和港股冷存储 freeze / hydrate 恢复控制面。A 股主线迁移应优先读取 `metadata/current_assets/a_share_current.json` 指向的 TuShare 平台资产；港股长期不使用时由 `metadata/frozen_markets/hk.json` 记录冷存储位置，需要复现时再恢复。港股 provider 生产模块和 `rqdata-hk-depth-snapshots` 均不作为活跃工作区入口。
 
 共享数据运维的新入口必须进入 `market-data-platform`。`cross-sectional-trees` 仅保留只读消费逻辑和少量兼容 wrapper；其边界清单由 `cross-sectional-trees/docs/internal/data-ops-boundary-inventory.md` 维护，下载、健康检查、current refresh、registry 或资产发布实现不应回流到研究仓库。
 
 ### 2. 读取数据并完成研究
 
-`cross-sectional-trees` 从当前数据清单解析已发布数据资产，再完成研究流程。A 股迁移候选入口是 `cstree run --config default_next`；港股配置用于 legacy reference、历史复现、跨市场对照或明确跟踪需求，不作为新增研究默认入口。
+`cross-sectional-trees` 从当前数据清单解析已发布数据资产，再完成研究流程。A 股迁移候选入口是 `cstree run --config default_next`；港股只用于 restore-only 历史复现，不作为新增研究默认入口。
 
 - 特征工程、训练与评估。
 - 历史回测、基准对比和研究证据管理。

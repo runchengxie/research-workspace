@@ -102,16 +102,24 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
         base, env = marketdata
         results.append(
             _run(
-                "marketdata migration status",
-                [*base, "migration", "status", "--json"],
+                "marketdata migration freeze-hk help",
+                [*base, "migration", "freeze-hk", "--help"],
                 env=env,
                 timeout=timeout,
             )
         )
         results.append(
             _run(
-                "marketdata paths hk",
-                [*base, "paths", "--market", "hk", "--json"],
+                "marketdata migration hydrate-hk help",
+                [*base, "migration", "hydrate-hk", "--help"],
+                env=env,
+                timeout=timeout,
+            )
+        )
+        results.append(
+            _run(
+                "marketdata paths a-share",
+                [*base, "paths", "--market", "a_share", "--json"],
                 env=env,
                 timeout=timeout,
             )
@@ -125,7 +133,7 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
                         "contract",
                         "build",
                         "--market",
-                        "hk",
+                        "a_share",
                         "--artifacts-root",
                         tmp,
                         "--dry-run",

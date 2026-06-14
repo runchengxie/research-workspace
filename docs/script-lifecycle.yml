@@ -258,16 +258,6 @@
       "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "market-data-platform/scripts/internal/import_cross_artifacts.py",
-      "owner": "market-data-platform",
-      "purpose": "Import selected research artifacts into data-platform metadata",
-      "lifecycle": "migration",
-      "safe_to_run_locally": false,
-      "writes_files": "data-platform metadata and artifact roots",
-      "external_dependencies": "source research artifacts and DATA_PLATFORM_ROOT",
-      "removal_condition": "archive only after A-share migration evidence no longer requires importing research artifacts and two release reviews record zero active calls"
-    },
-    {
       "path": "quant-execution-engine/project_tools/export_repo_source.py",
       "owner": "quant-execution-engine",
       "purpose": "Source export for execution-engine release evidence",

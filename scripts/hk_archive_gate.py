@@ -55,6 +55,7 @@ BLOCKING_VALUES = {
     "pending_operator_tag",
     "pending_operator_publication",
 }
+READY_GATE_STATUSES = {"ready", "removed"}
 REVISION_RE = re.compile(r"^[0-9a-f]{40}$")
 Issue = dict[str, str]
 
@@ -279,7 +280,7 @@ def _record_blockers(record: dict[str, Any]) -> list[str]:
         for field in sorted(REQUIRED_GATE_FIELDS - {"status"})
         if _is_blocking(gate.get(field))
     ]
-    if gate.get("status") != "ready":
+    if gate.get("status") not in READY_GATE_STATUSES:
         blockers.append("status")
     return blockers
 
