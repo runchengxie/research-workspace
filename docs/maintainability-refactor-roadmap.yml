@@ -133,6 +133,12 @@
       "next_action": "split command groups when new CLI work touches this file"
     },
     {
+      "path": "market-data-platform/src/market_data_platform/tushare_refresh.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share refresh and promotion orchestration entered the refreshed baseline after TuShare workflow work expanded",
+      "next_action": "split refresh planning, promotion, and reporting when TuShare workflow work resumes"
+    },
+    {
       "path": "market-data-platform/src/market_data_platform/data_providers.py",
       "owner_repo": "market-data-platform",
       "reason": "provider compatibility debt is lower priority than HK asset restore modules",
