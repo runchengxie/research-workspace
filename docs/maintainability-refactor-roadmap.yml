@@ -85,7 +85,7 @@
       "owner_repo": "cross-sectional-trees",
       "risk": "medium",
       "first_safe_extraction": "cli_parser_extraction",
-      "target_layout": "commands/tune/{parser.py,runner.py,report.py}",
+      "target_layout": "commands/tune/{parser.py,report.py}; runner logic already started in commands/tune_runner.py",
       "focused_tests": [
         "cross-sectional-trees CLI tests"
       ],
@@ -267,14 +267,14 @@
     {
       "path": "cross-sectional-trees/src/cstree/commands/linear_sweep.py",
       "owner_repo": "cross-sectional-trees",
-      "reason": "CLI orchestration debt is already tracked in C901 debt registry",
-      "next_action": "split parser and runner when sweep command changes resume"
+      "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
+      "next_action": "split parser and runner only when sweep command changes resume"
     },
     {
       "path": "cross-sectional-trees/src/cstree/commands/run_grid.py",
       "owner_repo": "cross-sectional-trees",
-      "reason": "CLI orchestration debt is already tracked in C901 debt registry",
-      "next_action": "split parser, fixed-signal runner, and summary writer when grid command changes resume"
+      "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
+      "next_action": "split parser, fixed-signal runner, and summary writer only when grid command changes resume"
     },
     {
       "path": "cross-sectional-trees/src/cstree/research/construction_grid.py",

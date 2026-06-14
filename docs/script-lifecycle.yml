@@ -58,26 +58,6 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/export_hk_public_demo.py",
-      "owner": "research-workspace",
-      "purpose": "Clean-room public demo staging and safety scan",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "staging directory passed via --out",
-      "external_dependencies": "none for scan; git optional for source revision",
-      "removal_condition": "remove only after public demo staging is removed or replaced, no release checklist calls this script for two release reviews, and the replacement export path is documented"
-    },
-    {
-      "path": "scripts/hk_public_demo_scan.py",
-      "owner": "research-workspace",
-      "purpose": "Public-demo safety scan shared by export and scan-only workflows",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after public demo staging is removed or replaced, no release checklist calls the public-demo scanner for two release reviews"
-    },
-    {
       "path": "scripts/export_hk_legacy_archive.py",
       "owner": "research-workspace",
       "purpose": "Private paused-maintenance HK legacy source archive staging",
@@ -96,16 +76,6 @@
       "writes_files": "only when --out is provided",
       "external_dependencies": "git checkout with initialized submodules",
       "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
-    },
-    {
-      "path": "scripts/hk_research_lane_inventory.py",
-      "owner": "research-workspace",
-      "purpose": "HK research lane inventory validation and public template safety scan",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after the research lane split checklist is retired and no CI or public-template safety scan calls this script for two release reviews"
     },
     {
       "path": "scripts/maintainability_baseline.py",

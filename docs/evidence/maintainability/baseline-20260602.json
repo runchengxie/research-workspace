@@ -9,9 +9,9 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 49,
-      "python_loc": 7093,
-      "hk_related_file_count": 23,
+      "python_file_count": 31,
+      "python_loc": 5666,
+      "hk_related_file_count": 5,
       "large_files": [],
       "long_functions": [
         {
@@ -50,10 +50,7 @@
         "scripts/a_share_readiness_contract.py",
         "scripts/a_share_readiness_evidence.py",
         "scripts/export_hk_legacy_archive.py",
-        "scripts/export_hk_public_demo.py",
         "scripts/hk_archive_gate.py",
-        "scripts/hk_public_demo_scan.py",
-        "scripts/hk_research_lane_inventory.py",
         "scripts/maintainability_baseline.py",
         "scripts/print_version_matrix.py",
         "scripts/run_quality_checks.py",
@@ -497,8 +494,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 215,
-      "python_loc": 63266,
+      "python_file_count": 216,
+      "python_loc": 63658,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -524,11 +521,6 @@
         {
           "path": "src/cstree/exposure.py",
           "loc": 1161,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/commands/tune.py",
-          "loc": 1064,
           "hk_related": false
         },
         {
@@ -562,6 +554,11 @@
           "hk_related": false
         },
         {
+          "path": "src/cstree/commands/run_grid.py",
+          "loc": 900,
+          "hk_related": false
+        },
+        {
           "path": "src/cstree/portfolio.py",
           "loc": 890,
           "hk_related": false
@@ -592,11 +589,6 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/commands/run_grid.py",
-          "loc": 782,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/execution.py",
           "loc": 781,
           "hk_related": false
@@ -604,6 +596,16 @@
         {
           "path": "src/cstree/pipeline/output_artifacts.py",
           "loc": 774,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/commands/tune.py",
+          "loc": 744,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/commands/linear_sweep.py",
+          "loc": 723,
           "hk_related": false
         },
         {
@@ -620,37 +622,14 @@
           "path": "src/cstree/research/construction_grid.py",
           "loc": 709,
           "hk_related": false
-        },
-        {
-          "path": "src/cstree/research/feature_evidence.py",
-          "loc": 693,
-          "hk_related": false
         }
       ],
       "long_functions": [
-        {
-          "path": "src/cstree/commands/run_grid.py",
-          "name": "run",
-          "line_count": 332,
-          "complexity": 81
-        },
         {
           "path": "src/cstree/pipeline/runner.py",
           "name": "prepare_research_context",
           "line_count": 328,
           "complexity": 9
-        },
-        {
-          "path": "src/cstree/commands/linear_sweep.py",
-          "name": "run",
-          "line_count": 318,
-          "complexity": 41
-        },
-        {
-          "path": "src/cstree/commands/tune.py",
-          "name": "run",
-          "line_count": 317,
-          "complexity": 39
         },
         {
           "path": "src/cstree/pipeline/eval.py",
@@ -777,27 +756,27 @@
           "name": "main",
           "line_count": 171,
           "complexity": 24
+        },
+        {
+          "path": "src/cstree/research/summarize_runs.py",
+          "name": "_extract_row",
+          "line_count": 164,
+          "complexity": 9
+        },
+        {
+          "path": "src/cstree/commands/run_grid.py",
+          "name": "_run_fixed_signal_grid",
+          "line_count": 157,
+          "complexity": 23
+        },
+        {
+          "path": "tests/test_run_release_scripts.py",
+          "name": "_write_demo_run",
+          "line_count": 157,
+          "complexity": 1
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "src/cstree/commands/run_grid.py",
-          "name": "run",
-          "line_count": 332,
-          "complexity": 81
-        },
-        {
-          "path": "src/cstree/commands/linear_sweep.py",
-          "name": "run",
-          "line_count": 318,
-          "complexity": 41
-        },
-        {
-          "path": "src/cstree/commands/tune.py",
-          "name": "run",
-          "line_count": 317,
-          "complexity": 39
-        },
         {
           "path": "src/cstree/research/cpcv.py",
           "name": "_path_metric_row",
@@ -920,6 +899,12 @@
         },
         {
           "path": "src/cstree/commands/run_grid.py",
+          "name": "_resolve_grid_values",
+          "line_count": 49,
+          "complexity": 23
+        },
+        {
+          "path": "src/cstree/commands/run_grid.py",
           "name": "_run_fixed_signal_grid",
           "line_count": 157,
           "complexity": 23
@@ -929,6 +914,18 @@
           "name": "simulate_capacity_execution",
           "line_count": 128,
           "complexity": 23
+        },
+        {
+          "path": "src/cstree/pipeline/eval.py",
+          "name": "_record_quantile_turnover_bucket_metrics",
+          "line_count": 111,
+          "complexity": 22
+        },
+        {
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "_selected_runs",
+          "line_count": 49,
+          "complexity": 22
         }
       ],
       "quality_config": {

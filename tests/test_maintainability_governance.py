@@ -308,7 +308,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         (record["repo"], record["path"]): set(record["rules"])
         for record in manifest["per_file_ignore_register"]
     }
-    cross_ignores = cross_config["tool"]["ruff"]["lint"]["per-file-ignores"]
+    cross_ignores = cross_config["tool"]["ruff"]["lint"].get("per-file-ignores", {})
     assert per_file_records == {
         ("cross-sectional-trees", path): set(rules) for path, rules in cross_ignores.items()
     }

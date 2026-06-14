@@ -51,7 +51,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ## 研究主线
 
-当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为历史研究线，并通过 [`hk-research-lane-inventory.json`](hk-research-lane-inventory.json) 记录独立研究线候选、迁出动作和保留边界。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
+当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 restore-only 历史研究线，工作区内 public demo 和独立港股研究线 staging 已退役。迁出动作和保留边界见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 与 [`archive/hk/README.md`](archive/hk/README.md)。具体 default 切换、港股 frozen-active / sunset 条件以 `cross-sectional-trees/docs/market-lifecycle.md` 为准。
 
 当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股继续用 `daily_clean` / `default_next` 做 staged baseline。切换 `default` 到 A 股前，先满足验收条件。
 

@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Scan superproject-owned files and optional public-demo staging for secret leaks."""
+"""Scan superproject-owned files for secret leaks."""
 
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import re
 from pathlib import Path
@@ -19,16 +18,6 @@ SECRET_ASSIGNMENT = re.compile(
     r"(?i)(?:access[_-]?token|api[_-]?key|client[_-]?secret|password|private[_-]?key)"
     r"\s*[:=]\s*[\"']?(?!<|\\{|\\$|none\b|example\b|private-value\b)[A-Za-z0-9_/+.-]{12,}"
 )
-
-
-def _load_demo_exporter() -> Any:
-    path = ROOT / "scripts" / "export_hk_public_demo.py"
-    spec = importlib.util.spec_from_file_location("export_hk_public_demo", path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"Cannot import demo exporter: {path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
 
 
 def _root_owned_files(root: Path) -> list[Path]:
@@ -69,12 +58,8 @@ def scan_superproject(root: Path) -> dict[str, Any]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
-    parser.add_argument("--demo-stage", type=Path)
     args = parser.parse_args(argv)
     result: dict[str, Any] = {"superproject": scan_superproject(args.root.resolve())}
-    if args.demo_stage is not None:
-        exporter = _load_demo_exporter()
-        result["public_demo_stage"] = exporter.scan_public_tree(args.demo_stage.resolve())
     print(json.dumps(result, indent=2, sort_keys=True))
     failed = any(payload["status"] != "passed" for payload in result.values())
     return 1 if failed else 0

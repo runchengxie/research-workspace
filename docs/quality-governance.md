@@ -6,7 +6,7 @@
 
 | 仓库 | 硬门禁 | 建议项 | 人工或发布复核 |
 | --- | --- | --- | --- |
-| superproject | Ruff、Ruff format、secret scan、顶层 pytest、doctor、contract smoke | `pip-audit`、`deptry`、选择性 coverage ratchet | 港股公开演示 staging scan、发布检查清单 |
+| superproject | Ruff、Ruff format、secret scan、顶层 pytest、doctor、contract smoke | `pip-audit`、`deptry`、选择性 coverage ratchet | 港股 restore-only archive 复核、发布检查清单 |
 | `market-data-platform` | Ruff、Ruff format、Pyright、pytest | `pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
 | `cross-sectional-trees` | 仓库自有 lint、format、Pyright、pytest | `pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、CPCV、turnover/cost、capacity 复核 |
 | `quant-execution-engine` | Ruff、Ruff format、Pyright、pytest | mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
@@ -23,13 +23,11 @@ ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，
 ```bash
 python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile secrets
-python scripts/run_quality_checks.py --profile secrets \
-  --demo-stage /tmp/hk-cross-sectional-strategy-demo
 python scripts/run_submodule_checks.py --profile mypy_advisory \
   --submodule quant-execution-engine
 ```
 
-公开演示仓库发布前必须扫描 staging tree。涉及 provider 或券商凭证读取逻辑时，还应对改动所属子仓库执行 credential review；credential leak 属于阻塞问题，不按 advisory 处理。
+涉及 provider 或券商凭证读取逻辑时，还应对改动所属子仓库执行 credential review；credential leak 属于阻塞问题，不按 advisory 处理。港股材料不再通过工作区内 public demo 路线发布，只保留 private restore-only archive 复核。
 
 执行引擎至少保留一个发布周期的 mypy 观察期。下一次 release review 中，如果 mypy 没有独有阻塞发现，且 Pyright warning 分类保持稳定，可以评估移除 advisory。若需要回滚，将 `scripts/submodule_checks.json` 中执行引擎的 `type` 恢复为 mypy；已完成的 SDK 边界窄化修复继续保留。
 

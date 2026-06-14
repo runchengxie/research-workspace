@@ -8,10 +8,9 @@
 
 这里收录顶层工作区说明，只覆盖跨仓库协作、文件约定、版本锁定和发布检查。子项目内部的依赖、业务命令、架构规则和测试要求仍以各自 README 和 docs 为准。
 
-当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产和研究输出按冷存储 /
-恢复边界保留。公开展示使用工作区外、暂停维护状态的 `synthetic / public-safe demo` 仓库，
-独立于本工作区子模块、依赖和必跑 CI 目标，不承接真实 provider、broker 或 restore
-实现代码。
+当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产、研究输出和历史代码
+只按冷存储 / private paused-maintenance restore-only archive 边界保留；工作区不再维护
+public demo 或独立港股研究线 staging。
 
 ## 推荐阅读顺序
 
@@ -38,12 +37,12 @@
 ## 文档分层
 
 - 活跃文档：初始化、当前跨仓库工作流、A 股就绪度、文件约定、发布检查清单。
-- 参考文档：长期稳定的文件约定、质量治理、维护流程和公开演示导出。
+- 参考文档：长期稳定的文件约定、质量治理和维护流程。
 - 归档文档：[archive/README.md](archive/README.md) 下的交接记录、冻结记录和历史证据。
 - 生命周期规则：[documentation-lifecycle.md](documentation-lifecycle.md) 定义 `active`、`reference`、`archived` 和 `superseded` 的状态字段。
 - 兼容入口：`hk-legacy-surface-inventory.md`、`hk-private-archive.md`、
-  `hk-public-demo-export.md`、`a-share-production-readiness.md` 保留给旧链接，
-  当前入口分别见 [archive/hk/README.md](archive/hk/README.md) 和
+  `a-share-production-readiness.md` 保留给旧链接，当前入口分别见
+  [archive/hk/README.md](archive/hk/README.md) 和
   [data-transition-playbook.md](data-transition-playbook.md)。
 
 ## 文档边界

@@ -4,10 +4,9 @@
   "generated_from": [
     "docs/archive/hk/README.md",
     "docs/hk-legacy-surface-inventory.md",
-    "docs/hk-public-demo-export.md",
     "docs/deprecations.yml",
-    "demo/hk-public-demo-allowlist-v1.txt",
-    "repo-local HK surface search on 2026-06-02"
+    "repo-local HK surface search on 2026-06-02",
+    "owner decision on 2026-06-14 to retire the public demo route and keep restore-only archives"
   ],
   "reviewed_commands": [
     "rg -n \"\\\\b(hk|HK|Hong Kong|longport|rqdata-hk|hkdata|alloc-hk|hk_assets|hk_depth|hk_data_platform)\\\\b\" README.md docs scripts demo market-data-platform cross-sectional-trees quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**'",
@@ -15,8 +14,6 @@
   ],
   "actions": [
     "keep_in_main",
-    "move_to_public_demo",
-    "archive_in_public_demo",
     "delete_after_split",
     "private_do_not_export"
   ],
@@ -36,7 +33,7 @@
     "removed"
   ],
   "follow_up_budget": {
-    "blocked_or_follow_up_records_max": 4,
+    "blocked_or_follow_up_records_max": 0,
     "policy": "ratchet_only; lower this maximum after HK split follow-up records are resolved, do not raise it without explicit release review"
   },
   "deletion_gate_requirements": [
@@ -58,22 +55,22 @@
         "scripts/export_hk_public_demo.py",
         "scripts/hk_public_demo_scan.py"
       ],
-      "path_kind": "repo_local",
-      "action": "move_to_public_demo",
+      "path_kind": "historical_git",
+      "action": "delete_after_split",
       "public_safety": "public_safe",
       "restore_dependency": "not_required_synthetic_fixture_only",
       "consumer_audit_status": "not_required_not_workspace_dependency",
-      "replacement_path": "future external paused-maintenance public repository",
+      "replacement_path": "public demo route retired; restore-only archive retained",
       "required_redactions": [],
-      "removal_condition": "After the public repository candidate is exported and manually published, keep only top-level docs and exporter evidence in the workspace unless a follow-up change removes the staging template.",
+      "removal_condition": "Removed from the active workspace on 2026-06-14 after owner decision to retire public demo staging.",
       "deletion_gate": {
-        "status": "follow_up_required",
+        "status": "removed",
         "restore_evidence": "not_required",
         "consumer_audit": "not_required",
-        "replacement_docs": "docs/hk-public-demo-export.md",
+        "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "tests/test_export_hk_public_demo.py",
-        "public_split_evidence": "export-manifest.json from staged public tree"
+        "focused_tests": "2026-06-14: uv run --with pytest python -m pytest tests/test_hk_public_split_manifest.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -91,7 +88,6 @@
         "docs/hk-legacy-surface-inventory.md",
         "docs/hk-private-archive-manifest.yml",
         "docs/hk-private-archive.md",
-        "docs/hk-public-demo-export.md",
         "docs/hk-public-split-manifest.yml",
         "scripts/export_hk_legacy_archive.py",
         "scripts/hk_archive_gate.py"
@@ -105,7 +101,7 @@
       "required_redactions": [
         "do not export local absolute paths from archived handoff notes into public demo"
       ],
-      "removal_condition": "Keep as the workspace record for restore, archive, and public-demo split decisions.",
+      "removal_condition": "Keep as the workspace record for restore, archive, and retired public-demo split decisions.",
       "deletion_gate": {
         "status": "not_applicable",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
@@ -151,22 +147,22 @@
         "docs/hk-research-lane-inventory.json",
         "scripts/hk_research_lane_inventory.py"
       ],
-      "path_kind": "repo_local",
-      "action": "move_to_public_demo",
+      "path_kind": "historical_git",
+      "action": "delete_after_split",
       "public_safety": "public_safe",
       "restore_dependency": "synthetic research-lane template only",
       "consumer_audit_status": "not_required_not_workspace_dependency",
-      "replacement_path": "future external paused-maintenance public repository",
+      "replacement_path": "public research-lane route retired; restore-only archive retained",
       "required_redactions": [],
-      "removal_condition": "After a reviewed research-lane public candidate is exported, keep only top-level docs and inventory evidence in the workspace unless a follow-up change removes the template.",
+      "removal_condition": "Removed from the active workspace on 2026-06-14 after owner decision to retire the independent public research-lane template.",
       "deletion_gate": {
-        "status": "follow_up_required",
+        "status": "removed",
         "restore_evidence": "not_required",
         "consumer_audit": "not_required",
-        "replacement_docs": "docs/hk-public-demo-export.md",
+        "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "tests/test_hk_research_lane_inventory.py",
-        "public_split_evidence": "research-lane template smoke output"
+        "focused_tests": "2026-06-14: uv run --with pytest python -m pytest tests/test_hk_public_split_manifest.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -259,7 +255,7 @@
         "replacement_docs": "cross-sectional-trees/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_cli_liveops.py tests/test_docs_contracts.py tests/test_cstree_namespace.py -q; uv run python -m pytest tests -q",
-        "public_split_evidence": "public demo synthetic allocation module"
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -274,26 +270,26 @@
         "cross-sectional-trees/tests/test_*hk*.py"
       ],
       "path_kind": "repo_local",
-      "action": "archive_in_public_demo",
-      "public_safety": "public_safe_archive",
+      "action": "keep_in_main",
+      "public_safety": "restore_sensitive",
       "restore_dependency": "historical research provenance and cold-storage archive manifest",
-      "consumer_audit_status": "active HK research implementation modules removed on 2026-06-13; manual provenance review remains only before public excerpt export",
-      "replacement_path": "demo archive only for public-safe excerpts; full restore remains in cold storage",
+      "consumer_audit_status": "active HK research implementation modules removed on 2026-06-13; public excerpt route retired on 2026-06-14",
+      "replacement_path": "restore-only archive and cold storage",
       "required_redactions": [
         "licensed data references",
         "local paths",
         "private run output names",
         "provider-specific operational details"
       ],
-      "removal_condition": "Active HK research implementation modules were removed on 2026-06-13; archive only reviewed excerpts in the public demo candidate.",
+      "removal_condition": "Active HK research implementation modules were removed on 2026-06-13; public excerpt route retired on 2026-06-14.",
       "deletion_gate": {
-        "status": "follow_up_required",
+        "status": "not_applicable",
         "restore_evidence": "docs/evidence/hk-research-archive-manifest-20260601.json",
-        "consumer_audit": "repo-local active-code audit passed; public excerpt review remains manual_review_required",
-        "replacement_docs": "demo/hk-public-demo-template-v1/archive/README.md",
+        "consumer_audit": "repo-local active-code audit passed; public excerpt review no longer required",
+        "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_docs_contracts.py tests/test_cli_research.py tests/test_repo_path_references.py -q",
-        "public_split_evidence": "reviewed public demo archive entries"
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -304,25 +300,25 @@
         "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md"
       ],
       "path_kind": "repo_local",
-      "action": "archive_in_public_demo",
-      "public_safety": "public_safe_after_review",
+      "action": "keep_in_main",
+      "public_safety": "restore_sensitive",
       "restore_dependency": "historical reproducibility, deleted restore presets in private archive, and archived config provenance",
-      "consumer_audit_status": "active experiment configs moved to docs/archive/research/hk/configs/experiments on 2026-06-13; manual review required only before public excerpt",
-      "replacement_path": "active A-share presets in cross-sectional-trees; demo synthetic configs if needed",
+      "consumer_audit_status": "active experiment configs moved to docs/archive/research/hk/configs/experiments on 2026-06-13; public excerpt route retired on 2026-06-14",
+      "replacement_path": "active A-share presets in cross-sectional-trees; HK configs remain restore-only archive material",
       "required_redactions": [
         "private output names",
         "provider-specific dataset paths",
         "local-only assumptions"
       ],
-      "removal_condition": "Active HK experiment configs, explicit restore presets, data presets, and field profiles were removed from active configs on 2026-06-13; public excerpt review only covers archive copies.",
+      "removal_condition": "Active HK experiment configs, explicit restore presets, data presets, and field profiles were removed from active configs on 2026-06-13; public excerpt route retired on 2026-06-14.",
       "deletion_gate": {
-        "status": "follow_up_required",
+        "status": "not_applicable",
         "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
-        "consumer_audit": "repo-local active config audit passed; public excerpt review remains pending",
+        "consumer_audit": "repo-local active config audit passed; public excerpt review no longer required",
         "replacement_docs": "cross-sectional-trees/docs/archive/research/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_config_lifecycle.py tests/test_config_utils.py tests/test_linear_sweep.py tests/test_docs_contracts.py -q",
-        "public_split_evidence": "optional reviewed demo archive excerpts"
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -364,16 +360,16 @@
       "path_kind": "repo_local",
       "action": "private_do_not_export",
       "public_safety": "private_runtime",
-      "restore_dependency": "not required for public demo; retained for execution engine broker support",
+      "restore_dependency": "not required for restore; retained for execution engine broker support",
       "consumer_audit_status": "active execution-engine responsibility",
-      "replacement_path": "public demo omits broker integration and live execution",
+      "replacement_path": "not_applicable",
       "required_redactions": [
         "broker credentials",
         "account semantics",
         "live execution controls",
         "provider package references"
       ],
-      "removal_condition": "Never export to public demo. Keep or refactor only inside quant-execution-engine according to its broker governance.",
+      "removal_condition": "Keep or refactor only inside quant-execution-engine according to its broker governance.",
       "deletion_gate": {
         "status": "not_applicable",
         "restore_evidence": "not_required",
@@ -381,7 +377,7 @@
         "replacement_docs": "quant-execution-engine/docs/longport-paper-failure-smoke.md",
         "rollback_notes": "quant-execution-engine docs archive or release notes",
         "focused_tests": "quant-execution-engine longport unit tests",
-        "public_split_evidence": "public demo scan rejects broker/runtime markers"
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
     {
@@ -407,7 +403,7 @@
         "replacement_docs": "docs/contracts.md",
         "rollback_notes": "quant-execution-engine docs",
         "focused_tests": "quant-execution-engine targets and rebalance tests",
-        "public_split_evidence": "public demo emits standard synthetic targets.json only"
+        "public_split_evidence": "not_required_public_demo_route_retired"
       }
     }
   ]

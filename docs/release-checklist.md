@@ -10,16 +10,10 @@
 - [ ] `python scripts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `uv run --with pytest python -m pytest tests -q` 通过。
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 只扫描 `scripts/` 与 `tests/`。
-- [ ] 如发布港股公开演示仓库，`python scripts/export_hk_public_demo.py --out <staging-dir>` 已生成 clean-room staged tree 和 `export-manifest.json`。
-- [ ] 如发布港股公开演示仓库，`export-manifest.json` 中 `scan.status` 与 `offline_smoke.status` 均为 `passed`。
-- [ ] 如发布港股公开演示仓库，`python scripts/export_hk_public_demo.py --scan-only <staging-dir>` 通过。
-- [ ] 如发布港股公开演示仓库，`python scripts/run_quality_checks.py --profile secrets --demo-stage <staging-dir>` 通过。
-- [ ] 如发布港股公开演示仓库，已人工复核 staged tree 中不存在敏感词、provider 痕迹、本地路径、Parquet、pickle、压缩包、大文件、真实行情、真实输出、券商 adapter 或执行审计日志。
-- [ ] 如发布港股公开演示仓库，公开仓库创建、首次 push 和是否 archive 均由维护者在 GitHub 侧显式操作；工作区不把它加入 submodule、required CI 或 release matrix。
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/hk_archive_gate.py --check --format json` 已通过。
 - [ ] 如 stage 港股私有 legacy archive，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
 - [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
-- [ ] 如推进独立港股研究线，`python scripts/hk_research_lane_inventory.py --check --format json` 已通过，且 `demo/hk-research-lane-template-v1` smoke 只使用 synthetic fixture。
+- [ ] 不再发布工作区内 public demo 或独立港股研究线；港股材料只按 private、paused-maintenance、restore-only archive 处理。
 - [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台质量治理和策略研究 maintainability ratchet，失败项能定位到具体子项目和命令。
 - [ ] Advisory 结果已记录：依赖审计、依赖 hygiene、选择性 coverage ratchet，以及执行引擎迁移后的 `mypy_advisory`。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。

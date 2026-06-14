@@ -6,7 +6,7 @@
 > source_of_truth: yes
 > superseded_by: n/a
 
-本页收口中国香港市场历史数据、研究产物和公开演示仓库的归档入口。当前活跃主线是 A 股数据、研究和执行交接；港股真实资产按冷存储和显式恢复流程维护。
+本页收口中国香港市场历史数据、研究产物和 restore-only 归档入口。当前活跃主线是 A 股数据、研究和执行交接；港股真实资产按冷存储和显式恢复流程维护。
 
 ## 当前状态
 
@@ -21,7 +21,7 @@
 - 港股 restore-only workspace：已发布到外部 private 仓库
   `git@github.com:runchengxie/hk-research-workspace-archive.git`，仅 pin 三个子模块到
   `hk-freeze-20260613`。
-- 公开展示：仅通过外部 paused-maintenance 的 synthetic demo 仓库，不作为本工作区 submodule、CI 目标或 release matrix 成员。
+- 公开展示：工作区内 public demo 和独立港股研究线 staging 已于 2026-06-14 退役；港股材料只保留 private、paused-maintenance、restore-only archive。
 
 ## 权威入口
 
@@ -39,7 +39,6 @@
 
 - [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md)
 - [../../hk-private-archive.md](../../hk-private-archive.md)
-- [../../hk-public-demo-export.md](../../hk-public-demo-export.md)
 
 ## 记录
 
@@ -59,14 +58,13 @@
 
 `../../hk-public-split-manifest.yml` 是迁出和删除判断入口。任何 restore-sensitive 或
 compatibility surface 在删除前都需要同时具备 restore evidence、consumer audit、replacement
-docs、rollback notes、focused tests，以及需要公开 demo 承接时的 public split evidence。
-
-公开 demo staging 只承接 synthetic fixture 和 public-safe demo 逻辑。真实行情、provider cache、
-券商 adapter、交易审计日志、本地路径和私有研究输出不进入公开 demo。
+docs、rollback notes 和 focused tests。public demo 路线已经退役，因此不再要求 staged public
+split evidence。
 
 ## 私有 legacy archive 门禁
 
-`../../hk-private-archive-manifest.yml` 管理真实业务代码的私有归档。它和 public demo 分离：
+`../../hk-private-archive-manifest.yml` 管理真实业务代码的私有归档。public demo 路线已退役后，
+它是港股历史业务代码的恢复依据：
 只从 pin 的 Git revision 导出 allowlist 源码，保留 SHA-256 和本地 staging 证据。2026-06-13
 的后续删除已把港股 provider 生产面移出活跃 `market-data-platform` 和 `cross-sectional-trees`
 入口；恢复时从 `hk-freeze-20260613` 或 private restore-only archive 取回。LongPort、标准

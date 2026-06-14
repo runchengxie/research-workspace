@@ -26,7 +26,7 @@ def _ruff_command(*args: str) -> tuple[str, ...]:
     return ("uv", "run", "--with", "ruff", "ruff", *args)
 
 
-def plan_commands(profile: str, *, demo_stage: str | None = None) -> list[PlannedCommand]:
+def plan_commands(profile: str) -> list[PlannedCommand]:
     commands = {
         "lint": [
             PlannedCommand("ruff-check", _ruff_command("check", "scripts", "tests")),
@@ -38,7 +38,6 @@ def plan_commands(profile: str, *, demo_stage: str | None = None) -> list[Planne
                 (
                     sys.executable,
                     str(ROOT / "scripts" / "scan_workspace_secrets.py"),
-                    *(("--demo-stage", demo_stage) if demo_stage else ()),
                 ),
             )
         ],
@@ -70,11 +69,10 @@ def run_commands(commands: list[PlannedCommand], *, dry_run: bool) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", choices=("lint", "secrets", "hard"), default="hard")
-    parser.add_argument("--demo-stage", help="Also scan an exported 港股 public-demo staging tree.")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     return run_commands(
-        plan_commands(args.profile, demo_stage=args.demo_stage),
+        plan_commands(args.profile),
         dry_run=args.dry_run,
     )
 

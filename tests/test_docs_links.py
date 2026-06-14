@@ -65,18 +65,17 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("[../ARCHITECTURE.md](../ARCHITECTURE.md)", docs_index)
         self.assertIn("[../CONTRIBUTING.md](../CONTRIBUTING.md)", docs_index)
 
-    def test_docs_preserve_hk_public_demo_boundary(self) -> None:
+    def test_docs_preserve_hk_restore_only_boundary(self) -> None:
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
-        export_docs = (ROOT / "docs" / "hk-public-demo-export.md").read_text(encoding="utf-8")
         inventory = (ROOT / "docs" / "hk-legacy-surface-inventory.md").read_text(encoding="utf-8")
 
-        self.assertIn("synthetic / public-safe demo", docs_index)
-        self.assertIn("不承接真实 provider、broker 或 restore\n实现代码", docs_index)
+        self.assertIn("不再维护\npublic demo", docs_index)
+        self.assertIn("restore-only archive", docs_index)
         self.assertIn("source_of_truth: yes", archive_index)
         self.assertIn("hk-public-split-manifest.yml", archive_index)
         self.assertIn("hk-private-archive-manifest.yml", archive_index)
-        self.assertIn("不要把真实港股业务实现原样搬入 demo", export_docs)
+        self.assertIn("public demo 路线已经退役", archive_index)
         self.assertIn("hk-public-split-manifest.yml", inventory)
         self.assertIn("restore-sensitive", inventory)
 

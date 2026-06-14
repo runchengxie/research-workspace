@@ -14,9 +14,8 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 
 | 清单 | 用途 |
 | --- | --- |
-| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | 公开演示拆分、归档、删除门禁和 restore-sensitive surface |
+| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | public demo 路线退役记录、归档、删除门禁和 restore-sensitive surface |
 | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | 私有 paused-maintenance legacy archive staging 和删除门禁 |
-| [hk-research-lane-inventory.json](hk-research-lane-inventory.json) | 独立港股研究线候选、迁移动作和保留边界 |
 | [deprecations.md](deprecations.md) | deprecated 入口 owner、replacement、milestone 和删除门禁 |
 
 ## 快速分类
@@ -39,7 +38,7 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 - replacement docs；
 - rollback notes；
 - owning repo focused tests；
-- 需要公开 demo 承接时的 public split evidence。
+- public demo 路线已退役，不再新增 public split evidence 要求。
 
 港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究线；仓库中仍保留的
 港股配置、历史笔记和工具入口只作为 `archived_provenance` 或 `frozen_compatibility`

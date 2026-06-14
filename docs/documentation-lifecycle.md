@@ -66,7 +66,6 @@
 | --- | --- |
 | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) | [archive/hk/README.md](archive/hk/README.md), [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | [hk-private-archive.md](hk-private-archive.md) | [archive/hk/README.md](archive/hk/README.md), [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
-| [hk-public-demo-export.md](hk-public-demo-export.md) | [archive/hk/README.md](archive/hk/README.md), [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | [a-share-production-readiness.md](a-share-production-readiness.md) | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
 
 ## 路由规则

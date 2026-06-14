@@ -2,7 +2,7 @@
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
     "broad_exclude_register_max": 3,
-    "per_file_ignore_register_max": 3,
+    "per_file_ignore_register_max": 0,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
   "repos": [
@@ -139,42 +139,5 @@
       ]
     }
   ],
-  "per_file_ignore_register": [
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/commands/linear_sweep.py",
-      "tool": "ruff",
-      "rules": [
-        "C901"
-      ],
-      "owner": "cross-sectional-trees",
-      "reason": "linear sweep command still mixes parser, run orchestration, and reporting",
-      "next_action": "split parser and runner when sweep command changes resume",
-      "review_milestone": "after command orchestration extraction"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/commands/run_grid.py",
-      "tool": "ruff",
-      "rules": [
-        "C901"
-      ],
-      "owner": "cross-sectional-trees",
-      "reason": "grid command still mixes parser, execution routing, and summary writing",
-      "next_action": "split parser, fixed-signal runner, and summary writer when grid command changes resume",
-      "review_milestone": "after command orchestration extraction"
-    },
-    {
-      "repo": "cross-sectional-trees",
-      "path": "src/cstree/commands/tune.py",
-      "tool": "ruff",
-      "rules": [
-        "C901"
-      ],
-      "owner": "cross-sectional-trees",
-      "reason": "tune command remains a large CLI orchestration surface",
-      "next_action": "split command parser, runner, and report helpers",
-      "review_milestone": "after tune command refactor"
-    }
-  ]
+  "per_file_ignore_register": []
 }
