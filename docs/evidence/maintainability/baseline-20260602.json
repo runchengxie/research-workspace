@@ -71,7 +71,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 64,
-      "python_loc": 21845,
+      "python_loc": 22667,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -86,7 +86,7 @@
         },
         {
           "path": "src/market_data_platform/cli.py",
-          "loc": 1077,
+          "loc": 1106,
           "hk_related": false
         },
         {
@@ -97,6 +97,16 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
           "loc": 962,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_refresh.py",
+          "loc": 867,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 847,
           "hk_related": false
         },
         {
@@ -115,13 +125,8 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 643,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
-          "loc": 578,
+          "loc": 585,
           "hk_related": false
         },
         {
@@ -130,13 +135,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_clean.py",
-          "loc": 530,
+          "path": "src/market_data_platform/tushare_cli.py",
+          "loc": 550,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/tushare_cli.py",
-          "loc": 506,
+          "path": "tests/test_tushare_a_share_clean.py",
+          "loc": 530,
           "hk_related": false
         },
         {
@@ -207,6 +212,12 @@
           "complexity": 1
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+          "name": "validate_a_share_universe",
+          "line_count": 98,
+          "complexity": 20
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
           "name": "_record_common_checks",
           "line_count": 97,
@@ -231,12 +242,6 @@
           "complexity": 1
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
-          "name": "validate_a_share_universe",
-          "line_count": 92,
-          "complexity": 19
-        },
-        {
           "path": "src/market_data_platform/contract_health.py",
           "name": "inspect_current_contract",
           "line_count": 89,
@@ -253,6 +258,12 @@
           "name": "mirror_a_share_trade_date_dataset",
           "line_count": 87,
           "complexity": 11
+        },
+        {
+          "path": "src/market_data_platform/tushare_refresh.py",
+          "name": "_apply_promotion",
+          "line_count": 87,
+          "complexity": 7
         },
         {
           "path": "src/market_data_platform/data_warehouse.py",
@@ -289,12 +300,6 @@
           "name": "main",
           "line_count": 80,
           "complexity": 12
-        },
-        {
-          "path": "src/market_data_platform/data_providers.py",
-          "name": "_load_basic_rqdata",
-          "line_count": 80,
-          "complexity": 20
         }
       ],
       "complexity_hotspots": [
@@ -367,8 +372,8 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
           "name": "validate_a_share_universe",
-          "line_count": 92,
-          "complexity": 19
+          "line_count": 98,
+          "complexity": 20
         },
         {
           "path": "src/market_data_platform/rqdata_runtime.py",
@@ -495,7 +500,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 216,
-      "python_loc": 63658,
+      "python_loc": 63663,
       "hk_related_file_count": 2,
       "large_files": [
         {
