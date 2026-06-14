@@ -21,7 +21,7 @@
 
 | 文件或目录 | 生产方 | 消费方 | 用途 |
 | --- | --- | --- | --- |
-| `DATA_PLATFORM_ROOT` | 操作环境 | 数据平台、研究系统 | 共享资产根目录，由运行环境提供 |
+| `DATA_PLATFORM_ROOT` | 操作环境或顶层未跟踪 `.env` | 数据平台、研究系统 | 共享资产根目录 |
 | `metadata/frozen_markets/hk.json` | `market-data-platform` | 人工审计、顶层 doctor | 港股已移入冷存储时的 freeze marker |
 | `metadata/current_assets/a_share_current.json` | `market-data-platform` | 下游研究或数据消费者 | A 股当前可用数据清单 |
 | `metadata/dataset_registry.csv` | `market-data-platform` | 人工审计、研究系统 | 已发布数据资产索引 |

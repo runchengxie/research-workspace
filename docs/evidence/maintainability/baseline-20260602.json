@@ -9,8 +9,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 48,
-      "python_loc": 6931,
+      "python_file_count": 49,
+      "python_loc": 7093,
       "hk_related_file_count": 23,
       "large_files": [],
       "long_functions": [
@@ -62,6 +62,7 @@
         "scripts/smoke_contracts.py",
         "scripts/submodule_checks.json",
         "scripts/workspace_doctor.py",
+        "scripts/workspace_env.py",
         "scripts/workspace_governance.py",
         "scripts/workspace_governance_common.py",
         "scripts/workspace_governance_hk_split.py",

@@ -178,6 +178,16 @@
       "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/workspace_env.py",
+      "owner": "research-workspace",
+      "purpose": "Allowlisted top-level .env parsing for workspace path settings",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor no longer reads top-level .env path settings"
+    },
+    {
       "path": "scripts/workspace_governance.py",
       "owner": "research-workspace",
       "purpose": "Maintainability governance register validation used by workspace doctor",
