@@ -115,6 +115,28 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertEqual("WARN", checks[0].severity)
         self.assertIn(f"export DATA_PLATFORM_ROOT={artifact_root}", checks[0].message)
 
+    def test_data_platform_contract_check_reads_top_level_env_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            artifact_root = root / "data-root"
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+            (artifact_root / "metadata" / "dataset_registry.csv").write_text(
+                "dataset_name,market\n",
+                encoding="utf-8",
+            )
+            (root / ".env").write_text(
+                f"DATA_PLATFORM_ROOT={artifact_root}\n",
+                encoding="utf-8",
+            )
+
+            with mock.patch.dict(workspace_doctor.os.environ, {}, clear=True):
+                checks = workspace_doctor.check_data_platform_root(root)
+
+        self.assertEqual("OK", checks[0].severity)
+        self.assertIn("(.env)", checks[0].message)
+
     def test_data_platform_contract_check_warns_on_legacy_cn_alias(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             artifact_root = Path(tmp)
@@ -206,6 +228,65 @@ class WorkspaceDoctorTest(unittest.TestCase):
                 for check in checks
             )
         )
+
+    def test_data_platform_contract_check_accepts_remote_restore_only_hk_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            artifact_root = Path(tmp) / "active"
+            current_root = artifact_root / "metadata" / "current_assets"
+            current_root.mkdir(parents=True)
+            (current_root / "a_share_current.json").write_text("{}", encoding="utf-8")
+            marker = artifact_root / "metadata" / "frozen_markets" / "hk.json"
+            marker.parent.mkdir(parents=True)
+            marker.write_text(
+                json.dumps(
+                    {
+                        "cold_snapshot": str(Path(tmp) / "missing-cold-snapshot"),
+                        "local_snapshot_available": False,
+                        "release_url": "https://example.invalid/releases/hk-freeze",
+                        "status": "frozen",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with mock.patch.dict(
+                workspace_doctor.os.environ,
+                {"DATA_PLATFORM_ROOT": str(artifact_root)},
+                clear=False,
+            ):
+                checks = workspace_doctor.check_data_platform_root()
+
+        self.assertTrue(
+            any(check.code == "frozen-market" and check.severity == "OK" for check in checks)
+        )
+        self.assertFalse(
+            any(check.code == "frozen-market" and check.severity == "WARN" for check in checks)
+        )
+
+    def test_top_level_env_allows_only_workspace_path_settings(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".env").write_text(
+                "DATA_PLATFORM_ROOT=/tmp/market-data-platform\n",
+                encoding="utf-8",
+            )
+
+            checks = workspace_doctor.check_top_level_outputs(root)
+
+        self.assertFalse(any(check.severity == "ERROR" for check in checks))
+
+    def test_top_level_env_rejects_credentials(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".env").write_text(
+                "DATA_PLATFORM_ROOT=/tmp/market-data-platform\nTUSHARE_TOKEN=secret\n",
+                encoding="utf-8",
+            )
+
+            checks = workspace_doctor.check_top_level_outputs(root)
+
+        self.assertEqual("ERROR", checks[0].severity)
+        self.assertIn("TUSHARE_TOKEN is not allowlisted", checks[0].message)
 
     def test_private_archive_governance_stays_outside_active_graph(self) -> None:
         checks = workspace_doctor.check_hk_private_archive_governance(ROOT)

@@ -64,6 +64,15 @@ cd ..
 export DATA_PLATFORM_ROOT=/path/to/research-artifacts
 ```
 
+也可以复制顶层示例文件，给本机 `workspace_doctor.py` 和跨仓库检查提供默认路径：
+
+```bash
+cp .env.example .env
+```
+
+顶层 `.env` 只允许记录 `DATA_PLATFORM_ROOT` 这类工作区路径配置；provider token、券商凭证、
+密码和其他 secret 仍必须放在对应子项目约定的私有位置，不能放进顶层 `.env`。
+
 常见共享路径：
 
 ```text
@@ -82,7 +91,7 @@ $DATA_PLATFORM_ROOT/
 
 不要把以下内容提交到顶层 Git：
 
-- `.env`、`.env.*`、`.envrc`、本地凭证文件。
+- `.env`、`.env.*`、`.envrc`、本地凭证文件；`.env.example` 是唯一可提交的示例文件。
 - `artifacts/`、`outputs/`、`data/`、`cache/` 等大型产物或缓存。
 - 券商实盘凭证。实盘凭证应遵循 `quant-execution-engine` 自身文档，放在用户私有位置。
 

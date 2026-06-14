@@ -12,6 +12,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import workspace_env
 from workspace_governance import (
     Check,
     check_maintainability_governance,
@@ -219,6 +220,17 @@ def _check_hk_current_or_freeze(hk_contract: Path, hk_freeze_marker: Path) -> li
                 f"HK assets are frozen in cold storage: {cold_snapshot}.",
             )
         ]
+    if marker.get("status") == "frozen" and marker.get("local_snapshot_available") is False:
+        release_url = str(marker.get("release_url") or "").strip()
+        restore_hint = f" Restore from {release_url} before hydrate." if release_url else ""
+        return [
+            Check(
+                "OK",
+                "frozen-market",
+                "HK assets are frozen remotely; local cold snapshot is not required by default."
+                + restore_hint,
+            )
+        ]
     return [
         Check(
             "WARN",
@@ -228,8 +240,8 @@ def _check_hk_current_or_freeze(hk_contract: Path, hk_freeze_marker: Path) -> li
     ]
 
 
-def check_data_platform_root() -> list[Check]:
-    root_text = os.environ.get("DATA_PLATFORM_ROOT", "").strip()
+def check_data_platform_root(root: Path | None = None) -> list[Check]:
+    root_text, source = workspace_env.data_platform_root_text(root)
     if not root_text:
         existing_candidates = [
             str(candidate) for candidate in DATA_PLATFORM_ROOT_CANDIDATES if candidate.exists()
@@ -258,7 +270,10 @@ def check_data_platform_root() -> list[Check]:
             )
         ]
 
-    checks.append(Check("OK", "data-platform-root", f"DATA_PLATFORM_ROOT={artifact_root}"))
+    source_suffix = f" ({source})" if source else ""
+    checks.append(
+        Check("OK", "data-platform-root", f"DATA_PLATFORM_ROOT={artifact_root}{source_suffix}")
+    )
     current_root = artifact_root / "metadata" / "current_assets"
     hk_contract = current_root / "hk_current.json"
     a_share_contract = current_root / "a_share_current.json"
@@ -291,7 +306,13 @@ def check_top_level_outputs(root: Path) -> list[Check]:
     leaked_files: list[str] = []
     for pattern in FORBIDDEN_TOP_LEVEL_PATTERNS:
         for candidate in root.glob(pattern):
-            if candidate.name == ".env.example":
+            if candidate.name == workspace_env.TOP_LEVEL_ENV_EXAMPLE:
+                continue
+            if candidate.name == workspace_env.TOP_LEVEL_ENV_FILE:
+                issues = workspace_env.env_file_issues(candidate)
+                if not issues:
+                    continue
+                leaked_files.append(f"{candidate.name} ({'; '.join(issues)})")
                 continue
             leaked_files.append(candidate.name)
     if leaked_files:
@@ -436,7 +457,7 @@ def run_checks(root: Path) -> list[Check]:
     checks.extend(check_readme(root))
     checks.extend(check_submodule_state(root))
     checks.extend(check_public_clis(root))
-    checks.extend(check_data_platform_root())
+    checks.extend(check_data_platform_root(root))
     checks.extend(check_top_level_outputs(root))
     checks.extend(check_script_import_boundaries(root))
     checks.extend(check_hk_private_archive_governance(root))
