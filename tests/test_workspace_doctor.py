@@ -345,7 +345,6 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertIn("governance-script-lifecycle", codes)
         self.assertIn("governance-quality", codes)
         self.assertIn("governance-refactor-roadmap", codes)
-        self.assertIn("governance-hk-public-split", codes)
         self.assertTrue(
             any(
                 check.severity == "OK"

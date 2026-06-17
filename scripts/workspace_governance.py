@@ -8,13 +8,11 @@ from pathlib import Path
 from typing import Any
 
 from workspace_governance_common import Check
-from workspace_governance_hk_split import _uncovered_hk_split_paths, check_hk_public_split
 from workspace_governance_quality import check_quality_coverage
 from workspace_governance_submodules import check_submodule_governance_gates
 
 __all__ = [
     "Check",
-    "_uncovered_hk_split_paths",
     "check_maintainability_governance",
     "check_submodule_governance_gates",
 ]
@@ -24,8 +22,7 @@ GOVERNANCE_DOC_SCHEMAS = {
     "docs/script-lifecycle.yml": "script_lifecycle.v1",
     "docs/quality-coverage-governance.yml": "quality_coverage_governance.v1",
     "docs/maintainability-refactor-roadmap.yml": "maintainability_refactor_roadmap.v1",
-    "docs/evidence/maintainability/baseline-20260602.json": "maintainability_baseline.v1",
-    "docs/hk-public-split-manifest.yml": "hk_public_split_manifest.v1",
+    "docs/evidence/maintainability/baseline-20260617.json": "maintainability_baseline.v1",
 }
 SCRIPT_LIFECYCLE_ROOTS = (
     "scripts",
@@ -285,10 +282,8 @@ def check_maintainability_governance(root: Path) -> list[Check]:
         checks.extend(check_quality_coverage(root, quality))
 
     roadmap = docs.get("docs/maintainability-refactor-roadmap.yml")
-    baseline = docs.get("docs/evidence/maintainability/baseline-20260602.json")
+    baseline = docs.get("docs/evidence/maintainability/baseline-20260617.json")
     if roadmap and baseline:
         checks.extend(_check_refactor_roadmap(roadmap, baseline))
 
-    if split_manifest := docs.get("docs/hk-public-split-manifest.yml"):
-        checks.extend(check_hk_public_split(root, split_manifest))
     return checks

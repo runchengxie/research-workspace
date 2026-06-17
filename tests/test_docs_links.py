@@ -68,16 +68,10 @@ class DocsLinksTest(unittest.TestCase):
     def test_docs_preserve_hk_restore_only_boundary(self) -> None:
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
-        inventory = (ROOT / "docs" / "hk-legacy-surface-inventory.md").read_text(encoding="utf-8")
 
-        self.assertIn("不再维护\npublic demo", docs_index)
         self.assertIn("restore-only archive", docs_index)
         self.assertIn("source_of_truth: yes", archive_index)
-        self.assertIn("hk-public-split-manifest.yml", archive_index)
-        self.assertIn("hk-private-archive-manifest.yml", archive_index)
         self.assertIn("public demo 路线已经退役", archive_index)
-        self.assertIn("hk-public-split-manifest.yml", inventory)
-        self.assertIn("restore-sensitive", inventory)
 
     def test_hk_archive_records_are_outside_primary_path(self) -> None:
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")

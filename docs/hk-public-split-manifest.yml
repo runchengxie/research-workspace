@@ -69,7 +69,7 @@
         "consumer_audit": "not_required",
         "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "2026-06-14: uv run --with pytest python -m pytest tests/test_hk_public_split_manifest.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
+        "focused_tests": "2026-06-17: uv run --with pytest python -m pytest tests/test_hk_archive_boundary.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
         "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },
@@ -90,7 +90,8 @@
         "docs/hk-private-archive.md",
         "docs/hk-public-split-manifest.yml",
         "scripts/export_hk_legacy_archive.py",
-        "scripts/hk_archive_gate.py"
+        "scripts/hk_archive_gate.py",
+        "scripts/workspace_governance_hk_split.py"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",
@@ -117,25 +118,25 @@
       "owner_repo": "research-workspace",
       "paths": [
         "scripts/workspace_doctor.py",
-        "scripts/workspace_governance_hk_split.py",
         "scripts/smoke_contracts.py",
+        "tests/test_hk_archive_boundary.py",
         "docs/platform-workflow.md"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",
       "public_safety": "shared_active",
       "restore_dependency": "uses frozen HK marker and shared contract smoke references",
-      "consumer_audit_status": "active top-level checks",
+      "consumer_audit_status": "active top-level boundary checks",
       "replacement_path": "not_applicable",
       "required_redactions": [],
-      "removal_condition": "Keep while the workspace doctor documents HK frozen-market status and shared path contracts.",
+      "removal_condition": "Keep while the workspace doctor and archive boundary test document HK frozen-market status and shared path contracts.",
       "deletion_gate": {
         "status": "not_applicable",
         "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
         "consumer_audit": "not_required",
         "replacement_docs": "docs/platform-workflow.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "tests/test_workspace_doctor.py",
+        "focused_tests": "tests/test_hk_archive_boundary.py tests/test_workspace_doctor.py",
         "public_split_evidence": "not_required"
       }
     },
@@ -161,7 +162,7 @@
         "consumer_audit": "not_required",
         "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "2026-06-14: uv run --with pytest python -m pytest tests/test_hk_public_split_manifest.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
+        "focused_tests": "2026-06-17: uv run --with pytest python -m pytest tests/test_hk_archive_boundary.py tests/test_docs_links.py tests/test_workspace_doctor.py -q",
         "public_split_evidence": "not_required_public_demo_route_retired"
       }
     },

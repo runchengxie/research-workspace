@@ -180,12 +180,12 @@
     {
       "path": "scripts/workspace_governance_hk_split.py",
       "owner": "research-workspace",
-      "purpose": "HK split manifest path coverage validation used by workspace governance",
-      "lifecycle": "dev",
+      "purpose": "Archived HK split manifest validator retained for restore/removal review only",
+      "lifecycle": "archive",
       "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_governance.py",
+      "writes_files": "none",
       "external_dependencies": "none",
-      "removal_condition": "remove only after HK split governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+      "removal_condition": "remove after two release reviews confirm no restore/removal review calls this validator and tests/test_hk_archive_boundary.py remains the active workspace guard"
     },
     {
       "path": "scripts/workspace_governance_submodules.py",

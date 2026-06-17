@@ -419,6 +419,24 @@
       "owner_repo": "market-data-platform",
       "reason": "large A-share fundamentals scenario test mirrors provider fundamentals debt",
       "next_action": "split by endpoint and cache behavior when tests change"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share ownership feature builder entered the refreshed baseline after factor asset work expanded",
+      "next_action": "split ownership transforms and validation helpers when feature work resumes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_flow_features.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share flow feature builder entered the refreshed baseline after factor asset work expanded",
+      "next_action": "split flow transforms and manifest reporting when feature work resumes"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share_research_assets.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large A-share research asset scenario test is tracked but not active production code",
+      "next_action": "split by research asset family when tests change"
     }
   ]
 }

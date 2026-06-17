@@ -10,7 +10,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_SCRIPT = ROOT / "scripts" / "maintainability_baseline.py"
-BASELINE_PATH = ROOT / "docs" / "evidence" / "maintainability" / "baseline-20260602.json"
+BASELINE_RELATIVE = "docs/evidence/maintainability/baseline-20260617.json"
+BASELINE_PATH = ROOT / BASELINE_RELATIVE
 QUALITY_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance_quality.py"
 WORKSPACE_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"
 REPOS = {
@@ -18,15 +19,6 @@ REPOS = {
     "market-data-platform",
     "cross-sectional-trees",
     "quant-execution-engine",
-}
-REQUIRED_DEPRECATION_IDS = {
-    "market-data-platform-hkdata",
-    "market-data-platform-hk-data-platform-package",
-    "market-data-platform-rqdata-hk-depth",
-    "market-data-platform-rqdata-tick",
-    "market-data-platform-rqdata-hk-assets",
-    "cross-sectional-trees-alloc-hk",
-    "cross-sectional-trees-hk-historical-configs",
 }
 REQUIRED_ROADMAP_PATHS = {
     "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
@@ -150,7 +142,7 @@ def _deprecation_removal_issues(manifest: dict[str, Any]) -> list[str]:
 
 
 def test_maintainability_baseline_schema_and_generator() -> None:
-    baseline = _load_json_doc("docs/evidence/maintainability/baseline-20260602.json")
+    baseline = _load_json_doc(BASELINE_RELATIVE)
 
     assert baseline["schema_version"] == "maintainability_baseline.v1"
     assert baseline["thresholds"] == {
@@ -201,6 +193,7 @@ def test_deprecation_register_has_required_fields_and_removal_gate() -> None:
     }
 
     assert manifest["schema_version"] == "deprecation_register.v1"
+    record_ids = [record["id"] for record in manifest["records"]]
     pending_count = sum(
         1
         for record in manifest["records"]
@@ -208,7 +201,7 @@ def test_deprecation_register_has_required_fields_and_removal_gate() -> None:
     )
     assert DEPRECATION_BUDGET_FIELDS <= set(manifest["deprecation_budget"])
     assert manifest["deprecation_budget"]["pending_follow_up_max"] == pending_count
-    assert REQUIRED_DEPRECATION_IDS <= {record["id"] for record in manifest["records"]}
+    assert len(record_ids) == len(set(record_ids))
     assert _deprecation_removal_issues(manifest) == []
     for record in manifest["records"]:
         assert required_fields <= set(record)
@@ -290,12 +283,6 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         cross_config["tool"]["pyright"]["include"]
     )
 
-    market_ruff_excludes = set(market_config["tool"]["ruff"]["extend-exclude"])
-    market_pyright_excludes = set(market_config["tool"]["pyright"]["exclude"])
-    assert "src/market_data_platform/hk_assets" not in market_ruff_excludes
-    assert "src/market_data_platform/hk_depth" not in market_ruff_excludes
-    assert "src/market_data_platform/hk_assets" not in market_pyright_excludes
-    assert "src/market_data_platform/hk_depth" not in market_pyright_excludes
     assert "maintainability" not in market_config["tool"]
 
     assert set(repos["quant-execution-engine"]["pyright"]["strict_targets"]) == set(
@@ -337,7 +324,7 @@ def test_quality_debt_budget_blocks_registered_increases() -> None:
 
 def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     roadmap = _load_json_doc("docs/maintainability-refactor-roadmap.yml")
-    baseline = _load_json_doc("docs/evidence/maintainability/baseline-20260602.json")
+    baseline = _load_json_doc(BASELINE_RELATIVE)
     planned = {record["path"] for record in roadmap["records"]}
     accepted = {record["path"] for record in roadmap["accepted_hotspots"]}
 

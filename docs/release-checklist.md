@@ -10,8 +10,8 @@
 - [ ] `python scripts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `uv run --with pytest python -m pytest tests -q` 通过。
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 只扫描 `scripts/` 与 `tests/`。
-- [ ] 如 stage 港股私有 legacy archive，`python scripts/hk_archive_gate.py --check --format json` 已通过。
-- [ ] 如 stage 港股私有 legacy archive，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
+- [ ] 仅在执行港股私有 legacy archive restore/removal review 时，`python scripts/hk_archive_gate.py --check --format json` 已通过。
+- [ ] 仅在重新 stage 港股私有 legacy archive 时，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
 - [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
 - [ ] 不再发布工作区内 public demo 或独立港股研究线；港股材料只按 private、paused-maintenance、restore-only archive 处理。
 - [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台质量治理和策略研究 maintainability ratchet，失败项能定位到具体子项目和命令。
@@ -27,7 +27,7 @@
 - [ ] 如本次涉及 A 股数据，`metadata/current_assets/a_share_current.json` 存在并指向预期 A 股资产版本。
 - [ ] 未把历史兼容 `metadata/current_assets/cn_current.json` 当作新的 A 股权威入口。
 - [ ] `metadata/dataset_registry.csv` 已更新或确认无需更新。
-- [ ] `marketdata migration freeze-hk --help` 和 `marketdata migration hydrate-hk --help` 可运行；港股 provider 生产命令不作为活跃发布入口。
+- [ ] 如本次涉及港股归档复现，`marketdata migration freeze-hk --help` 和 `marketdata migration hydrate-hk --help` 可运行；港股 provider 生产命令不作为活跃发布入口。
 
 ## 数据迁移优先级
 
