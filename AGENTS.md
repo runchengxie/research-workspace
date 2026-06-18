@@ -57,6 +57,18 @@ cd quant-execution-engine && uv run pytest
 
 如果只改跨仓库文件约定，优先运行每个边界的 focused tests，再按需要扩大到完整 pytest、Ruff、Pyright 或治理脚本。
 
+## TuShare 凭证约定
+
+- TuShare 本地凭证由 `market-data-platform` 负责管理；不要在顶层仓库新增或提交 `.env*`。
+- 需要真实 TuShare 请求时，优先进入 `market-data-platform` 使用该仓库 CLI。CLI 会读取当前工作目录和
+  `market-data-platform` 根目录下未跟踪的 `.env.local` / `.env`。
+- 15000 分账户使用 `TUSHARE_TOKEN_2`，并依赖匹配的 `TUSHARE_API_URL_2` 中转地址；命令应显式传
+  `--token-env TUSHARE_TOKEN_2`，或在验证命令中传 `--env TUSHARE_TOKEN_2`。不要因为默认官方 API
+  域名返回 token 错误就判断 token 失效。
+- Codex / MCP connector 的 TuShare token 配置和本地 `.env` 不是同一套环境；如果 connector 报
+  “需要 token”，应改用 `market-data-platform` CLI 或先确认 connector 侧单独配置，而不是读取或打印本地
+  token。
+
 ## 编辑规则
 
 - 先确认改动属于顶层工作区还是某个子仓库；不要把子仓库内部规则复制到顶层文档。
