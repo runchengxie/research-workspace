@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "example",
+  "market": "a_share",
+  "evidence_type": "optional_factor_diagnostics",
+  "source_report": "cross-sectional-trees/artifacts/runs/<run>/factor_diagnostics_summary.json",
+  "run_dir": "cross-sectional-trees/artifacts/runs/<run>",
+  "checks": {
+    "diagnostics_available": true,
+    "top_features_profiled": true,
+    "residual_ic_available": true,
+    "size_bucket_available": true,
+    "style_dominated_feature_count": 0,
+    "high_redundancy_pair_count": 0
+  },
+  "warnings": [],
+  "limitations": [
+    "This optional evidence is a schema example. Replace source_report and run_dir with a real run before using it for A-share readiness review.",
+    "Industry diagnostics depend on the available industry label history in the scored data."
+  ]
+}

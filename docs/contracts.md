@@ -28,6 +28,7 @@
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
 | `summary.json` | `cross-sectional-trees` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet` | `cross-sectional-trees` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物 |
+| `factor_diagnostics_summary.json` | `cross-sectional-trees` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
 | `positions_current*.csv` | `cross-sectional-trees` | `cstree export-targets` | 已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
@@ -102,6 +103,12 @@ signals.parquet
 - 导出命令不连接券商、不预演订单、不提交订单。
 - `qexec rebalance <targets.json>` 负责券商连接、执行前检查、模拟盘和实盘门禁。
 - 顶层脚本不得默认追加 `--execute`，也不得绕过 `QEXEC_ENABLE_LIVE=1` 等执行系统门禁。
+
+## 研究诊断证据
+
+`cross-sectional-trees` 可以在每次 run 后输出 `factor_diagnostics_*` 画像产物。顶层仓库只把这类报告当作人工审计和 optional evidence，不直接导入研究仓库内部实现，也不让执行仓库重新解释因子。
+
+可选 evidence 示例见 [`evidence/a-share-factor-diagnostics-20260621.json`](evidence/a-share-factor-diagnostics-20260621.json)。第一阶段该 evidence 不属于 `production_strategy_evidence` hard gate；稳定后再评估是否合并进 feature evidence 或 promotion gate。
 
 ## 缓存、别名和临时文件
 
