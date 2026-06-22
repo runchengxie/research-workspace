@@ -165,9 +165,13 @@ TRADING_SYMBOLS = [s for s in ETF_METADATA if s not in BENCHMARK_SYMBOLS]
 def build_concept_features(
     trade_date_str: str,
     concept_score_history: dict[str, list[tuple[str, float]]],
+    etf_first_dates: dict[str, str],
     top_n_hot: int = 30,
 ) -> dict[str, dict[str, float]]:
     """Build concept-based feature vector for each ETF.
+
+    Only accumulates score history for ETFs that have started trading
+    (avoiding pre-listing noise like 159329 before 2024-07).
 
     Returns: {symbol: {feature_name: value, ...}}
     """
@@ -214,8 +218,11 @@ def build_concept_features(
     if not etf_scores:
         return {}
 
-    # Update history
+    # Update history (only for ETFs that have started trading)
     for sym, score in etf_scores.items():
+        first_date = etf_first_dates.get(sym, "19000101")
+        if trade_date_str < first_date:
+            continue  # Skip: ETF not yet listed
         if sym not in concept_score_history:
             concept_score_history[sym] = []
         concept_score_history[sym].append((trade_date_str, score))
@@ -405,6 +412,7 @@ def load_benchmark_etf() -> pd.DataFrame | None:
 def build_feature_matrix(
     date_list: list[str],
     etf_data: dict[str, pd.DataFrame],
+    etf_first_dates: dict[str, str],
     mode: str = "concept",  # "concept", "technical", "fusion"
 ) -> tuple[pd.DataFrame, pd.Series, list[str], list[str]]:
     """Build feature matrix X and label vector y.
@@ -418,7 +426,7 @@ def build_feature_matrix(
         concept_score_history: dict[str, list[tuple[str, float]]] = {}
         concept_features_by_date: dict[str, dict[str, dict[str, float]]] = {}
         for i, d in enumerate(date_list):
-            cf = build_concept_features(d, concept_score_history)
+            cf = build_concept_features(d, concept_score_history, etf_first_dates)
             if cf:
                 concept_features_by_date[d] = cf
             if (i + 1) % 100 == 0:
@@ -576,7 +584,7 @@ def walk_forward_backtest(
     nav = 1.0
     bm_nav = 1.0
     fold_metrics: list[dict] = []
-    all_ics: list[float] = []
+    daily_ics: list[float] = []  # per-day cross-sectional rank IC
 
     fold_start = 0
     fold_idx = 0
@@ -607,18 +615,25 @@ def walk_forward_backtest(
         model.fit(X_train, y_train_v, feature_names)
         preds = model.predict(X_test)
 
-        # Rank IC
-        if len(set(preds)) > 1 and len(preds) >= 5:
-            ic = stats.spearmanr(preds, y_test)[0]
-            if np.isfinite(ic):
-                all_ics.append(float(ic))
-
-        # Group by date, pick top-K
+        # Daily cross-sectional rank IC (correct way)
         test_df = X.iloc[test_mask].copy()
         test_df["pred"] = preds
         test_df["true_label"] = y_test
         test_df["date"] = [dates[i] for i, m in enumerate(test_mask) if m]
 
+        fold_daily_ics: list[float] = []
+        for t_date in sorted(set(test_df["date"])):
+            day_rows = test_df[test_df["date"] == t_date]
+            if len(day_rows) < 5:
+                continue
+            if len(set(day_rows["pred"])) < 2:
+                continue
+            ic = stats.spearmanr(day_rows["pred"], day_rows["true_label"])[0]
+            if np.isfinite(ic):
+                daily_ics.append(float(ic))
+                fold_daily_ics.append(float(ic))
+
+        # Group by date, pick top-K
         for t_date in sorted(set(test_df["date"])):
             day_rows = test_df[test_df["date"] == t_date]
             if len(day_rows) < top_k:
@@ -664,8 +679,8 @@ def walk_forward_backtest(
     sharpe = float(np.mean(rets) / np.std(rets) * np.sqrt(252)) if len(rets) > 1 and np.std(rets) > 0 else 0
     max_dd = float(np.min(np.minimum.accumulate(1 + rets) / np.maximum.accumulate(1 + rets)) - 1) if len(rets) > 0 else 0
     hit_rate = float(np.mean(rets > 0)) if len(rets) > 0 else 0
-    mean_ic = float(np.mean(all_ics)) if all_ics else 0
-    icir = float(np.mean(all_ics) / np.std(all_ics)) if all_ics and np.std(all_ics) > 0 else 0
+    mean_ic = float(np.mean(daily_ics)) if daily_ics else 0
+    icir = float(np.mean(daily_ics) / np.std(daily_ics)) if daily_ics and np.std(daily_ics) > 0 else 0
 
     # Benchmark metrics
     if bm_daily:
@@ -686,6 +701,7 @@ def walk_forward_backtest(
         "trade_count": len(daily_returns),
         "mean_rank_ic": round(mean_ic, 4),
         "icir": round(icir, 3),
+        "ic_days": len(daily_ics),
         "benchmark_return_pct": round(bm_total * 100, 2),
         "benchmark_annual_pct": round(bm_ann * 100, 2),
         "excess_return_pct": round(excess * 100, 2),
@@ -702,6 +718,7 @@ def run_backtest(
     mode: str,
     date_list: list[str],
     etf_data: dict[str, pd.DataFrame],
+    etf_first_dates: dict[str, str],
     benchmark_df: pd.DataFrame | None,
     train_window: int = 180,
     step: int = 20,
@@ -713,7 +730,7 @@ def run_backtest(
     print(f"Config: train_window={train_window}, step={step}, top_k={top_k}, alpha={alpha}")
     print(f"{'='*60}")
 
-    X, y, feature_names, dates = build_feature_matrix(date_list, etf_data, mode=mode)
+    X, y, feature_names, dates = build_feature_matrix(date_list, etf_data, etf_first_dates, mode=mode)
     if X.empty:
         print(f"  ERROR: No features generated")
         return None
@@ -742,6 +759,70 @@ def run_backtest(
     return result
 
 
+def compute_equal_weight_benchmark(
+    date_list: list[str],
+    etf_data: dict[str, pd.DataFrame],
+    etf_first_dates: dict[str, str],
+    train_window: int = 180,
+    step: int = 20,
+    purge_days: int = 3,
+) -> tuple[list[float], float]:
+    """Compute daily returns of equal-weight holding all available trading ETFs.
+
+    Uses the same trading schedule as the strategy: T+1 open entry, T+2 open exit.
+    Returns (daily_returns, nav_final).
+    """
+    from hot_sector_screener.data_sources.platform import list_available_dates
+
+    daily_rets: list[float] = []
+    unique_dates = sorted(set(date_list))
+
+    # Walk-forward aligned test windows (same as strategy)
+    fold_start = 0
+    while fold_start + train_window + step <= len(unique_dates):
+        test_start_idx = fold_start + train_window + purge_days
+        test_end_idx = min(test_start_idx + step, len(unique_dates))
+        if test_start_idx >= len(unique_dates):
+            break
+
+        for j in range(test_start_idx, min(test_end_idx, len(unique_dates) - 2)):
+            t_date = unique_dates[j]
+            t1_date = unique_dates[j + 1]
+            t2_date = unique_dates[j + 2]
+
+            t1_str = f"{t1_date[:4]}-{t1_date[4:6]}-{t1_date[6:]}"
+            t2_str = f"{t2_date[:4]}-{t2_date[4:6]}-{t2_date[6:]}"
+
+            rets: list[float] = []
+            for sym in TRADING_SYMBOLS:
+                if sym in BENCHMARK_SYMBOLS:
+                    continue
+                df = etf_data.get(sym)
+                if df is None:
+                    continue
+                first_date = etf_first_dates.get(sym, "19000101")
+                if t_date < first_date:
+                    continue
+                try:
+                    entry_px = df.loc[t1_str, "open"]
+                    exit_px = df.loc[t2_str, "open"]
+                except KeyError:
+                    continue
+                if entry_px > 0 and exit_px > 0:
+                    rets.append((exit_px / entry_px) - 1.0)
+
+            if len(rets) >= 5:
+                daily_rets.append(float(np.mean(rets)))
+
+        fold_start += step
+
+    if not daily_rets:
+        return [], 1.0
+
+    nav = float(np.prod(1 + np.array(daily_rets)))
+    return daily_rets, nav
+
+
 def main():
     print("=" * 70)
     print("Path B Production: Concept + Technical Feature Fusion for ETF Rotation")
@@ -754,6 +835,16 @@ def main():
     benchmark_df = load_benchmark_etf()
     trading_etfs = [s for s in etf_data if s not in BENCHMARK_SYMBOLS]
     print(f"  Trading ETFs: {len(trading_etfs)}, Benchmark: {'yes' if benchmark_df is not None else 'no'}")
+
+    # Compute each ETF's first trading date (YYYYMMDD)
+    etf_first_dates: dict[str, str] = {}
+    for sym in TRADING_SYMBOLS:
+        df = etf_data.get(sym)
+        if df is not None and not df.empty:
+            etf_first_dates[sym] = df.index[0].strftime("%Y%m%d")
+    late_etfs = {s: d for s, d in etf_first_dates.items() if d > "20240102"}
+    if late_etfs:
+        print(f"  Late-listing ETFs (after 2024-01-02): {late_etfs}")
     print()
 
     # 2. Build date list
@@ -768,47 +859,60 @@ def main():
     print(f"  Overlap: {len(date_list)} days, {date_list[0]} ~ {date_list[-1]}")
     print()
 
+    # 2b. Compute equal-weight benchmark
+    print("[2b] Computing equal-weight benchmark...")
+    ew_rets, ew_nav = compute_equal_weight_benchmark(
+        date_list, etf_data, etf_first_dates,
+        train_window=180, step=20, purge_days=3,
+    )
+    if ew_rets:
+        ew_total = float(np.prod(1 + np.array(ew_rets)) - 1)
+        ew_ann = float((1 + ew_total) ** (252 / len(ew_rets)) - 1) if len(ew_rets) > 1 else 0
+        ew_sharpe = float(np.mean(ew_rets) / np.std(ew_rets) * np.sqrt(252)) if np.std(ew_rets) > 0 else 0
+        ew_maxdd = float(np.min(np.minimum.accumulate(1 + np.array(ew_rets)) / np.maximum.accumulate(1 + np.array(ew_rets))) - 1)
+        print(f"  EW Benchmark: {ew_total*100:+.2f}% total, {ew_ann*100:+.2f}% ann, "
+              f"Sharpe={ew_sharpe:.3f}, MaxDD={ew_maxdd*100:.2f}%, trades={len(ew_rets)}")
+    else:
+        ew_total, ew_ann, ew_sharpe, ew_maxdd = 0.0, 0.0, 0.0, 0.0
+    print()
+
     # 3. Run backtest comparisons
     print("[3/4] Running backtests...")
 
     results: dict[str, Any] = {}
 
-    results["concept"] = run_backtest(
-        "concept", date_list, etf_data, benchmark_df,
-        train_window=180, step=20, top_k=3, alpha=1.0,
-    )
-
-    results["technical"] = run_backtest(
-        "technical", date_list, etf_data, benchmark_df,
-        train_window=180, step=20, top_k=3, alpha=1.0,
-    )
-
-    results["fusion"] = run_backtest(
-        "fusion", date_list, etf_data, benchmark_df,
-        train_window=180, step=20, top_k=3, alpha=1.0,
-    )
+    for mode in ["concept", "technical", "fusion"]:
+        results[mode] = run_backtest(
+            mode, date_list, etf_data, etf_first_dates, benchmark_df,
+            train_window=180, step=20, top_k=3, alpha=1.0,
+        )
 
     # 4. Summary
     print("\n" + "=" * 70)
     print("[4/4] COMPARISON SUMMARY")
     print("=" * 70)
-    print(f"\n{'Mode':>12} {'Total':>10} {'Ann':>10} {'Sharpe':>8} {'MaxDD':>8} {'Excess':>10} {'IC':>8} {'Trades':>8}")
-    print("-" * 80)
+    print(f"\n  Equal-weight (all ETFs): {ew_total*100:+.2f}% total, Sharpe={ew_sharpe:.3f}")
+    print()
+    print(f"  {'Mode':>12} {'Total':>10} {'Ann':>10} {'Sharpe':>8} {'MaxDD':>8} {'Excess':>10} {'vsEW':>10} {'IC':>8} {'ICdays':>8}")
+    print(f"  {'-'*12} {'-'*10} {'-'*10} {'-'*8} {'-'*8} {'-'*10} {'-'*10} {'-'*8} {'-'*8}")
 
     for mode, r in results.items():
         if r is None:
-            print(f"  {mode:>10} {'FAILED':>10}")
+            print(f"  {mode:>12} {'FAILED':>10}")
             continue
-        print(f"  {mode:>10} {r['total_return_pct']:>9.2f}% {r['annual_return_pct']:>9.2f}% "
+        excess_vs_ew = r["total_return_pct"] / 100.0 - ew_total
+        print(f"  {mode:>12} {r['total_return_pct']:>9.2f}% {r['annual_return_pct']:>9.2f}% "
               f"{r['sharpe']:>8.3f} {r['max_drawdown_pct']:>7.2f}% "
-              f"{r['excess_return_pct']:>9.2f}% {r['mean_rank_ic']:>8.4f} {r['trade_count']:>8}")
+              f"{r['excess_return_pct']:>9.2f}% {excess_vs_ew*100:>9.2f}% "
+              f"{r['mean_rank_ic']:>8.4f} {r['ic_days']:>8}")
 
     # Winner
     valid = {m: r for m, r in results.items() if r is not None}
     if valid:
         best = max(valid, key=lambda m: valid[m]["sharpe"])
         print(f"\n  Best: {best.upper()} (Sharpe={valid[best]['sharpe']:.3f}, "
-              f"Excess={valid[best]['excess_return_pct']:+.2f}%)")
+              f"Excess vs CSI300={valid[best]['excess_return_pct']:+.2f}%, "
+              f"Excess vs EW={valid[best]['total_return_pct']/100.0 - ew_total:+.2f}%)")
 
     # Save best model
     if best in valid and valid[best] is not None:
@@ -816,7 +920,7 @@ def main():
         artifacts_dir = Path("/home/richard/code/research-workspace/artifacts")
         artifacts_dir.mkdir(exist_ok=True)
 
-        X, y, feature_names, _ = build_feature_matrix(date_list, etf_data, mode=best)
+        X, y, feature_names, _ = build_feature_matrix(date_list, etf_data, etf_first_dates, mode=best)
         if not X.empty:
             model = LinearRankModel(alpha=1.0)
             model.fit(X.values, y.values, feature_names)
