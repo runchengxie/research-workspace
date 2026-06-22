@@ -78,6 +78,16 @@
       "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
     },
     {
+      "path": "scripts/concept_etf_ml_backtest.py",
+      "owner": "research-workspace",
+      "purpose": "Concept ETF ML backtest experiment script",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout and configured output paths",
+      "external_dependencies": "DATA_PLATFORM_ROOT",
+      "removal_condition": "remove after two release reviews record no active use"
+    },
+    {
       "path": "scripts/maintainability_baseline.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo maintainability baseline generation",
@@ -86,6 +96,46 @@
       "writes_files": "only when --out is provided",
       "external_dependencies": "none",
       "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
+    },
+    {
+      "path": "scripts/path_b_production.py",
+      "owner": "research-workspace",
+      "purpose": "Path B production pipeline script",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout and configured output paths",
+      "external_dependencies": "DATA_PLATFORM_ROOT",
+      "removal_condition": "remove after two release reviews record no active use"
+    },
+    {
+      "path": "scripts/path_c_m1_validate.py",
+      "owner": "research-workspace",
+      "purpose": "Path C M1 validation script",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout and configured output paths",
+      "external_dependencies": "DATA_PLATFORM_ROOT",
+      "removal_condition": "remove after two release reviews record no active use"
+    },
+    {
+      "path": "scripts/publish_etf_industry_signal.py",
+      "owner": "research-workspace",
+      "purpose": "Publish guan-etf-rotation-v3 industry signal to DATA_PLATFORM_ROOT standard location",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/etf_rotation_v3/<run>/",
+      "external_dependencies": "DATA_PLATFORM_ROOT, guan-etf-rotation-v3 artifacts",
+      "removal_condition": "remove after guan-etf-rotation-v3 writes directly to standard location or two release reviews record no active use"
+    },
+    {
+      "path": "scripts/hotsector_to_cstree_universe.py",
+      "owner": "research-workspace",
+      "purpose": "Convert hot-sector-screener candidate universe to cross-sectional-trees by_date CSV",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/",
+      "external_dependencies": "DATA_PLATFORM_ROOT, hot-sector-screener outputs",
+      "removal_condition": "remove after hot-sector-screener writes cstree-compatible format directly or two release reviews record no active use"
     },
     {
       "path": "scripts/print_version_matrix.py",
