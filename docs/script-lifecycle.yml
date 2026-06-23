@@ -88,6 +88,16 @@
       "removal_condition": "remove after two release reviews record no active use"
     },
     {
+      "path": "scripts/export_holdings_html.py",
+      "owner": "research-workspace",
+      "purpose": "Export latest cross-sectional-trees holdings snapshot to standalone HTML",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout by default; HTML file only when --out is provided",
+      "external_dependencies": "cross-sectional-trees run artifacts and optional market-data-platform instruments parquet",
+      "removal_condition": "remove after holdings snapshot export moves into cross-sectional-trees or two release reviews record no active use"
+    },
+    {
       "path": "scripts/maintainability_baseline.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo maintainability baseline generation",
