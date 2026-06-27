@@ -31,6 +31,8 @@ class DataTransitionPlaybookTest(unittest.TestCase):
         required = [
             "A 股 baseline 持仓建议验收",
             "market-data-platform",
+            "alpha-research",
+            "portfolio-backtester",
             "cross-sectional-trees",
             "quant-execution-engine",
             "positions_current*.csv",

@@ -7,3 +7,9 @@
 [submodule "quant-execution-engine"]
 	path = quant-execution-engine
 	url = https://github.com/runchengxie/quant-execution-engine.git
+[submodule "alpha-research"]
+	path = alpha-research
+	url = https://github.com/runchengxie/alpha-research.git
+[submodule "portfolio-backtester"]
+	path = portfolio-backtester
+	url = https://github.com/runchengxie/portfolio-backtester.git

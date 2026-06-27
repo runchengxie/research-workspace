@@ -27,10 +27,10 @@
 | `metadata/dataset_registry.csv` | `market-data-platform` | 人工审计、研究系统 | 已发布数据资产索引 |
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
 | `summary.json` | `cross-sectional-trees` | 人工审计、后续导出 | 研究运行摘要 |
-| `signals.parquet` | `cross-sectional-trees` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物 |
-| `factor_diagnostics_summary.json` | `cross-sectional-trees` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
+| `signals.parquet` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物 |
+| `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
 | `strategy_outputs/style_factors/<name>/` | `style_factor_attribution.py` → `financial-research` | 策略研究（cstree 等）| 全市场 5 因子 (Size/Value/Momentum/Quality/LowVol) long-short 日收益、逐年分解、相关性矩阵、策略归因报告 |
-| `positions_current*.csv` | `cross-sectional-trees` | `cstree export-targets` | 已保存的目标持仓候选 |
+| `positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
@@ -107,7 +107,7 @@ signals.parquet
 
 ## 研究诊断证据
 
-`cross-sectional-trees` 可以在每次 run 后输出 `factor_diagnostics_*` 画像产物。顶层仓库只把这类报告当作人工审计和 optional evidence，不直接导入研究仓库内部实现，也不让执行仓库重新解释因子。
+`alpha-research` 的诊断逻辑可以在 `cross-sectional-trees` 编排的每次 run 后输出 `factor_diagnostics_*` 画像产物。顶层仓库只把这类报告当作人工审计和 optional evidence，不直接导入研究仓库内部实现，也不让执行仓库重新解释因子。
 
 可选 evidence 示例见 [`evidence/a-share-factor-diagnostics-20260621.json`](evidence/a-share-factor-diagnostics-20260621.json)。第一阶段该 evidence 不属于 `production_strategy_evidence` hard gate；稳定后再评估是否合并进 feature evidence 或 promotion gate。
 
@@ -149,4 +149,4 @@ python scripts/run_submodule_checks.py --profile full
 ```
 
 委托检查的命令定义在 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层只负责调度和汇总结果，不解析子模块内部源码，也不把 SOLID 或内聚耦合做成顶层评分。
-其中 `lint` profile 包含子仓库自己定义的边界和维护债 gate；例如数据平台的港股拆分边界检查和策略研究的 maintainability ratchet。
+其中 `lint` profile 包含子仓库自己定义的边界和维护债 gate；例如数据平台的港股拆分边界检查和策略编排的 maintainability ratchet。

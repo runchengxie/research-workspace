@@ -88,7 +88,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         )
         self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), cross_lint)
 
-    def test_manifest_type_profiles_use_pyright_with_qexec_mypy_advisory_separate(self) -> None:
+    def test_manifest_type_profiles_use_basedpyright_with_qexec_pyright_advisory_separate(
+        self,
+    ) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
 
         type_commands = {}
@@ -103,11 +105,17 @@ class RunSubmoduleChecksTest(unittest.TestCase):
 
         self.assertEqual(
             {
+                "alpha-research": [
+                    ("uv", "run", "--extra", "dev", "basedpyright")
+                ],
                 "cross-sectional-trees": [
-                    ("uv", "run", "--extra", "dev", "python", "-m", "pyright")
+                    ("uv", "run", "--extra", "dev", "basedpyright")
                 ],
                 "market-data-platform": [
-                    ("uv", "run", "--extra", "dev", "python", "-m", "pyright")
+                    ("uv", "run", "--extra", "dev", "basedpyright")
+                ],
+                "portfolio-backtester": [
+                    ("uv", "run", "--extra", "dev", "basedpyright")
                 ],
                 "quant-execution-engine": [
                     ("uv", "run", "--group", "dev", "python", "-m", "pyright")

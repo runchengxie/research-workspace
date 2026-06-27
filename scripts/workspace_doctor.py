@@ -18,8 +18,10 @@ from workspace_governance import (
     check_maintainability_governance,
 )
 
-EXPECTED_SUBMODULES = {
+EXPECTED_SUBMODULES: dict[str, str | None] = {
     "market-data-platform": "marketdata",
+    "alpha-research": None,
+    "portfolio-backtester": None,
     "cross-sectional-trees": "cstree",
     "quant-execution-engine": "qexec",
 }
@@ -161,6 +163,9 @@ def check_submodule_state(root: Path) -> list[Check]:
 def check_public_clis(root: Path) -> list[Check]:
     checks: list[Check] = []
     for path, command in EXPECTED_SUBMODULES.items():
+        if command is None:
+            checks.append(Check("OK", "cli", f"{path} has no workspace-level CLI contract."))
+            continue
         resolved = resolve_public_command(root, path, command)
         if resolved:
             checks.append(Check("OK", "cli", f"{command} resolves to {resolved}."))

@@ -1,6 +1,6 @@
 # 量化研发平台
 
-这个仓库是量化研发平台，负责把数据平台、策略研究和交易执行三个仓库固定在一组可以一起工作的版本上，并说明它们之间怎样交接。
+这个仓库是量化研发平台，负责把数据平台、alpha 研究、组合回测、策略编排和交易执行固定在一组可以一起工作的版本上，并说明它们之间怎样交接。
 
 如果你是第一次接触这个项目，可以把这里理解成一张入口地图：
 
@@ -9,8 +9,16 @@ market-data-platform
   生产并发布数据资产
         |
         v
+alpha-research
+  因子、模型、稳健性和信号产物
+        |
+        v
+portfolio-backtester
+  组合构造、回测、容量和报告
+        |
+        v
 cross-sectional-trees
-  只读消费数据，完成研究、回测和目标持仓导出
+  研究编排、CLI 兼容层和目标持仓导出
         |
         v
 quant-execution-engine
@@ -27,7 +35,7 @@ quant-execution-engine
 - 顶层仓库只做集成、文档、轻量检查和子模块版本锁定。
 - 大型市场数据、研究输出、provider 缓存、交易审计日志不要放在顶层仓库。
 - 数据资产的正式入口是共享数据根目录下的 `metadata/current_assets/*.json` 和 `metadata/dataset_registry.csv`。
-- 研究到执行的正式交接文件是 `targets.json`，由 `cross-sectional-trees` 导出，由 `quant-execution-engine` 读取。
+- 研究到执行的正式交接文件是 `targets.json`，由 `cross-sectional-trees` 编排导出，由 `quant-execution-engine` 读取。
 - 模拟盘和实盘能力由执行引擎自己的安全门禁控制；顶层脚本不会直接触发真实券商交易。
 
 ## 第一次启动
@@ -72,15 +80,17 @@ python scripts/smoke_contracts.py
 | 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |
 | 找全部顶层文档入口 | [docs/README.md](docs/README.md) |
 
-## 三个子项目
+## 活跃子项目
 
 | 子项目 | 负责什么 | 从哪里读 |
 | --- | --- | --- |
 | [market-data-platform](market-data-platform/) | 维护共享数据目录、当前数据清单、资产索引、中国香港市场 RQData 资产、港股十档盘口快照数据，以及 A 股数据入口。 | [market-data-platform/README.md](market-data-platform/README.md) |
-| [cross-sectional-trees](cross-sectional-trees/) | 只读消费已发布数据资产，运行特征工程、模型评估、回测、持仓快照和 `targets.json` 导出。 | [cross-sectional-trees/README.md](cross-sectional-trees/README.md) |
+| [alpha-research](alpha-research/) | 承载 `cstree.alpha.*`：特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断。 | [alpha-research/README.md](alpha-research/README.md) |
+| [portfolio-backtester](portfolio-backtester/) | 承载 `cstree.backtesting.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
+| [cross-sectional-trees](cross-sectional-trees/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容 facade、持仓快照和 `targets.json` 导出。 | [cross-sectional-trees/README.md](cross-sectional-trees/README.md) |
 | [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
 
-港股公开演示仓库独立于这三个子项目，仅用于作品集展示。真实港股历史复现以
+港股公开演示仓库独立于这些活跃子项目，仅用于作品集展示。真实港股历史复现以
 [中国香港市场归档](docs/archive/hk/README.md)、冷存储发布包、清单、恢复演练
 和对应子仓库兼容入口为准；迁出或删除候选面由
 [港股公开拆分清单](docs/hk-public-split-manifest.yml) 记录。旧的兼容面和公开演示说明页仍作为兼容入口保留；默认阅读路径从 [docs/README.md](docs/README.md) 开始。

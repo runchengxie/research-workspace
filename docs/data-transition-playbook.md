@@ -7,7 +7,7 @@
 > superseded_by: n/a
 
 本页解决什么：把冻结港股到冷存储、保持 A 股活跃根目录简洁、继续分阶段验证 A 股的当前决策落成可执行顺序。\
-边界：`market-data-platform` 的数据下载运维手册和 `cross-sectional-trees` 的 A 股 baseline playbook 仍在各自子仓库维护。\
+边界：`market-data-platform` 的数据下载运维手册、`alpha-research` / `portfolio-backtester` 的研究实现，以及 `cross-sectional-trees` 的 A 股 baseline 编排 playbook 仍在各自子仓库维护。\
 适合谁：准备维护 A 股活跃数据、冻结或恢复港股资产，或判断是否晋升 A 股研究入口的人。
 
 ## 当前决策
@@ -74,8 +74,12 @@ panel 和 `positions_by_rebalance.csv` 生成；顶层 readiness 仍要求 `turn
 ```text
 market-data-platform
   发布 metadata/current_assets/a_share_current.json、dataset_registry.csv、daily_clean、by-date universe
+alpha-research
+  产出模型、稳健性、feature evidence 和 signals.parquet
+portfolio-backtester
+  消费信号和行情，产出回测、capacity、positions_current*.csv
 cross-sectional-trees
-  只读消费平台资产，产出 summary.json、config.used.yml、positions_current*.csv
+  编排研究流程，产出 summary.json、config.used.yml
   通过 cstree export-targets 生成 targets.json 和 targets.json.lineage.json
 quant-execution-engine
   读取 targets.json，完成 CN local dry-run 证据
