@@ -3,6 +3,8 @@
 
 # Submodule boundaries
 /market-data-platform/ @runchengxie
+/alpha-research/ @runchengxie
+/portfolio-backtester/ @runchengxie
 /cross-sectional-trees/ @runchengxie
 /quant-execution-engine/ @runchengxie
 

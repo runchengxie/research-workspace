@@ -9,11 +9,92 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 30,
-      "python_loc": 5505,
+      "python_file_count": 38,
+      "python_loc": 8937,
       "hk_related_file_count": 4,
-      "large_files": [],
+      "large_files": [
+        {
+          "path": "scripts/path_b_production.py",
+          "loc": 935,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "loc": 698,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "loc": 647,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/workspace_doctor.py",
+          "loc": 501,
+          "hk_related": false
+        }
+      ],
       "long_functions": [
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "walk_forward_backtest",
+          "line_count": 173,
+          "complexity": 29
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "walk_forward_backtest",
+          "line_count": 150,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h1_consecutive_days",
+          "line_count": 127,
+          "complexity": 25
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h2_rank_momentum",
+          "line_count": 110,
+          "complexity": 16
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_technical_features",
+          "line_count": 109,
+          "complexity": 22
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "main",
+          "line_count": 106,
+          "complexity": 21
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h3_constituent_features",
+          "line_count": 103,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_concept_features",
+          "line_count": 99,
+          "complexity": 36
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_feature_matrix",
+          "line_count": 97,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "main",
+          "line_count": 95,
+          "complexity": 11
+        },
         {
           "path": "scripts/smoke_contracts.py",
           "name": "run_smoke",
@@ -21,7 +102,74 @@
           "complexity": 5
         }
       ],
-      "complexity_hotspots": [],
+      "complexity_hotspots": [
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_concept_features",
+          "line_count": 99,
+          "complexity": 36
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_feature_matrix",
+          "line_count": 97,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "walk_forward_backtest",
+          "line_count": 150,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h3_constituent_features",
+          "line_count": 103,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "walk_forward_backtest",
+          "line_count": 173,
+          "complexity": 29
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h1_consecutive_days",
+          "line_count": 127,
+          "complexity": 25
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_technical_features",
+          "line_count": 109,
+          "complexity": 22
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "main",
+          "line_count": 106,
+          "complexity": 21
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "build_concept_features_for_date",
+          "line_count": 71,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h2_rank_momentum",
+          "line_count": 110,
+          "complexity": 16
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h4_kpl_stability",
+          "line_count": 73,
+          "complexity": 16
+        }
+      ],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -34,8 +182,10 @@
           ".git",
           ".pytest_cache",
           ".venv",
+          "alpha-research",
           "cross-sectional-trees",
           "market-data-platform",
+          "portfolio-backtester",
           "quant-execution-engine",
           "demo"
         ],
@@ -49,14 +199,21 @@
         "scripts/a_share_readiness_common.py",
         "scripts/a_share_readiness_contract.py",
         "scripts/a_share_readiness_evidence.py",
+        "scripts/concept_etf_ml_backtest.py",
         "scripts/export_hk_legacy_archive.py",
+        "scripts/export_holdings_html.py",
         "scripts/hk_archive_gate.py",
+        "scripts/hotsector_to_cstree_universe.py",
         "scripts/maintainability_baseline.py",
+        "scripts/path_b_production.py",
+        "scripts/path_c_m1_validate.py",
         "scripts/print_version_matrix.py",
+        "scripts/publish_etf_industry_signal.py",
         "scripts/run_quality_checks.py",
         "scripts/run_submodule_checks.py",
         "scripts/scan_workspace_secrets.py",
         "scripts/smoke_contracts.py",
+        "scripts/style_factor_attribution.py",
         "scripts/submodule_checks.json",
         "scripts/workspace_doctor.py",
         "scripts/workspace_env.py",
@@ -70,48 +227,38 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 71,
-      "python_loc": 27839,
+      "python_file_count": 113,
+      "python_loc": 32799,
       "hk_related_file_count": 0,
       "large_files": [
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 1509,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
-          "loc": 1468,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "loc": 1336,
+          "loc": 1737,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "loc": 1724,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share.py",
-          "loc": 1315,
+          "loc": 1602,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/cli.py",
-          "loc": 1308,
+          "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+          "loc": 1472,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/data_providers.py",
-          "loc": 1150,
+          "path": "src/market_data_platform/providers/tushare_a_share_hotspot_features.py",
+          "loc": 941,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/data_warehouse.py",
-          "loc": 992,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
-          "loc": 962,
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "loc": 895,
           "hk_related": false
         },
         {
@@ -120,13 +267,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/tushare_cli.py",
-          "loc": 773,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
-          "loc": 730,
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "loc": 850,
           "hk_related": false
         },
         {
@@ -135,8 +277,23 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+          "loc": 650,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
-          "loc": 662,
+          "loc": 642,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share_research_assets.py",
+          "loc": 627,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/dev/quality_debt.py",
+          "loc": 590,
           "hk_related": false
         },
         {
@@ -145,13 +302,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
-          "loc": 562,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_tushare_a_share_research_assets.py",
-          "loc": 562,
+          "path": "src/market_data_platform/providers/tushare_a_share_options.py",
+          "loc": 574,
           "hk_related": false
         },
         {
@@ -167,76 +319,22 @@
       ],
       "long_functions": [
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "name": "build_pit_fundamentals",
-          "line_count": 272,
-          "complexity": 43
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_ths_member",
+          "line_count": 135,
+          "complexity": 22
         },
         {
-          "path": "src/market_data_platform/tushare_cli.py",
-          "name": "_add_tushare_research_asset_parsers",
-          "line_count": 218,
-          "complexity": 1
-        },
-        {
-          "path": "src/market_data_platform/cli.py",
-          "name": "_handle_tushare_research_assets",
-          "line_count": 197,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
-          "name": "validate_a_share_daily_clean",
-          "line_count": 166,
-          "complexity": 20
-        },
-        {
-          "path": "tests/test_tushare_a_share_research_assets.py",
-          "name": "test_a_share_research_asset_commands_are_exposed",
-          "line_count": 160,
-          "complexity": 1
-        },
-        {
-          "path": "src/market_data_platform/data_providers.py",
-          "name": "fetch_daily",
-          "line_count": 157,
-          "complexity": 44
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
-          "name": "download_a_share_industry_membership",
-          "line_count": 151,
-          "complexity": 27
-        },
-        {
-          "path": "tests/test_tushare_a_share_flow_features.py",
-          "name": "test_build_and_validate_a_share_flow_ownership_features_asset",
-          "line_count": 146,
-          "complexity": 3
-        },
-        {
-          "path": "src/market_data_platform/data_warehouse.py",
+          "path": "src/market_data_platform/data_warehouse_materialize.py",
           "name": "materialize_standardized",
-          "line_count": 131,
+          "line_count": 133,
           "complexity": 22
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
           "name": "build_a_share_flow_ownership_features",
-          "line_count": 130,
+          "line_count": 133,
           "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/tushare_cli.py",
-          "name": "add_tushare_parser",
-          "line_count": 130,
-          "complexity": 2
-        },
-        {
-          "path": "tests/test_tushare_a_share_ownership_features.py",
-          "name": "test_build_and_validate_a_share_fund_portfolio_features_asset",
-          "line_count": 130,
-          "complexity": 2
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
@@ -245,10 +343,10 @@
           "complexity": 13
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "name": "mirror_a_share_fund_portfolio",
+          "path": "src/market_data_platform/cli_tushare_core.py",
+          "name": "_tushare_date_mirror_commands",
           "line_count": 128,
-          "complexity": 18
+          "complexity": 1
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
@@ -263,79 +361,115 @@
           "complexity": 13
         },
         {
-          "path": "tests/test_tushare_a_share_ownership_features.py",
-          "name": "test_build_and_validate_a_share_holder_structure_features_asset",
-          "line_count": 116,
-          "complexity": 3
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "name": "mirror_a_share_top10_holder_dataset",
-          "line_count": 115,
-          "complexity": 14
-        },
-        {
-          "path": "src/market_data_platform/tushare_cli.py",
-          "name": "_add_tushare_fundamentals_parsers",
-          "line_count": 114,
-          "complexity": 1
-        },
-        {
-          "path": "tests/test_tushare_a_share_ownership_features.py",
-          "name": "test_build_and_validate_a_share_top_inst_events_asset",
-          "line_count": 112,
-          "complexity": 2
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "name": "mirror_a_share_stk_holdertrade",
-          "line_count": 111,
-          "complexity": 14
-        },
-        {
-          "path": "tests/test_tushare_a_share_research_assets.py",
-          "name": "test_download_a_share_industry_membership_source_then_build_changes",
-          "line_count": 106,
-          "complexity": 1
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "name": "mirror_a_share_trade_date_dataset",
-          "line_count": 103,
-          "complexity": 13
-        },
-        {
-          "path": "tests/test_tushare_a_share_research_assets.py",
-          "name": "test_a_share_research_asset_contract_keys_and_registry_rows",
-          "line_count": 101,
-          "complexity": 4
+          "path": "src/market_data_platform/cli_tushare_core.py",
+          "name": "_handle_tushare_core",
+          "line_count": 105,
+          "complexity": 18
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
           "name": "build_a_share_holder_structure_features",
           "line_count": 100,
           "complexity": 12
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_date_range_event_dataset",
+          "line_count": 99,
+          "complexity": 11
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_stk_holdertrade",
+          "line_count": 98,
+          "complexity": 14
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_top10_holder_dataset",
+          "line_count": 98,
+          "complexity": 14
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+          "name": "validate_a_share_universe",
+          "line_count": 98,
+          "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "_record_common_checks",
+          "line_count": 97,
+          "complexity": 14
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+          "name": "_with_holdertrade_event_features",
+          "line_count": 96,
+          "complexity": 14
+        },
+        {
+          "path": "tests/test_backup_data.py",
+          "name": "test_backup_data_hk_current_preset_prunes_universe_file_and_directory_overlap",
+          "line_count": 96,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_data_warehouse.py",
+          "name": "test_refresh_catalog_scans_manifest_backed_artifacts",
+          "line_count": 93,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_tushare_a_share_clean.py",
+          "name": "test_build_a_share_daily_clean_merges_adjustment_valuation_and_limit_status",
+          "line_count": 93,
+          "complexity": 1
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_month_dataset",
+          "line_count": 91,
+          "complexity": 11
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+          "name": "build_a_share_holdertrade_events",
+          "line_count": 91,
+          "complexity": 9
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "inspect_current_contract",
+          "line_count": 89,
+          "complexity": 16
+        },
+        {
+          "path": "tests/test_tushare_a_share_ownership_features.py",
+          "name": "test_build_and_validate_a_share_holdertrade_events_asset",
+          "line_count": 88,
+          "complexity": 2
+        },
+        {
+          "path": "src/market_data_platform/data_providers_rqdata.py",
+          "name": "_load_basic_rqdata",
+          "line_count": 87,
+          "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/data_warehouse_catalog.py",
+          "name": "_catalog_artifact_from_manifest",
+          "line_count": 87,
+          "complexity": 27
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_flow_validation.py",
+          "name": "validate_a_share_flow_ownership_features",
+          "line_count": 87,
+          "complexity": 7
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "src/market_data_platform/data_providers.py",
-          "name": "fetch_daily",
-          "line_count": 157,
-          "complexity": 44
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "name": "build_pit_fundamentals",
-          "line_count": 272,
-          "complexity": 43
-        },
-        {
-          "path": "src/market_data_platform/current_assets.py",
-          "name": "load_manifest_summary",
-          "line_count": 73,
-          "complexity": 42
-        },
         {
           "path": "src/market_data_platform/manifest.py",
           "name": "load_manifest_summary",
@@ -343,22 +477,10 @@
           "complexity": 35
         },
         {
-          "path": "src/market_data_platform/data_warehouse.py",
+          "path": "src/market_data_platform/data_warehouse_catalog.py",
           "name": "_catalog_artifact_from_manifest",
-          "line_count": 86,
+          "line_count": 87,
           "complexity": 27
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_research.py",
-          "name": "download_a_share_industry_membership",
-          "line_count": 151,
-          "complexity": 27
-        },
-        {
-          "path": "src/market_data_platform/data_providers.py",
-          "name": "fetch_fundamentals",
-          "line_count": 89,
-          "complexity": 25
         },
         {
           "path": "src/market_data_platform/contract_health.py",
@@ -367,21 +489,21 @@
           "complexity": 22
         },
         {
-          "path": "src/market_data_platform/data_warehouse.py",
+          "path": "src/market_data_platform/data_warehouse_materialize.py",
           "name": "materialize_standardized",
-          "line_count": 131,
+          "line_count": 133,
           "complexity": 22
         },
         {
-          "path": "src/market_data_platform/data_providers.py",
-          "name": "_load_basic_rqdata",
-          "line_count": 80,
-          "complexity": 20
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "name": "mirror_a_share_ths_member",
+          "line_count": 135,
+          "complexity": 22
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
-          "name": "validate_a_share_daily_clean",
-          "line_count": 166,
+          "path": "src/market_data_platform/data_providers_rqdata.py",
+          "name": "_load_basic_rqdata",
+          "line_count": 87,
           "complexity": 20
         },
         {
@@ -391,10 +513,16 @@
           "complexity": 20
         },
         {
-          "path": "src/market_data_platform/rqdata_runtime.py",
+          "path": "src/market_data_platform/rqdata_runtime_patch.py",
           "name": "patch_rqdatac_adjust_price_readonly",
           "line_count": 78,
           "complexity": 19
+        },
+        {
+          "path": "src/market_data_platform/backup_data.py",
+          "name": "_current_contract_backup_paths",
+          "line_count": 59,
+          "complexity": 18
         },
         {
           "path": "src/market_data_platform/backup_data.py",
@@ -403,21 +531,15 @@
           "complexity": 18
         },
         {
-          "path": "src/market_data_platform/cli.py",
-          "name": "_handle_tushare_research_assets",
-          "line_count": 197,
+          "path": "src/market_data_platform/cli_tushare_core.py",
+          "name": "_handle_tushare_core",
+          "line_count": 105,
           "complexity": 18
         },
         {
-          "path": "src/market_data_platform/data_providers.py",
+          "path": "src/market_data_platform/data_providers_rqdata.py",
           "name": "_fetch_daily_rqdata",
           "line_count": 47,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "name": "mirror_a_share_fund_portfolio",
-          "line_count": 128,
           "complexity": 18
         },
         {
@@ -439,18 +561,6 @@
           "complexity": 16
         },
         {
-          "path": "src/market_data_platform/backup_data.py",
-          "name": "_current_contract_backup_paths",
-          "line_count": 50,
-          "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/cli.py",
-          "name": "_dispatch",
-          "line_count": 23,
-          "complexity": 16
-        },
-        {
           "path": "src/market_data_platform/cold_storage.py",
           "name": "_inventory",
           "line_count": 42,
@@ -465,8 +575,50 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
           "name": "build_a_share_flow_ownership_features",
-          "line_count": 130,
+          "line_count": 133,
           "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "build_normalized_fundamentals",
+          "line_count": 68,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_pit_fundamentals",
+          "line_count": 124,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/rqdata_runtime_patch.py",
+          "name": "wrapped",
+          "line_count": 59,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/symbols.py",
+          "name": "normalize_symbol_for_market",
+          "line_count": 32,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "_build_quality_checks",
+          "line_count": 72,
+          "complexity": 15
+        },
+        {
+          "path": "src/market_data_platform/current_assets.py",
+          "name": "match_current_contract_entry",
+          "line_count": 23,
+          "complexity": 15
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "name": "_update_daily_clean_stats",
+          "line_count": 26,
+          "complexity": 15
         }
       ],
       "quality_config": {
@@ -486,106 +638,541 @@
           "data",
           "reports"
         ],
-        "pyright_include": [
-          "src/market_data_platform"
-        ],
-        "pyright_exclude": [
-          ".venv",
-          "artifacts",
-          "data",
-          "reports",
-          "src/market_data_platform/data_providers.py",
-          "src/market_data_platform/data_warehouse.py",
-          "src/market_data_platform/rqdata_runtime.py"
-        ],
-        "pyright_type_checking_mode": "basic",
+        "pyright_include": [],
+        "pyright_exclude": [],
+        "pyright_type_checking_mode": null,
         "mypy_present": false
       },
       "script_inventory": [
-        "scripts/build_a_share_tushare_sw2021_industry_changes.py",
         "scripts/dev/architecture_governance.py",
         "scripts/dev/compatibility_governance.py",
         "scripts/dev/maintainability_baseline.json",
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/quality_baseline.json",
-        "scripts/dev/quality_debt.py"
+        "scripts/dev/quality_debt.py",
+        "scripts/dev/repair_manifest.py",
+        "scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py"
       ]
+    },
+    {
+      "repo": "alpha-research",
+      "root": "alpha-research",
+      "python_file_count": 34,
+      "python_loc": 10874,
+      "hk_related_file_count": 0,
+      "large_files": [
+        {
+          "path": "src/cstree/alpha/cpcv.py",
+          "loc": 1053,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/dynamic_signal_ensemble.py",
+          "loc": 783,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/factor_diagnostics.py",
+          "loc": 781,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/train_eval_stage.py",
+          "loc": 760,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/feature_evidence.py",
+          "loc": 725,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/feature_dataset.py",
+          "loc": 676,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/split.py",
+          "loc": 552,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/cstree/alpha/research_dataset.py",
+          "name": "_processor_records",
+          "line_count": 102,
+          "complexity": 10
+        },
+        {
+          "path": "src/cstree/alpha/train_eval_stage.py",
+          "name": "_build_walk_forward_context",
+          "line_count": 102,
+          "complexity": 1
+        },
+        {
+          "path": "src/cstree/alpha/cpcv.py",
+          "name": "_path_metric_row",
+          "line_count": 100,
+          "complexity": 39
+        },
+        {
+          "path": "src/cstree/alpha/train_eval_stage.py",
+          "name": "_build_period_eval_context",
+          "line_count": 100,
+          "complexity": 1
+        },
+        {
+          "path": "src/cstree/alpha/cpcv.py",
+          "name": "_evaluate_split_backtest",
+          "line_count": 97,
+          "complexity": 11
+        },
+        {
+          "path": "src/cstree/alpha/walk_forward.py",
+          "name": "_evaluate_walk_forward_window",
+          "line_count": 96,
+          "complexity": 4
+        },
+        {
+          "path": "src/cstree/alpha/overfitting_diagnostics.py",
+          "name": "negative_control_report",
+          "line_count": 94,
+          "complexity": 10
+        },
+        {
+          "path": "src/cstree/alpha/feature_evidence.py",
+          "name": "factor_ic_report",
+          "line_count": 91,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/alpha/split.py",
+          "name": "time_series_cv_ic",
+          "line_count": 89,
+          "complexity": 7
+        },
+        {
+          "path": "src/cstree/alpha/train_eval_stage.py",
+          "name": "_run_train_eval_stage_impl",
+          "line_count": 83,
+          "complexity": 2
+        },
+        {
+          "path": "src/cstree/alpha/feature_correlation.py",
+          "name": "correlation_audit_report",
+          "line_count": 82,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/alpha/feature_dataset.py",
+          "name": "_prepare_feature_dataset",
+          "line_count": 80,
+          "complexity": 1
+        },
+        {
+          "path": "src/cstree/alpha/feature_evidence.py",
+          "name": "permutation_active_return_importance",
+          "line_count": 80,
+          "complexity": 27
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/cstree/alpha/cpcv.py",
+          "name": "_path_metric_row",
+          "line_count": 100,
+          "complexity": 39
+        },
+        {
+          "path": "src/cstree/alpha/feature_evidence.py",
+          "name": "permutation_active_return_importance",
+          "line_count": 80,
+          "complexity": 27
+        },
+        {
+          "path": "src/cstree/alpha/dynamic_signal_ensemble_calibration.py",
+          "name": "calibrate_signal_directions",
+          "line_count": 70,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/alpha/split.py",
+          "name": "_time_decay_weights",
+          "line_count": 52,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/alpha/factor_diagnostics_config.py",
+          "name": "factor_diagnostics_options_from_config",
+          "line_count": 46,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/alpha/feature_evidence.py",
+          "name": "factor_ic_report",
+          "line_count": 91,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/alpha/dynamic_signal_ensemble.py",
+          "name": "_select_factors",
+          "line_count": 69,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/alpha/feature_correlation.py",
+          "name": "correlation_audit_report",
+          "line_count": 82,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/alpha/cpcv.py",
+          "name": "build_cpcv_splits",
+          "line_count": 63,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/alpha/factor_diagnostics.py",
+          "name": "_correlation_rows",
+          "line_count": 48,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/alpha/split.py",
+          "name": "_build_label_event_windows",
+          "line_count": 49,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/alpha/dynamic_signal_ensemble_io.py",
+          "name": "_load_from_signal_files",
+          "line_count": 48,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/alpha/overfitting_diagnostics.py",
+          "name": "uniqueness_report",
+          "line_count": 76,
+          "complexity": 15
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E9",
+          "F401",
+          "F821",
+          "F822",
+          "F823",
+          "F841",
+          "I001",
+          "B905",
+          "C90"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "pyright_include": [],
+        "pyright_exclude": [],
+        "pyright_type_checking_mode": null,
+        "mypy_present": false
+      },
+      "script_inventory": []
+    },
+    {
+      "repo": "portfolio-backtester",
+      "root": "portfolio-backtester",
+      "python_file_count": 40,
+      "python_loc": 16194,
+      "hk_related_file_count": 0,
+      "large_files": [
+        {
+          "path": "src/cstree/backtesting/execution_sim/core.py",
+          "loc": 2394,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/exposure.py",
+          "loc": 1201,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "loc": 996,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/tearsheet.py",
+          "loc": 952,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "loc": 794,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/execution.py",
+          "loc": 784,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/portfolio_positions.py",
+          "loc": 770,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/position_backtest.py",
+          "loc": 705,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/capacity_report.py",
+          "loc": 688,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/evaluation.py",
+          "loc": 639,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/position_postprocess.py",
+          "loc": 597,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/post_buffer_exposure_repair.py",
+          "loc": 579,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/a_share_round_lot.py",
+          "loc": 518,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "_evaluate_backtest_leg",
+          "line_count": 100,
+          "complexity": 5
+        },
+        {
+          "path": "src/cstree/backtesting/execution_sim/core.py",
+          "name": "_execute_buy_orders",
+          "line_count": 97,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/exposure.py",
+          "name": "_industry_exposure_rows",
+          "line_count": 97,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "_evaluate_long_only_period",
+          "line_count": 96,
+          "complexity": 2
+        },
+        {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_build_variant_backtest_options",
+          "line_count": 94,
+          "complexity": 3
+        },
+        {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 94,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/backtesting/evaluation.py",
+          "name": "_record_backtest_outputs",
+          "line_count": 94,
+          "complexity": 10
+        },
+        {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_init_row",
+          "line_count": 91,
+          "complexity": 6
+        },
+        {
+          "path": "src/cstree/backtesting/portfolio_positions.py",
+          "name": "_process_long_short_rebalance",
+          "line_count": 89,
+          "complexity": 7
+        },
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "_evaluate_backtest_rebalance_period",
+          "line_count": 88,
+          "complexity": 12
+        },
+        {
+          "path": "src/cstree/backtesting/engine.py",
+          "name": "_evaluate_long_short_period",
+          "line_count": 87,
+          "complexity": 3
+        },
+        {
+          "path": "src/cstree/backtesting/evaluation.py",
+          "name": "_record_period_execution_sim",
+          "line_count": 83,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/capacity_report.py",
+          "name": "_build_grid_row",
+          "line_count": 81,
+          "complexity": 10
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/cstree/backtesting/execution_sim/core.py",
+          "name": "_summarize_adjusted_nav",
+          "line_count": 77,
+          "complexity": 22
+        },
+        {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 94,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/backtesting/portfolio_selection.py",
+          "name": "apply_rebalance_buffer",
+          "line_count": 36,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/backtesting/capacity_report.py",
+          "name": "run",
+          "line_count": 66,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/execution_sim/core.py",
+          "name": "_execute_buy_orders",
+          "line_count": 97,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/exposure.py",
+          "name": "_build_active_exposure_summary_table",
+          "line_count": 66,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/periods.py",
+          "name": "resolve_backtest_period_plan",
+          "line_count": 76,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/tearsheet.py",
+          "name": "_summarize_series",
+          "line_count": 52,
+          "complexity": 16
+        },
+        {
+          "path": "src/cstree/backtesting/a_share_round_lot.py",
+          "name": "allocate_round_lot",
+          "line_count": 72,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/capacity_report.py",
+          "name": "_evaluate_row",
+          "line_count": 40,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/evaluation.py",
+          "name": "_record_period_execution_sim",
+          "line_count": 83,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/execution_calendar.py",
+          "name": "resolve_execution_open_dates",
+          "line_count": 50,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/exposure.py",
+          "name": "_industry_exposure_rows",
+          "line_count": 97,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/strategy.py",
+          "name": "strategy_from_config",
+          "line_count": 55,
+          "complexity": 15
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E9",
+          "F401",
+          "F821",
+          "F822",
+          "F823",
+          "F841",
+          "I001",
+          "B905",
+          "C90"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "pyright_include": [],
+        "pyright_exclude": [],
+        "pyright_type_checking_mode": null,
+        "mypy_present": false
+      },
+      "script_inventory": []
     },
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 231,
-      "python_loc": 67692,
+      "python_file_count": 303,
+      "python_loc": 65014,
       "hk_related_file_count": 2,
       "large_files": [
         {
-          "path": "src/cstree/execution_sim.py",
-          "loc": 2329,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_pipeline_e2e.py",
-          "loc": 1859,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/eval.py",
-          "loc": 1580,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/research/summarize_runs.py",
-          "loc": 1280,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/exposure.py",
-          "loc": 1161,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/research/promotion_gate.py",
-          "loc": 1149,
+          "loc": 1866,
           "hk_related": false
         },
         {
           "path": "src/cstree/pipeline/config.py",
-          "loc": 1039,
+          "loc": 1177,
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/cpcv.py",
-          "loc": 1003,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/train_eval_stage.py",
-          "loc": 958,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/backtest_tearsheet.py",
-          "loc": 952,
+          "path": "src/cstree/research/promotion_gate.py",
+          "loc": 1128,
           "hk_related": false
         },
         {
           "path": "tests/test_pipeline_filters_backtest.py",
           "loc": 951,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/commands/run_grid.py",
-          "loc": 900,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/portfolio.py",
-          "loc": 890,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/release_tools/package_runs.py",
-          "loc": 885,
           "hk_related": false
         },
         {
@@ -599,8 +1186,8 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/panel_loader.py",
-          "loc": 808,
+          "path": "src/cstree/pipeline/output_summary_sections.py",
+          "loc": 800,
           "hk_related": false
         },
         {
@@ -609,18 +1196,23 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/construction_grid.py",
-          "loc": 783,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/execution.py",
-          "loc": 781,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/pipeline/output_artifacts.py",
-          "loc": 774,
+          "loc": 784,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_cli_research.py",
+          "loc": 782,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/release_tools/package_runs.py",
+          "loc": 769,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_backtest.py",
+          "loc": 754,
           "hk_related": false
         },
         {
@@ -629,63 +1221,72 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/research/feature_evidence.py",
-          "loc": 725,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/commands/linear_sweep.py",
           "loc": 723,
           "hk_related": false
         },
         {
-          "path": "src/cstree/backtesting/engine.py",
-          "loc": 719,
+          "path": "src/cstree/liveops/holdings.py",
+          "loc": 716,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
+          "loc": 707,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_promotion_gate.py",
+          "loc": 686,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/dataset_sampling.py",
+          "loc": 656,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_docs_contracts.py",
+          "loc": 632,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/commands/run_grid.py",
+          "loc": 624,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/a_share_500k_round_lot_probe.py",
+          "loc": 615,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_run_release_scripts.py",
+          "loc": 590,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_pipeline_memory_path.py",
+          "loc": 582,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_pipeline_validation.py",
+          "loc": 577,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/release_tools/release_runs.py",
+          "loc": 573,
           "hk_related": false
         }
       ],
       "long_functions": [
         {
-          "path": "src/cstree/pipeline/runner.py",
-          "name": "prepare_research_context",
-          "line_count": 329,
-          "complexity": 9
-        },
-        {
-          "path": "src/cstree/pipeline/eval.py",
-          "name": "_evaluate_walk_forward_window",
-          "line_count": 303,
-          "complexity": 29
-        },
-        {
           "path": "tests/test_cli_research.py",
           "name": "test_cli_parses_research_commands",
-          "line_count": 299,
+          "line_count": 322,
           "complexity": 1
-        },
-        {
-          "path": "src/cstree/research/cpcv.py",
-          "name": "_evaluate_split",
-          "line_count": 239,
-          "complexity": 31
-        },
-        {
-          "path": "src/cstree/backtesting/engine.py",
-          "name": "backtest_topk",
-          "line_count": 237,
-          "complexity": 28
-        },
-        {
-          "path": "src/cstree/pipeline/live.py",
-          "name": "_prepare_live_snapshot",
-          "line_count": 234,
-          "complexity": 26
-        },
-        {
-          "path": "src/cstree/promotion_sidecar.py",
-          "name": "simulate_promotion_sidecar",
-          "line_count": 229,
-          "complexity": 33
         },
         {
           "path": "tests/test_pipeline_filters_backtest.py",
@@ -694,87 +1295,15 @@
           "complexity": 3
         },
         {
-          "path": "src/cstree/pipeline/feature_dataset.py",
-          "name": "_prepare_feature_dataset",
-          "line_count": 215,
-          "complexity": 25
-        },
-        {
-          "path": "src/cstree/execution_sim.py",
-          "name": "simulate_execution_adjusted_nav",
-          "line_count": 213,
-          "complexity": 30
-        },
-        {
-          "path": "src/cstree/pipeline/dataset_sampling.py",
-          "name": "build_modeling_dataset",
-          "line_count": 210,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/research/construction_grid.py",
-          "name": "_evaluate_variant",
-          "line_count": 208,
-          "complexity": 26
-        },
-        {
-          "path": "src/cstree/pipeline/runtime.py",
-          "name": "_prepare_split_context",
-          "line_count": 202,
-          "complexity": 20
-        },
-        {
           "path": "tests/test_pipeline_filters_file_derived.py",
           "name": "test_pipeline_hk_file_fundamentals_supports_trailing_stability_features",
           "line_count": 201,
           "complexity": 1
         },
         {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "name": "apply_fundamentals_enrichment",
-          "line_count": 197,
-          "complexity": 31
-        },
-        {
-          "path": "src/cstree/pipeline/final_oos_stage.py",
-          "name": "run_final_oos_stage",
-          "line_count": 194,
-          "complexity": 14
-        },
-        {
-          "path": "src/cstree/pipeline/panel_loader.py",
-          "name": "_load_research_panel",
-          "line_count": 193,
-          "complexity": 3
-        },
-        {
-          "path": "src/cstree/pipeline/eval.py",
-          "name": "_evaluate_period",
-          "line_count": 187,
-          "complexity": 8
-        },
-        {
-          "path": "src/cstree/research/dynamic_signal_ensemble.py",
-          "name": "build_dynamic_signal_ensemble",
-          "line_count": 185,
-          "complexity": 17
-        },
-        {
-          "path": "scripts/a_share_500k_round_lot_probe.py",
-          "name": "simulate_variant",
-          "line_count": 174,
-          "complexity": 37
-        },
-        {
-          "path": "src/cstree/release_tools/release_runs.py",
-          "name": "main",
-          "line_count": 173,
-          "complexity": 27
-        },
-        {
           "path": "tests/test_pipeline_e2e.py",
           "name": "test_pipeline_run_offline",
-          "line_count": 172,
+          "line_count": 179,
           "complexity": 1
         },
         {
@@ -784,133 +1313,127 @@
           "complexity": 24
         },
         {
-          "path": "src/cstree/research/summarize_runs.py",
-          "name": "_extract_row",
-          "line_count": 164,
-          "complexity": 9
+          "path": "tests/test_run_release_scripts.py",
+          "name": "_write_demo_run",
+          "line_count": 157,
+          "complexity": 1
         },
         {
-          "path": "src/cstree/commands/run_grid.py",
-          "name": "_run_fixed_signal_grid",
-          "line_count": 157,
-          "complexity": 23
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_backtest_writes_compare_benchmark_reports",
+          "line_count": 155,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_overlay.py",
+          "name": "test_pipeline_hk_file_fundamentals_provider_overlay_stays_daily",
+          "line_count": 148,
+          "complexity": 4
+        },
+        {
+          "path": "tests/test_pipeline_filters_industry.py",
+          "name": "test_pipeline_industry_file_join_preserves_labels_for_dataset_and_bucket_ic",
+          "line_count": 146,
+          "complexity": 5
+        },
+        {
+          "path": "tests/test_output_summary_metadata.py",
+          "name": "test_build_inputs_lock_records_symlink_resolution_and_manifest_metadata",
+          "line_count": 141,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_train_eval_contracts.py",
+          "name": "_request",
+          "line_count": 140,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_derived.py",
+          "name": "test_pipeline_hk_file_fundamentals_derived_slow_features",
+          "line_count": 139,
+          "complexity": 2
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_derived.py",
+          "name": "test_pipeline_hk_file_fundamentals_supports_growth_and_structure_ratios",
+          "line_count": 139,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_summarize_runs.py",
+          "name": "test_summarize_runs_collects_metrics_and_flags",
+          "line_count": 139,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_feature_formulas.py",
+          "name": "test_pipeline_feature_formulas",
+          "line_count": 135,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_with_local_rqdata_assets_smoke",
+          "line_count": 130,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_benchmark_compare_accepts_symbol_sources",
+          "line_count": 129,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_pipeline_filters_provider_fundamentals.py",
+          "name": "test_pipeline_a_share_rqdata_provider_fundamentals_enabled",
+          "line_count": 129,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_tune.py",
+          "name": "test_tune_generates_configs_runs_and_best_trial",
+          "line_count": 129,
+          "complexity": 7
+        },
+        {
+          "path": "docs/archive/research/a_share/probes/a_share_hotspot_feature_quick_probe.py",
+          "name": "_load_limit_industry_features",
+          "line_count": 127,
+          "complexity": 4
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
+          "line_count": 126,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_walk_forward_feature_stability_outputs",
+          "line_count": 121,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_overlay.py",
+          "name": "test_pipeline_hk_file_fundamentals_provider_overlay_required_fails_when_empty",
+          "line_count": 121,
+          "complexity": 2
+        },
+        {
+          "path": "tests/test_pipeline_filters_backtest.py",
+          "name": "test_pipeline_backtest_industry_exposure_uses_prior_sparse_labels",
+          "line_count": 119,
+          "complexity": 5
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_build.py",
+          "name": "test_pipeline_hk_file_fundamentals_built_from_pit_asset",
+          "line_count": 119,
+          "complexity": 1
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "src/cstree/research/cpcv.py",
-          "name": "_path_metric_row",
-          "line_count": 100,
-          "complexity": 39
-        },
-        {
-          "path": "scripts/a_share_500k_round_lot_probe.py",
-          "name": "simulate_variant",
-          "line_count": 174,
-          "complexity": 37
-        },
-        {
-          "path": "src/cstree/pipeline/output_summary_metadata.py",
-          "name": "build_inputs_lock",
-          "line_count": 110,
-          "complexity": 34
-        },
-        {
-          "path": "src/cstree/promotion_sidecar.py",
-          "name": "simulate_promotion_sidecar",
-          "line_count": 229,
-          "complexity": 33
-        },
-        {
-          "path": "src/cstree/backtesting/metrics.py",
-          "name": "summarize_period_returns",
-          "line_count": 136,
-          "complexity": 31
-        },
-        {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "name": "apply_fundamentals_enrichment",
-          "line_count": 197,
-          "complexity": 31
-        },
-        {
-          "path": "src/cstree/research/cpcv.py",
-          "name": "_evaluate_split",
-          "line_count": 239,
-          "complexity": 31
-        },
-        {
-          "path": "src/cstree/execution_sim.py",
-          "name": "simulate_execution_adjusted_nav",
-          "line_count": 213,
-          "complexity": 30
-        },
-        {
-          "path": "src/cstree/pipeline/eval.py",
-          "name": "_evaluate_walk_forward_window",
-          "line_count": 303,
-          "complexity": 29
-        },
-        {
-          "path": "src/cstree/research/pbo.py",
-          "name": "compute_pbo_report",
-          "line_count": 118,
-          "complexity": 29
-        },
-        {
-          "path": "src/cstree/backtesting/engine.py",
-          "name": "backtest_topk",
-          "line_count": 237,
-          "complexity": 28
-        },
-        {
-          "path": "src/cstree/exposure.py",
-          "name": "_style_exposure_row",
-          "line_count": 135,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/pipeline/dataset_sampling.py",
-          "name": "build_modeling_dataset",
-          "line_count": 210,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/release_tools/release_runs.py",
-          "name": "main",
-          "line_count": 173,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/research/feature_evidence.py",
-          "name": "permutation_active_return_importance",
-          "line_count": 80,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/split.py",
-          "name": "time_series_cv_ic",
-          "line_count": 147,
-          "complexity": 27
-        },
-        {
-          "path": "src/cstree/pipeline/live.py",
-          "name": "_prepare_live_snapshot",
-          "line_count": 234,
-          "complexity": 26
-        },
-        {
-          "path": "src/cstree/research/construction_grid.py",
-          "name": "_evaluate_variant",
-          "line_count": 208,
-          "complexity": 26
-        },
-        {
-          "path": "src/cstree/pipeline/feature_dataset.py",
-          "name": "_prepare_feature_dataset",
-          "line_count": 215,
-          "complexity": 25
-        },
         {
           "path": "docs/archive/research/a_share/probes/topk_style_probe.py",
           "name": "main",
@@ -924,12 +1447,6 @@
           "complexity": 24
         },
         {
-          "path": "src/cstree/research/cpcv.py",
-          "name": "run_cpcv_audit",
-          "line_count": 118,
-          "complexity": 24
-        },
-        {
           "path": "scripts/a_share_live_risk_control_grid.py",
           "name": "apply_trade_controls",
           "line_count": 42,
@@ -938,14 +1455,134 @@
         {
           "path": "src/cstree/commands/run_grid.py",
           "name": "_resolve_grid_values",
-          "line_count": 49,
+          "line_count": 51,
           "complexity": 23
         },
         {
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "_selected_runs",
+          "line_count": 49,
+          "complexity": 22
+        },
+        {
+          "path": "src/cstree/research/promotion_gate.py",
+          "name": "build_promotion_record",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
+          "path": "src/cstree/liveops/alloc_market_data.py",
+          "name": "extract_price_wide_frame",
+          "line_count": 58,
+          "complexity": 21
+        },
+        {
+          "path": "src/cstree/research/summarize_runs.py",
+          "name": "run",
+          "line_count": 56,
+          "complexity": 21
+        },
+        {
+          "path": "src/cstree/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
+          "path": "src/cstree/release_tools/package_runs.py",
+          "name": "_apply_run_filters",
+          "line_count": 57,
+          "complexity": 20
+        },
+        {
+          "path": "src/cstree/release_tools/release_runs.py",
+          "name": "_package_cmd_from_args",
+          "line_count": 33,
+          "complexity": 20
+        },
+        {
+          "path": "src/cstree/research/summarize_runs_scoring.py",
+          "name": "_compute_grouped_dsr",
+          "line_count": 57,
+          "complexity": 20
+        },
+        {
+          "path": "docs/archive/research/a_share/probes/a_share_strategy_development_probe.py",
+          "name": "constrained_select",
+          "line_count": 56,
+          "complexity": 19
+        },
+        {
+          "path": "docs/archive/research/a_share/probes/constraint_probe.py",
+          "name": "constrained_select",
+          "line_count": 37,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/liveops/holdings.py",
+          "name": "_resolve_run_dir",
+          "line_count": 46,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/liveops/snapshot.py",
+          "name": "main",
+          "line_count": 108,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/pipeline/config.py",
+          "name": "_normalize_benchmark_compare",
+          "line_count": 44,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/research/promotion_gate.py",
+          "name": "_is_missing_evidence_category",
+          "line_count": 39,
+          "complexity": 19
+        },
+        {
+          "path": "scripts/a_share_live_risk_control_grid.py",
+          "name": "simulate",
+          "line_count": 87,
+          "complexity": 18
+        },
+        {
+          "path": "scripts/dev/config_lifecycle.py",
+          "name": "_validate_catalog",
+          "line_count": 45,
+          "complexity": 18
+        },
+        {
           "path": "src/cstree/commands/run_grid.py",
-          "name": "_run_fixed_signal_grid",
-          "line_count": 157,
-          "complexity": 23
+          "name": "_base_grid_context",
+          "line_count": 73,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/pipeline/config.py",
+          "name": "_resolve_feature_settings",
+          "line_count": 60,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/pipeline/config.py",
+          "name": "_validate_exp_decay_sample_weight_params",
+          "line_count": 30,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/pipeline/output_summary_sections.py",
+          "name": "_build_final_oos_section",
+          "line_count": 44,
+          "complexity": 18
+        },
+        {
+          "path": "src/cstree/pipeline/panel_join_support.py",
+          "name": "load_panel_join_frames",
+          "line_count": 83,
+          "complexity": 18
         }
       ],
       "quality_config": {
@@ -968,55 +1605,51 @@
           "dist",
           "docs/archive"
         ],
-        "pyright_include": [
-          "src/cstree/pipeline/contracts.py",
-          "src/cstree/pipeline/output_context.py",
-          "src/cstree/pipeline/output_artifacts.py",
-          "src/cstree/pipeline/output.py",
-          "src/cstree/pipeline/output_orchestration.py",
-          "src/cstree/pipeline/output_summary.py",
-          "src/cstree/pipeline/final_oos_stage.py",
-          "src/cstree/liveops/export_targets.py",
-          "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py",
-          "src/cstree/liveops/alloc.py",
-          "src/cstree/backtesting/types.py"
-        ],
-        "pyright_exclude": [
-          ".venv",
-          "artifacts",
-          "build",
-          "configs/local",
-          "dist"
-        ],
-        "pyright_type_checking_mode": "basic",
+        "pyright_include": [],
+        "pyright_exclude": [],
+        "pyright_type_checking_mode": null,
         "mypy_present": false
       },
       "script_inventory": [
         "scripts/README.md",
         "scripts/a_share_500k_round_lot_probe.py",
+        "scripts/a_share_hotspot_event_overlay_probe.py",
         "scripts/a_share_live_executable_oos_topk_probe.py",
         "scripts/a_share_live_executable_variant_top10_probe.py",
         "scripts/a_share_live_industry_cap_top10_probe.py",
         "scripts/a_share_live_risk_control_grid.py",
         "scripts/a_share_small_capital_robustness.py",
+        "scripts/cross_sec_ml_4class.py",
         "scripts/dev/check_c901_debt.py",
         "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
+        "scripts/dev/import_boundary.py",
         "scripts/dev/install_git_hooks.sh",
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/run_tests.sh",
+        "scripts/dev/split_smoke.py",
         "scripts/dev/test_impact.py",
+        "scripts/factor_ic_2026_daily.py",
         "scripts/internal/export_repo_source.py",
         "scripts/internal/freeze_hk_research_outputs.py",
-        "scripts/internal/package_repo.sh"
+        "scripts/internal/package_repo.sh",
+        "scripts/market_style_dashboard.py",
+        "scripts/research_new_features_ic.py",
+        "scripts/research_new_features_ic_v2.py",
+        "scripts/research_rotation_filter.py",
+        "scripts/research_rotation_ic.py",
+        "scripts/step1_build_report_features.py",
+        "scripts/step1c_report_sent_kw.py",
+        "scripts/step2_join_regression.py",
+        "scripts/step2_sentiment_regression.py",
+        "scripts/style_analysis_3y.py"
       ]
     },
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 75,
-      "python_loc": 23442,
+      "python_file_count": 79,
+      "python_loc": 24339,
       "hk_related_file_count": 12,
       "large_files": [
         {
@@ -1026,7 +1659,7 @@
         },
         {
           "path": "src/quant_execution_engine/cli.py",
-          "loc": 1421,
+          "loc": 1523,
           "hk_related": false
         },
         {
@@ -1089,7 +1722,7 @@
         {
           "path": "src/quant_execution_engine/cli_parser.py",
           "name": "create_parser",
-          "line_count": 314,
+          "line_count": 344,
           "complexity": 1
         },
         {
@@ -1101,8 +1734,14 @@
         {
           "path": "src/quant_execution_engine/cli.py",
           "name": "main",
-          "line_count": 223,
-          "complexity": 32
+          "line_count": 242,
+          "complexity": 34
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_config",
+          "line_count": 207,
+          "complexity": 52
         },
         {
           "path": "src/quant_execution_engine/renderers/diff.py",
@@ -1121,12 +1760,6 @@
           "name": "test_run_operator_smoke_workflow_writes_blocked_operator_outcome_evidence",
           "line_count": 170,
           "complexity": 2
-        },
-        {
-          "path": "src/quant_execution_engine/cli.py",
-          "name": "run_config",
-          "line_count": 169,
-          "complexity": 42
         },
         {
           "path": "src/quant_execution_engine/renderers/diff.py",
@@ -1239,16 +1872,16 @@
       ],
       "complexity_hotspots": [
         {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_config",
+          "line_count": 207,
+          "complexity": 52
+        },
+        {
           "path": "src/quant_execution_engine/renderers/diff.py",
           "name": "render_rebalance_diff",
           "line_count": 191,
           "complexity": 47
-        },
-        {
-          "path": "src/quant_execution_engine/cli.py",
-          "name": "run_config",
-          "line_count": 169,
-          "complexity": 42
         },
         {
           "path": "src/quant_execution_engine/diagnostics.py",
@@ -1271,8 +1904,8 @@
         {
           "path": "src/quant_execution_engine/cli.py",
           "name": "main",
-          "line_count": 223,
-          "complexity": 32
+          "line_count": 242,
+          "complexity": 34
         },
         {
           "path": "src/quant_execution_engine/cli.py",
@@ -1383,10 +2016,10 @@
           "complexity": 17
         },
         {
-          "path": "project_tools/export_repo_source.py",
-          "name": "combine_project_files",
-          "line_count": 117,
-          "complexity": 16
+          "path": "src/quant_execution_engine/health.py",
+          "name": "render_health_result",
+          "line_count": 57,
+          "complexity": 17
         }
       ],
       "quality_config": {

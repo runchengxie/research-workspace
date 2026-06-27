@@ -437,6 +437,222 @@
       "owner_repo": "market-data-platform",
       "reason": "large A-share research asset scenario test is tracked but not active production code",
       "next_action": "split by research asset family when tests change"
+    },
+    {
+      "path": "scripts/path_b_production.py",
+      "owner_repo": "research-workspace",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "scripts/concept_etf_ml_backtest.py",
+      "owner_repo": "research-workspace",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "scripts/path_c_m1_validate.py",
+      "owner_repo": "research-workspace",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "scripts/workspace_doctor.py",
+      "owner_repo": "research-workspace",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_hotspot_features.py",
+      "owner_repo": "market-data-platform",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/scripts/dev/quality_debt.py",
+      "owner_repo": "market-data-platform",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_options.py",
+      "owner_repo": "market-data-platform",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/cpcv.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/dynamic_signal_ensemble.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/factor_diagnostics.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/train_eval_stage.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/feature_evidence.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/feature_dataset.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/split.py",
+      "owner_repo": "alpha-research",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/execution_sim/core.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/exposure.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/construction_grid.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/tearsheet.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/engine.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/execution.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/portfolio_positions.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/position_backtest.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/capacity_report.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/evaluation.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/position_postprocess.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/post_buffer_exposure_repair.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/a_share_round_lot.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/output_summary_sections.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_cli_research.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_promotion_gate.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/dataset_sampling.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/scripts/a_share_500k_round_lot_probe.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_run_release_scripts.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_pipeline_memory_path.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/tests/test_pipeline_validation.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/release_tools/release_runs.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     }
   ]
 }

@@ -16,7 +16,9 @@ QUALITY_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance_quality.py"
 WORKSPACE_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"
 REPOS = {
     "research-workspace",
+    "alpha-research",
     "market-data-platform",
+    "portfolio-backtester",
     "cross-sectional-trees",
     "quant-execution-engine",
 }
@@ -109,8 +111,10 @@ def _load_workspace_governance_module() -> Any:
 def _script_paths_to_classify() -> set[str]:
     roots = [
         ROOT / "scripts",
+        ROOT / "alpha-research" / "scripts",
         ROOT / "cross-sectional-trees" / "scripts" / "internal",
         ROOT / "market-data-platform" / "scripts" / "internal",
+        ROOT / "portfolio-backtester" / "scripts",
         ROOT / "quant-execution-engine" / "project_tools",
     ]
     paths: set[str] = set()
@@ -262,8 +266,10 @@ def test_script_lifecycle_manifest_classifies_all_tracked_scripts() -> None:
 def test_quality_coverage_governance_matches_submodule_configs() -> None:
     manifest = _load_json_doc("docs/quality-coverage-governance.yml")
     repos = {record["repo"]: record for record in manifest["repos"]}
+    alpha_config = _load_pyproject("alpha-research")
     cross_config = _load_pyproject("cross-sectional-trees")
     market_config = _load_pyproject("market-data-platform")
+    portfolio_config = _load_pyproject("portfolio-backtester")
     execution_config = _load_pyproject("quant-execution-engine")
 
     assert manifest["schema_version"] == "quality_coverage_governance.v1"
@@ -274,16 +280,31 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert manifest["debt_budget"]["per_file_ignore_register_max"] == len(
         manifest["per_file_ignore_register"]
     )
-    assert set(repos) == {"cross-sectional-trees", "market-data-platform", "quant-execution-engine"}
+    assert set(repos) == {
+        "alpha-research",
+        "cross-sectional-trees",
+        "market-data-platform",
+        "portfolio-backtester",
+        "quant-execution-engine",
+    }
+    assert set(repos["alpha-research"]["basedpyright"]["include_targets"]) == set(
+        alpha_config["tool"]["basedpyright"]["include"]
+    )
     cross_staged_select = cross_config["tool"]["maintainability"]["quality_targets"][
         "ruff_staged_select"
     ]
     assert set(cross_staged_select) == set(repos["cross-sectional-trees"]["ruff"]["staged_select"])
-    assert set(repos["cross-sectional-trees"]["pyright"]["next_include_targets"]) <= set(
-        cross_config["tool"]["pyright"]["include"]
+    assert set(repos["cross-sectional-trees"]["basedpyright"]["next_include_targets"]) <= set(
+        cross_config["tool"]["basedpyright"]["include"]
     )
 
     assert "maintainability" not in market_config["tool"]
+    assert set(repos["market-data-platform"]["basedpyright"]["include_targets"]) == set(
+        market_config["tool"]["basedpyright"]["include"]
+    )
+    assert set(repos["portfolio-backtester"]["basedpyright"]["include_targets"]) == set(
+        portfolio_config["tool"]["basedpyright"]["include"]
+    )
 
     assert set(repos["quant-execution-engine"]["pyright"]["strict_targets"]) == set(
         execution_config["tool"]["maintainability"]["quality_targets"]["pyright_strict_targets"]
@@ -364,6 +385,8 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
     combined = "\n".join([contributing, architecture, pr_template])
 
     assert "/market-data-platform/" in owners
+    assert "/alpha-research/" in owners
+    assert "/portfolio-backtester/" in owners
     assert "/cross-sectional-trees/" in owners
     assert "/quant-execution-engine/" in owners
     for phrase in (

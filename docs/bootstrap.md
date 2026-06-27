@@ -1,6 +1,6 @@
 # 新机器初始化
 
-本页说明如何在新机器上拉起 `research-workspace`，并检查三个子项目是否处在顶层仓库记录的版本。各子项目的完整依赖、凭证和业务命令仍以各自 README 和 docs 为准。
+本页说明如何在新机器上拉起 `research-workspace`，并检查活跃子项目是否处在顶层仓库记录的版本。各子项目的完整依赖、凭证和业务命令仍以各自 README 和 docs 为准。
 
 ## 克隆仓库
 
@@ -34,10 +34,16 @@ python scripts/workspace_doctor.py --strict
 
 ## 安装依赖
 
-推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或共享虚拟环境。
+推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或共享虚拟环境。`alpha-research` 和 `portfolio-backtester` 当前仍依赖同一个 workspace 下的 `cstree` namespace 组合运行；完整研究命令仍从 `cross-sectional-trees` 的 `cstree` CLI 进入。
 
 ```bash
 cd market-data-platform
+uv sync --extra dev
+
+cd ../alpha-research
+uv sync --extra dev
+
+cd ../portfolio-backtester
 uv sync --extra dev
 
 cd ../cross-sectional-trees
@@ -118,5 +124,5 @@ python scripts/run_submodule_checks.py --profile lint --submodule cross-sectiona
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
-`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台质量治理与策略研究 maintainability ratchet。
+配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`basedpyright`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
+`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台质量治理与策略编排 maintainability ratchet。

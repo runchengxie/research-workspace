@@ -34,7 +34,9 @@ QUALITY_DEBT_BUDGET_FIELDS = {
     "policy",
 }
 EXPECTED_QUALITY_REPOS = {
+    "alpha-research",
     "market-data-platform",
+    "portfolio-backtester",
     "cross-sectional-trees",
     "quant-execution-engine",
 }
@@ -74,6 +76,11 @@ def _quality_config_entries(pyproject: dict[str, Any], tool_name: str) -> list[s
         if not isinstance(pyright, dict):
             return []
         entries = pyright.get("exclude", [])
+    elif tool_name == "basedpyright":
+        basedpyright = tool.get("basedpyright", {})
+        if not isinstance(basedpyright, dict):
+            return []
+        entries = basedpyright.get("exclude", [])
     else:
         return []
     if not isinstance(entries, list):
@@ -152,7 +159,7 @@ def _check_quality_exclude_drift(
             issues.append(error)
             continue
         assert pyproject is not None
-        for tool_name in ("ruff", "pyright"):
+        for tool_name in ("ruff", "basedpyright", "pyright"):
             entries = _quality_debt_entries(_quality_config_entries(pyproject, tool_name))
             patterns = _registered_patterns(register, repo, tool_name)
             missing = _unregistered_quality_excludes(entries, patterns)

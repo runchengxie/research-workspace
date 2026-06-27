@@ -6,8 +6,10 @@ extend-exclude = [
   ".git",
   ".pytest_cache",
   ".venv",
+  "alpha-research",
   "cross-sectional-trees",
   "market-data-platform",
+  "portfolio-backtester",
   "quant-execution-engine",
   "demo",
 ]

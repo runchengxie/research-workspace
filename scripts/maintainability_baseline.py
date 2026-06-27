@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_REPOS = [
     "research-workspace",
     "market-data-platform",
+    "alpha-research",
+    "portfolio-backtester",
     "cross-sectional-trees",
     "quant-execution-engine",
 ]
@@ -24,8 +26,10 @@ DEFAULT_THRESHOLDS = {
     "complexity": 15,
 }
 SUBMODULE_DIRS = {
+    "alpha-research",
     "cross-sectional-trees",
     "market-data-platform",
+    "portfolio-backtester",
     "quant-execution-engine",
 }
 EXCLUDED_PARTS = {

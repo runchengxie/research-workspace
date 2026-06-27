@@ -21,7 +21,9 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
 
     assert ruff["include"] == ["scripts/**/*.py", "tests/**/*.py"]
     assert {
+        "alpha-research",
         "market-data-platform",
+        "portfolio-backtester",
         "cross-sectional-trees",
         "quant-execution-engine",
     } <= set(ruff["extend-exclude"])
@@ -34,6 +36,8 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
     for item in commands:
         assert "scripts" in item.command
         assert "tests" in item.command
+        assert "alpha-research" not in item.command
         assert "market-data-platform" not in item.command
+        assert "portfolio-backtester" not in item.command
         assert "cross-sectional-trees" not in item.command
         assert "quant-execution-engine" not in item.command

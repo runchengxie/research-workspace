@@ -1,6 +1,6 @@
 # 平台工作流与集成边界
 
-本页说明 `research-workspace` 中三个模块怎样衔接，以及哪些步骤已经验证。顶层仓库负责锁定一组可以一起使用的版本，并说明模块之间的文件交接方式。
+本页说明 `research-workspace` 中活跃模块怎样衔接，以及哪些步骤已经验证。顶层仓库负责锁定一组可以一起使用的版本，并说明模块之间的文件交接方式。
 
 ## 当前工作流
 
@@ -9,7 +9,9 @@
 ```text
 数据维护和盘口加工
   -> 发布共享数据资产
-  -> 策略研究、模型评估和回测
+  -> alpha 研究、模型评估和信号产物
+  -> 组合构造、回测和持仓候选
+  -> 策略编排和目标文件导出
   -> 导出 targets.json
   -> 执行引擎解析文件并生成离线调仓计划
 ```
@@ -35,10 +37,10 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 阶段 | 所有者 | 稳定对象 / 文件 |
 | --- | --- | --- |
 | 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、manifest、registry |
-| 研究数据集 | `cross-sectional-trees` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
-| 模型 | `cross-sectional-trees` | `CSTreeModel.detail()`、`feature_importance.csv`、`model_detail` summary |
-| 信号 | `cross-sectional-trees` | `signals.parquet` |
-| 组合 | `cross-sectional-trees` | named `StrategySpec`、`positions_current*.csv` |
+| 研究数据集 | `alpha-research` / `cross-sectional-trees` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
+| 模型 | `alpha-research` | `CSTreeModel.detail()`、`feature_importance.csv`、`model_detail` summary |
+| 信号 | `alpha-research` | `signals.parquet` |
+| 组合 | `portfolio-backtester` | named `StrategySpec`、`positions_current*.csv` |
 | 执行交接 | `cross-sectional-trees` -> `quant-execution-engine` | `targets.json`、`targets.json.lineage.json`、`qexec rebalance` |
 
 ## 模块分工
@@ -46,17 +48,20 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、A 股资产发布和港股归档 freeze / hydrate 恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
-| 策略研究 | `cross-sectional-trees` | 只读消费发布数据，完成特征、模型、评估、回测、持仓分配和执行目标导出；港股只作为历史归档复现入口 | `summary.json`、`positions_current*.csv`、`targets.json` |
+| Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `cstree.alpha.*`、`signals.parquet` |
+| 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `cstree.backtesting.*`、`positions_current*.csv` |
+| 策略编排 | `cross-sectional-trees` | 只读消费发布数据，组合 alpha/backtesting 包，保留 CLI、兼容 facade、持仓快照和执行目标导出 | `cstree ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界
 
-三仓库共同覆盖研究完整性，但职责不同：
+活跃子模块共同覆盖研究完整性，但职责不同：
 
 | 层级 | 仓库 | 负责的防线 | 文档入口 |
 | --- | --- | --- | --- |
 | 数据防泄漏 | `market-data-platform` | current contract、manifest、PIT universe、PIT fundamentals、历史行业、research validation、current health 和 release evidence | [`market-data-platform/docs/research-integrity.md`](../market-data-platform/docs/research-integrity.md) |
-| 研究防过拟合 | `cross-sectional-trees` | time-series CV、rolling / walk-forward、final OOS、CPCV、purge / embargo、feature evidence、DSR、promotion gate 和候选晋升证据 | [`cross-sectional-trees/docs/concepts/overfitting-controls.md`](../cross-sectional-trees/docs/concepts/overfitting-controls.md) |
+| Alpha 防过拟合 | `alpha-research` | time-series CV、rolling / walk-forward、final OOS、CPCV、purge / embargo、feature evidence、DSR、promotion gate 和候选晋升证据 | [`alpha-research/README.md`](../alpha-research/README.md) |
+| 回测稳健性 | `portfolio-backtester` | turnover/cost、capacity、benchmark ladder、execution simulation、exposure 和报告复核 | [`portfolio-backtester/README.md`](../portfolio-backtester/README.md) |
 | 执行隔离和审计 | `quant-execution-engine` | 标准 `targets.json` 输入、dry-run / paper / live 分层、风控预检、订单审计、对账和 evidence bundle | [`quant-execution-engine/docs/research-handoff-governance.md`](../quant-execution-engine/docs/research-handoff-governance.md) |
 
 数据平台不读取研究 run 指标；研究仓库不生产市场数据资产或提交券商订单；执行引擎不重新评估模型，也不把 lineage sidecar 作为下单参数。这样可以避免数据发布、模型选择和真实执行互相污染。
@@ -89,7 +94,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ### 2. 读取数据并完成研究
 
-`cross-sectional-trees` 从当前数据清单解析已发布数据资产，再完成研究流程。A 股迁移候选入口是 `cstree run --config default_next`；港股只用于 restore-only 历史复现，不作为新增研究默认入口。
+`cross-sectional-trees` 从当前数据清单解析已发布数据资产，再通过 workspace 中的 `alpha-research` 和 `portfolio-backtester` 完成研究流程。A 股迁移候选入口是 `cstree run --config default_next`；港股只用于 restore-only 历史复现，不作为新增研究默认入口。
 
 - 特征工程、训练与评估。
 - 历史回测、基准对比和研究证据管理。

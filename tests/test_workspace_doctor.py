@@ -32,8 +32,10 @@ class WorkspaceDoctorTest(unittest.TestCase):
         submodules = workspace_doctor.parse_gitmodules(ROOT)
         self.assertEqual(
             {
+                "alpha-research": "alpha-research",
                 "cross-sectional-trees": "cross-sectional-trees",
                 "market-data-platform": "market-data-platform",
+                "portfolio-backtester": "portfolio-backtester",
                 "quant-execution-engine": "quant-execution-engine",
             },
             submodules,
@@ -313,6 +315,18 @@ class WorkspaceDoctorTest(unittest.TestCase):
                                 "profiles": {
                                     "lint": [],
                                     "full": ["@smoke", "@test", "@type"],
+                                }
+                            },
+                            "alpha-research": {
+                                "profiles": {
+                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "src"]],
+                                    "full": ["@smoke", "@lint", "@test", "@type"],
+                                }
+                            },
+                            "portfolio-backtester": {
+                                "profiles": {
+                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "src"]],
+                                    "full": ["@smoke", "@lint", "@test", "@type"],
                                 }
                             },
                             "cross-sectional-trees": {

@@ -7,7 +7,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 EXPECTED_SUBMODULES = {
+    "alpha-research",
     "market-data-platform",
+    "portfolio-backtester",
     "cross-sectional-trees",
     "quant-execution-engine",
 }

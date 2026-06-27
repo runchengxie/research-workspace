@@ -7,7 +7,7 @@
 适合放在顶层的改动：
 
 - 跨仓库文件约定、工作流、发布检查清单或 doctor 规则。
-- 子模块 gitlink，也就是锁定 `market-data-platform`、`cross-sectional-trees`、`quant-execution-engine` 的具体提交。
+- 子模块 gitlink，也就是锁定 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`cross-sectional-trees`、`quant-execution-engine` 的具体提交。
 - 顶层 `docs/` 中的协作说明和版本组合记录。
 - 只依赖公开 CLI 或文档化文件输出的轻量检查脚本。
 
@@ -20,12 +20,12 @@
 
 ## 子模块版本锁定
 
-本仓库通过 Git submodule 固定三个子项目的提交版本。子项目仍在各自目录里独立开发、测试和发布；顶层仓库记录这几个提交可以一起使用的组合。
+本仓库通过 Git submodule 固定活跃子项目的提交版本。子项目仍在各自目录里独立开发、测试和发布；顶层仓库记录这几个提交可以一起使用的组合。
 
 日常开发通常在子项目目录中完成：
 
 ```bash
-cd cross-sectional-trees
+cd alpha-research
 git status
 git add <files>
 git commit -m "..."
@@ -37,8 +37,8 @@ git push
 ```bash
 cd ..
 git status
-git add cross-sectional-trees
-git commit -m "Bump cross-sectional-trees"
+git add alpha-research
+git commit -m "Bump alpha-research"
 git push
 ```
 
@@ -72,7 +72,7 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
+配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`basedpyright`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
 
 检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
 以及执行引擎迁移后的 mypy advisory 见 [quality-governance.md](quality-governance.md)。

@@ -129,7 +129,7 @@ research_universe:
   by_date_file: strategy_outputs/hot_sector_screener/by_date/cstree_universe.csv
 ```
 
-详细输出契约见[hotsector 项目文档](../hot-sector-screener/docs/output-contract.md)（不在本仓库内）。
+详细输出契约见 [hotsector 项目文档](https://github.com/runchengxie/hot-sector-screener/blob/main/docs/output-contract.md)（不在本仓库内）。
 
 ## a-share-factor-core
 

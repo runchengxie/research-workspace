@@ -7,6 +7,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_ACTIVE_SUBMODULES = {
     "market-data-platform",
+    "alpha-research",
+    "portfolio-backtester",
     "cross-sectional-trees",
     "quant-execution-engine",
 }

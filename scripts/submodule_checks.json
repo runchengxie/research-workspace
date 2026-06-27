@@ -15,7 +15,45 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pyright"]
+          ["uv", "run", "--extra", "dev", "basedpyright"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    },
+    "alpha-research": {
+      "path": "alpha-research",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../portfolio-backtester/src', 'src']; import cstree.alpha.cpcv; import cstree.alpha.signal_artifact"]
+        ],
+        "lint": [
+          ["uv", "run", "--extra", "dev", "ruff", "check", "src"],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "src"]
+        ],
+        "test": [
+          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../portfolio-backtester/src', 'src']; import cstree.alpha.overfitting_diagnostics; import cstree.alpha.pbo"]
+        ],
+        "type": [
+          ["uv", "run", "--extra", "dev", "basedpyright"]
+        ],
+        "full": ["@smoke", "@lint", "@test", "@type"]
+      }
+    },
+    "portfolio-backtester": {
+      "path": "portfolio-backtester",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../alpha-research/src', 'src']; import cstree.backtesting.engine; import cstree.backtesting.metrics"]
+        ],
+        "lint": [
+          ["uv", "run", "--extra", "dev", "ruff", "check", "src"],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "src"]
+        ],
+        "test": [
+          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../alpha-research/src', 'src']; import cstree.backtesting.execution_sim; import cstree.backtesting.reporting"]
+        ],
+        "type": [
+          ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
         "full": ["@smoke", "@lint", "@test", "@type"]
       }
@@ -35,7 +73,7 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pyright"]
+          ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
         "full": ["@smoke", "@lint", "@test", "@type"]
       }

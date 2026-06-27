@@ -2,6 +2,8 @@
 
 - [ ] Superproject-only change
 - [ ] Data platform change
+- [ ] Alpha research change
+- [ ] Portfolio backtester change
 - [ ] Strategy research change
 - [ ] Trading execution change
 - [ ] Submodule gitlink update
@@ -20,7 +22,9 @@
 Report checks in this order:
 
 1. Data platform:
-2. Strategy research:
-3. Trading execution:
-4. Top-level docs/doctor:
-5. Remaining limitations:
+2. Alpha research:
+3. Portfolio backtester:
+4. Strategy orchestration:
+5. Trading execution:
+6. Top-level docs/doctor:
+7. Remaining limitations:
