@@ -29,6 +29,7 @@
 | `summary.json` | `cross-sectional-trees` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet` | `cross-sectional-trees` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物 |
 | `factor_diagnostics_summary.json` | `cross-sectional-trees` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
+| `strategy_outputs/style_factors/<name>/` | `style_factor_attribution.py` → `financial-research` | 策略研究（cstree 等）| 全市场 5 因子 (Size/Value/Momentum/Quality/LowVol) long-short 日收益、逐年分解、相关性矩阵、策略归因报告 |
 | `positions_current*.csv` | `cross-sectional-trees` | `cstree export-targets` | 已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
