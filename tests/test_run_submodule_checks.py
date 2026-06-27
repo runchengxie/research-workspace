@@ -88,6 +88,21 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         )
         self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), cross_lint)
 
+    def test_split_package_test_profiles_run_repo_local_pytest(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        for submodule in ("alpha-research", "portfolio-backtester"):
+            planned = run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="test",
+                submodules=[submodule],
+            )
+            self.assertEqual(
+                [("uv", "run", "--extra", "dev", "pytest")],
+                [item.command for item in planned],
+            )
+
     def test_manifest_type_profiles_use_basedpyright_with_qexec_pyright_advisory_separate(
         self,
     ) -> None:
