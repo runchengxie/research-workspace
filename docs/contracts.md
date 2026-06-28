@@ -37,7 +37,7 @@
 
 ## 跨模块 artifact contract
 
-机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)。后续把 contract 实现抽到正式共享薄包时，以这份 manifest 作为跨仓库 artifact contract 的迁移基准；顶层只校验 manifest 和文件交接，不导入子模块 runtime internals。
+机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，schema/manifest 校验入口在 [`research-contracts`](../research-contracts/) 薄包中。后续把 contract 实现抽到正式共享薄包时，以这份 manifest 作为跨仓库 artifact contract 的迁移基准；顶层只校验 manifest 和文件交接，不导入子模块 runtime internals。
 
 | Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |

@@ -17,6 +17,15 @@ sys.modules[spec.name] = smoke_contracts
 spec.loader.exec_module(smoke_contracts)
 
 
+def _load_contracts_package():
+    contracts_src = ROOT / "research-contracts" / "src"
+    if str(contracts_src) not in sys.path:
+        sys.path.insert(0, str(contracts_src))
+    import research_contracts
+
+    return research_contracts
+
+
 def _load_manifest() -> dict[str, object]:
     return json.loads(MANIFEST.read_text(encoding="utf-8"))
 
@@ -41,10 +50,26 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
 
 
 def test_artifact_contract_manifest_is_docs_and_path_validated() -> None:
-    result = smoke_contracts._artifact_contract_manifest_check(ROOT)
+    contracts = _load_contracts_package()
+    result = contracts.validate_artifact_contract_manifest(
+        root=ROOT,
+        manifest_path=MANIFEST,
+        docs_path=ROOT / "docs" / "contracts.md",
+    )
 
-    assert result.severity == "OK"
-    assert result.message == "passed"
+    assert result.ok
+
+
+def test_shared_contract_package_loads_manifest() -> None:
+    contracts = _load_contracts_package()
+    manifest = contracts.load_artifact_contract_manifest(MANIFEST)
+
+    assert manifest.schema_version == "artifact_contracts.v1"
+    assert {str(record["artifact"]) for record in manifest.artifacts} >= {
+        "signals.parquet",
+        "positions_by_rebalance.csv",
+        "targets.json",
+    }
 
 
 def test_contract_smoke_includes_manifest_check() -> None:

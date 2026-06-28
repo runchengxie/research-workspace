@@ -19,7 +19,11 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     ruff = config["tool"]["ruff"]
 
-    assert ruff["include"] == ["scripts/**/*.py", "tests/**/*.py"]
+    assert ruff["include"] == [
+        "research-contracts/src/**/*.py",
+        "scripts/**/*.py",
+        "tests/**/*.py",
+    ]
     assert {
         "alpha-research",
         "market-data-platform",
