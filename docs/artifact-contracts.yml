@@ -1,0 +1,154 @@
+{
+  "schema_version": "artifact_contracts.v1",
+  "policy": {
+    "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
+    "shared_package_target": "research-contracts",
+    "shared_package_status": "planned",
+    "owner_rule": "The owning module defines the canonical runtime implementation until a formal shared package exists.",
+    "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals."
+  },
+  "artifacts": [
+    {
+      "artifact": "signals.parquet",
+      "contract": "cstree.signals",
+      "schema_version": 1,
+      "owner": "alpha-research",
+      "producer": "alpha-research",
+      "consumers": [
+        "portfolio-backtester",
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "signals.parquet"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "cstree.alpha.signal_artifact",
+          "path": "src/cstree/alpha/signal_artifact.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "strategy-pipeline",
+          "module": "cstree.contracts.signals",
+          "path": "src/cstree/contracts/signals.py",
+          "role": "compatibility_contract"
+        }
+      ],
+      "required_fields": [
+        "signal_date",
+        "symbol",
+        "raw_pred",
+        "signal_eval",
+        "signal_backtest",
+        "signal_direction",
+        "rank",
+        "model_version",
+        "feature_set_id",
+        "eligible_for_backtest",
+        "eligible_for_live"
+      ],
+      "notes": "Alpha owns signal generation and canonical validation; strategy-pipeline keeps only compatibility/orchestration-facing helpers until this moves into a shared package."
+    },
+    {
+      "artifact": "signals.meta.json",
+      "contract": "cstree.signals metadata",
+      "schema_version": 1,
+      "owner": "alpha-research",
+      "producer": "alpha-research",
+      "consumers": [
+        "portfolio-backtester",
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "signals.meta.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "cstree.alpha.signal_artifact",
+          "path": "src/cstree/alpha/signal_artifact.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "contract",
+        "schema_version",
+        "file",
+        "metadata_file",
+        "rows",
+        "required_columns"
+      ],
+      "notes": "Metadata travels with signals.parquet and records the schema and row-level summary needed by downstream audit."
+    },
+    {
+      "artifact": "positions_by_rebalance.csv",
+      "contract": "cstree.positions_by_rebalance",
+      "schema_version": 1,
+      "owner": "portfolio-backtester",
+      "producer": "portfolio-backtester",
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "positions_by_rebalance.csv"
+      ],
+      "entrypoints": [
+        {
+          "repo": "portfolio-backtester",
+          "module": "cstree.backtesting.contracts",
+          "path": "src/cstree/backtesting/contracts.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "rebalance_date",
+        "symbol",
+        "weight"
+      ],
+      "common_fields": [
+        "entry_date",
+        "side",
+        "signal",
+        "rank"
+      ],
+      "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff."
+    },
+    {
+      "artifact": "targets.json",
+      "contract": "quant-execution-engine.targets/v2",
+      "schema_version": 2,
+      "owner": "quant-execution-engine",
+      "producer": "strategy-pipeline",
+      "consumers": [
+        "quant-execution-engine"
+      ],
+      "canonical_files": [
+        "targets.json",
+        "targets.json.lineage.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "cstree.liveops.export_targets",
+          "path": "src/cstree/liveops/export_targets.py",
+          "role": "producer"
+        },
+        {
+          "repo": "quant-execution-engine",
+          "module": "quant_execution_engine.targets",
+          "path": "src/quant_execution_engine/targets.py",
+          "role": "canonical_parser"
+        }
+      ],
+      "required_fields": [
+        "targets",
+        "symbol",
+        "market",
+        "target_weight",
+        "target_quantity"
+      ],
+      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine."
+    }
+  ]
+}

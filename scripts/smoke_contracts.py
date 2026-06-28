@@ -4,15 +4,32 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from workspace_doctor import resolve_public_command
 
 ROOT = Path(__file__).resolve().parents[1]
+CONTRACT_MANIFEST = ROOT / "docs" / "artifact-contracts.yml"
+CONTRACT_DOC = ROOT / "docs" / "contracts.md"
+REQUIRED_CORE_ARTIFACTS = {
+    "signals.parquet",
+    "signals.meta.json",
+    "positions_by_rebalance.csv",
+    "targets.json",
+}
+KNOWN_REPOS = {
+    "alpha-research",
+    "market-data-platform",
+    "portfolio-backtester",
+    "strategy-pipeline",
+    "quant-execution-engine",
+}
 
 
 @dataclass(frozen=True)
@@ -86,9 +103,115 @@ def _skip(name: str, message: str) -> SmokeResult:
     return SmokeResult("WARN", name, message)
 
 
+def _load_manifest(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _strings(values: object) -> list[str]:
+    if not isinstance(values, list):
+        return []
+    return [value for value in values if isinstance(value, str) and value.strip()]
+
+
+def _docs_sync_issues(record: dict[str, Any], docs_text: str) -> list[str]:
+    issues: list[str] = []
+    artifact = str(record.get("artifact", "")).strip()
+    contract = str(record.get("contract", "")).strip()
+    owner = str(record.get("owner", "")).strip()
+    expected_tokens = [
+        (artifact, f"{artifact}: missing from docs/contracts.md"),
+        (contract, f"{artifact}: contract {contract!r} missing from docs/contracts.md"),
+        (owner, f"{artifact}: owner {owner!r} missing from docs/contracts.md"),
+    ]
+    for token, message in expected_tokens:
+        if token and token not in docs_text:
+            issues.append(message)
+    for file_name in _strings(record.get("canonical_files")):
+        if file_name not in docs_text:
+            issues.append(f"{artifact}: canonical file {file_name!r} missing from docs")
+    return issues
+
+
+def _entrypoint_issues(root: Path, artifact: str, entrypoints: object) -> list[str]:
+    if not isinstance(entrypoints, list) or not entrypoints:
+        return [f"{artifact}: entrypoints must be non-empty"]
+
+    issues: list[str] = []
+    for entrypoint in entrypoints:
+        if not isinstance(entrypoint, dict):
+            issues.append(f"{artifact}: entrypoint must be an object")
+            continue
+        repo = str(entrypoint.get("repo", "")).strip()
+        path = str(entrypoint.get("path", "")).strip()
+        if repo not in KNOWN_REPOS:
+            issues.append(f"{artifact}: unknown entrypoint repo {repo!r}")
+        if not path:
+            issues.append(f"{artifact}: entrypoint path is required")
+        elif repo in KNOWN_REPOS and not (root / repo / path).is_file():
+            issues.append(f"{artifact}: missing entrypoint path {repo}/{path}")
+    return issues
+
+
+def _artifact_record_issues(
+    root: Path,
+    record: object,
+    docs_text: str,
+    seen: set[str],
+) -> list[str]:
+    if not isinstance(record, dict):
+        return ["artifact record must be an object"]
+
+    artifact = str(record.get("artifact", "")).strip()
+    contract = str(record.get("contract", "")).strip()
+    owner = str(record.get("owner", "")).strip()
+    if not artifact:
+        return ["artifact is required"]
+
+    issues: list[str] = []
+    if artifact in seen:
+        issues.append(f"{artifact}: duplicate artifact")
+    seen.add(artifact)
+    if not contract:
+        issues.append(f"{artifact}: contract is required")
+    if owner not in KNOWN_REPOS:
+        issues.append(f"{artifact}: unknown owner {owner!r}")
+    if not _strings(record.get("required_fields")):
+        issues.append(f"{artifact}: required_fields must be non-empty")
+    issues.extend(_docs_sync_issues(record, docs_text))
+    issues.extend(_entrypoint_issues(root, artifact, record.get("entrypoints")))
+    return issues
+
+
+def _artifact_contract_manifest_check(root: Path) -> SmokeResult:
+    manifest_path = root / CONTRACT_MANIFEST.relative_to(ROOT)
+    contract_doc = root / CONTRACT_DOC.relative_to(ROOT)
+    try:
+        manifest = _load_manifest(manifest_path)
+        docs_text = contract_doc.read_text(encoding="utf-8")
+    except (FileNotFoundError, json.JSONDecodeError, OSError) as exc:
+        return SmokeResult("ERROR", "artifact contract manifest", str(exc))
+
+    if manifest.get("schema_version") != "artifact_contracts.v1":
+        return SmokeResult("ERROR", "artifact contract manifest", "unexpected schema_version")
+    artifacts = manifest.get("artifacts")
+    if not isinstance(artifacts, list) or not artifacts:
+        return SmokeResult("ERROR", "artifact contract manifest", "artifacts must be non-empty")
+
+    seen: set[str] = set()
+    issues: list[str] = []
+    for record in artifacts:
+        issues.extend(_artifact_record_issues(root, record, docs_text, seen))
+    missing = sorted(REQUIRED_CORE_ARTIFACTS - seen)
+    if missing:
+        issues.append("missing core artifacts: " + ", ".join(missing))
+    if issues:
+        return SmokeResult("ERROR", "artifact contract manifest", "; ".join(issues))
+    return SmokeResult("OK", "artifact contract manifest", "passed")
+
+
 def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     root = root.resolve()
-    results: list[SmokeResult] = []
+    results: list[SmokeResult] = [_artifact_contract_manifest_check(root)]
 
     marketdata = _command_for(
         root,

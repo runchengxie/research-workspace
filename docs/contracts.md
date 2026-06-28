@@ -37,10 +37,12 @@
 
 ## 跨模块 artifact contract
 
+机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)。后续把 contract 实现抽到正式共享薄包时，以这份 manifest 作为跨仓库 artifact contract 的迁移基准；顶层只校验 manifest 和文件交接，不导入子模块 runtime internals。
+
 | Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
 | `signals.parquet` | `cstree.signals` | `alpha-research` | `cstree.alpha.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
-| `signals.meta.json` | `cstree.signals` metadata | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
+| `signals.meta.json` | `cstree.signals metadata` | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
 | `positions_by_rebalance.csv` | `cstree.positions_by_rebalance` | `portfolio-backtester` | `cstree.backtesting.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
 | `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`cstree export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
 | `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `cstree export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
