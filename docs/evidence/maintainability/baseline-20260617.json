@@ -694,8 +694,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 41,
-      "python_loc": 11761,
+      "python_file_count": 43,
+      "python_loc": 11907,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1275,8 +1275,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 295,
-      "python_loc": 61070,
+      "python_file_count": 293,
+      "python_loc": 60924,
       "hk_related_file_count": 2,
       "large_files": [
         {
