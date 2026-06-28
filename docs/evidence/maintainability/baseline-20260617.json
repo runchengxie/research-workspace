@@ -695,8 +695,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 61,
-      "python_loc": 14049,
+      "python_file_count": 64,
+      "python_loc": 14759,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -716,7 +716,7 @@
         },
         {
           "path": "src/cstree/alpha/train_eval_stage.py",
-          "loc": 761,
+          "loc": 759,
           "hk_related": false
         },
         {
@@ -788,6 +788,12 @@
           "name": "factor_ic_report",
           "line_count": 91,
           "complexity": 18
+        },
+        {
+          "path": "src/cstree/alpha/train_eval_result.py",
+          "name": "build_train_eval_stage_result",
+          "line_count": 91,
+          "complexity": 1
         },
         {
           "path": "src/cstree/alpha/split.py",
@@ -1324,7 +1330,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 223,
-      "python_loc": 57872,
+      "python_loc": 57207,
       "hk_related_file_count": 2,
       "large_files": [
         {
