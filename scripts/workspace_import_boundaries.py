@@ -75,6 +75,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="alpha-research:alpha-to-strategy-core-metrics",
+        description=(
+            "alpha-research should own research metrics instead of importing strategy-pipeline "
+            "top-level metric modules"
+        ),
+        repo="alpha-research",
+        source="src/cstree/alpha",
+        forbidden=("cstree.metrics", "cstree.return_metrics"),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="portfolio-backtester:backtesting-to-pipeline",
         description=(
             "portfolio-backtester should not grow runtime imports back into strategy pipeline"
