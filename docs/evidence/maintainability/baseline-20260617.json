@@ -945,8 +945,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 64,
-      "python_loc": 21633,
+      "python_file_count": 66,
+      "python_loc": 21835,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1006,7 +1006,7 @@
         },
         {
           "path": "src/cstree/backtesting/evaluation.py",
-          "loc": 639,
+          "loc": 636,
           "hk_related": false
         },
         {
@@ -1148,6 +1148,12 @@
           "complexity": 22
         },
         {
+          "path": "src/cstree/backtesting/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
           "path": "src/cstree/backtesting/construction_grid.py",
           "name": "_prepare_signal_column",
           "line_count": 94,
@@ -1164,6 +1170,12 @@
           "name": "apply_rebalance_buffer",
           "line_count": 36,
           "complexity": 17
+        },
+        {
+          "path": "src/cstree/backtesting/benchmarking.py",
+          "name": "warn_if_delay_exit_lag",
+          "line_count": 44,
+          "complexity": 16
         },
         {
           "path": "src/cstree/backtesting/capacity_report.py",

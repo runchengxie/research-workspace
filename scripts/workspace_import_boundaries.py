@@ -81,8 +81,8 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         ),
         repo="portfolio-backtester",
         source="src/cstree/backtesting",
-        forbidden=("cstree.pipeline",),
-        max_allowed=3,
+        forbidden=("cstree.pipeline", "cstree.benchmarking"),
+        max_allowed=1,
     ),
     BoundaryRule(
         identifier="portfolio-backtester:backtesting-to-alpha",
