@@ -92,7 +92,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         repo="portfolio-backtester",
         source="src/cstree/backtesting",
         forbidden=("cstree.alpha",),
-        max_allowed=3,
+        max_allowed=1,
     ),
     BoundaryRule(
         identifier="market-data-platform:no-cstree-imports",

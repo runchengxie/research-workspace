@@ -945,8 +945,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 68,
-      "python_loc": 21988,
+      "python_file_count": 70,
+      "python_loc": 22240,
       "hk_related_file_count": 0,
       "large_files": [
         {
