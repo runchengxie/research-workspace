@@ -1282,7 +1282,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 225,
-      "python_loc": 57977,
+      "python_loc": 57984,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1292,7 +1292,7 @@
         },
         {
           "path": "src/cstree/pipeline/config.py",
-          "loc": 1177,
+          "loc": 1176,
           "hk_related": false
         },
         {
