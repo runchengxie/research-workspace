@@ -694,8 +694,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 48,
-      "python_loc": 12873,
+      "python_file_count": 49,
+      "python_loc": 12927,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1282,7 +1282,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 287,
-      "python_loc": 59146,
+      "python_loc": 59108,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1302,7 +1302,7 @@
         },
         {
           "path": "tests/test_pipeline_filters_backtest.py",
-          "loc": 951,
+          "loc": 913,
           "hk_related": false
         },
         {
