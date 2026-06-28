@@ -106,6 +106,23 @@ class DocsLinksTest(unittest.TestCase):
         ):
             self.assertIn(phrase, contracts)
 
+    def test_strategy_satellites_preserve_stage3_core_chain(self) -> None:
+        satellites = (ROOT / "docs" / "strategy-satellites.md").read_text(encoding="utf-8")
+
+        self.assertNotIn(
+            "`market-data-platform` → `cross-sectional-trees` → `quant-execution-engine`",
+            satellites,
+        )
+        for phrase in (
+            "`market-data-platform` → `alpha-research`",
+            "`portfolio-backtester` → `cross-sectional-trees` / `strategy-pipeline`",
+            "signals.parquet + signals.meta.json",
+            "positions_by_rebalance.csv + backtest evidence",
+            "targets.json + targets.json.lineage.json",
+            "五段核心架构",
+        ):
+            self.assertIn(phrase, satellites)
+
 
 if __name__ == "__main__":
     unittest.main()

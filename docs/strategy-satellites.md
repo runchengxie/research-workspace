@@ -5,8 +5,10 @@
 > last_verified: 2026-06-22
 > source_of_truth: yes
 
-本工作区核心链路是 `market-data-platform` → `cross-sectional-trees` → `quant-execution-engine`。
-以下项目是策略卫星，通过文件契约接入核心链路，不作为 workspace submodule。
+本工作区核心链路是 `market-data-platform` → `alpha-research` →
+`portfolio-backtester` → `cross-sectional-trees` / `strategy-pipeline` →
+`quant-execution-engine`。以下项目是策略卫星，通过文件契约接入数据平台、
+研究 universe、信号或目标持仓交接点，不作为 workspace submodule。
 
 各卫星项目是独立 git 仓库，路径相对于 `~/code/`。适配脚本见 `scripts/` 目录。
 
@@ -33,9 +35,21 @@ hot-sector-screener
     │  │  转换为 cstree research_universe 格式      │
     │  └───────────────────────────────────────────┘
     ↓
-cross-sectional-trees (core submodule)
+market-data-platform (core submodule)
+    │  发布: strategy_outputs/.../cstree_universe.csv
+    ↓
+alpha-research (core submodule)
+    │  消费: research dataset / research_universe.by_date_file
+    │  输出: signals.parquet + signals.meta.json
+    ↓
+portfolio-backtester (core submodule)
+    │  消费: signal artifact + pricing / tradability data
+    │  输出: positions_by_rebalance.csv + backtest evidence
+    ↓
+cross-sectional-trees / strategy-pipeline (core submodule)
     │  消费: candidate universe → research_universe.by_date_file
-    │  输出: signals.parquet → targets.json
+    │  编排: alpha-research + portfolio-backtester
+    │  输出: targets.json + targets.json.lineage.json
     ↓
 quant-execution-engine (core submodule)
     消费: targets.json → dry-run / 执行
@@ -178,7 +192,7 @@ a-share-factor-core = { git = "https://github.com/runchengxie/a-share-factor-cor
 
 ## 为什么不作为 workspace submodule
 
-1. research-workspace 已有的三层核心架构（数据→研究→执行）边界清晰，硬门禁测试覆盖完整。
+1. research-workspace 已有的五段核心架构（数据→alpha→组合回测→策略编排→执行）边界清晰，硬门禁测试覆盖完整。
 2. 两个策略项目体量和成熟度不同，强制纳入 core release matrix 会拖慢 CI 和版本锁定。
-3. 核心链路已通过 `targets.json` 标准化——策略卫星的角色是"可选输入源"，不是"核心组件"。
+3. 核心链路已通过 `signals.parquet`、`positions_by_rebalance.csv` 和 `targets.json` 标准化——策略卫星的角色是"可选输入源"，不是"核心组件"。
 4. 应先验证 candidate universe 作为 cstree research_universe 后的 OOS 表现，再评估提升为 optional submodule。
