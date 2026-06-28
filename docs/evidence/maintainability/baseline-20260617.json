@@ -1281,8 +1281,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 243,
-      "python_loc": 58449,
+      "python_file_count": 238,
+      "python_loc": 58330,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1367,7 +1367,7 @@
         },
         {
           "path": "src/cstree/pipeline/dataset_sampling.py",
-          "loc": 656,
+          "loc": 659,
           "hk_related": false
         },
         {
