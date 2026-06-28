@@ -137,11 +137,19 @@ def _quality_config(repo: Path) -> dict[str, Any]:
     tool = config.get("tool", {})
     ruff = tool.get("ruff", {})
     ruff_lint = ruff.get("lint", {})
+    ty = tool.get("ty", {})
+    ty_src = ty.get("src", {}) if isinstance(ty, dict) else {}
+    basedpyright = tool.get("basedpyright", {})
     pyright = tool.get("pyright", {})
     mypy = tool.get("mypy", {})
     return {
         "ruff_select": ruff_lint.get("select", []),
         "ruff_extend_exclude": ruff.get("extend-exclude", []),
+        "ty_include": ty_src.get("include", []),
+        "ty_exclude": ty_src.get("exclude", []),
+        "basedpyright_include": basedpyright.get("include", []),
+        "basedpyright_exclude": basedpyright.get("exclude", []),
+        "basedpyright_type_checking_mode": basedpyright.get("typeCheckingMode"),
         "pyright_include": pyright.get("include", []),
         "pyright_exclude": pyright.get("exclude", []),
         "pyright_type_checking_mode": pyright.get("typeCheckingMode"),

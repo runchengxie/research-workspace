@@ -319,13 +319,13 @@ class WorkspaceDoctorTest(unittest.TestCase):
                             },
                             "alpha-research": {
                                 "profiles": {
-                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "src"]],
+                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "."]],
                                     "full": ["@smoke", "@lint", "@test", "@type"],
                                 }
                             },
                             "portfolio-backtester": {
                                 "profiles": {
-                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "src"]],
+                                    "lint": [["uv", "run", "--extra", "dev", "ruff", "check", "."]],
                                     "full": ["@smoke", "@lint", "@test", "@type"],
                                 }
                             },

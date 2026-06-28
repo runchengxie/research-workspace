@@ -22,7 +22,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
     def test_default_manifest_profiles_expand(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
         self.assertEqual(
-            ["full", "lint", "mypy_advisory", "smoke", "test", "type"],
+            ["full", "lint", "mypy_advisory", "release_typecheck", "smoke", "test", "type"],
             run_submodule_checks.available_profiles(configs),
         )
         planned = run_submodule_checks.plan_commands(
@@ -36,8 +36,8 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--group", "dev", "--extra", "cli", "qexec", "--help"),
                 ("uv", "run", "--group", "dev", "ruff", "check", "."),
                 ("uv", "run", "--group", "dev", "ruff", "format", "--check", "."),
+                ("uv", "run", "--group", "dev", "ty", "check"),
                 ("uv", "run", "--group", "dev", "pytest"),
-                ("uv", "run", "--group", "dev", "python", "-m", "pyright"),
             ],
             [item.command for item in planned],
         )
@@ -103,7 +103,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 [item.command for item in planned],
             )
 
-    def test_manifest_type_profiles_use_basedpyright_with_qexec_pyright_advisory_separate(
+    def test_manifest_type_profiles_use_ty_with_release_typecheck_separate(
         self,
     ) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
@@ -120,23 +120,36 @@ class RunSubmoduleChecksTest(unittest.TestCase):
 
         self.assertEqual(
             {
-                "alpha-research": [
-                    ("uv", "run", "--extra", "dev", "basedpyright")
-                ],
-                "cross-sectional-trees": [
-                    ("uv", "run", "--extra", "dev", "basedpyright")
-                ],
-                "market-data-platform": [
-                    ("uv", "run", "--extra", "dev", "basedpyright")
-                ],
-                "portfolio-backtester": [
-                    ("uv", "run", "--extra", "dev", "basedpyright")
-                ],
+                "alpha-research": [("uv", "run", "--extra", "dev", "ty", "check")],
+                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "ty", "check")],
+                "market-data-platform": [("uv", "run", "--extra", "dev", "ty", "check")],
+                "portfolio-backtester": [("uv", "run", "--extra", "dev", "ty", "check")],
+                "quant-execution-engine": [("uv", "run", "--group", "dev", "ty", "check")],
+            },
+            type_commands,
+        )
+
+        release_type_commands = {}
+        for name in sorted(configs):
+            planned = run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="release_typecheck",
+                submodules=[name],
+            )
+            release_type_commands[name] = [item.command for item in planned]
+
+        self.assertEqual(
+            {
+                "alpha-research": [("uv", "run", "--extra", "dev", "basedpyright")],
+                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "basedpyright")],
+                "market-data-platform": [("uv", "run", "--extra", "dev", "basedpyright")],
+                "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "quant-execution-engine": [
                     ("uv", "run", "--group", "dev", "python", "-m", "pyright")
                 ],
             },
-            type_commands,
+            release_type_commands,
         )
 
         qexec_full = [
@@ -148,7 +161,8 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 submodules=["quant-execution-engine"],
             )
         ]
-        self.assertIn(("uv", "run", "--group", "dev", "python", "-m", "pyright"), qexec_full)
+        self.assertIn(("uv", "run", "--group", "dev", "ty", "check"), qexec_full)
+        self.assertNotIn(("uv", "run", "--group", "dev", "python", "-m", "pyright"), qexec_full)
         self.assertNotIn(("uv", "run", "--group", "dev", "mypy", "src"), qexec_full)
 
         qexec_advisory = [

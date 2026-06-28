@@ -29,8 +29,8 @@ def _ruff_command(*args: str) -> tuple[str, ...]:
 def plan_commands(profile: str) -> list[PlannedCommand]:
     commands = {
         "lint": [
-            PlannedCommand("ruff-check", _ruff_command("check", "scripts", "tests")),
-            PlannedCommand("ruff-format", _ruff_command("format", "--check", "scripts", "tests")),
+            PlannedCommand("ruff-check", _ruff_command("check", ".")),
+            PlannedCommand("ruff-format", _ruff_command("format", "--check", ".")),
         ],
         "secrets": [
             PlannedCommand(

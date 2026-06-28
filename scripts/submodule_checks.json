@@ -15,9 +15,12 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
+          ["uv", "run", "--extra", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
           ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
+        "full": ["@smoke", "@lint", "@type", "@test"]
       }
     },
     "alpha-research": {
@@ -27,16 +30,19 @@
           ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../portfolio-backtester/src', 'src']; import cstree.alpha.cpcv; import cstree.alpha.signal_artifact"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "src"],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "src"]
+          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
         ],
         "test": [
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
+          ["uv", "run", "--extra", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
           ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
+        "full": ["@smoke", "@lint", "@type", "@test"]
       }
     },
     "portfolio-backtester": {
@@ -46,16 +52,19 @@
           ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../alpha-research/src', 'src']; import cstree.backtesting.engine; import cstree.backtesting.metrics"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "src"],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "src"]
+          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
         ],
         "test": [
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
+          ["uv", "run", "--extra", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
           ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
+        "full": ["@smoke", "@lint", "@type", "@test"]
       }
     },
     "cross-sectional-trees": {
@@ -73,9 +82,12 @@
           ["uv", "run", "--extra", "dev", "pytest"]
         ],
         "type": [
+          ["uv", "run", "--extra", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
           ["uv", "run", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
+        "full": ["@smoke", "@lint", "@type", "@test"]
       }
     },
     "quant-execution-engine": {
@@ -92,12 +104,15 @@
           ["uv", "run", "--group", "dev", "pytest"]
         ],
         "type": [
+          ["uv", "run", "--group", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
           ["uv", "run", "--group", "dev", "python", "-m", "pyright"]
         ],
         "mypy_advisory": [
           ["uv", "run", "--group", "dev", "mypy", "src"]
         ],
-        "full": ["@smoke", "@lint", "@test", "@type"]
+        "full": ["@smoke", "@lint", "@type", "@test"]
       }
     }
   }

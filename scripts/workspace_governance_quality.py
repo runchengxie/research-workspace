@@ -81,6 +81,14 @@ def _quality_config_entries(pyproject: dict[str, Any], tool_name: str) -> list[s
         if not isinstance(basedpyright, dict):
             return []
         entries = basedpyright.get("exclude", [])
+    elif tool_name == "ty":
+        ty = tool.get("ty", {})
+        if not isinstance(ty, dict):
+            return []
+        src = ty.get("src", {})
+        if not isinstance(src, dict):
+            return []
+        entries = src.get("exclude", [])
     else:
         return []
     if not isinstance(entries, list):
@@ -159,7 +167,7 @@ def _check_quality_exclude_drift(
             issues.append(error)
             continue
         assert pyproject is not None
-        for tool_name in ("ruff", "basedpyright", "pyright"):
+        for tool_name in ("ruff", "basedpyright", "pyright", "ty"):
             entries = _quality_debt_entries(_quality_config_entries(pyproject, tool_name))
             patterns = _registered_patterns(register, repo, tool_name)
             missing = _unregistered_quality_excludes(entries, patterns)

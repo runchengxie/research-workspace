@@ -70,9 +70,10 @@ python scripts/smoke_contracts.py --strict
 python scripts/run_submodule_checks.py --list-profiles
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`basedpyright`、`pyright`、`mypy` 等规则仍由各子项目自己的配置和依赖环境决定。
+配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 才运行 BasedPyright / Pyright，`mypy_advisory` 仍是执行引擎的单独观察项。
 
 检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
 以及执行引擎迁移后的 mypy advisory 见 [quality-governance.md](quality-governance.md)。

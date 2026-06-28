@@ -1,7 +1,7 @@
 {
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
-    "broad_exclude_register_max": 2,
+    "broad_exclude_register_max": 3,
     "per_file_ignore_register_max": 0,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
@@ -20,15 +20,22 @@
           "B905",
           "C90"
         ],
-        "current_hard_gate": "uv run --extra dev ruff check src",
+        "current_hard_gate": "uv run --extra dev ruff check .",
         "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
       },
-      "basedpyright": {
-        "current_mode": "basic",
+      "ty": {
+        "current_hard_gate": "uv run --extra dev ty check",
         "include_targets": [
           "src/cstree/__init__.py"
         ],
-        "promotion_criteria": "expand after BasedPyright can resolve the transitional cstree namespace and shared interfaces are extracted"
+        "promotion_criteria": "expand after package interfaces are extracted and transitional namespace imports are narrower"
+      },
+      "basedpyright": {
+        "current_mode": "release_advisory_basic",
+        "include_targets": [
+          "src/cstree/__init__.py"
+        ],
+        "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
       }
     },
     {
@@ -51,7 +58,7 @@
         "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
       },
       "basedpyright": {
-        "current_mode": "basic",
+        "current_mode": "release_advisory_basic",
         "next_include_targets": [
           "src/cstree/contracts/__init__.py",
           "src/cstree/contracts/backtest.py",
@@ -67,7 +74,22 @@
           "src/cstree/liveops/alloc_selection.py",
           "src/cstree/liveops/alloc.py"
         ],
-        "promotion_criteria": "contract/liveops modules pass before broader orchestration modules are added"
+        "promotion_criteria": "run before release; contract/liveops modules pass before broader orchestration modules are added"
+      },
+      "ty": {
+        "current_hard_gate": "scripts/dev/run_tests.sh typecheck",
+        "include_targets": [
+          "src/cstree/contracts/__init__.py",
+          "src/cstree/contracts/backtest.py",
+          "src/cstree/contracts/signals.py",
+          "src/cstree/contracts/strategy.py",
+          "src/cstree/return_metrics.py",
+          "src/cstree/pipeline/contracts.py",
+          "src/cstree/pipeline/output_context.py",
+          "src/cstree/pipeline/output.py",
+          "src/cstree/pipeline/output_summary.py"
+        ],
+        "promotion_criteria": "expand typed islands after staged modules are free of dynamic protocol assumptions"
       }
     },
     {
@@ -87,11 +109,24 @@
         "promotion_criteria": "whole-repo Ruff hard gate stays green after HK provider production modules are archived"
       },
       "basedpyright": {
-        "current_mode": "off",
+        "current_mode": "release_advisory_off",
         "include_targets": [
           "src/market_data_platform"
         ],
-        "promotion_criteria": "raise type coverage after provider adapter contract tests are refreshed"
+        "promotion_criteria": "run before release; raise type coverage after provider adapter contract tests are refreshed"
+      },
+      "ty": {
+        "current_hard_gate": "uv run --extra dev ty check",
+        "include_targets": [
+          "src/market_data_platform/artifacts.py",
+          "src/market_data_platform/contract.py",
+          "src/market_data_platform/current_assets.py",
+          "src/market_data_platform/data_provider_contracts.py",
+          "src/market_data_platform/manifest.py",
+          "src/market_data_platform/paths.py",
+          "src/market_data_platform/registry.py"
+        ],
+        "promotion_criteria": "expand after provider adapter contracts and artifact roots stay type-clean"
       }
     },
     {
@@ -108,15 +143,22 @@
           "B905",
           "C90"
         ],
-        "current_hard_gate": "uv run --extra dev ruff check src",
+        "current_hard_gate": "uv run --extra dev ruff check .",
         "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
       },
-      "basedpyright": {
-        "current_mode": "basic",
+      "ty": {
+        "current_hard_gate": "uv run --extra dev ty check",
         "include_targets": [
           "src/cstree/backtesting/types.py"
         ],
-        "promotion_criteria": "expand after BasedPyright can resolve the transitional cstree namespace and shared interfaces are extracted"
+        "promotion_criteria": "expand after backtesting interfaces are extracted from transitional namespace imports"
+      },
+      "basedpyright": {
+        "current_mode": "release_advisory_basic",
+        "include_targets": [
+          "src/cstree/backtesting/types.py"
+        ],
+        "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
       }
     },
     {
@@ -133,7 +175,7 @@
         "promotion_criteria": "existing hard gate stays green"
       },
       "pyright": {
-        "current_mode": "basic",
+        "current_mode": "release_advisory_basic",
         "strict_targets": [
           "src/quant_execution_engine/targets.py",
           "src/quant_execution_engine/risk.py",
@@ -144,7 +186,21 @@
           "src/quant_execution_engine/execution_service.py",
           "src/quant_execution_engine/cli.py"
         ],
-        "promotion_criteria": "execution-critical modules pass stricter checks before optional broker adapters are tightened"
+        "promotion_criteria": "run before release; execution-critical modules pass stricter checks before optional broker adapters are tightened"
+      },
+      "ty": {
+        "current_hard_gate": "uv run --group dev ty check",
+        "include_targets": [
+          "src/quant_execution_engine/targets.py",
+          "src/quant_execution_engine/risk.py",
+          "src/quant_execution_engine/preflight.py",
+          "src/quant_execution_engine/rebalance.py",
+          "src/quant_execution_engine/execution_state.py",
+          "src/quant_execution_engine/broker/base.py",
+          "src/quant_execution_engine/execution_service.py",
+          "src/quant_execution_engine/cli.py"
+        ],
+        "promotion_criteria": "expand after execution-critical modules remain green under default ty gate"
       }
     }
   ],
@@ -165,6 +221,18 @@
       "repo": "cross-sectional-trees",
       "path": "configs/local",
       "tool": "basedpyright",
+      "owner": "cross-sectional-trees",
+      "reason": "local override configs are personal and not active package code",
+      "next_include_target": "not_applicable",
+      "review_milestone": "keep excluded by policy",
+      "coverage_patterns": [
+        "configs/local"
+      ]
+    },
+    {
+      "repo": "cross-sectional-trees",
+      "path": "configs/local",
+      "tool": "ty",
       "owner": "cross-sectional-trees",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",

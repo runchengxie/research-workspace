@@ -290,6 +290,9 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert set(repos["alpha-research"]["basedpyright"]["include_targets"]) == set(
         alpha_config["tool"]["basedpyright"]["include"]
     )
+    assert set(repos["alpha-research"]["ty"]["include_targets"]) == set(
+        alpha_config["tool"]["ty"]["src"]["include"]
+    )
     cross_staged_select = cross_config["tool"]["maintainability"]["quality_targets"][
         "ruff_staged_select"
     ]
@@ -297,17 +300,29 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert set(repos["cross-sectional-trees"]["basedpyright"]["next_include_targets"]) <= set(
         cross_config["tool"]["basedpyright"]["include"]
     )
+    assert set(repos["cross-sectional-trees"]["ty"]["include_targets"]) == set(
+        cross_config["tool"]["ty"]["src"]["include"]
+    )
 
     assert "maintainability" not in market_config["tool"]
     assert set(repos["market-data-platform"]["basedpyright"]["include_targets"]) == set(
         market_config["tool"]["basedpyright"]["include"]
     )
+    assert set(repos["market-data-platform"]["ty"]["include_targets"]) == set(
+        market_config["tool"]["ty"]["src"]["include"]
+    )
     assert set(repos["portfolio-backtester"]["basedpyright"]["include_targets"]) == set(
         portfolio_config["tool"]["basedpyright"]["include"]
+    )
+    assert set(repos["portfolio-backtester"]["ty"]["include_targets"]) == set(
+        portfolio_config["tool"]["ty"]["src"]["include"]
     )
 
     assert set(repos["quant-execution-engine"]["pyright"]["strict_targets"]) == set(
         execution_config["tool"]["maintainability"]["quality_targets"]["pyright_strict_targets"]
+    )
+    assert set(repos["quant-execution-engine"]["ty"]["include_targets"]) == set(
+        execution_config["tool"]["ty"]["src"]["include"]
     )
     for record in manifest["broad_exclude_register"]:
         assert QUALITY_REGISTER_FIELDS <= set(record)

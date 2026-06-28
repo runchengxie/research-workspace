@@ -653,6 +653,48 @@
       "owner_repo": "cross-sectional-trees",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "cross-sectional-trees/docs/archive/research/a_share/probes/a_share_500k_round_lot_probe.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "archived A-share probe remains in the refreshed baseline but is not active production code",
+      "next_action": "delete or move out of active archive scan after formal A-share evidence supersedes the probe"
+    },
+    {
+      "path": "cross-sectional-trees/docs/archive/research/a_share/probes/a_share_live_executable_oos_topk_probe.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "archived executable OOS probe remains in the refreshed baseline but is not active production code",
+      "next_action": "delete or move out of active archive scan after formal OOS evidence supersedes the probe"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/liveops/alloc_core.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "live allocation core remains a large typed-island-adjacent module outside this tooling migration",
+      "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
+    },
+    {
+      "path": "cross-sectional-trees/src/cstree/pipeline/research_ops/promotion_gate.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "pipeline promotion gate mirrors existing research promotion debt after namespace split",
+      "next_action": "split gate model and reporting helpers when promotion workflow changes resume"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/a_share_executable_oos_topk.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "A-share executable OOS backtest module is outside this quality-tooling migration",
+      "next_action": "split selection, execution, and reporting helpers when A-share OOS work resumes"
+    },
+    {
+      "path": "portfolio-backtester/tests/test_backtest.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "large backtest scenario test file is tracked but not active production code",
+      "next_action": "split by backtest scenario when tests change"
+    },
+    {
+      "path": "portfolio-backtester/tests/test_execution_sim.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "large execution simulation scenario test file mirrors accepted execution simulator debt",
+      "next_action": "split by execution simulation scenario when tests change"
     }
   ]
 }

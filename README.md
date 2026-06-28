@@ -105,10 +105,11 @@ python scripts/print_version_matrix.py
 uv run --with pytest python -m pytest tests -q
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 python scripts/run_quality_checks.py --profile hard
 ```
 
-`run_submodule_checks.py` 只按清单进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
+`run_submodule_checks.py` 只按清单进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。`full` 默认使用 Ruff、ty 和 pytest；`release_typecheck` 才运行 BasedPyright / Pyright。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
 
 `a_share_readiness.py` 只读检查 A 股迁移证据，不会下载数据、训练模型或连接券商。完整 baseline 验收时通过 `--evidence-manifest <json>` 提供研究输出、目标文件 lineage 和执行 dry-run 报告。
 

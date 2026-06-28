@@ -34,8 +34,7 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
 
     assert commands
     for item in commands:
-        assert "scripts" in item.command
-        assert "tests" in item.command
+        assert item.command[-1] == "."
         assert "alpha-research" not in item.command
         assert "market-data-platform" not in item.command
         assert "portfolio-backtester" not in item.command

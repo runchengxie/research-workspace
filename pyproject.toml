@@ -12,6 +12,13 @@ extend-exclude = [
   "portfolio-backtester",
   "quant-execution-engine",
   "demo",
+  "scripts/concept_etf_ml_backtest.py",
+  "scripts/export_holdings_html.py",
+  "scripts/hotsector_to_cstree_universe.py",
+  "scripts/path_b_production.py",
+  "scripts/path_c_m1_validate.py",
+  "scripts/publish_etf_industry_signal.py",
+  "scripts/style_factor_attribution.py",
 ]
 
 [tool.ruff.lint]

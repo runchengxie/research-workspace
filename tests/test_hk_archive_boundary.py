@@ -68,9 +68,7 @@ def test_hk_archives_stay_outside_active_submodule_graph() -> None:
 
 
 def test_hk_archive_has_single_restore_entrypoint_and_no_public_followups() -> None:
-    archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(
-        encoding="utf-8"
-    )
+    archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
     split_manifest = _load_json_subset("docs/hk-public-split-manifest.yml")
     follow_up = [
         record["id"]

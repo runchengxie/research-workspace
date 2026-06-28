@@ -122,7 +122,8 @@ python scripts/run_submodule_checks.py --list-profiles
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile lint --submodule cross-sectional-trees
 python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`ruff`、`pytest`、`basedpyright`、`pyright`、`mypy` 等规则仍由各子项目自己的 `pyproject.toml` 和依赖环境决定。
+配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 才运行 BasedPyright / Pyright，`mypy_advisory` 仍是执行引擎的单独观察项。
 `lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台质量治理与策略编排 maintainability ratchet。

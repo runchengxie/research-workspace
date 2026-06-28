@@ -1,37 +1,38 @@
 # 工作区质量治理矩阵
 
-顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 只检查 `scripts/` 与 `tests/`。
+顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本/测试，并排除子仓与历史探索脚本。
 
 ## 检查分类
 
 | 仓库 | 硬门禁 | 建议项 | 人工或发布复核 |
 | --- | --- | --- | --- |
 | superproject | Ruff、Ruff format、secret scan、顶层 pytest、doctor、contract smoke | `pip-audit`、`deptry`、选择性 coverage ratchet | 港股 restore-only archive 复核、发布检查清单 |
-| `market-data-platform` | Ruff、Ruff format、BasedPyright、pytest | `pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
-| `alpha-research` | Ruff、Ruff format、BasedPyright、import smoke | pytest coverage、CPCV/PBO focused tests、feature evidence fixtures | signal artifact、feature evidence、promotion gate |
-| `portfolio-backtester` | Ruff、Ruff format、BasedPyright、import smoke | pytest coverage、capacity/exposure/backtest focused tests | turnover/cost、capacity、benchmark ladder、reporting |
-| `cross-sectional-trees` | 仓库自有 lint、format、BasedPyright、pytest | `pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
-| `quant-execution-engine` | Ruff、Ruff format、Pyright、pytest | mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
+| `market-data-platform` | Ruff、Ruff format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
+| `alpha-research` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright advisory、pytest coverage、CPCV/PBO focused tests、feature evidence fixtures | signal artifact、feature evidence、promotion gate |
+| `portfolio-backtester` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright advisory、pytest coverage、capacity/exposure/backtest focused tests | turnover/cost、capacity、benchmark ladder、reporting |
+| `cross-sectional-trees` | 仓库自有 lint、format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
+| `quant-execution-engine` | Ruff、Ruff format、ty、pytest | Pyright release check、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
 顶层委托配置是 `scripts/submodule_checks.json`。`lint` 会同时运行子仓库自己的边界与维护债
 ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，策略编排包含
 `scripts/dev/run_tests.sh maintainability`。`type` 始终表示各仓库当前 hard type gate；
-已迁移仓库使用 BasedPyright，执行引擎仍按自身 `tool.pyright` 配置运行 Pyright。执行引擎的
-`mypy_advisory` 在迁移后的一个发布周期内单独运行，不替代 Pyright。任何 type error 都会
-阻塞 hard gate。
+现在统一为 `ty check`。`release_typecheck` 才运行已迁移仓库的 BasedPyright 和执行引擎的
+Pyright；执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内单独运行，不替代 `ty check`
+或 release Pyright。
 
 ## 顶层命令
 
 ```bash
 python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile secrets
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 python scripts/run_submodule_checks.py --profile mypy_advisory \
   --submodule quant-execution-engine
 ```
 
 涉及 provider 或券商凭证读取逻辑时，还应对改动所属子仓库执行 credential review；credential leak 属于阻塞问题，不按 advisory 处理。港股材料不再通过工作区内 public demo 路线发布，只保留 private restore-only archive 复核。
 
-执行引擎至少保留一个发布周期的 mypy 观察期。下一次 release review 中，如果 mypy 没有独有阻塞发现，且 Pyright warning 分类保持稳定，可以评估移除 advisory。若需要回滚，将 `scripts/submodule_checks.json` 中执行引擎的 `type` 恢复为 mypy；已完成的 SDK 边界窄化修复继续保留。其他已使用 BasedPyright 的仓库不再保留单独 Pyright 入口。
+执行引擎至少保留一个发布周期的 mypy 观察期。下一次 release review 中，如果 mypy 没有独有阻塞发现，且 Pyright warning 分类保持稳定，可以评估移除 advisory。若需要回滚，将 `scripts/submodule_checks.json` 中执行引擎的 `release_typecheck` 恢复为 mypy；已完成的 SDK 边界窄化修复继续保留。其他已使用 BasedPyright 的仓库不再保留单独 Pyright 入口。
 
 ## Advisory 依赖检查
 
