@@ -10,16 +10,8 @@
 python scripts/print_version_matrix.py
 ```
 
-当前本地输出：
-
-| component | commit |
-| --- | --- |
-| workspace | `7ba737c` + local changes |
-| market-data-platform | `fce11ef` |
-| alpha-research | `c694b08` |
-| portfolio-backtester | `e05bde7` |
-| cross-sectional-trees | `dd8d14f` |
-| quant-execution-engine | `00cfced` |
+不要手工维护“当前输出”的静态表；提交后它会立即变旧。需要现场状态时运行脚本，
+需要可审计状态时看下方“已验证组合”。
 
 如果脚本报告 `not initialized`，先运行：
 
@@ -33,6 +25,7 @@ git submodule update --init --recursive
 
 | 日期 | 顶层仓库提交 | market-data-platform | alpha-research | portfolio-backtester | cross-sectional-trees | quant-execution-engine | 验证状态 | 证据 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-06-28 | `945ce43` | `f606f86` | `7af023f` | `7495902` | `91b4e0e` | `0617076` | 阶段 3 边界加固组合：artifact contracts、外部策略 backtester smoke、alpha 无 backtester smoke、strategy-pipeline 本地 alpha/backtesting source 防回流、`export-targets` 执行隔离、策略卫星五段链路文档均已收口；顶层 workspace 测试和 hard quality gate 通过 | `uv run --with pytest python -m pytest tests -q` (`66 passed`)；`python scripts/run_quality_checks.py --profile hard`；`python scripts/workspace_doctor.py` (`errors=0 warnings=1`)；GitHub CodeQL `28325877208` |
 | 2026-06-27 | stage-3 split branch local checkout | `fce11ef` | `c694b08` | `e05bde7` | `dd8d14f` | `00cfced` | `alpha-research` 和 `portfolio-backtester` 已拆为 workspace 子模块；新子模块 lint/type/import smoke 通过；`cross-sectional-trees` 保留编排层并通过 lint/type/fast tests；顶层 workspace 测试和子模块检查通过；cross GitHub Actions bootstrap 已补齐 split package checkout，并使用两个新 private repos 的只读 deploy keys；cross PR 已合并到 main | `python scripts/run_submodule_checks.py --profile full --submodule alpha-research --submodule portfolio-backtester`；`scripts/dev/run_tests.sh fast` in `cross-sectional-trees`；`uv run --with pytest python -m pytest tests -q` |
 | 2026-06-13 | `hk-freeze-20260613` -> `8d2f5fd` | `hk-freeze-20260613` -> `e802f12` | n/a | n/a | `hk-freeze-20260613` -> `b6e4cad` | `hk-freeze-20260613` -> `dc520cf` | 港股 restore-only freeze tag 已推送；private legacy archive staging 已从该 tag 组合重建并通过 gate；`hk-research-workspace-archive` 已创建为 private restore-only superproject；删除评审仍 blocked pending audit | `docs/evidence/hk-private-archive-stage-20260613.json`；`docs/evidence/hk-research-workspace-archive-20260613.json`；`python scripts/hk_archive_gate.py --check --export-manifest /tmp/hk-quant-legacy-archive-export-20260613/archive-export-manifest.json --format json` |
 | 2026-05-27 | `f38ce4c` | `a310a80` | n/a | n/a | `10ca23f` | `85ad0e7` | 部分验证 | 已验证研究系统导出目标持仓文件，以及执行引擎解析文件并生成离线调仓计划；模拟盘持续联调证据仍需补齐 |

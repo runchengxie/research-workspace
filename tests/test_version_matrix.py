@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "print_version_matrix.py"
+DOC = ROOT / "docs" / "version-matrix.md"
 
 
 def test_version_matrix_current_checkout_runs() -> None:
@@ -37,3 +38,27 @@ def test_version_matrix_source_snapshot_message(tmp_path: Path) -> None:
 
     assert completed.returncode == 2
     assert "requires a git checkout with initialized submodules" in completed.stdout
+
+
+def test_version_matrix_doc_does_not_pin_static_current_checkout() -> None:
+    text = DOC.read_text(encoding="utf-8")
+
+    assert "当前本地输出：" not in text
+    assert "不要手工维护“当前输出”的静态表" in text
+
+
+def test_version_matrix_records_stage3_boundary_hardening_snapshot() -> None:
+    text = DOC.read_text(encoding="utf-8")
+
+    for phrase in (
+        "2026-06-28",
+        "`945ce43`",
+        "`f606f86`",
+        "`7af023f`",
+        "`7495902`",
+        "`91b4e0e`",
+        "`0617076`",
+        "阶段 3 边界加固组合",
+        "GitHub CodeQL `28325877208`",
+    ):
+        assert phrase in text
