@@ -945,8 +945,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 66,
-      "python_loc": 21835,
+      "python_file_count": 68,
+      "python_loc": 21988,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1235,6 +1235,12 @@
           "path": "src/cstree/backtesting/exposure.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/backtesting/freshness_overlay.py",
+          "name": "apply_freshness_overlay",
+          "line_count": 56,
           "complexity": 15
         },
         {
