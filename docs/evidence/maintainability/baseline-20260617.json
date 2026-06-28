@@ -10,7 +10,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 39,
-      "python_loc": 9253,
+      "python_loc": 9265,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -981,7 +981,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 70,
-      "python_loc": 22303,
+      "python_loc": 22779,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1041,7 +1041,7 @@
         },
         {
           "path": "src/cstree/backtesting/evaluation.py",
-          "loc": 636,
+          "loc": 635,
           "hk_related": false
         },
         {
