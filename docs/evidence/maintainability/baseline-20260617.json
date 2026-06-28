@@ -695,8 +695,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 69,
-      "python_loc": 15785,
+      "python_file_count": 70,
+      "python_loc": 16280,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -716,7 +716,7 @@
         },
         {
           "path": "src/cstree/alpha/train_eval_stage.py",
-          "loc": 759,
+          "loc": 755,
           "hk_related": false
         },
         {
@@ -1336,7 +1336,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 223,
-      "python_loc": 56595,
+      "python_loc": 56635,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1521,14 +1521,14 @@
           "complexity": 5
         },
         {
-          "path": "tests/test_output_summary_metadata.py",
-          "name": "test_build_inputs_lock_records_symlink_resolution_and_manifest_metadata",
-          "line_count": 141,
+          "path": "tests/test_pipeline_train_eval_contracts.py",
+          "name": "_request",
+          "line_count": 143,
           "complexity": 1
         },
         {
-          "path": "tests/test_pipeline_train_eval_contracts.py",
-          "name": "_request",
+          "path": "tests/test_output_summary_metadata.py",
+          "name": "test_build_inputs_lock_records_symlink_resolution_and_manifest_metadata",
           "line_count": 141,
           "complexity": 1
         },
