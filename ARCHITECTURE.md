@@ -44,3 +44,4 @@ contracts 和 shared helpers 组合使用。
 - 质量覆盖和排除项：[docs/quality-coverage-governance.yml](docs/quality-coverage-governance.yml)
 - 重构路线图：[docs/maintainability-refactor-roadmap.yml](docs/maintainability-refactor-roadmap.yml)
 - 当前文件约定：[docs/contracts.md](docs/contracts.md)
+- 拆分收敛清单：[docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md)

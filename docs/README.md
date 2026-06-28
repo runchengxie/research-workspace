@@ -33,6 +33,7 @@ public demo 或独立港股研究线 staging。
 || 查看废弃入口删除条件 | [deprecations.md](deprecations.md) |
 | 维护子模块指针或运行顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量门禁、建议项和人工复核项 | [quality-governance.md](quality-governance.md) |
+| 查看阶段4拆分收敛清单 | [architecture-split-closure-checklist.md](architecture-split-closure-checklist.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合前检查 | [release-checklist.md](release-checklist.md) |
 
