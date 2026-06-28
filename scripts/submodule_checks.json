@@ -27,7 +27,7 @@
       "path": "alpha-research",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../portfolio-backtester/src', 'src']; import cstree.alpha.cpcv; import cstree.alpha.signal_artifact"]
+          ["uv", "run", "--extra", "dev", "python", "-c", "import cstree.alpha.cpcv; import cstree.alpha.signal_artifact"]
         ],
         "lint": [
           ["uv", "run", "--extra", "dev", "ruff", "check", "."],
@@ -49,7 +49,7 @@
       "path": "portfolio-backtester",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "python", "-c", "import sys; sys.path[:0] = ['../cross-sectional-trees/src', '../alpha-research/src', 'src']; import cstree.backtesting.engine; import cstree.backtesting.metrics"]
+          ["uv", "run", "--extra", "dev", "python", "-c", "import cstree.backtesting.engine; import cstree.backtesting.metrics"]
         ],
         "lint": [
           ["uv", "run", "--extra", "dev", "ruff", "check", "."],

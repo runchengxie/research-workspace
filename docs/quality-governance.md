@@ -26,9 +26,10 @@
 顶层委托配置是 `scripts/submodule_checks.json`。`lint` 会同时运行子仓库自己的边界与维护债
 ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，策略编排包含
 `scripts/dev/run_tests.sh maintainability`。`type` 始终表示各仓库当前 hard type gate；
-现在统一为 `ty check`。`release_typecheck` 才运行已迁移仓库的 BasedPyright 和执行引擎的
-Pyright；执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内单独运行，不替代 `ty check`
-或 release Pyright。
+现在统一为 `ty check`。`alpha-research` 和 `portfolio-backtester` 的 smoke / BasedPyright
+配置不应通过 sibling source path 补齐 import；`release_typecheck` 才运行已迁移仓库的
+BasedPyright 和执行引擎的 Pyright；执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内
+单独运行，不替代 `ty check` 或 release Pyright。
 
 ## 顶层命令
 

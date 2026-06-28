@@ -103,6 +103,23 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 [item.command for item in planned],
             )
 
+    def test_split_package_smoke_profiles_do_not_inject_sibling_source_paths(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        for submodule in ("alpha-research", "portfolio-backtester"):
+            planned = run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="smoke",
+                submodules=[submodule],
+            )
+
+            self.assertEqual(1, len(planned))
+            command_text = " ".join(planned[0].command)
+            self.assertNotIn("../cross-sectional-trees/src", command_text)
+            self.assertNotIn("../alpha-research/src", command_text)
+            self.assertNotIn("../portfolio-backtester/src", command_text)
+
     def test_manifest_type_profiles_use_ty_with_release_typecheck_separate(
         self,
     ) -> None:

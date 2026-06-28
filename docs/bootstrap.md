@@ -34,7 +34,10 @@ python scripts/workspace_doctor.py --strict
 
 ## 安装依赖
 
-推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或共享虚拟环境。`alpha-research` 和 `portfolio-backtester` 当前仍依赖同一个 workspace 下的 `cstree` namespace 组合运行；完整研究命令仍从 `cross-sectional-trees` 的 `cstree` CLI 进入。
+推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或
+共享虚拟环境。`alpha-research` 和 `portfolio-backtester` 的基础 import smoke / typecheck
+不应手工注入 sibling source path；完整研究编排命令仍从 `cross-sectional-trees` 的
+`cstree` CLI 进入。
 
 ```bash
 cd market-data-platform

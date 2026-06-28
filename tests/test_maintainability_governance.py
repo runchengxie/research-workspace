@@ -290,6 +290,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert set(repos["alpha-research"]["basedpyright"]["include_targets"]) == set(
         alpha_config["tool"]["basedpyright"]["include"]
     )
+    assert "extraPaths" not in alpha_config["tool"]["basedpyright"]
     assert set(repos["alpha-research"]["ty"]["include_targets"]) == set(
         alpha_config["tool"]["ty"]["src"]["include"]
     )
@@ -314,6 +315,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert set(repos["portfolio-backtester"]["basedpyright"]["include_targets"]) == set(
         portfolio_config["tool"]["basedpyright"]["include"]
     )
+    assert "extraPaths" not in portfolio_config["tool"]["basedpyright"]
     assert set(repos["portfolio-backtester"]["ty"]["include_targets"]) == set(
         portfolio_config["tool"]["ty"]["src"]["include"]
     )
