@@ -217,6 +217,12 @@
       "next_action": "split path resolution, validation, and load orchestration when panel loading changes resume"
     },
     {
+      "path": "cross-sectional-trees/src/cstree/pipeline/panel_load_steps.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "panel loading was split into step helpers, but the step module remains a large-file hotspot after feature dataset tests moved out",
+      "next_action": "split source fetch, benchmark separation, pricing preparation, and lifecycle diagnostics when panel loading changes resume"
+    },
+    {
       "path": "cross-sectional-trees/scripts/a_share_live_executable_oos_topk_probe.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "A-share executable OOS probe is tracked as research support rather than reusable library code",

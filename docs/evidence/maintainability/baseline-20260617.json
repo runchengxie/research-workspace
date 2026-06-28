@@ -694,8 +694,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 47,
-      "python_loc": 12653,
+      "python_file_count": 48,
+      "python_loc": 12873,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1282,7 +1282,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 287,
-      "python_loc": 59342,
+      "python_loc": 59124,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1391,11 +1391,6 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_pipeline_memory_path.py",
-          "loc": 582,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_pipeline_validation.py",
           "loc": 577,
           "hk_related": false
@@ -1408,6 +1403,11 @@
         {
           "path": "src/cstree/liveops/alloc_core.py",
           "loc": 561,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/panel_load_steps.py",
+          "loc": 551,
           "hk_related": false
         }
       ],
