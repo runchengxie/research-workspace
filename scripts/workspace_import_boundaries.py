@@ -86,6 +86,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="alpha-research:alpha-to-strategy-compat",
+        description=(
+            "alpha-research should own runtime compatibility shims instead of importing "
+            "strategy-pipeline top-level compatibility modules"
+        ),
+        repo="alpha-research",
+        source="src/cstree/alpha",
+        forbidden=("cstree.compat",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="portfolio-backtester:backtesting-to-pipeline",
         description=(
             "portfolio-backtester should not grow runtime imports back into strategy pipeline"
