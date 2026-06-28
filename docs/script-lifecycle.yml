@@ -155,7 +155,7 @@
       "safe_to_run_locally": true,
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/style_factors/<name>/",
       "external_dependencies": "DATA_PLATFORM_ROOT, financial-research scripts/style_analysis.py, mdp venv with matplotlib+tabulate",
-      "removal_condition": "remove after style factor analysis is promoted to cross-sectional-trees core or pip-installable shared library, or two release reviews record no active use"
+      "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
     },
     {
       "path": "scripts/print_version_matrix.py",

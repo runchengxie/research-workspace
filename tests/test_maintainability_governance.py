@@ -260,6 +260,15 @@ def test_script_lifecycle_manifest_classifies_all_tracked_scripts() -> None:
         assert isinstance(record["safe_to_run_locally"], bool)
 
 
+def test_script_lifecycle_routes_alpha_research_scripts_to_alpha_owner() -> None:
+    manifest = _load_json_doc("docs/script-lifecycle.yml")
+    records = {record["path"]: record for record in manifest["records"]}
+
+    removal_condition = records["scripts/style_factor_attribution.py"]["removal_condition"]
+    assert "alpha-research" in removal_condition
+    assert "cross-sectional-trees core" not in removal_condition
+
+
 def test_quality_coverage_governance_matches_submodule_configs() -> None:
     manifest = _load_json_doc("docs/quality-coverage-governance.yml")
     repos = {record["repo"]: record for record in manifest["repos"]}
