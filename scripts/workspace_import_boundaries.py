@@ -150,6 +150,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="portfolio-backtester:backtesting-to-strategy-rebalance",
+        description=(
+            "portfolio-backtester should own backtest rebalance sampling instead of importing "
+            "strategy-pipeline contract implementation helpers"
+        ),
+        repo="portfolio-backtester",
+        source="src/cstree/backtesting",
+        forbidden=("cstree.contracts.rebalance",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="market-data-platform:no-cstree-imports",
         description="market-data-platform must stay independent from research strategy internals",
         repo="market-data-platform",

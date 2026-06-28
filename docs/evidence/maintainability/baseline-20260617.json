@@ -10,7 +10,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 39,
-      "python_loc": 9265,
+      "python_loc": 9277,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -981,7 +981,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 70,
-      "python_loc": 22779,
+      "python_loc": 22860,
       "hk_related_file_count": 0,
       "large_files": [
         {
