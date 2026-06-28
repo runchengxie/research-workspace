@@ -108,6 +108,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="alpha-research:alpha-to-strategy-signal-contract",
+        description=(
+            "alpha-research should own canonical signal artifacts instead of importing "
+            "strategy-pipeline contract modules"
+        ),
+        repo="alpha-research",
+        source="src/cstree/alpha",
+        forbidden=("cstree.contracts.signals",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="portfolio-backtester:backtesting-to-pipeline",
         description=(
             "portfolio-backtester should not grow runtime imports back into strategy pipeline"
