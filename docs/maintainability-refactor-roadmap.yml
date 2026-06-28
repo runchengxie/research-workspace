@@ -48,39 +48,6 @@
       "non_goals": "do not change evaluation metrics"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/train_eval_stage.py",
-      "owner_repo": "cross-sectional-trees",
-      "risk": "high",
-      "first_safe_extraction": "workflow_orchestration_separation",
-      "target_layout": "pipeline/train_eval/{stage.py,state.py,outputs.py}",
-      "focused_tests": [
-        "cross-sectional-trees pipeline tests"
-      ],
-      "non_goals": "do not change run outputs or config semantics"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/research/summarize_runs.py",
-      "owner_repo": "cross-sectional-trees",
-      "risk": "medium",
-      "first_safe_extraction": "rendering_reporting",
-      "target_layout": "research/summarize/{model.py,collect.py,render.py}",
-      "focused_tests": [
-        "cross-sectional-trees summarize runs tests"
-      ],
-      "non_goals": "do not change report schema"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/exposure.py",
-      "owner_repo": "cross-sectional-trees",
-      "risk": "medium",
-      "first_safe_extraction": "pure_validation",
-      "target_layout": "exposure/{model.py,analysis.py,render.py}",
-      "focused_tests": [
-        "cross-sectional-trees exposure tests"
-      ],
-      "non_goals": "do not change exposure math"
-    },
-    {
       "path": "cross-sectional-trees/src/cstree/commands/tune.py",
       "owner_repo": "cross-sectional-trees",
       "risk": "medium",
@@ -175,12 +142,6 @@
       "next_action": "split by scenario when pipeline e2e tests change"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/research/cpcv.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "research module debt outside first train/eval and reporting wave",
-      "next_action": "split CPCV model and runner if research workflow changes resume"
-    },
-    {
       "path": "cross-sectional-trees/src/cstree/pipeline/config.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "pipeline config debt is lower priority than eval orchestration split",
@@ -197,18 +158,6 @@
       "owner_repo": "cross-sectional-trees",
       "reason": "release packaging debt is lower priority than research pipeline refactor",
       "next_action": "split packaging checks when release tooling changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/execution_sim.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "simulation debt is lower priority than execution target contract modules",
-      "next_action": "split simulation model and report if simulation changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/portfolio.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "portfolio construction debt entered the refreshed baseline after A-share sizing work expanded",
-      "next_action": "split sizing, constraints, and reporting when portfolio construction changes resume"
     },
     {
       "path": "cross-sectional-trees/src/cstree/pipeline/panel_loader.py",
@@ -229,18 +178,6 @@
       "next_action": "split job materialization, execution, and result collection when tune workflow work resumes"
     },
     {
-      "path": "cross-sectional-trees/scripts/a_share_live_executable_oos_topk_probe.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "A-share executable OOS probe is tracked as research support rather than reusable library code",
-      "next_action": "archive or delete after formal OOS evidence supersedes the probe"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/backtesting/engine.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "backtest engine debt entered the refreshed baseline after backtesting support expanded",
-      "next_action": "split cost, fill, and accounting helpers when backtest engine changes resume"
-    },
-    {
       "path": "cross-sectional-trees/tests/test_pipeline_filters_file_derived.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "large derived-feature scenario test file is tracked but not active production code",
@@ -253,36 +190,6 @@
       "next_action": "split after summarize_runs.py reporting extraction"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/research/promotion_gate.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "research governance module debt outside first train/eval wave",
-      "next_action": "split gate model and report when promotion gate changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/pipeline/backtest_tearsheet.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "reporting debt is lower priority than eval orchestration split",
-      "next_action": "split rendering helpers when tearsheet changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/research/hk_financial_details.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "HK research provenance debt waits behind public split and archive work",
-      "next_action": "archive or split after HK research config migration"
-    },
-    {
-      "path": "cross-sectional-trees/tests/test_backtest.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "large backtest scenario test file is tracked but not active production code",
-      "next_action": "split by backtest scenario when tests change"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/execution.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "research-side execution helper debt is lower priority than targets.json contract path",
-      "next_action": "split after export-targets contract modules stay typed"
-    },
-    {
       "path": "cross-sectional-trees/src/cstree/commands/linear_sweep.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
@@ -293,18 +200,6 @@
       "owner_repo": "cross-sectional-trees",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
       "next_action": "split parser, fixed-signal runner, and summary writer only when grid command changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/research/construction_grid.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "research grid debt is lower priority than eval/reporting modules",
-      "next_action": "split grid schema and runner when construction grid changes resume"
-    },
-    {
-      "path": "cross-sectional-trees/src/cstree/research/feature_evidence.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "feature evidence debt is lower priority than eval pipeline split",
-      "next_action": "split evidence model and renderer when feature evidence changes resume"
     },
     {
       "path": "cross-sectional-trees/src/cstree/pipeline/fundamentals_enrichment.py",
@@ -638,12 +533,6 @@
     },
     {
       "path": "cross-sectional-trees/src/cstree/pipeline/dataset_sampling.py",
-      "owner_repo": "cross-sectional-trees",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "cross-sectional-trees/scripts/a_share_500k_round_lot_probe.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"

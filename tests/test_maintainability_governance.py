@@ -26,9 +26,6 @@ REQUIRED_ROADMAP_PATHS = {
     "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
     "market-data-platform/src/market_data_platform/tushare_cli.py",
     "cross-sectional-trees/src/cstree/pipeline/eval.py",
-    "cross-sectional-trees/src/cstree/pipeline/train_eval_stage.py",
-    "cross-sectional-trees/src/cstree/research/summarize_runs.py",
-    "cross-sectional-trees/src/cstree/exposure.py",
     "cross-sectional-trees/src/cstree/commands/tune.py",
     "quant-execution-engine/src/quant_execution_engine/cli.py",
     "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
@@ -378,8 +375,10 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
             "focused_tests",
             "non_goals",
         } <= set(record)
+        assert (ROOT / record["path"]).exists()
     for record in roadmap["accepted_hotspots"]:
         assert {"path", "owner_repo", "reason", "next_action"} <= set(record)
+        assert (ROOT / record["path"]).exists()
 
     missing: list[str] = []
     for repo in baseline["repos"]:
