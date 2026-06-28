@@ -67,6 +67,13 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("[../ARCHITECTURE.md](../ARCHITECTURE.md)", docs_index)
         self.assertIn("[../CONTRIBUTING.md](../CONTRIBUTING.md)", docs_index)
 
+    def test_documentation_lifecycle_owner_template_covers_active_submodules(self) -> None:
+        lifecycle = (ROOT / "docs" / "documentation-lifecycle.md").read_text(encoding="utf-8")
+
+        self.assertIn("> owner: workspace |", lifecycle)
+        for submodule in EXPECTED_SUBMODULES:
+            self.assertIn(submodule, lifecycle)
+
     def test_docs_preserve_hk_restore_only_boundary(self) -> None:
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
