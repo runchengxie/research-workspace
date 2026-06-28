@@ -71,8 +71,7 @@
           "src/cstree/pipeline/output_summary.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py",
-          "src/cstree/liveops/alloc.py"
+          "src/cstree/liveops/alloc_selection.py"
         ],
         "promotion_criteria": "run before release; contract/liveops modules pass before broader orchestration modules are added"
       },

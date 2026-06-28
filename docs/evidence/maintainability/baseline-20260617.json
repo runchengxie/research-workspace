@@ -1281,8 +1281,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 225,
-      "python_loc": 57984,
+      "python_file_count": 224,
+      "python_loc": 57895,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1766,8 +1766,7 @@
           "src/cstree/pipeline/output_summary.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py",
-          "src/cstree/liveops/alloc.py"
+          "src/cstree/liveops/alloc_selection.py"
         ],
         "basedpyright_exclude": [
           ".venv",
