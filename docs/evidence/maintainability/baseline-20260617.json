@@ -1281,8 +1281,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 287,
-      "python_loc": 58871,
+      "python_file_count": 279,
+      "python_loc": 58806,
       "hk_related_file_count": 2,
       "large_files": [
         {
