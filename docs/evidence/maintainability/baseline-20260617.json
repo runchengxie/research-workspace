@@ -944,8 +944,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 61,
-      "python_loc": 20803,
+      "python_file_count": 63,
+      "python_loc": 21412,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1121,6 +1121,12 @@
           "complexity": 12
         },
         {
+          "path": "tests/test_construction_grid.py",
+          "name": "test_construction_grid_reuses_existing_scores",
+          "line_count": 84,
+          "complexity": 5
+        },
+        {
           "path": "src/cstree/backtesting/evaluation.py",
           "name": "_record_period_execution_sim",
           "line_count": 83,
@@ -1275,8 +1281,8 @@
     {
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
-      "python_file_count": 289,
-      "python_loc": 60178,
+      "python_file_count": 287,
+      "python_loc": 59560,
       "hk_related_file_count": 2,
       "large_files": [
         {
