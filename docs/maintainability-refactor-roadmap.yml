@@ -511,6 +511,12 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
+      "path": "alpha-research/src/cstree/alpha/walk_forward.py",
+      "owner_repo": "alpha-research",
+      "reason": "walk-forward alpha evaluation remains a large-file hotspot after backtesting dependency injection removed direct backtester imports",
+      "next_action": "split feature-importance reporting and injected backtest orchestration when walk-forward evaluation changes resume"
+    },
+    {
       "path": "alpha-research/src/cstree/alpha/feature_evidence.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",

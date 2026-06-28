@@ -695,8 +695,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 50,
-      "python_loc": 13366,
+      "python_file_count": 53,
+      "python_loc": 13598,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -716,7 +716,7 @@
         },
         {
           "path": "src/cstree/alpha/train_eval_stage.py",
-          "loc": 760,
+          "loc": 761,
           "hk_related": false
         },
         {
@@ -733,20 +733,25 @@
           "path": "src/cstree/alpha/split.py",
           "loc": 552,
           "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/walk_forward.py",
+          "loc": 518,
+          "hk_related": false
         }
       ],
       "long_functions": [
+        {
+          "path": "src/cstree/alpha/train_eval_stage.py",
+          "name": "_build_walk_forward_context",
+          "line_count": 103,
+          "complexity": 1
+        },
         {
           "path": "src/cstree/alpha/research_dataset.py",
           "name": "_processor_records",
           "line_count": 102,
           "complexity": 10
-        },
-        {
-          "path": "src/cstree/alpha/train_eval_stage.py",
-          "name": "_build_walk_forward_context",
-          "line_count": 102,
-          "complexity": 1
         },
         {
           "path": "src/cstree/alpha/cpcv.py",
@@ -767,16 +772,16 @@
           "complexity": 11
         },
         {
-          "path": "src/cstree/alpha/walk_forward.py",
-          "name": "_evaluate_walk_forward_window",
-          "line_count": 96,
-          "complexity": 4
-        },
-        {
           "path": "src/cstree/alpha/overfitting_diagnostics.py",
           "name": "negative_control_report",
           "line_count": 94,
           "complexity": 10
+        },
+        {
+          "path": "src/cstree/alpha/walk_forward.py",
+          "name": "_evaluate_walk_forward_window",
+          "line_count": 94,
+          "complexity": 4
         },
         {
           "path": "src/cstree/alpha/feature_evidence.py",
@@ -1301,7 +1306,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 223,
-      "python_loc": 57846,
+      "python_loc": 57872,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1494,7 +1499,7 @@
         {
           "path": "tests/test_pipeline_train_eval_contracts.py",
           "name": "_request",
-          "line_count": 140,
+          "line_count": 141,
           "complexity": 1
         },
         {
