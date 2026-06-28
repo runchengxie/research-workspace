@@ -9,8 +9,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 37,
-      "python_loc": 8812,
+      "python_file_count": 39,
+      "python_loc": 9205,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -233,7 +233,8 @@
         "scripts/workspace_governance_common.py",
         "scripts/workspace_governance_hk_split.py",
         "scripts/workspace_governance_quality.py",
-        "scripts/workspace_governance_submodules.py"
+        "scripts/workspace_governance_submodules.py",
+        "scripts/workspace_import_boundaries.py"
       ]
     },
     {

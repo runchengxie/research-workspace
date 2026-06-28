@@ -41,9 +41,19 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                 ),
             )
         ],
+        "architecture": [
+            PlannedCommand(
+                "workspace-import-boundaries",
+                (
+                    sys.executable,
+                    str(ROOT / "scripts" / "workspace_import_boundaries.py"),
+                    "--check",
+                ),
+            )
+        ],
     }
     if profile == "hard":
-        return [*commands["lint"], *commands["secrets"]]
+        return [*commands["lint"], *commands["architecture"], *commands["secrets"]]
     if profile in commands:
         return commands[profile]
     raise ValueError(f"Unknown quality profile: {profile}")
@@ -68,7 +78,11 @@ def run_commands(commands: list[PlannedCommand], *, dry_run: bool) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("lint", "secrets", "hard"), default="hard")
+    parser.add_argument(
+        "--profile",
+        choices=("lint", "architecture", "secrets", "hard"),
+        default="hard",
+    )
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     return run_commands(

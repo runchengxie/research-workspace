@@ -40,3 +40,11 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
         assert "portfolio-backtester" not in item.command
         assert "cross-sectional-trees" not in item.command
         assert "quant-execution-engine" not in item.command
+
+
+def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
+    commands = run_quality_checks.plan_commands("hard")
+
+    names = [item.name for item in commands]
+
+    assert "workspace-import-boundaries" in names

@@ -178,6 +178,16 @@
       "removal_condition": "remove only after top-level quality profiles are replaced or retired and no CI/release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/workspace_import_boundaries.py",
+      "owner": "research-workspace",
+      "purpose": "Cross-repo import direction budget gate for the stage 3.5/4 repo split",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "initialized workspace submodules",
+      "removal_condition": "remove only after repo split import direction budgets move into repo-local CI gates and no workspace quality profile calls this script for two release reviews"
+    },
+    {
       "path": "scripts/run_submodule_checks.py",
       "owner": "research-workspace",
       "purpose": "Delegate smoke/full checks to submodules",
