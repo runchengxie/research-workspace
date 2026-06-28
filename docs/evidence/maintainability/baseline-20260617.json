@@ -1335,8 +1335,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 223,
-      "python_loc": 56683,
+      "python_file_count": 187,
+      "python_loc": 47036,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1367,11 +1367,6 @@
         {
           "path": "tests/test_pipeline_filters_file_derived.py",
           "loc": 827,
-          "hk_related": false
-        },
-        {
-          "path": "docs/archive/research/a_share/probes/a_share_live_executable_oos_topk_probe.py",
-          "loc": 798,
           "hk_related": false
         },
         {
@@ -1430,11 +1425,6 @@
           "hk_related": false
         },
         {
-          "path": "docs/archive/research/a_share/probes/a_share_500k_round_lot_probe.py",
-          "loc": 615,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_run_release_scripts.py",
           "loc": 590,
           "hk_related": false
@@ -1463,6 +1453,16 @@
           "path": "src/cstree/commands/tune_runner.py",
           "loc": 546,
           "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/stats.py",
+          "loc": 540,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/pipeline/context_builder.py",
+          "loc": 510,
+          "hk_related": false
         }
       ],
       "long_functions": [
@@ -1489,12 +1489,6 @@
           "name": "test_pipeline_run_offline",
           "line_count": 179,
           "complexity": 1
-        },
-        {
-          "path": "docs/archive/research/a_share/probes/topk_style_probe.py",
-          "name": "main",
-          "line_count": 171,
-          "complexity": 24
         },
         {
           "path": "tests/test_run_release_scripts.py",
@@ -1581,12 +1575,6 @@
           "complexity": 7
         },
         {
-          "path": "docs/archive/research/a_share/probes/a_share_hotspot_feature_quick_probe.py",
-          "name": "_load_limit_industry_features",
-          "line_count": 127,
-          "complexity": 4
-        },
-        {
           "path": "tests/test_pipeline_e2e.py",
           "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
           "line_count": 126,
@@ -1615,26 +1603,26 @@
           "name": "test_pipeline_hk_file_fundamentals_built_from_pit_asset",
           "line_count": 119,
           "complexity": 1
+        },
+        {
+          "path": "scripts/internal/export_repo_source.py",
+          "name": "combine_project_files",
+          "line_count": 117,
+          "complexity": 16
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_walk_forward_backtest_benchmark_summary",
+          "line_count": 116,
+          "complexity": 4
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "docs/archive/research/a_share/probes/topk_style_probe.py",
-          "name": "main",
-          "line_count": 171,
-          "complexity": 24
-        },
         {
           "path": "src/cstree/release_tools/package_runs.py",
           "name": "_gather_relative_files",
           "line_count": 48,
           "complexity": 24
-        },
-        {
-          "path": "docs/archive/research/a_share/probes/a_share_live_risk_control_grid.py",
-          "name": "apply_trade_controls",
-          "line_count": 42,
-          "complexity": 23
         },
         {
           "path": "src/cstree/commands/run_grid.py",
@@ -1691,18 +1679,6 @@
           "complexity": 20
         },
         {
-          "path": "docs/archive/research/a_share/probes/a_share_strategy_development_probe.py",
-          "name": "constrained_select",
-          "line_count": 56,
-          "complexity": 19
-        },
-        {
-          "path": "docs/archive/research/a_share/probes/constraint_probe.py",
-          "name": "constrained_select",
-          "line_count": 37,
-          "complexity": 19
-        },
-        {
           "path": "src/cstree/liveops/holdings.py",
           "name": "_resolve_run_dir",
           "line_count": 46,
@@ -1725,12 +1701,6 @@
           "name": "_is_missing_evidence_category",
           "line_count": 39,
           "complexity": 19
-        },
-        {
-          "path": "docs/archive/research/a_share/probes/a_share_live_risk_control_grid.py",
-          "name": "simulate",
-          "line_count": 87,
-          "complexity": 18
         },
         {
           "path": "scripts/dev/config_lifecycle.py",
@@ -1767,6 +1737,36 @@
           "name": "load_panel_join_frames",
           "line_count": 83,
           "complexity": 18
+        },
+        {
+          "path": "src/cstree/commands/tune.py",
+          "name": "_normalize_choice",
+          "line_count": 47,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/config_utils.py",
+          "name": "resolve_config",
+          "line_count": 83,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/liveops/export_targets.py",
+          "name": "_target_entries",
+          "line_count": 67,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/pipeline/config.py",
+          "name": "resolve_date_range_and_label_settings",
+          "line_count": 93,
+          "complexity": 17
+        },
+        {
+          "path": "src/cstree/pipeline/config_eval.py",
+          "name": "_normalize_score_postprocess",
+          "line_count": 44,
+          "complexity": 17
         }
       ],
       "quality_config": {

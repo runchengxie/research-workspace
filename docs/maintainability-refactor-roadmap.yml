@@ -59,6 +59,28 @@
       "non_goals": "do not change command flags"
     },
     {
+      "path": "strategy-pipeline/src/cstree/pipeline/context_builder.py",
+      "owner_repo": "strategy-pipeline",
+      "risk": "medium",
+      "first_safe_extraction": "workflow_orchestration_separation",
+      "target_layout": "pipeline/context/{panel_request.py,settings.py,assembly.py}",
+      "focused_tests": [
+        "strategy-pipeline pipeline context and panel loading tests"
+      ],
+      "non_goals": "do not change TrainEvalRequest fields or panel loading behavior"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/stats.py",
+      "owner_repo": "strategy-pipeline",
+      "risk": "medium",
+      "first_safe_extraction": "rendering_reporting",
+      "target_layout": "pipeline/stats/{pricing_fields.py,recency_diagnostics.py,summary_metrics.py}",
+      "focused_tests": [
+        "strategy-pipeline pipeline stats and output summary tests"
+      ],
+      "non_goals": "do not change metric formulas or report schema"
+    },
+    {
       "path": "quant-execution-engine/src/quant_execution_engine/cli.py",
       "owner_repo": "quant-execution-engine",
       "risk": "medium",
@@ -560,18 +582,6 @@
       "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/docs/archive/research/a_share/probes/a_share_500k_round_lot_probe.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "archived A-share probe remains in the refreshed baseline but is not active production code",
-      "next_action": "delete or move out of active archive scan after formal A-share evidence supersedes the probe"
-    },
-    {
-      "path": "strategy-pipeline/docs/archive/research/a_share/probes/a_share_live_executable_oos_topk_probe.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "archived executable OOS probe remains in the refreshed baseline but is not active production code",
-      "next_action": "delete or move out of active archive scan after formal OOS evidence supersedes the probe"
     },
     {
       "path": "strategy-pipeline/src/cstree/liveops/alloc_core.py",
