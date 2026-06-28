@@ -31,6 +31,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "portfolio-backtester:backtesting-to-strategy-core-metrics",
         "portfolio-backtester:backtesting-to-strategy-rebalance",
         "portfolio-backtester:backtesting-to-strategy-liquidity-proxy",
+        "portfolio-backtester:backtesting-to-strategy-contracts",
         "market-data-platform:no-cstree-imports",
         "quant-execution-engine:no-cstree-imports",
         "strategy-pipeline:no-execution-engine-imports",

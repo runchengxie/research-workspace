@@ -172,6 +172,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="portfolio-backtester:backtesting-to-strategy-contracts",
+        description=(
+            "portfolio-backtester should own backtest pricing and strategy specs instead of "
+            "importing strategy-pipeline contract modules"
+        ),
+        repo="portfolio-backtester",
+        source="src/cstree/backtesting",
+        forbidden=("cstree.contracts.backtest", "cstree.contracts.strategy"),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="market-data-platform:no-cstree-imports",
         description="market-data-platform must stay independent from research strategy internals",
         repo="market-data-platform",
