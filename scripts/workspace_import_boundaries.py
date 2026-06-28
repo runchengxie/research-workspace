@@ -161,6 +161,17 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="portfolio-backtester:backtesting-to-strategy-liquidity-proxy",
+        description=(
+            "portfolio-backtester should own capacity liquidity proxy derivation instead of "
+            "importing strategy-pipeline top-level helpers"
+        ),
+        repo="portfolio-backtester",
+        source="src/cstree/backtesting",
+        forbidden=("cstree.liquidity_proxy",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="market-data-platform:no-cstree-imports",
         description="market-data-platform must stay independent from research strategy internals",
         repo="market-data-platform",
