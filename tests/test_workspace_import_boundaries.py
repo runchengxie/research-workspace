@@ -24,6 +24,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "alpha-research:alpha-to-backtesting",
         "alpha-research:alpha-to-strategy-core-metrics",
         "alpha-research:alpha-to-strategy-compat",
+        "alpha-research:alpha-to-strategy-rebalance",
         "portfolio-backtester:backtesting-to-pipeline",
         "portfolio-backtester:backtesting-to-alpha",
         "market-data-platform:no-cstree-imports",
