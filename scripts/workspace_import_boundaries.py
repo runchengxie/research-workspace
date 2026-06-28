@@ -33,6 +33,15 @@ class ImportFinding:
 
 
 @dataclass(frozen=True)
+class SourceLayoutRule:
+    identifier: str
+    description: str
+    repo: str
+    forbidden_sources: tuple[str, ...]
+    max_allowed: int
+
+
+@dataclass(frozen=True)
 class RuleResult:
     rule: BoundaryRule
     findings: tuple[ImportFinding, ...]
@@ -50,6 +59,28 @@ class RuleResult:
     def status(self) -> str:
         if self.missing_source:
             return "missing_source"
+        if self.over_budget:
+            return "over_budget"
+        if self.count < self.rule.max_allowed:
+            return "under_budget"
+        return "at_budget"
+
+
+@dataclass(frozen=True)
+class SourceLayoutResult:
+    rule: SourceLayoutRule
+    findings: tuple[ImportFinding, ...]
+
+    @property
+    def count(self) -> int:
+        return len(self.findings)
+
+    @property
+    def over_budget(self) -> bool:
+        return self.count > self.rule.max_allowed
+
+    @property
+    def status(self) -> str:
         if self.over_budget:
             return "over_budget"
         if self.count < self.rule.max_allowed:
@@ -210,6 +241,19 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
 )
 
+SOURCE_LAYOUT_RULES: tuple[SourceLayoutRule, ...] = (
+    SourceLayoutRule(
+        identifier="strategy-pipeline:no-local-alpha-backtesting-source",
+        description=(
+            "strategy-pipeline should orchestrate alpha research and portfolio backtesting "
+            "instead of carrying local alpha/backtesting implementation modules"
+        ),
+        repo="cross-sectional-trees",
+        forbidden_sources=("src/cstree/alpha", "src/cstree/backtesting"),
+        max_allowed=0,
+    ),
+)
+
 
 def _module_for_path(src_root: Path, path: Path) -> str:
     relative = path.relative_to(src_root).with_suffix("")
@@ -300,12 +344,34 @@ def _scan_rule(root: Path, rule: BoundaryRule) -> RuleResult:
     return RuleResult(rule=rule, findings=tuple(findings))
 
 
-def evaluate_boundaries(
-    root: Path = ROOT,
-    rules: tuple[BoundaryRule, ...] = BOUNDARY_RULES,
-) -> tuple[RuleResult, ...]:
-    resolved_root = root.resolve()
-    return tuple(_scan_rule(resolved_root, rule) for rule in rules)
+def _scan_source_layout_rule(root: Path, rule: SourceLayoutRule) -> SourceLayoutResult:
+    repo_root = root / rule.repo
+    findings: list[ImportFinding] = []
+    for source in rule.forbidden_sources:
+        source_root = repo_root / source
+        if not source_root.exists():
+            continue
+        if source_root.is_file():
+            if source_root.suffix == ".py":
+                findings.append(
+                    ImportFinding(
+                        path=source_root.relative_to(root).as_posix(),
+                        line=0,
+                        module="<source-file>",
+                        matched=source,
+                    )
+                )
+            continue
+        for path in _python_files(source_root):
+            findings.append(
+                ImportFinding(
+                    path=path.relative_to(root).as_posix(),
+                    line=0,
+                    module="<source-file>",
+                    matched=source,
+                )
+            )
+    return SourceLayoutResult(rule=rule, findings=tuple(findings))
 
 
 def _finding_to_dict(finding: ImportFinding) -> dict[str, Any]:
@@ -313,6 +379,13 @@ def _finding_to_dict(finding: ImportFinding) -> dict[str, Any]:
         "path": finding.path,
         "line": finding.line,
         "module": finding.module,
+        "matched": finding.matched,
+    }
+
+
+def _source_layout_finding_to_dict(finding: ImportFinding) -> dict[str, Any]:
+    return {
+        "path": finding.path,
         "matched": finding.matched,
     }
 
@@ -331,11 +404,29 @@ def _result_to_dict(result: RuleResult) -> dict[str, Any]:
     }
 
 
+def _source_layout_result_to_dict(result: SourceLayoutResult) -> dict[str, Any]:
+    return {
+        "id": result.rule.identifier,
+        "repo": result.rule.repo,
+        "description": result.rule.description,
+        "forbidden_sources": list(result.rule.forbidden_sources),
+        "count": result.count,
+        "max_allowed": result.rule.max_allowed,
+        "status": result.status,
+        "findings": [_source_layout_finding_to_dict(finding) for finding in result.findings],
+    }
+
+
 def build_report(
     root: Path = ROOT,
     rules: tuple[BoundaryRule, ...] = BOUNDARY_RULES,
+    source_layout_rules: tuple[SourceLayoutRule, ...] = SOURCE_LAYOUT_RULES,
 ) -> dict[str, Any]:
-    results = evaluate_boundaries(root, rules)
+    resolved_root = root.resolve()
+    results = tuple(_scan_rule(resolved_root, rule) for rule in rules)
+    source_layout_results = tuple(
+        _scan_source_layout_rule(resolved_root, rule) for rule in source_layout_rules
+    )
     issues: list[str] = []
     for result in results:
         if result.missing_source:
@@ -348,26 +439,40 @@ def build_report(
                 f"{result.rule.identifier}: {result.count} imports exceed budget "
                 f"{result.rule.max_allowed}"
             )
+    for result in source_layout_results:
+        if result.over_budget:
+            issues.append(
+                f"{result.rule.identifier}: {result.count} source files exceed budget "
+                f"{result.rule.max_allowed}"
+            )
     return {
-        "schema_version": "workspace_import_boundaries.v1",
+        "schema_version": "workspace_import_boundaries.v2",
         "root": str(root.resolve()),
         "issues": issues,
         "rules": [_result_to_dict(result) for result in results],
+        "source_layout_rules": [
+            _source_layout_result_to_dict(result) for result in source_layout_results
+        ],
     }
 
 
 def render_report(report: dict[str, Any]) -> str:
-    lines = ["Workspace import boundary report:"]
+    lines = ["Workspace boundary report:"]
     for rule in report["rules"]:
         lines.append(
             f"[{rule['status']}] {rule['id']}: "
             f"{rule['count']}/{rule['max_allowed']} forbidden imports"
         )
+    for rule in report["source_layout_rules"]:
+        lines.append(
+            f"[{rule['status']}] {rule['id']}: "
+            f"{rule['count']}/{rule['max_allowed']} forbidden source files"
+        )
     if report["issues"]:
         lines.append("Issues:")
         lines.extend(f"- {issue}" for issue in report["issues"])
     else:
-        lines.append("Import boundary budgets hold.")
+        lines.append("Workspace boundary budgets hold.")
     return "\n".join(lines)
 
 

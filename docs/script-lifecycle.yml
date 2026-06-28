@@ -180,7 +180,7 @@
     {
       "path": "scripts/workspace_import_boundaries.py",
       "owner": "research-workspace",
-      "purpose": "Cross-repo import direction budget gate for the stage 3.5/4 repo split",
+      "purpose": "Cross-repo import direction and source layout budget gate for the stage 3.5/4 repo split",
       "lifecycle": "ci",
       "safe_to_run_locally": true,
       "writes_files": "stdout only",

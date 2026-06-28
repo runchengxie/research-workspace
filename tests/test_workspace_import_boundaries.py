@@ -36,6 +36,10 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "quant-execution-engine:no-cstree-imports",
         "strategy-pipeline:no-execution-engine-imports",
     } == {rule["id"] for rule in report["rules"]}
+    assert {
+        "strategy-pipeline:no-local-alpha-backtesting-source",
+    } == {rule["id"] for rule in report["source_layout_rules"]}
+    assert all(rule["count"] == 0 for rule in report["source_layout_rules"])
 
 
 def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path) -> None:
@@ -74,4 +78,33 @@ def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path)
     assert report["issues"] == [
         "alpha-to-pipeline: 1 imports exceed budget 0",
         "alpha-to-backtesting: 1 imports exceed budget 0",
+    ]
+
+
+def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_code(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "cross-sectional-trees" / "src" / "cstree" / "backtesting"
+    source.mkdir(parents=True)
+    (source / "engine.py").write_text("def backtest_topk():\n    return None\n", encoding="utf-8")
+    rules = (
+        workspace_import_boundaries.SourceLayoutRule(
+            identifier="no-local-backtesting",
+            description="test",
+            repo="cross-sectional-trees",
+            forbidden_sources=("src/cstree/backtesting",),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, (), rules)
+
+    assert report["issues"] == [
+        "no-local-backtesting: 1 source files exceed budget 0",
+    ]
+    assert report["source_layout_rules"][0]["findings"] == [
+        {
+            "matched": "src/cstree/backtesting",
+            "path": "cross-sectional-trees/src/cstree/backtesting/engine.py",
+        }
     ]

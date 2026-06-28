@@ -13,13 +13,15 @@
 | `cross-sectional-trees` | 仓库自有 lint、format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
 | `quant-execution-engine` | Ruff、Ruff format、ty、pytest | Pyright release check、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
-顶层 hard profile 还包含 workspace import boundary gate：
+顶层 hard profile 还包含 workspace boundary gate：
 `python scripts/workspace_import_boundaries.py --check`。该检查把阶段 3.5 /
 阶段 4 的拆分方向转成可 ratchet 的预算：`alpha-research` 不应增加对
 `cstree.pipeline` / `cstree.backtesting` 的运行时依赖，`portfolio-backtester`
 不应增加对 `cstree.pipeline`、strategy-pipeline 根模块或 `cstree.alpha` 的运行时依赖，
-数据平台和执行引擎不应导入 `cstree` 内部，strategy-pipeline 不应导入执行引擎实现。
-当前预算只封顶既有反向依赖；清掉一批后再下调对应 `max_allowed`。
+数据平台和执行引擎不应导入 `cstree` 内部，strategy-pipeline 不应导入执行引擎实现；
+同时 strategy-pipeline 不应重新承载本地 `cstree.alpha` / `cstree.backtesting`
+实现源码。当前预算只封顶既有反向依赖和 source layout；清掉一批后再下调对应
+`max_allowed`。
 
 顶层委托配置是 `scripts/submodule_checks.json`。`lint` 会同时运行子仓库自己的边界与维护债
 ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，策略编排包含
