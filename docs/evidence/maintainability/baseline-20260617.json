@@ -1282,7 +1282,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 227,
-      "python_loc": 58174,
+      "python_loc": 58016,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1331,17 +1331,17 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_cli_research.py",
-          "loc": 782,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/release_tools/package_runs.py",
           "loc": 769,
           "hk_related": false
         },
         {
           "path": "src/cstree/commands/tune.py",
+          "loc": 744,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_cli_research.py",
           "loc": 744,
           "hk_related": false
         },
@@ -1415,7 +1415,7 @@
         {
           "path": "tests/test_cli_research.py",
           "name": "test_cli_parses_research_commands",
-          "line_count": 322,
+          "line_count": 350,
           "complexity": 1
         },
         {
