@@ -223,6 +223,12 @@
       "next_action": "split source fetch, benchmark separation, pricing preparation, and lifecycle diagnostics when panel loading changes resume"
     },
     {
+      "path": "cross-sectional-trees/src/cstree/commands/tune_runner.py",
+      "owner_repo": "cross-sectional-trees",
+      "reason": "tune runner became visible in the refreshed baseline after tune CLI extraction work moved orchestration out of tune.py",
+      "next_action": "split job materialization, execution, and result collection when tune workflow work resumes"
+    },
+    {
       "path": "cross-sectional-trees/scripts/a_share_live_executable_oos_topk_probe.py",
       "owner_repo": "cross-sectional-trees",
       "reason": "A-share executable OOS probe is tracked as research support rather than reusable library code",

@@ -64,7 +64,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         repo="alpha-research",
         source="src/cstree/alpha",
         forbidden=("cstree.pipeline",),
-        max_allowed=5,
+        max_allowed=4,
     ),
     BoundaryRule(
         identifier="alpha-research:alpha-to-backtesting",
