@@ -17,7 +17,7 @@ DEFAULT_REPOS = [
     "market-data-platform",
     "alpha-research",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 ]
 DEFAULT_THRESHOLDS = {
@@ -27,7 +27,7 @@ DEFAULT_THRESHOLDS = {
 }
 SUBMODULE_DIRS = {
     "alpha-research",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "market-data-platform",
     "portfolio-backtester",
     "quant-execution-engine",

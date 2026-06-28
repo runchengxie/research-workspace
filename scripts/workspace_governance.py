@@ -26,7 +26,7 @@ GOVERNANCE_DOC_SCHEMAS = {
 }
 SCRIPT_LIFECYCLE_ROOTS = (
     "scripts",
-    "cross-sectional-trees/scripts/internal",
+    "strategy-pipeline/scripts/internal",
     "market-data-platform/scripts/internal",
     "quant-execution-engine/project_tools",
 )

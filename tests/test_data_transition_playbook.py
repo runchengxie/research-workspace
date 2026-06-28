@@ -33,7 +33,7 @@ class DataTransitionPlaybookTest(unittest.TestCase):
             "market-data-platform",
             "alpha-research",
             "portfolio-backtester",
-            "cross-sectional-trees",
+            "strategy-pipeline",
             "quant-execution-engine",
             "positions_current*.csv",
             "targets.json.lineage.json",

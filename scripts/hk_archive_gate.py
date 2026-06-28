@@ -16,7 +16,7 @@ DEFAULT_MANIFEST = ROOT / "docs" / "hk-private-archive-manifest.yml"
 REQUIRED_REPOSITORIES = {
     "research-workspace",
     "market-data-platform",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 REQUIRED_RECORD_FIELDS = {

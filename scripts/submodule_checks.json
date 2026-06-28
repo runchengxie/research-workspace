@@ -67,8 +67,8 @@
         "full": ["@smoke", "@lint", "@type", "@test"]
       }
     },
-    "cross-sectional-trees": {
-      "path": "cross-sectional-trees",
+    "strategy-pipeline": {
+      "path": "strategy-pipeline",
       "profiles": {
         "smoke": [
           ["uv", "run", "--extra", "dev", "cstree", "--help"]

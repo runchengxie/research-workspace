@@ -9,7 +9,7 @@ EXPECTED_ACTIVE_SUBMODULES = {
     "market-data-platform",
     "alpha-research",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 REMOVED_ACTIVE_HK_SURFACES = (
@@ -23,14 +23,14 @@ REMOVED_ACTIVE_HK_SURFACES = (
     "market-data-platform/src/market_data_platform/hk_assets",
     "market-data-platform/src/market_data_platform/hk_depth",
     "market-data-platform/src/hk_data_platform",
-    "cross-sectional-trees/src/cstree/liveops/alloc_hk.py",
-    "cross-sectional-trees/configs/presets/data/hk_rqdata.yml",
+    "strategy-pipeline/src/cstree/liveops/alloc_hk.py",
+    "strategy-pipeline/configs/presets/data/hk_rqdata.yml",
 )
 REMOVED_ACTIVE_HK_GLOBS = (
-    "cross-sectional-trees/src/cstree/liveops/alloc_hk*.py",
-    "cross-sectional-trees/configs/presets/hk*.yml",
-    "cross-sectional-trees/configs/field_profiles/hk_*",
-    "cross-sectional-trees/configs/experiments/**/*hk*.yml",
+    "strategy-pipeline/src/cstree/liveops/alloc_hk*.py",
+    "strategy-pipeline/configs/presets/hk*.yml",
+    "strategy-pipeline/configs/field_profiles/hk_*",
+    "strategy-pipeline/configs/experiments/**/*hk*.yml",
 )
 CACHE_PARTS = {".pytest_cache", "__pycache__"}
 

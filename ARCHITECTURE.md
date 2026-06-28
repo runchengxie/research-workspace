@@ -15,7 +15,7 @@ portfolio-backtester
   组合构造、回测、容量和报告
         |
         v
-cross-sectional-trees
+strategy-pipeline
   编排研究流程、保留 CLI 兼容层，并导出 targets.json
         |
         v
@@ -25,7 +25,7 @@ quant-execution-engine
 
 `alpha-research` 承载 `cstree.alpha.*`，`portfolio-backtester` 承载
 `cstree.backtesting.*`。当前是阶段 3 过渡态：代码已经物理拆成子模块，
-但运行时仍通过同一个 `cstree` namespace 与 `cross-sectional-trees` 中的 pipeline、
+但运行时仍通过同一个 `cstree` namespace 与 `strategy-pipeline` 中的 pipeline、
 contracts 和 shared helpers 组合使用。
 
 ## 代码边界

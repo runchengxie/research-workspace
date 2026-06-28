@@ -1,5 +1,5 @@
-[submodule "cross-sectional-trees"]
-	path = cross-sectional-trees
+[submodule "strategy-pipeline"]
+	path = strategy-pipeline
 	url = https://github.com/runchengxie/cross-sectional-trees.git
 [submodule "market-data-platform"]
 	path = market-data-platform

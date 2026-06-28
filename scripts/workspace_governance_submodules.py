@@ -22,7 +22,7 @@ REQUIRED_SUBMODULE_GOVERNANCE_GATES = {
         ],
         "reason": "data-platform HK split boundary gate",
     },
-    "cross-sectional-trees": {
+    "strategy-pipeline": {
         "profile": "lint",
         "command": ["scripts/dev/run_tests.sh", "maintainability"],
         "reason": "strategy-research maintainability ratchet",

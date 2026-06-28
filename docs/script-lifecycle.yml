@@ -90,12 +90,12 @@
     {
       "path": "scripts/export_holdings_html.py",
       "owner": "research-workspace",
-      "purpose": "Export latest cross-sectional-trees holdings snapshot to standalone HTML",
+      "purpose": "Export latest strategy-pipeline holdings snapshot to standalone HTML",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "stdout by default; HTML file only when --out is provided",
-      "external_dependencies": "cross-sectional-trees run artifacts and optional market-data-platform instruments parquet",
-      "removal_condition": "remove after holdings snapshot export moves into cross-sectional-trees or two release reviews record no active use"
+      "external_dependencies": "strategy-pipeline run artifacts and optional market-data-platform instruments parquet",
+      "removal_condition": "remove after holdings snapshot export moves into strategy-pipeline or two release reviews record no active use"
     },
     {
       "path": "scripts/maintainability_baseline.py",
@@ -140,7 +140,7 @@
     {
       "path": "scripts/hotsector_to_cstree_universe.py",
       "owner": "research-workspace",
-      "purpose": "Convert hot-sector-screener candidate universe to cross-sectional-trees by_date CSV",
+      "purpose": "Convert hot-sector-screener candidate universe to strategy-pipeline by_date CSV",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/",
@@ -288,8 +288,8 @@
       "removal_condition": "remove only after quality coverage governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
     },
     {
-      "path": "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
-      "owner": "cross-sectional-trees",
+      "path": "strategy-pipeline/scripts/internal/freeze_hk_research_outputs.py",
+      "owner": "strategy-pipeline",
       "purpose": "HK research output cold-storage freeze",
       "lifecycle": "release",
       "safe_to_run_locally": false,
@@ -298,8 +298,8 @@
       "removal_condition": "move to archive only after research freeze evidence is no longer refreshed, archive manifest coverage remains available, and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "cross-sectional-trees/scripts/internal/export_repo_source.py",
-      "owner": "cross-sectional-trees",
+      "path": "strategy-pipeline/scripts/internal/export_repo_source.py",
+      "owner": "strategy-pipeline",
       "purpose": "Source export for release/provenance bundles",
       "lifecycle": "release",
       "safe_to_run_locally": true,
@@ -308,8 +308,8 @@
       "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "cross-sectional-trees/scripts/internal/package_repo.sh",
-      "owner": "cross-sectional-trees",
+      "path": "strategy-pipeline/scripts/internal/package_repo.sh",
+      "owner": "strategy-pipeline",
       "purpose": "Package repository source for release",
       "lifecycle": "release",
       "safe_to_run_locally": true,

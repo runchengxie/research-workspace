@@ -19,14 +19,14 @@ REPOS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 REQUIRED_ROADMAP_PATHS = {
     "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
     "market-data-platform/src/market_data_platform/tushare_cli.py",
-    "cross-sectional-trees/src/cstree/pipeline/eval.py",
-    "cross-sectional-trees/src/cstree/commands/tune.py",
+    "strategy-pipeline/src/cstree/pipeline/eval.py",
+    "strategy-pipeline/src/cstree/commands/tune.py",
     "quant-execution-engine/src/quant_execution_engine/cli.py",
     "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
     "quant-execution-engine/project_tools/smoke_operator_harness.py",
@@ -109,7 +109,7 @@ def _script_paths_to_classify() -> set[str]:
     roots = [
         ROOT / "scripts",
         ROOT / "alpha-research" / "scripts",
-        ROOT / "cross-sectional-trees" / "scripts" / "internal",
+        ROOT / "strategy-pipeline" / "scripts" / "internal",
         ROOT / "market-data-platform" / "scripts" / "internal",
         ROOT / "portfolio-backtester" / "scripts",
         ROOT / "quant-execution-engine" / "project_tools",
@@ -266,14 +266,14 @@ def test_script_lifecycle_routes_alpha_research_scripts_to_alpha_owner() -> None
 
     removal_condition = records["scripts/style_factor_attribution.py"]["removal_condition"]
     assert "alpha-research" in removal_condition
-    assert "cross-sectional-trees core" not in removal_condition
+    assert "strategy-pipeline core" not in removal_condition
 
 
 def test_quality_coverage_governance_matches_submodule_configs() -> None:
     manifest = _load_json_doc("docs/quality-coverage-governance.yml")
     repos = {record["repo"]: record for record in manifest["repos"]}
     alpha_config = _load_pyproject("alpha-research")
-    cross_config = _load_pyproject("cross-sectional-trees")
+    cross_config = _load_pyproject("strategy-pipeline")
     market_config = _load_pyproject("market-data-platform")
     portfolio_config = _load_pyproject("portfolio-backtester")
     execution_config = _load_pyproject("quant-execution-engine")
@@ -288,7 +288,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     )
     assert set(repos) == {
         "alpha-research",
-        "cross-sectional-trees",
+        "strategy-pipeline",
         "market-data-platform",
         "portfolio-backtester",
         "quant-execution-engine",
@@ -303,11 +303,11 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     cross_staged_select = cross_config["tool"]["maintainability"]["quality_targets"][
         "ruff_staged_select"
     ]
-    assert set(cross_staged_select) == set(repos["cross-sectional-trees"]["ruff"]["staged_select"])
-    assert set(repos["cross-sectional-trees"]["basedpyright"]["next_include_targets"]) <= set(
+    assert set(cross_staged_select) == set(repos["strategy-pipeline"]["ruff"]["staged_select"])
+    assert set(repos["strategy-pipeline"]["basedpyright"]["next_include_targets"]) <= set(
         cross_config["tool"]["basedpyright"]["include"]
     )
-    assert set(repos["cross-sectional-trees"]["ty"]["include_targets"]) == set(
+    assert set(repos["strategy-pipeline"]["ty"]["include_targets"]) == set(
         cross_config["tool"]["ty"]["src"]["include"]
     )
 
@@ -341,7 +341,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     }
     cross_ignores = cross_config["tool"]["ruff"]["lint"].get("per-file-ignores", {})
     assert per_file_records == {
-        ("cross-sectional-trees", path): set(rules) for path, rules in cross_ignores.items()
+        ("strategy-pipeline", path): set(rules) for path, rules in cross_ignores.items()
     }
     for record in manifest["per_file_ignore_register"]:
         assert PER_FILE_IGNORE_REGISTER_FIELDS <= set(record)
@@ -412,7 +412,7 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
     assert "/market-data-platform/" in owners
     assert "/alpha-research/" in owners
     assert "/portfolio-backtester/" in owners
-    assert "/cross-sectional-trees/" in owners
+    assert "/strategy-pipeline/" in owners
     assert "/quant-execution-engine/" in owners
     for phrase in (
         "deprecated surface",

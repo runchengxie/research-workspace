@@ -37,7 +37,7 @@ EXPECTED_QUALITY_REPOS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 NON_DEBT_QUALITY_EXCLUDES = {

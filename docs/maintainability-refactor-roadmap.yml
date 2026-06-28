@@ -37,24 +37,24 @@
       "non_goals": "do not change public CLI flags or A-share artifact paths"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/eval.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/eval.py",
+      "owner_repo": "strategy-pipeline",
       "risk": "high",
       "first_safe_extraction": "rendering_reporting",
       "target_layout": "pipeline/eval/{metrics.py,reporting.py,orchestration.py}",
       "focused_tests": [
-        "cross-sectional-trees pipeline and docs contract tests"
+        "strategy-pipeline pipeline and docs contract tests"
       ],
       "non_goals": "do not change evaluation metrics"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/commands/tune.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/commands/tune.py",
+      "owner_repo": "strategy-pipeline",
       "risk": "medium",
       "first_safe_extraction": "cli_parser_extraction",
       "target_layout": "commands/tune/{parser.py,report.py}; runner logic already started in commands/tune_runner.py",
       "focused_tests": [
-        "cross-sectional-trees CLI tests"
+        "strategy-pipeline CLI tests"
       ],
       "non_goals": "do not change command flags"
     },
@@ -136,98 +136,98 @@
       "next_action": "extract quality rule models and renderers when provider quality work resumes"
     },
     {
-      "path": "cross-sectional-trees/tests/test_pipeline_e2e.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_pipeline_e2e.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "large fixture-heavy test file is tracked but not active production code",
       "next_action": "split by scenario when pipeline e2e tests change"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/config.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/config.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "pipeline config debt is lower priority than eval orchestration split",
       "next_action": "split schema and resolver after contract modules stay typed"
     },
     {
-      "path": "cross-sectional-trees/tests/test_pipeline_filters_backtest.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_pipeline_filters_backtest.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "large scenario test file is tracked but not active production code",
       "next_action": "split by filter family when backtest filter tests change"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/release_tools/package_runs.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/release_tools/package_runs.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "release packaging debt is lower priority than research pipeline refactor",
       "next_action": "split packaging checks when release tooling changes resume"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/panel_loader.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/panel_loader.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "platform asset loading debt entered the refreshed baseline after A-share panel support expanded",
       "next_action": "split path resolution, validation, and load orchestration when panel loading changes resume"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/panel_load_steps.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/panel_load_steps.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "panel loading was split into step helpers, but the step module remains a large-file hotspot after feature dataset tests moved out",
       "next_action": "split source fetch, benchmark separation, pricing preparation, and lifecycle diagnostics when panel loading changes resume"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/commands/tune_runner.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/commands/tune_runner.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "tune runner became visible in the refreshed baseline after tune CLI extraction work moved orchestration out of tune.py",
       "next_action": "split job materialization, execution, and result collection when tune workflow work resumes"
     },
     {
-      "path": "cross-sectional-trees/tests/test_pipeline_filters_file_derived.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_pipeline_filters_file_derived.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "large derived-feature scenario test file is tracked but not active production code",
       "next_action": "split by derived feature group when tests change"
     },
     {
-      "path": "cross-sectional-trees/tests/test_summarize_runs.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_summarize_runs.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "large report test file mirrors summarize_runs.py debt",
       "next_action": "split after summarize_runs.py reporting extraction"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/commands/linear_sweep.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/commands/linear_sweep.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
       "next_action": "split parser and runner only when sweep command changes resume"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/commands/run_grid.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/commands/run_grid.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
       "next_action": "split parser, fixed-signal runner, and summary writer only when grid command changes resume"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/fundamentals_enrichment.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/fundamentals_enrichment.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "fundamental enrichment debt waits behind pipeline contract typing",
       "next_action": "split enrichment schema and resolver when fundamentals work resumes"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/output_artifacts.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/output_artifacts.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "output artifact module is newly included in staged Pyright coverage",
       "next_action": "promote further only after focused typecheck stays green"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/cli/liveops.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/cli/liveops.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "liveops CLI wiring debt waits behind allocation/export contract modules",
       "next_action": "split parser wiring after alloc-hk compatibility decision"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/liveops/holdings.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/liveops/holdings.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "holdings C901 debt was cleared, but the file remains a liveops large-file hotspot",
       "next_action": "split parser, run selection, and output rendering when holdings changes resume"
     },
     {
-      "path": "cross-sectional-trees/tests/test_docs_contracts.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_docs_contracts.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "large docs contract test file is tracked but not active production code",
       "next_action": "split by contract family when docs contract tests change"
     },
@@ -514,74 +514,74 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/output_summary_sections.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/output_summary_sections.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/tests/test_cli_research.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_cli_research.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/tests/test_promotion_gate.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_promotion_gate.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/dataset_sampling.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/dataset_sampling.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/tests/test_run_release_scripts.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_run_release_scripts.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/tests/test_pipeline_memory_path.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_pipeline_memory_path.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/tests/test_pipeline_validation.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/tests/test_pipeline_validation.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/release_tools/release_runs.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/release_tools/release_runs.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "cross-sectional-trees/docs/archive/research/a_share/probes/a_share_500k_round_lot_probe.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/docs/archive/research/a_share/probes/a_share_500k_round_lot_probe.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "archived A-share probe remains in the refreshed baseline but is not active production code",
       "next_action": "delete or move out of active archive scan after formal A-share evidence supersedes the probe"
     },
     {
-      "path": "cross-sectional-trees/docs/archive/research/a_share/probes/a_share_live_executable_oos_topk_probe.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/docs/archive/research/a_share/probes/a_share_live_executable_oos_topk_probe.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "archived executable OOS probe remains in the refreshed baseline but is not active production code",
       "next_action": "delete or move out of active archive scan after formal OOS evidence supersedes the probe"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/liveops/alloc_core.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/liveops/alloc_core.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "live allocation core remains a large typed-island-adjacent module outside this tooling migration",
       "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
     },
     {
-      "path": "cross-sectional-trees/src/cstree/pipeline/research_ops/promotion_gate.py",
-      "owner_repo": "cross-sectional-trees",
+      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/promotion_gate.py",
+      "owner_repo": "strategy-pipeline",
       "reason": "pipeline promotion gate mirrors existing research promotion debt after namespace split",
       "next_action": "split gate model and reporting helpers when promotion workflow changes resume"
     },

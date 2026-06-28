@@ -144,7 +144,7 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
                 )
             )
 
-    cstree = _command_for(root, "cross-sectional-trees", "cstree", "cstree")
+    cstree = _command_for(root, "strategy-pipeline", "cstree", "cstree")
     if cstree is None:
         results.append(_skip("cstree export-targets help", "cstree CLI is unavailable"))
     else:

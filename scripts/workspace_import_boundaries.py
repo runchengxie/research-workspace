@@ -234,7 +234,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         description=(
             "strategy-pipeline exports execution targets without importing execution internals"
         ),
-        repo="cross-sectional-trees",
+        repo="strategy-pipeline",
         source="src/cstree",
         forbidden=("quant_execution_engine",),
         max_allowed=0,
@@ -248,7 +248,7 @@ SOURCE_LAYOUT_RULES: tuple[SourceLayoutRule, ...] = (
             "strategy-pipeline should orchestrate alpha research and portfolio backtesting "
             "instead of carrying local alpha/backtesting implementation modules"
         ),
-        repo="cross-sectional-trees",
+        repo="strategy-pipeline",
         forbidden_sources=("src/cstree/alpha", "src/cstree/backtesting"),
         max_allowed=0,
     ),

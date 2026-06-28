@@ -70,7 +70,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ROOT,
                 configs,
                 profile="lint",
-                submodules=["cross-sectional-trees"],
+                submodules=["strategy-pipeline"],
             )
         ]
 
@@ -116,7 +116,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
 
             self.assertEqual(1, len(planned))
             command_text = " ".join(planned[0].command)
-            self.assertNotIn("../cross-sectional-trees/src", command_text)
+            self.assertNotIn("../strategy-pipeline/src", command_text)
             self.assertNotIn("../alpha-research/src", command_text)
             self.assertNotIn("../portfolio-backtester/src", command_text)
 
@@ -138,7 +138,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         self.assertEqual(
             {
                 "alpha-research": [("uv", "run", "--extra", "dev", "ty", "check")],
-                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "ty", "check")],
+                "strategy-pipeline": [("uv", "run", "--extra", "dev", "ty", "check")],
                 "market-data-platform": [("uv", "run", "--extra", "dev", "ty", "check")],
                 "portfolio-backtester": [("uv", "run", "--extra", "dev", "ty", "check")],
                 "quant-execution-engine": [("uv", "run", "--group", "dev", "ty", "check")],
@@ -159,7 +159,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         self.assertEqual(
             {
                 "alpha-research": [("uv", "run", "--extra", "dev", "basedpyright")],
-                "cross-sectional-trees": [("uv", "run", "--extra", "dev", "basedpyright")],
+                "strategy-pipeline": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "market-data-platform": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "quant-execution-engine": [

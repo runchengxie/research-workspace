@@ -23,7 +23,7 @@ HK_SPLIT_SCAN_ROOTS = (
     "scripts",
     "demo",
     "market-data-platform",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 )
 HK_SPLIT_MARKER_RE = re.compile(

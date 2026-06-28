@@ -84,14 +84,14 @@ def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path)
 def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_code(
     tmp_path: Path,
 ) -> None:
-    source = tmp_path / "cross-sectional-trees" / "src" / "cstree" / "backtesting"
+    source = tmp_path / "strategy-pipeline" / "src" / "cstree" / "backtesting"
     source.mkdir(parents=True)
     (source / "engine.py").write_text("def backtest_topk():\n    return None\n", encoding="utf-8")
     rules = (
         workspace_import_boundaries.SourceLayoutRule(
             identifier="no-local-backtesting",
             description="test",
-            repo="cross-sectional-trees",
+            repo="strategy-pipeline",
             forbidden_sources=("src/cstree/backtesting",),
             max_allowed=0,
         ),
@@ -105,6 +105,6 @@ def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_cod
     assert report["source_layout_rules"][0]["findings"] == [
         {
             "matched": "src/cstree/backtesting",
-            "path": "cross-sectional-trees/src/cstree/backtesting/engine.py",
+            "path": "strategy-pipeline/src/cstree/backtesting/engine.py",
         }
     ]

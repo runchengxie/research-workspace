@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Convert hot-sector-screener candidate universe to cross-sectional-trees by_date format.
+"""Convert hot-sector-screener candidate universe to strategy-pipeline by_date format.
 
 hot-sector-screener outputs:
   outputs/<YYYYMMDD>/candidate_universe.csv  (columns: ts_code, name, relevance, source_topics)
   outputs/<YYYYMMDD>/candidate_universe.json (candidate_universe array)
 
-cross-sectional-trees research_universe.by_date_file expects:
+strategy-pipeline research_universe.by_date_file expects:
   trade_date,symbol[,selected]
 
 Usage:

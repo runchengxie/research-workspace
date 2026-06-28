@@ -183,7 +183,7 @@
           ".pytest_cache",
           ".venv",
           "alpha-research",
-          "cross-sectional-trees",
+          "strategy-pipeline",
           "market-data-platform",
           "portfolio-backtester",
           "quant-execution-engine",
@@ -1333,8 +1333,8 @@
       "script_inventory": []
     },
     {
-      "repo": "cross-sectional-trees",
-      "root": "cross-sectional-trees",
+      "repo": "strategy-pipeline",
+      "root": "strategy-pipeline",
       "python_file_count": 223,
       "python_loc": 56683,
       "hk_related_file_count": 2,

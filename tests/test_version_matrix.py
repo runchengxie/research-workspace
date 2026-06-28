@@ -23,7 +23,7 @@ def test_version_matrix_current_checkout_runs() -> None:
     assert "| alpha-research |" in completed.stdout
     assert "| market-data-platform |" in completed.stdout
     assert "| portfolio-backtester |" in completed.stdout
-    assert "| cross-sectional-trees |" in completed.stdout
+    assert "| strategy-pipeline |" in completed.stdout
     assert "| quant-execution-engine |" in completed.stdout
 
 

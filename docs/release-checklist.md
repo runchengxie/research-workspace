@@ -44,7 +44,7 @@
 
 ## 研究交接
 
-- [ ] `cross-sectional-trees` 已在子项目内完成相关研究、测试或人工验证。
+- [ ] `strategy-pipeline` 已在子项目内完成相关研究、测试或人工验证。
 - [ ] `positions_current*.csv` / 已保存持仓的来源明确。
 - [ ] `cstree export-targets` 已生成标准格式的 `targets.json`。
 - [ ] `targets.json.lineage.json` 已保留，并包含运行编号、输入、配置和数据资产来源信息。

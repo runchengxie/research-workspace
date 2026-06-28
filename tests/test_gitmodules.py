@@ -9,7 +9,7 @@ EXPECTED_PATHS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 

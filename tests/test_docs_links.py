@@ -10,7 +10,7 @@ EXPECTED_SUBMODULES = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
-    "cross-sectional-trees",
+    "strategy-pipeline",
     "quant-execution-engine",
 }
 
@@ -117,12 +117,12 @@ class DocsLinksTest(unittest.TestCase):
         satellites = (ROOT / "docs" / "strategy-satellites.md").read_text(encoding="utf-8")
 
         self.assertNotIn(
-            "`market-data-platform` → `cross-sectional-trees` → `quant-execution-engine`",
+            "`market-data-platform` → `strategy-pipeline` → `quant-execution-engine`",
             satellites,
         )
         for phrase in (
             "`market-data-platform` → `alpha-research`",
-            "`portfolio-backtester` → `cross-sectional-trees` / `strategy-pipeline`",
+            "`portfolio-backtester` → `strategy-pipeline`",
             "signals.parquet + signals.meta.json",
             "positions_by_rebalance.csv + backtest evidence",
             "targets.json + targets.json.lineage.json",

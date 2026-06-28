@@ -2,7 +2,7 @@
 """将最新持仓导出为独立 HTML 文件。
 
 用法：
-    cd cross-sectional-trees
+    cd strategy-pipeline
     uv run python ../scripts/export_holdings_html.py [--out holdings.html]
 
 默认读取 latest.json 指向的最新 run 的 positions_current_live.csv，
@@ -18,7 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 # --- 路径默认值 ---
-DEFAULT_RUNS_DIR = Path(__file__).resolve().parent.parent / "cross-sectional-trees/artifacts/runs"
+DEFAULT_RUNS_DIR = Path(__file__).resolve().parent.parent / "strategy-pipeline/artifacts/runs"
 DEFAULT_LATEST_JSON = DEFAULT_RUNS_DIR / "latest.json"
 DEFAULT_INSTRUMENTS_PARQUET = Path(
     "/home/richard/data/market-data-platform/assets/tushare/a_share/instruments/"
@@ -83,7 +83,7 @@ HTML_TEMPLATE = """\
     </tbody>
   </table>
   <div class="footer">
-    数据来源：cross-sectional-trees 实时快照 · 行业分类：申万二级 · 仅供研究参考，不构成投资建议
+    数据来源：strategy-pipeline 实时快照 · 行业分类：申万二级 · 仅供研究参考，不构成投资建议
   </div>
 </div>
 </body>

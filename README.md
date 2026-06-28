@@ -17,7 +17,7 @@ portfolio-backtester
   组合构造、回测、容量和报告
         |
         v
-cross-sectional-trees
+strategy-pipeline
   研究编排、CLI 兼容层和目标持仓导出
         |
         v
@@ -35,7 +35,7 @@ quant-execution-engine
 - 顶层仓库只做集成、文档、轻量检查和子模块版本锁定。
 - 大型市场数据、研究输出、provider 缓存、交易审计日志不要放在顶层仓库。
 - 数据资产的正式入口是共享数据根目录下的 `metadata/current_assets/*.json` 和 `metadata/dataset_registry.csv`。
-- 研究到执行的正式交接文件是 `targets.json`，由 `cross-sectional-trees` 编排导出，由 `quant-execution-engine` 读取。
+- 研究到执行的正式交接文件是 `targets.json`，由 `strategy-pipeline` 编排导出，由 `quant-execution-engine` 读取。
 - 模拟盘和实盘能力由执行引擎自己的安全门禁控制；顶层脚本不会直接触发真实券商交易。
 
 ## 第一次启动
@@ -87,7 +87,7 @@ python scripts/smoke_contracts.py
 | [market-data-platform](market-data-platform/) | 维护共享数据目录、当前数据清单、资产索引、中国香港市场 RQData 资产、港股十档盘口快照数据，以及 A 股数据入口。 | [market-data-platform/README.md](market-data-platform/README.md) |
 | [alpha-research](alpha-research/) | 承载 `cstree.alpha.*`：特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断。 | [alpha-research/README.md](alpha-research/README.md) |
 | [portfolio-backtester](portfolio-backtester/) | 承载 `cstree.backtesting.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
-| [cross-sectional-trees](cross-sectional-trees/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容 facade、持仓快照和 `targets.json` 导出。 | [cross-sectional-trees/README.md](cross-sectional-trees/README.md) |
+| [strategy-pipeline](strategy-pipeline/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容 facade、持仓快照和 `targets.json` 导出。 | [strategy-pipeline/README.md](strategy-pipeline/README.md) |
 | [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
 
 港股公开演示仓库独立于这些活跃子项目，仅用于作品集展示。真实港股历史复现以

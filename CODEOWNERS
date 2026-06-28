@@ -5,7 +5,7 @@
 /market-data-platform/ @runchengxie
 /alpha-research/ @runchengxie
 /portfolio-backtester/ @runchengxie
-/cross-sectional-trees/ @runchengxie
+/strategy-pipeline/ @runchengxie
 /quant-execution-engine/ @runchengxie
 
 # Cross-repo contracts and governance

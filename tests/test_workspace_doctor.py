@@ -33,7 +33,7 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertEqual(
             {
                 "alpha-research": "alpha-research",
-                "cross-sectional-trees": "cross-sectional-trees",
+                "strategy-pipeline": "strategy-pipeline",
                 "market-data-platform": "market-data-platform",
                 "portfolio-backtester": "portfolio-backtester",
                 "quant-execution-engine": "quant-execution-engine",
@@ -342,7 +342,7 @@ class WorkspaceDoctorTest(unittest.TestCase):
                                     "full": ["@smoke", "@lint", "@test", "@type"],
                                 }
                             },
-                            "cross-sectional-trees": {
+                            "strategy-pipeline": {
                                 "profiles": {
                                     "lint": [["scripts/dev/run_tests.sh", "maintainability"]],
                                     "full": ["@smoke", "@lint", "@test", "@type"],

@@ -17,7 +17,7 @@ Usage:
 
   # Strategy attribution (the main workspace use case):
   python scripts/style_factor_attribution.py \\
-    --strategy-csv ~/code/cross-sectional-trees/outputs/cstree_returns.csv \\
+    --strategy-csv ~/code/strategy-pipeline/outputs/cstree_returns.csv \\
     --strategy-name cstree \\
     --out-name 20260627
 

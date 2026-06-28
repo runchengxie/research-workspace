@@ -39,7 +39,7 @@
       }
     },
     {
-      "repo": "cross-sectional-trees",
+      "repo": "strategy-pipeline",
       "ruff": {
         "staged_select": [
           "E",
@@ -205,10 +205,10 @@
   ],
   "broad_exclude_register": [
     {
-      "repo": "cross-sectional-trees",
+      "repo": "strategy-pipeline",
       "path": "configs/local",
       "tool": "ruff",
-      "owner": "cross-sectional-trees",
+      "owner": "strategy-pipeline",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",
       "review_milestone": "keep excluded by policy",
@@ -217,10 +217,10 @@
       ]
     },
     {
-      "repo": "cross-sectional-trees",
+      "repo": "strategy-pipeline",
       "path": "configs/local",
       "tool": "basedpyright",
-      "owner": "cross-sectional-trees",
+      "owner": "strategy-pipeline",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",
       "review_milestone": "keep excluded by policy",
@@ -229,10 +229,10 @@
       ]
     },
     {
-      "repo": "cross-sectional-trees",
+      "repo": "strategy-pipeline",
       "path": "configs/local",
       "tool": "ty",
-      "owner": "cross-sectional-trees",
+      "owner": "strategy-pipeline",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",
       "review_milestone": "keep excluded by policy",

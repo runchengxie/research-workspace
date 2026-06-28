@@ -10,7 +10,7 @@
 | `market-data-platform` | Ruff、Ruff format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
 | `alpha-research` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright advisory、pytest coverage、CPCV/PBO focused tests、feature evidence fixtures | signal artifact、feature evidence、promotion gate |
 | `portfolio-backtester` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright advisory、pytest coverage、capacity/exposure/backtest focused tests | turnover/cost、capacity、benchmark ladder、reporting |
-| `cross-sectional-trees` | 仓库自有 lint、format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
+| `strategy-pipeline` | 仓库自有 lint、format、ty、pytest | BasedPyright advisory、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
 | `quant-execution-engine` | Ruff、Ruff format、ty、pytest | Pyright release check、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
 顶层 hard profile 还包含 workspace boundary gate：

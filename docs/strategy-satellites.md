@@ -6,7 +6,7 @@
 > source_of_truth: yes
 
 本工作区核心链路是 `market-data-platform` → `alpha-research` →
-`portfolio-backtester` → `cross-sectional-trees` / `strategy-pipeline` →
+`portfolio-backtester` → `strategy-pipeline` →
 `quant-execution-engine`。以下项目是策略卫星，通过文件契约接入数据平台、
 研究 universe、信号或目标持仓交接点，不作为 workspace submodule。
 
@@ -46,7 +46,7 @@ portfolio-backtester (core submodule)
     │  消费: signal artifact + pricing / tradability data
     │  输出: positions_by_rebalance.csv + backtest evidence
     ↓
-cross-sectional-trees / strategy-pipeline (core submodule)
+strategy-pipeline (core submodule)
     │  消费: candidate universe → research_universe.by_date_file
     │  编排: alpha-research + portfolio-backtester
     │  输出: targets.json + targets.json.lineage.json
@@ -117,7 +117,7 @@ python scripts/publish_etf_industry_signal.py \
 
 ### 转换为 cstree universe 格式
 
-cross-sectional-trees 的 `research_universe.by_date_file` 需要 `trade_date,symbol` 格式。
+strategy-pipeline 的 `research_universe.by_date_file` 需要 `trade_date,symbol` 格式。
 使用 `scripts/hotsector_to_cstree_universe.py` 转换：
 
 ```bash
