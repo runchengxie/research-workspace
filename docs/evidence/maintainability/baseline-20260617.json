@@ -696,7 +696,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 74,
-      "python_loc": 17392,
+      "python_loc": 17420,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -981,7 +981,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 75,
-      "python_loc": 23467,
+      "python_loc": 23495,
       "hk_related_file_count": 0,
       "large_files": [
         {
