@@ -93,6 +93,19 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("历史兼容 alias", playbook)
         self.assertIn("不能作为新的 A 股权威入口", playbook)
 
+    def test_docs_preserve_cross_module_artifact_contracts(self) -> None:
+        contracts = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
+
+        for phrase in (
+            "cstree.signals",
+            "signals.meta.json",
+            "cstree.positions_by_rebalance",
+            "positions_by_rebalance.csv",
+            "quant-execution-engine.targets/v2",
+            "targets.json.lineage.json",
+        ):
+            self.assertIn(phrase, contracts)
+
 
 if __name__ == "__main__":
     unittest.main()

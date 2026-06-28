@@ -27,13 +27,23 @@
 | `metadata/dataset_registry.csv` | `market-data-platform` | 人工审计、研究系统 | 已发布数据资产索引 |
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
 | `summary.json` | `cross-sectional-trees` | 人工审计、后续导出 | 研究运行摘要 |
-| `signals.parquet` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物 |
+| `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
 | `strategy_outputs/style_factors/<name>/` | `style_factor_attribution.py` → `financial-research` | 策略研究（cstree 等）| 全市场 5 因子 (Size/Value/Momentum/Quality/LowVol) long-short 日收益、逐年分解、相关性矩阵、策略归因报告 |
-| `positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 已保存的目标持仓候选 |
+| `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
+
+## 跨模块 artifact contract
+
+| Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
+| --- | --- | --- | --- | --- |
+| `signals.parquet` | `cstree.signals` | `alpha-research` | `cstree.alpha.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
+| `signals.meta.json` | `cstree.signals` metadata | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
+| `positions_by_rebalance.csv` | `cstree.positions_by_rebalance` | `portfolio-backtester` | `cstree.backtesting.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
+| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`cross-sectional-trees` 导出 | `quant_execution_engine.targets`、`cstree export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
+| `targets.json.lineage.json` | target export lineage | `cross-sectional-trees` | `cstree export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
 
 ## A 股资产状态
 
@@ -92,7 +102,7 @@ $DATA_PLATFORM_ROOT/
 ```text
 signals.parquet
   -> named StrategySpec
-  -> cross-sectional-trees 已保存持仓
+  -> positions_by_rebalance.csv / cross-sectional-trees 已保存持仓
   -> cstree export-targets
   -> targets.json
   -> quant-execution-engine 预演 / 模拟盘 / 实盘门禁流程
