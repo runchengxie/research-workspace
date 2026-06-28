@@ -72,6 +72,7 @@ python scripts/smoke_contracts.py
 | 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
 | 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
 | 查看港股公开拆分清单 | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
+| 按阶段4收敛清单推进架构边界 | [docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md) |
 | 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
 | 查看维护债治理入口 | [docs/maintainability-governance.md](docs/maintainability-governance.md) |
 | 查看文档生命周期和归档规则 | [docs/documentation-lifecycle.md](docs/documentation-lifecycle.md) |

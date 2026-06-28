@@ -53,6 +53,8 @@ python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
 uv run --with pytest python -m pytest tests -q
 python scripts/run_quality_checks.py --profile hard
+python scripts/workspace_import_boundaries.py --check
+python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
 
 发布前或更新子模块指针前建议使用严格模式：
@@ -60,6 +62,8 @@ python scripts/run_quality_checks.py --profile hard
 ```bash
 python scripts/workspace_doctor.py --strict
 python scripts/smoke_contracts.py --strict
+python scripts/workspace_import_boundaries.py --check
+python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
 
 ## 委托子项目检查
