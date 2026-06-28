@@ -35,6 +35,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "market-data-platform:no-cstree-imports",
         "quant-execution-engine:no-cstree-imports",
         "strategy-pipeline:no-execution-engine-imports",
+        "strategy-pipeline:contracts-pure-handoff",
     } == {rule["id"] for rule in report["rules"]}
     assert {
         "strategy-pipeline:no-local-alpha-backtesting-source",
@@ -107,4 +108,40 @@ def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_cod
             "matched": "src/cstree/backtesting",
             "path": "strategy-pipeline/src/cstree/backtesting/engine.py",
         }
+    ]
+
+
+def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "strategy-pipeline" / "src" / "cstree" / "contracts"
+    source.mkdir(parents=True)
+    (source / "signals.py").write_text(
+        textwrap.dedent(
+            """
+            from ..pipeline.runner import run_pipeline
+            from quant_execution_engine.targets import TargetSet
+            """
+        ),
+        encoding="utf-8",
+    )
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="contracts-pure-handoff",
+            description="test",
+            repo="strategy-pipeline",
+            source="src/cstree/contracts",
+            forbidden=("cstree.pipeline", "quant_execution_engine"),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+    assert report["issues"] == [
+        "contracts-pure-handoff: 2 imports exceed budget 0",
+    ]
+    assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
+        "cstree.pipeline",
+        "quant_execution_engine",
     ]

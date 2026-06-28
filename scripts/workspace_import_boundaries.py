@@ -107,10 +107,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="alpha-research:alpha-to-strategy-core-metrics",
-        description=(
-            "alpha-research should own research metrics instead of importing strategy-pipeline "
-            "top-level metric modules"
-        ),
+        description="alpha-research should own research metrics",
         repo="alpha-research",
         source="src/cstree/alpha",
         forbidden=("cstree.metrics", "cstree.return_metrics"),
@@ -118,10 +115,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="alpha-research:alpha-to-strategy-compat",
-        description=(
-            "alpha-research should own runtime compatibility shims instead of importing "
-            "strategy-pipeline top-level compatibility modules"
-        ),
+        description="alpha-research should own runtime compatibility shims",
         repo="alpha-research",
         source="src/cstree/alpha",
         forbidden=("cstree.compat",),
@@ -151,9 +145,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="portfolio-backtester:backtesting-to-pipeline",
-        description=(
-            "portfolio-backtester should not grow runtime imports back into strategy pipeline"
-        ),
+        description="portfolio-backtester should not import strategy pipeline runtime",
         repo="portfolio-backtester",
         source="src/cstree/backtesting",
         forbidden=("cstree.pipeline", "cstree.benchmarking"),
@@ -231,12 +223,23 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="strategy-pipeline:no-execution-engine-imports",
-        description=(
-            "strategy-pipeline exports execution targets without importing execution internals"
-        ),
+        description="strategy-pipeline exports execution targets without execution internals",
         repo="strategy-pipeline",
         source="src/cstree",
         forbidden=("quant_execution_engine",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="strategy-pipeline:contracts-pure-handoff",
+        description="strategy-pipeline contract compatibility modules stay pure before extraction",
+        repo="strategy-pipeline",
+        source="src/cstree/contracts",
+        forbidden=(
+            "cstree.alpha",
+            "cstree.backtesting",
+            "cstree.pipeline",
+            "quant_execution_engine",
+        ),
         max_allowed=0,
     ),
 )
