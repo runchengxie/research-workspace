@@ -944,8 +944,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 63,
-      "python_loc": 21412,
+      "python_file_count": 64,
+      "python_loc": 21633,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1282,7 +1282,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 287,
-      "python_loc": 59560,
+      "python_loc": 59342,
       "hk_related_file_count": 2,
       "large_files": [
         {
