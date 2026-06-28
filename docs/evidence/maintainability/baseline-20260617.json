@@ -695,8 +695,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 53,
-      "python_loc": 13598,
+      "python_file_count": 61,
+      "python_loc": 14049,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -736,7 +736,7 @@
         },
         {
           "path": "src/cstree/alpha/walk_forward.py",
-          "loc": 518,
+          "loc": 515,
           "hk_related": false
         }
       ],
@@ -834,6 +834,12 @@
           "complexity": 27
         },
         {
+          "path": "src/cstree/alpha/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
           "path": "src/cstree/alpha/dynamic_signal_ensemble_calibration.py",
           "name": "calibrate_signal_directions",
           "line_count": 70,
@@ -870,6 +876,12 @@
           "complexity": 17
         },
         {
+          "path": "src/cstree/alpha/benchmarking.py",
+          "name": "warn_if_delay_exit_lag",
+          "line_count": 43,
+          "complexity": 16
+        },
+        {
           "path": "src/cstree/alpha/cpcv.py",
           "name": "build_cpcv_splits",
           "line_count": 63,
@@ -891,6 +903,12 @@
           "path": "src/cstree/alpha/dynamic_signal_ensemble_io.py",
           "name": "_load_from_signal_files",
           "line_count": 48,
+          "complexity": 15
+        },
+        {
+          "path": "src/cstree/alpha/freshness_overlay.py",
+          "name": "apply_freshness_overlay",
+          "line_count": 54,
           "complexity": 15
         },
         {
