@@ -946,7 +946,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 70,
-      "python_loc": 22240,
+      "python_loc": 22303,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -961,7 +961,7 @@
         },
         {
           "path": "src/cstree/backtesting/construction_grid.py",
-          "loc": 996,
+          "loc": 1013,
           "hk_related": false
         },
         {
@@ -1032,6 +1032,12 @@
       ],
       "long_functions": [
         {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 102,
+          "complexity": 21
+        },
+        {
           "path": "src/cstree/backtesting/engine.py",
           "name": "_evaluate_backtest_leg",
           "line_count": 100,
@@ -1066,12 +1072,6 @@
           "name": "_build_variant_backtest_options",
           "line_count": 94,
           "complexity": 3
-        },
-        {
-          "path": "src/cstree/backtesting/construction_grid.py",
-          "name": "_prepare_signal_column",
-          "line_count": 94,
-          "complexity": 19
         },
         {
           "path": "src/cstree/backtesting/evaluation.py",
@@ -1148,16 +1148,16 @@
           "complexity": 22
         },
         {
+          "path": "src/cstree/backtesting/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 102,
+          "complexity": 21
+        },
+        {
           "path": "src/cstree/backtesting/benchmarking.py",
           "name": "build_benchmark_series",
           "line_count": 65,
           "complexity": 20
-        },
-        {
-          "path": "src/cstree/backtesting/construction_grid.py",
-          "name": "_prepare_signal_column",
-          "line_count": 94,
-          "complexity": 19
         },
         {
           "path": "src/cstree/backtesting/a_share_executable_oos_topk.py",
@@ -1301,7 +1301,7 @@
       "repo": "cross-sectional-trees",
       "root": "cross-sectional-trees",
       "python_file_count": 223,
-      "python_loc": 57842,
+      "python_loc": 57846,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1355,12 +1355,12 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/commands/tune.py",
-          "loc": 744,
+          "path": "tests/test_cli_research.py",
+          "loc": 746,
           "hk_related": false
         },
         {
-          "path": "tests/test_cli_research.py",
+          "path": "src/cstree/commands/tune.py",
           "loc": 744,
           "hk_related": false
         },
