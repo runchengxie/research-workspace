@@ -290,6 +290,19 @@ class WorkspaceDoctorTest(unittest.TestCase):
         self.assertEqual("ERROR", checks[0].severity)
         self.assertIn("TUSHARE_TOKEN is not allowlisted", checks[0].message)
 
+    def test_top_level_shared_python_code_is_an_error(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            shared = root / "_shared"
+            shared.mkdir()
+            (shared / "metrics.py").write_text("VALUE = 1\n", encoding="utf-8")
+
+            checks = workspace_doctor.check_top_level_outputs(root)
+
+        errors = [check for check in checks if check.severity == "ERROR"]
+        self.assertTrue(any(check.code == "top-level-shared-code" for check in errors))
+        self.assertTrue(any("_shared/metrics.py" in check.message for check in errors))
+
     def test_private_archive_governance_stays_outside_active_graph(self) -> None:
         checks = workspace_doctor.check_hk_private_archive_governance(ROOT)
 

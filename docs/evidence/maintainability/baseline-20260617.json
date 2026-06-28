@@ -9,8 +9,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 38,
-      "python_loc": 8994,
+      "python_file_count": 37,
+      "python_loc": 8812,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -30,7 +30,7 @@
         },
         {
           "path": "scripts/workspace_doctor.py",
-          "loc": 501,
+          "loc": 526,
           "hk_related": false
         }
       ],

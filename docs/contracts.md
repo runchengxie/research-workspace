@@ -136,7 +136,7 @@ python scripts/smoke_contracts.py
 
 这些脚本只做轻量检查。子项目测试、业务参数验证和真实交易验证仍在对应子项目中完成。
 
-`workspace_doctor.py` 还会检查 `scripts/*.py` 是否直接导入了子模块 Python 包。顶层脚本应通过公开 CLI 或文档化文件进行交接，不应写成对子模块内部实现的 import 依赖。
+`workspace_doctor.py` 还会检查 `scripts/*.py` 是否直接导入了子模块 Python 包，并阻止顶层 `_shared/*.py` 这类裸共享库回流。顶层脚本应通过公开 CLI 或文档化文件进行交接；可复用 Python API 应进入有明确 owner 的子模块或正式共享 package。
 
 如果需要从顶层发起子项目自己的质量检查，使用委托式入口：
 

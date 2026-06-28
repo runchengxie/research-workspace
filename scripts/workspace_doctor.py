@@ -32,6 +32,7 @@ DATA_PLATFORM_ROOT_CANDIDATES = (
 )
 FORBIDDEN_TOP_LEVEL_PATTERNS = (".env", ".env.*", ".envrc", ".envrc.*")
 FORBIDDEN_TOP_LEVEL_DIRS = ("artifacts", "outputs", "data", "cache")
+FORBIDDEN_TOP_LEVEL_SHARED_CODE_DIRS = ("_shared",)
 FORBIDDEN_SCRIPT_IMPORTS = {
     "cstree",
     "hk_data_platform",
@@ -343,6 +344,30 @@ def check_top_level_outputs(root: Path) -> list[Check]:
     else:
         checks.append(
             Check("OK", "top-level-artifacts", "No top-level data/cache/output dirs found.")
+        )
+
+    shared_code_files: list[str] = []
+    for dirname in FORBIDDEN_TOP_LEVEL_SHARED_CODE_DIRS:
+        shared_root = root / dirname
+        if not shared_root.exists():
+            continue
+        shared_code_files.extend(
+            path.relative_to(root).as_posix()
+            for path in sorted(shared_root.rglob("*.py"))
+            if path.is_file()
+        )
+    if shared_code_files:
+        checks.append(
+            Check(
+                "ERROR",
+                "top-level-shared-code",
+                "Top-level shared Python code must move into an owning submodule/package: "
+                + ", ".join(shared_code_files),
+            )
+        )
+    else:
+        checks.append(
+            Check("OK", "top-level-shared-code", "No top-level shared Python code found.")
         )
     return checks
 
