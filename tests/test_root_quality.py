@@ -53,3 +53,12 @@ def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
     names = [item.name for item in commands]
 
     assert "workspace-import-boundaries" in names
+
+
+def test_superproject_ci_runs_top_level_quality_gates() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "superproject.yml").read_text(encoding="utf-8")
+
+    assert "python scripts/run_quality_checks.py --profile hard" in workflow
+    assert "uv run --with pytest python -m pytest tests -q" in workflow
+    assert "python scripts/run_submodule_checks.py --profile full --dry-run" in workflow
+    assert "python src/research_contracts/smoke_contracts.py --timeout 10" in workflow
