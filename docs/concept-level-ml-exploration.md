@@ -109,7 +109,7 @@
 - Mean rank IC > 0.03
 - ICIR > 0.3
 - 样本外 top-3 概念组合跑赢全 A 等权基准（年化超额 > 3%）
-- Walk-forward 所有折的 Sharpe 中位数 > 0
+- Walk-forward 所有折的夏普中位数 > 0
 
 ## 阶段 4：执行层（从概念到股票）
 

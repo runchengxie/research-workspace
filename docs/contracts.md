@@ -29,7 +29,7 @@
 | `summary.json` | `strategy-pipeline` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
-| `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究（cstree 等）| 全市场 9 因子（Size/Value/Momentum/Quality/LowVol/Growth/Leverage/Beta/Liquidity）long-short 日收益、逐年分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
+| `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究（cstree 等）| 全市场 9 因子（Size/Value/Momentum/Quality/LowVol/Growth/Leverage/Beta/Liquidity）多空日收益、逐年分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
 | `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
@@ -52,21 +52,21 @@
 A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `strategy-pipeline` 的 `cstree run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
 
 - TuShare 5000 积分账户可覆盖的 raw/clean 日线类资产：`stock_basic`、`trade_cal`、`daily`、`adj_factor`、`daily_basic`、`stk_limit`，以及由这些输入生成的 `daily_clean`。
-- `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌或零成交标记、上市天数和板块粗分类。发布前先执行 `marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>`，研究就绪度检查再执行带交易日历的 `--profile research`。当前 ST 标记来自 latest instruments snapshot，不能描述成 PIT-safe。
+- `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌或零成交标记、上市天数和板块粗分类。发布前先执行 `marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>`，研究就绪度检查再执行带交易日历的 `--profile research`。当前 ST 标记来自 latest instruments snapshot，说明时应标注为最新快照口径。
 - price-only A 股研究可以先消费 `daily_clean`、`instruments`、静态股票池或人工维护的 by-date 股票池。
 
 以下能力需要对应资产可用后才能进入正式研究或执行验收：
 
-- PIT universe：CSI300/500/800 或全 A 动态成分需要 point-in-time 成分来源；如果 TuShare 账户权限不足，应使用已授权 RQData/指数供应商资产或人工归档的历史成分资产，不能用当前成分回填历史。
+- PIT universe：CSI300/500/800 或全 A 动态成分需要 point-in-time 成分来源；如果 TuShare 账户权限不足，应使用已授权 RQData/指数供应商资产或人工归档的历史成分资产。当前成分只适合当前截面说明。
 - PIT fundamentals：需要披露日、报告期、公告延迟和字段映射；仅有最新财报快照不满足无未来函数研究。
-- `daily_basic` 的 PE、PB、市值和换手率只是逐日估值 overlay，不能冒充财务报表 PIT。
+- `daily_basic` 的 PE、PB、市值和换手率属于逐日估值 overlay。财务报表 PIT 口径需要单独的披露日和报告期链路。
 - 平台原生财报链路必须按 raw -> normalized -> PIT 分层，并在 validation 通过后才发布
   `normalized_fundamentals`、`pit_fundamentals` current-contract key 和 registry row。
-- 行业 overlay：申万/中信行业最好保留历史变更；只有当前行业标签时只能作为当前截面说明，不应回填历史回测。
+- 行业 overlay：申万/中信行业最好保留历史变更；只有当前行业标签时，只适合当前截面说明。历史回测应使用历史行业标签。
 - A 股深度交易规则：T+1、ST、停牌、涨跌停、新股上市 N 日和不同板块涨跌幅可作为研究侧过滤/标记；真实成交约束仍由执行系统和券商接口验证。
 - 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据；真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。`cstree export-targets` 可以把 `.SH`、`.SZ`、`.BJ`、`.XSHG`、`.XSHE` A 股后缀映射为 `market: CN`，并保留或标准化执行目标里的交易所后缀。券商后端的中国大陆市场真实报单能力以执行仓库的券商证据为准。
 
-扩大 A 股下载范围前，先按 [data-transition-playbook.md](data-transition-playbook.md) 完成 `DATA_PLATFORM_ROOT`、current contract、registry、`daily_clean` 质量门禁和 `default` smoke 验证。`default_next` 作为同一 A 股路径的兼容别名保留。旧称 `metadata/current_assets/cn_current.json` 只能作为历史兼容 alias 说明，不能作为新流程的权威入口。
+扩大 A 股下载范围前，先按 [data-transition-playbook.md](data-transition-playbook.md) 完成 `DATA_PLATFORM_ROOT`、current contract、registry、`daily_clean` 质量门禁和 `default` smoke 验证。`default_next` 作为同一 A 股路径的兼容别名保留。旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容 alias 说明，新流程的权威入口是 `metadata/current_assets/a_share_current.json`。
 
 ## 港股生命周期边界
 
