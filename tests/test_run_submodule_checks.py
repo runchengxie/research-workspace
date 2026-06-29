@@ -37,7 +37,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--group", "dev", "ruff", "check", "."),
                 ("uv", "run", "--group", "dev", "ruff", "format", "--check", "."),
                 ("uv", "run", "--group", "dev", "ty", "check"),
-                ("uv", "run", "--group", "dev", "pytest"),
+                ("uv", "run", "--group", "dev", "python", "-m", "pytest"),
             ],
             [item.command for item in planned],
         )
@@ -99,7 +99,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 submodules=[submodule],
             )
             self.assertEqual(
-                [("uv", "run", "--extra", "dev", "pytest")],
+                [("uv", "run", "--extra", "dev", "python", "-m", "pytest")],
                 [item.command for item in planned],
             )
 

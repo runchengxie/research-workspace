@@ -60,7 +60,7 @@ cd ..
 
 中国香港市场 provider 生产面已从活跃 `market-data-platform` 主线归档。日常运行不再使用
 `marketdata rqdata hk-*` 或旧 `rqdata-hk-*` 命令；需要历史复现时，先通过
-`marketdata migration hydrate-hk` 从 restore-only archive 恢复。工作区已停止追踪
+`marketdata migration hydrate-hk` 从恢复专用归档恢复。工作区已停止追踪
 `rqdata-hk-depth-snapshots` 子模块，也不承诺 `rqdata_tick_data.*` 旧 Python import 路径。
 
 如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。

@@ -14,8 +14,8 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 
 | 清单 | 用途 |
 | --- | --- |
-| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | public demo 路线退役记录、归档、删除门禁和 restore-sensitive surface |
-| [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | 私有 paused-maintenance legacy archive staging 和删除门禁 |
+| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | 公开演示路线退役记录、归档、删除门禁和恢复敏感 surface |
+| [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | 私有暂停维护 legacy archive 暂存和删除门禁 |
 | [deprecations.md](deprecations.md) | deprecated 入口 owner、replacement、milestone 和删除门禁 |
 
 ## 快速分类
@@ -33,12 +33,12 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 `hkdata`、`hk_data_platform.*`、`rqdata-hk-*`、`cstree alloc-hk` 或港股历史配置，需要先在
 `hk-public-split-manifest.yml` 中把对应记录推进到 deletion gate `ready`，并补齐：
 
-- restore evidence；
+- 恢复证据；
 - downstream consumer audit；
 - replacement docs；
 - rollback notes；
 - owning repo focused tests；
-- public demo 路线已退役，不再新增 public split evidence 要求。
+- 公开演示路线已退役，不再新增 public split evidence 要求。
 
 港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究线；仓库中仍保留的
 港股配置、历史笔记和工具入口只作为 `archived_provenance` 或 `frozen_compatibility`

@@ -548,10 +548,10 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/tests/test_promotion_gate.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+      "path": "alpha-research/tests/test_promotion_gate.py",
+      "owner_repo": "alpha-research",
+      "reason": "promotion gate 主体已经迁到 alpha-research，这个大测试文件随模块一起登记",
+      "next_action": "promotion gate 测试变更时按证据类型拆分"
     },
     {
       "path": "strategy-pipeline/src/cstree/pipeline/dataset_sampling.py",
@@ -590,10 +590,16 @@
       "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/promotion_gate.py",
+      "path": "alpha-research/src/cstree/alpha/promotion_gate.py",
+      "owner_repo": "alpha-research",
+      "reason": "promotion gate 的主体实现已经迁到 alpha-research，当前先登记为 alpha 研究侧维护性债务",
+      "next_action": "promotion gate 变更时拆分证据读取、阈值判定和报告渲染逻辑"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/summarize_runs.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "pipeline promotion gate mirrors existing research promotion debt after namespace split",
-      "next_action": "split gate model and reporting helpers when promotion workflow changes resume"
+      "reason": "汇总报告实现进入当前基线，先登记为研究汇总流程的现有债务",
+      "next_action": "summarize_runs 变更时拆分读取、指标汇总和渲染逻辑"
     },
     {
       "path": "portfolio-backtester/src/cstree/backtesting/a_share_executable_oos_topk.py",

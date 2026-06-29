@@ -77,7 +77,7 @@ def test_hk_archive_has_single_restore_entrypoint_and_no_public_followups() -> N
     ]
 
     assert "source_of_truth: yes" in archive_index
-    assert "public demo 路线已经退役" in archive_index
+    assert "公开演示路线已经退役" in archive_index
     assert split_manifest["follow_up_budget"]["blocked_or_follow_up_records_max"] == 0
     assert follow_up == []
 

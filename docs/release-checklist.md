@@ -11,11 +11,11 @@
 - [ ] `uv run --with pytest python -m pytest tests -q` 通过。
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本/测试，并排除子仓与历史探索脚本。
 - [ ] 仅在执行港股私有 legacy archive restore/removal review 时，`python scripts/hk_archive_gate.py --check --format json` 已通过。
-- [ ] 仅在重新 stage 港股私有 legacy archive 时，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
-- [ ] 港股私有 legacy archive 保持 private、paused-maintenance、restore-only；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
-- [ ] 不再发布工作区内 public demo 或独立港股研究线；港股材料只按 private、paused-maintenance、restore-only archive 处理。
+- [ ] 仅在重新暂存港股私有 legacy archive 时，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。
+- [ ] 港股私有 legacy archive 保持私有、暂停维护、恢复专用；不加入 submodule、required CI、release matrix 或 A 股运行依赖。
+- [ ] 不再发布工作区内公开演示路线或独立港股研究线；港股材料只按私有恢复专用归档处理。
 - [ ] 如本次需要子项目质量门禁，`python scripts/run_submodule_checks.py --profile full` 已运行；其中 `lint` 包含数据平台质量治理和策略编排 maintainability ratchet，`type` 使用 `ty check`，失败项能定位到具体子项目和命令。
-- [ ] Release/advisory 结果已记录：`python scripts/run_submodule_checks.py --profile release_typecheck`、`python scripts/run_submodule_checks.py --profile mypy_advisory --submodule quant-execution-engine`、依赖审计、依赖 hygiene、选择性 coverage ratchet。
+- [ ] 发布检查和建议项结果已记录：`python scripts/run_submodule_checks.py --profile release_typecheck`、`python scripts/run_submodule_checks.py --profile mypy_advisory --submodule quant-execution-engine`、依赖审计、依赖 hygiene、选择性 coverage ratchet。
 - [ ] `python scripts/print_version_matrix.py` 输出已复制到 [version-matrix.md](version-matrix.md) 或对应发布记录。
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容；`.env.example` 只包含非敏感示例。
 - [ ] `python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --evidence-manifest <json> --pretty` 已运行，并保存所需 readiness 结论。
@@ -36,7 +36,7 @@
 - [ ] 如港股已冻结，`marketdata migration freeze-hk ... --json` 清单、freeze marker 和冷存储 manifest 已保留。
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>` 已通过并保留报告，或质量缺口已记录。
 - [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。
-- [ ] 如推进 A 股研究，`cstree run --config default_next` 已产出 `summary.json`、`config.used.yml` 和持仓文件。
+- [ ] 如推进 A 股研究，`cstree run --config default` 已产出 `summary.json`、`config.used.yml` 和持仓文件；`default_next` 兼容别名也保持可用。
 - [ ] 如推进研究抽象收敛，run 已产出或明确跳过 `signals.parquet`，`summary.json` 包含 `dataset.lifecycle`、`signals`、`model_detail` 和 strategy lineage。
 - [ ] 描述完整 PIT 研究能力前，`complete_pit_research_data` 已通过。
 - [ ] 描述生产级策略证据前，`production_strategy_evidence` 已通过。

@@ -78,9 +78,9 @@ class DocsLinksTest(unittest.TestCase):
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")
 
-        self.assertIn("restore-only archive", docs_index)
+        self.assertIn("恢复专用归档", docs_index)
         self.assertIn("source_of_truth: yes", archive_index)
-        self.assertIn("public demo 路线已经退役", archive_index)
+        self.assertIn("公开演示路线已经退役", archive_index)
 
     def test_hk_archive_records_are_outside_primary_path(self) -> None:
         archive_index = (ROOT / "docs" / "archive" / "hk" / "README.md").read_text(encoding="utf-8")

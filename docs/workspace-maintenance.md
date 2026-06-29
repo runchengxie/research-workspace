@@ -8,6 +8,7 @@
 
 - 跨仓库文件约定、工作流、发布检查清单或 doctor 规则。
 - 子模块 gitlink，也就是锁定 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`、`quant-execution-engine` 的具体提交。
+- 顶层直接追踪的 `research-contracts` 薄包，用于校验跨仓库 artifact contract 清单。
 - 顶层 `docs/` 中的协作说明和版本组合记录。
 - 只依赖公开 CLI 或文档化文件输出的轻量检查脚本。
 
@@ -54,7 +55,7 @@ python scripts/smoke_contracts.py
 uv run --with pytest python -m pytest tests -q
 python scripts/run_quality_checks.py --profile hard
 python scripts/workspace_import_boundaries.py --check
-python -m pytest tests/test_workspace_import_boundaries.py -q
+uv run --with pytest python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
 
 发布前或更新子模块指针前建议使用严格模式：
@@ -63,7 +64,7 @@ python -m pytest tests/test_workspace_import_boundaries.py -q
 python scripts/workspace_doctor.py --strict
 python scripts/smoke_contracts.py --strict
 python scripts/workspace_import_boundaries.py --check
-python -m pytest tests/test_workspace_import_boundaries.py -q
+uv run --with pytest python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
 
 ## 委托子项目检查
@@ -79,8 +80,10 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 才运行 BasedPyright / Pyright，`mypy_advisory` 仍是执行引擎的单独观察项。
 
+执行引擎仓库自己的 `Makefile` 还提供 `make test`、`make typecheck` 和 `make quality`。顶层委托检查以 [../scripts/submodule_checks.json](../scripts/submodule_checks.json) 为准，执行引擎本地维护时再使用 `Makefile`。
+
 检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
-以及执行引擎迁移后的 mypy advisory 见 [quality-governance.md](quality-governance.md)。
+以及执行引擎迁移后的 mypy 建议项见 [quality-governance.md](quality-governance.md)。
 
 ## 常见术语
 

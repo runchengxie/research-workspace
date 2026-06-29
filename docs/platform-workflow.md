@@ -4,7 +4,7 @@
 
 ## 当前工作流
 
-截至 2026-06-01，工作区已经锁定并验证到研究结果交给执行引擎生成离线计划这一段：
+截至 2026-06-29，工作区已经锁定并验证到研究结果交给执行引擎生成离线计划这一段：
 
 ```text
 数据维护和盘口加工
@@ -50,7 +50,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、A 股资产发布和港股归档 freeze / hydrate 恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `cstree.alpha.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `cstree.backtesting.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
-| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，保留 CLI、兼容 facade、持仓快照和执行目标导出 | `cstree ...`、`summary.json`、`targets.json` |
+| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，保留 CLI、兼容门面、持仓快照和执行目标导出 | `cstree ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界
@@ -68,9 +68,9 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ## 研究主线
 
-当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为 restore-only 历史研究线，工作区内 public demo 和独立港股研究线 staging 已退役。迁出动作和保留边界见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 与 [`archive/hk/README.md`](archive/hk/README.md)。具体 default 切换、港股 frozen-active / sunset 条件以 `strategy-pipeline/docs/market-lifecycle.md` 为准。
+当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为恢复专用历史研究线，工作区内公开演示路线和独立港股研究线已退役。迁出动作和保留边界见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 与 [`archive/hk/README.md`](archive/hk/README.md)。具体 default 切换、港股 frozen-active / sunset 条件以 `strategy-pipeline/docs/market-lifecycle.md` 为准。
 
-当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股继续用 `daily_clean` / `default_next` 做 staged baseline。切换 `default` 到 A 股前，先满足验收条件。
+当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股主线使用 `default`，`default_next` 只作为迁移兼容别名保留。完整 PIT、长窗口证据和券商能力仍按就绪度分层单独验收。
 
 ### 1. 发布数据资产
 
@@ -94,7 +94,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ### 2. 读取数据并完成研究
 
-`strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 workspace 中的 `alpha-research` 和 `portfolio-backtester` 完成研究流程。A 股迁移候选入口是 `cstree run --config default_next`；港股只用于 restore-only 历史复现，不作为新增研究默认入口。
+`strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 workspace 中的 `alpha-research` 和 `portfolio-backtester` 完成研究流程。A 股主入口是 `cstree run --config default`；`default_next` 继续作为同一 A 股 preset 的迁移兼容别名。港股只用于恢复专用历史复现，不作为新增研究默认入口。
 
 - 特征工程、训练与评估。
 - 历史回测、基准对比和研究证据管理。

@@ -9,8 +9,8 @@
 这里收录顶层工作区说明，只覆盖跨仓库协作、文件约定、版本锁定和发布检查。子项目内部的依赖、业务命令、架构规则和测试要求仍以各自 README 和 docs 为准。
 
 当前工作区的活跃方向是 A 股数据、策略研究和执行交接。港股真实资产、研究输出和历史代码
-只按冷存储 / private paused-maintenance restore-only archive 边界保留；工作区不再维护
-public demo 或独立港股研究线 staging。
+按冷存储和恢复专用归档保留。工作区不再维护
+公开演示路线或独立港股研究线。
 
 ## 推荐阅读顺序
 
@@ -29,13 +29,14 @@ public demo 或独立港股研究线 staging。
 | 查看跨仓库研究完整性和防过拟合边界 | [platform-workflow.md](platform-workflow.md#研究完整性和防过拟合边界) |
 | 查看维护债治理入口 | [maintainability-governance.md](maintainability-governance.md) |
 | 查看文档生命周期和归档规则 | [documentation-lifecycle.md](documentation-lifecycle.md) |
-|| 了解策略卫星项目和接入方式 | [strategy-satellites.md](strategy-satellites.md) |
-|| 查看废弃入口删除条件 | [deprecations.md](deprecations.md) |
+| 了解策略卫星项目和接入方式 | [strategy-satellites.md](strategy-satellites.md) |
+| 查看废弃入口删除条件 | [deprecations.md](deprecations.md) |
 | 维护子模块指针或运行顶层检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量门禁、建议项和人工复核项 | [quality-governance.md](quality-governance.md) |
 | 查看阶段4拆分收敛清单 | [architecture-split-closure-checklist.md](architecture-split-closure-checklist.md) |
 | 查看当前版本组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合前检查 | [release-checklist.md](release-checklist.md) |
+| 了解顶层本地契约薄包 | [contracts.md](contracts.md#跨模块-artifact-contract) |
 
 ## 文档分层
 
@@ -52,4 +53,5 @@ public demo 或独立港股研究线 staging。
 
 - 顶层文档写数据平台、策略研究、交易执行之间的交接方式。
 - 子项目内部实现、业务参数和完整命令说明放在子项目自己的文档里。
+- `research-contracts` 是顶层直接追踪的本地薄包，用于加载和校验跨仓库 artifact contract 清单，不登记为 Git 子模块。
 - 大型市场数据、研究 run、交易审计日志和 provider 缓存不进入顶层仓库。

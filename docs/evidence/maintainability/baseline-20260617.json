@@ -695,10 +695,15 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 75,
-      "python_loc": 17545,
+      "python_file_count": 83,
+      "python_loc": 20502,
       "hk_related_file_count": 0,
       "large_files": [
+        {
+          "path": "src/cstree/alpha/promotion_gate.py",
+          "loc": 1142,
+          "hk_related": false
+        },
         {
           "path": "src/cstree/alpha/cpcv.py",
           "loc": 1053,
@@ -722,6 +727,11 @@
         {
           "path": "src/cstree/alpha/feature_evidence.py",
           "loc": 725,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_promotion_gate.py",
+          "loc": 686,
           "hk_related": false
         },
         {
@@ -802,6 +812,12 @@
           "complexity": 7
         },
         {
+          "path": "src/cstree/alpha/promotion_gate.py",
+          "name": "build_promotion_record",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
           "path": "src/cstree/alpha/train_eval_stage.py",
           "name": "_run_train_eval_stage_impl",
           "line_count": 83,
@@ -812,6 +828,12 @@
           "name": "correlation_audit_report",
           "line_count": 82,
           "complexity": 17
+        },
+        {
+          "path": "src/cstree/alpha/promotion_gate.py",
+          "name": "flatten_promotion_record",
+          "line_count": 82,
+          "complexity": 10
         },
         {
           "path": "src/cstree/alpha/feature_dataset.py",
@@ -840,6 +862,12 @@
           "complexity": 27
         },
         {
+          "path": "src/cstree/alpha/promotion_gate.py",
+          "name": "build_promotion_record",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
           "path": "src/cstree/alpha/benchmarking.py",
           "name": "build_benchmark_series",
           "line_count": 65,
@@ -849,6 +877,12 @@
           "path": "src/cstree/alpha/dynamic_signal_ensemble_calibration.py",
           "name": "calibrate_signal_directions",
           "line_count": 70,
+          "complexity": 19
+        },
+        {
+          "path": "src/cstree/alpha/promotion_gate.py",
+          "name": "_is_missing_evidence_category",
+          "line_count": 39,
           "complexity": 19
         },
         {
@@ -980,8 +1014,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 75,
-      "python_loc": 23709,
+      "python_file_count": 76,
+      "python_loc": 23897,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -1335,8 +1369,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 187,
-      "python_loc": 47080,
+      "python_file_count": 184,
+      "python_loc": 43954,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1347,11 +1381,6 @@
         {
           "path": "src/cstree/pipeline/config.py",
           "loc": 1176,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/research_ops/promotion_gate.py",
-          "loc": 1123,
           "hk_related": false
         },
         {
@@ -1405,16 +1434,6 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/fundamentals_enrichment.py",
-          "loc": 705,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_promotion_gate.py",
-          "loc": 686,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_docs_contracts.py",
           "loc": 634,
           "hk_related": false
@@ -1455,13 +1474,13 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/stats.py",
-          "loc": 540,
+          "path": "src/cstree/pipeline/context_builder.py",
+          "loc": 510,
           "hk_related": false
         },
         {
-          "path": "src/cstree/pipeline/context_builder.py",
-          "loc": 510,
+          "path": "src/cstree/pipeline/research_ops/summarize_runs.py",
+          "loc": 503,
           "hk_related": false
         }
       ],
@@ -1631,12 +1650,6 @@
           "complexity": 23
         },
         {
-          "path": "src/cstree/pipeline/research_ops/promotion_gate.py",
-          "name": "build_promotion_record",
-          "line_count": 83,
-          "complexity": 22
-        },
-        {
           "path": "src/cstree/release_tools/release_runs.py",
           "name": "_selected_runs",
           "line_count": 49,
@@ -1694,12 +1707,6 @@
           "path": "src/cstree/pipeline/config.py",
           "name": "_normalize_benchmark_compare",
           "line_count": 44,
-          "complexity": 19
-        },
-        {
-          "path": "src/cstree/pipeline/research_ops/promotion_gate.py",
-          "name": "_is_missing_evidence_category",
-          "line_count": 39,
           "complexity": 19
         },
         {
@@ -1767,6 +1774,18 @@
           "name": "_normalize_score_postprocess",
           "line_count": 44,
           "complexity": 17
+        },
+        {
+          "path": "src/cstree/pipeline/quality.py",
+          "name": "enforce_liveops_quality_gate",
+          "line_count": 52,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/internal/export_repo_source.py",
+          "name": "combine_project_files",
+          "line_count": 117,
+          "complexity": 16
         }
       ],
       "quality_config": {

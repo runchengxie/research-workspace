@@ -307,7 +307,7 @@ class WorkspaceDoctorTest(unittest.TestCase):
         checks = workspace_doctor.check_hk_private_archive_governance(ROOT)
 
         self.assertEqual(["OK"], [check.severity for check in checks])
-        self.assertIn("outside the submodule graph", checks[0].message)
+        self.assertIn("不在 submodule graph 中", checks[0].message)
 
     def test_submodule_governance_gates_are_visible_to_doctor(self) -> None:
         checks = workspace_governance.check_submodule_governance_gates(ROOT)

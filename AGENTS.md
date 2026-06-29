@@ -6,7 +6,8 @@
 
 本工作区是多仓库集成层，主要负责：
 
-- 维护 `market-data-platform`、`cross-sectional-trees`、`quant-execution-engine` 的子模块边界。
+- 维护 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`、`quant-execution-engine` 的子模块边界。
+- 维护顶层直接追踪的 `research-contracts` 薄包，用于校验跨仓库产物契约清单。
 - 记录跨仓库数据文件约定、运行路径、发布检查清单和工作区健康检查。
 - 协调数据平台、策略研究和交易执行之间的文件交接。
 
@@ -27,8 +28,10 @@
 
 1. 顶层文档、doctor 或检查清单明确权威文件约定名称。
 2. `market-data-platform` 负责生产、检查和发布数据资产文件约定。
-3. `cross-sectional-trees` 只读消费平台资产，并负责研究输出与执行目标导出。
-4. `quant-execution-engine` 读取标准 `targets.json`，负责解析、dry-run、风控、执行与审计。
+3. `alpha-research` 负责特征、模型、研究评估、稳健性诊断和信号产物。
+4. `portfolio-backtester` 负责组合构造、回测、容量、暴露、换手和报告。
+5. `strategy-pipeline` 只读消费平台资产，编排研究流程，并导出执行目标文件。
+6. `quant-execution-engine` 读取标准 `targets.json`，负责解析、dry-run、风控、执行与审计。
 
 当前 A 股权威 current contract 文件名是：
 
@@ -50,12 +53,20 @@ uv run --with pytest python -m pytest tests -q
 子仓库检查应进入对应目录后执行该仓库自己的命令，例如：
 
 ```bash
-cd market-data-platform && uv run python -m pytest
-cd cross-sectional-trees && uv run python -m pytest
-cd quant-execution-engine && uv run pytest
+cd market-data-platform && uv run --extra dev python -m pytest
+cd alpha-research && uv run --extra dev python -m pytest
+cd portfolio-backtester && uv run --extra dev python -m pytest
+cd strategy-pipeline && scripts/dev/run_tests.sh all
+cd quant-execution-engine && uv run --group dev python -m pytest
 ```
 
-如果只改跨仓库文件约定，优先运行每个边界的 focused tests，再按需要扩大到完整 pytest、Ruff、Pyright 或治理脚本。
+如果只改跨仓库文件约定，优先运行对应边界的定点测试，再按需要扩大到完整 pytest、Ruff、ty、Pyright 或治理脚本。顶层统一委托入口是：
+
+```bash
+python scripts/run_submodule_checks.py --profile smoke
+python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
+```
 
 ## TuShare 凭证约定
 
@@ -65,14 +76,13 @@ cd quant-execution-engine && uv run pytest
 - 15000 分账户使用 `TUSHARE_TOKEN_2`，并依赖匹配的 `TUSHARE_API_URL_2` 中转地址；命令应显式传
   `--token-env TUSHARE_TOKEN_2`，或在验证命令中传 `--env TUSHARE_TOKEN_2`。不要因为默认官方 API
   域名返回 token 错误就判断 token 失效。
-- Codex / MCP connector 的 TuShare token 配置和本地 `.env` 不是同一套环境；如果 connector 报
-  “需要 token”，应改用 `market-data-platform` CLI 或先确认 connector 侧单独配置，而不是读取或打印本地
-  token。
+- Codex / MCP connector 的 TuShare token 配置和本地 `.env` 分属两套环境；如果 connector 报缺少 token，应改用 `market-data-platform` CLI，或先确认 connector 侧配置。不要读取或打印本地 token。
 
 ## 编辑规则
 
 - 先确认改动属于顶层工作区还是某个子仓库；不要把子仓库内部规则复制到顶层文档。
 - 顶层 `docs/` 只写跨仓库协作、文件约定和发布检查事项。
+- `strategy-pipeline/docs/` 当前仍保留部分历史研究、alpha 和回测说明；新增或大改这类说明时，优先放到 `alpha-research` 或 `portfolio-backtester`。留在 `strategy-pipeline` 的内容应聚焦编排、CLI、配置、产物和执行目标导出。
 - 临时交接、冻结记录、发布说明和历史复查材料应放入 `docs/archive/`，活跃文档只链接归档入口。
 - 修改 submodule 内容后，要同时注意 superproject 的 submodule gitlink 状态。
 - 不要提交 `.pytest_cache/`、`__pycache__/`、`artifacts/`、`outputs/`、provider 凭证或本地 `.env*`。

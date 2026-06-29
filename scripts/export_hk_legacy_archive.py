@@ -124,8 +124,8 @@ def export_archive(*, manifest_path: Path, out_dir: Path, root: Path = ROOT) -> 
             )
     readme = (
         "# HK quant legacy archive\n\n"
-        "Private paused-maintenance restore-only source archive. "
-        "This repository is not an active workspace dependency.\n"
+        "私有、暂停维护、恢复专用的源码归档。"
+        "该仓库不作为活跃 workspace 依赖。\n"
     )
     (out_dir / "README.md").write_text(readme, encoding="utf-8")
     initial_scan = scan_archive_tree(out_dir)
