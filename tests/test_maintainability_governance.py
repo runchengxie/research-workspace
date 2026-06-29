@@ -57,6 +57,18 @@ QUALITY_DEBT_BUDGET_FIELDS = {
     "policy",
 }
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
+COMPATIBILITY_FACADE_FIELDS = {
+    "path",
+    "owner_repo",
+    "kind",
+    "replacement",
+    "current_consumers",
+    "removal_condition",
+    "rollback_path",
+    "focused_tests",
+    "consumer_audit",
+    "status",
+}
 
 
 def _load_json_doc(relative: str) -> dict[str, Any]:
@@ -222,6 +234,21 @@ def test_deprecation_budget_blocks_new_pending_surfaces() -> None:
         and "pending deprecated surface count" in check.message
         for check in checks
     )
+
+
+def test_compatibility_facade_register_covers_detected_facades() -> None:
+    manifest = _load_json_doc("docs/compatibility-facades.yml")
+    module = _load_workspace_governance_module()
+    records = {record["path"]: record for record in manifest["records"]}
+
+    assert manifest["schema_version"] == "compatibility_facades.v1"
+    assert set(records) == module._tracked_compatibility_facade_paths(ROOT)
+    for record in records.values():
+        assert COMPATIBILITY_FACADE_FIELDS <= set(record)
+        assert (ROOT / record["path"]).is_file()
+        assert record["focused_tests"]
+        assert record["removal_condition"]
+        assert record["rollback_path"]
 
 
 def test_script_lifecycle_manifest_classifies_all_tracked_scripts() -> None:

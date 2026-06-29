@@ -7,6 +7,7 @@
 | 领域 | 权威入口 |
 | --- | --- |
 | 废弃兼容入口 | [deprecations.md](deprecations.md)、[deprecations.yml](deprecations.yml) |
+| 兼容 facade 和 wrapper | [compatibility-facades.yml](compatibility-facades.yml) |
 | 脚本生命周期和安全边界 | [script-lifecycle.yml](script-lifecycle.yml) |
 | 质量覆盖和排除项 | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
 | 大文件和重构路线图 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
@@ -26,6 +27,7 @@ python scripts/maintainability_baseline.py --out docs/evidence/maintainability/b
 ## 规则
 
 - 新增 deprecated surface 需要 owner、replacement、removal condition、rollback path 和 focused tests。
+- 新增或保留兼容 facade、wrapper、星号重导出时，需要登记 replacement、consumer audit、removal condition、rollback path 和 focused tests。
 - 新增非平凡脚本并用于发布或迁移流程前，需要补齐 lifecycle 元数据。
 - 新增大范围 Ruff、Pyright 或 mypy 排除项，需要 owner、reason、review milestone 和 next include target。
 - 大文件和长函数进入大范围改写前，先进入路线图。

@@ -1,0 +1,180 @@
+{
+  "schema_version": "compatibility_facades.v1",
+  "required_removal_evidence": [
+    "repo-local reference scan",
+    "downstream consumer audit or explicit not_applicable note",
+    "replacement import or command documentation",
+    "focused tests for the replacement path",
+    "rollback path"
+  ],
+  "records": [
+    {
+      "path": "alpha-research/src/cstree/alpha/train_eval.py",
+      "owner_repo": "alpha-research",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.train_eval_fit and cstree.alpha.train_eval_stage",
+      "current_consumers": "kept for existing alpha train/eval imports during package split",
+      "removal_condition": "remove after two release reviews show no repo-local or downstream imports of cstree.alpha.train_eval and replacement docs cover direct imports",
+      "rollback_path": "restore facade module from the previous alpha-research release tag",
+      "focused_tests": ["alpha-research import smoke", "alpha-research pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/capacity.py",
+      "owner_repo": "portfolio-backtester",
+      "kind": "module_facade",
+      "replacement": "cstree.backtesting.capacity_report",
+      "current_consumers": "kept for existing backtesting capacity imports during package split",
+      "removal_condition": "remove after two release reviews show no imports of cstree.backtesting.capacity and capacity_report docs/tests cover replacement imports",
+      "rollback_path": "restore facade module from the previous portfolio-backtester release tag",
+      "focused_tests": ["portfolio-backtester import smoke", "portfolio-backtester pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/reports.py",
+      "owner_repo": "portfolio-backtester",
+      "kind": "module_facade",
+      "replacement": "cstree.backtesting.reporting and cstree.backtesting.tearsheet",
+      "current_consumers": "kept for existing report imports during package split",
+      "removal_condition": "remove after two release reviews show no imports of cstree.backtesting.reports and replacement docs/tests cover direct imports",
+      "rollback_path": "restore facade module from the previous portfolio-backtester release tag",
+      "focused_tests": ["portfolio-backtester import smoke", "portfolio-backtester pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/freshness_overlay.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.freshness_overlay",
+      "current_consumers": "kept for strategy-pipeline callers that imported freshness overlay from pipeline",
+      "removal_condition": "remove after two release reviews show no pipeline freshness_overlay imports and alpha replacement docs are linked",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/train_eval_request_builder.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.train_eval_request_builder",
+      "current_consumers": "kept for strategy-pipeline callers that imported train/eval request helpers from pipeline",
+      "removal_condition": "remove after two release reviews show no pipeline train_eval_request_builder imports and alpha replacement docs are linked",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/train_eval_result.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.train_eval_result",
+      "current_consumers": "kept for strategy-pipeline callers that imported train/eval result helpers from pipeline",
+      "removal_condition": "remove after two release reviews show no pipeline train_eval_result imports and alpha replacement docs are linked",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/promotion_gate.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.promotion_gate",
+      "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
+      "removal_condition": "remove after two release reviews show no research_ops promotion_gate imports and alpha replacement docs/tests cover direct use",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": ["strategy-pipeline promotion gate tests", "alpha-research promotion gate tests"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/promotion_gate_thresholds.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "cstree.alpha.promotion_gate_thresholds",
+      "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
+      "removal_condition": "remove after two release reviews show no research_ops promotion_gate_thresholds imports and alpha replacement docs/tests cover direct use",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": ["strategy-pipeline promotion gate tests", "alpha-research promotion gate tests"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/data_providers.py",
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.data_providers_client or public data provider APIs",
+      "current_consumers": "kept for existing market_data_platform.data_providers imports",
+      "removal_condition": "remove after two release reviews show no active imports of data_providers and public data provider docs cover replacement APIs",
+      "rollback_path": "restore facade module from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform data provider tests", "market-data-platform import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/data_providers_core.py",
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.data_providers_client and data_providers_public_api",
+      "current_consumers": "kept as the explicit compatibility export surface behind data_providers",
+      "removal_condition": "remove after data_providers facade is removed and no repo-local or downstream imports target data_providers_core",
+      "rollback_path": "restore facade module from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform data provider tests", "market-data-platform import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/tushare_cli.py",
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.cli_tushare and tushare_cli_* modules",
+      "current_consumers": "kept for existing TuShare CLI parser imports and tests",
+      "removal_condition": "remove after two release reviews show no direct tushare_cli imports and CLI parser docs/tests cover split modules",
+      "rollback_path": "restore facade module from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform TuShare CLI tests", "market-data-platform import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/execution.py",
+      "owner_repo": "quant-execution-engine",
+      "kind": "module_facade",
+      "replacement": "quant_execution_engine.execution_service and execution_state",
+      "current_consumers": "kept for existing execution lifecycle imports and monkeypatch-compatible tests",
+      "removal_condition": "remove after two release reviews show no external imports of quant_execution_engine.execution and execution service docs cover replacements",
+      "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
+      "focused_tests": ["quant-execution-engine execution foundation tests", "quant-execution-engine import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/execution_service_recovery.py",
+      "owner_repo": "quant-execution-engine",
+      "kind": "module_facade",
+      "replacement": "quant_execution_engine.execution_service_recovery_actions",
+      "current_consumers": "kept for existing recovery mixin imports",
+      "removal_condition": "remove after two release reviews show no imports of execution_service_recovery and recovery action docs/tests cover replacements",
+      "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
+      "focused_tests": ["quant-execution-engine execution recovery tests", "quant-execution-engine import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/facade.py",
+      "owner_repo": "quant-execution-engine",
+      "kind": "external_facade",
+      "replacement": "quant_execution_engine.rebalance.RebalanceService for internal callers",
+      "current_consumers": "kept as the documented external API for downstream execution clients",
+      "removal_condition": "do not remove while external facade remains documented; replacement requires downstream migration plan and two release reviews",
+      "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
+      "focused_tests": ["quant-execution-engine facade tests", "quant-execution-engine import smoke"],
+      "consumer_audit": "not_applicable while retained as public external API",
+      "status": "retained_public_api"
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 from pathlib import Path
 from typing import Any
@@ -20,6 +21,7 @@ __all__ = [
 GOVERNANCE_DOC_SCHEMAS = {
     "docs/deprecations.yml": "deprecation_register.v1",
     "docs/script-lifecycle.yml": "script_lifecycle.v1",
+    "docs/compatibility-facades.yml": "compatibility_facades.v1",
     "docs/quality-coverage-governance.yml": "quality_coverage_governance.v1",
     "docs/maintainability-refactor-roadmap.yml": "maintainability_refactor_roadmap.v1",
     "docs/evidence/maintainability/baseline-20260617.json": "maintainability_baseline.v1",
@@ -43,6 +45,31 @@ SCRIPT_LIFECYCLE_EXTRA_PATHS = {
 }
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
 DEPRECATION_PENDING_STATUSES = {"blocked_pending_audit", "follow_up_required"}
+COMPATIBILITY_FACADE_FIELDS = {
+    "path",
+    "owner_repo",
+    "kind",
+    "replacement",
+    "current_consumers",
+    "removal_condition",
+    "rollback_path",
+    "focused_tests",
+    "consumer_audit",
+    "status",
+}
+COMPATIBILITY_FACADE_ROOTS = (
+    "alpha-research/src",
+    "portfolio-backtester/src",
+    "strategy-pipeline/src",
+    "market-data-platform/src",
+    "quant-execution-engine/src",
+)
+COMPATIBILITY_FACADE_MARKERS = (
+    "facade",
+    "Compatibility wrapper",
+    "Backward-compatible",
+    "backward-compatible",
+)
 
 
 def _load_json_doc(root: Path, relative: str) -> tuple[dict[str, Any] | None, Check | None]:
@@ -223,6 +250,90 @@ def _check_deprecations(manifest: dict[str, Any]) -> list[Check]:
     return checks
 
 
+def _has_star_import(path: Path) -> bool:
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=path.as_posix())
+    except (OSError, SyntaxError, UnicodeDecodeError):
+        return False
+    return any(
+        isinstance(node, ast.ImportFrom) and any(alias.name == "*" for alias in node.names)
+        for node in ast.walk(tree)
+    )
+
+
+def _tracked_compatibility_facade_paths(root: Path) -> set[str]:
+    paths: set[str] = set()
+    for relative_root in COMPATIBILITY_FACADE_ROOTS:
+        source_root = root / relative_root
+        if not source_root.is_dir():
+            continue
+        for path in source_root.rglob("*.py"):
+            if "__pycache__" in path.parts:
+                continue
+            try:
+                head = path.read_text(encoding="utf-8", errors="ignore")[:500]
+            except OSError:
+                continue
+            if any(marker in head for marker in COMPATIBILITY_FACADE_MARKERS) or _has_star_import(
+                path
+            ):
+                paths.add(path.relative_to(root).as_posix())
+    return paths
+
+
+def _check_compatibility_facades(root: Path, manifest: dict[str, Any]) -> list[Check]:
+    records = [record for record in manifest.get("records", []) if isinstance(record, dict)]
+    record_paths = {str(record.get("path", "")) for record in records}
+    tracked_paths = _tracked_compatibility_facade_paths(root)
+    issues: list[str] = []
+
+    missing = sorted(tracked_paths - record_paths)
+    stale = sorted(record_paths - tracked_paths)
+    if missing:
+        issues.append("unregistered=" + ", ".join(missing))
+    if stale:
+        issues.append("stale=" + ", ".join(stale))
+
+    for record in records:
+        path = str(record.get("path", ""))
+        missing_fields = sorted(COMPATIBILITY_FACADE_FIELDS - set(record))
+        if missing_fields:
+            issues.append(f"{path}: missing fields {', '.join(missing_fields)}")
+        if path and not (root / path).is_file():
+            issues.append(f"{path}: file missing")
+        focused_tests = record.get("focused_tests")
+        if not isinstance(focused_tests, list) or not focused_tests:
+            issues.append(f"{path}: focused_tests must be non-empty")
+        for field in (
+            "owner_repo",
+            "kind",
+            "replacement",
+            "current_consumers",
+            "removal_condition",
+            "rollback_path",
+            "consumer_audit",
+            "status",
+        ):
+            if not str(record.get(field, "")).strip():
+                issues.append(f"{path}: {field} must be non-empty")
+
+    if issues:
+        return [
+            Check(
+                "ERROR",
+                "governance-compatibility-facades",
+                "Compatibility facade governance drift: " + "; ".join(issues),
+            )
+        ]
+    return [
+        Check(
+            "OK",
+            "governance-compatibility-facades",
+            f"Compatibility facade register covers {len(tracked_paths)} detected facades.",
+        )
+    ]
+
+
 def _check_script_lifecycle(root: Path, manifest: dict[str, Any]) -> list[Check]:
     records = {
         str(record.get("path", ""))
@@ -290,6 +401,8 @@ def check_maintainability_governance(root: Path) -> list[Check]:
         checks.extend(_check_deprecations(deprecations))
     if lifecycle := docs.get("docs/script-lifecycle.yml"):
         checks.extend(_check_script_lifecycle(root, lifecycle))
+    if facades := docs.get("docs/compatibility-facades.yml"):
+        checks.extend(_check_compatibility_facades(root, facades))
     checks.extend(check_submodule_governance_gates(root))
     if quality := docs.get("docs/quality-coverage-governance.yml"):
         checks.extend(check_quality_coverage(root, quality))
