@@ -33,7 +33,22 @@
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "include_targets": [
-          "src/cstree/__init__.py"
+          "src/cstree/__init__.py",
+          "src/cstree/alpha/cpcv_audit.py",
+          "src/cstree/alpha/dataset_sampling.py",
+          "src/cstree/alpha/dataset_sampling_core.py",
+          "src/cstree/alpha/dynamic_signal_ensemble_types.py",
+          "src/cstree/alpha/evaluation.py",
+          "src/cstree/alpha/feature_windows.py",
+          "src/cstree/alpha/modeling_dataset.py",
+          "src/cstree/alpha/period_evaluation.py",
+          "src/cstree/alpha/promotion_gate_thresholds.py",
+          "src/cstree/alpha/signal_artifact.py",
+          "src/cstree/alpha/train_eval.py",
+          "src/cstree/alpha/train_eval_contracts.py",
+          "src/cstree/alpha/train_eval_request_builder.py",
+          "src/cstree/alpha/train_eval_result.py",
+          "src/cstree/alpha/walk_forward_windows.py"
         ],
         "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
       }
@@ -60,18 +75,42 @@
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "next_include_targets": [
+          "src/cstree/__init__.py",
+          "src/cstree/__main__.py",
+          "src/cstree/cli/common.py",
           "src/cstree/contracts/__init__.py",
           "src/cstree/contracts/backtest.py",
           "src/cstree/contracts/signals.py",
           "src/cstree/contracts/strategy.py",
+          "src/cstree/date_utils.py",
+          "src/cstree/identity.py",
           "src/cstree/return_metrics.py",
+          "src/cstree/sharpe_stats.py",
           "src/cstree/pipeline/contracts.py",
+          "src/cstree/pipeline/dataset_sampling.py",
+          "src/cstree/pipeline/dates.py",
+          "src/cstree/pipeline/diagnostic_artifacts.py",
+          "src/cstree/pipeline/eval_benchmark.py",
+          "src/cstree/pipeline/freshness_overlay.py",
+          "src/cstree/pipeline/fundamentals_enrichment.py",
+          "src/cstree/pipeline/fundamentals_overlay.py",
           "src/cstree/pipeline/output_context.py",
           "src/cstree/pipeline/output.py",
           "src/cstree/pipeline/output_summary.py",
+          "src/cstree/pipeline/panel_enrichment.py",
+          "src/cstree/pipeline/panel_loader.py",
+          "src/cstree/pipeline/panel_load_workflow.py",
+          "src/cstree/pipeline/position_output_artifacts.py",
+          "src/cstree/pipeline/position_postprocess_artifacts.py",
+          "src/cstree/pipeline/stats.py",
+          "src/cstree/pipeline/train_eval_request_builder.py",
+          "src/cstree/pipeline/train_eval_result.py",
+          "src/cstree/liveops/__init__.py",
           "src/cstree/liveops/export_targets.py",
           "src/cstree/liveops/alloc_core.py",
-          "src/cstree/liveops/alloc_selection.py"
+          "src/cstree/liveops/alloc_rendering.py",
+          "src/cstree/liveops/alloc_selection.py",
+          "src/cstree/liveops/snapshot.py"
         ],
         "promotion_criteria": "run before release; contract/liveops modules pass before broader orchestration modules are added"
       },
@@ -158,7 +197,15 @@
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "include_targets": [
-          "src/cstree/backtesting/types.py"
+          "src/cstree/__init__.py",
+          "src/cstree/backtesting/__init__.py",
+          "src/cstree/backtesting/capacity.py",
+          "src/cstree/backtesting/period_outputs.py",
+          "src/cstree/backtesting/portfolio.py",
+          "src/cstree/backtesting/reports.py",
+          "src/cstree/backtesting/types.py",
+          "src/cstree/backtesting/execution_sim/__init__.py",
+          "src/cstree/backtesting/execution_sim/results.py"
         ],
         "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
       }
