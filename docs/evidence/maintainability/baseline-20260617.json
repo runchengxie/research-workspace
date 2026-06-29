@@ -3,15 +3,22 @@
   "thresholds": {
     "large_file_loc": 500,
     "long_function_lines": 80,
-    "complexity": 15
+    "complexity": 15,
+    "large_class_lines": 300
   },
   "repos": [
     {
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 54,
-      "python_loc": 11163,
+      "python_loc": 11325,
       "hk_related_file_count": 4,
+      "hotspot_counts": {
+        "large_files": 4,
+        "long_functions": 12,
+        "complexity_hotspots": 14,
+        "large_classes": 1
+      },
       "large_files": [
         {
           "path": "scripts/path_b_production.py",
@@ -100,6 +107,12 @@
           "name": "run_smoke",
           "line_count": 87,
           "complexity": 5
+        },
+        {
+          "path": "scripts/workspace_governance.py",
+          "name": "_check_refactor_roadmap",
+          "line_count": 84,
+          "complexity": 19
         }
       ],
       "complexity_hotspots": [
@@ -152,9 +165,21 @@
           "complexity": 21
         },
         {
+          "path": "scripts/workspace_governance.py",
+          "name": "_check_refactor_roadmap",
+          "line_count": 84,
+          "complexity": 19
+        },
+        {
           "path": "scripts/concept_etf_ml_backtest.py",
           "name": "build_concept_features_for_date",
           "line_count": 71,
+          "complexity": 17
+        },
+        {
+          "path": "tests/test_maintainability_governance.py",
+          "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
+          "line_count": 49,
           "complexity": 17
         },
         {
@@ -174,6 +199,14 @@
           "name": "plot_yearly_barchart",
           "line_count": 68,
           "complexity": 16
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "tests/test_workspace_doctor.py",
+          "name": "WorkspaceDoctorTest",
+          "line_count": 361,
+          "method_count": 19
         }
       ],
       "quality_config": {
@@ -243,6 +276,12 @@
       "python_file_count": 113,
       "python_loc": 32838,
       "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 17,
+        "long_functions": 37,
+        "complexity_hotspots": 27,
+        "large_classes": 1
+      },
       "large_files": [
         {
           "path": "src/market_data_platform/providers/tushare_a_share.py",
@@ -634,6 +673,14 @@
           "complexity": 15
         }
       ],
+      "large_classes": [
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "name": "FakeDataClient",
+          "line_count": 345,
+          "method_count": 17
+        }
+      ],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -698,6 +745,12 @@
       "python_file_count": 85,
       "python_loc": 20931,
       "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 10,
+        "long_functions": 16,
+        "complexity_hotspots": 19,
+        "large_classes": 0
+      },
       "large_files": [
         {
           "path": "src/cstree/alpha/promotion_gate.py",
@@ -964,6 +1017,7 @@
           "complexity": 15
         }
       ],
+      "large_classes": [],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -1036,6 +1090,12 @@
       "python_file_count": 78,
       "python_loc": 24333,
       "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 16,
+        "long_functions": 18,
+        "complexity_hotspots": 18,
+        "large_classes": 0
+      },
       "large_files": [
         {
           "path": "src/cstree/backtesting/execution_sim/core.py",
@@ -1338,6 +1398,7 @@
           "complexity": 15
         }
       ],
+      "large_classes": [],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -1403,6 +1464,12 @@
       "python_file_count": 193,
       "python_loc": 44380,
       "hk_related_file_count": 2,
+      "hotspot_counts": {
+        "large_files": 20,
+        "long_functions": 74,
+        "complexity_hotspots": 37,
+        "large_classes": 1
+      },
       "large_files": [
         {
           "path": "src/cstree/pipeline/output_summary_sections.py",
@@ -1809,6 +1876,14 @@
           "complexity": 17
         }
       ],
+      "large_classes": [
+        {
+          "path": "src/cstree/data_interface.py",
+          "name": "DataInterface",
+          "line_count": 310,
+          "method_count": 12
+        }
+      ],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -1925,6 +2000,12 @@
       "python_file_count": 79,
       "python_loc": 24323,
       "hk_related_file_count": 12,
+      "hotspot_counts": {
+        "large_files": 13,
+        "long_functions": 35,
+        "complexity_hotspots": 35,
+        "large_classes": 7
+      },
       "large_files": [
         {
           "path": "tests/unit/test_execution_foundation.py",
@@ -2294,6 +2375,50 @@
           "name": "render_health_result",
           "line_count": 53,
           "complexity": 17
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "name": "LongPortClient",
+          "line_count": 666,
+          "method_count": 23
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "OrderLifecycleService",
+          "line_count": 564,
+          "method_count": 9
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_state_reconcile_ops.py",
+          "name": "OrderLifecycleStateReconcileOpsMixin",
+          "line_count": 505,
+          "method_count": 24
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_recovery_actions.py",
+          "name": "OrderLifecycleRecoveryActionsMixin",
+          "line_count": 500,
+          "method_count": 9
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "RebalanceService",
+          "line_count": 499,
+          "method_count": 15
+        },
+        {
+          "path": "src/quant_execution_engine/broker/ibkr.py",
+          "name": "IbkrPaperBrokerAdapter",
+          "line_count": 329,
+          "method_count": 14
+        },
+        {
+          "path": "src/quant_execution_engine/broker/ibkr_runtime.py",
+          "name": "IbkrRuntime",
+          "line_count": 320,
+          "method_count": 21
         }
       ],
       "quality_config": {

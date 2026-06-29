@@ -57,6 +57,13 @@ QUALITY_DEBT_BUDGET_FIELDS = {
     "policy",
 }
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
+HOTSPOT_COUNT_FIELDS = {
+    "large_files",
+    "long_functions",
+    "complexity_hotspots",
+    "large_classes",
+}
+HOTSPOT_BUDGET_FIELDS = {"repo"} | {f"max_{field}" for field in HOTSPOT_COUNT_FIELDS}
 COMPATIBILITY_FACADE_FIELDS = {
     "path",
     "owner_repo",
@@ -149,16 +156,20 @@ def test_maintainability_baseline_schema_and_generator() -> None:
         "large_file_loc": 500,
         "long_function_lines": 80,
         "complexity": 15,
+        "large_class_lines": 300,
     }
     assert {repo["repo"] for repo in baseline["repos"]} == REPOS
     for repo in baseline["repos"]:
         assert {
+            "hotspot_counts",
             "large_files",
             "long_functions",
             "complexity_hotspots",
+            "large_classes",
             "quality_config",
             "script_inventory",
         } <= set(repo)
+        assert HOTSPOT_COUNT_FIELDS <= set(repo["hotspot_counts"])
         assert isinstance(repo["python_file_count"], int)
         assert isinstance(repo["python_loc"], int)
         assert isinstance(repo["hk_related_file_count"], int)
@@ -387,9 +398,11 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     baseline = _load_json_doc(BASELINE_RELATIVE)
     planned = {record["path"] for record in roadmap["records"]}
     accepted = {record["path"] for record in roadmap["accepted_hotspots"]}
+    hotspot_budgets = {record["repo"]: record for record in roadmap["hotspot_budgets"]}
 
     assert roadmap["schema_version"] == "maintainability_refactor_roadmap.v1"
     assert REQUIRED_ROADMAP_PATHS <= planned
+    assert set(hotspot_budgets) == REPOS
     for record in roadmap["records"]:
         assert {
             "path",
@@ -404,9 +417,15 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     for record in roadmap["accepted_hotspots"]:
         assert {"path", "owner_repo", "reason", "next_action"} <= set(record)
         assert (ROOT / record["path"]).exists()
+    for record in roadmap["hotspot_budgets"]:
+        assert HOTSPOT_BUDGET_FIELDS <= set(record)
 
     missing: list[str] = []
     for repo in baseline["repos"]:
+        budget = hotspot_budgets[repo["repo"]]
+        for field in HOTSPOT_COUNT_FIELDS:
+            assert budget[f"max_{field}"] == repo["hotspot_counts"][field]
+
         for file_record in repo["large_files"]:
             repo_path = file_record["path"]
             path = (
@@ -414,8 +433,32 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
             )
             if path not in planned and path not in accepted:
                 missing.append(path)
+        for class_record in repo["large_classes"]:
+            repo_path = class_record["path"]
+            path = (
+                repo_path if repo["repo"] == "research-workspace" else f"{repo['repo']}/{repo_path}"
+            )
+            if path not in planned and path not in accepted:
+                missing.append(path)
 
     assert missing == []
+
+
+def test_refactor_hotspot_budget_blocks_increases() -> None:
+    roadmap = _load_json_doc("docs/maintainability-refactor-roadmap.yml")
+    baseline = _load_json_doc(BASELINE_RELATIVE)
+    module = _load_workspace_governance_module()
+    mutated = copy.deepcopy(baseline)
+    mutated["repos"][0]["hotspot_counts"]["large_files"] += 1
+
+    checks = module._check_refactor_roadmap(roadmap, mutated)
+
+    assert any(
+        check.severity == "ERROR"
+        and check.code == "governance-refactor-roadmap"
+        and "large_files count" in check.message
+        for check in checks
+    )
 
 
 def test_collaboration_docs_cover_maintainability_topics() -> None:

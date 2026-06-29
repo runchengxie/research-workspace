@@ -3,8 +3,54 @@
   "thresholds": {
     "large_file_loc": 500,
     "long_function_lines": 80,
-    "complexity": 15
+    "complexity": 15,
+    "large_class_lines": 300
   },
+  "hotspot_budget_policy": "Budgets must match the committed maintainability baseline. Lower budgets in the same change when hotspot counts fall; do not raise them without an explicit owner decision.",
+  "hotspot_budgets": [
+    {
+      "repo": "research-workspace",
+      "max_large_files": 4,
+      "max_long_functions": 12,
+      "max_complexity_hotspots": 14,
+      "max_large_classes": 1
+    },
+    {
+      "repo": "market-data-platform",
+      "max_large_files": 17,
+      "max_long_functions": 37,
+      "max_complexity_hotspots": 27,
+      "max_large_classes": 1
+    },
+    {
+      "repo": "alpha-research",
+      "max_large_files": 10,
+      "max_long_functions": 16,
+      "max_complexity_hotspots": 19,
+      "max_large_classes": 0
+    },
+    {
+      "repo": "portfolio-backtester",
+      "max_large_files": 16,
+      "max_long_functions": 18,
+      "max_complexity_hotspots": 18,
+      "max_large_classes": 0
+    },
+    {
+      "repo": "strategy-pipeline",
+      "max_large_files": 20,
+      "max_long_functions": 74,
+      "max_complexity_hotspots": 37,
+      "max_large_classes": 1
+    },
+    {
+      "repo": "quant-execution-engine",
+      "max_large_files": 13,
+      "max_long_functions": 35,
+      "max_complexity_hotspots": 35,
+      "max_large_classes": 7
+    }
+  ],
   "first_safe_extraction_types": [
     "schema_model_extraction",
     "path_resolution",
@@ -392,6 +438,12 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
+      "path": "tests/test_workspace_doctor.py",
+      "owner_repo": "research-workspace",
+      "reason": "large test fixture class is tracked as class-size debt rather than production code debt",
+      "next_action": "split workspace doctor scenarios when this test changes"
+    },
+    {
       "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_hotspot_features.py",
       "owner_repo": "market-data-platform",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
@@ -590,6 +642,12 @@
       "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
     },
     {
+      "path": "strategy-pipeline/src/cstree/data_interface.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DataInterface is a class-size hotspot behind the current data access compatibility boundary",
+      "next_action": "split path resolution and data loading helpers when data interface work resumes"
+    },
+    {
       "path": "alpha-research/src/cstree/alpha/promotion_gate.py",
       "owner_repo": "alpha-research",
       "reason": "promotion gate 的主体实现已经迁到 alpha-research，当前先登记为 alpha 研究侧维护性债务",
@@ -618,6 +676,18 @@
       "owner_repo": "portfolio-backtester",
       "reason": "large execution simulation scenario test file mirrors accepted execution simulator debt",
       "next_action": "split by execution simulation scenario when tests change"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/ibkr.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "IBKR paper broker adapter is a class-size hotspot outside the current LongPort-first split",
+      "next_action": "split order, account, and market-data helpers when IBKR adapter work resumes"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/ibkr_runtime.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "IBKR runtime class is a class-size hotspot outside the current LongPort-first split",
+      "next_action": "split session lifecycle and broker event handling when IBKR runtime work resumes"
     }
   ]
 }

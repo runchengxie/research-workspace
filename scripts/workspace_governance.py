@@ -70,6 +70,13 @@ COMPATIBILITY_FACADE_MARKERS = (
     "Backward-compatible",
     "backward-compatible",
 )
+HOTSPOT_COUNT_FIELDS = {
+    "large_files",
+    "long_functions",
+    "complexity_hotspots",
+    "large_classes",
+}
+HOTSPOT_BUDGET_FIELDS = {f"max_{field}" for field in HOTSPOT_COUNT_FIELDS}
 
 
 def _load_json_doc(root: Path, relative: str) -> tuple[dict[str, Any] | None, Check | None]:
@@ -185,10 +192,26 @@ def _baseline_large_file_paths(baseline: dict[str, Any]) -> set[str]:
             relative = str(file_record.get("path", "")).strip()
             if not relative:
                 continue
-            if repo_name == "research-workspace":
-                paths.add(relative)
-            else:
-                paths.add(f"{repo_name}/{relative}")
+            paths.add(_workspace_relative_path(repo_name, relative))
+    return paths
+
+
+def _workspace_relative_path(repo_name: str, relative: str) -> str:
+    return relative if repo_name == "research-workspace" else f"{repo_name}/{relative}"
+
+
+def _baseline_large_class_paths(baseline: dict[str, Any]) -> set[str]:
+    paths: set[str] = set()
+    for repo in baseline.get("repos", []):
+        if not isinstance(repo, dict):
+            continue
+        repo_name = str(repo.get("repo", ""))
+        for class_record in repo.get("large_classes", []):
+            if not isinstance(class_record, dict):
+                continue
+            relative = str(class_record.get("path", "")).strip()
+            if relative:
+                paths.add(_workspace_relative_path(repo_name, relative))
     return paths
 
 
@@ -376,20 +399,77 @@ def _check_refactor_roadmap(roadmap: dict[str, Any], baseline: dict[str, Any]) -
         for record in roadmap.get("accepted_hotspots", [])
         if isinstance(record, dict)
     }
-    uncovered = sorted(_baseline_large_file_paths(baseline) - planned - accepted)
+    uncovered = sorted(
+        (_baseline_large_file_paths(baseline) | _baseline_large_class_paths(baseline))
+        - planned
+        - accepted
+    )
+    budget_records = {
+        str(record.get("repo", "")): record
+        for record in roadmap.get("hotspot_budgets", [])
+        if isinstance(record, dict)
+    }
+    budget_issues: list[str] = []
+    for repo in baseline.get("repos", []):
+        if not isinstance(repo, dict):
+            continue
+        repo_name = str(repo.get("repo", ""))
+        budget = budget_records.get(repo_name)
+        if not isinstance(budget, dict):
+            budget_issues.append(f"{repo_name}: missing hotspot budget")
+            continue
+        missing_fields = sorted(HOTSPOT_BUDGET_FIELDS - set(budget))
+        if missing_fields:
+            budget_issues.append(f"{repo_name}: missing budget fields {', '.join(missing_fields)}")
+            continue
+        counts = repo.get("hotspot_counts", {})
+        if not isinstance(counts, dict):
+            budget_issues.append(f"{repo_name}: missing hotspot counts")
+            continue
+        for field in sorted(HOTSPOT_COUNT_FIELDS):
+            count = counts.get(field)
+            limit = budget.get(f"max_{field}")
+            if not _valid_budget_limit(count):
+                budget_issues.append(f"{repo_name}: invalid {field} count")
+            elif not _valid_budget_limit(limit):
+                budget_issues.append(f"{repo_name}: invalid max_{field} budget")
+            elif count > limit:
+                budget_issues.append(f"{repo_name}: {field} count {count} exceeds budget {limit}")
+            elif count < limit:
+                budget_issues.append(
+                    f"{repo_name}: {field} budget {limit} is loose; lower it to {count}"
+                )
+    baseline_repos = {
+        str(repo.get("repo", "")) for repo in baseline.get("repos", []) if isinstance(repo, dict)
+    }
+    stale_budget_repos = sorted(set(budget_records) - baseline_repos)
+    for repo_name in stale_budget_repos:
+        budget_issues.append(f"{repo_name}: stale hotspot budget")
+
+    checks: list[Check] = []
     if uncovered:
-        return [
+        checks.append(
             Check(
                 "ERROR",
                 "governance-refactor-roadmap",
-                "Baseline large files missing roadmap decision: " + ", ".join(uncovered),
+                "Baseline large files/classes missing roadmap decision: " + ", ".join(uncovered),
             )
-        ]
+        )
+    if budget_issues:
+        checks.append(
+            Check(
+                "ERROR",
+                "governance-refactor-roadmap",
+                "Hotspot budget drift: " + "; ".join(budget_issues),
+            )
+        )
+    if checks:
+        return checks
     return [
         Check(
             "OK",
             "governance-refactor-roadmap",
-            "Baseline large files have planned or accepted roadmap decisions.",
+            "Baseline large files/classes have decisions and hotspot budgets are tight.",
         )
     ]
 

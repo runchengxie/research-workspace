@@ -24,6 +24,7 @@ DEFAULT_THRESHOLDS = {
     "large_file_loc": 500,
     "long_function_lines": 80,
     "complexity": 15,
+    "large_class_lines": 300,
 }
 SUBMODULE_DIRS = {
     "alpha-research",
@@ -65,6 +66,14 @@ class FunctionMetric:
     complexity: int
 
 
+@dataclass(frozen=True)
+class ClassMetric:
+    path: str
+    name: str
+    line_count: int
+    method_count: int
+
+
 def _repo_root(name: str) -> Path:
     return ROOT if name == "research-workspace" else ROOT / name
 
@@ -99,25 +108,38 @@ def _count_complexity(node: ast.AST) -> int:
     return 1 + sum(isinstance(child, branches) for child in ast.walk(node))
 
 
-def _function_metrics(path: Path, relative: str) -> list[FunctionMetric]:
+def _module_metrics(path: Path, relative: str) -> tuple[list[FunctionMetric], list[ClassMetric]]:
     try:
         tree = ast.parse(path.read_text(encoding="utf-8"), filename=relative)
     except (SyntaxError, UnicodeDecodeError):
-        return []
-    metrics = []
+        return [], []
+    function_metrics = []
+    class_metrics = []
     for node in ast.walk(tree):
-        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            continue
-        end_lineno = getattr(node, "end_lineno", node.lineno)
-        metrics.append(
-            FunctionMetric(
-                path=relative,
-                name=node.name,
-                line_count=end_lineno - node.lineno + 1,
-                complexity=_count_complexity(node),
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            end_lineno = getattr(node, "end_lineno", node.lineno)
+            function_metrics.append(
+                FunctionMetric(
+                    path=relative,
+                    name=node.name,
+                    line_count=end_lineno - node.lineno + 1,
+                    complexity=_count_complexity(node),
+                )
             )
-        )
-    return metrics
+        elif isinstance(node, ast.ClassDef):
+            end_lineno = getattr(node, "end_lineno", node.lineno)
+            method_count = sum(
+                isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)) for child in node.body
+            )
+            class_metrics.append(
+                ClassMetric(
+                    path=relative,
+                    name=node.name,
+                    line_count=end_lineno - node.lineno + 1,
+                    method_count=method_count,
+                )
+            )
+    return function_metrics, class_metrics
 
 
 def _is_hk_related(relative: str) -> bool:
@@ -174,6 +196,7 @@ def build_repo_report(name: str, *, thresholds: dict[str, int]) -> dict[str, Any
     files = _python_files(repo, repo_name=name)
     file_rows = []
     function_rows: list[FunctionMetric] = []
+    class_rows: list[ClassMetric] = []
     for path in files:
         relative = path.relative_to(repo).as_posix()
         try:
@@ -181,19 +204,28 @@ def build_repo_report(name: str, *, thresholds: dict[str, int]) -> dict[str, Any
         except UnicodeDecodeError:
             loc = 0
         file_rows.append({"path": relative, "loc": loc, "hk_related": _is_hk_related(relative)})
-        function_rows.extend(_function_metrics(path, relative))
+        function_metrics, class_metrics = _module_metrics(path, relative)
+        function_rows.extend(function_metrics)
+        class_rows.extend(class_metrics)
 
     large_files = [row for row in file_rows if int(row["loc"]) >= thresholds["large_file_loc"]]
     long_functions = [
         row for row in function_rows if row.line_count >= thresholds["long_function_lines"]
     ]
     complex_functions = [row for row in function_rows if row.complexity >= thresholds["complexity"]]
+    large_classes = [row for row in class_rows if row.line_count >= thresholds["large_class_lines"]]
     return {
         "repo": name,
         "root": repo.relative_to(ROOT).as_posix() if repo != ROOT else ".",
         "python_file_count": len(files),
         "python_loc": sum(int(row["loc"]) for row in file_rows),
         "hk_related_file_count": sum(1 for row in file_rows if row["hk_related"]),
+        "hotspot_counts": {
+            "large_files": len(large_files),
+            "long_functions": len(long_functions),
+            "complexity_hotspots": len(complex_functions),
+            "large_classes": len(large_classes),
+        },
         "large_files": sorted(
             large_files,
             key=lambda row: (-int(row["loc"]), str(row["path"])),
@@ -210,6 +242,13 @@ def build_repo_report(name: str, *, thresholds: dict[str, int]) -> dict[str, Any
             for row in sorted(
                 complex_functions,
                 key=lambda item: (-item.complexity, item.path, item.name),
+            )[:25]
+        ],
+        "large_classes": [
+            row.__dict__
+            for row in sorted(
+                large_classes,
+                key=lambda item: (-item.line_count, item.path, item.name),
             )[:25]
         ],
         "quality_config": _quality_config(repo),
