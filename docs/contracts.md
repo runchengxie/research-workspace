@@ -143,7 +143,7 @@ signals.parquet
 
 ```bash
 python scripts/workspace_doctor.py
-python scripts/smoke_contracts.py
+python src/research_contracts/smoke_contracts.py
 ```
 
 这些脚本只做轻量检查。子项目测试、业务参数验证和真实交易验证仍在对应子项目中完成。

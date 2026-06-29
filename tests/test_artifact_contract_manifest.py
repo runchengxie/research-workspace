@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "smoke_contracts.py"
+SCRIPT = ROOT / "src" / "research_contracts" / "smoke_contracts.py"
 MANIFEST = ROOT / "docs" / "artifact-contracts.yml"
 
 sys.path.insert(0, str(SCRIPT.parent))

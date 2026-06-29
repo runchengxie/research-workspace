@@ -110,7 +110,7 @@ $DATA_PLATFORM_ROOT/
 
 ```bash
 python scripts/workspace_doctor.py
-python scripts/smoke_contracts.py
+python src/research_contracts/smoke_contracts.py
 uv run --with pytest python -m pytest tests -q
 ```
 

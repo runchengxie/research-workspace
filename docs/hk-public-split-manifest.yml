@@ -118,7 +118,7 @@
       "owner_repo": "research-workspace",
       "paths": [
         "scripts/workspace_doctor.py",
-        "scripts/smoke_contracts.py",
+        "src/research_contracts/smoke_contracts.py",
         "tests/test_hk_archive_boundary.py",
         "docs/platform-workflow.md"
       ],

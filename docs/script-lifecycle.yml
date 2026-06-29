@@ -18,7 +18,7 @@
   },
   "records": [
     {
-      "path": "scripts/a_share_readiness.py",
+      "path": "src/research_contracts/a_share_readiness.py",
       "owner": "research-workspace",
       "purpose": "A-share readiness evidence aggregation",
       "lifecycle": "ci",
@@ -28,7 +28,7 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/a_share_readiness_common.py",
+      "path": "src/research_contracts/a_share_readiness_common.py",
       "owner": "research-workspace",
       "purpose": "Shared constants and primitives for A-share readiness checks",
       "lifecycle": "ci",
@@ -38,7 +38,7 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/a_share_readiness_contract.py",
+      "path": "src/research_contracts/a_share_readiness_contract.py",
       "owner": "research-workspace",
       "purpose": "A-share current contract, asset, and registry readiness checks",
       "lifecycle": "ci",
@@ -48,7 +48,7 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/a_share_readiness_evidence.py",
+      "path": "src/research_contracts/a_share_readiness_evidence.py",
       "owner": "research-workspace",
       "purpose": "A-share research, target, and execution evidence aggregation",
       "lifecycle": "ci",
@@ -148,7 +148,7 @@
       "removal_condition": "remove after hot-sector-screener writes cstree-compatible format directly or two release reviews record no active use"
     },
     {
-      "path": "scripts/style_factor_attribution.py",
+      "path": "src/style_factors/style_factor_attribution.py",
       "owner": "research-workspace",
       "purpose": "Run A-share 9-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
       "lifecycle": "dev",

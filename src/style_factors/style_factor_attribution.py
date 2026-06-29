@@ -4,8 +4,8 @@
 Now directly imports style_factors (part of research-workspace).
 
 Usage:
-  python scripts/style_factor_attribution.py --out-name 20260629
-  python scripts/style_factor_attribution.py \\
+  python src/style_factors/style_factor_attribution.py --out-name 20260629
+  python src/style_factors/style_factor_attribution.py \\
     --strategy-csv returns.csv --strategy-name cstree --out-name 20260629
 """
 

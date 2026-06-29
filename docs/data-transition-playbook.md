@@ -27,7 +27,7 @@
 顶层只读命令按四档汇报状态：
 
 ```bash
-python scripts/a_share_readiness.py \
+python src/research_contracts/a_share_readiness.py \\
   --artifacts-root "$DATA_PLATFORM_ROOT" \
   --evidence-manifest /path/to/a_share_readiness_evidence.json \
   --pretty

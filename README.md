@@ -104,7 +104,7 @@ python scripts/smoke_contracts.py
 ```bash
 python scripts/workspace_doctor.py
 python scripts/smoke_contracts.py
-python scripts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
+python src/research_contracts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
 python scripts/print_version_matrix.py
 uv run --with pytest python -m pytest tests -q
 python scripts/run_submodule_checks.py --profile smoke
