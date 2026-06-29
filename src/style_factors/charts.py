@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from src.style_factors import BG, CJK, FACTOR_COLORS, FACTOR_LABELS, FG, LG
-from src.style_factors.factor_backtest import compute_factor_correlations
+from . import BG, CJK, FACTOR_COLORS, FACTOR_LABELS, FG, LG
+from .factor_backtest import compute_factor_correlations
 
 
 def _active_names(factor_results: dict) -> list[str]:

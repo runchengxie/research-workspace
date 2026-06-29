@@ -10,23 +10,23 @@ from typing import Any
 
 import pandas as pd
 
-from style_factors.attribution import run_strategy_attribution
-from style_factors.charts import (
+from .attribution import run_strategy_attribution
+from .charts import (
     plot_correlation_heatmap,
     plot_cumulative_comparison,
     plot_factor_nav,
     plot_yearly_barchart,
 )
-from style_factors.data import load_data, load_fina_indicator
-from style_factors.factor_backtest import (
+from .data import load_data, load_fina_indicator
+from .factor_backtest import (
     build_factor_returns,
     compute_factor_correlations,
     compute_summary,
     compute_yearly_breakdown,
     get_rebalance_dates,
 )
-from style_factors.factor_calc import compute_factors
-from style_factors.report import generate_report
+from .factor_calc import compute_factors
+from .report import generate_report
 
 
 @dataclass(frozen=True)
