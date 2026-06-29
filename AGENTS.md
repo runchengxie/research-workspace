@@ -68,6 +68,12 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
+## GitHub 发布偏好
+
+- 用户明确要求 commit、push 或发布本仓改动时，默认直接在 `main` 上提交并推送到对应远端。
+- 不要默认新建 `codex/*` 分支或 draft PR；只有用户明确要求 PR、远端规则阻止直接推送、工作区存在难以拆分的混杂改动，或改动风险需要人工 review 时才走分支和 PR。
+- 修改子模块内容时，先在对应子模块仓库按同样规则提交并推送，再回到顶层提交更新后的 submodule gitlink。
+
 ## TuShare 凭证约定
 
 - TuShare 本地凭证由 `market-data-platform` 负责管理；不要在顶层仓库新增或提交 `.env*`。
