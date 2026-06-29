@@ -208,7 +208,7 @@
       "removal_condition": "remove only after public/private boundary checks move to another gate and two release reviews record no direct calls to this script"
     },
     {
-      "path": "scripts/smoke_contracts.py",
+      "path": "src/research_contracts/smoke_contracts.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo contract smoke commands",
       "lifecycle": "ci",
