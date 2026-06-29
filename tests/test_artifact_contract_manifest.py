@@ -18,7 +18,7 @@ spec.loader.exec_module(smoke_contracts)
 
 
 def _load_contracts_package():
-    contracts_src = ROOT / "src" / "research_contracts" / "src"
+    contracts_src = ROOT / "src"
     if str(contracts_src) not in sys.path:
         sys.path.insert(0, str(contracts_src))
     import research_contracts
