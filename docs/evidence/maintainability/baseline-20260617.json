@@ -1370,7 +1370,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 184,
-      "python_loc": 43954,
+      "python_loc": 43988,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1435,7 +1435,7 @@
         },
         {
           "path": "tests/test_docs_contracts.py",
-          "loc": 634,
+          "loc": 668,
           "hk_related": false
         },
         {
