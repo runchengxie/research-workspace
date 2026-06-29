@@ -51,9 +51,10 @@ git push
 
 ```bash
 python scripts/workspace_doctor.py
-python scripts/smoke_contracts.py
+python src/research_contracts/smoke_contracts.py
 uv run --with pytest python -m pytest tests -q
 python scripts/run_quality_checks.py --profile hard
+python scripts/run_quality_checks.py --profile basedpyright
 python scripts/workspace_import_boundaries.py --check
 uv run --with pytest python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
@@ -62,7 +63,7 @@ uv run --with pytest python -m pytest tests/test_workspace_import_boundaries.py 
 
 ```bash
 python scripts/workspace_doctor.py --strict
-python scripts/smoke_contracts.py --strict
+python src/research_contracts/smoke_contracts.py --strict
 python scripts/workspace_import_boundaries.py --check
 uv run --with pytest python -m pytest tests/test_workspace_import_boundaries.py -q
 ```
@@ -78,12 +79,22 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 统一运行 BasedPyright advisory，`mypy_advisory` 仍是执行引擎的单独观察项。
+配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 统一运行 BasedPyright 建议项，`mypy_advisory` 仍是执行引擎的单独观察项。
 
 执行引擎仓库自己的 `Makefile` 还提供 `make test`、`make typecheck`、`make basedpyright` 和 `make quality`。顶层委托检查以 [../scripts/submodule_checks.json](../scripts/submodule_checks.json) 为准，执行引擎本地维护时再使用 `Makefile`。
 
-检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
-以及执行引擎迁移后的 mypy 建议项见 [quality-governance.md](quality-governance.md)。
+检查分为硬门禁、建议项和人工复核三类。GitHub Actions 在拿不到私有子模块 token 时运行顶层 `ci-smoke` 质量档位，只检查根仓库 Ruff、格式、`ty check` 和 secret scan；有 token 或本地完整工作区时继续运行 `hard` 档位。仓库级 ownership、secret scan、依赖审计 baseline 以及执行引擎迁移后的 mypy 建议项见 [quality-governance.md](quality-governance.md)。
+
+## GitHub Actions 清点
+
+| 仓库 | workflow | 阻塞检查 | 非阻塞或专项检查 |
+| --- | --- | --- | --- |
+| superproject | `.github/workflows/superproject.yml` | 有 `WORKSPACE_SUBMODULE_READ_TOKEN` 时运行 `hard`、完整 pytest、contract smoke；无 token 时运行 `ci-smoke`、smoke pytest 和子项目检查 dry-run。 | BasedPyright 以 `continue-on-error` 运行；CodeQL 和 Dependency Graph 由 GitHub 独立 workflow 运行。 |
+| `market-data-platform` | `.github/workflows/ci.yml` | Ruff、Ruff format、`ty check`、pytest coverage、质量债 ratchet、维护性 baseline、兼容层和架构治理。 | BasedPyright、BasedPyright core basic 和 BasedPyright debt 以 `continue-on-error` 运行；`.github/workflows/package.yml` 负责构建和按需发布包。 |
+| `alpha-research` | `.github/workflows/tests.yml` | Ruff、Ruff format、`ty check`、维护性 ratchet；配置 `HK_DATA_PLATFORM_READ_TOKEN` 后还会 checkout `market-data-platform` 并运行 pytest。 | BasedPyright 以 `continue-on-error` 运行。 |
+| `portfolio-backtester` | `.github/workflows/tests.yml` | Ruff、Ruff format、`ty check`、维护性 ratchet；配置 `HK_DATA_PLATFORM_READ_TOKEN` 后还会 checkout `market-data-platform` 并运行 pytest。 | BasedPyright 以 `continue-on-error` 运行。 |
+| `strategy-pipeline` | `.github/workflows/tests.yml` | lint、format、维护性 ratchet、platform contract、fast tests、`ty check`、DuckDB extra smoke、stats extra smoke。 | BasedPyright 通过 `typecheck-release` 作为 `continue-on-error` 步骤运行；`.github/workflows/security-audit.yml` 运行 lockfile 和 `pip-audit`；`.github/workflows/manual-tests.yml` 保留 slow 与 integration 手动测试。 |
+| `quant-execution-engine` | `.github/workflows/tests.yml` | Ruff、Ruff format、`ty check`、pytest。 | BasedPyright 以 `continue-on-error` 运行；CodeQL 和 Dependency Graph 由 GitHub 独立 workflow 运行。 |
 
 ## 常见术语
 

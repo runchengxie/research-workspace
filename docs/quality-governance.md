@@ -1,17 +1,17 @@
 # 工作区质量治理矩阵
 
-顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本/测试，并排除子仓与历史探索脚本。
+顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本和测试，并排除子仓与历史探索脚本。
 
 ## 检查分类
 
 | 仓库 | 硬门禁 | 建议项 | 人工或发布复核 |
 | --- | --- | --- | --- |
-| superproject | Ruff、Ruff format、ty、secret scan、顶层 pytest、doctor、contract smoke | BasedPyright advisory、`pip-audit`、`deptry`、选择性 coverage ratchet | 港股恢复专用归档复核、发布检查清单 |
+| superproject | Ruff、Ruff format、ty、secret scan、顶层 pytest、doctor、contract smoke | BasedPyright 建议项、`pip-audit`、`deptry`、选择性 coverage ratchet | 私有子模块 checkout token、港股恢复专用归档复核、发布检查清单 |
 | `market-data-platform` | Ruff、Ruff format、ty、pytest | BasedPyright 建议项、`pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
 | `alpha-research` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright 建议项、pytest coverage、CPCV/PBO 定点测试、feature evidence fixtures | signal artifact、feature evidence、promotion gate |
 | `portfolio-backtester` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright 建议项、pytest coverage、capacity/exposure/backtest 定点测试 | turnover/cost、capacity、benchmark ladder、reporting |
 | `strategy-pipeline` | 仓库自有 lint、format、ty、pytest | BasedPyright 建议项、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
-| `quant-execution-engine` | Ruff、Ruff format、ty、pytest | BasedPyright advisory、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
+| `quant-execution-engine` | Ruff、Ruff format、ty、pytest | BasedPyright 建议项、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
 
 顶层 hard profile 还包含 workspace boundary gate：
 `python scripts/workspace_import_boundaries.py --check`。该检查把阶段 3.5 /
@@ -28,13 +28,16 @@ ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，
 `scripts/dev/run_tests.sh maintainability`。`type` 始终表示各仓库当前基础类型门禁；
 现在统一为 `ty check`。`alpha-research` 和 `portfolio-backtester` 的 smoke / BasedPyright
 配置不应通过 sibling source path 补齐 import；`release_typecheck` 统一运行
-BasedPyright advisory。执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内
-单独运行，不替代 `ty check` 或 BasedPyright advisory。
+BasedPyright 建议项。执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内
+单独运行，不替代 `ty check` 或 BasedPyright 建议项。
+
+GitHub Actions 中，BasedPyright 只作为非阻塞建议项运行，并设置 `continue-on-error`。本地和阻塞 CI 的基础链路统一是 Ruff、Ruff format、`ty check` 和 pytest。superproject 的 CI 如果没有 `WORKSPACE_SUBMODULE_READ_TOKEN`，会跳过私有子模块 checkout，并改跑 `ci-smoke` 质量档位；完整子模块树可用时仍跑 `hard` 档位和 contract smoke。
 
 ## 顶层命令
 
 ```bash
 python scripts/run_quality_checks.py --profile hard
+python scripts/run_quality_checks.py --profile ci-smoke
 python scripts/run_quality_checks.py --profile basedpyright
 python scripts/run_quality_checks.py --profile architecture
 python scripts/workspace_import_boundaries.py --check
@@ -65,5 +68,5 @@ coverage 同样按 contract、manifest、target export、risk、execution state 
 ratchet，不设置跨仓库统一阈值。
 
 Dead-code 扫描先保持建议项：顶层入口只扫描 superproject-owned Python 代码，并默认把
-Vulture 的高置信发现降级为 advisory；清理到零发现后可以用 `python scripts/dead_code_advisory.py
+Vulture 的高置信发现降级为建议项；清理到零发现后可以用 `python scripts/dead_code_advisory.py
 --strict` 做本地复核。子仓库 dead-code 候选应进入对应子仓库的维护性 ratchet，不由顶层直接阻塞。

@@ -5,8 +5,8 @@
 > last_verified: 2026-06-22
 > source_of_truth: yes
 
-本工作区核心链路是 `market-data-platform` → `alpha-research` →
-`portfolio-backtester` → `strategy-pipeline` →
+本工作区核心链路依次经过 `market-data-platform`、`alpha-research`、
+`portfolio-backtester`、`strategy-pipeline` 和
 `quant-execution-engine`。以下项目是策略卫星，通过文件契约接入数据平台、
 研究 universe、信号或目标持仓交接点，不作为 workspace submodule。
 
@@ -58,7 +58,7 @@ quant-execution-engine (core submodule)
 ## guan-etf-rotation-v3
 
 | 属性 | 值 |
-|------|-----|
+| --- | --- |
 | 路径 | `~/code/guan-etf-rotation-v3` |
 | 角色 | ETF 横截面轮动 + 行业聚合信号生成 |
 | Python | >=3.10 |
@@ -194,5 +194,5 @@ a-share-factor-core = { git = "https://github.com/runchengxie/a-share-factor-cor
 
 1. research-workspace 已有的五段核心架构（数据→alpha→组合回测→策略编排→执行）边界清晰，硬门禁测试覆盖完整。
 2. 两个策略项目体量和成熟度不同，强制纳入 core release matrix 会拖慢 CI 和版本锁定。
-3. 核心链路已通过 `signals.parquet`、`positions_by_rebalance.csv` 和 `targets.json` 标准化——策略卫星的角色是"可选输入源"，不是"核心组件"。
+3. 核心链路已通过 `signals.parquet`、`positions_by_rebalance.csv` 和 `targets.json` 标准化。策略卫星的角色是可选输入源，核心组件仍是五段主链路。
 4. 应先验证 candidate universe 作为 cstree research_universe 后的 OOS 表现，再评估提升为 optional submodule。

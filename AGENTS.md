@@ -60,7 +60,7 @@ cd strategy-pipeline && scripts/dev/run_tests.sh all
 cd quant-execution-engine && uv run --group dev python -m pytest
 ```
 
-如果只改跨仓库文件约定，优先运行对应边界的定点测试，再按需要扩大到完整 pytest、Ruff、ty、BasedPyright advisory 或治理脚本。顶层统一委托入口是：
+如果只改跨仓库文件约定，优先运行对应边界的定点测试，再按需要扩大到完整 pytest、Ruff、ty、BasedPyright 建议项或治理脚本。顶层统一委托入口是：
 
 ```bash
 python scripts/run_submodule_checks.py --profile smoke

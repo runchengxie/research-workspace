@@ -12,7 +12,7 @@
 
 - [ ] No new deprecated surface, or deprecation record updated
 - [ ] No new one-off script, or script lifecycle metadata added
-- [ ] No new Ruff/Pyright/mypy exclude, or quality-governance exception added
+- [ ] No new Ruff/BasedPyright/mypy exclude, or quality-governance exception added
 - [ ] No `targets.json` contract impact, or contract docs/tests updated
 - [ ] No provider/broker credential dependency, or safety docs/tests updated
 - [ ] Migration note, rollback path, or restore evidence added when needed

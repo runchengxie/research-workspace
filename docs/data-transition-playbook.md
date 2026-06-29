@@ -96,7 +96,7 @@ quant-execution-engine
 ```bash
 export DATA_PLATFORM_ROOT=/data/market-data-platform
 UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/workspace_doctor.py
-UV_CACHE_DIR=/tmp/uv-cache uv run python scripts/smoke_contracts.py
+UV_CACHE_DIR=/tmp/uv-cache uv run python src/research_contracts/smoke_contracts.py
 ```
 
 必须确认：

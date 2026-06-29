@@ -121,8 +121,8 @@ class DocsLinksTest(unittest.TestCase):
             satellites,
         )
         for phrase in (
-            "`market-data-platform` → `alpha-research`",
-            "`portfolio-backtester` → `strategy-pipeline`",
+            "核心链路依次经过 `market-data-platform`、`alpha-research`",
+            "`portfolio-backtester`、`strategy-pipeline` 和",
             "signals.parquet + signals.meta.json",
             "positions_by_rebalance.csv + backtest evidence",
             "targets.json + targets.json.lineage.json",

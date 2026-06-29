@@ -59,7 +59,7 @@ git submodule update --init --recursive
 
 ```bash
 python scripts/workspace_doctor.py
-python scripts/smoke_contracts.py
+python src/research_contracts/smoke_contracts.py
 ```
 
 更完整的新机器配置，包括子项目依赖、`DATA_PLATFORM_ROOT` 和委托检查，见 [新机器初始化](docs/bootstrap.md)。
@@ -103,7 +103,7 @@ python scripts/smoke_contracts.py
 
 ```bash
 python scripts/workspace_doctor.py
-python scripts/smoke_contracts.py
+python src/research_contracts/smoke_contracts.py
 python src/research_contracts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
 python scripts/print_version_matrix.py
 uv run --with pytest python -m pytest tests -q
@@ -111,9 +111,10 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 python scripts/run_quality_checks.py --profile hard
+python scripts/run_quality_checks.py --profile basedpyright
 ```
 
-`run_submodule_checks.py` 只按清单进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。`full` 默认使用 Ruff、ty 和 pytest；`release_typecheck` 统一运行 BasedPyright advisory。执行引擎自己的 `Makefile` 也使用 Ruff、ty 和 pytest 作为基础门禁，mypy 保留为单独建议项。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
+`run_submodule_checks.py` 只按清单进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。`full` 默认使用 Ruff、ty 和 pytest；`release_typecheck` 统一运行 BasedPyright 建议项。执行引擎自己的 `Makefile` 也使用 Ruff、ty 和 pytest 作为基础门禁，mypy 保留为单独建议项。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
 
 `a_share_readiness.py` 只读检查 A 股迁移证据，不会下载数据、训练模型或连接券商。完整 baseline 验收时通过 `--evidence-manifest <json>` 提供研究输出、目标文件 lineage 和执行 dry-run 报告。
 

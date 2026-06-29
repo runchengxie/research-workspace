@@ -44,7 +44,7 @@ def test_version_matrix_doc_does_not_pin_static_current_checkout() -> None:
     text = DOC.read_text(encoding="utf-8")
 
     assert "当前本地输出：" not in text
-    assert "不要手工维护“当前输出”的静态表" in text
+    assert "不要手工维护当前输出的静态表" in text
 
 
 def test_version_matrix_records_stage3_boundary_hardening_snapshot() -> None:
