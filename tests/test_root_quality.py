@@ -21,6 +21,7 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
 
     assert ruff["include"] == [
         "research-contracts/src/**/*.py",
+        "style_factors/**/*.py",
         "scripts/**/*.py",
         "tests/**/*.py",
     ]

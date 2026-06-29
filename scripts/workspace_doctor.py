@@ -472,10 +472,7 @@ def check_hk_private_archive_governance(root: Path) -> list[Check]:
         Check(
             "OK",
             "hk-private-archive",
-            (
-                f"{archive_name} 保持私有、暂停维护、恢复专用状态，"
-                "并且不在 submodule graph 中。"
-            ),
+            (f"{archive_name} 保持私有、暂停维护、恢复专用状态，并且不在 submodule graph 中。"),
         )
     ]
 

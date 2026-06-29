@@ -78,10 +78,13 @@
       "ty": {
         "current_hard_gate": "scripts/dev/run_tests.sh typecheck",
         "include_targets": [
+          "src/cstree/cli/common.py",
           "src/cstree/contracts/__init__.py",
           "src/cstree/contracts/backtest.py",
           "src/cstree/contracts/signals.py",
           "src/cstree/contracts/strategy.py",
+          "src/cstree/date_utils.py",
+          "src/cstree/dataset.py",
           "src/cstree/return_metrics.py",
           "src/cstree/pipeline/contracts.py",
           "src/cstree/pipeline/output_context.py",

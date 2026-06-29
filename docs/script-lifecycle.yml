@@ -150,11 +150,11 @@
     {
       "path": "scripts/style_factor_attribution.py",
       "owner": "research-workspace",
-      "purpose": "Run A-share 5-factor style analysis (Size/Value/Momentum/Quality/LowVol) with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
+      "purpose": "Run A-share 9-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/style_factors/<name>/",
-      "external_dependencies": "DATA_PLATFORM_ROOT, financial-research scripts/style_analysis.py, mdp venv with matplotlib+tabulate",
+      "external_dependencies": "DATA_PLATFORM_ROOT, local style_factors package, pandas/numpy/matplotlib/pyarrow/tabulate",
       "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
     },
     {
