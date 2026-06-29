@@ -8,7 +8,7 @@
 
 - 跨仓库文件约定、工作流、发布检查清单或 doctor 规则。
 - 子模块 gitlink，也就是锁定 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`、`quant-execution-engine` 的具体提交。
-- 顶层直接追踪的 `research-contracts` 薄包，用于校验跨仓库 artifact contract 清单。
+- 顶层直接追踪的 `src/research_contracts` 薄包，用于校验跨仓库 artifact contract 清单。
 - 顶层 `docs/` 中的协作说明和版本组合记录。
 - 只依赖公开 CLI 或文档化文件输出的轻量检查脚本。
 

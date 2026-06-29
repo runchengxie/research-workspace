@@ -29,7 +29,7 @@
 | `summary.json` | `strategy-pipeline` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
-| `strategy_outputs/style_factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究（cstree 等）| 全市场 9 因子（Size/Value/Momentum/Quality/LowVol/Growth/Leverage/Beta/Liquidity）long-short 日收益、逐年分解、相关性矩阵、策略归因报告 |
+| `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究（cstree 等）| 全市场 9 因子（Size/Value/Momentum/Quality/LowVol/Growth/Leverage/Beta/Liquidity）long-short 日收益、逐年分解、相关性矩阵、策略归因报告 |
 | `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
@@ -37,7 +37,7 @@
 
 ## 跨模块 artifact contract
 
-机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，清单加载和校验入口在 [`research-contracts`](../research-contracts/) 薄包中。`research-contracts` 由顶层仓库直接追踪，不登记为子模块。后续如果把 contract 实现抽到正式共享包，这份清单就是跨仓库 artifact contract 的迁移基准；顶层只校验清单和文件交接，不导入子模块运行时内部实现。
+机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，清单加载和校验入口在 [`src/research_contracts`](../src/research_contracts/) 薄包中。`src/research_contracts` 由顶层仓库直接追踪，不登记为子模块。后续如果把 contract 实现抽到正式共享包，这份清单就是跨仓库 artifact contract 的迁移基准；顶层只校验清单和文件交接，不导入子模块运行时内部实现。
 
 | Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |

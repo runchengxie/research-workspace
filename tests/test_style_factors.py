@@ -3,13 +3,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from style_factors.factor_backtest import (
+from src.style_factors.factor_backtest import (
     available_factor_names,
     build_factor_returns,
     compute_summary,
     get_rebalance_dates,
 )
-from style_factors.factor_calc import compute_factors
+from src.style_factors.factor_calc import compute_factors
 
 
 def _sample_market_frames(days: int = 90, symbols: int = 60) -> tuple[pd.DataFrame, pd.DataFrame]:

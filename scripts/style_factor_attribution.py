@@ -23,12 +23,12 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-run_style_factor_analysis = import_module("style_factors.workflow").run_style_factor_analysis
+run_style_factor_analysis = import_module("src.style_factors.workflow").run_style_factor_analysis
 
 DATA_PLATFORM_ROOT = Path(
     os.environ.get("DATA_PLATFORM_ROOT", "/home/richard/data/market-data-platform")
 )
-OUTPUT_BASE = DATA_PLATFORM_ROOT / "strategy_outputs" / "style_factors"
+OUTPUT_BASE = DATA_PLATFORM_ROOT / "strategy_outputs" / "style-factors"
 
 
 def _write_publish_manifest(outdir: Path, out_name: str) -> None:

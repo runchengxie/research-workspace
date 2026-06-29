@@ -33,7 +33,7 @@ quant-execution-engine
 ## 先知道什么
 
 - 顶层仓库只做集成、文档、轻量检查和子模块版本锁定。
-- 顶层 Git 当前锁定 5 个活跃子模块；`research-contracts` 是顶层直接追踪的本地契约校验薄包，不登记为子模块。
+- 顶层 Git 当前锁定 5 个活跃子模块；`src/research_contracts` 是顶层直接追踪的本地契约校验薄包，不登记为子模块。
 - 大型市场数据、研究输出、provider 缓存、交易审计日志不要放在顶层仓库。
 - 数据资产的正式入口是共享数据根目录下的 `metadata/current_assets/*.json` 和 `metadata/dataset_registry.csv`。
 - 研究到执行的正式交接文件是 `targets.json`，由 `strategy-pipeline` 编排导出，由 `quant-execution-engine` 读取。

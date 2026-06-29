@@ -16,7 +16,7 @@ package = false
 [tool.ruff]
 target-version = "py311"
 line-length = 100
-include = ["research-contracts/src/**/*.py", "style_factors/**/*.py", "scripts/**/*.py", "tests/**/*.py"]
+include = ["src/research_contracts/**/*.py", "src/style_factors/**/*.py", "scripts/**/*.py", "tests/**/*.py"]
 extend-exclude = [
   ".git",
   ".pytest_cache",

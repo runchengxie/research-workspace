@@ -20,8 +20,8 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
     ruff = config["tool"]["ruff"]
 
     assert ruff["include"] == [
-        "research-contracts/src/**/*.py",
-        "style_factors/**/*.py",
+        "src/research_contracts/**/*.py",
+        "src/style_factors/**/*.py",
         "scripts/**/*.py",
         "tests/**/*.py",
     ]

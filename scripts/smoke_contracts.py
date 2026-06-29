@@ -90,7 +90,7 @@ def _skip(name: str, message: str) -> SmokeResult:
 
 
 def _artifact_contract_manifest_check(root: Path) -> SmokeResult:
-    contracts_src = ROOT / "research-contracts" / "src"
+    contracts_src = ROOT / "src" / "research_contracts" / "src"
     if str(contracts_src) not in sys.path:
         sys.path.insert(0, str(contracts_src))
     from research_contracts import validate_artifact_contract_manifest

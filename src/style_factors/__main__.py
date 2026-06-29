@@ -14,7 +14,7 @@ import argparse
 import os
 from pathlib import Path
 
-from style_factors.workflow import run_style_factor_analysis
+from src.style_factors.workflow import run_style_factor_analysis
 
 
 def main() -> None:

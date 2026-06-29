@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from style_factors import FACTOR_LABELS
+from src.style_factors import FACTOR_LABELS
 
 
 def _factor_definition_lines() -> list[str]:

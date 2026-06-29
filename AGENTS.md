@@ -7,7 +7,7 @@
 本工作区是多仓库集成层，主要负责：
 
 - 维护 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`、`quant-execution-engine` 的子模块边界。
-- 维护顶层直接追踪的 `research-contracts` 薄包，用于校验跨仓库产物契约清单。
+- 维护顶层 `src/research_contracts` 薄包，用于校验跨仓库产物契约清单。
 - 记录跨仓库数据文件约定、运行路径、发布检查清单和工作区健康检查。
 - 协调数据平台、策略研究和交易执行之间的文件交接。
 

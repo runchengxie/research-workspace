@@ -53,5 +53,5 @@
 
 - 顶层文档写数据平台、策略研究、交易执行之间的交接方式。
 - 子项目内部实现、业务参数和完整命令说明放在子项目自己的文档里。
-- `research-contracts` 是顶层直接追踪的本地薄包，用于加载和校验跨仓库 artifact contract 清单，不登记为 Git 子模块。
+- `src/research_contracts` 是顶层本地薄包，用于加载和校验跨仓库 artifact contract 清单，不登记为 Git 子模块。
 - 大型市场数据、研究 run、交易审计日志和 provider 缓存不进入顶层仓库。
