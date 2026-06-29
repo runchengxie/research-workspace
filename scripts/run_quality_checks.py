@@ -88,6 +88,12 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
             *commands["architecture"],
             *commands["secrets"],
         ]
+    if profile == "ci-smoke":
+        return [
+            *commands["lint"],
+            *commands["type"],
+            *commands["secrets"],
+        ]
     if profile in commands:
         return commands[profile]
     raise ValueError(f"Unknown quality profile: {profile}")
@@ -114,7 +120,16 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--profile",
-        choices=("lint", "type", "basedpyright", "architecture", "secrets", "dead-code", "hard"),
+        choices=(
+            "lint",
+            "type",
+            "basedpyright",
+            "architecture",
+            "secrets",
+            "dead-code",
+            "hard",
+            "ci-smoke",
+        ),
         default="hard",
     )
     parser.add_argument("--dry-run", action="store_true")

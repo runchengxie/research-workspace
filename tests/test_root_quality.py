@@ -56,6 +56,15 @@ def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
     assert "workspace-import-boundaries" in names
 
 
+def test_ci_smoke_profile_skips_workspace_import_boundary_gate() -> None:
+    commands = run_quality_checks.plan_commands("ci-smoke")
+
+    names = [item.name for item in commands]
+
+    assert names == ["ruff-check", "ruff-format", "ty-check", "secret-scan"]
+    assert "workspace-import-boundaries" not in names
+
+
 def test_basedpyright_profile_is_advisory() -> None:
     commands = run_quality_checks.plan_commands("basedpyright")
 
@@ -76,6 +85,8 @@ def test_superproject_ci_runs_top_level_quality_gates() -> None:
     assert "WORKSPACE_SUBMODULE_READ_TOKEN" in workflow
     assert "Checkout private submodules" in workflow
     assert "python scripts/run_quality_checks.py --profile hard" in workflow
+    assert "Run superproject smoke quality profile without private submodules" in workflow
+    assert "python scripts/run_quality_checks.py --profile ci-smoke" in workflow
     assert "python scripts/run_quality_checks.py --profile basedpyright" in workflow
     assert "continue-on-error: true" in workflow
     assert "uv run --with pytest python -m pytest tests -q" in workflow

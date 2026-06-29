@@ -39,7 +39,11 @@ jobs:
           git config --global url."https://x-access-token:${WORKSPACE_SUBMODULE_READ_TOKEN}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive --depth 1
       - name: Run superproject hard quality profile
+        if: env.HAS_WORKSPACE_SUBMODULE_TOKEN == 'true'
         run: python scripts/run_quality_checks.py --profile hard
+      - name: Run superproject smoke quality profile without private submodules
+        if: env.HAS_WORKSPACE_SUBMODULE_TOKEN != 'true'
+        run: python scripts/run_quality_checks.py --profile ci-smoke
       - name: Run superproject BasedPyright advisory
         continue-on-error: true
         run: python scripts/run_quality_checks.py --profile basedpyright
