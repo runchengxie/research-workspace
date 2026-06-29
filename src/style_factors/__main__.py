@@ -62,6 +62,11 @@ def main() -> None:
             f"R²={artifacts.attribution['r_squared']}, "
             f"alpha={artifacts.attribution['annual_alpha']}%"
         )
+    if artifacts.yearly_attribution is not None and not artifacts.yearly_attribution.empty:
+        print(
+            "[strategy attribution yearly] "
+            f"{len(artifacts.yearly_attribution)} years → strategy_attribution_yearly.csv"
+        )
 
     print(f"\n[OK] 全部产出写入 {outdir}/")
     for f in sorted(outdir.iterdir()):

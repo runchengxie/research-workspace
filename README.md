@@ -71,6 +71,7 @@ python src/research_contracts/smoke_contracts.py
 | 先把工作区跑起来 | [docs/bootstrap.md](docs/bootstrap.md) |
 | 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
 | 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
+| 做 A 股市场风格复盘或策略归因 | [docs/style-factors.md](docs/style-factors.md) |
 | 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
 | 查看港股公开拆分清单 | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
 | 按阶段4收敛清单推进架构边界 | [docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md) |

@@ -10,7 +10,7 @@ from typing import Any
 
 import pandas as pd
 
-from .attribution import run_strategy_attribution
+from .attribution import run_strategy_attribution, run_yearly_strategy_attribution
 from .charts import (
     plot_correlation_heatmap,
     plot_cumulative_comparison,
@@ -37,6 +37,7 @@ class StyleFactorArtifacts:
     correlation: pd.DataFrame
     yearly: pd.DataFrame
     attribution: dict | None
+    yearly_attribution: pd.DataFrame | None
     metadata: dict[str, Any]
 
 
@@ -49,27 +50,23 @@ def load_strategy_returns(path: Path | None) -> pd.Series | None:
     return frame.iloc[:, 0]
 
 
-def _filter_quick_sample(
-    daily: pd.DataFrame,
-    basics: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    return (
-        daily[daily["trade_date"] >= "2020-01-01"].copy(),
-        basics[basics["trade_date"] >= "2020-01-01"].copy(),
-    )
-
-
 def _save_factor_outputs(
     outdir: Path,
     factor_results: dict,
     summary: pd.DataFrame,
     corr: pd.DataFrame,
     yearly: pd.DataFrame,
+    attribution: dict | None,
+    yearly_attribution: pd.DataFrame | None,
     metadata: dict[str, Any],
 ) -> None:
     summary.to_json(outdir / "factor_summary.json", orient="records", indent=2)
     corr.to_json(outdir / "factor_correlation.json", orient="index", indent=2)
     yearly.to_csv(outdir / "factor_yearly.csv", index=False)
+    if attribution:
+        (outdir / "strategy_attribution.json").write_text(json.dumps(attribution, indent=2) + "\n")
+    if yearly_attribution is not None and not yearly_attribution.empty:
+        yearly_attribution.to_csv(outdir / "strategy_attribution_yearly.csv", index=False)
     (outdir / "meta.json").write_text(json.dumps(metadata, indent=2) + "\n")
     for name, res in factor_results.items():
         res["long_short"].to_csv(
@@ -86,15 +83,22 @@ def _build_metadata(
     quick: bool,
     factor_results: dict,
     attribution: dict | None,
+    yearly_attribution: pd.DataFrame | None,
 ) -> dict[str, Any]:
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "data_root": str(data_root),
         "output": str(outdir),
         "quick": quick,
+        "quick_start_date": "2020-01-01" if quick else None,
         "factor_count": len(factor_results),
         "factors": sorted(factor_results),
         "attribution": attribution,
+        "yearly_attribution_file": (
+            str(outdir / "strategy_attribution_yearly.csv")
+            if yearly_attribution is not None and not yearly_attribution.empty
+            else None
+        ),
     }
 
 
@@ -108,10 +112,9 @@ def run_style_factor_analysis(
 ) -> StyleFactorArtifacts:
     outdir.mkdir(parents=True, exist_ok=True)
 
-    daily, basics = load_data(data_root)
+    start_date = "2020-01-01" if quick else None
+    daily, basics = load_data(data_root, start_date=start_date)
     fina = load_fina_indicator(data_root)
-    if quick:
-        daily, basics = _filter_quick_sample(daily, basics)
 
     factors = compute_factors(daily, basics, fina if not fina.empty else None)
     all_dates = pd.DatetimeIndex(sorted(factors["trade_date"].unique()))
@@ -131,14 +134,17 @@ def run_style_factor_analysis(
 
     strategy_returns = load_strategy_returns(strategy_csv)
     attribution = run_strategy_attribution(results, strategy_returns, strategy_name)
+    yearly_attribution = run_yearly_strategy_attribution(results, strategy_returns, strategy_name)
     if attribution and "error" in attribution:
         attribution = None
+    if yearly_attribution.empty:
+        yearly_attribution = None
 
     plot_factor_nav(results, outdir)
     plot_cumulative_comparison(results, outdir)
     plot_correlation_heatmap(results, outdir)
     plot_yearly_barchart(yearly, outdir)
-    generate_report(summary, corr, results, outdir, attribution, yearly)
+    generate_report(summary, corr, results, outdir, attribution, yearly, yearly_attribution)
 
     metadata = _build_metadata(
         data_root=data_root,
@@ -146,8 +152,18 @@ def run_style_factor_analysis(
         quick=quick,
         factor_results=results,
         attribution=attribution,
+        yearly_attribution=yearly_attribution,
     )
-    _save_factor_outputs(outdir, results, summary, corr, yearly, metadata)
+    _save_factor_outputs(
+        outdir,
+        results,
+        summary,
+        corr,
+        yearly,
+        attribution,
+        yearly_attribution,
+        metadata,
+    )
     return StyleFactorArtifacts(
         outdir=outdir,
         factor_results=results,
@@ -155,5 +171,6 @@ def run_style_factor_analysis(
         correlation=corr,
         yearly=yearly,
         attribution=attribution,
+        yearly_attribution=yearly_attribution,
         metadata=metadata,
     )

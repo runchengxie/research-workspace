@@ -45,6 +45,7 @@ def _append_attribution_section(
     lines: list[str],
     summary: pd.DataFrame,
     attribution: dict | None,
+    yearly_attribution: pd.DataFrame | None,
 ) -> None:
     if not attribution or "error" in attribution:
         return
@@ -71,6 +72,22 @@ def _append_attribution_section(
         contrib = beta * factor_ann
         lines.append(f"| {FACTOR_LABELS.get(factor, factor)} | {beta:.4f} | {contrib:+.2f}% |")
     lines.append("")
+
+    if yearly_attribution is None or yearly_attribution.empty:
+        return
+    compact = yearly_attribution[
+        ["year", "days", "period_return", "annual_return", "r_squared", "annual_alpha"]
+    ].copy()
+    lines.extend(
+        [
+            "### 逐年策略归因",
+            "",
+            compact.to_markdown(index=False, floatfmt=".2f"),
+            "",
+            "完整逐年 beta、因子收益和贡献见 `strategy_attribution_yearly.csv`。",
+            "",
+        ]
+    )
 
 
 def _append_coverage(lines: list[str], factor_results: dict) -> None:
@@ -103,6 +120,7 @@ def generate_report(
     outdir: Path,
     attribution: dict | None = None,
     yearly: pd.DataFrame | None = None,
+    yearly_attribution: pd.DataFrame | None = None,
 ) -> str:
     lines = [
         "# A 股全市场风格因子分析报告",
@@ -125,12 +143,12 @@ def generate_report(
     ]
 
     _append_yearly_section(lines, yearly)
-    _append_attribution_section(lines, summary, attribution)
+    _append_attribution_section(lines, summary, attribution, yearly_attribution)
     _append_coverage(lines, factor_results)
     lines.extend(
         [
             "",
-            "*由 Hermes Agent 自动生成 | 数据来源: market-data-platform (daily + daily_basic)*",
+            "*由 style_factors 自动生成 | 数据来源: market-data-platform (daily + daily_basic)*",
         ]
     )
 

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pandas as pd
 
+from src.style_factors.attribution import run_strategy_attribution, run_yearly_strategy_attribution
 from src.style_factors.factor_backtest import (
     available_factor_names,
     build_factor_returns,
@@ -55,6 +58,17 @@ def test_compute_factors_without_fundamentals_skips_optional_factors() -> None:
     )
 
 
+def test_compute_factors_does_not_turn_negative_valuation_into_top_signal() -> None:
+    daily, basics = _sample_market_frames(days=50)
+    basics.loc[basics["symbol"] == "000001.SZ", "pb"] = -1.0
+    basics.loc[basics["symbol"] == "000002.SZ", "pe_ttm"] = -5.0
+
+    factors = compute_factors(daily, basics)
+
+    assert "000001.SZ" not in set(factors["symbol"])
+    assert "000002.SZ" not in set(factors["symbol"])
+
+
 def test_build_factor_returns_handles_missing_optional_factors() -> None:
     daily, basics = _sample_market_frames()
     factors = compute_factors(daily, basics)
@@ -79,3 +93,24 @@ def test_compute_summary_reports_negative_drawdown() -> None:
 
     assert summary.loc[0, "factor"] == "size"
     assert summary.loc[0, "max_drawdown"] < 0
+
+
+def test_strategy_attribution_reports_yearly_betas_and_json_safe_summary() -> None:
+    dates = pd.bdate_range("2024-01-01", "2025-12-31")
+    size = pd.Series(np.sin(np.arange(len(dates)) / 17) / 100, index=dates, name="size")
+    value = pd.Series(np.cos(np.arange(len(dates)) / 23) / 100, index=dates, name="value")
+    strategy = 0.5 * size + 0.2 * value + 0.0001
+    factor_results = {
+        "size": {"long_short": size},
+        "value": {"long_short": value},
+    }
+
+    attribution = run_strategy_attribution(factor_results, strategy, "demo")
+    yearly = run_yearly_strategy_attribution(factor_results, strategy, "demo")
+
+    json.dumps(attribution)
+    assert attribution["strategy"] == "demo"
+    assert abs(attribution["betas"]["size"] - 0.5) < 1e-6
+    assert list(yearly["year"]) == [2024, 2025]
+    assert abs(yearly.loc[0, "beta_size"] - 0.5) < 1e-6
+    assert "contribution_value" in yearly.columns

@@ -36,6 +36,20 @@ def get_rebalance_dates(dates: pd.DatetimeIndex) -> pd.DatetimeIndex:
     return pd.DatetimeIndex(df.groupby(["year", "month"])["date"].max().sort_values())
 
 
+def _daily_return_matrix(daily: pd.DataFrame) -> pd.DataFrame:
+    ret_df = daily[["trade_date", "symbol", "pct_chg"]].dropna().copy()
+    ret_df["trade_date"] = pd.to_datetime(ret_df["trade_date"]).dt.normalize()
+    ret_df["pct_chg"] = ret_df["pct_chg"] / 100.0
+    returns = ret_df.pivot_table(
+        index="trade_date",
+        columns="symbol",
+        values="pct_chg",
+        aggfunc="mean",
+    )
+    returns.index = pd.DatetimeIndex(returns.index)
+    return returns.sort_index()
+
+
 def build_factor_returns(
     factors_df: pd.DataFrame,
     daily: pd.DataFrame,
@@ -45,24 +59,24 @@ def build_factor_returns(
     """For each factor: quintile long-short monthly rebalance."""
     factor_names = available_factor_names(factors_df)
 
-    ret_df = daily[["trade_date", "symbol", "pct_chg"]].copy()
-    ret_df["pct_chg"] = ret_df["pct_chg"] / 100.0
-    ret_df["trade_date"] = pd.to_datetime(ret_df["trade_date"])
-
-    all_dates = sorted(ret_df["trade_date"].unique())
+    daily_returns = _daily_return_matrix(daily)
     rd_list = sorted(rebalance_dates)
 
     results = {}
     for fname in factor_names:
         fcol = f"factor_{fname}_z"
-        print(f"[backtest] {fname} ...")
-        long_ret, short_ret, ls_ret, dates_out = [], [], [], []
+        print(f"[backtest] {fname} ...", flush=True)
+        long_parts: list[pd.Series] = []
+        short_parts: list[pd.Series] = []
+        ls_parts: list[pd.Series] = []
 
         for i, rd in enumerate(rd_list):
             if i == len(rd_list) - 1:
                 break
             next_rd = rd_list[i + 1]
 
+            rd = pd.Timestamp(rd).normalize()
+            next_rd = pd.Timestamp(next_rd).normalize()
             rd_data = factors_df[factors_df["trade_date"] == rd].dropna(subset=[fcol])
             if len(rd_data) < n_quantiles * 10:
                 continue
@@ -77,25 +91,35 @@ def build_factor_returns(
             top_syms = rd_data[rd_data["quantile"] == n_quantiles - 1]["symbol"].tolist()
             bot_syms = rd_data[rd_data["quantile"] == 0]["symbol"].tolist()
 
-            holding_dates = [d for d in all_dates if rd < d <= next_rd]
-            if not holding_dates:
+            period_returns = daily_returns.loc[rd:next_rd]
+            period_returns = period_returns[period_returns.index > rd]
+            if period_returns.empty:
                 continue
 
-            for hd in holding_dates:
-                day_ret = ret_df[ret_df["trade_date"] == hd]
-                top_r = day_ret[day_ret["symbol"].isin(top_syms)]["pct_chg"].mean()
-                bot_r = day_ret[day_ret["symbol"].isin(bot_syms)]["pct_chg"].mean()
-                if pd.notna(top_r) and pd.notna(bot_r):
-                    long_ret.append(top_r)
-                    short_ret.append(bot_r)
-                    ls_ret.append(top_r - bot_r)
-                    dates_out.append(hd)
+            top_r = period_returns.reindex(columns=top_syms).mean(axis=1)
+            bot_r = period_returns.reindex(columns=bot_syms).mean(axis=1)
+            paired = pd.concat({"long": top_r, "short": bot_r}, axis=1).dropna()
+            if paired.empty:
+                continue
 
-        idx = pd.DatetimeIndex(dates_out)
+            long_parts.append(paired["long"])
+            short_parts.append(paired["short"])
+            ls_parts.append(paired["long"] - paired["short"])
+
+        if ls_parts:
+            long_series = pd.concat(long_parts).sort_index()
+            short_series = pd.concat(short_parts).sort_index()
+            ls_series = pd.concat(ls_parts).sort_index()
+        else:
+            empty_index = pd.DatetimeIndex([], name="trade_date")
+            long_series = pd.Series(dtype=float, index=empty_index)
+            short_series = pd.Series(dtype=float, index=empty_index)
+            ls_series = pd.Series(dtype=float, index=empty_index)
+        ls_series.name = fname
         results[fname] = {
-            "long_short": pd.Series(ls_ret, index=idx, name=fname),
-            "long": pd.Series(long_ret, index=idx),
-            "short": pd.Series(short_ret, index=idx),
+            "long_short": ls_series,
+            "long": long_series,
+            "short": short_series,
         }
 
     return results
