@@ -9,8 +9,8 @@
     "owner decision on 2026-06-14 to retire the public demo route and keep restore-only archives"
   ],
   "reviewed_commands": [
-    "rg -n \"\\\\b(hk|HK|Hong Kong|longport|rqdata-hk|hkdata|alloc-hk|hk_assets|hk_depth|hk_data_platform)\\\\b\" README.md docs scripts demo market-data-platform cross-sectional-trees quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**'",
-    "find market-data-platform cross-sectional-trees quant-execution-engine demo -path '*/.git' -prune -o -type f \\( -iname '*hk*' -o -iname '*longport*' \\) -print"
+    "rg -n \"\\\\b(hk|HK|Hong Kong|longport|rqdata-hk|hkdata|alloc-hk|hk_assets|hk_depth|hk_data_platform)\\\\b\" README.md docs scripts demo market-data-platform strategy-pipeline quant-execution-engine --glob '!**/.git/**' --glob '!**/__pycache__/**' --glob '!**/.pytest_cache/**'",
+    "find market-data-platform strategy-pipeline quant-execution-engine demo -path '*/.git' -prune -o -type f \\( -iname '*hk*' -o -iname '*longport*' \\) -print"
   ],
   "actions": [
     "keep_in_main",
@@ -233,10 +233,10 @@
     },
     {
       "id": "strategy-research-hk-allocation-compat",
-      "owner_repo": "cross-sectional-trees",
+      "owner_repo": "strategy-pipeline",
       "paths": [
-        "cross-sectional-trees/src/cstree/liveops/alloc_hk*.py",
-        "cross-sectional-trees/tests/test_alloc_hk.py"
+        "strategy-pipeline/src/cstree/liveops/alloc_hk*.py",
+        "strategy-pipeline/tests/test_alloc_hk.py"
       ],
       "path_kind": "historical_git",
       "action": "delete_after_split",
@@ -253,7 +253,7 @@
         "status": "removed",
         "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
         "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
-        "replacement_docs": "cross-sectional-trees/docs/cli.md",
+        "replacement_docs": "strategy-pipeline/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_cli_liveops.py tests/test_docs_contracts.py tests/test_cstree_namespace.py -q; uv run python -m pytest tests -q",
         "public_split_evidence": "not_required_public_demo_route_retired"
@@ -261,14 +261,14 @@
     },
     {
       "id": "strategy-research-hk-research-provenance",
-      "owner_repo": "cross-sectional-trees",
+      "owner_repo": "strategy-pipeline",
       "paths": [
-        "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md",
-        "cross-sectional-trees/docs/archive/research/hk/README.md",
-        "cross-sectional-trees/docs/playbooks/hk-*.md",
-        "cross-sectional-trees/docs/rqdata/hk-health-checks.md",
-        "cross-sectional-trees/scripts/internal/freeze_hk_research_outputs.py",
-        "cross-sectional-trees/tests/test_*hk*.py"
+        "strategy-pipeline/docs/archive/research/hk/notes/hk-*.md",
+        "strategy-pipeline/docs/archive/research/hk/README.md",
+        "strategy-pipeline/docs/playbooks/hk-*.md",
+        "strategy-pipeline/docs/rqdata/hk-health-checks.md",
+        "strategy-pipeline/scripts/internal/freeze_hk_research_outputs.py",
+        "strategy-pipeline/tests/test_*hk*.py"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",
@@ -295,17 +295,17 @@
     },
     {
       "id": "strategy-research-hk-configs",
-      "owner_repo": "cross-sectional-trees",
+      "owner_repo": "strategy-pipeline",
       "paths": [
-        "cross-sectional-trees/docs/archive/research/hk/configs/experiments/**/*hk*.yml",
-        "cross-sectional-trees/docs/archive/research/hk/notes/hk-*.md"
+        "strategy-pipeline/docs/archive/research/hk/configs/experiments/**/*hk*.yml",
+        "strategy-pipeline/docs/archive/research/hk/notes/hk-*.md"
       ],
       "path_kind": "repo_local",
       "action": "keep_in_main",
       "public_safety": "restore_sensitive",
       "restore_dependency": "historical reproducibility, deleted restore presets in private archive, and archived config provenance",
       "consumer_audit_status": "active experiment configs moved to docs/archive/research/hk/configs/experiments on 2026-06-13; public excerpt route retired on 2026-06-14",
-      "replacement_path": "active A-share presets in cross-sectional-trees; HK configs remain restore-only archive material",
+      "replacement_path": "active A-share presets in strategy-pipeline; HK configs remain restore-only archive material",
       "required_redactions": [
         "private output names",
         "provider-specific dataset paths",
@@ -316,7 +316,7 @@
         "status": "not_applicable",
         "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
         "consumer_audit": "repo-local active config audit passed; public excerpt review no longer required",
-        "replacement_docs": "cross-sectional-trees/docs/archive/research/hk/README.md",
+        "replacement_docs": "strategy-pipeline/docs/archive/research/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_config_lifecycle.py tests/test_config_utils.py tests/test_linear_sweep.py tests/test_docs_contracts.py -q",
         "public_split_evidence": "not_required_public_demo_route_retired"
@@ -324,7 +324,7 @@
     },
     {
       "id": "strategy-research-frozen-hk-marker",
-      "owner_repo": "cross-sectional-trees",
+      "owner_repo": "strategy-pipeline",
       "paths": [
         "docs/evidence/hk-research-archive-manifest-20260601.json"
       ],
@@ -344,7 +344,7 @@
         "consumer_audit": "not_required",
         "replacement_docs": "docs/archive/hk/README.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "cross-sectional-trees/tests/test_freeze_hk_research_outputs.py",
+        "focused_tests": "strategy-pipeline/tests/test_freeze_hk_research_outputs.py",
         "public_split_evidence": "not_required"
       }
     },

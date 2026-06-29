@@ -126,8 +126,8 @@
       "status": "removed"
     },
     {
-      "id": "cross-sectional-trees-alloc-hk",
-      "owner_repo": "cross-sectional-trees",
+      "id": "strategy-pipeline-alloc-hk",
+      "owner_repo": "strategy-pipeline",
       "entrypoint": "cstree alloc-hk",
       "kind": "deprecated_cli",
       "replacement": "cstree alloc plus cstree export-targets",
@@ -137,18 +137,18 @@
       "rollback_path": "restore deprecated CLI handler and alloc_hk modules from hk-freeze-20260613 or private archive",
       "restore_evidence_required": true,
       "focused_tests": [
-        "cross-sectional-trees/tests/test_cli_liveops.py",
-        "cross-sectional-trees/tests/test_docs_contracts.py",
-        "cross-sectional-trees full pytest"
+        "strategy-pipeline/tests/test_cli_liveops.py",
+        "strategy-pipeline/tests/test_docs_contracts.py",
+        "strategy-pipeline full pytest"
       ],
       "consumer_audit": "repo-local focused audit passed; previous implementation retained by hk-freeze-20260613 and private restore-only archive",
-      "replacement_docs": "cross-sectional-trees/docs/cli.md",
+      "replacement_docs": "strategy-pipeline/docs/cli.md",
       "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
       "status": "removed"
     },
     {
-      "id": "cross-sectional-trees-hk-historical-configs",
-      "owner_repo": "cross-sectional-trees",
+      "id": "strategy-pipeline-hk-historical-configs",
+      "owner_repo": "strategy-pipeline",
       "entrypoint": "configs/experiments/**/*hk*.yml",
       "kind": "archived_provenance",
       "replacement": "docs/archive/research/hk/configs/experiments plus restore-only archive",
@@ -158,12 +158,12 @@
       "rollback_path": "restore historical configs from release tag or cold-storage research archive",
       "restore_evidence_required": true,
       "focused_tests": [
-        "cross-sectional-trees docs contract tests",
-        "cross-sectional-trees config lifecycle tests",
-        "cross-sectional-trees full pytest"
+        "strategy-pipeline docs contract tests",
+        "strategy-pipeline config lifecycle tests",
+        "strategy-pipeline full pytest"
       ],
       "consumer_audit": "repo-local focused audit passed; remaining HK presets are explicit restore presets, not active experiment catalog entries",
-      "replacement_docs": "cross-sectional-trees/docs/README.md",
+      "replacement_docs": "strategy-pipeline/docs/README.md",
       "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
       "status": "removed"
     }

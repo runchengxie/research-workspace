@@ -1,6 +1,6 @@
 [submodule "strategy-pipeline"]
 	path = strategy-pipeline
-	url = https://github.com/runchengxie/cross-sectional-trees.git
+	url = https://github.com/runchengxie/strategy-pipeline.git
 [submodule "market-data-platform"]
 	path = market-data-platform
 	url = https://github.com/runchengxie/market-data-platform.git

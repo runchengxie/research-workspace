@@ -16,13 +16,13 @@
   "repository_paths": {
     "research-workspace": ".",
     "market-data-platform": "market-data-platform",
-    "cross-sectional-trees": "cross-sectional-trees",
+    "strategy-pipeline": "strategy-pipeline",
     "quant-execution-engine": "quant-execution-engine"
   },
   "source_revisions": {
     "research-workspace": "8d2f5fd2a7a52f68ee7b0fc763398aff8c7171a1",
     "market-data-platform": "e802f12c042ca6dcc756805412c7fe7ee3efe08e",
-    "cross-sectional-trees": "b6e4cadd9a283fa80ac12d003db805fb1d510488",
+    "strategy-pipeline": "b6e4cadd9a283fa80ac12d003db805fb1d510488",
     "quant-execution-engine": "dc520cf7bce386c59c20a88466cd434bce0eae9e"
   },
   "restore_evidence": "docs/evidence/hk-restore-drill-20260601.json",
@@ -68,8 +68,8 @@
       }
     },
     {
-      "id": "cross-sectional-trees-hk-research-legacy",
-      "owner_repo": "cross-sectional-trees",
+      "id": "strategy-pipeline-hk-research-legacy",
+      "owner_repo": "strategy-pipeline",
       "archive_action": "include",
       "lifecycle": "archived_provenance",
       "paths": [
@@ -84,12 +84,12 @@
       ],
       "restore_dependency": "explicit HK reproduction, archived research provenance, and deleted alloc_hk module restoration from hk-freeze-20260613",
       "consumer_audit": "repo-local focused audit passed for active A-share workspace cleanup",
-      "replacement_docs": "cross-sectional-trees/docs/cli.md",
+      "replacement_docs": "strategy-pipeline/docs/cli.md",
       "rollback_notes": "docs/archive/hk/README.md",
       "focused_tests": [
-        "cross-sectional-trees/tests/test_cli_liveops.py",
-        "cross-sectional-trees/tests/test_docs_contracts.py",
-        "cross-sectional-trees full pytest"
+        "strategy-pipeline/tests/test_cli_liveops.py",
+        "strategy-pipeline/tests/test_docs_contracts.py",
+        "strategy-pipeline full pytest"
       ],
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
@@ -97,7 +97,7 @@
         "source_tag": "hk-freeze-20260613",
         "restore_evidence": "docs/evidence/hk-research-workspace-archive-20260613.json",
         "consumer_audit": "repo-local focused audit passed; previous implementation retained in private restore-only archive",
-        "replacement_docs": "cross-sectional-trees/docs/cli.md",
+        "replacement_docs": "strategy-pipeline/docs/cli.md",
         "rollback_notes": "docs/archive/hk/README.md",
         "focused_tests": "2026-06-13: uv run python -m pytest tests/test_docs_contracts.py tests/test_repo_path_references.py tests/test_data_ops_boundary.py tests/test_cstree_namespace.py tests/test_cli_liveops.py tests/test_cli_research.py -q; uv run python -m pytest tests -q",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
