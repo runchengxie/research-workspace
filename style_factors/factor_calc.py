@@ -126,21 +126,33 @@ def _add_fundamental_factors(df: pd.DataFrame, *, has_fina: bool) -> pd.DataFram
 
 
 def _add_beta_factor(df: pd.DataFrame) -> pd.DataFrame:
+    """252-day CAPM β, using rolling-sum decomposition for speed.
+
+    COV(x,y) = E[xy] - E[x]E[y], so this avoids per-group rolling covariance.
+    """
     df["ret"] = df["pct_chg"] / 100.0
     df["mkt_ret"] = df.groupby("trade_date")["ret"].transform("mean")
-    df["cov_252"] = (
-        df.groupby("symbol")[["ret", "mkt_ret"]]
-        .apply(
-            lambda group: group["ret"].rolling(252, min_periods=126).cov(group["mkt_ret"]),
-            include_groups=False,
-        )
-        .reset_index(level=0, drop=True)
-    )
-    df["var_252"] = df.groupby("symbol")["mkt_ret"].transform(
-        lambda series: series.rolling(252, min_periods=126).var()
-    )
-    raw_beta = df["cov_252"] / df["var_252"].replace(0, np.nan)
-    df["factor_beta"] = -raw_beta
+    df["ret_mkt"] = df["ret"] * df["mkt_ret"]
+    df["mkt_ret_sq"] = df["mkt_ret"] * df["mkt_ret"]
+
+    grouped = df.groupby("symbol", sort=False)
+    window, min_periods = 252, 126
+    rolling = {
+        column: grouped[column].rolling(window, min_periods=min_periods)
+        for column in ("ret_mkt", "ret", "mkt_ret", "mkt_ret_sq")
+    }
+    sum_rm = rolling["ret_mkt"].sum().reset_index(level=0, drop=True)
+    sum_r = rolling["ret"].sum().reset_index(level=0, drop=True)
+    sum_m = rolling["mkt_ret"].sum().reset_index(level=0, drop=True)
+    sum_m2 = rolling["mkt_ret_sq"].sum().reset_index(level=0, drop=True)
+    n = grouped["ret"].rolling(window, min_periods=min_periods).count()
+    n = n.reset_index(level=0, drop=True)
+
+    cov_num = sum_rm / n - (sum_r / n) * (sum_m / n)
+    var_den = sum_m2 / n - (sum_m / n) ** 2
+    raw_beta = cov_num / var_den.replace(0, np.nan)
+    df["factor_beta"] = -raw_beta  # low-beta long, high-beta short
+    df = df.drop(columns=["ret_mkt", "mkt_ret_sq"])
     return df
 
 
