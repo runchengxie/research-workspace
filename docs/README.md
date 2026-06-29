@@ -25,7 +25,8 @@
 | 查看港股私有归档清单 | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 | 查看港股公开拆分清单 | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | 查看 A 股就绪度分层与验收命令 | [data-transition-playbook.md](data-transition-playbook.md#a-股-readiness-分层) |
-| 运行 A 股 Barra 风格 proxy 和策略归因 | [style-factors.md](style-factors.md) |
+| 运行 A 股 Barra 风格代理因子和策略归因 | [style-factors.md](style-factors.md) |
+| 阅读 2008-2026 A 股年度风格切换解读 | [style-factor-market-regimes-2008-2026.md](style-factor-market-regimes-2008-2026.md) |
 | 确认上下游文件约定 | [contracts.md](contracts.md) |
 | 查看跨仓库研究完整性和防过拟合边界 | [platform-workflow.md](platform-workflow.md#研究完整性和防过拟合边界) |
 | 查看维护债治理入口 | [maintainability-governance.md](maintainability-governance.md) |
