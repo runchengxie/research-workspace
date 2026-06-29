@@ -55,6 +55,13 @@ def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
     assert "workspace-import-boundaries" in names
 
 
+def test_dead_code_profile_runs_advisory_wrapper() -> None:
+    commands = run_quality_checks.plan_commands("dead-code")
+
+    assert [item.name for item in commands] == ["dead-code-advisory"]
+    assert commands[0].command[-1].endswith("scripts/dead_code_advisory.py")
+
+
 def test_superproject_ci_runs_top_level_quality_gates() -> None:
     workflow = (ROOT / ".github" / "workflows" / "superproject.yml").read_text(encoding="utf-8")
 

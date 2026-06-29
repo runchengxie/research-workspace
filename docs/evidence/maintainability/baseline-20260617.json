@@ -9,8 +9,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 53,
-      "python_loc": 10964,
+      "python_file_count": 54,
+      "python_loc": 11023,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -20,7 +20,7 @@
         },
         {
           "path": "scripts/concept_etf_ml_backtest.py",
-          "loc": 698,
+          "loc": 697,
           "hk_related": false
         },
         {
@@ -213,6 +213,7 @@
       },
       "script_inventory": [
         "scripts/concept_etf_ml_backtest.py",
+        "scripts/dead_code_advisory.py",
         "scripts/export_hk_legacy_archive.py",
         "scripts/export_holdings_html.py",
         "scripts/hk_archive_gate.py",

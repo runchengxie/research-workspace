@@ -218,6 +218,16 @@
       "removal_condition": "remove only after top-level quality profiles are replaced or retired and no CI/release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/dead_code_advisory.py",
+      "owner": "research-workspace",
+      "purpose": "High-confidence dead-code advisory wrapper for superproject-owned Python code",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "vulture or uvx network/tool cache",
+      "removal_condition": "remove only after dead-code advisory scanning moves into a successor quality profile and no docs or maintenance workflow calls this script for two release reviews"
+    },
+    {
       "path": "scripts/workspace_import_boundaries.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo import direction and source layout budget gate for the stage 3.5/4 repo split",

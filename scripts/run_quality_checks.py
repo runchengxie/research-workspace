@@ -51,6 +51,15 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                 ),
             )
         ],
+        "dead-code": [
+            PlannedCommand(
+                "dead-code-advisory",
+                (
+                    sys.executable,
+                    str(ROOT / "scripts" / "dead_code_advisory.py"),
+                ),
+            )
+        ],
     }
     if profile == "hard":
         return [*commands["lint"], *commands["architecture"], *commands["secrets"]]
@@ -80,7 +89,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--profile",
-        choices=("lint", "architecture", "secrets", "hard"),
+        choices=("lint", "architecture", "secrets", "dead-code", "hard"),
         default="hard",
     )
     parser.add_argument("--dry-run", action="store_true")

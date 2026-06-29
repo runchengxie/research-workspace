@@ -38,6 +38,7 @@ python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile architecture
 python scripts/workspace_import_boundaries.py --check
 python scripts/run_quality_checks.py --profile secrets
+python scripts/run_quality_checks.py --profile dead-code
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 python scripts/run_submodule_checks.py --profile mypy_advisory \
   --submodule quant-execution-engine
@@ -61,3 +62,7 @@ uvx bandit -q -r src -lll
 本地操作环境安装的依赖必须先标注 owner、用途和复核命令，再决定是否晋升硬门禁。
 coverage 同样按 contract、manifest、target export、risk、execution state 等高风险模块逐步
 ratchet，不设置跨仓库统一阈值。
+
+Dead-code 扫描先保持建议项：顶层入口只扫描 superproject-owned Python 代码，并默认把
+Vulture 的高置信发现降级为 advisory；清理到零发现后可以用 `python scripts/dead_code_advisory.py
+--strict` 做本地复核。子仓库 dead-code 候选应进入对应子仓库的维护性 ratchet，不由顶层直接阻塞。
