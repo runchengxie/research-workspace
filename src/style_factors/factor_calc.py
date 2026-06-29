@@ -82,9 +82,18 @@ def _merge_fundamentals(
     df["_sym"] = df["symbol"].str.replace(r"\.(SZ|SH|BJ)$", "", regex=True)
     df["_idx"] = np.arange(len(df))
     aligned = _prepare_fundamentals(fina)
+    fundamentals_by_symbol = {
+        symbol: group.drop(columns=["_sym"])
+        for symbol, group in aligned.groupby("_sym", sort=False)
+    }
+    empty_fundamentals = aligned.iloc[0:0].drop(columns=["_sym"])
 
     grouped = [
-        _assign_symbol_fundamentals(group, aligned[aligned["_sym"] == symbol], columns)
+        _assign_symbol_fundamentals(
+            group,
+            fundamentals_by_symbol.get(symbol, empty_fundamentals),
+            columns,
+        )
         for symbol, group in df.groupby("_sym", sort=False)
     ]
     merged = pd.concat(grouped, ignore_index=True)
@@ -95,10 +104,10 @@ def _merge_fundamentals(
 def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
     df["factor_size"] = np.log(df["total_mv"] + 1)
 
-    df["pb_clean"] = df["pb"].clip(lower=0.01, upper=100)
+    df["pb_clean"] = df["pb"].where(df["pb"] > 0).clip(lower=0.01, upper=100)
     df["factor_value"] = 1.0 / df["pb_clean"]
 
-    df["pe_clean"] = df["pe_ttm"].clip(lower=1, upper=500)
+    df["pe_clean"] = df["pe_ttm"].where(df["pe_ttm"] > 0).clip(lower=1, upper=500)
     df["factor_quality"] = 1.0 / df["pe_clean"]
 
     df["ret_1d"] = df.groupby("symbol")["close"].pct_change()
@@ -166,15 +175,15 @@ def _standardize_factors(df: pd.DataFrame) -> pd.DataFrame:
     df = df.dropna(subset=FACTOR_COLS[:5]).copy()
     active = [column for column in FACTOR_COLS if column in df.columns]
     for column in active:
-        df[column] = df.groupby("trade_date")[column].transform(
-            lambda series: series.clip(
-                lower=series.quantile(0.01),
-                upper=series.quantile(0.99),
-            )
-        )
+        quantiles = df.groupby("trade_date", sort=False)[column].quantile([0.01, 0.99])
+        quantiles = quantiles.unstack()
+        lower = df["trade_date"].map(quantiles[0.01])
+        upper = df["trade_date"].map(quantiles[0.99])
+        df[column] = df[column].clip(lower=lower, upper=upper, axis=0)
     for column in active:
-        mean = df.groupby("trade_date")[column].transform("mean")
-        std = df.groupby("trade_date")[column].transform("std")
+        grouped = df.groupby("trade_date", sort=False)[column]
+        mean = grouped.transform("mean")
+        std = grouped.transform("std")
         df[f"{column}_z"] = (df[column] - mean) / std.replace(0, np.nan)
     return df
 
@@ -195,6 +204,8 @@ def compute_factors(
     df = _add_fundamental_factors(df, has_fina=has_fina)
     df = _add_beta_factor(df)
     df = _add_liquidity_factor(df)
+    active = [column for column in FACTOR_COLS if column in df.columns]
+    df = df[["trade_date", "symbol", *active]].copy()
     df = _standardize_factors(df)
     active = [column for column in FACTOR_COLS if column in df.columns]
     n_factors = len(active)
