@@ -76,7 +76,7 @@
       "focused_tests": [
         "market-data-platform full pytest",
         "market-data-platform ruff",
-        "market-data-platform pyright"
+        "market-data-platform basedpyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",
@@ -97,7 +97,7 @@
       "focused_tests": [
         "market-data-platform full pytest",
         "market-data-platform ruff",
-        "market-data-platform pyright"
+        "market-data-platform basedpyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",
@@ -118,7 +118,7 @@
       "focused_tests": [
         "market-data-platform full pytest",
         "market-data-platform ruff",
-        "market-data-platform pyright"
+        "market-data-platform basedpyright"
       ],
       "consumer_audit": "repo-local focused audit passed; downstream recovery covered by private archive",
       "replacement_docs": "market-data-platform/docs/compatibility.md",

@@ -29,6 +29,6 @@ python scripts/maintainability_baseline.py --out docs/evidence/maintainability/b
 - 新增 deprecated surface 需要 owner、replacement、removal condition、rollback path 和 focused tests。
 - 新增或保留兼容 facade、wrapper、星号重导出时，需要登记 replacement、consumer audit、removal condition、rollback path 和 focused tests。
 - 新增非平凡脚本并用于发布或迁移流程前，需要补齐 lifecycle 元数据。
-- 新增大范围 Ruff、Pyright 或 mypy 排除项，需要 owner、reason、review milestone 和 next include target。
+- 新增大范围 Ruff、BasedPyright 或 mypy 排除项，需要 owner、reason、review milestone 和 next include target。
 - 大文件、大类、长函数和复杂度热点由路线图预算 ratchet 约束；计数下降时同步下调预算，不保留松动空间。
 - 删除 restore-sensitive 港股兼容代码需要后续变更，并附上负责仓库的证据。

@@ -37,3 +37,53 @@ extend-exclude = [
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ty.src]
+include = [
+  "scripts/run_quality_checks.py",
+  "scripts/run_submodule_checks.py",
+  "scripts/scan_workspace_secrets.py",
+  "scripts/workspace_governance_common.py",
+  "scripts/workspace_governance_submodules.py",
+  "scripts/workspace_import_boundaries.py",
+  "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_contracts.py",
+]
+exclude = [
+  ".venv",
+  "alpha-research",
+  "artifacts",
+  "build",
+  "dist",
+  "market-data-platform",
+  "portfolio-backtester",
+  "quant-execution-engine",
+  "strategy-pipeline",
+]
+
+[tool.basedpyright]
+include = [
+  "scripts/run_quality_checks.py",
+  "scripts/run_submodule_checks.py",
+  "scripts/scan_workspace_secrets.py",
+  "scripts/workspace_governance_common.py",
+  "scripts/workspace_governance_submodules.py",
+  "scripts/workspace_import_boundaries.py",
+  "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_contracts.py",
+]
+exclude = [
+  ".venv",
+  "alpha-research",
+  "artifacts",
+  "build",
+  "dist",
+  "market-data-platform",
+  "portfolio-backtester",
+  "quant-execution-engine",
+  "strategy-pipeline",
+]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+reportImplicitRelativeImport = false
+reportMissingTypeStubs = false

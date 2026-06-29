@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 54,
-      "python_loc": 11325,
+      "python_loc": 11365,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 4,
@@ -234,11 +234,49 @@
           "scripts/path_c_m1_validate.py",
           "scripts/publish_etf_industry_signal.py"
         ],
-        "ty_include": [],
-        "ty_exclude": [],
-        "basedpyright_include": [],
-        "basedpyright_exclude": [],
-        "basedpyright_type_checking_mode": null,
+        "ty_include": [
+          "scripts/run_quality_checks.py",
+          "scripts/run_submodule_checks.py",
+          "scripts/scan_workspace_secrets.py",
+          "scripts/workspace_governance_common.py",
+          "scripts/workspace_governance_submodules.py",
+          "scripts/workspace_import_boundaries.py",
+          "src/research_contracts/__init__.py",
+          "src/research_contracts/artifact_contracts.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "alpha-research",
+          "artifacts",
+          "build",
+          "dist",
+          "market-data-platform",
+          "portfolio-backtester",
+          "quant-execution-engine",
+          "strategy-pipeline"
+        ],
+        "basedpyright_include": [
+          "scripts/run_quality_checks.py",
+          "scripts/run_submodule_checks.py",
+          "scripts/scan_workspace_secrets.py",
+          "scripts/workspace_governance_common.py",
+          "scripts/workspace_governance_submodules.py",
+          "scripts/workspace_import_boundaries.py",
+          "src/research_contracts/__init__.py",
+          "src/research_contracts/artifact_contracts.py"
+        ],
+        "basedpyright_exclude": [
+          ".venv",
+          "alpha-research",
+          "artifacts",
+          "build",
+          "dist",
+          "market-data-platform",
+          "portfolio-backtester",
+          "quant-execution-engine",
+          "strategy-pipeline"
+        ],
+        "basedpyright_type_checking_mode": "basic",
         "pyright_include": [],
         "pyright_exclude": [],
         "pyright_type_checking_mode": null,
@@ -2446,19 +2484,19 @@
           "build",
           "dist"
         ],
-        "basedpyright_include": [],
-        "basedpyright_exclude": [],
-        "basedpyright_type_checking_mode": null,
-        "pyright_include": [
+        "basedpyright_include": [
           "src/quant_execution_engine"
         ],
-        "pyright_exclude": [
+        "basedpyright_exclude": [
           ".venv",
           "outputs",
           "build",
           "dist"
         ],
-        "pyright_type_checking_mode": "basic",
+        "basedpyright_type_checking_mode": "basic",
+        "pyright_include": [],
+        "pyright_exclude": [],
+        "pyright_type_checking_mode": null,
         "mypy_present": true
       },
       "script_inventory": [

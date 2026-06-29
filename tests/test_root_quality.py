@@ -52,7 +52,14 @@ def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
 
     names = [item.name for item in commands]
 
+    assert "ty-check" in names
     assert "workspace-import-boundaries" in names
+
+
+def test_basedpyright_profile_is_advisory() -> None:
+    commands = run_quality_checks.plan_commands("basedpyright")
+
+    assert [item.name for item in commands] == ["basedpyright-advisory"]
 
 
 def test_dead_code_profile_runs_advisory_wrapper() -> None:
@@ -65,7 +72,10 @@ def test_dead_code_profile_runs_advisory_wrapper() -> None:
 def test_superproject_ci_runs_top_level_quality_gates() -> None:
     workflow = (ROOT / ".github" / "workflows" / "superproject.yml").read_text(encoding="utf-8")
 
+    assert "WORKSPACE_SUBMODULE_READ_TOKEN" in workflow
     assert "python scripts/run_quality_checks.py --profile hard" in workflow
+    assert "python scripts/run_quality_checks.py --profile basedpyright" in workflow
+    assert "continue-on-error: true" in workflow
     assert "uv run --with pytest python -m pytest tests -q" in workflow
     assert "python scripts/run_submodule_checks.py --profile full --dry-run" in workflow
     assert "python src/research_contracts/smoke_contracts.py --timeout 10" in workflow

@@ -33,7 +33,7 @@
 
 - 新增或扩展 `deprecated surface`。
 - 新增 `one-off script` 或迁移工具。
-- 新增 Ruff、Pyright 或 mypy 排除项。
+- 新增 Ruff、BasedPyright 或 mypy 排除项。
 - 改动 `targets.json` 交接 contract。
 - 读取 provider 或 broker 凭证。
 - 需要 migration note、rollback path、restore evidence 或 focused verification。

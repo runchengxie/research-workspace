@@ -330,7 +330,7 @@
     {
       "path": "scripts/workspace_governance_quality.py",
       "owner": "research-workspace",
-      "purpose": "Ruff and Pyright exclude-register drift validation used by workspace governance",
+      "purpose": "Ruff and BasedPyright exclude-register drift validation used by workspace governance",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "none; imported by workspace_governance.py",

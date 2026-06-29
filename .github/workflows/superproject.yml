@@ -19,17 +19,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
+          token: ${{ secrets.WORKSPACE_SUBMODULE_READ_TOKEN || github.token }}
           submodules: recursive
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v8.1.0
         with:
+          version: "0.10.11"
           enable-cache: true
       - name: Run superproject hard quality profile
         run: python scripts/run_quality_checks.py --profile hard
+      - name: Run superproject BasedPyright advisory
+        continue-on-error: true
+        run: python scripts/run_quality_checks.py --profile basedpyright
       - name: Run superproject tests
         run: uv run --with pytest python -m pytest tests -q
       - name: Verify delegated submodule check plan

@@ -26,11 +26,31 @@ def _ruff_command(*args: str) -> tuple[str, ...]:
     return ("uv", "run", "--with", "ruff", "ruff", *args)
 
 
+def _ty_command(*args: str) -> tuple[str, ...]:
+    resolved = shutil.which("ty")
+    if resolved:
+        return (resolved, *args)
+    return ("uv", "run", "--with", "ty", "ty", *args)
+
+
+def _basedpyright_command(*args: str) -> tuple[str, ...]:
+    resolved = shutil.which("basedpyright")
+    if resolved:
+        return (resolved, *args)
+    return ("uv", "run", "--with", "basedpyright", "basedpyright", *args)
+
+
 def plan_commands(profile: str) -> list[PlannedCommand]:
     commands = {
         "lint": [
             PlannedCommand("ruff-check", _ruff_command("check", ".")),
             PlannedCommand("ruff-format", _ruff_command("format", "--check", ".")),
+        ],
+        "type": [
+            PlannedCommand("ty-check", _ty_command("check")),
+        ],
+        "basedpyright": [
+            PlannedCommand("basedpyright-advisory", _basedpyright_command()),
         ],
         "secrets": [
             PlannedCommand(
@@ -62,7 +82,12 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
         ],
     }
     if profile == "hard":
-        return [*commands["lint"], *commands["architecture"], *commands["secrets"]]
+        return [
+            *commands["lint"],
+            *commands["type"],
+            *commands["architecture"],
+            *commands["secrets"],
+        ]
     if profile in commands:
         return commands[profile]
     raise ValueError(f"Unknown quality profile: {profile}")
@@ -89,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--profile",
-        choices=("lint", "architecture", "secrets", "dead-code", "hard"),
+        choices=("lint", "type", "basedpyright", "architecture", "secrets", "dead-code", "hard"),
         default="hard",
     )
     parser.add_argument("--dry-run", action="store_true")

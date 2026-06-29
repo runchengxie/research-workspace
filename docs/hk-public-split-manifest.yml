@@ -200,7 +200,7 @@
         "consumer_audit": "owner_attested_no_active_downstream_dependency_2026-06-13",
         "replacement_docs": "market-data-platform/docs/operations/hk-archive-restore.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m pyright",
+        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m basedpyright",
         "public_split_evidence": "docs/evidence/hk-provider-legacy-removal-20260613.json"
       }
     },

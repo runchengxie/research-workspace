@@ -107,7 +107,7 @@
           ["uv", "run", "--group", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--group", "dev", "python", "-m", "pyright"]
+          ["uv", "run", "--group", "dev", "python", "-m", "basedpyright"]
         ],
         "mypy_advisory": [
           ["uv", "run", "--group", "dev", "mypy", "src"]

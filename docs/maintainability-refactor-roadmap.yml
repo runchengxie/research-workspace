@@ -278,7 +278,7 @@
     {
       "path": "strategy-pipeline/src/cstree/pipeline/output_artifacts.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "output artifact module is newly included in staged Pyright coverage",
+      "reason": "output artifact module is newly included in staged BasedPyright coverage",
       "next_action": "promote further only after focused typecheck stays green"
     },
     {

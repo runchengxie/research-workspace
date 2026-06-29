@@ -353,8 +353,10 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         portfolio_config["tool"]["ty"]["src"]["include"]
     )
 
-    assert set(repos["quant-execution-engine"]["pyright"]["strict_targets"]) == set(
-        execution_config["tool"]["maintainability"]["quality_targets"]["pyright_strict_targets"]
+    assert set(repos["quant-execution-engine"]["basedpyright"]["include_targets"]) == set(
+        execution_config["tool"]["maintainability"]["quality_targets"][
+            "basedpyright_include_targets"
+        ]
     )
     assert set(repos["quant-execution-engine"]["ty"]["include_targets"]) == set(
         execution_config["tool"]["ty"]["src"]["include"]
@@ -477,7 +479,7 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
         "deprecated surface",
         "one-off script",
         "Ruff",
-        "Pyright",
+        "BasedPyright",
         "mypy",
         "targets.json",
         "provider",

@@ -165,7 +165,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 "market-data-platform": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "quant-execution-engine": [
-                    ("uv", "run", "--group", "dev", "python", "-m", "pyright")
+                    ("uv", "run", "--group", "dev", "python", "-m", "basedpyright")
                 ],
             },
             release_type_commands,
@@ -181,7 +181,10 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             )
         ]
         self.assertIn(("uv", "run", "--group", "dev", "ty", "check"), qexec_full)
-        self.assertNotIn(("uv", "run", "--group", "dev", "python", "-m", "pyright"), qexec_full)
+        self.assertNotIn(
+            ("uv", "run", "--group", "dev", "python", "-m", "basedpyright"),
+            qexec_full,
+        )
         self.assertNotIn(("uv", "run", "--group", "dev", "mypy", "src"), qexec_full)
 
         qexec_advisory = [

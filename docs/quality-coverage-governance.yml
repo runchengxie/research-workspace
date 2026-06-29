@@ -223,9 +223,9 @@
         "current_hard_gate": "uv run python -m ruff check .",
         "promotion_criteria": "existing hard gate stays green"
       },
-      "pyright": {
+      "basedpyright": {
         "current_mode": "release_advisory_basic",
-        "strict_targets": [
+        "include_targets": [
           "src/quant_execution_engine/targets.py",
           "src/quant_execution_engine/risk.py",
           "src/quant_execution_engine/preflight.py",

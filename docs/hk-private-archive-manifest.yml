@@ -51,7 +51,7 @@
       "focused_tests": [
         "market-data-platform full pytest",
         "market-data-platform ruff",
-        "market-data-platform pyright"
+        "market-data-platform basedpyright"
       ],
       "archive_checksum": "generated_during_export",
       "deletion_gate": {
@@ -61,7 +61,7 @@
         "consumer_audit": "owner attested no active downstream dependency on 港股 provider legacy; active restore controls retained",
         "replacement_docs": "market-data-platform/docs/operations/hk-archive-restore.md",
         "rollback_notes": "docs/archive/hk/README.md",
-        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m pyright",
+        "focused_tests": "2026-06-13: .venv/bin/python -m pytest -q; .venv/bin/python -m ruff check .; .venv/bin/python -m basedpyright",
         "private_archive_reference": "git@github.com:runchengxie/hk-quant-legacy-archive.git",
         "private_archive_export_evidence": "docs/evidence/hk-private-archive-stage-20260613.json",
         "zero_usage_release_window": "waived_by_owner_attestation_2026-06-13"

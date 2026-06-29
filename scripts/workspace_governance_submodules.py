@@ -46,7 +46,7 @@ def _submodule_profile_commands(
     if not isinstance(profiles, dict):
         return []
     commands = profiles.get(profile)
-    return commands if isinstance(commands, list) else []
+    return list(commands) if isinstance(commands, list) else []
 
 
 def check_submodule_governance_gates(root: Path) -> list[Check]:

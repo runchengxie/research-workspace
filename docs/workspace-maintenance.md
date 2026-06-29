@@ -78,9 +78,9 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 才运行 BasedPyright / Pyright，`mypy_advisory` 仍是执行引擎的单独观察项。
+配置文件是 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 统一运行 BasedPyright advisory，`mypy_advisory` 仍是执行引擎的单独观察项。
 
-执行引擎仓库自己的 `Makefile` 还提供 `make test`、`make typecheck` 和 `make quality`。顶层委托检查以 [../scripts/submodule_checks.json](../scripts/submodule_checks.json) 为准，执行引擎本地维护时再使用 `Makefile`。
+执行引擎仓库自己的 `Makefile` 还提供 `make test`、`make typecheck`、`make basedpyright` 和 `make quality`。顶层委托检查以 [../scripts/submodule_checks.json](../scripts/submodule_checks.json) 为准，执行引擎本地维护时再使用 `Makefile`。
 
 检查分为硬门禁、建议项和人工复核三类。仓库级 ownership、secret scan、依赖审计 baseline
 以及执行引擎迁移后的 mypy 建议项见 [quality-governance.md](quality-governance.md)。
