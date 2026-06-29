@@ -158,6 +158,46 @@
       "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
     },
     {
+      "path": "alpha-research/scripts/dev/maintainability_metrics.py",
+      "owner": "alpha-research",
+      "purpose": "Alpha research static maintainability metrics and ratchet check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout",
+      "removal_condition": "remove only after alpha-research maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
+    },
+    {
+      "path": "alpha-research/scripts/dev/run_tests.sh",
+      "owner": "alpha-research",
+      "purpose": "Alpha research repo-local test, lint, typecheck, format, and maintainability dispatcher",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
+      "removal_condition": "remove only after alpha-research replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/maintainability_metrics.py",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio backtester static maintainability metrics and ratchet check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout",
+      "removal_condition": "remove only after portfolio-backtester maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/run_tests.sh",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio backtester repo-local test, lint, typecheck, format, and maintainability dispatcher",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
+      "removal_condition": "remove only after portfolio-backtester replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
+    },
+    {
       "path": "scripts/print_version_matrix.py",
       "owner": "research-workspace",
       "purpose": "Workspace and submodule version matrix rendering",

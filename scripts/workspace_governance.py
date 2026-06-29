@@ -26,11 +26,21 @@ GOVERNANCE_DOC_SCHEMAS = {
 }
 SCRIPT_LIFECYCLE_ROOTS = (
     "scripts",
+    "alpha-research/scripts",
     "strategy-pipeline/scripts/internal",
     "market-data-platform/scripts/internal",
+    "portfolio-backtester/scripts",
     "quant-execution-engine/project_tools",
 )
 SCRIPT_LIFECYCLE_SUFFIXES = {".py", ".sh"}
+SCRIPT_LIFECYCLE_EXTRA_PATHS = {
+    "src/research_contracts/a_share_readiness.py",
+    "src/research_contracts/a_share_readiness_common.py",
+    "src/research_contracts/a_share_readiness_contract.py",
+    "src/research_contracts/a_share_readiness_evidence.py",
+    "src/research_contracts/smoke_contracts.py",
+    "src/style_factors/style_factor_attribution.py",
+}
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
 DEPRECATION_PENDING_STATUSES = {"blocked_pending_audit", "follow_up_required"}
 
@@ -50,6 +60,9 @@ def _load_json_doc(root: Path, relative: str) -> tuple[dict[str, Any] | None, Ch
 
 def _tracked_script_paths(root: Path) -> set[str]:
     paths: set[str] = set()
+    for relative_path in SCRIPT_LIFECYCLE_EXTRA_PATHS:
+        if (root / relative_path).is_file():
+            paths.add(relative_path)
     for relative_root in SCRIPT_LIFECYCLE_ROOTS:
         script_root = root / relative_root
         if not script_root.is_dir():

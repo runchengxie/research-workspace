@@ -106,21 +106,8 @@ def _load_workspace_governance_module() -> Any:
 
 
 def _script_paths_to_classify() -> set[str]:
-    roots = [
-        ROOT / "scripts",
-        ROOT / "alpha-research" / "scripts",
-        ROOT / "strategy-pipeline" / "scripts" / "internal",
-        ROOT / "market-data-platform" / "scripts" / "internal",
-        ROOT / "portfolio-backtester" / "scripts",
-        ROOT / "quant-execution-engine" / "project_tools",
-    ]
-    paths: set[str] = set()
-    for root in roots:
-        for path in root.rglob("*"):
-            if "__pycache__" in path.parts or path.suffix not in {".py", ".sh"}:
-                continue
-            paths.add(path.relative_to(ROOT).as_posix())
-    return paths
+    module = _load_workspace_governance_module()
+    return module._tracked_script_paths(ROOT)
 
 
 def _deprecation_removal_issues(manifest: dict[str, Any]) -> list[str]:
@@ -264,7 +251,9 @@ def test_script_lifecycle_routes_alpha_research_scripts_to_alpha_owner() -> None
     manifest = _load_json_doc("docs/script-lifecycle.yml")
     records = {record["path"]: record for record in manifest["records"]}
 
-    removal_condition = records["src/style_factors/style_factor_attribution.py"]["removal_condition"]
+    removal_condition = records["src/style_factors/style_factor_attribution.py"][
+        "removal_condition"
+    ]
     assert "alpha-research" in removal_condition
     assert "strategy-pipeline core" not in removal_condition
 

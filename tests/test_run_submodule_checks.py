@@ -159,7 +159,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         self.assertEqual(
             {
                 "alpha-research": [("uv", "run", "--extra", "dev", "basedpyright")],
-                "strategy-pipeline": [("uv", "run", "--extra", "dev", "basedpyright")],
+                "strategy-pipeline": [
+                    ("uv", "run", "--extra", "dev", "python", "-m", "basedpyright")
+                ],
                 "market-data-platform": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
                 "quant-execution-engine": [

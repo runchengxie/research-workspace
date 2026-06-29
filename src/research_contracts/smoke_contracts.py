@@ -5,15 +5,14 @@ from __future__ import annotations
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from workspace_doctor import resolve_public_command
-
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_MANIFEST = ROOT / "docs" / "artifact-contracts.yml"
 CONTRACT_DOC = ROOT / "docs" / "contracts.md"
 
@@ -23,6 +22,36 @@ class SmokeResult:
     severity: str
     name: str
     message: str
+
+
+def _public_command_candidates(root: Path, submodule_path: str, command: str) -> list[Path]:
+    repo = root / submodule_path
+    return [
+        repo / ".venv" / "bin" / command,
+        repo / ".venv" / "Scripts" / f"{command}.exe",
+    ]
+
+
+def _has_valid_shebang(path: Path) -> bool:
+    try:
+        first_line = path.read_bytes().splitlines()[0].decode("utf-8", errors="ignore")
+    except (IndexError, OSError):
+        return False
+    if not first_line.startswith("#!"):
+        return True
+    interpreter = first_line[2:].strip().split(" ", 1)[0]
+    if interpreter == "/usr/bin/env":
+        return True
+    if interpreter.startswith("/"):
+        return Path(interpreter).exists()
+    return True
+
+
+def _resolve_public_command(root: Path, submodule_path: str, command: str) -> str | None:
+    for candidate in _public_command_candidates(root, submodule_path, command):
+        if candidate.is_file() and os.access(candidate, os.X_OK) and _has_valid_shebang(candidate):
+            return str(candidate)
+    return shutil.which(command)
 
 
 def _module_command(root: Path, submodule: str, module: str) -> tuple[list[str], dict[str, str]]:
@@ -48,7 +77,7 @@ def _command_for(
     executable: str,
     module: str,
 ) -> tuple[list[str], dict[str, str]] | None:
-    resolved = resolve_public_command(root, submodule, executable)
+    resolved = _resolve_public_command(root, submodule, executable)
     if resolved:
         return [resolved], dict(os.environ)
     source_root = root / submodule / "src"

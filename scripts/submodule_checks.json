@@ -85,7 +85,7 @@
           ["uv", "run", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--extra", "dev", "basedpyright"]
+          ["uv", "run", "--extra", "dev", "python", "-m", "basedpyright"]
         ],
         "full": ["@smoke", "@lint", "@type", "@test"]
       }

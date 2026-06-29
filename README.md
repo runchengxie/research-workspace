@@ -92,7 +92,7 @@ python scripts/smoke_contracts.py
 | [portfolio-backtester](portfolio-backtester/) | 承载 `cstree.backtesting.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
 | [strategy-pipeline](strategy-pipeline/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容门面、持仓快照和 `targets.json` 导出。 | [strategy-pipeline/README.md](strategy-pipeline/README.md) |
 | [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
-| [research-contracts](research-contracts/) | 顶层普通目录，提供跨仓库产物契约清单的加载和校验，不独立提交子模块指针。 | [docs/contracts.md](docs/contracts.md) |
+| [research-contracts](src/research_contracts/) | 顶层普通目录，提供跨仓库产物契约清单的加载和校验，不独立提交子模块指针。 | [docs/contracts.md](docs/contracts.md) |
 
 港股公开演示仓库独立于这些活跃子项目，仅用于作品集展示。真实港股历史复现以
 [中国香港市场归档](docs/archive/hk/README.md)、冷存储发布包、清单、恢复演练

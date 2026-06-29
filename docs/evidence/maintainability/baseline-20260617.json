@@ -9,8 +9,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 52,
-      "python_loc": 10922,
+      "python_file_count": 53,
+      "python_loc": 10955,
       "hk_related_file_count": 4,
       "large_files": [
         {
@@ -96,7 +96,7 @@
           "complexity": 11
         },
         {
-          "path": "scripts/smoke_contracts.py",
+          "path": "src/research_contracts/smoke_contracts.py",
           "name": "run_smoke",
           "line_count": 87,
           "complexity": 5
@@ -170,7 +170,7 @@
           "complexity": 16
         },
         {
-          "path": "style_factors/charts.py",
+          "path": "src/style_factors/charts.py",
           "name": "plot_yearly_barchart",
           "line_count": 68,
           "complexity": 16
@@ -212,10 +212,6 @@
         "mypy_present": false
       },
       "script_inventory": [
-        "scripts/a_share_readiness.py",
-        "scripts/a_share_readiness_common.py",
-        "scripts/a_share_readiness_contract.py",
-        "scripts/a_share_readiness_evidence.py",
         "scripts/concept_etf_ml_backtest.py",
         "scripts/export_hk_legacy_archive.py",
         "scripts/export_holdings_html.py",
@@ -229,8 +225,6 @@
         "scripts/run_quality_checks.py",
         "scripts/run_submodule_checks.py",
         "scripts/scan_workspace_secrets.py",
-        "scripts/smoke_contracts.py",
-        "scripts/style_factor_attribution.py",
         "scripts/submodule_checks.json",
         "scripts/workspace_doctor.py",
         "scripts/workspace_env.py",
@@ -700,8 +694,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 83,
-      "python_loc": 20502,
+      "python_file_count": 85,
+      "python_loc": 20931,
       "hk_related_file_count": 0,
       "large_files": [
         {
@@ -731,7 +725,7 @@
         },
         {
           "path": "src/cstree/alpha/feature_evidence.py",
-          "loc": 725,
+          "loc": 726,
           "hk_related": false
         },
         {
@@ -751,7 +745,7 @@
         },
         {
           "path": "src/cstree/alpha/walk_forward.py",
-          "loc": 515,
+          "loc": 512,
           "hk_related": false
         }
       ],
@@ -971,14 +965,15 @@
       ],
       "quality_config": {
         "ruff_select": [
-          "E9",
-          "F401",
-          "F821",
-          "F822",
-          "F823",
-          "F841",
-          "I001",
-          "B905",
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
           "C90"
         ],
         "ruff_extend_exclude": [
@@ -1014,18 +1009,21 @@
         "pyright_type_checking_mode": null,
         "mypy_present": false
       },
-      "script_inventory": []
+      "script_inventory": [
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/run_tests.sh"
+      ]
     },
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 76,
-      "python_loc": 23897,
+      "python_file_count": 78,
+      "python_loc": 24333,
       "hk_related_file_count": 0,
       "large_files": [
         {
           "path": "src/cstree/backtesting/execution_sim/core.py",
-          "loc": 2394,
+          "loc": 2393,
           "hk_related": false
         },
         {
@@ -1070,7 +1068,7 @@
         },
         {
           "path": "src/cstree/backtesting/position_backtest.py",
-          "loc": 703,
+          "loc": 701,
           "hk_related": false
         },
         {
@@ -1326,14 +1324,15 @@
       ],
       "quality_config": {
         "ruff_select": [
-          "E9",
-          "F401",
-          "F821",
-          "F822",
-          "F823",
-          "F841",
-          "I001",
-          "B905",
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
           "C90"
         ],
         "ruff_extend_exclude": [
@@ -1369,13 +1368,16 @@
         "pyright_type_checking_mode": null,
         "mypy_present": false
       },
-      "script_inventory": []
+      "script_inventory": [
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/run_tests.sh"
+      ]
     },
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 193,
-      "python_loc": 44296,
+      "python_loc": 44376,
       "hk_related_file_count": 2,
       "large_files": [
         {
@@ -1400,7 +1402,7 @@
         },
         {
           "path": "tests/test_pipeline_e2e.py",
-          "loc": 755,
+          "loc": 760,
           "hk_related": false
         },
         {
@@ -1425,7 +1427,7 @@
         },
         {
           "path": "tests/test_docs_contracts.py",
-          "loc": 668,
+          "loc": 671,
           "hk_related": false
         },
         {
@@ -1435,12 +1437,12 @@
         },
         {
           "path": "tests/test_run_release_scripts.py",
-          "loc": 590,
+          "loc": 595,
           "hk_related": false
         },
         {
           "path": "tests/test_pipeline_validation.py",
-          "loc": 577,
+          "loc": 593,
           "hk_related": false
         },
         {
@@ -1449,13 +1451,13 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/liveops/alloc_core.py",
-          "loc": 561,
+          "path": "tests/test_pipeline_filters_backtest.py",
+          "loc": 564,
           "hk_related": false
         },
         {
-          "path": "tests/test_pipeline_filters_backtest.py",
-          "loc": 559,
+          "path": "src/cstree/liveops/alloc_core.py",
+          "loc": 561,
           "hk_related": false
         },
         {
@@ -1531,7 +1533,7 @@
         {
           "path": "tests/test_output_summary_metadata.py",
           "name": "test_build_inputs_lock_records_symlink_resolution_and_manifest_metadata",
-          "line_count": 141,
+          "line_count": 139,
           "complexity": 1
         },
         {
@@ -1785,14 +1787,15 @@
       ],
       "quality_config": {
         "ruff_select": [
-          "E9",
-          "F401",
-          "F821",
-          "F822",
-          "F823",
-          "F841",
-          "I001",
-          "B905",
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
           "C90"
         ],
         "ruff_extend_exclude": [
