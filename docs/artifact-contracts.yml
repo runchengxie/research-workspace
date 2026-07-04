@@ -51,7 +51,19 @@
         "eligible_for_backtest",
         "eligible_for_live"
       ],
-      "notes": "Alpha owns canonical research signal generation and validation; market-intel/hot-sector-screener may produce external cstree.signals-compatible daily candidate signals. strategy-pipeline keeps only compatibility/orchestration-facing helpers until this moves into a shared package."
+      "optional_fields": [
+        "daily_confirm_score",
+        "trend_score",
+        "volume_score",
+        "risk_score",
+        "ret_5d",
+        "ret_10d",
+        "close_to_20d_high",
+        "amount_ratio_20d",
+        "confidence_score",
+        "confidence_label"
+      ],
+      "notes": "Alpha owns canonical research signal generation and validation; market-intel/hot-sector-screener may produce external cstree.signals-compatible daily candidate signals with optional explanation columns. strategy-pipeline keeps only compatibility/orchestration-facing helpers until this moves into a shared package."
     },
     {
       "artifact": "signals.meta.json",

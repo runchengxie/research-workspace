@@ -44,6 +44,9 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
         "targets.json",
     }
     assert records["signals.parquet"]["owner"] == "alpha-research"
+    assert "market-intel/hot-sector-screener" in records["signals.parquet"]["external_producers"]
+    assert "confidence_score" in records["signals.parquet"]["optional_fields"]
+    assert "daily_confirm_score" in records["signals.parquet"]["optional_fields"]
     assert records["positions_by_rebalance.csv"]["owner"] == "portfolio-backtester"
     assert records["targets.json"]["owner"] == "quant-execution-engine"
     assert records["targets.json"]["producer"] == "strategy-pipeline"

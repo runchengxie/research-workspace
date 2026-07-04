@@ -51,6 +51,9 @@
 也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
 候选池排序；是否构造成组合由 `strategy-pipeline` 的 `external_signals` / `hotsector_overlay`
 显式处理，是否导出执行目标由 `cstree export-targets` 显式处理。
+外部热点信号可携带 `daily_confirm_score`、`confidence_score`、`confidence_label`
+等可选解释列；这些列不属于最小稳定契约。默认 `hotsector_overlay` 仍使用等权 Top-K，
+需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
 ## A 股资产状态
 
