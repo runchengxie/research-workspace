@@ -80,12 +80,12 @@
     {
       "path": "scripts/concept_etf_ml_backtest.py",
       "owner": "research-workspace",
-      "purpose": "Concept ETF ML backtest experiment script",
+      "purpose": "Legacy concept ETF ML backtest experiment script; not part of the hotsector daily handoff",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT",
-      "removal_condition": "remove after two release reviews record no active use"
+      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
+      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/export_holdings_html.py",
@@ -110,22 +110,22 @@
     {
       "path": "scripts/path_b_production.py",
       "owner": "research-workspace",
-      "purpose": "Path B production pipeline script",
+      "purpose": "Legacy Path B experiment script; not part of the hotsector daily handoff",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT",
-      "removal_condition": "remove after two release reviews record no active use"
+      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
+      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/path_c_m1_validate.py",
       "owner": "research-workspace",
-      "purpose": "Path C M1 validation script",
+      "purpose": "Legacy Path C M1 validation script; not part of the hotsector daily handoff",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT",
-      "removal_condition": "remove after two release reviews record no active use"
+      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
+      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/publish_etf_industry_signal.py",
@@ -140,12 +140,12 @@
     {
       "path": "scripts/hotsector_to_cstree_universe.py",
       "owner": "research-workspace",
-      "purpose": "Convert hot-sector-screener candidate universe to strategy-pipeline by_date CSV",
+      "purpose": "Legacy converter for pre-cstree.signals hot-sector outputs",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/",
       "external_dependencies": "DATA_PLATFORM_ROOT, hot-sector-screener outputs",
-      "removal_condition": "remove after hot-sector-screener writes cstree-compatible format directly or two release reviews record no active use"
+      "removal_condition": "archive after hot-sector-screener cstree.signals handoff is stable for two release reviews; new daily handoff should use signals.parquet directly"
     },
     {
       "path": "src/style_factors/style_factor_attribution.py",

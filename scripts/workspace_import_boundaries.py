@@ -242,6 +242,18 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         ),
         max_allowed=0,
     ),
+    BoundaryRule(
+        identifier="research-workspace:legacy-hotsector-internal-imports",
+        description=(
+            "top-level research-workspace scripts should consume hotsector artifacts instead "
+            "of importing market-intel hot_sector_screener internals; existing dev scripts are "
+            "legacy budget only"
+        ),
+        repo=".",
+        source="scripts",
+        forbidden=("hot_sector_screener",),
+        max_allowed=10,
+    ),
 )
 
 SOURCE_LAYOUT_RULES: tuple[SourceLayoutRule, ...] = (

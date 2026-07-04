@@ -36,6 +36,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "quant-execution-engine:no-cstree-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
+        "research-workspace:legacy-hotsector-internal-imports",
     } == {rule["id"] for rule in report["rules"]}
     assert {
         "strategy-pipeline:no-local-alpha-backtesting-source",

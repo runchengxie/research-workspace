@@ -47,6 +47,11 @@
 | `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`cstree export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
 | `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `cstree export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
 
+`signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
+也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
+候选池排序；是否构造成组合由 `strategy-pipeline` 的 `external_signals` / `hotsector_overlay`
+显式处理，是否导出执行目标由 `cstree export-targets` 显式处理。
+
 ## A 股资产状态
 
 A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `strategy-pipeline` 的 `cstree run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
