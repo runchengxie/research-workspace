@@ -46,6 +46,8 @@
 | `positions_by_rebalance.csv` | `cstree.positions_by_rebalance` | `portfolio-backtester` | `cstree.backtesting.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
 | `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`cstree export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
 | `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `cstree export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
+| `signals_style_replica.parquet` | `cstree.signals` (style_replica variant) | `alpha-research` | `cstree.alpha.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
+| `signals_style_replica.meta.json` | `cstree.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | contract name、schema version、model_version、config (a/b slots、theme quotas) |
 
 `signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
 也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
