@@ -60,14 +60,24 @@ def _make_price_panel(
 def _make_industry_frame(n_stocks: int = 50) -> pd.DataFrame:
     """Create synthetic industry classification."""
     industries = [
-        "集成电路", "印制电路板", "被动元件", "白酒", "光模块",
-        "钨", "电子化学品Ⅲ", "温控设备", "合成树脂", "通信网络设备及器件",
+        "集成电路",
+        "印制电路板",
+        "被动元件",
+        "白酒",
+        "光模块",
+        "钨",
+        "电子化学品Ⅲ",
+        "温控设备",
+        "合成树脂",
+        "通信网络设备及器件",
     ]
     symbols = [f"STOCK_{i:04d}" for i in range(n_stocks)]
-    return pd.DataFrame({
-        "symbol": symbols,
-        "industry_name": [industries[i % len(industries)] for i in range(n_stocks)],
-    })
+    return pd.DataFrame(
+        {
+            "symbol": symbols,
+            "industry_name": [industries[i % len(industries)] for i in range(n_stocks)],
+        }
+    )
 
 
 # ── Theme mapping tests ────────────────────────────────────────────────────────
@@ -75,22 +85,48 @@ def _make_industry_frame(n_stocks: int = 50) -> pd.DataFrame:
 
 class TestThemeMapping:
     def test_industry_exact_match(self):
-        assert map_stock_to_theme("S1", industry_name="集成电路") == "semiconductor_chip_equipment_materials"
-        assert map_stock_to_theme("S2", industry_name="印制电路板") == "pcb_ccl_electronic_substrate"
-        assert map_stock_to_theme("S3", industry_name="被动元件") == "electronic_components_passive_ceramic"
-        assert map_stock_to_theme("S4", industry_name="光模块") == "optical_cpo_communication_equipment"
+        assert (
+            map_stock_to_theme("S1", industry_name="集成电路")
+            == "semiconductor_chip_equipment_materials"
+        )
+        assert (
+            map_stock_to_theme("S2", industry_name="印制电路板") == "pcb_ccl_electronic_substrate"
+        )
+        assert (
+            map_stock_to_theme("S3", industry_name="被动元件")
+            == "electronic_components_passive_ceramic"
+        )
+        assert (
+            map_stock_to_theme("S4", industry_name="光模块")
+            == "optical_cpo_communication_equipment"
+        )
         assert map_stock_to_theme("S5", industry_name="钨") == "minor_metals_rare_metal_powder"
         assert map_stock_to_theme("S6", industry_name="温控设备") == "datacenter_storage_cooling"
-        assert map_stock_to_theme("S7", industry_name="电子化学品Ⅲ") == "electronic_chemicals_polymer_materials"
+        assert (
+            map_stock_to_theme("S7", industry_name="电子化学品Ⅲ")
+            == "electronic_chemicals_polymer_materials"
+        )
 
     def test_industry_substring_match(self):
-        assert map_stock_to_theme("S1", industry_name="集成电路设计") == "semiconductor_chip_equipment_materials"
-        assert map_stock_to_theme("S2", industry_name="半导体材料及设备") == "semiconductor_chip_equipment_materials"
+        assert (
+            map_stock_to_theme("S1", industry_name="集成电路设计")
+            == "semiconductor_chip_equipment_materials"
+        )
+        assert (
+            map_stock_to_theme("S2", industry_name="半导体材料及设备")
+            == "semiconductor_chip_equipment_materials"
+        )
 
     def test_concept_fallback(self):
         assert map_stock_to_theme("S1", concept_tags=["AI算力"]) == "datacenter_storage_cooling"
-        assert map_stock_to_theme("S2", concept_tags=["CPO概念"]) == "optical_cpo_communication_equipment"
-        assert map_stock_to_theme("S3", concept_tags=["芯片设计"]) == "semiconductor_chip_equipment_materials"
+        assert (
+            map_stock_to_theme("S2", concept_tags=["CPO概念"])
+            == "optical_cpo_communication_equipment"
+        )
+        assert (
+            map_stock_to_theme("S3", concept_tags=["芯片设计"])
+            == "semiconductor_chip_equipment_materials"
+        )
 
     def test_unknown_returns_none(self):
         assert map_stock_to_theme("S1", industry_name="白酒") is None
@@ -101,10 +137,12 @@ class TestThemeMapping:
         assert sum(AI_HARDWARE_THEME_QUOTAS.values()) == 80
 
     def test_build_theme_map(self):
-        df = pd.DataFrame({
-            "symbol": ["A", "B", "C", "D"],
-            "industry_name": ["集成电路", "白酒", "印制电路板", "被动元件"],
-        })
+        df = pd.DataFrame(
+            {
+                "symbol": ["A", "B", "C", "D"],
+                "industry_name": ["集成电路", "白酒", "印制电路板", "被动元件"],
+            }
+        )
         tm = build_theme_map(df)
         assert tm["A"] == "semiconductor_chip_equipment_materials"
         assert pd.isna(tm["B"])
@@ -134,7 +172,16 @@ class TestFactors:
     def test_all_factors_output(self):
         prices = _make_price_panel(n_dates=150, n_stocks=20)
         factors = compute_all_style_factors(prices)
-        expected_keys = {"resvol", "beta", "size", "liquidity", "mom20", "mom120", "industry_mom", "vol_convergence"}
+        expected_keys = {
+            "resvol",
+            "beta",
+            "size",
+            "liquidity",
+            "mom20",
+            "mom120",
+            "industry_mom",
+            "vol_convergence",
+        }
         assert set(factors.keys()) == expected_keys
         for name, df in factors.items():
             assert df.shape == prices.shape, f"{name} shape mismatch: {df.shape} != {prices.shape}"
@@ -170,7 +217,9 @@ class TestScoring:
 
         low_score = score_b_last[low_vol_stocks].mean()
         high_score = score_b_last[high_vol_stocks].mean()
-        assert low_score > high_score, f"B-leg should prefer low RESVOL: low={low_score:.3f} high={high_score:.3f}"
+        assert low_score > high_score, (
+            f"B-leg should prefer low RESVOL: low={low_score:.3f} high={high_score:.3f}"
+        )
 
     def test_score_a_prefers_high_resvol(self):
         """A-leg should give higher score to stocks with higher RESVOL."""
@@ -187,7 +236,9 @@ class TestScoring:
 
         low_score = score_a_last[low_vol_stocks].mean()
         high_score = score_a_last[high_vol_stocks].mean()
-        assert high_score > low_score, f"A-leg should prefer high RESVOL: low={low_score:.3f} high={high_score:.3f}"
+        assert high_score > low_score, (
+            f"A-leg should prefer high RESVOL: low={low_score:.3f} high={high_score:.3f}"
+        )
 
 
 # ── Universe tests ─────────────────────────────────────────────────────────────
@@ -196,22 +247,26 @@ class TestScoring:
 class TestUniverse:
     def test_filter_removes_short_history(self):
         prices = _make_price_panel(n_dates=50, n_stocks=10)
-        instruments = pd.DataFrame({
-            "symbol": prices.columns.tolist(),
-            "list_date": ["2020-01-01"] * len(prices.columns),
-            "is_st": [False] * len(prices.columns),
-        })
+        instruments = pd.DataFrame(
+            {
+                "symbol": prices.columns.tolist(),
+                "list_date": ["2020-01-01"] * len(prices.columns),
+                "is_st": [False] * len(prices.columns),
+            }
+        )
         result = filter_style_replica_universe(prices, instruments, prices.index[-1])
         # min_history=120, but we only have 50 dates → empty result
         assert result.empty
 
     def test_filter_keeps_valid_stocks(self):
         prices = _make_price_panel(n_dates=200, n_stocks=10)
-        instruments = pd.DataFrame({
-            "symbol": prices.columns.tolist(),
-            "list_date": ["2020-01-01"] * 10,
-            "is_st": [False] * 10,
-        })
+        instruments = pd.DataFrame(
+            {
+                "symbol": prices.columns.tolist(),
+                "list_date": ["2020-01-01"] * 10,
+                "is_st": [False] * 10,
+            }
+        )
         result = filter_style_replica_universe(prices, instruments, prices.index[-1])
         assert not result.empty
         assert result.shape[1] == 10
@@ -224,19 +279,26 @@ class TestPortfolioConstruction:
     def _make_mock_signals(self, n_stocks: int = 200) -> pd.DataFrame:
         rng = np.random.default_rng(42)
         industries = ["集成电路", "印制电路板", "白酒", "温控设备", "光模块"] * 40
-        themes = ["semiconductor_chip_equipment_materials", "pcb_ccl_electronic_substrate",
-                  None, "datacenter_storage_cooling", "optical_cpo_communication_equipment"] * 40
+        themes = [
+            "semiconductor_chip_equipment_materials",
+            "pcb_ccl_electronic_substrate",
+            None,
+            "datacenter_storage_cooling",
+            "optical_cpo_communication_equipment",
+        ] * 40
 
-        df = pd.DataFrame({
-            "signal_date": ["20250101"] * n_stocks,
-            "trade_date": pd.Timestamp("2025-01-01"),
-            "symbol": [f"STOCK_{i:04d}" for i in range(n_stocks)],
-            "score_a": rng.uniform(0, 1, n_stocks),
-            "score_b": rng.uniform(0, 1, n_stocks),
-            "theme": themes[:n_stocks],
-            "industry": industries[:n_stocks],
-            "leg": ["A"] * n_stocks,
-        })
+        df = pd.DataFrame(
+            {
+                "signal_date": ["20250101"] * n_stocks,
+                "trade_date": pd.Timestamp("2025-01-01"),
+                "symbol": [f"STOCK_{i:04d}" for i in range(n_stocks)],
+                "score_a": rng.uniform(0, 1, n_stocks),
+                "score_b": rng.uniform(0, 1, n_stocks),
+                "theme": themes[:n_stocks],
+                "industry": industries[:n_stocks],
+                "leg": ["A"] * n_stocks,
+            }
+        )
         # Make some stocks not have AI hardware theme
         df.loc[df["theme"].isna(), "score_a"] = np.nan
         df.loc[df["theme"].isna(), "leg"] = "B"
@@ -266,7 +328,10 @@ class TestPortfolioConstruction:
         """When a stock is in both A and B, weight should double."""
         signals = self._make_mock_signals(50)
         config = StyleReplicaPortfolioConfig(
-            theme_quotas={"semiconductor_chip_equipment_materials": 20, "pcb_ccl_electronic_substrate": 20},
+            theme_quotas={
+                "semiconductor_chip_equipment_materials": 20,
+                "pcb_ccl_electronic_substrate": 20,
+            },
             a_slots=40,
             b_slots=10,
             overlap_policy="aggregate",
