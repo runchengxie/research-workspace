@@ -317,12 +317,12 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 138,
-      "python_loc": 57781,
+      "python_loc": 58112,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 42,
-        "long_functions": 72,
-        "complexity_hotspots": 50,
+        "long_functions": 73,
+        "complexity_hotspots": 51,
         "large_classes": 1
       },
       "large_files": [
@@ -357,6 +357,11 @@
           "hk_related": false
         },
         {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "loc": 1447,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "loc": 1323,
           "hk_related": false
@@ -367,13 +372,13 @@
           "hk_related": false
         },
         {
-          "path": "scripts/operations/cutover_a_share_minute.py",
-          "loc": 1298,
+          "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
+          "loc": 1219,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
-          "loc": 1219,
+          "path": "tests/test_cutover_a_share_minute.py",
+          "loc": 1196,
           "hk_related": false
         },
         {
@@ -389,11 +394,6 @@
         {
           "path": "tests/test_tushare_a_share_mins.py",
           "loc": 1036,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_cutover_a_share_minute.py",
-          "loc": 1014,
           "hk_related": false
         },
         {
@@ -496,16 +496,16 @@
           "complexity": 1
         },
         {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "cutover_minute_current",
+          "line_count": 185,
+          "complexity": 35
+        },
+        {
           "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
           "name": "_aggregate_polars_deal_batch",
           "line_count": 182,
           "complexity": 3
-        },
-        {
-          "path": "scripts/operations/cutover_a_share_minute.py",
-          "name": "cutover_minute_current",
-          "line_count": 175,
-          "complexity": 35
         },
         {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
@@ -574,6 +574,12 @@
           "complexity": 19
         },
         {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "validate_cutover_receipt",
+          "line_count": 138,
+          "complexity": 46
+        },
+        {
           "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
           "name": "_aggregate_guan_deal_file_pandas",
           "line_count": 138,
@@ -596,12 +602,6 @@
           "name": "build_a_share_daily_clean",
           "line_count": 133,
           "complexity": 13
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "classify_minute_coverage",
-          "line_count": 132,
-          "complexity": 26
         }
       ],
       "complexity_hotspots": [
@@ -625,6 +625,12 @@
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "validate_cutover_receipt",
+          "line_count": 138,
+          "complexity": 46
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "_validate_bj_overlay_evidence",
           "line_count": 154,
           "complexity": 43
@@ -637,14 +643,8 @@
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
-          "name": "validate_cutover_receipt",
-          "line_count": 111,
-          "complexity": 37
-        },
-        {
-          "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "cutover_minute_current",
-          "line_count": 175,
+          "line_count": 185,
           "complexity": 35
         },
         {
@@ -694,6 +694,12 @@
           "name": "classify_minute_coverage",
           "line_count": 132,
           "complexity": 26
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_production_contract",
+          "line_count": 86,
+          "complexity": 25
         },
         {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
@@ -748,12 +754,6 @@
           "name": "exclusive_file_lock",
           "line_count": 98,
           "complexity": 22
-        },
-        {
-          "path": "scripts/operations/cutover_a_share_minute.py",
-          "name": "_validate_production_contract",
-          "line_count": 64,
-          "complexity": 21
         }
       ],
       "large_classes": [

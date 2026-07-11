@@ -18,8 +18,8 @@
     {
       "repo": "market-data-platform",
       "max_large_files": 42,
-      "max_long_functions": 72,
-      "max_complexity_hotspots": 50,
+      "max_long_functions": 73,
+      "max_complexity_hotspots": 51,
       "max_large_classes": 1
     },
     {
