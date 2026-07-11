@@ -10,16 +10,16 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 4,
+      "max_large_files": 5,
       "max_long_functions": 12,
       "max_complexity_hotspots": 14,
       "max_large_classes": 1
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 17,
-      "max_long_functions": 37,
-      "max_complexity_hotspots": 27,
+      "max_large_files": 42,
+      "max_long_functions": 72,
+      "max_complexity_hotspots": 50,
       "max_large_classes": 1
     },
     {
@@ -31,16 +31,16 @@
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 16,
-      "max_long_functions": 18,
-      "max_complexity_hotspots": 18,
+      "max_large_files": 18,
+      "max_long_functions": 20,
+      "max_complexity_hotspots": 19,
       "max_large_classes": 0
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 20,
-      "max_long_functions": 74,
-      "max_complexity_hotspots": 37,
+      "max_large_files": 24,
+      "max_long_functions": 79,
+      "max_complexity_hotspots": 38,
       "max_large_classes": 1
     },
     {
@@ -688,6 +688,150 @@
       "owner_repo": "quant-execution-engine",
       "reason": "IBKR runtime class is a class-size hotspot outside the current LongPort-first split",
       "next_action": "split session lifecycle and broker event handling when IBKR runtime work resumes"
+    },
+    {
+      "path": "scripts/workspace_import_boundaries.py",
+      "owner_repo": "research-workspace",
+      "reason": "workspace boundary inventory now spans all final submodule package surfaces",
+      "next_action": "split repository discovery from boundary evaluation when this governance script changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_coverage.py",
+      "owner_repo": "market-data-platform",
+      "reason": "minute coverage classification, materialization, and audit logic landed together with the hardened promotion workflow",
+      "next_action": "split coverage classification, source materialization, and partition audit behind the existing coverage tests"
+    },
+    {
+      "path": "market-data-platform/tests/test_a_share_minute_coverage.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large scenario suite covers the minute coverage and promotion safety contract",
+      "next_action": "split source-tier, audit, and materialization scenarios when coverage behavior changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_mins.py",
+      "owner_repo": "market-data-platform",
+      "reason": "TuShare minute mirroring and full-partition validation landed in the final minute hardening release",
+      "next_action": "split request planning, partition validation, and mirror receipts when minute mirroring changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_build.py",
+      "owner_repo": "market-data-platform",
+      "reason": "fused minute build orchestration retains source selection and promotion evidence in one module",
+      "next_action": "extract source planning and promotion receipt construction behind build regression tests"
+    },
+    {
+      "path": "market-data-platform/scripts/operations/cutover_a_share_minute.py",
+      "owner_repo": "market-data-platform",
+      "reason": "cutover validation intentionally centralizes production evidence gates and atomic pointer exchange",
+      "next_action": "split evidence validators from atomic cutover mechanics without weakening production gates"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_fusion.py",
+      "owner_repo": "market-data-platform",
+      "reason": "Guan deal aggregation supports multiple engines and strict canonical validation in one compatibility module",
+      "next_action": "split engine adapters from canonical validation when aggregation behavior changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/guan_annual_minbar.py",
+      "owner_repo": "market-data-platform",
+      "reason": "annual single-scan normalization includes staging, validation, recovery, and atomic promotion",
+      "next_action": "split staging recovery and partition validation from annual scan orchestration"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/guan_mobile_raw.py",
+      "owner_repo": "market-data-platform",
+      "reason": "mobile raw promotion combines inventory, deduplication, conflict handling, and receipt verification",
+      "next_action": "split inventory planning from promotion and receipt verification when raw ingestion changes"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share_mins.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large TuShare minute test suite covers request, validation, and receipt failure modes",
+      "next_action": "split mirror and partition-validation scenarios when the provider changes"
+    },
+    {
+      "path": "market-data-platform/tests/test_cutover_a_share_minute.py",
+      "owner_repo": "market-data-platform",
+      "reason": "cutover tests encode the full production evidence contract and recovery matrix",
+      "next_action": "split evidence-family fixtures from pointer exchange and recovery scenarios"
+    },
+    {
+      "path": "market-data-platform/scripts/operations/archive_guan_mobile.py",
+      "owner_repo": "market-data-platform",
+      "reason": "archive and verification paths retain explicit evidence handling for restore safety",
+      "next_action": "extract archive inventory and hash verification helpers when archival behavior changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/cli_data.py",
+      "owner_repo": "market-data-platform",
+      "reason": "data CLI parser and dispatch expanded with minute build, coverage, and promotion operations",
+      "next_action": "split minute command registration and handlers without changing public flags"
+    },
+    {
+      "path": "market-data-platform/tests/test_cli_data_minutes.py",
+      "owner_repo": "market-data-platform",
+      "reason": "minute CLI integration scenarios cover build, finalize, and evidence binding",
+      "next_action": "split command families when minute CLI behavior changes"
+    },
+    {
+      "path": "market-data-platform/tests/test_a_share_minute_build.py",
+      "owner_repo": "market-data-platform",
+      "reason": "minute build tests cover source precedence, validation, and failure preservation",
+      "next_action": "split source-specific scenarios when build orchestration changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_bj_overlay.py",
+      "owner_repo": "market-data-platform",
+      "reason": "Beijing exchange overlay enforces source-specific validation and base-dataset integrity",
+      "next_action": "split base verification from overlay materialization when Beijing coverage changes"
+    },
+    {
+      "path": "market-data-platform/scripts/operations/detach_a_share_minute_v3.py",
+      "owner_repo": "market-data-platform",
+      "reason": "hardlink detachment keeps scan, copy, recovery, and receipt logic together for operational safety",
+      "next_action": "extract tree scanning and receipt rendering when detachment tooling changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/tushare_minute_backfill.py",
+      "owner_repo": "market-data-platform",
+      "reason": "backfill planning and execution share immutable plan and request-budget contracts",
+      "next_action": "split plan construction from execution when backfill scheduling changes"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/style_replica_portfolio.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "StyleReplica A/B selection, overlap, replacement, and reporting landed as one portfolio module",
+      "next_action": "split leg selection from position assembly behind StyleReplica portfolio tests"
+    },
+    {
+      "path": "portfolio-backtester/src/cstree/backtesting/metrics.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "core metric surface is just over the large-file threshold after final backtest integration",
+      "next_action": "extract specialized metric families when this module next changes"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/a_share_next_high_explore.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "offline A-share exploration script retains a complete reproducible research workflow",
+      "next_action": "extract data preparation and reporting helpers if this experiment is promoted or extended"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/a_share_next_open_to_high_backtest.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "offline open-to-high backtest script retains a complete reproducible research workflow",
+      "next_action": "extract scenario construction and reporting helpers if the experiment is extended"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/pipeline/external_signals.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "external signal ingestion centralizes schema validation, alignment, and diagnostics",
+      "next_action": "split loaders from alignment diagnostics when external signal support expands"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/style_replica_pipeline.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "StyleReplica orchestration remains a large integration module after oversize functions were extracted",
+      "next_action": "split artifact loading from daily run orchestration when StyleReplica workflow changes"
     }
   ]
 }

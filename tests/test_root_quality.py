@@ -89,7 +89,9 @@ def test_superproject_ci_runs_top_level_quality_gates() -> None:
     assert "python scripts/run_quality_checks.py --profile ci-smoke" in workflow
     assert "python scripts/run_quality_checks.py --profile basedpyright" in workflow
     assert "continue-on-error: true" in workflow
-    assert "uv run --with pytest python -m pytest tests -q" in workflow
+    assert "uv run --project strategy-pipeline --extra dev" in workflow
+    assert "--with 'matplotlib>=3.8' --with 'tabulate>=0.9'" in workflow
+    assert "python -m pytest tests -q" in workflow
     assert "Run superproject smoke tests without private submodules" in workflow
     assert "python scripts/run_submodule_checks.py --profile full --dry-run" in workflow
     assert "python src/research_contracts/smoke_contracts.py --timeout 10" in workflow

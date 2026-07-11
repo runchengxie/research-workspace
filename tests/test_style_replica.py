@@ -16,11 +16,8 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-import pytest
-
 from cstree.alpha.style_replica import (
     AI_HARDWARE_THEME_QUOTAS,
-    StyleReplicaSignalGenerator,
     compute_score_a,
     compute_score_b,
     filter_style_replica_universe,
@@ -36,7 +33,6 @@ from cstree.backtesting.style_replica_portfolio import (
     compute_daily_changes,
     compute_daily_exposure,
 )
-
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -406,8 +402,9 @@ class TestEndToEnd:
 
         # Verify positions
         assert not positions.empty
-        assert positions["weight"].sum() > 0
-        assert positions["weight"].sum() < 2.0
+        daily_weights = positions.groupby("rebalance_date")["weight"].sum()
+        assert (daily_weights > 0).all()
+        assert (daily_weights < 2.0).all()
 
         # Verify daily changes
         changes = compute_daily_changes(positions)

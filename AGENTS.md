@@ -47,8 +47,14 @@ metadata/current_assets/a_share_current.json
 
 ```bash
 uv run --with pytest python -m pytest tests/test_workspace_doctor.py -q
-uv run --with pytest python -m pytest tests -q
+uv run --project strategy-pipeline --extra dev \
+  --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
+  python -m pytest tests -q
 ```
+
+完整顶层测试包含跨 `alpha-research` 与 `portfolio-backtester` 的集成测试，因此使用
+`strategy-pipeline` 已声明的工作区依赖环境，并补入顶层测试专用的绘图与表格依赖；不含私有子模块的
+smoke 测试仍使用顶层环境。
 
 子仓库检查应进入对应目录后执行该仓库自己的命令，例如：
 

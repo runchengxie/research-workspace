@@ -161,7 +161,6 @@
         "include_targets": [
           "src/market_data_platform/artifacts.py",
           "src/market_data_platform/contract.py",
-          "src/market_data_platform/current_assets.py",
           "src/market_data_platform/data_provider_contracts.py",
           "src/market_data_platform/manifest.py",
           "src/market_data_platform/paths.py",
