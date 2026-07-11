@@ -316,8 +316,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 138,
-      "python_loc": 58112,
+      "python_file_count": 140,
+      "python_loc": 58932,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 42,
