@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 55,
-      "python_loc": 12078,
+      "python_loc": 12087,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -316,34 +316,34 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 140,
-      "python_loc": 58932,
+      "python_file_count": 141,
+      "python_loc": 60054,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 42,
-        "long_functions": 73,
-        "complexity_hotspots": 51,
+        "large_files": 43,
+        "long_functions": 60,
+        "complexity_hotspots": 34,
         "large_classes": 1
       },
       "large_files": [
         {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "loc": 2414,
+          "loc": 2284,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 1717,
+          "loc": 1711,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share.py",
-          "loc": 1681,
+          "loc": 1683,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "loc": 1648,
+          "loc": 1633,
           "hk_related": false
         },
         {
@@ -353,7 +353,7 @@
         },
         {
           "path": "tests/test_a_share_minute_coverage.py",
-          "loc": 1471,
+          "loc": 1473,
           "hk_related": false
         },
         {
@@ -362,18 +362,23 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "loc": 1323,
+          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
+          "loc": 1373,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
-          "loc": 1304,
+          "loc": 1339,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "loc": 1333,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
-          "loc": 1219,
+          "loc": 1299,
           "hk_related": false
         },
         {
@@ -382,13 +387,13 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
-          "loc": 1185,
+          "path": "src/market_data_platform/guan_mobile_raw.py",
+          "loc": 1127,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/guan_mobile_raw.py",
-          "loc": 1085,
+          "path": "src/market_data_platform/cli_data.py",
+          "loc": 1065,
           "hk_related": false
         },
         {
@@ -407,28 +412,33 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/cli_data.py",
-          "loc": 942,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
-          "loc": 907,
+          "loc": 877,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
-          "loc": 869,
+          "loc": 871,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/tushare_refresh.py",
-          "loc": 867,
+          "loc": 870,
           "hk_related": false
         },
         {
           "path": "tests/test_cli_data_minutes.py",
-          "loc": 861,
+          "loc": 867,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "loc": 866,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
+          "loc": 863,
           "hk_related": false
         },
         {
@@ -437,38 +447,16 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
-          "loc": 855,
-          "hk_related": false
-        },
-        {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
           "loc": 837,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_backfill.py",
-          "loc": 791,
           "hk_related": false
         }
       ],
       "long_functions": [
         {
-          "path": "src/market_data_platform/cli_data.py",
-          "name": "handle_data",
-          "line_count": 478,
-          "complexity": 47
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "audit_minute_coverage",
-          "line_count": 392,
-          "complexity": 66
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "name": "mirror_minute_bars",
-          "line_count": 378,
+          "line_count": 338,
           "complexity": 70
         },
         {
@@ -478,15 +466,9 @@
           "complexity": 10
         },
         {
-          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
-          "name": "build_guan_annual_minbar",
-          "line_count": 277,
-          "complexity": 34
-        },
-        {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
           "name": "_build_fused_minute_dataset",
-          "line_count": 229,
+          "line_count": 216,
           "complexity": 35
         },
         {
@@ -520,12 +502,6 @@
           "complexity": 23
         },
         {
-          "path": "src/market_data_platform/cli_data.py",
-          "name": "add_data_parser",
-          "line_count": 160,
-          "complexity": 1
-        },
-        {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
           "name": "_audit_partition",
           "line_count": 157,
@@ -536,18 +512,6 @@
           "name": "_validate_bj_overlay_evidence",
           "line_count": 154,
           "complexity": 43
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "_materialize_tushare_full_days",
-          "line_count": 154,
-          "complexity": 21
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "_materialize_tushare_partial_dates",
-          "line_count": 152,
-          "complexity": 25
         },
         {
           "path": "tests/test_a_share_minute_coverage.py",
@@ -568,6 +532,12 @@
           "complexity": 14
         },
         {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_materialize_tushare_full_days",
+          "line_count": 143,
+          "complexity": 21
+        },
+        {
           "path": "src/market_data_platform/tushare_minute_backfill.py",
           "name": "build_minute_backfill_plan",
           "line_count": 143,
@@ -578,12 +548,6 @@
           "name": "validate_cutover_receipt",
           "line_count": 138,
           "complexity": 46
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
-          "name": "_aggregate_guan_deal_file_pandas",
-          "line_count": 138,
-          "complexity": 18
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -602,26 +566,50 @@
           "name": "build_a_share_daily_clean",
           "line_count": 133,
           "complexity": 13
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
+          "name": "build_a_share_flow_ownership_features",
+          "line_count": 131,
+          "complexity": 14
+        },
+        {
+          "path": "tests/test_a_share_minute_coverage.py",
+          "name": "test_production_input_discovery_reads_calendar_manifest_and_file_names",
+          "line_count": 131,
+          "complexity": 3
+        },
+        {
+          "path": "src/market_data_platform/cli_tushare_core.py",
+          "name": "_tushare_date_mirror_commands",
+          "line_count": 128,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_a_share_minute_fusion.py",
+          "name": "test_deal_file_row_group_aggregation_units_buckets_and_mapping",
+          "line_count": 125,
+          "complexity": 1
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_pit_fundamentals",
+          "line_count": 124,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "name": "_build_checks",
+          "line_count": 114,
+          "complexity": 13
         }
       ],
       "complexity_hotspots": [
         {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "name": "mirror_minute_bars",
-          "line_count": 378,
+          "line_count": 338,
           "complexity": 70
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "audit_minute_coverage",
-          "line_count": 392,
-          "complexity": 66
-        },
-        {
-          "path": "src/market_data_platform/cli_data.py",
-          "name": "handle_data",
-          "line_count": 478,
-          "complexity": 47
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -650,20 +638,8 @@
         {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
           "name": "_build_fused_minute_dataset",
-          "line_count": 229,
+          "line_count": 216,
           "complexity": 35
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "load_guan_deal_manifest",
-          "line_count": 132,
-          "complexity": 34
-        },
-        {
-          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
-          "name": "build_guan_annual_minbar",
-          "line_count": 277,
-          "complexity": 34
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -678,33 +654,15 @@
           "complexity": 32
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "load_annual_minbar_manifest",
-          "line_count": 116,
-          "complexity": 28
-        },
-        {
           "path": "src/market_data_platform/data_warehouse_catalog.py",
           "name": "_catalog_artifact_from_manifest",
           "line_count": 87,
           "complexity": 27
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "classify_minute_coverage",
-          "line_count": 132,
-          "complexity": 26
-        },
-        {
           "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "_validate_production_contract",
           "line_count": 86,
-          "complexity": 25
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "_materialize_tushare_partial_dates",
-          "line_count": 152,
           "complexity": 25
         },
         {
@@ -714,9 +672,9 @@
           "complexity": 24
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "name": "validate_complete_minute_partition",
-          "line_count": 113,
+          "path": "src/market_data_platform/providers/_a_share_minute_coverage_audit.py",
+          "name": "_coverage_audit_plan",
+          "line_count": 103,
           "complexity": 24
         },
         {
@@ -726,34 +684,76 @@
           "complexity": 23
         },
         {
-          "path": "src/market_data_platform/guan_mobile_raw.py",
-          "name": "verify_guan_mobile_promotion",
-          "line_count": 66,
-          "complexity": 23
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "name": "validate_overlap_audit",
-          "line_count": 92,
-          "complexity": 23
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_backfill.py",
-          "name": "run_minute_backfill",
-          "line_count": 122,
-          "complexity": 23
-        },
-        {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
           "name": "_scan_tree",
           "line_count": 63,
           "complexity": 22
         },
         {
-          "path": "src/market_data_platform/dataset_lock.py",
-          "name": "exclusive_file_lock",
-          "line_count": 98,
-          "complexity": 22
+          "path": "src/market_data_platform/providers/a_share_minute_build.py",
+          "name": "validate_fused_minute_dataset",
+          "line_count": 53,
+          "complexity": 21
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_materialize_tushare_full_days",
+          "line_count": 143,
+          "complexity": 21
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "name": "build_minute_backfill_plan",
+          "line_count": 143,
+          "complexity": 19
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_sh_sz_gap_contract",
+          "line_count": 56,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_audit_partition",
+          "line_count": 157,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/registry.py",
+          "name": "build_dataset_registry_rows",
+          "line_count": 53,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/cli_data.py",
+          "name": "_source_audit_lineage",
+          "line_count": 77,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/dev/compatibility_governance.py",
+          "name": "inventory_issues",
+          "line_count": 38,
+          "complexity": 16
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_tree_layout",
+          "line_count": 43,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "inspect_current_contract",
+          "line_count": 79,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/guan_mobile_raw.py",
+          "name": "verify_guan_mobile_promotion",
+          "line_count": 58,
+          "complexity": 16
         }
       ],
       "large_classes": [
@@ -829,13 +829,13 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 95,
-      "python_loc": 23093,
+      "python_file_count": 101,
+      "python_loc": 24849,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 10,
         "long_functions": 16,
-        "complexity_hotspots": 19,
+        "complexity_hotspots": 20,
         "large_classes": 0
       },
       "large_files": [
@@ -1102,6 +1102,12 @@
           "name": "uniqueness_report",
           "line_count": 76,
           "complexity": 15
+        },
+        {
+          "path": "src/cstree/alpha/style_replica/portfolio.py",
+          "name": "_select_b_leg_for_date",
+          "line_count": 42,
+          "complexity": 15
         }
       ],
       "large_classes": [],
@@ -1174,12 +1180,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 79,
-      "python_loc": 25083,
+      "python_file_count": 84,
+      "python_loc": 25863,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
-        "long_functions": 20,
+        "long_functions": 18,
         "complexity_hotspots": 19,
         "large_classes": 0
       },
@@ -1191,12 +1197,12 @@
         },
         {
           "path": "src/cstree/backtesting/exposure.py",
-          "loc": 1201,
+          "loc": 1202,
           "hk_related": false
         },
         {
           "path": "src/cstree/backtesting/construction_grid.py",
-          "loc": 1013,
+          "loc": 1014,
           "hk_related": false
         },
         {
@@ -1226,12 +1232,17 @@
         },
         {
           "path": "src/cstree/backtesting/portfolio_positions.py",
-          "loc": 770,
+          "loc": 771,
           "hk_related": false
         },
         {
           "path": "tests/test_backtest.py",
           "loc": 754,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/backtesting/daily_watch20.py",
+          "loc": 708,
           "hk_related": false
         },
         {
@@ -1246,12 +1257,7 @@
         },
         {
           "path": "src/cstree/backtesting/position_postprocess.py",
-          "loc": 597,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/backtesting/style_replica_portfolio.py",
-          "loc": 589,
+          "loc": 598,
           "hk_related": false
         },
         {
@@ -1271,17 +1277,11 @@
         },
         {
           "path": "src/cstree/backtesting/metrics.py",
-          "loc": 502,
+          "loc": 503,
           "hk_related": false
         }
       ],
       "long_functions": [
-        {
-          "path": "src/cstree/backtesting/style_replica_portfolio.py",
-          "name": "build_style_replica_positions",
-          "line_count": 113,
-          "complexity": 10
-        },
         {
           "path": "src/cstree/backtesting/construction_grid.py",
           "name": "_prepare_signal_column",
@@ -1341,12 +1341,6 @@
           "name": "_init_row",
           "line_count": 91,
           "complexity": 6
-        },
-        {
-          "path": "src/cstree/backtesting/style_replica_portfolio.py",
-          "name": "_select_b_leg_for_date",
-          "line_count": 90,
-          "complexity": 17
         },
         {
           "path": "src/cstree/backtesting/portfolio_positions.py",
@@ -1417,6 +1411,12 @@
           "complexity": 20
         },
         {
+          "path": "src/cstree/backtesting/daily_watch20.py",
+          "name": "_validate_config",
+          "line_count": 31,
+          "complexity": 20
+        },
+        {
           "path": "src/cstree/backtesting/a_share_executable_oos_topk.py",
           "name": "allocate_with_redistribution",
           "line_count": 63,
@@ -1426,12 +1426,6 @@
           "path": "src/cstree/backtesting/portfolio_selection.py",
           "name": "apply_rebalance_buffer",
           "line_count": 36,
-          "complexity": 17
-        },
-        {
-          "path": "src/cstree/backtesting/style_replica_portfolio.py",
-          "name": "_select_b_leg_for_date",
-          "line_count": 90,
           "complexity": 17
         },
         {
@@ -1576,13 +1570,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 198,
-      "python_loc": 47293,
+      "python_file_count": 204,
+      "python_loc": 49010,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 24,
-        "long_functions": 79,
-        "complexity_hotspots": 38,
+        "large_files": 25,
+        "long_functions": 81,
+        "complexity_hotspots": 39,
         "large_classes": 1
       },
       "large_files": [
@@ -1667,6 +1661,11 @@
           "hk_related": false
         },
         {
+          "path": "src/cstree/daily_watch20_pipeline.py",
+          "loc": 582,
+          "hk_related": false
+        },
+        {
           "path": "src/cstree/release_tools/release_runs.py",
           "loc": 573,
           "hk_related": false
@@ -1683,7 +1682,7 @@
         },
         {
           "path": "src/cstree/style_replica_pipeline.py",
-          "loc": 555,
+          "loc": 553,
           "hk_related": false
         },
         {
@@ -1903,6 +1902,12 @@
           "complexity": 20
         },
         {
+          "path": "src/cstree/daily_watch20_publish.py",
+          "name": "_validate_watchlist",
+          "line_count": 42,
+          "complexity": 20
+        },
+        {
           "path": "src/cstree/pipeline/research_ops/summarize_runs_scoring.py",
           "name": "_compute_grouped_dsr",
           "line_count": 57,
@@ -2003,12 +2008,6 @@
           "name": "_normalize_score_postprocess",
           "line_count": 44,
           "complexity": 17
-        },
-        {
-          "path": "src/cstree/pipeline/quality.py",
-          "name": "enforce_liveops_quality_gate",
-          "line_count": 53,
-          "complexity": 17
         }
       ],
       "large_classes": [
@@ -2047,6 +2046,9 @@
           "src/cstree/contracts/signals.py",
           "src/cstree/contracts/strategy.py",
           "src/cstree/date_utils.py",
+          "src/cstree/daily_watch20_data.py",
+          "src/cstree/daily_watch20_minute.py",
+          "src/cstree/daily_watch20_publish.py",
           "src/cstree/dataset.py",
           "src/cstree/return_metrics.py",
           "src/cstree/pipeline/contracts.py",
@@ -2071,6 +2073,10 @@
           "src/cstree/contracts/signals.py",
           "src/cstree/contracts/strategy.py",
           "src/cstree/date_utils.py",
+          "src/cstree/daily_watch20_data.py",
+          "src/cstree/daily_watch20_minute.py",
+          "src/cstree/daily_watch20_pipeline.py",
+          "src/cstree/daily_watch20_publish.py",
           "src/cstree/identity.py",
           "src/cstree/return_metrics.py",
           "src/cstree/sharpe_stats.py",
@@ -2134,8 +2140,8 @@
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 79,
-      "python_loc": 24323,
+      "python_file_count": 80,
+      "python_loc": 24362,
       "hk_related_file_count": 12,
       "hotspot_counts": {
         "large_files": 13,

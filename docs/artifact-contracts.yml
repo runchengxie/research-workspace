@@ -167,6 +167,88 @@
         "target_quantity"
       ],
       "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine."
+    },
+    {
+      "artifact": "watchlist_20.csv",
+      "contract": "daily_watch20.selection.v1",
+      "schema_version": 1,
+      "owner": "strategy-pipeline",
+      "producer": "strategy-pipeline",
+      "consumers": [
+        "market-intel"
+      ],
+      "canonical_files": [
+        "watchlist_20.csv",
+        "watchlist_20.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "cstree.daily_watch20_publish",
+          "path": "src/cstree/daily_watch20_publish.py",
+          "role": "canonical_producer"
+        }
+      ],
+      "required_fields": [
+        "signal_date",
+        "source_date",
+        "symbol",
+        "name",
+        "sleeve",
+        "rank",
+        "tracking_weight",
+        "xgb_score",
+        "xgb_percentile",
+        "guard_score",
+        "final_score",
+        "industry",
+        "theme",
+        "model_version",
+        "feature_set_id",
+        "data_as_of"
+      ],
+      "notes": "A strict SH/SZ research watchlist with four pure-ML A names and sixteen guarded B names. It is a morning-report artifact only and is not an execution target."
+    },
+    {
+      "artifact": "selection_receipt.json",
+      "contract": "daily_watch20.selection.v1 receipt",
+      "schema_version": 1,
+      "owner": "strategy-pipeline",
+      "producer": "strategy-pipeline",
+      "consumers": [
+        "market-intel"
+      ],
+      "canonical_files": [
+        "selection_receipt.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "cstree.daily_watch20_publish",
+          "path": "src/cstree/daily_watch20_publish.py",
+          "role": "canonical_producer"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "status",
+        "quality_status",
+        "generated_at",
+        "market_scope",
+        "source_date",
+        "signal_date",
+        "model_version",
+        "feature_set_id",
+        "eligible_for_live",
+        "counts",
+        "tracking_weight_sum",
+        "minute_features",
+        "training",
+        "construction",
+        "inputs",
+        "artifacts"
+      ],
+      "notes": "Fail-closed lineage and quality evidence required before market-intel may render or deliver watchlist_20.csv. eligible_for_live remains false in the MVP."
     }
   ]
 }

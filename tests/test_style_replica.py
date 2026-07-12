@@ -18,6 +18,10 @@ import numpy as np
 import pandas as pd
 from cstree.alpha.style_replica import (
     AI_HARDWARE_THEME_QUOTAS,
+    StyleReplicaPortfolioConfig,
+    build_style_replica_positions,
+    compute_daily_changes,
+    compute_daily_exposure,
     compute_score_a,
     compute_score_b,
     filter_style_replica_universe,
@@ -27,12 +31,6 @@ from cstree.alpha.style_replica import (
 from cstree.alpha.style_replica.factors import compute_all_style_factors
 from cstree.alpha.style_replica.resvol import compute_resvol_factor
 from cstree.alpha.style_replica.theme_map import build_theme_map, get_theme_label
-from cstree.backtesting.style_replica_portfolio import (
-    StyleReplicaPortfolioConfig,
-    build_style_replica_positions,
-    compute_daily_changes,
-    compute_daily_exposure,
-)
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 

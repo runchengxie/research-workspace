@@ -41,7 +41,9 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
         "signals.parquet",
         "signals.meta.json",
         "positions_by_rebalance.csv",
+        "selection_receipt.json",
         "targets.json",
+        "watchlist_20.csv",
     }
     assert records["signals.parquet"]["owner"] == "alpha-research"
     assert "market-intel/hot-sector-screener" in records["signals.parquet"]["external_producers"]
@@ -50,6 +52,9 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
     assert records["positions_by_rebalance.csv"]["owner"] == "portfolio-backtester"
     assert records["targets.json"]["owner"] == "quant-execution-engine"
     assert records["targets.json"]["producer"] == "strategy-pipeline"
+    assert records["watchlist_20.csv"]["owner"] == "strategy-pipeline"
+    assert records["watchlist_20.csv"]["consumers"] == ["market-intel"]
+    assert "eligible_for_live" in records["selection_receipt.json"]["required_fields"]
 
 
 def test_artifact_contract_manifest_is_docs_and_path_validated() -> None:
@@ -71,7 +76,9 @@ def test_shared_contract_package_loads_manifest() -> None:
     assert {str(record["artifact"]) for record in manifest.artifacts} >= {
         "signals.parquet",
         "positions_by_rebalance.csv",
+        "selection_receipt.json",
         "targets.json",
+        "watchlist_20.csv",
     }
 
 

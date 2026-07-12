@@ -79,7 +79,11 @@ def test_dead_code_profile_runs_advisory_wrapper() -> None:
 
 
 def test_superproject_ci_runs_top_level_quality_gates() -> None:
-    workflow = (ROOT / ".github" / "workflows" / "superproject.yml").read_text(encoding="utf-8")
+    active = ROOT / ".github" / "workflows" / "superproject.yml"
+    disabled = ROOT / ".github" / "workflows" / "superproject.yml.disabled"
+    assert not active.exists()
+    assert disabled.is_file()
+    workflow = disabled.read_text(encoding="utf-8")
 
     assert "submodules: false" in workflow
     assert "WORKSPACE_SUBMODULE_READ_TOKEN" in workflow
