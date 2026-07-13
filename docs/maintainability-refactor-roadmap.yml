@@ -24,7 +24,7 @@
     },
     {
       "repo": "alpha-research",
-      "max_large_files": 10,
+      "max_large_files": 12,
       "max_long_functions": 16,
       "max_complexity_hotspots": 20,
       "max_large_classes": 0
@@ -38,9 +38,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 25,
+      "max_large_files": 26,
       "max_long_functions": 81,
-      "max_complexity_hotspots": 39,
+      "max_complexity_hotspots": 41,
       "max_large_classes": 1
     },
     {
@@ -162,6 +162,18 @@
   ],
   "accepted_hotspots": [
     {
+      "path": "alpha-research/src/cstree/alpha/daily_watch20.py",
+      "owner_repo": "alpha-research",
+      "reason": "DailyWatch20 keeps the ranker contract, point-in-time training policy, model restoration, and scoring lineage in one alpha-owned MVP boundary",
+      "next_action": "extract model lifecycle and attribution helpers if another ranker family or another persisted-model contract is added"
+    },
+    {
+      "path": "alpha-research/src/cstree/alpha/daily_watch20_features.py",
+      "owner_repo": "alpha-research",
+      "reason": "DailyWatch20 daily, minute, Hermite, and multi-horizon feature definitions remain colocated so their point-in-time alignment and feature-set identity are auditable for the MVP",
+      "next_action": "split feature families behind the existing feature-set contract when another minute transform or stability family is introduced"
+    },
+    {
       "path": "portfolio-backtester/src/cstree/backtesting/daily_watch20.py",
       "owner_repo": "portfolio-backtester",
       "reason": "DailyWatch20 keeps strict A4/B16 selection, guardrails, retention, and its fail-closed receipt in one model-agnostic boundary for the MVP",
@@ -172,6 +184,12 @@
       "owner_repo": "strategy-pipeline",
       "reason": "DailyWatch20 orchestration is split into short stage functions but remains one auditable transaction for the first delivery",
       "next_action": "extract candidate preparation and receipt assembly after the MVP contract stabilizes"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/daily_watch20_minute.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DailyWatch20 minute-cache planning, incremental partition reads, validation, and receipt evidence share one fail-closed publication boundary for the initial scheduled workflow",
+      "next_action": "extract cache planning and partition aggregation before adding another minute source or changing the minute-feature schema"
     },
     {
       "path": "market-data-platform/src/market_data_platform/cli.py",

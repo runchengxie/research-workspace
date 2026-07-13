@@ -830,10 +830,10 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 101,
-      "python_loc": 24849,
+      "python_loc": 25456,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 10,
+        "large_files": 12,
         "long_functions": 16,
         "complexity_hotspots": 20,
         "large_classes": 0
@@ -877,6 +877,16 @@
         {
           "path": "src/cstree/alpha/feature_dataset.py",
           "loc": 676,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/daily_watch20.py",
+          "loc": 597,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/alpha/daily_watch20_features.py",
+          "loc": 563,
           "hk_related": false
         },
         {
@@ -1181,7 +1191,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 84,
-      "python_loc": 25863,
+      "python_loc": 25864,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1570,13 +1580,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 204,
-      "python_loc": 49015,
+      "python_file_count": 212,
+      "python_loc": 51540,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 25,
+        "large_files": 26,
         "long_functions": 81,
-        "complexity_hotspots": 39,
+        "complexity_hotspots": 41,
         "large_classes": 1
       },
       "large_files": [
@@ -1611,8 +1621,18 @@
           "hk_related": false
         },
         {
+          "path": "src/cstree/daily_watch20_pipeline.py",
+          "loc": 766,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_pipeline_e2e.py",
           "loc": 760,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/daily_watch20_minute.py",
+          "loc": 757,
           "hk_related": false
         },
         {
@@ -1661,11 +1681,6 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/daily_watch20_pipeline.py",
-          "loc": 582,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/release_tools/release_runs.py",
           "loc": 573,
           "hk_related": false
@@ -1698,11 +1713,6 @@
         {
           "path": "src/cstree/pipeline/context_builder.py",
           "loc": 510,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/research_ops/summarize_runs.py",
-          "loc": 503,
           "hk_related": false
         }
       ],
@@ -1884,6 +1894,12 @@
           "complexity": 22
         },
         {
+          "path": "src/cstree/daily_watch20_freshness.py",
+          "name": "inspect_daily_watch20_delivery",
+          "line_count": 66,
+          "complexity": 21
+        },
+        {
           "path": "src/cstree/liveops/alloc_market_data.py",
           "name": "extract_price_wide_frame",
           "line_count": 58,
@@ -1924,6 +1940,12 @@
           "name": "_package_cmd_from_args",
           "line_count": 33,
           "complexity": 20
+        },
+        {
+          "path": "src/cstree/daily_watch20_model_lifecycle.py",
+          "name": "restore_prior_ranker",
+          "line_count": 59,
+          "complexity": 19
         },
         {
           "path": "src/cstree/liveops/holdings.py",
@@ -1995,18 +2017,6 @@
           "path": "src/cstree/liveops/export_targets.py",
           "name": "_target_entries",
           "line_count": 67,
-          "complexity": 17
-        },
-        {
-          "path": "src/cstree/pipeline/config.py",
-          "name": "resolve_date_range_and_label_settings",
-          "line_count": 93,
-          "complexity": 17
-        },
-        {
-          "path": "src/cstree/pipeline/config_eval.py",
-          "name": "_normalize_score_postprocess",
-          "line_count": 44,
           "complexity": 17
         }
       ],

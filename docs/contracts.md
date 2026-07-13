@@ -35,6 +35,7 @@
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `cstree watchlist20 run` | `market-intel` 晨报 | 严格 A4/B16 的“今日20只重点关注”研究清单；JSON companion 必须与 CSV 的股票、袖、排名和权重一致，不是执行目标 |
 | `strategy_outputs/watchlist20/latest/selection_receipt.json` | `cstree watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
+| `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `cstree watchlist20 run` | 严格 source date 的稀疏热点正样本；未出现股票表示未知而非零热度 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
 
 ## 跨模块 artifact contract
@@ -51,7 +52,7 @@
 | `signals_style_replica.parquet` | `cstree.signals` (style_replica variant) | `alpha-research` | `cstree.alpha.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
 | `signals_style_replica.meta.json` | `cstree.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | contract name、schema version、model_version、config (a/b slots、theme quotas) |
 | `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `cstree.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
-| `selection_receipt.json` | `daily_watch20.selection.v1 receipt` | `strategy-pipeline` | `cstree.daily_watch20_publish` | passed/quality 状态、A4/B16/20唯一计数、权重、分钟 as-of/lag、训练窗口、构造门禁、输入 lineage 和 artifact 哈希 |
+| `selection_receipt.json` | `daily_watch20.selection.v1 receipt` | `strategy-pipeline` | `cstree.daily_watch20_publish` | passed/quality 状态、A4/B16/20唯一计数、权重、分钟 required-date/as-of/lag、多周期标签、模型复用、热点输入、构造门禁和 artifact 哈希 |
 
 `signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
 也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
@@ -61,10 +62,15 @@
 等可选解释列；这些列不属于最小稳定契约。默认 `hotsector_overlay` 仍使用等权 Top-K，
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
-DailyWatch20 是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker 和 PIT feature
-实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline` 负责读取已发布数据、
-编排和原子发布，外部 `market-intel` 只校验与展示。MVP 的 `eligible_for_live=false`，不会生成
+DailyWatch20 是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、1/3/5 日 PIT 标签和
+feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline` 负责读取已发布数据、
+增量分钟缓存、周期重训/每日打分、消融和原子发布；`market-intel` 生产严格时点化热点输入并校验展示。
+MVP 的 `eligible_for_live=false`，不会生成
 `targets.json`，也不得被晨报脚本隐式转换为交易目标。
+
+热点输入目录固定包含 `news_heat.csv`、`news_heat_receipt.json` 和
+`news_heat_schema.json`。它由工作区之外的 `market-intel` 管理，因此只记录在人工跨项目合同中，
+不加入只允许 pinned submodule owner 的 `artifact-contracts.yml`。
 
 ## A 股资产状态
 
