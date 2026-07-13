@@ -111,7 +111,9 @@ $DATA_PLATFORM_ROOT/
 ```bash
 python scripts/workspace_doctor.py
 python src/research_contracts/smoke_contracts.py
-uv run --with pytest python -m pytest tests -q
+uv run --project strategy-pipeline --extra dev \
+  --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
+  python -m pytest tests -q
 ```
 
 `smoke_contracts.py` 只运行无写入、无真实下单的命令行和文件约定检查。任何需要凭证、网络、下载数据或提交订单的流程，都必须在对应子项目内显式执行。顶层测试包含 pytest 风格函数和 fixture，完整测试入口使用 `pytest`。

@@ -8,7 +8,7 @@
 - [ ] `git submodule status` 中所有子模块指针符合本次要锁定的版本。
 - [ ] `python scripts/workspace_doctor.py --strict` 通过，或所有警告都有明确记录。
 - [ ] `python src/research_contracts/smoke_contracts.py --strict` 通过，或所有警告都有明确记录。
-- [ ] `uv run --with pytest python -m pytest tests -q` 通过。
+- [ ] `uv run --project strategy-pipeline --extra dev --with 'matplotlib>=3.8' --with 'tabulate>=0.9' python -m pytest tests -q` 通过。
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本/测试，并排除子仓与历史探索脚本。
 - [ ] 仅在执行港股私有 legacy archive restore/removal review 时，`python scripts/hk_archive_gate.py --check --format json` 已通过。
 - [ ] 仅在重新暂存港股私有 legacy archive 时，`python scripts/export_hk_legacy_archive.py --out <external-staging-dir>` 已在工作区外生成 `archive-export-manifest.json` 和 SHA-256。

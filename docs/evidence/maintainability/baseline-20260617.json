@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 55,
-      "python_loc": 12087,
+      "python_loc": 12091,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -830,7 +830,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 101,
-      "python_loc": 25456,
+      "python_loc": 25553,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 12,
@@ -881,12 +881,12 @@
         },
         {
           "path": "src/cstree/alpha/daily_watch20.py",
-          "loc": 597,
+          "loc": 615,
           "hk_related": false
         },
         {
           "path": "src/cstree/alpha/daily_watch20_features.py",
-          "loc": 563,
+          "loc": 575,
           "hk_related": false
         },
         {
@@ -1580,8 +1580,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 212,
-      "python_loc": 51540,
+      "python_file_count": 214,
+      "python_loc": 52681,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 26,
@@ -1598,6 +1598,11 @@
         {
           "path": "tests/test_cli_research.py",
           "loc": 789,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/daily_watch20_pipeline.py",
+          "loc": 785,
           "hk_related": false
         },
         {
@@ -1618,11 +1623,6 @@
         {
           "path": "src/cstree/release_tools/package_runs.py",
           "loc": 769,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/daily_watch20_pipeline.py",
-          "loc": 766,
           "hk_related": false
         },
         {
@@ -2083,8 +2083,10 @@
           "src/cstree/contracts/signals.py",
           "src/cstree/contracts/strategy.py",
           "src/cstree/date_utils.py",
+          "src/cstree/daily_watch20_ablation.py",
           "src/cstree/daily_watch20_data.py",
           "src/cstree/daily_watch20_minute.py",
+          "src/cstree/daily_watch20_oos.py",
           "src/cstree/daily_watch20_pipeline.py",
           "src/cstree/daily_watch20_publish.py",
           "src/cstree/identity.py",

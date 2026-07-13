@@ -33,7 +33,7 @@
 | `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
-| `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `cstree watchlist20 run` | `market-intel` 晨报 | 严格 A4/B16 的“今日20只重点关注”研究清单；JSON companion 必须与 CSV 的股票、袖、排名和权重一致，不是执行目标 |
+| `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `cstree watchlist20 run` | `market-intel` 晨报 | 内部严格 A4/B16 的 20 股研究 artifact；JSON companion 必须与 CSV 的股票、袖、排名和权重一致，不是执行目标；客户 renderer 统一展示 20 股且不暴露内部袖、分数或权重 |
 | `strategy_outputs/watchlist20/latest/selection_receipt.json` | `cstree watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
 | `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `cstree watchlist20 run` | 严格 source date 的稀疏热点正样本；未出现股票表示未知而非零热度 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
@@ -62,9 +62,11 @@
 等可选解释列；这些列不属于最小稳定契约。默认 `hotsector_overlay` 仍使用等权 Top-K，
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
-DailyWatch20 是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、1/3/5 日 PIT 标签和
+DailyWatch20 是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、默认
+50%/30%/20% 权重的 1/3/5 日 PIT 标签和
 feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline` 负责读取已发布数据、
-增量分钟缓存、周期重训/每日打分、消融和原子发布；`market-intel` 生产严格时点化热点输入并校验展示。
+同日完整性门禁、增量分钟缓存、周期重训/每日打分、滚动 OOS 消融和原子发布；`market-intel`
+生产严格时点化热点输入，并分别生成客户统一 20 股展示和内部审计展示。
 MVP 的 `eligible_for_live=false`，不会生成
 `targets.json`，也不得被晨报脚本隐式转换为交易目标。
 

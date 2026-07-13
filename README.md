@@ -107,7 +107,9 @@ python scripts/workspace_doctor.py
 python src/research_contracts/smoke_contracts.py
 python src/research_contracts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
 python scripts/print_version_matrix.py
-uv run --with pytest python -m pytest tests -q
+uv run --project strategy-pipeline --extra dev \
+  --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
+  python -m pytest tests -q
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run

@@ -207,7 +207,7 @@
         "feature_set_id",
         "data_as_of"
       ],
-      "notes": "A strict SH/SZ research watchlist with four pure-ML A names and sixteen guarded B names. It is a morning-report artifact only and is not an execution target."
+      "notes": "Internal-only SH/SZ research handoff with four pure-ML A names and sixteen guarded B names. Sleeve, score, rank, and tracking-weight fields are audit data and must not appear in the client renderer, which presents one unordered 20-name watchlist. Same-day minute inputs mean complete post-close partitions, not a realtime feed. This artifact is not an execution target."
     },
     {
       "artifact": "selection_receipt.json",

@@ -54,6 +54,10 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
     assert records["targets.json"]["producer"] == "strategy-pipeline"
     assert records["watchlist_20.csv"]["owner"] == "strategy-pipeline"
     assert records["watchlist_20.csv"]["consumers"] == ["market-intel"]
+    watchlist_notes = str(records["watchlist_20.csv"]["notes"])
+    assert "Internal-only" in watchlist_notes
+    assert "must not appear in the client renderer" in watchlist_notes
+    assert "not a realtime feed" in watchlist_notes
     assert "eligible_for_live" in records["selection_receipt.json"]["required_fields"]
 
 
