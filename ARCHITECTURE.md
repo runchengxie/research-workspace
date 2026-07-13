@@ -40,6 +40,7 @@ contracts 和 shared helpers 组合使用。`cstree` 是 research-workspace 核�
 ## 治理入口
 
 - 框架集成决策：[docs/adr/0001-framework-integration-boundaries.md](docs/adr/0001-framework-integration-boundaries.md)
+- 框架采用评估：[docs/framework-adoption-assessment.md](docs/framework-adoption-assessment.md)
 - 框架迁移账本：[docs/framework-integration-ledger.yml](docs/framework-integration-ledger.yml)
 - 废弃入口：[docs/deprecations.md](docs/deprecations.md)
 - 港股公开拆分：[docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml)
