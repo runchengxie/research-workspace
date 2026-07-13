@@ -36,6 +36,9 @@
 
 ## 三、硬性验收项（建议按版本组合发布前逐项打勾）
 
+- [ ] 框架边界符合 [ADR-0001](adr/0001-framework-integration-boundaries.md)，迁移状态同步到 [`framework-integration-ledger.yml`](framework-integration-ledger.yml)。
+- [ ] Qlib、vn.py 或 LEAN 类型没有进入跨仓库 Python public result 或 artifact schema。
+- [ ] 没有安装 Qlib 或 vn.py 时，native 端到端路径仍可导入和运行。
 - [ ] 边界扫描通过：`python scripts/workspace_import_boundaries.py --check`
 - [ ] 边界测试通过：`python -m pytest tests/test_workspace_import_boundaries.py -q`
 - [ ] `strategy-pipeline` 内部边界通过：`scripts/dev/run_tests.sh import-boundary`
@@ -45,6 +48,8 @@
 
 ## 四、建议的长期方向（可逐步推进）
 
+- 按 ADR-0001 以 adapter 方式接入 Qlib 和 vn.py；LEAN 仅通过 framework-neutral scenario 做对照。
+- native 通用实现只在 parity evidence、兼容窗口和回滚证据齐全后删除。
 - 为长期治理保留明确的 owner API（例如通过 `alpha-research` 与 `portfolio-backtester` 入口）
   并将 `cstree` 兼容面控制为外部 facade 和兼容出口。
 - 将研究流程按因子挖掘、组合构建、风控容量、执行交接这条链路逐步沉淀为固定 sidecar。
@@ -54,3 +59,4 @@
 
 - 这条链路需要反复补证据：每次完成新特征或新构造层扫验后，回到前一层（通常是 alpha / backtest / 风险层）补齐证据，再决定是否晋升。
 - 本清单不建议把 `targets.json` 的成功 dry-run 解释为真实券商就绪。
+- 安装第三方依赖或跑通 happy-path demo 不代表迁移完成；退出条件以机器可读迁移账本为准。
