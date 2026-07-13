@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 ARTIFACT_CONTRACT_SCHEMA_VERSION = "artifact_contracts.v1"
+ARTIFACT_ENVELOPE_SCHEMA_VERSION = "research.artifact-envelope.v2"
 CORE_ARTIFACTS = frozenset(
     {
         "signals.parquet",
@@ -29,6 +30,7 @@ KNOWN_REPOS = frozenset(
 @dataclass(frozen=True)
 class ArtifactContractManifest:
     schema_version: str
+    artifact_envelope: Mapping[str, Any]
     artifacts: tuple[Mapping[str, Any], ...]
 
     @classmethod
@@ -38,6 +40,11 @@ class ArtifactContractManifest:
             artifacts = []
         return cls(
             schema_version=str(payload.get("schema_version", "")),
+            artifact_envelope=(
+                payload["artifact_envelope"]
+                if isinstance(payload.get("artifact_envelope"), Mapping)
+                else {}
+            ),
             artifacts=tuple(record for record in artifacts if isinstance(record, Mapping)),
         )
 
@@ -135,7 +142,17 @@ def _manifest_issues(manifest: ArtifactContractManifest) -> list[str]:
         return ["unexpected schema_version"]
     if not manifest.artifacts:
         return ["artifacts must be non-empty"]
-    return []
+    envelope = manifest.artifact_envelope
+    issues: list[str] = []
+    if envelope.get("schema_version") != ARTIFACT_ENVELOPE_SCHEMA_VERSION:
+        issues.append("unexpected artifact envelope schema_version")
+    if envelope.get("write_mode") != "opt_in":
+        issues.append("artifact envelope write_mode must be opt_in")
+    if envelope.get("container_key") != "artifact_envelope":
+        issues.append("artifact envelope container_key must be artifact_envelope")
+    if not _strings(envelope.get("required_fields")):
+        issues.append("artifact envelope required_fields must be non-empty")
+    return issues
 
 
 def validate_artifact_contract_manifest(

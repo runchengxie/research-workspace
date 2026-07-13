@@ -42,6 +42,19 @@
 
 机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，清单加载和校验入口在 [`src/research_contracts`](../src/research_contracts/) 薄包中。`src/research_contracts` 由顶层仓库直接追踪，不登记为子模块。后续如果把 contract 实现抽到正式共享包，这份清单就是跨仓库 artifact contract 的迁移基准；顶层只校验清单和文件交接，不导入子模块运行时内部实现。
 
+### 可选 artifact envelope v2
+
+迁移期间，现有 v1 artifact 和 reader 保持有效。producer 可以在 metadata 或 lineage sidecar 中以
+`artifact_envelope` 键选择性写入 `research.artifact-envelope.v2`。该 envelope 只记录跨仓库可复现信息：
+
+- artifact、run 和 producer 身份；
+- producer commit/version 与 backend provenance；
+- timezone-aware 创建时间；
+- artifact、配置和上游 lineage 的 SHA-256；
+- 对执行目标可选的 validity、portfolio/account scope、policy reference 和 idempotency scope。
+
+envelope 不包含数据加载、路径解析、模型训练或组合计算 helper。Qlib、vn.py 和 LEAN 对象不得进入 envelope。v2 writer 在各 owner 仓库完成 parity 前保持 opt-in；未携带 envelope 的 v1 metadata 继续由兼容 reader 原样读取。
+
 | Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
 | `signals.parquet` | `cstree.signals` | `alpha-research` | `cstree.alpha.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |

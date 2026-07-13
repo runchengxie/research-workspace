@@ -1,0 +1,6 @@
+{
+  "contract": "cstree.signals metadata",
+  "schema_version": 1,
+  "file": "signals.parquet",
+  "rows": 2
+}

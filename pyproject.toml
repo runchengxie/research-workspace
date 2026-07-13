@@ -47,6 +47,7 @@ include = [
   "scripts/workspace_governance_submodules.py",
   "scripts/workspace_import_boundaries.py",
   "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_envelope.py",
   "src/research_contracts/artifact_contracts.py",
 ]
 exclude = [
@@ -70,6 +71,7 @@ include = [
   "scripts/workspace_governance_submodules.py",
   "scripts/workspace_import_boundaries.py",
   "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_envelope.py",
   "src/research_contracts/artifact_contracts.py",
 ]
 exclude = [
