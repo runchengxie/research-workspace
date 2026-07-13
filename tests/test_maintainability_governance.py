@@ -10,7 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_SCRIPT = ROOT / "scripts" / "maintainability_baseline.py"
-BASELINE_RELATIVE = "docs/evidence/maintainability/baseline-20260617.json"
+BASELINE_RELATIVE = "docs/evidence/maintainability/baseline-20260713.json"
 BASELINE_PATH = ROOT / BASELINE_RELATIVE
 QUALITY_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance_quality.py"
 WORKSPACE_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"

@@ -77,6 +77,8 @@ def test_shared_contract_package_loads_manifest() -> None:
     manifest = contracts.load_artifact_contract_manifest(MANIFEST)
 
     assert manifest.schema_version == "artifact_contracts.v1"
+    assert manifest.artifact_envelope["schema_version"] == "research.artifact-envelope.v2"
+    assert manifest.artifact_envelope["write_mode"] == "opt_in"
     assert {str(record["artifact"]) for record in manifest.artifacts} >= {
         "signals.parquet",
         "positions_by_rebalance.csv",

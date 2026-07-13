@@ -7,6 +7,37 @@
     "owner_rule": "The owning module defines the canonical runtime implementation until a formal shared package exists.",
     "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals."
   },
+  "artifact_envelope": {
+    "schema_version": "research.artifact-envelope.v2",
+    "container_key": "artifact_envelope",
+    "write_mode": "opt_in",
+    "legacy_readers_required": true,
+    "required_fields": [
+      "schema_version",
+      "artifact_id",
+      "artifact_type",
+      "run_id",
+      "created_at",
+      "producer",
+      "configuration_sha256",
+      "content_sha256",
+      "lineage"
+    ],
+    "producer_fields": [
+      "repository",
+      "version",
+      "commit",
+      "backend"
+    ],
+    "target_handoff_fields": [
+      "valid_from",
+      "expires_at",
+      "portfolio_scope",
+      "account_scope",
+      "policy_reference",
+      "idempotency_scope"
+    ]
+  },
   "artifacts": [
     {
       "artifact": "signals.parquet",

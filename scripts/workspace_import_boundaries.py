@@ -22,6 +22,7 @@ class BoundaryRule:
     source: str
     forbidden: tuple[str, ...]
     max_allowed: int
+    required: bool = True
 
 
 @dataclass(frozen=True)
@@ -89,6 +90,16 @@ class SourceLayoutResult:
 
 
 BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
+    BoundaryRule(
+        identifier="research-workspace:contracts-no-direct-framework-imports",
+        description=(
+            "cross-repository contracts must not directly import optional framework runtimes"
+        ),
+        repo=".",
+        source="src/research_contracts",
+        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports"),
+        max_allowed=0,
+    ),
     BoundaryRule(
         identifier="alpha-research:alpha-to-pipeline",
         description="alpha-research should not grow runtime imports back into strategy pipeline",
@@ -243,6 +254,74 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
+        identifier="strategy-pipeline:target-contract-no-direct-framework-imports",
+        description=(
+            "target handoff contracts must not directly import Qlib, vn.py or LEAN runtimes"
+        ),
+        repo="strategy-pipeline",
+        source="src/cstree/liveops",
+        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports"),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="market-data-platform:published-contract-no-direct-qlib-imports",
+        description="published data contracts must not import Qlib; Qlib belongs in adapters",
+        repo="market-data-platform",
+        source="src/market_data_platform/contract.py",
+        forbidden=("qlib",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="alpha-research:artifact-contract-no-direct-qlib-imports",
+        description="research artifacts must not import Qlib and remain replayable without it",
+        repo="alpha-research",
+        source="src/cstree/alpha/research_artifacts.py",
+        forbidden=("qlib",),
+        max_allowed=0,
+        required=False,
+    ),
+    BoundaryRule(
+        identifier="alpha-research:signal-contract-no-direct-qlib-imports",
+        description="canonical signal contracts must not import Qlib",
+        repo="alpha-research",
+        source="src/cstree/alpha/signal_artifact.py",
+        forbidden=("qlib",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="portfolio-backtester:contracts-no-direct-framework-imports",
+        description="backtest exchange contracts must not import Qlib or LEAN runtimes",
+        repo="portfolio-backtester",
+        source="src/cstree/backtesting/contracts.py",
+        forbidden=("qlib", "QuantConnect", "AlgorithmImports"),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="quant-execution-engine:domain-no-direct-vnpy-imports",
+        description="qexec domain contracts must not directly import vn.py DTOs",
+        repo="quant-execution-engine",
+        source="src/quant_execution_engine/domain.py",
+        forbidden=("vnpy",),
+        max_allowed=0,
+        required=False,
+    ),
+    BoundaryRule(
+        identifier="quant-execution-engine:legacy-domain-no-direct-vnpy-imports",
+        description="legacy domain compatibility models must not directly import vn.py DTOs",
+        repo="quant-execution-engine",
+        source="src/quant_execution_engine/models.py",
+        forbidden=("vnpy",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
+        identifier="quant-execution-engine:targets-no-direct-vnpy-imports",
+        description="research target contracts must not directly import a transport runtime",
+        repo="quant-execution-engine",
+        source="src/quant_execution_engine/targets.py",
+        forbidden=("vnpy",),
+        max_allowed=0,
+    ),
+    BoundaryRule(
         identifier="research-workspace:legacy-hotsector-internal-imports",
         description=(
             "top-level research-workspace scripts should consume hotsector artifacts instead "
@@ -316,6 +395,8 @@ def _matches(module: str, forbidden: str) -> bool:
 
 
 def _python_files(source_root: Path) -> list[Path]:
+    if source_root.is_file():
+        return [source_root] if source_root.suffix == ".py" else []
     return sorted(
         path
         for path in source_root.rglob("*.py")
@@ -327,7 +408,7 @@ def _scan_rule(root: Path, rule: BoundaryRule) -> RuleResult:
     repo_root = root / rule.repo
     src_root = repo_root / "src"
     source_root = repo_root / rule.source
-    if not source_root.is_dir():
+    if not source_root.exists() or (not source_root.is_dir() and not source_root.is_file()):
         return RuleResult(rule=rule, findings=(), missing_source=True)
 
     findings: list[ImportFinding] = []
@@ -414,6 +495,7 @@ def _result_to_dict(result: RuleResult) -> dict[str, Any]:
         "forbidden": list(result.rule.forbidden),
         "count": result.count,
         "max_allowed": result.rule.max_allowed,
+        "required": result.rule.required,
         "status": result.status,
         "findings": [_finding_to_dict(finding) for finding in result.findings],
     }
@@ -444,7 +526,7 @@ def build_report(
     )
     issues: list[str] = []
     for result in results:
-        if result.missing_source:
+        if result.missing_source and result.rule.required:
             issues.append(
                 f"{result.rule.identifier}: missing source directory "
                 f"{result.rule.repo}/{result.rule.source}"

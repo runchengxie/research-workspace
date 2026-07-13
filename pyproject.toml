@@ -40,6 +40,9 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.ty.src]
 include = [
+  "scripts/framework_adapter_evidence.py",
+  "scripts/framework_adapter_execution_evidence.py",
+  "scripts/framework_adapter_release_gate.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",
   "scripts/scan_workspace_secrets.py",
@@ -47,6 +50,7 @@ include = [
   "scripts/workspace_governance_submodules.py",
   "scripts/workspace_import_boundaries.py",
   "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_envelope.py",
   "src/research_contracts/artifact_contracts.py",
 ]
 exclude = [
@@ -63,6 +67,9 @@ exclude = [
 
 [tool.basedpyright]
 include = [
+  "scripts/framework_adapter_evidence.py",
+  "scripts/framework_adapter_execution_evidence.py",
+  "scripts/framework_adapter_release_gate.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",
   "scripts/scan_workspace_secrets.py",
@@ -70,6 +77,7 @@ include = [
   "scripts/workspace_governance_submodules.py",
   "scripts/workspace_import_boundaries.py",
   "src/research_contracts/__init__.py",
+  "src/research_contracts/artifact_envelope.py",
   "src/research_contracts/artifact_contracts.py",
 ]
 exclude = [

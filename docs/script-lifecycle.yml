@@ -18,6 +18,36 @@
   },
   "records": [
     {
+      "path": "scripts/framework_adapter_execution_evidence.py",
+      "owner": "research-workspace",
+      "purpose": "Import-only strict validator for the framework-neutral qexec recovery matrix wire contract",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none; mirrors execution_recovery_matrix.v1 without importing qexec or vn.py",
+      "removal_condition": "remove with framework_adapter_evidence.py only after a versioned successor validates the execution recovery contract for two release reviews"
+    },
+    {
+      "path": "scripts/framework_adapter_evidence.py",
+      "owner": "research-workspace",
+      "purpose": "Framework-neutral alpha, backtest, and execution integration evidence validation",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --output is provided",
+      "external_dependencies": "owner-produced strict JSON evidence; no Qlib or vn.py runtime",
+      "removal_condition": "remove only after framework adapter evidence validation moves to a versioned successor and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/framework_adapter_release_gate.py",
+      "owner": "research-workspace",
+      "purpose": "Merge-before-pin and release-state enforcement for optional framework adapters",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "git checkout and docs/framework-adapter-release.yml",
+      "removal_condition": "remove only after submodule release pin governance moves to a versioned successor and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "src/research_contracts/a_share_readiness.py",
       "owner": "research-workspace",
       "purpose": "A-share readiness evidence aggregation",

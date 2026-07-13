@@ -22,6 +22,7 @@
 | 查看 Qlib、vn.py、LEAN 集成决策 | [adr/0001-framework-integration-boundaries.md](adr/0001-framework-integration-boundaries.md) |
 | 查看逐仓库重复建设与采用评估 | [framework-adoption-assessment.md](framework-adoption-assessment.md) |
 | 查看框架迁移状态和回滚条件 | [framework-integration-ledger.yml](framework-integration-ledger.yml) |
+| 查看框架适配发布候选、合并与 pin 门禁 | [framework-adapter-release.md](framework-adapter-release.md) |
 | 了解协作和变更规则 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看中国香港市场归档入口 | [archive/hk/README.md](archive/hk/README.md) |

@@ -23,6 +23,11 @@ git submodule update --init --recursive
 
 ## 已验证组合
 
+`framework-adapters-2026-07` 仍是等待下游 Draft PR 合并的候选列车，不属于已验证组合，
+也没有修改当前 gitlinks。候选提交和 merge-before-pin 状态见
+[framework-adapter-release.yml](framework-adapter-release.yml)，操作顺序见
+[framework-adapter-release.md](framework-adapter-release.md)。
+
 | 日期 | 顶层仓库提交 | market-data-platform | alpha-research | portfolio-backtester | strategy-pipeline | quant-execution-engine | 验证状态 | 证据 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-06-28 | `945ce43` | `f606f86` | `7af023f` | `7495902` | `91b4e0e` | `0617076` | 阶段 3 边界加固组合：artifact contracts、外部策略 backtester smoke、alpha 无 backtester smoke、strategy-pipeline 本地 alpha/backtesting source 防回流、`export-targets` 执行隔离、策略卫星五段链路文档均已收口；顶层 workspace 测试和 hard quality gate 通过 | `uv run --with pytest python -m pytest tests -q` (`66 passed`)；`python scripts/run_quality_checks.py --profile hard`；`python scripts/workspace_doctor.py` (`errors=0 warnings=1`)；GitHub CodeQL `28325877208` |

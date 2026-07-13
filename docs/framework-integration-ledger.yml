@@ -11,7 +11,10 @@
     {
       "id": "artifact-envelope-v2",
       "owner": "research-workspace",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/research-workspace/pull/19"
+      ],
       "entry_criteria": [
         "v1 artifacts and readers have committed fixtures",
         "field ownership is agreed by producer and consumer repositories"
@@ -27,7 +30,10 @@
     {
       "id": "qlib-data-adapter",
       "owner": "market-data-platform",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/market-data-platform/pull/7"
+      ],
       "entry_criteria": [
         "published asset manifest has a stable read-only owner API",
         "synthetic PIT universe and calendar fixtures exist"
@@ -42,7 +48,12 @@
     {
       "id": "qlib-research-backend",
       "owner": "alpha-research",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/alpha-research/pull/3",
+        "https://github.com/runchengxie/alpha-research/pull/4",
+        "https://github.com/runchengxie/alpha-research/pull/5"
+      ],
       "entry_criteria": [
         "framework-neutral dataset and trainer ports wrap the native implementation",
         "signal artifact remains the public result"
@@ -57,7 +68,12 @@
     {
       "id": "backtest-differential",
       "owner": "portfolio-backtester",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/portfolio-backtester/pull/5",
+        "https://github.com/runchengxie/portfolio-backtester/pull/6",
+        "https://github.com/runchengxie/portfolio-backtester/pull/7"
+      ],
       "entry_criteria": [
         "native replay is exposed behind a framework-neutral backend",
         "Top-K construction is represented by composable policies"
@@ -72,7 +88,12 @@
     {
       "id": "strategy-pipeline-thinning",
       "owner": "strategy-pipeline",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/strategy-pipeline/pull/17",
+        "https://github.com/runchengxie/strategy-pipeline/pull/19",
+        "https://github.com/runchengxie/strategy-pipeline/pull/18"
+      ],
       "entry_criteria": [
         "data, alpha, portfolio and execution-boundary owner ports exist",
         "current CLI behavior is covered by fixtures"
@@ -87,7 +108,14 @@
     {
       "id": "vnpy-execution-transport",
       "owner": "quant-execution-engine",
-      "status": "planned",
+      "status": "in_progress",
+      "implementation_prs": [
+        "https://github.com/runchengxie/quant-execution-engine/pull/5",
+        "https://github.com/runchengxie/quant-execution-engine/pull/6",
+        "https://github.com/runchengxie/quant-execution-engine/pull/7",
+        "https://github.com/runchengxie/quant-execution-engine/pull/8",
+        "https://github.com/runchengxie/quant-execution-engine/pull/9"
+      ],
       "entry_criteria": [
         "typed order intent and event contracts exist",
         "durable journal and idempotency are independent of transports",
