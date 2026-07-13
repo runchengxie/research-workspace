@@ -38,10 +38,11 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 26,
-      "max_long_functions": 81,
-      "max_complexity_hotspots": 41,
-      "max_large_classes": 1
+      "max_large_files": 32,
+      "max_long_functions": 91,
+      "max_complexity_hotspots": 45,
+      "max_large_classes": 1,
+      "owner_decision": "2026-07-13 candidate-signal research adds fail-closed offline audit orchestration and scenario coverage. The repo-local >800-file and >100-function ratchets remain unchanged and passed; split the registered research hotspots before promotion or when their variant families expand."
     },
     {
       "repo": "quant-execution-engine",
@@ -190,6 +191,36 @@
       "owner_repo": "strategy-pipeline",
       "reason": "DailyWatch20 minute-cache planning, incremental partition reads, validation, and receipt evidence share one fail-closed publication boundary for the initial scheduled workflow",
       "next_action": "extract cache planning and partition aggregation before adding another minute source or changing the minute-feature schema"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/daily_watch20_ablation.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The research-only ablation runner keeps fold construction, frozen variants, conditional-coverage metrics, and lineage assembly in one auditable workflow after publication and statistics helpers were extracted",
+      "next_action": "split variant evaluation from run orchestration before adding another model family or promoting any ablation result"
+    },
+    {
+      "path": "strategy-pipeline/src/cstree/daily_watch20_oos.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "Watch20 out-of-sample helpers keep next-open label eligibility, frozen Top4/Top20 coverage, and fail-closed tradability semantics together for the research contract",
+      "next_action": "split label-panel construction from portfolio outcome policy before adding a cash/carry execution simulator"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_daily_watch20_ablation.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The fixture-heavy research test covers continuous calendar windows, frozen buckets, conditional labels, source regimes, and strict publication receipts in one end-to-end contract suite",
+      "next_action": "split by window, execution, and publication concerns when the ablation contract next changes"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/a_share_next_open_to_high_minute_audit.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The offline minute audit retains provider-aware session validation, fixed-slot execution, benchmark joins, and evidence summary assembly as one reproducible research entry point after reusable helpers were extracted",
+      "next_action": "split date auditing from summary assembly if the experiment gains another execution policy or is prepared for shadow production"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_next_open_to_high_research.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The research test file exercises daily selection, minute execution, source-session contracts, matched benchmarks, and fail-closed edge cases for one frozen candidate policy",
+      "next_action": "split daily, minute, and benchmark scenarios when the frozen policy is revised"
     },
     {
       "path": "market-data-platform/src/market_data_platform/cli.py",

@@ -832,7 +832,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 101,
-      "python_loc": 25553,
+      "python_loc": 25700,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 12,
@@ -882,13 +882,13 @@
           "hk_related": false
         },
         {
-          "path": "src/cstree/alpha/daily_watch20.py",
-          "loc": 615,
+          "path": "src/cstree/alpha/daily_watch20_features.py",
+          "loc": 641,
           "hk_related": false
         },
         {
-          "path": "src/cstree/alpha/daily_watch20_features.py",
-          "loc": 575,
+          "path": "src/cstree/alpha/daily_watch20.py",
+          "loc": 615,
           "hk_related": false
         },
         {
@@ -1582,24 +1582,39 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 214,
-      "python_loc": 52681,
+      "python_file_count": 231,
+      "python_loc": 58183,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 26,
-        "long_functions": 81,
-        "complexity_hotspots": 41,
+        "large_files": 32,
+        "long_functions": 91,
+        "complexity_hotspots": 45,
         "large_classes": 1
       },
       "large_files": [
+        {
+          "path": "tests/test_next_open_to_high_research.py",
+          "loc": 792,
+          "hk_related": false
+        },
         {
           "path": "src/cstree/pipeline/output_summary_sections.py",
           "loc": 791,
           "hk_related": false
         },
         {
+          "path": "scripts/research/a_share_next_open_to_high_minute_audit.py",
+          "loc": 790,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_cli_research.py",
           "loc": 789,
+          "hk_related": false
+        },
+        {
+          "path": "src/cstree/daily_watch20_ablation.py",
+          "loc": 788,
           "hk_related": false
         },
         {
@@ -1618,11 +1633,6 @@
           "hk_related": false
         },
         {
-          "path": "scripts/research/a_share_next_open_to_high_backtest.py",
-          "loc": 769,
-          "hk_related": false
-        },
-        {
           "path": "src/cstree/release_tools/package_runs.py",
           "loc": 769,
           "hk_related": false
@@ -1638,6 +1648,11 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_daily_watch20_ablation.py",
+          "loc": 757,
+          "hk_related": false
+        },
+        {
           "path": "src/cstree/commands/tune.py",
           "loc": 744,
           "hk_related": false
@@ -1645,6 +1660,11 @@
         {
           "path": "src/cstree/pipeline/config.py",
           "loc": 744,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/a_share_next_open_to_high_backtest.py",
+          "loc": 743,
           "hk_related": false
         },
         {
@@ -1688,33 +1708,13 @@
           "hk_related": false
         },
         {
+          "path": "src/cstree/daily_watch20_oos.py",
+          "loc": 566,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_pipeline_filters_backtest.py",
           "loc": 564,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/liveops/alloc_core.py",
-          "loc": 561,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/style_replica_pipeline.py",
-          "loc": 553,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/panel_load_steps.py",
-          "loc": 551,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/commands/tune_runner.py",
-          "loc": 546,
-          "hk_related": false
-        },
-        {
-          "path": "src/cstree/pipeline/context_builder.py",
-          "loc": 510,
           "hk_related": false
         }
       ],
@@ -2016,9 +2016,9 @@
           "complexity": 17
         },
         {
-          "path": "src/cstree/liveops/export_targets.py",
-          "name": "_target_entries",
-          "line_count": 67,
+          "path": "src/cstree/daily_watch20_ablation_publish.py",
+          "name": "_json_ready",
+          "line_count": 22,
           "complexity": 17
         }
       ],
@@ -2148,7 +2148,14 @@
         "scripts/internal/freeze_hk_research_outputs.py",
         "scripts/internal/package_repo.sh",
         "scripts/research/a_share_next_high_explore.py",
-        "scripts/research/a_share_next_open_to_high_backtest.py"
+        "scripts/research/a_share_next_open_to_high_backtest.py",
+        "scripts/research/a_share_next_open_to_high_common.py",
+        "scripts/research/a_share_next_open_to_high_cost_stress.py",
+        "scripts/research/a_share_next_open_to_high_daily_benchmark.py",
+        "scripts/research/a_share_next_open_to_high_minute_audit.py",
+        "scripts/research/a_share_next_open_to_high_minute_benchmark.py",
+        "scripts/research/a_share_next_open_to_high_minute_execution.py",
+        "scripts/research/a_share_next_open_to_high_reporting.py"
       ]
     },
     {
