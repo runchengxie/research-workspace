@@ -40,6 +40,9 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.ty.src]
 include = [
+  "scripts/framework_adapter_evidence.py",
+  "scripts/framework_adapter_execution_evidence.py",
+  "scripts/framework_adapter_release_gate.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",
   "scripts/scan_workspace_secrets.py",
@@ -64,6 +67,9 @@ exclude = [
 
 [tool.basedpyright]
 include = [
+  "scripts/framework_adapter_evidence.py",
+  "scripts/framework_adapter_execution_evidence.py",
+  "scripts/framework_adapter_release_gate.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",
   "scripts/scan_workspace_secrets.py",

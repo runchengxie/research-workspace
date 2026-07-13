@@ -20,6 +20,17 @@
 - [ ] 顶层没有 `.env`、`.env.*`、`artifacts/`、`outputs/`、`data/`、`cache/` 等误提交内容；`.env.example` 只包含非敏感示例。
 - [ ] `python src/research_contracts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --evidence-manifest <json> --pretty` 已运行，并保存所需 readiness 结论。
 
+## Framework adapter release
+
+- [ ] `python scripts/framework_adapter_release_gate.py` 已运行；下游 PR 尚未全部合并时，报告必须明确为 `blocked`，且没有任何 candidate commit 被提前写入 submodule gitlink。
+- [ ] 只有下游 PR 全部合并后，才把 `docs/framework-adapter-release.yml` 中的 `merge_state` 改为 `merged`、另行记录实际 `merged_commit`，并更新对应 submodule 指针；保留 `candidate_commit` 作为 feature tip 审计记录。
+- [ ] 更新指针后，`python scripts/framework_adapter_release_gate.py --strict` 通过；不得用未合并的 feature-branch commit 冒充 release pin。
+- [ ] alpha owner 已通过 `write_backend_comparison_replay_receipt()` 生成可独立验证的 native-vs-Qlib 重放回执。
+- [ ] portfolio owner 已生成覆盖 dates、positions、turnover、cost、PnL 五个维度的 `backtest_differential.v1` 报告；所有差异均 matched 或有明确市场语义解释。
+- [ ] qexec 已生成 `execution_recovery_matrix.v1`，覆盖超时、重复/乱序回报、重启、撤单竞态、重连与 position drift，且 `live_broker_access=false`。
+- [ ] `python scripts/framework_adapter_evidence.py --release-manifest docs/framework-adapter-release.yml --alpha <replay-receipt.json> --backtest <differential.json> --execution <recovery-matrix.json> --output <integration-evidence.json>` 返回 `accepted`；manifest 记录该 envelope 的路径和 SHA-256，且 release ID 与五个 merge commit 绑定一致。
+- [ ] 在未安装 Qlib 和 vn.py 的干净环境中，native workspace smoke、contract smoke 和 paper transport 路径仍通过。
+
 ## 数据约定
 
 - [ ] `DATA_PLATFORM_ROOT` 指向本次验证使用的共享资产根目录。

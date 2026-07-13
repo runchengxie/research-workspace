@@ -1,0 +1,58 @@
+{
+  "schema_version": "framework_adapter_release.v1",
+  "release_id": "framework-adapters-2026-07",
+  "status": "blocked_on_downstream_merge",
+  "evidence_status": "pending",
+  "pin_policy": "after_downstream_merge_only",
+  "integration_evidence": {
+    "path": "docs/evidence/framework-adapters/framework-adapters-2026-07.json",
+    "sha256": null
+  },
+  "components": [
+    {
+      "repository": "market-data-platform",
+      "branch": "feat/qlib-read-adapter",
+      "pr_url": "https://github.com/runchengxie/market-data-platform/pull/7",
+      "baseline_commit": "5ee5139fa4ef07ee82e191c722dec56ad20a9e84",
+      "candidate_commit": "8e35be42577edda5fb05bf0fe576b7f2a617aa1d",
+      "merge_state": "draft",
+      "merged_commit": null
+    },
+    {
+      "repository": "alpha-research",
+      "branch": "refactor/backend-agnostic-governance",
+      "pr_url": "https://github.com/runchengxie/alpha-research/pull/5",
+      "baseline_commit": "f38308da65e5d83cc16d2f84c3c8a4278507cd57",
+      "candidate_commit": "0637fecc3a92b618c20bb8421c8ecd65d7227737",
+      "merge_state": "draft",
+      "merged_commit": null
+    },
+    {
+      "repository": "portfolio-backtester",
+      "branch": "feat/backtest-backends-and-parity",
+      "pr_url": "https://github.com/runchengxie/portfolio-backtester/pull/7",
+      "baseline_commit": "259f485a5cbfa3113ab53d82e219ffed1860e5cb",
+      "candidate_commit": "f388529c0fcbbd471e55c4c5d3f2fd4648031dd6",
+      "merge_state": "draft",
+      "merged_commit": null
+    },
+    {
+      "repository": "strategy-pipeline",
+      "branch": "feat/pure-target-export-v2",
+      "pr_url": "https://github.com/runchengxie/strategy-pipeline/pull/18",
+      "baseline_commit": "2f477367f8786ad3bdf3225217667f2e176c95ec",
+      "candidate_commit": "0196b678c78c4bc874f8ea6f61401af77fb3e9d5",
+      "merge_state": "draft",
+      "merged_commit": null
+    },
+    {
+      "repository": "quant-execution-engine",
+      "branch": "test/recovery-fault-matrix",
+      "pr_url": "https://github.com/runchengxie/quant-execution-engine/pull/9",
+      "baseline_commit": "5bf1314046636a5dc769769e78ceafe86012ddbf",
+      "candidate_commit": "c195c2f24a471e3b041646fa248806d3749adfb2",
+      "merge_state": "draft",
+      "merged_commit": null
+    }
+  ]
+}

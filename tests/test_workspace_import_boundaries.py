@@ -20,6 +20,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
 
     assert report["issues"] == []
     assert {
+        "research-workspace:contracts-no-direct-framework-imports",
         "alpha-research:alpha-to-pipeline",
         "alpha-research:alpha-to-backtesting",
         "alpha-research:alpha-to-strategy-core-metrics",
@@ -36,6 +37,14 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "quant-execution-engine:no-cstree-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
+        "strategy-pipeline:target-contract-no-direct-framework-imports",
+        "market-data-platform:published-contract-no-direct-qlib-imports",
+        "alpha-research:artifact-contract-no-direct-qlib-imports",
+        "alpha-research:signal-contract-no-direct-qlib-imports",
+        "portfolio-backtester:contracts-no-direct-framework-imports",
+        "quant-execution-engine:domain-no-direct-vnpy-imports",
+        "quant-execution-engine:legacy-domain-no-direct-vnpy-imports",
+        "quant-execution-engine:targets-no-direct-vnpy-imports",
         "research-workspace:legacy-hotsector-internal-imports",
     } == {rule["id"] for rule in report["rules"]}
     assert {
@@ -80,6 +89,34 @@ def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path)
     assert report["issues"] == [
         "alpha-to-pipeline: 1 imports exceed budget 0",
         "alpha-to-backtesting: 1 imports exceed budget 0",
+    ]
+
+
+def test_single_file_contract_rule_blocks_optional_framework_import(tmp_path: Path) -> None:
+    contract = tmp_path / "owner" / "src" / "owner" / "contract.py"
+    contract.parent.mkdir(parents=True)
+    contract.write_text("from qlib.data.dataset import DatasetH\n", encoding="utf-8")
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="contract-no-framework",
+            description="test",
+            repo="owner",
+            source="src/owner/contract.py",
+            forbidden=("qlib",),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules, ())
+
+    assert report["issues"] == ["contract-no-framework: 1 imports exceed budget 0"]
+    assert report["rules"][0]["findings"] == [
+        {
+            "path": "owner/src/owner/contract.py",
+            "line": 1,
+            "module": "qlib.data.dataset",
+            "matched": "qlib",
+        }
     ]
 
 
