@@ -1,0 +1,253 @@
+{
+  "schema_version": "a_share_candidate_signal_audit.v1",
+  "generated_at": "2026-07-13T11:36:33Z",
+  "status": "research_only",
+  "markets": [
+    "SH",
+    "SZ"
+  ],
+  "production_decision": {
+    "action": "retain_production_defaults",
+    "automatic_promotion_allowed": false,
+    "production_default_changed": false,
+    "summary": "The three probes identify research candidates, not validated executable alpha."
+  },
+  "candidates": {
+    "next_open_to_high": {
+      "verdict": "freeze_for_forward_shadow_only",
+      "contract": {
+        "signal_time": "T close",
+        "entry": "T+1 completed 09:31 minute-bar close",
+        "exit": "TP8 after a later strict minute-high cross, otherwise same-day close mark",
+        "selection": "fixed Top20; unavailable slots remain cash; no after-open replacement",
+        "default_all_in_drag_bps": 22.0
+      },
+      "sample": {
+        "signal_days": 122,
+        "fixed_slots": 2440,
+        "audited_slots": 2329,
+        "daily_signal_unfilled_slots": 96,
+        "minute_entry_blocked_slots": 15
+      },
+      "metrics": {
+        "net_return_mean_per_day": 0.005903437061643416,
+        "net_return_hac_t_lag5": 3.3231609016646075,
+        "net_total_return": 0.9992774059809533,
+        "tp8_cross_rate": 0.2640618291112065,
+        "limit_band_matched_active_mean_per_day": 0.007476709657206451,
+        "limit_band_matched_active_hac_t_lag5": 5.053560016345636,
+        "return_mean_at_50bps": 0.003238343976752672,
+        "return_hac_t_at_50bps": 1.8124398223812608,
+        "return_mean_at_100bps": -0.0015341970068538822
+      },
+      "hard_limitations": [
+        "The test window and TP8/Top20 policy have already been inspected; this is not an untouched holdout.",
+        "About 72 percent of audited selections are in the 20 percent signal-day price-limit band.",
+        "The primary benchmark matches entry path, invested weight, and price-limit band, but not industry, size, volatility, liquidity, or momentum.",
+        "The 09:31 close entry, bar-high TP fill, and 83 close exits marked at down limit are execution upper bounds.",
+        "Capacity, queue position, market impact, and multi-day carry after an unexecutable exit are not simulated."
+      ],
+      "artifact": {
+        "daily_summary": "/home/richard/code/research-workspace/strategy-pipeline/artifacts/reports/a_share_next_oth_signal_only_shsz_v3_20260713/summary.json",
+        "daily_summary_sha256": "130ea46ab630ab496b500dacbaf5addcdeb13d8233372677ea559e554f8b0305",
+        "minute_summary": "/home/richard/code/research-workspace/strategy-pipeline/artifacts/reports/a_share_next_oth_signal_only_shsz_minute_v3_20260713/summary.json",
+        "minute_summary_sha256": "98100bdb1a88615c627730e0dc71caafc1968a6a9ed0b3786523c7de5d470f4a"
+      }
+    },
+    "minute_volume_activity5": {
+      "verdict": "retain_as_incremental_rank_candidate",
+      "contract": {
+        "signal_time": "T close after complete minute data",
+        "label": "T+1 market open to T+2 market open",
+        "calendar": "explicit market-calendar lookup; no per-symbol suspension skipping",
+        "walk_forward": "80 train dates, 1 purged date, 10 test dates",
+        "portfolio_policy": "rebalance_3d_turnover_cap_0_30",
+        "primary_cost_bps": 30.0
+      },
+      "sample": {
+        "oos_days": 101,
+        "universe": "static Top200, not point-in-time",
+        "complete_top20_days": 101,
+        "universe_active_return_incomplete_days": 7,
+        "entry_block_attempts": 6,
+        "exit_block_attempts": 6
+      },
+      "metrics": {
+        "baseline_mean_rank_ic": 0.026416267418664204,
+        "volume_mean_rank_ic": 0.047411136434903085,
+        "paired_rank_ic_delta": 0.02099486901623887,
+        "paired_rank_ic_delta_hac_t": 3.6854092729693364,
+        "paired_net_return_delta_per_day": 0.0006611275890407908,
+        "paired_net_return_delta_hac_t": 0.6948902738427075,
+        "recent_20d_rank_ic_delta": -0.003921,
+        "recent_40d_rank_ic_delta": 0.009678
+      },
+      "hard_limitations": [
+        "The five volume features were selected on overlapping history, so this is not an untouched factor holdout.",
+        "The static Top200 universe is not point-in-time.",
+        "Blocked orders are audited but the target-fill return remains an execution upper bound.",
+        "Incremental net return is not statistically significant and recent short-window IC is unstable.",
+        "Missing future rows make full-universe active-return inference fail closed."
+      ],
+      "artifact": {
+        "summary": "/home/richard/code/market-intel/artifacts/a_share_minute_volume_oos_audit/summary.json",
+        "summary_sha256": "1a2feff1a378c9f70944e45307184af89f873a3e24679300a0d70fbd9539d1b7"
+      }
+    },
+    "watch20_minute_hermite_lag": {
+      "verdict": "retain_lag0_do_not_add_hermite_to_xgb_no_guard_change",
+      "contract": {
+        "evaluation_dates": 252,
+        "evaluation_start": "2025-06-19",
+        "evaluation_end": "2026-07-02",
+        "train_window_dates": 504,
+        "rolling_folds": 3,
+        "refit_semantics": "three approximately 84-evaluation-day research refits, not monthly production validation",
+        "label_profile": "next-open 1d/3d/5d blend with 50/30/20 weights",
+        "ic_semantics": "conditional on finite future labels with explicit daily coverage",
+        "top_bucket_semantics": "freeze T-day Top4/Top20; any selected missing label makes the day unavailable"
+      },
+      "coverage": {
+        "finite_label_rows": 966289,
+        "candidate_rows": 1007086,
+        "finite_label_ratio": 0.95949,
+        "finite_ic_days": 243,
+        "total_ic_days": 252,
+        "zero_coverage_signal_dates": 9,
+        "production_top20_complete_dates": 235,
+        "production_tradability_pass_dates": 245,
+        "production_blocked_gross_weight": 3.65
+      },
+      "minute_lag0_vs_daily_only": {
+        "mean_ic_delta": 0.011942,
+        "hac_t": 3.785727,
+        "holm_p_value": 0.00046,
+        "window_ic_deltas": [
+          0.020607,
+          0.0117,
+          0.007288,
+          0.007543
+        ],
+        "decision": "Minute lag0 features have repeatable conditional rank evidence and remain candidates for validation."
+      },
+      "minute_lag1_vs_lag0": {
+        "mean_ic_delta": -0.002851,
+        "hac_t": -1.249579,
+        "holm_p_value": 0.211453,
+        "window_ic_deltas": [
+          -0.006818,
+          -0.001978,
+          -0.001112,
+          -0.001269
+        ],
+        "decision": "There is no evidence that lag1 improves on lag0."
+      },
+      "hermite_in_xgb_vs_lag0": {
+        "mean_ic_delta": -0.008132,
+        "hac_t": -3.558533,
+        "holm_p_value": 0.000746,
+        "window_ic_deltas": [
+          -0.014396,
+          -0.002557,
+          -0.010025,
+          -0.005119
+        ],
+        "decision": "Do not add Hermite stability to XGB."
+      },
+      "hermite_b_guard_off_minus_on": {
+        "mean_names_changed": 2.825397,
+        "mean_net_return_delta_per_day": -0.00005933,
+        "hac_t": -0.597678,
+        "p_value": 0.550055,
+        "window_directions": [
+          "negative",
+          "negative",
+          "negative",
+          "positive"
+        ],
+        "decision": "The guard effect is not significant; retain the existing guard pending better execution and PIT data."
+      },
+      "source_regimes": {
+        "guan_annual_days": 134,
+        "tushare_full_day_days": 85,
+        "guan_deal_days": 33,
+        "effective_transitions": 4,
+        "hermite_120d_source_homogeneous_ratio": 0.5317,
+        "limitation": "lag timing is confounded with provider regime; minute_active_ratio requires a fixed 241-bar denominator or removal"
+      },
+      "hard_limitations": [
+        "All aggregate return means fail closed because future label/tradability gaps remain.",
+        "Conditional IC is rank evidence, not an execution backtest.",
+        "Blocked trades are audited without cash/carry position simulation.",
+        "Industry classification is current/static rather than point-in-time.",
+        "Provider regime changes confound lag attribution.",
+        "The evaluation axis is validated against trade_cal for this artifact, but the general feature builder still derives horizons from the daily frame."
+      ],
+      "artifact": {
+        "latest": "/home/richard/data/market-data-platform/strategy_outputs/watchlist20/research/ablations/latest",
+        "resolved_run": "/home/richard/data/market-data-platform/strategy_outputs/watchlist20/research/ablations/runs/20260710_20260713T112507Z_2a7a54e3_corrected_corrected",
+        "metrics_csv_sha256": "385945cbbd0177b7927be28d265c0e2a0e8c2d93ef82c79664266469b7a36516",
+        "metrics_json_sha256": "0d29753de3c6419309879e54f79a1787df618ad851ce5d8702b69fab71f3a921",
+        "window_metrics_csv_sha256": "b66c2205990ab83ef5442b74a6d8be46a66363c489ad2b3f281207b0791ec0e0",
+        "window_metrics_json_sha256": "9cf9f4a433a033ee4f99fb201322784102171213d56ca809157bf02a7d5e789a",
+        "decision_sha256": "96886bdf576f08c1119e74b0c82f0a3d5df3c7344e4c94a77e136ad8fd8c5245",
+        "postprocess_receipt_sha256": "1318d055a8cdea5cdbe9f95ab69a0bb6e2baa64486995c3bdf085819ebb9cf32"
+      }
+    }
+  },
+  "known_data_gaps": [
+    {
+      "dates": [
+        "2026-06-23",
+        "2026-06-24",
+        "2026-06-25",
+        "2026-06-26"
+      ],
+      "field": "raw up_limit/down_limit",
+      "scope": "full SH/SZ daily-clean input",
+      "effect": "Nine mature Watch20 signal dates have zero future-label coverage; next-open fixed slots fail closed on affected entry dates.",
+      "disposition": "Do not derive limits heuristically; backfill the authoritative limit-status source and rebuild daily clean in a separate data transaction."
+    }
+  ],
+  "quality_gates": {
+    "market_intel": {
+      "tests": "257 passed",
+      "ruff": "passed",
+      "format": "passed",
+      "ty": "passed",
+      "basedpyright": "passed",
+      "cli_help_check": "passed"
+    },
+    "alpha_research": {
+      "tests": "207 passed",
+      "ruff": "passed",
+      "format": "passed",
+      "ty": "passed",
+      "basedpyright": "passed"
+    },
+    "strategy_pipeline": {
+      "tests": "660 passed, 1 skipped",
+      "ruff": "passed",
+      "format": "passed",
+      "ty": "passed",
+      "basedpyright": "passed",
+      "maintainability": "passed: functions_over_100=38/38, files_over_800=0"
+    },
+    "research_workspace": {
+      "tests": "107 passed",
+      "ruff": "passed",
+      "format": "passed",
+      "ty": "passed",
+      "basedpyright": "passed: 0 errors, 0 warnings, 0 notes",
+      "workspace_doctor": "passed: 0 errors, 2 pre-existing warnings",
+      "governance": "passed: registered candidate-research hotspots; tight baseline budgets"
+    }
+  },
+  "local_commits": {
+    "market_intel": "fee56d85d4c114e7b7e48e49340579c8f0af5765",
+    "alpha_research": "3f4eca29cc78f47395e5cc05ad4824d9cce35f3e",
+    "strategy_next_open": "ae9c66cb905bb8d2fb49512d6a5f5b269b2b1952",
+    "strategy_watch20": "0db88fe6a05af9123cb48ae9af2df2bfdf27e1b7"
+  },
+  "push_performed": false
+}
