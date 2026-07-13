@@ -39,6 +39,9 @@ contracts 和 shared helpers 组合使用。`cstree` 是 research-workspace 核�
 
 ## 治理入口
 
+- 框架集成决策：[docs/adr/0001-framework-integration-boundaries.md](docs/adr/0001-framework-integration-boundaries.md)
+- 框架采用评估：[docs/framework-adoption-assessment.md](docs/framework-adoption-assessment.md)
+- 框架迁移账本：[docs/framework-integration-ledger.yml](docs/framework-integration-ledger.yml)
 - 废弃入口：[docs/deprecations.md](docs/deprecations.md)
 - 港股公开拆分：[docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml)
 - 脚本生命周期：[docs/script-lifecycle.yml](docs/script-lifecycle.yml)
@@ -46,3 +49,10 @@ contracts 和 shared helpers 组合使用。`cstree` 是 research-workspace 核�
 - 重构路线图：[docs/maintainability-refactor-roadmap.yml](docs/maintainability-refactor-roadmap.yml)
 - 当前文件约定：[docs/contracts.md](docs/contracts.md)
 - 拆分收敛清单：[docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md)
+
+## 外部框架边界
+
+- Qlib 只作为可选研究和差分回测后端，不拥有数据资产、PIT 语义或跨仓库 artifact。
+- vn.py 只作为可选执行 transport、Gateway 和 OMS bridge；执行审批、幂等、持久证据和对账继续由 `quant-execution-engine` 拥有。
+- LEAN 只作为领域对象和 golden-reference 参照，不进入当前 Python 主运行时。
+- 第三方框架对象不得跨 repository contract。适配器必须把输入和输出转换为本工作区的稳定类型或文件产物。

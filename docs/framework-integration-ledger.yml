@@ -1,0 +1,105 @@
+{
+  "schema_version": "framework_integration_ledger.v1",
+  "decision": "docs/adr/0001-framework-integration-boundaries.md",
+  "policy": {
+    "native_default_until_parity": true,
+    "optional_framework_dependencies": ["qlib", "vnpy"],
+    "forbidden_contract_types": ["qlib.*", "vnpy.*", "QuantConnect.*"],
+    "submodule_pin_after_downstream_merge": true
+  },
+  "workstreams": [
+    {
+      "id": "artifact-envelope-v2",
+      "owner": "research-workspace",
+      "status": "planned",
+      "entry_criteria": [
+        "v1 artifacts and readers have committed fixtures",
+        "field ownership is agreed by producer and consumer repositories"
+      ],
+      "exit_criteria": [
+        "v1 fixtures remain readable",
+        "v2 provenance timestamps are timezone-aware",
+        "lineage and configuration hashes are validated",
+        "targets carry validity, scope, policy and idempotency metadata"
+      ],
+      "rollback": "disable v2 writers and continue reading and writing the pinned v1 contracts"
+    },
+    {
+      "id": "qlib-data-adapter",
+      "owner": "market-data-platform",
+      "status": "planned",
+      "entry_criteria": [
+        "published asset manifest has a stable read-only owner API",
+        "synthetic PIT universe and calendar fixtures exist"
+      ],
+      "exit_criteria": [
+        "Qlib is an optional extra",
+        "native publication imports no Qlib module",
+        "native and adapter frames match on deterministic fixtures"
+      ],
+      "rollback": "remove or disable the adapter extra; published assets and current pointers remain unchanged"
+    },
+    {
+      "id": "qlib-research-backend",
+      "owner": "alpha-research",
+      "status": "planned",
+      "entry_criteria": [
+        "framework-neutral dataset and trainer ports wrap the native implementation",
+        "signal artifact remains the public result"
+      ],
+      "exit_criteria": [
+        "raw, infer and learn semantics have deterministic parity evidence",
+        "PIT and leakage checks run before both backends",
+        "promotion can be reproduced without a live Qlib runtime"
+      ],
+      "rollback": "select the native backend and keep Qlib-produced artifacts readable through canonical schemas"
+    },
+    {
+      "id": "backtest-differential",
+      "owner": "portfolio-backtester",
+      "status": "planned",
+      "entry_criteria": [
+        "native replay is exposed behind a framework-neutral backend",
+        "Top-K construction is represented by composable policies"
+      ],
+      "exit_criteria": [
+        "date, position, turnover, cost and PnL differences are classified",
+        "A-share rule differences are protected by native golden tests",
+        "LEAN scenarios use only framework-neutral files"
+      ],
+      "rollback": "disable comparison backends and retain native A-share replay as canonical"
+    },
+    {
+      "id": "strategy-pipeline-thinning",
+      "owner": "strategy-pipeline",
+      "status": "planned",
+      "entry_criteria": [
+        "data, alpha, portfolio and execution-boundary owner ports exist",
+        "current CLI behavior is covered by fixtures"
+      ],
+      "exit_criteria": [
+        "pipeline contains no model fitting, PIT joins, portfolio algorithms or broker logic",
+        "compatibility facades name an owner API and removal release",
+        "target export is pure and deterministic"
+      ],
+      "rollback": "route owner ports to native compatibility adapters for the documented support window"
+    },
+    {
+      "id": "vnpy-execution-transport",
+      "owner": "quant-execution-engine",
+      "status": "planned",
+      "entry_criteria": [
+        "typed order intent and event contracts exist",
+        "durable journal and idempotency are independent of transports",
+        "a common transport conformance suite covers paper execution"
+      ],
+      "exit_criteria": [
+        "vn.py is an optional extra",
+        "shadow mode cannot send live orders",
+        "duplicate and out-of-order callbacks are harmless",
+        "restart and reconciliation evidence is deterministic"
+      ],
+      "rollback": "disable the vn.py transport and replay qexec journal through the native paper transport"
+    }
+  ]
+}
