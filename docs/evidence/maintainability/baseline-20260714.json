@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 65,
-      "python_loc": 14324,
+      "python_file_count": 66,
+      "python_loc": 14322,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -844,8 +844,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 106,
-      "python_loc": 26361,
+      "python_file_count": 107,
+      "python_loc": 26421,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 12,
@@ -1218,8 +1218,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 88,
-      "python_loc": 26485,
+      "python_file_count": 89,
+      "python_loc": 26545,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1624,8 +1624,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 234,
-      "python_loc": 59494,
+      "python_file_count": 235,
+      "python_loc": 59557,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 34,
@@ -2206,8 +2206,8 @@
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 88,
-      "python_loc": 26934,
+      "python_file_count": 89,
+      "python_loc": 26996,
       "hk_related_file_count": 12,
       "hotspot_counts": {
         "large_files": 14,

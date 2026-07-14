@@ -109,9 +109,6 @@
         "release_typecheck": [
           ["uv", "run", "--group", "dev", "python", "-m", "basedpyright"]
         ],
-        "mypy_advisory": [
-          ["uv", "run", "--group", "dev", "mypy", "src"]
-        ],
         "full": ["@smoke", "@lint", "@type", "@test"]
       }
     }
