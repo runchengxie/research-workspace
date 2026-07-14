@@ -50,8 +50,8 @@ python scripts/print_version_matrix.py
 - 是否涉及实盘；实盘状态只能按人工监督下的真实结果填写。
 - 子模块是否存在未提交改动；如存在，请标为本地工作状态，发布前先清理或提交。
 
-## Owner-native namespace 候选组合
+## Owner-native namespace 已合并组合
 
 | 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |
 | --- | --- | --- | --- | --- | --- |
-| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `24d4458` / 1.1.0 | 已验证候选：三个下游 namespace jobs 通过；真实五仓源码组合的 canonical/compatibility imports、完整 workspace import boundary、CLI parser、环境变量 fallback 和 compileall 通过；strategy lockfile 已与两个 0.2.0 owner package 对齐。合并后仍需刷新可能变化的 merge SHA | `docs/owner-native-namespace-release.json`、`docs/evidence/owner-native-namespace-integration-20260714.json`、ADR-0002、PR #6/#8/#20 |
+| 2026-07-14 | `a5cfede` / 0.2.0 | `329f1fa` / 0.2.0 | `d0eb474` / 1.1.0 | 已合并并验证：实现全部位于 owner-native package；活跃 smoke、文档、runtime module 和 canonical CLI 已切换到 owner 入口；`cstree` 仅由 strategy 在 1.x 提供限期兼容 facade。alpha 215、portfolio 197、strategy 735（另 1 skipped）项测试通过，workspace 边界、hard quality 与 doctor 通过 | `docs/owner-native-namespace-release.json`、`docs/evidence/owner-native-namespace-integration-20260714.json`、ADR-0002、PR #6/#8/#20 |

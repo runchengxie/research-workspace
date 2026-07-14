@@ -19,7 +19,7 @@ class DataTransitionPlaybookTest(unittest.TestCase):
             "marketdata migration freeze-hk",
             "marketdata migration hydrate-hk",
             "marketdata tushare validate-a-share-daily-clean",
-            "cstree run --config default_next",
+            "strategy run --config default_next",
             "qexec rebalance",
             "FX_CNY_USD",
         ]

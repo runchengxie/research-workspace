@@ -47,7 +47,7 @@
 - [ ] 如港股已冻结，`marketdata migration freeze-hk ... --json` 清单、freeze marker 和冷存储 manifest 已保留。
 - [ ] 如推进 A 股 baseline，`marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>` 已通过并保留报告，或质量缺口已记录。
 - [ ] 如推进 A 股 baseline，`baseline_reproducible` 已通过，或缺失 evidence 已逐项记录。
-- [ ] 如推进 A 股研究，`cstree run --config default` 已产出 `summary.json`、`config.used.yml` 和持仓文件；`default_next` 兼容别名也保持可用。
+- [ ] 如推进 A 股研究，`strategy run --config default` 已产出 `summary.json`、`config.used.yml` 和持仓文件；`default_next` 兼容别名也保持可用。
 - [ ] 如推进研究抽象收敛，run 已产出或明确跳过 `signals.parquet`，`summary.json` 包含 `dataset.lifecycle`、`signals`、`model_detail` 和 strategy lineage。
 - [ ] 描述完整 PIT 研究能力前，`complete_pit_research_data` 已通过。
 - [ ] 描述生产级策略证据前，`production_strategy_evidence` 已通过。
@@ -57,7 +57,7 @@
 
 - [ ] `strategy-pipeline` 已在子项目内完成相关研究、测试或人工验证。
 - [ ] `positions_current*.csv` / 已保存持仓的来源明确。
-- [ ] `cstree export-targets` 已生成标准格式的 `targets.json`。
+- [ ] `strategy export-targets` 已生成标准格式的 `targets.json`。
 - [ ] `targets.json.lineage.json` 已保留，并包含运行编号、输入、配置和数据资产来源信息。
 - [ ] 导出的目标只做多，且权重、敞口、日期口径符合执行侧要求。
 

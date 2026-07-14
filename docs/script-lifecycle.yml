@@ -138,6 +138,16 @@
       "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
     },
     {
+      "path": "scripts/namespace_contracts.py",
+      "owner": "research-workspace",
+      "purpose": "Owner-native Python namespace release-manifest and submodule pin validation",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "git checkout with initialized alpha-research, portfolio-backtester, and strategy-pipeline submodules",
+      "removal_condition": "remove only after the owner-native namespace migration release gate moves to a versioned successor and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "scripts/path_b_production.py",
       "owner": "research-workspace",
       "purpose": "Legacy Path B experiment script; not part of the hotsector daily handoff",
@@ -198,6 +208,16 @@
       "removal_condition": "remove only after alpha-research maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
     },
     {
+      "path": "alpha-research/scripts/dev/namespace_boundary.py",
+      "owner": "alpha-research",
+      "purpose": "Alpha package ownership and forbidden legacy namespace boundary gate",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "alpha-research source checkout",
+      "removal_condition": "remove only after owner-native alpha package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
+    },
+    {
       "path": "alpha-research/scripts/dev/run_tests.sh",
       "owner": "alpha-research",
       "purpose": "Alpha research repo-local test, lint, typecheck, format, and maintainability dispatcher",
@@ -216,6 +236,16 @@
       "writes_files": "stdout only",
       "external_dependencies": "git checkout",
       "removal_condition": "remove only after portfolio-backtester maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/namespace_boundary.py",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio package ownership and forbidden legacy namespace boundary gate",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "portfolio-backtester source checkout",
+      "removal_condition": "remove only after owner-native portfolio package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
     },
     {
       "path": "portfolio-backtester/scripts/dev/run_tests.sh",

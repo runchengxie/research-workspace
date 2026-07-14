@@ -8,28 +8,28 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "e24fce61845061705e44c0445001bc4b9a7226e5",
+      "commit": "a5cfedea34f163553b24c929e113384f9a42c182",
       "legacy_source_tree_allowed": false,
       "pr": 6,
       "version": "0.2.0"
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "426083f2e988f1e5003e19df28ebda8dafb3324b",
+      "commit": "329f1fa2e47d8cb1e4ef4156cee03b45448a1d06",
       "legacy_source_tree_allowed": false,
       "pr": 8,
       "version": "0.2.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "24d4458d40444fe4e55e831c53a21fc8a61db786",
+      "commit": "d0eb4742a9b48d36fb7b0df9cc6c836f4232c6ab",
       "compatibility_package_allowed": true,
       "pr": 20,
       "version": "1.1.0"
     }
   },
   "schema": "owner_native_namespace_release.v1",
-  "status": "validated-candidate",
+  "status": "merged-main-validated",
   "validation": {
     "alpha_namespace_job": 29306434651,
     "portfolio_namespace_job": 29306440619,
@@ -38,6 +38,7 @@
     "strategy_migration_job": 29306199840,
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
-    "workspace_source_artifact_integration": "passed-2026-07-14"
+    "workspace_source_artifact_integration": "passed-2026-07-14",
+    "final_main_local_validation": "passed-2026-07-14"
   }
 }

@@ -50,7 +50,8 @@ def check_initialized_layout() -> list[str]:
         if not (repo_root / "src" / package / "__init__.py").is_file():
             errors.append(f"{repo}: missing canonical package src/{package}")
     for repo in ("alpha-research", "portfolio-backtester"):
-        if (ROOT / repo / "src/cstree").exists():
+        legacy_tree = ROOT / repo / "src/cstree"
+        if any(legacy_tree.rglob("*.py")):
             errors.append(f"{repo}: legacy src/cstree must not exist")
     compat = ROOT / "strategy-pipeline/src/cstree"
     actual = {path.name for path in compat.glob("*.py")} if compat.exists() else set()

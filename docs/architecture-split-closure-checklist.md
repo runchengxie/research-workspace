@@ -17,9 +17,11 @@
 
 ## 二、落地目标（你这次强调的四条风险对齐）
 
-1. 短期兼容，长期解耦 `cstree` 命名空间
-   - 短期保留共享 `cstree` facade（便于现有 CLI 与历史入口连续性）。
-   - 长期通过 owner API 与文档契约，把 `alpha-research` 与 `portfolio-backtester` 的稳定入口作为显式主入口引用。
+1. owner-native namespace 已落地，兼容面限期退出
+   - `alpha-research`、`portfolio-backtester` 和 `strategy-pipeline` 已各自独占
+     `alpha_research.*`、`portfolio_backtester.*` 和 `strategy_pipeline.*` namespace。
+   - `strategy-pipeline` 在 1.x 中单独保留 `cstree` facade 与 CLI alias；它不再是多个
+     distribution 共同贡献的共享 namespace，权威 CLI 是 `strategy`。
 
 2. 所有关键交接都走 artifact contract
    - `alpha-research` 仅输出信号与诊断契约化产物。
@@ -32,7 +34,7 @@
 
 4. 执行与回测严格分离
    - `quant-execution-engine` 只消费 `targets.json`。
-   - `cstree export-targets` 不触发下单、不会做券商预演。
+   - `strategy export-targets` 不触发下单、不会做券商预演。
 
 ## 三、硬性验收项（建议按版本组合发布前逐项打勾）
 
@@ -50,8 +52,8 @@
 
 - 按 ADR-0001 以 adapter 方式接入 Qlib 和 vn.py；LEAN 仅通过 framework-neutral scenario 做对照。
 - native 通用实现只在 parity evidence、兼容窗口和回滚证据齐全后删除。
-- 为长期治理保留明确的 owner API（例如通过 `alpha-research` 与 `portfolio-backtester` 入口）
-  并将 `cstree` 兼容面控制为外部 facade 和兼容出口。
+- 为长期治理保留明确的 owner API（例如通过 `alpha-research` 与 `portfolio-backtester` 入口），
+  并将由 `strategy-pipeline` 单独持有的 `cstree` 兼容面控制为外部 facade 和兼容出口。
 - 将研究流程按因子挖掘、组合构建、风控容量、执行交接这条链路逐步沉淀为固定 sidecar。
 - 对每类新增功能，优先补 `contracts` + `tests`，再补 `strategy-pipeline` 编排与 `workspace-import-boundary` 例外。
 

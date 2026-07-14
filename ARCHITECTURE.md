@@ -24,10 +24,11 @@ quant-execution-engine
 ```
 
 `alpha-research` 承载 alpha 研究模块（`alpha_research.*`），`portfolio-backtester` 承载
-组合回测模块（`portfolio_backtester.*`）。当前是阶段 3 过渡态：代码已经物理拆成子模块，
-但运行时仍通过同一个 `cstree` namespace 与 `strategy-pipeline` 中的 pipeline、
-contracts 和 shared helpers 组合使用。`cstree` 是 research-workspace 核心框架的历史名称
-（源自 cross-sectional-trees），现已演化为通用的策略研究管线，不再特指某一种策略。
+组合回测模块（`portfolio_backtester.*`），`strategy-pipeline` 承载编排模块
+（`strategy_pipeline.*`）。三个 distribution 已各自独占 owner-native namespace，不再通过共享
+`cstree` namespace 或 `pkgutil.extend_path` 拼装运行时。`strategy-pipeline` 在 1.x 中单独保留
+`cstree` Python facade 与 CLI alias 作为限期兼容面；权威命令是 `strategy`，兼容面按
+[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md) 计划在 workspace 2.0 删除。
 
 ## 代码边界
 

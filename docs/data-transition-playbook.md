@@ -56,7 +56,7 @@ readiness 报告不会下载数据、跑训练或连接券商。当前已发布�
 生产策略 evidence 至少包含全 A 等权 benchmark、可获得时的指数族 cohort、feature evidence、
 最终 OOS 或书面替代说明、CPCV、turnover/cost、capacity 和压力窗口复核。候选不优于要求
 benchmark 时，不能描述成生产级策略。
-capacity evidence 由 `strategy-pipeline` 的 `cstree capacity-report` 基于日线 pricing
+capacity evidence 由 `strategy-pipeline` 的 `strategy capacity-report` 基于日线 pricing
 panel 和 `positions_by_rebalance.csv` 生成；顶层 readiness 仍要求 `turnover_cost_report` 和
 `capacity_report` 同时通过。
 
@@ -79,7 +79,7 @@ portfolio-backtester
   消费信号和行情，产出回测、capacity、positions_current*.csv
 strategy-pipeline
   编排研究流程，产出 summary.json、config.used.yml
-  通过 cstree export-targets 生成 targets.json 和 targets.json.lineage.json
+  通过 strategy export-targets 生成 targets.json 和 targets.json.lineage.json
 quant-execution-engine
   读取 targets.json，完成 CN local dry-run 证据
 ```
@@ -180,13 +180,13 @@ marketdata registry build \
 
 ```bash
 cd strategy-pipeline
-cstree run --config default
+strategy run --config default
 ```
 
 `default_next` 仍可作为同一 A 股 preset 的兼容别名使用：
 
 ```bash
-cstree run --config default_next
+strategy run --config default_next
 ```
 
 通过后检查 run 产物里的 `config.used.yml`，至少应能看到：
@@ -200,7 +200,7 @@ cstree run --config default_next
 
 ## 4. 执行 dry-run 证据
 
-`cstree export-targets` 能导出 A 股 `targets.json` 只说明研究到执行文件契约可交接。进入执行 dry-run 前必须显式配置 CNY 到 USD 汇率；缺失汇率时执行侧应阻断。
+`strategy export-targets` 能导出 A 股 `targets.json` 只说明研究到执行文件契约可交接。进入执行 dry-run 前必须显式配置 CNY 到 USD 汇率；缺失汇率时执行侧应阻断。
 
 ```bash
 export FX_CNY_USD=<rate>

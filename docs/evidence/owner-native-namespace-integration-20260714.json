@@ -1,13 +1,20 @@
 {
   "date": "2026-07-14",
-  "inputs": {
+  "candidate_inputs": {
     "alpha-research": "e24fce61845061705e44c0445001bc4b9a7226e5",
     "market-data-platform": "f84d5bf83668acd174c7bbf5e3ea8e489aff72eb",
     "portfolio-backtester": "426083f2e988f1e5003e19df28ebda8dafb3324b",
     "quant-execution-engine": "ae20db3da07c1de42dc6ebb3b1f431fd84d1419a",
     "strategy-pipeline": "24d4458d40444fe4e55e831c53a21fc8a61db786"
   },
-  "method": "GitHub Actions source snapshots assembled into one isolated local workspace, followed by an isolated lockfile-only strategy validation",
+  "inputs": {
+    "alpha-research": "a5cfedea34f163553b24c929e113384f9a42c182",
+    "market-data-platform": "1769edbb7e45f7563188e982d53533cb952b4689",
+    "portfolio-backtester": "329f1fa2e47d8cb1e4ef4156cee03b45448a1d06",
+    "quant-execution-engine": "066f7b4131a06246bf1b8aa7850187e040f7495d",
+    "strategy-pipeline": "d0eb4742a9b48d36fb7b0df9cc6c836f4232c6ab"
+  },
+  "method": "Candidate source snapshots were validated in GitHub Actions, then the final merged main commits were checked out as real submodules and validated locally as one workspace",
   "results": {
     "alpha_lockfile": "public-PyPI uv lock --check passed without changes",
     "alpha_namespace_tests": "2 passed",
@@ -22,6 +29,16 @@
     "environment_alias": "CSTREE_ARTIFACTS_ROOT -> STRATEGY_PIPELINE_ARTIFACTS_ROOT passed with deprecation warning",
     "portfolio_lockfile": "public-PyPI uv lock --check passed without changes",
     "portfolio_namespace_tests": "2 passed",
+    "final_main_full_tests": {
+      "alpha-research": "215 passed",
+      "market-data-platform": "500 passed, 1 skipped",
+      "portfolio-backtester": "197 passed",
+      "strategy-pipeline": "735 passed, 1 skipped"
+    },
+    "final_main_submodule_smoke": "passed for all five active submodules using canonical commands and imports",
+    "final_main_workspace_hard_quality": "passed",
+    "final_main_workspace_tests": "130 passed",
+    "final_main_workspace_doctor": "errors=0",
     "shared_namespace_layout": "alpha and portfolio have no src/cstree; strategy facade contains only __init__.py and __main__.py",
     "strategy_lockfile": "path dependency package versions aligned to alpha-research 0.2.0 and portfolio-backtester 0.2.0 in Actions run 29307638113",
     "strategy_namespace_tests": "5 passed",
@@ -30,9 +47,9 @@
   },
   "schema": "owner_native_namespace_integration_evidence.v1",
   "source_snapshot_strategy_commit": "5509966fbd284271d21cc06cace68f828278d22c",
-  "status": "passed",
+  "status": "passed-final-main",
   "validation_limits": {
     "full_uv_install_ci": "not run because WORKSPACE_SUBMODULE_READ_TOKEN is not configured in research-workspace Actions",
-    "gitlink_manifest": "passed in GitHub Actions run 29306709607 using a real repository checkout"
+    "gitlink_manifest": "candidate passed in GitHub Actions run 29306709607; final merged-main gitlinks passed locally on 2026-07-14"
   }
 }

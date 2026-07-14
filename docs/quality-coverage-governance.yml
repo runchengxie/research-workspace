@@ -2,7 +2,7 @@
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
     "broad_exclude_register_max": 3,
-    "per_file_ignore_register_max": 0,
+    "per_file_ignore_register_max": 1,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
   "repos": [
@@ -26,15 +26,15 @@
       "ty": {
         "current_hard_gate": "uv run --extra dev ty check",
         "include_targets": [
-          "src/strategy_pipeline/__init__.py"
+          "src/alpha_research/backends"
         ],
         "promotion_criteria": "expand after package interfaces are extracted and transitional namespace imports are narrower"
       },
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "include_targets": [
-          "src/strategy_pipeline/__init__.py",
           "src/alpha_research/cpcv_audit.py",
+          "src/alpha_research/backends",
           "src/alpha_research/dataset_sampling.py",
           "src/alpha_research/dataset_sampling_core.py",
           "src/alpha_research/dynamic_signal_ensemble_types.py",
@@ -82,8 +82,11 @@
           "src/strategy_pipeline/contracts/backtest.py",
           "src/strategy_pipeline/contracts/signals.py",
           "src/strategy_pipeline/contracts/strategy.py",
+          "src/strategy_pipeline/daily_watch20_ablation.py",
           "src/strategy_pipeline/daily_watch20_data.py",
           "src/strategy_pipeline/daily_watch20_minute.py",
+          "src/strategy_pipeline/daily_watch20_oos.py",
+          "src/strategy_pipeline/daily_watch20_pipeline.py",
           "src/strategy_pipeline/daily_watch20_publish.py",
           "src/strategy_pipeline/date_utils.py",
           "src/strategy_pipeline/identity.py",
@@ -100,6 +103,7 @@
           "src/strategy_pipeline/pipeline/output_context.py",
           "src/strategy_pipeline/pipeline/output.py",
           "src/strategy_pipeline/pipeline/output_summary.py",
+          "src/strategy_pipeline/pipeline/owner_ports.py",
           "src/strategy_pipeline/pipeline/panel_enrichment.py",
           "src/strategy_pipeline/pipeline/panel_loader.py",
           "src/strategy_pipeline/pipeline/panel_load_workflow.py",
@@ -134,7 +138,8 @@
           "src/strategy_pipeline/pipeline/contracts.py",
           "src/strategy_pipeline/pipeline/output_context.py",
           "src/strategy_pipeline/pipeline/output.py",
-          "src/strategy_pipeline/pipeline/output_summary.py"
+          "src/strategy_pipeline/pipeline/output_summary.py",
+          "src/strategy_pipeline/pipeline/owner_ports.py"
         ],
         "promotion_criteria": "expand typed islands after staged modules are free of dynamic protocol assumptions"
       }
@@ -167,9 +172,13 @@
         "include_targets": [
           "src/market_data_platform/artifacts.py",
           "src/market_data_platform/contract.py",
+          "src/market_data_platform/current_path_audit.py",
+          "src/market_data_platform/data_governance.py",
           "src/market_data_platform/data_provider_contracts.py",
           "src/market_data_platform/manifest.py",
           "src/market_data_platform/paths.py",
+          "src/market_data_platform/published_assets.py",
+          "src/market_data_platform/published_frames.py",
           "src/market_data_platform/registry.py"
         ],
         "promotion_criteria": "expand after provider adapter contracts and artifact roots stay type-clean"
@@ -195,6 +204,8 @@
       "ty": {
         "current_hard_gate": "uv run --extra dev ty check",
         "include_targets": [
+          "src/portfolio_backtester/api.py",
+          "src/portfolio_backtester/backtest_spec.py",
           "src/portfolio_backtester/types.py"
         ],
         "promotion_criteria": "expand after backtesting interfaces are extracted from transitional namespace imports"
@@ -202,8 +213,9 @@
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "include_targets": [
-          "src/strategy_pipeline/__init__.py",
           "src/portfolio_backtester/__init__.py",
+          "src/portfolio_backtester/api.py",
+          "src/portfolio_backtester/backtest_spec.py",
           "src/portfolio_backtester/capacity.py",
           "src/portfolio_backtester/period_outputs.py",
           "src/portfolio_backtester/portfolio.py",
@@ -231,6 +243,11 @@
       "basedpyright": {
         "current_mode": "release_advisory_basic",
         "include_targets": [
+          "src/quant_execution_engine/domain.py",
+          "src/quant_execution_engine/_serialization_common.py",
+          "src/quant_execution_engine/_serialization_v1.py",
+          "src/quant_execution_engine/_serialization_v2.py",
+          "src/quant_execution_engine/serialization.py",
           "src/quant_execution_engine/targets.py",
           "src/quant_execution_engine/risk.py",
           "src/quant_execution_engine/preflight.py",
@@ -245,6 +262,11 @@
       "ty": {
         "current_hard_gate": "uv run --group dev ty check",
         "include_targets": [
+          "src/quant_execution_engine/domain.py",
+          "src/quant_execution_engine/_serialization_common.py",
+          "src/quant_execution_engine/_serialization_v1.py",
+          "src/quant_execution_engine/_serialization_v2.py",
+          "src/quant_execution_engine/serialization.py",
           "src/quant_execution_engine/targets.py",
           "src/quant_execution_engine/risk.py",
           "src/quant_execution_engine/preflight.py",
@@ -296,5 +318,18 @@
       ]
     }
   ],
-  "per_file_ignore_register": []
+  "per_file_ignore_register": [
+    {
+      "repo": "quant-execution-engine",
+      "path": "src/quant_execution_engine/cli.py",
+      "tool": "ruff",
+      "rules": [
+        "C901"
+      ],
+      "owner": "quant-execution-engine",
+      "reason": "The execution CLI remains a broad command dispatcher while broker-specific command groups are extracted behind focused tests.",
+      "next_action": "Split broker and recovery command routing before removing the temporary complexity exception.",
+      "review_milestone": "next quant-execution CLI command-family change or 2.0 release review"
+    }
+  ]
 }

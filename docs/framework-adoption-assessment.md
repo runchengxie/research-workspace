@@ -41,9 +41,11 @@
 | `quant-execution-engine` | 3.5 | 4.5 | 控制面价值高，Gateway、事件分发和基础 OMS 优先接 vn.py |
 | superproject | 2.5 | 3.0 | 作为 integration BOM 合理，应完成阶段 4 并停止新增 runtime helper |
 
-当前多仓库结构是有明确退出清单的阶段 3 过渡态。它仍有共享 `cstree` namespace 和 runtime
-helper 耦合，但已有 canonical owner、artifact handoff 和阶段 4 closure checklist，不能简单定性为
-无意识形成的分布式单体。风险在于过渡态长期化，而不是物理拆仓本身。
+当前多仓库结构是有明确退出清单的阶段 3 过渡态。三个 Python distribution 已迁到各自的
+owner-native namespace，不再共享 `cstree` namespace；`strategy-pipeline` 仅为 1.x 兼容窗口
+单独持有 `cstree` facade。编排层 runtime helper 的职责收敛仍未全部完成，但已有 canonical owner、
+artifact handoff 和阶段 4 closure checklist，不能简单定性为无意识形成的分布式单体。风险在于
+剩余过渡态长期化，而不是物理拆仓本身。
 
 ## 值得保留的领域资产
 

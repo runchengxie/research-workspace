@@ -36,8 +36,8 @@ python scripts/workspace_doctor.py --strict
 
 推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或
 共享虚拟环境。`alpha-research` 和 `portfolio-backtester` 的基础 import smoke / typecheck
-不应手工注入 sibling source path；完整研究编排命令仍从 `strategy-pipeline` 的
-`cstree` CLI 进入。
+不应手工注入 sibling source path；完整研究编排命令从 `strategy-pipeline` 的
+`strategy` CLI 进入。
 
 ```bash
 cd market-data-platform

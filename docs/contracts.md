@@ -6,7 +6,7 @@
 
 顶层仓库只依赖两类稳定入口：
 
-- 公开命令行：例如 `marketdata ...`、`marketdata migration hydrate-hk`、`cstree ...`、`qexec ...`。
+- 公开命令行：例如 `marketdata ...`、`marketdata migration hydrate-hk`、`strategy ...`、`qexec ...`。
 - 文档化的文件输出：例如当前数据清单、数据资产索引、研究输出和标准格式的 `targets.json`。
 
 顶层仓库的边界：
@@ -30,12 +30,12 @@
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 IC 和冗余画像摘要 |
 | `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究 | 全市场 9 因子多空日收益、逐年分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
-| `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `cstree export-targets` | 回测持仓和已保存的目标持仓候选 |
-| `targets.json` | `cstree export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
-| `targets.json.lineage.json` | `cstree export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
-| `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `cstree watchlist20 run` | `market-intel` 晨报 | 内部严格 A4/B16 的 20 股研究 artifact；JSON companion 必须与 CSV 的股票、袖、排名和权重一致，不是执行目标；客户 renderer 统一展示 20 股且不暴露内部袖、分数或权重 |
-| `strategy_outputs/watchlist20/latest/selection_receipt.json` | `cstree watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
-| `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `cstree watchlist20 run` | 严格 source date 的稀疏热点正样本；未出现股票表示未知而非零热度 |
+| `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `strategy export-targets` | 回测持仓和已保存的目标持仓候选 |
+| `targets.json` | `strategy export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
+| `targets.json.lineage.json` | `strategy export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
+| `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `strategy watchlist20 run` | `market-intel` 晨报 | 内部严格 A4/B16 的 20 股研究 artifact；JSON companion 必须与 CSV 的股票、袖、排名和权重一致，不是执行目标；客户 renderer 统一展示 20 股且不暴露内部袖、分数或权重 |
+| `strategy_outputs/watchlist20/latest/selection_receipt.json` | `strategy watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
+| `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `strategy watchlist20 run` | 严格 source date 的稀疏热点正样本；未出现股票表示未知而非零热度 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
 
 ## 跨模块 artifact contract
@@ -60,17 +60,17 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 | `signals.parquet` | `cstree.signals` | `alpha-research` | `alpha_research.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
 | `signals.meta.json` | `cstree.signals metadata` | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
 | `positions_by_rebalance.csv` | `cstree.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
-| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`cstree export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
-| `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `cstree export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
+| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
+| `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `strategy export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
 | `signals_style_replica.parquet` | `cstree.signals` (style_replica variant) | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
 | `signals_style_replica.meta.json` | `cstree.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | contract name、schema version、model_version、config (a/b slots、theme quotas) |
-| `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `cstree.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
-| `selection_receipt.json` | `daily_watch20.selection.v1 receipt` | `strategy-pipeline` | `cstree.daily_watch20_publish` | passed/quality 状态、A4/B16/20唯一计数、权重、分钟 required-date/as-of/lag、多周期标签、模型复用、热点输入、构造门禁和 artifact 哈希 |
+| `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
+| `selection_receipt.json` | `daily_watch20.selection.v1 receipt` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | passed/quality 状态、A4/B16/20唯一计数、权重、分钟 required-date/as-of/lag、多周期标签、模型复用、热点输入、构造门禁和 artifact 哈希 |
 
 `signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
 也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
 候选池排序；是否构造成组合由 `strategy-pipeline` 的 `external_signals` / `hotsector_overlay`
-显式处理，是否导出执行目标由 `cstree export-targets` 显式处理。
+显式处理，是否导出执行目标由 `strategy export-targets` 显式处理。
 外部热点信号可携带 `daily_confirm_score`、`confidence_score`、`confidence_label`
 等可选解释列；这些列不属于最小稳定契约。默认 `hotsector_overlay` 仍使用等权 Top-K，
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
@@ -89,7 +89,7 @@ MVP 的 `eligible_for_live=false`，不会生成
 
 ## A 股资产状态
 
-A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `strategy-pipeline` 的 `cstree run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
+A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `strategy-pipeline` 的 `strategy run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
 
 - TuShare 5000 积分账户可覆盖的 raw/clean 日线类资产：`stock_basic`、`trade_cal`、`daily`、`adj_factor`、`daily_basic`、`stk_limit`，以及由这些输入生成的 `daily_clean`。
 - `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌或零成交标记、上市天数和板块粗分类。发布前先执行 `marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>`，研究就绪度检查再执行带交易日历的 `--profile research`。当前 ST 标记来自 latest instruments snapshot，说明时应标注为最新快照口径。
@@ -104,7 +104,7 @@ A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。�
   `normalized_fundamentals`、`pit_fundamentals` current-contract key 和 registry row。
 - 行业 overlay：申万/中信行业最好保留历史变更；只有当前行业标签时，只适合当前截面说明。历史回测应使用历史行业标签。
 - A 股深度交易规则：T+1、ST、停牌、涨跌停、新股上市 N 日和不同板块涨跌幅可作为研究侧过滤/标记；真实成交约束仍由执行系统和券商接口验证。
-- 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据；真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。`cstree export-targets` 可以把 `.SH`、`.SZ`、`.BJ`、`.XSHG`、`.XSHE` A 股后缀映射为 `market: CN`，并保留或标准化执行目标里的交易所后缀。券商后端的中国大陆市场真实报单能力以执行仓库的券商证据为准。
+- 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据；真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。`strategy export-targets` 可以把 `.SH`、`.SZ`、`.BJ`、`.XSHG`、`.XSHE` A 股后缀映射为 `market: CN`，并保留或标准化执行目标里的交易所后缀。券商后端的中国大陆市场真实报单能力以执行仓库的券商证据为准。
 
 扩大 A 股下载范围前，先按 [data-transition-playbook.md](data-transition-playbook.md) 完成 `DATA_PLATFORM_ROOT`、current contract、registry、`daily_clean` 质量门禁和 `default` smoke 验证。`default_next` 作为同一 A 股路径的兼容别名保留。旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容 alias 说明，新流程的权威入口是 `metadata/current_assets/a_share_current.json`。
 
@@ -139,20 +139,20 @@ $DATA_PLATFORM_ROOT/
 
 ## 研究到执行交接
 
-研究系统通过 `cstree export-targets` 生成标准格式的 `targets.json`：
+研究系统通过 `strategy export-targets` 生成标准格式的 `targets.json`：
 
 ```text
 signals.parquet
   -> named StrategySpec
   -> positions_by_rebalance.csv / strategy-pipeline 已保存持仓
-  -> cstree export-targets
+  -> strategy export-targets
   -> targets.json
   -> quant-execution-engine 预演 / 模拟盘 / 实盘门禁流程
 ```
 
 约定：
 
-- `cstree export-targets` 只生成目标文件和审计附属文件。
+- `strategy export-targets` 只生成目标文件和审计附属文件。
 - 导出命令不连接券商、不预演订单、不提交订单。
 - `qexec rebalance <targets.json>` 负责券商连接、执行前检查、模拟盘和实盘门禁。
 - 顶层脚本不得默认追加 `--execute`，也不得绕过 `QEXEC_ENABLE_LIVE=1` 等执行系统门禁。

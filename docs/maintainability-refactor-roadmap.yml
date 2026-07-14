@@ -17,39 +17,43 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 43,
-      "max_long_functions": 60,
-      "max_complexity_hotspots": 34,
-      "max_large_classes": 1
+      "max_large_files": 45,
+      "max_long_functions": 62,
+      "max_complexity_hotspots": 37,
+      "max_large_classes": 1,
+      "owner_decision": "2026-07-14 data-governance and current-path audit work added explicit operational validation surfaces. Keep the new modules registered as accepted hotspots and split them before expanding another governance command family."
     },
     {
       "repo": "alpha-research",
       "max_large_files": 12,
-      "max_long_functions": 16,
-      "max_complexity_hotspots": 20,
-      "max_large_classes": 0
+      "max_long_functions": 17,
+      "max_complexity_hotspots": 21,
+      "max_large_classes": 0,
+      "owner_decision": "2026-07-14 owner-native package migration and namespace enforcement establish the standalone alpha boundary. Hold this synchronized baseline while the new package layout settles; do not add another hotspot without focused extraction."
     },
     {
       "repo": "portfolio-backtester",
       "max_large_files": 18,
-      "max_long_functions": 18,
-      "max_complexity_hotspots": 19,
-      "max_large_classes": 0
+      "max_long_functions": 19,
+      "max_complexity_hotspots": 20,
+      "max_large_classes": 0,
+      "owner_decision": "2026-07-14 owner-native package migration and namespace enforcement establish the standalone portfolio boundary. Hold this synchronized baseline while the new package layout settles; do not add another hotspot without focused extraction."
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 32,
-      "max_long_functions": 91,
-      "max_complexity_hotspots": 45,
+      "max_large_files": 34,
+      "max_long_functions": 96,
+      "max_complexity_hotspots": 49,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-13 candidate-signal research adds fail-closed offline audit orchestration and scenario coverage. The repo-local >800-file and >100-function ratchets remain unchanged and passed; split the registered research hotspots before promotion or when their variant families expand."
+      "owner_decision": "2026-07-14 DailyWatch20 strict hotspot-pool selection, freshness validation, and end-to-end scenario coverage expand the fail-closed delivery contract. Split the registered freshness and pipeline test hotspots before another delivery-policy family is added."
     },
     {
       "repo": "quant-execution-engine",
-      "max_large_files": 13,
+      "max_large_files": 14,
       "max_long_functions": 35,
-      "max_complexity_hotspots": 35,
-      "max_large_classes": 7
+      "max_complexity_hotspots": 37,
+      "max_large_classes": 7,
+      "owner_decision": "2026-07-14 typed execution-domain and versioned serialization work makes wire ownership explicit while retaining the public serialization facade. Split domain model families before introducing another wire schema generation."
     }
   ],
   "first_safe_extraction_types": [
@@ -355,10 +359,22 @@
       "next_action": "split parser, run selection, and output rendering when holdings changes resume"
     },
     {
-      "path": "strategy-pipeline/tests/test_docs_contracts.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_freshness.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "large docs contract test file is tracked but not active production code",
-      "next_action": "split by contract family when docs contract tests change"
+      "reason": "DailyWatch20 freshness validation keeps artifact lineage, trade-date eligibility, and fail-closed publication checks in one delivery boundary for the current scheduled workflow",
+      "next_action": "split lineage parsing from eligibility and publication validation before adding another producer cadence or freshness policy"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_daily_watch20_pipeline.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The end-to-end DailyWatch20 suite covers strict hotspot-pool enforcement, freshness failures, deterministic selection, and publication receipts in one contract-focused test module",
+      "next_action": "split candidate-pool, freshness, and publication scenarios when the delivery contract next changes"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/domain.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "Typed execution domain models remain co-located to preserve cross-model validation and deterministic serialization during the versioned wire-contract migration",
+      "next_action": "split target, order, fill, and event model families after the v2 serialization surface remains stable for one release"
     },
     {
       "path": "quant-execution-engine/tests/unit/test_execution_foundation.py",

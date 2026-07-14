@@ -129,6 +129,14 @@ def _script_paths_to_classify() -> set[str]:
     return module._tracked_script_paths(ROOT)
 
 
+def _ruff_per_file_records() -> dict[tuple[str, str], set[str]]:
+    records: dict[tuple[str, str], set[str]] = {}
+    for repo in REPOS - {"research-workspace"}:
+        ignores = _load_pyproject(repo)["tool"]["ruff"]["lint"].get("per-file-ignores", {})
+        records.update({(repo, path): set(rules) for path, rules in ignores.items()})
+    return records
+
+
 def _deprecation_removal_issues(manifest: dict[str, Any]) -> list[str]:
     issues: list[str] = []
     for record in manifest["records"]:
@@ -368,10 +376,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         (record["repo"], record["path"]): set(record["rules"])
         for record in manifest["per_file_ignore_register"]
     }
-    cross_ignores = cross_config["tool"]["ruff"]["lint"].get("per-file-ignores", {})
-    assert per_file_records == {
-        ("strategy-pipeline", path): set(rules) for path, rules in cross_ignores.items()
-    }
+    assert per_file_records == _ruff_per_file_records()
     for record in manifest["per_file_ignore_register"]:
         assert PER_FILE_IGNORE_REGISTER_FIELDS <= set(record)
         assert record["tool"] == "ruff"
