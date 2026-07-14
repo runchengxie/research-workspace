@@ -1,105 +1,100 @@
 # AGENTS.md
 
-本文件给维护者、外部贡献者和代码代理使用。它描述顶层工作区的协作规则；各子仓库仍以自己的 `AGENTS.md` 为准。
+本文件说明顶层工作区的协作规则。子仓库内部改动仍以各自的 `AGENTS.md` 为准。
 
-## 工作区范围
+## 工作区职责
 
-本工作区是多仓库集成层，主要负责：
+顶层仓库负责以下内容：
 
-- 维护 `market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`、`quant-execution-engine` 的子模块边界。
-- 维护顶层 `src/research_contracts` 薄包，用于校验跨仓库产物契约清单。
-- 记录跨仓库数据文件约定、运行路径、发布检查清单和工作区健康检查。
-- 协调数据平台、策略研究和交易执行之间的文件交接。
+- 锁定五个子模块的提交版本
+- 维护跨仓库文件约定和 `src/research_contracts`
+- 维护工作区 doctor、质量检查和子仓库委托脚本
+- 记录版本组合、发布检查和归档入口
+- 说明数据、研究、回测、编排和执行之间的交接方式
 
-不要在顶层仓库放置大体积市场数据、研究 run、交易审计日志或 provider 缓存。这些内容应留在各子仓库约定的产物目录或共享数据根目录。
+子仓库内部实现、依赖、业务参数和完整测试配置留在对应仓库。
 
-## 市场称谓
+## 仓库边界
 
-文档、注释、报错信息和面向用户的说明文字应使用清晰、稳妥的市场称谓：
+| 仓库 | 主要职责 |
+| --- | --- |
+| `market-data-platform` | 数据资产生产、检查、发布和读取 |
+| `alpha-research` | 特征、模型、研究评估和信号产物 |
+| `portfolio-backtester` | 组合构造、回测、成本、容量、暴露和报告 |
+| `strategy-pipeline` | 研究编排、CLI、运行目录和 `targets.json` 导出 |
+| `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
-- 优先写中国香港市场、港股、港股通、中国大陆市场、A 股等表述。
-- 避免把中国大陆市场与中国香港市场写成政治或地域对立关系。
-- 面向用户的正文先写业务含义；命令、路径、配置键、资产键、provider API 和历史文件名只用于说明现有接口。
-- 不要为了润色而顺手重命名公开接口、路径、asset key 或历史产物；命名变更应单独评估兼容影响。
+顶层不保存大型数据、研究运行产物、provider 缓存、券商凭证或交易审计日志。
 
-## 跨仓库文件约定
-
-跨仓库改动应优先按边界验证：
-
-1. 顶层文档、doctor 或检查清单明确权威文件约定名称。
-2. `market-data-platform` 负责生产、检查和发布数据资产文件约定。
-3. `alpha-research` 负责特征、模型、研究评估、稳健性诊断和信号产物。
-4. `portfolio-backtester` 负责组合构造、回测、容量、暴露、换手和报告。
-5. `strategy-pipeline` 只读消费平台资产，编排研究流程，并导出执行目标文件。
-6. `quant-execution-engine` 读取标准 `targets.json`，负责解析、dry-run、风控、执行与审计。
-
-当前 A 股权威 current contract 文件名是：
-
-```text
-metadata/current_assets/a_share_current.json
-```
-
-旧称 `cn_current.json` 只作为 alias 或历史兼容说明，不作为新文档里的权威入口。
-
-## 常用命令
-
-顶层工作区常用检查：
+## 常用检查
 
 ```bash
-uv run --with pytest python -m pytest tests/test_workspace_doctor.py -q
+python scripts/workspace_doctor.py
+python src/research_contracts/smoke_contracts.py
 uv run --project strategy-pipeline --extra dev \
   --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
   python -m pytest tests -q
-```
-
-完整顶层测试包含跨 `alpha-research` 与 `portfolio-backtester` 的集成测试，因此使用
-`strategy-pipeline` 已声明的工作区依赖环境，并补入顶层测试专用的绘图与表格依赖；不含私有子模块的
-smoke 测试仍使用顶层环境。
-
-子仓库检查应进入对应目录后执行该仓库自己的命令，例如：
-
-```bash
-cd market-data-platform && uv run --extra dev python -m pytest
-cd alpha-research && uv run --extra dev python -m pytest
-cd portfolio-backtester && uv run --extra dev python -m pytest
-cd strategy-pipeline && scripts/dev/run_tests.sh all
-cd quant-execution-engine && uv run --group dev python -m pytest
-```
-
-如果只改跨仓库文件约定，优先运行对应边界的定点测试，再按需要扩大到完整 pytest、Ruff、ty、BasedPyright 建议项或治理脚本。顶层统一委托入口是：
-
-```bash
+python scripts/run_quality_checks.py --profile hard
+python scripts/run_quality_checks.py --profile basedpyright
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-## GitHub 发布偏好
+`run_submodule_checks.py` 只执行 `scripts/submodule_checks.json` 中登记的命令。不要在顶层复制子仓库内部检查逻辑。
 
-- 用户明确要求 commit、push 或发布本仓改动时，默认直接在 `main` 上提交并推送到对应远端。
-- 不要默认新建 `codex/*` 分支或 draft PR；只有用户明确要求 PR、远端规则阻止直接推送、工作区存在难以拆分的混杂改动，或改动风险需要人工 review 时才走分支和 PR。
-- 修改子模块内容时，先在对应子模块仓库按同样规则提交并推送，再回到顶层提交更新后的 submodule gitlink。
+当前没有启用顶层 GitHub Actions workflow。文档中不得把 `.github/workflows/superproject.yml.disabled` 描述为正在运行的 CI。
 
-## TuShare 凭证约定
+## 文件约定
 
-- TuShare 本地凭证由 `market-data-platform` 负责管理；不要在顶层仓库新增或提交 `.env*`。
-- 需要真实 TuShare 请求时，优先进入 `market-data-platform` 使用该仓库 CLI。CLI 会读取当前工作目录和
-  `market-data-platform` 根目录下未跟踪的 `.env.local` / `.env`。
-- 15000 分账户使用 `TUSHARE_TOKEN_2`，并依赖匹配的 `TUSHARE_API_URL_2` 中转地址；命令应显式传
-  `--token-env TUSHARE_TOKEN_2`，或在验证命令中传 `--env TUSHARE_TOKEN_2`。不要因为默认官方 API
-  域名返回 token 错误就判断 token 失效。
-- Codex / MCP connector 的 TuShare token 配置和本地 `.env` 分属两套环境；如果 connector 报缺少 token，应改用 `market-data-platform` CLI，或先确认 connector 侧配置。不要读取或打印本地 token。
+A 股权威 current contract：
 
-## 编辑规则
+```text
+metadata/current_assets/a_share_current.json
+```
 
-- 先确认改动属于顶层工作区还是某个子仓库；不要把子仓库内部规则复制到顶层文档。
-- 顶层 `docs/` 只写跨仓库协作、文件约定和发布检查事项。
-- `strategy-pipeline/docs/` 当前仍保留部分历史研究、alpha 和回测说明；新增或大改这类说明时，优先放到 `alpha-research` 或 `portfolio-backtester`。留在 `strategy-pipeline` 的内容应聚焦编排、CLI、配置、产物和执行目标导出。
-- 临时交接、冻结记录、发布说明和历史复查材料应放入 `docs/archive/`，活跃文档只链接归档入口。
-- 修改 submodule 内容后，要同时注意 superproject 的 submodule gitlink 状态。
-- 不要提交 `.pytest_cache/`、`__pycache__/`、`artifacts/`、`outputs/`、provider 凭证或本地 `.env*`。
-- 文档改动至少检查路径、文件约定名称和市场称谓是否一致。
+研究到执行的权威交接文件：
 
-## 对用户汇报
+```text
+targets.json
+```
 
-汇报跨仓库工作时，按 数据平台 -> 策略研究 -> 交易执行 -> 顶层文档/doctor -> 剩余限制 的顺序说明，并用真实命令输出支撑完成状态。
+修改跨仓库产物格式时，应同步更新生产方、消费方、顶层契约文档和对应测试。
+
+## 文档规则
+
+- 根目录 `README.md` 只保留定位、快速开始、核心边界和文档入口
+- `docs/README.md` 只做导航
+- 顶层 `docs/` 只记录跨仓库协作、契约、版本和发布治理
+- 子仓库实现细节放在子仓库文档
+- 阶段记录和历史证据放入 `docs/archive/` 或 `docs/evidence/`
+- 中文正文使用中文标点
+- 保留必要的命令、路径、配置键和 API 名称
+- 避免中英混杂的长句、翻译腔和先否定再转折的表达
+- 尽量不用双引号、加粗、分号和破折号
+- 文档中的命令、文件名和默认值必须能从代码或测试中核对
+
+文档润色不得顺手修改公开接口、路径、资产键或历史产物名称。
+
+## 测试与验证
+
+- 文档改动至少运行链接检查、入口文档风格检查和相关事实测试
+- 修改 `scripts/submodule_checks.json` 时同步更新 `tests/test_run_submodule_checks.py`
+- 修改子模块列表时同步更新 `.gitmodules`、doctor、版本矩阵和测试
+- 修改 Python 命名空间边界时运行 `tests/test_namespace_contracts.py` 和 `tests/test_workspace_import_boundaries.py`
+- 修改 `targets.json` 或 current contract 时运行对应契约测试
+
+## Git 工作流
+
+跨多个仓库的文档和测试调整使用短期分支与 PR。子仓库改动合并后，再更新顶层 gitlink 和版本矩阵。
+
+提交前检查暂存区，避免加入以下内容：
+
+- `.env`、`.env.*`、`.envrc`
+- API 密钥、访问令牌和券商凭证
+- `artifacts/`、`outputs/`、缓存和大型数据文件
+- 本地绝对路径、内部主机名和私有账户信息
+
+## 汇报顺序
+
+跨仓库工作按数据平台、alpha 研究、组合回测、策略编排、交易执行、顶层工作区的顺序汇报。完成状态应附真实命令结果或明确说明尚未运行的检查。
