@@ -1,37 +1,19 @@
-# 工作区质量治理矩阵
+# 工作区质量治理
 
-顶层仓库只管理稳定 profile 和跨仓库发布边界。每个子仓库继续拥有自己的 Ruff、类型检查、pytest、coverage 和 optional dependency 配置；顶层 Ruff 通过 `pyproject.toml` 限定在 workspace 自有脚本和测试，并排除子仓与历史探索脚本。
+顶层仓库只维护跨仓库质量入口。每个子仓库仍拥有自己的 Ruff、格式、类型检查、pytest 和维护性配置。
 
 ## 检查分类
 
-| 仓库 | 硬门禁 | 建议项 | 人工或发布复核 |
+| 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| superproject | Ruff、Ruff format、ty、secret scan、顶层 pytest、doctor、contract smoke | BasedPyright 建议项、`pip-audit`、`deptry`、选择性 coverage ratchet | 私有子模块 checkout token、港股恢复专用归档复核、发布检查清单 |
-| `market-data-platform` | Ruff、Ruff format、ty、pytest | BasedPyright 建议项、`pip-audit`、`deptry`、Bandit 高置信规则、contract 模块 coverage ratchet | provider entitlement、数据质量报告、registry/current publication |
-| `alpha-research` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright 建议项、pytest coverage、CPCV/PBO 定点测试、feature evidence fixtures | signal artifact、feature evidence、promotion gate |
-| `portfolio-backtester` | Ruff、Ruff format、ty、pytest、import smoke | BasedPyright 建议项、pytest coverage、capacity/exposure/backtest 定点测试 | turnover/cost、capacity、benchmark ladder、reporting |
-| `strategy-pipeline` | 仓库自有 lint、format、ty、pytest | BasedPyright 建议项、`pip-audit`、`deptry`、target-export coverage ratchet | 长窗口 benchmark、编排层 smoke、目标文件导出复核 |
-| `quant-execution-engine` | Ruff、Ruff format、ty、pytest | BasedPyright 建议项、mypy、`pip-audit`、`deptry`、Bandit 高置信规则、risk/execution-state coverage ratchet | 券商凭证扫描、受监督 paper/live smoke、对账和操作批准 |
+| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、contract smoke | BasedPyright、依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | BasedPyright、依赖审计 | 数据权限、数据质量和 current contract 发布 |
+| `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、研究证据定点测试 | signal artifact 和候选晋升证据 |
+| `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、回测定点测试 | 成本、换手、容量和报告口径 |
+| `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | BasedPyright、依赖审计 | 长窗口研究、编排和目标文件导出 |
+| `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | BasedPyright、集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
 
-顶层 hard profile 还包含 workspace boundary gate：
-`python scripts/workspace_import_boundaries.py --check`。该检查把阶段 3.5 /
-阶段 4 的拆分方向转成可 ratchet 的预算：`alpha-research` 不应增加对
-`strategy_pipeline.pipeline` / `portfolio_backtester` 的运行时依赖，`portfolio-backtester`
-不应增加对 `strategy_pipeline.pipeline`、strategy-pipeline 根模块或 `alpha_research` 的运行时依赖，
-数据平台和执行引擎不应导入 `cstree` 内部，strategy-pipeline 不应导入执行引擎实现；
-同时 strategy-pipeline 不应重新承载本地 `alpha_research` / `portfolio_backtester`
-实现源码。当前预算只封顶既有反向依赖和 source layout；清掉一批后再下调对应
-`max_allowed`。
-
-顶层委托配置是 `scripts/submodule_checks.json`。`lint` 会同时运行子仓库自己的边界与维护债
-ratchet：数据平台包含 `scripts/dev/architecture_governance.py --check`，策略编排包含
-`scripts/dev/run_tests.sh maintainability`。`type` 始终表示各仓库当前基础类型门禁；
-现在统一为 `ty check`。`alpha-research` 和 `portfolio-backtester` 的 smoke / BasedPyright
-配置不应通过 sibling source path 补齐 import；`release_typecheck` 统一运行
-BasedPyright 建议项。执行引擎的 `mypy_advisory` 在迁移后的一个发布周期内
-单独运行，不替代 `ty check` 或 BasedPyright 建议项。
-
-GitHub Actions 中，BasedPyright 只作为非阻塞建议项运行，并设置 `continue-on-error`。本地和阻塞 CI 的基础链路统一是 Ruff、Ruff format、`ty check` 和 pytest。superproject 的 CI 如果没有 `WORKSPACE_SUBMODULE_READ_TOKEN`，会跳过私有子模块 checkout，并改跑 `ci-smoke` 质量档位；完整子模块树可用时仍跑 `hard` 档位和 contract smoke。
+执行引擎已经移除 mypy。顶层委托配置不再提供 `mypy_advisory`。
 
 ## 顶层命令
 
@@ -40,21 +22,32 @@ python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile ci-smoke
 python scripts/run_quality_checks.py --profile basedpyright
 python scripts/run_quality_checks.py --profile architecture
-python scripts/workspace_import_boundaries.py --check
 python scripts/run_quality_checks.py --profile secrets
 python scripts/run_quality_checks.py --profile dead-code
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
-python scripts/run_submodule_checks.py --profile mypy_advisory \
-  --submodule quant-execution-engine
 ```
 
-涉及 provider 或券商凭证读取逻辑时，还应对改动所属子仓库执行 credential review；credential leak 属于阻塞问题，不按建议项处理。港股材料不再通过工作区内公开演示路线发布，只保留私有恢复专用归档复核。
+`hard` 包含 Ruff、格式、`ty`、工作区导入边界和 secret scan。`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
 
-执行引擎至少保留一个发布周期的 mypy 观察期。下一次发布复核中，如果 mypy 没有独有阻塞发现，且 BasedPyright warning 分类保持稳定，可以评估移除 mypy 建议项。若需要回滚，将 `scripts/submodule_checks.json` 中执行引擎的 `mypy_advisory` 保持为人工复核入口；已完成的 SDK 边界窄化修复继续保留。所有仓库统一使用 BasedPyright。
+## 跨仓库边界
 
-## 依赖建议项
+`python scripts/workspace_import_boundaries.py --check` 检查以下方向：
 
-依赖审计先作为建议项记录，不直接阻塞 A 股迁移：
+- `alpha-research` 不新增对策略编排和回测内部实现的运行时依赖
+- `portfolio-backtester` 不新增对策略编排和 alpha 内部实现的运行时依赖
+- 数据平台和执行引擎不导入历史 `cstree` 内部实现
+- `strategy-pipeline` 不重新承载 `alpha_research` 或 `portfolio_backtester` 源码
+- 第三方框架对象不跨仓库文件契约
+
+顶层委托配置是 `scripts/submodule_checks.json`。子仓库的维护性阈值和排除项留在各自仓库。
+
+## 自动化状态
+
+`.github/workflows/superproject.yml.disabled` 是停用模板。当前检查需要在本地或人工触发环境中运行。恢复远端自动化时，应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。
+
+## 依赖与安全
+
+依赖审计和静态安全扫描按仓库运行：
 
 ```bash
 uvx pip-audit
@@ -62,11 +55,6 @@ uvx deptry .
 uvx bandit -q -r src -lll
 ```
 
-每个仓库单独维护 baseline 或 allowlist。provider SDK、券商 SDK、UI extra、动态导入和仅在
-本地操作环境安装的依赖必须先标注 owner、用途和复核命令，再决定是否晋升硬门禁。
-coverage 同样按 contract、manifest、target export、risk、execution state 等高风险模块逐步
-ratchet，不设置跨仓库统一阈值。
+provider SDK、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
 
-Dead-code 扫描先保持建议项：顶层入口只扫描 superproject-owned Python 代码，并默认把
-Vulture 的高置信发现降级为建议项；清理到零发现后可以用 `python scripts/dead_code_advisory.py
---strict` 做本地复核。子仓库 dead-code 候选应进入对应子仓库的维护性 ratchet，不由顶层直接阻塞。
+coverage 按高风险模块逐步提高，不设置跨仓库统一阈值。
