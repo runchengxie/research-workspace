@@ -115,7 +115,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
       "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
+      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/export_holdings_html.py",
@@ -155,7 +155,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
       "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
+      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/path_c_m1_validate.py",
@@ -165,7 +165,7 @@
       "safe_to_run_locally": true,
       "writes_files": "stdout and configured output paths",
       "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through cstree.signals artifacts, or after two release reviews record no active use"
+      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
     },
     {
       "path": "scripts/publish_etf_industry_signal.py",
@@ -178,14 +178,14 @@
       "removal_condition": "remove after guan-etf-rotation-v3 writes directly to standard location or two release reviews record no active use"
     },
     {
-      "path": "scripts/hotsector_to_cstree_universe.py",
+      "path": "scripts/hotsector_to_strategy_universe.py",
       "owner": "research-workspace",
-      "purpose": "Legacy converter for pre-cstree.signals hot-sector outputs",
+      "purpose": "Converter for pre-alpha_research.signals hot-sector outputs",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/",
       "external_dependencies": "DATA_PLATFORM_ROOT, hot-sector-screener outputs",
-      "removal_condition": "archive after hot-sector-screener cstree.signals handoff is stable for two release reviews; new daily handoff should use signals.parquet directly"
+      "removal_condition": "archive after hot-sector-screener alpha_research.signals handoff is stable for two release reviews; new daily handoff should use signals.parquet directly"
     },
     {
       "path": "src/style_factors/style_factor_attribution.py",

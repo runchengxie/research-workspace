@@ -217,15 +217,15 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         max_allowed=0,
     ),
     BoundaryRule(
-        identifier="market-data-platform:no-cstree-imports",
-        description="market-data-platform must stay independent from research strategy internals",
+        identifier="market-data-platform:no-legacy-shared-namespace-imports",
+        description="market-data-platform must stay independent from legacy research internals",
         repo="market-data-platform",
         source="src",
         forbidden=("cstree",),
         max_allowed=0,
     ),
     BoundaryRule(
-        identifier="quant-execution-engine:no-cstree-imports",
+        identifier="quant-execution-engine:no-legacy-shared-namespace-imports",
         description="quant-execution-engine consumes targets.json, not research/backtest internals",
         repo="quant-execution-engine",
         source="src",
@@ -242,7 +242,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="strategy-pipeline:contracts-pure-handoff",
-        description="strategy-pipeline contract compatibility modules stay pure before extraction",
+        description="strategy-pipeline orchestration schema modules stay pure before extraction",
         repo="strategy-pipeline",
         source="src/strategy_pipeline/contracts",
         forbidden=(

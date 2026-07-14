@@ -10,16 +10,16 @@ strategy-pipeline research_universe.by_date_file expects:
 
 Usage:
   # From a specific hotsector output directory (auto-detects date from dir name):
-  python scripts/hotsector_to_cstree_universe.py \\
+  python scripts/hotsector_to_strategy_universe.py \\
     --input ~/code/hot-sector-screener/outputs/20260619
 
   # Explicit trade date (overrides directory-name detection):
-  python scripts/hotsector_to_cstree_universe.py \\
+  python scripts/hotsector_to_strategy_universe.py \\
     --input ~/code/hot-sector-screener/outputs/20260619/candidate_universe.csv \\
     --trade-date 2026-06-19
 
   # Append mode (accumulate multiple days in one file):
-  python scripts/hotsector_to_cstree_universe.py \\
+  python scripts/hotsector_to_strategy_universe.py \\
     --input ~/code/hot-sector-screener/outputs/20260619 \\
     --out universe.csv --append
 
@@ -38,7 +38,6 @@ import os
 import re
 import sys
 from pathlib import Path
-
 
 _DATE_FROM_DIR = re.compile(r"(\d{8})")
 
@@ -88,7 +87,7 @@ def _read_csv(path: Path) -> list[dict]:
 
 
 def convert(candidates: list[dict], trade_date: str) -> list[dict]:
-    """Convert hotsector candidate records to cstree by_date rows."""
+    """Convert hotsector candidate records to strategy-pipeline by-date rows."""
     rows = []
     seen = set()
     for c in candidates:
@@ -98,11 +97,13 @@ def convert(candidates: list[dict], trade_date: str) -> list[dict]:
         if symbol in seen:
             continue
         seen.add(symbol)
-        rows.append({
-            "trade_date": trade_date,
-            "symbol": symbol,
-            "selected": "true",
-        })
+        rows.append(
+            {
+                "trade_date": trade_date,
+                "symbol": symbol,
+                "selected": "true",
+            }
+        )
     return rows
 
 
@@ -124,10 +125,11 @@ def write_output(rows: list[dict], out_path: Path, append: bool) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Convert hotsector candidate universe to cstree by_date CSV."
+        description="Convert hotsector candidate universe to strategy-pipeline by-date CSV."
     )
     parser.add_argument(
-        "--input", "-i",
+        "--input",
+        "-i",
         required=True,
         help="Path to hotsector output directory, candidate_universe.json, or .csv",
     )
@@ -137,13 +139,15 @@ def main() -> None:
         help="Trade date as YYYY-MM-DD (default: auto-detect from directory name)",
     )
     parser.add_argument(
-        "--out", "-o",
+        "--out",
+        "-o",
         default=None,
         help="Output CSV path. If not set, uses "
-        "$DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/cstree_universe.csv",
+        "$DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/strategy_universe.csv",
     )
     parser.add_argument(
-        "--append", "-a",
+        "--append",
+        "-a",
         action="store_true",
         help="Append to existing output file instead of overwriting",
     )
@@ -160,9 +164,7 @@ def main() -> None:
 
     trade_date = args.trade_date or detect_date(input_path)
     if not trade_date:
-        sys.exit(
-            "Could not detect trade date. Pass --trade-date YYYY-MM-DD explicitly."
-        )
+        sys.exit("Could not detect trade date. Pass --trade-date YYYY-MM-DD explicitly.")
 
     rows = convert(candidates, trade_date)
 
@@ -171,16 +173,13 @@ def main() -> None:
     else:
         root = os.environ.get("DATA_PLATFORM_ROOT", "")
         if not root:
-            sys.exit(
-                "DATA_PLATFORM_ROOT is not set. "
-                "Export it or pass --out explicitly."
-            )
+            sys.exit("DATA_PLATFORM_ROOT is not set. Export it or pass --out explicitly.")
         out_path = (
             Path(root).expanduser().resolve()
             / "strategy_outputs"
             / "hot_sector_screener"
             / "by_date"
-            / "cstree_universe.csv"
+            / "strategy_universe.csv"
         )
 
     write_output(rows, out_path, args.append)

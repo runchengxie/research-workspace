@@ -16,7 +16,7 @@ portfolio-backtester
         |
         v
 strategy-pipeline
-  编排研究流程、保留 CLI 兼容层，并导出 targets.json
+  编排研究流程，并导出 targets.json
         |
         v
 quant-execution-engine
@@ -26,9 +26,9 @@ quant-execution-engine
 `alpha-research` 承载 alpha 研究模块（`alpha_research.*`），`portfolio-backtester` 承载
 组合回测模块（`portfolio_backtester.*`），`strategy-pipeline` 承载编排模块
 （`strategy_pipeline.*`）。三个 distribution 已各自独占 owner-native namespace，不再通过共享
-`cstree` namespace 或 `pkgutil.extend_path` 拼装运行时。`strategy-pipeline` 在 1.x 中单独保留
-`cstree` Python facade 与 CLI alias 作为限期兼容面；权威命令是 `strategy`，兼容面按
-[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md) 计划在 workspace 2.0 删除。
+namespace 或 `pkgutil.extend_path` 拼装运行时。工作区 2.0 已删除旧 Python facade、
+CLI alias 与环境变量 fallback；权威命令是 `strategy` 与 `strategy-pipeline`。命名边界见
+[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 
 ## 代码边界
 

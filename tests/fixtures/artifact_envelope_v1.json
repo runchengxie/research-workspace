@@ -1,5 +1,5 @@
 {
-  "contract": "cstree.signals metadata",
+  "contract": "alpha_research.signals metadata",
   "schema_version": 1,
   "file": "signals.parquet",
   "rows": 2

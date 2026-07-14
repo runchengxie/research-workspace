@@ -6,7 +6,7 @@ Now directly imports style_factors (part of research-workspace).
 Usage:
   python src/style_factors/style_factor_attribution.py --out-name 20260629
   python src/style_factors/style_factor_attribution.py \\
-    --strategy-csv returns.csv --strategy-name cstree --out-name 20260629
+    --strategy-csv returns.csv --strategy-name strategy --out-name 20260629
 """
 
 from __future__ import annotations

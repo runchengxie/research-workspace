@@ -31,12 +31,12 @@ hot-sector-screener
     │  消费: 数据湖热点数据 + ETF 行业轮动信号
     │  输出: outputs/<YYYYMMDD>/candidate_universe.{csv,json}
     │
-    │  ┌─ scripts/hotsector_to_cstree_universe.py ─┐
-    │  │  转换为 cstree research_universe 格式      │
+    │  ┌─ scripts/hotsector_to_strategy_universe.py ─┐
+    │  │  转换为 strategy-pipeline universe 格式     │
     │  └───────────────────────────────────────────┘
     ↓
 market-data-platform (core submodule)
-    │  发布: strategy_outputs/.../cstree_universe.csv
+    │  发布: strategy_outputs/.../strategy_universe.csv
     ↓
 alpha-research (core submodule)
     │  消费: research dataset / research_universe.by_date_file
@@ -115,16 +115,16 @@ python scripts/publish_etf_industry_signal.py \
 }
 ```
 
-### 转换为 cstree universe 格式
+### 转换为 strategy-pipeline universe 格式
 
 strategy-pipeline 的 `research_universe.by_date_file` 需要 `trade_date,symbol` 格式。
-使用 `scripts/hotsector_to_cstree_universe.py` 转换：
+使用 `scripts/hotsector_to_strategy_universe.py` 转换：
 
 ```bash
-python scripts/hotsector_to_cstree_universe.py \
+python scripts/hotsector_to_strategy_universe.py \
   --input ~/code/hot-sector-screener/outputs/20260619/candidate_universe.csv \
   --trade-date 2026-06-19 \
-  --out "$DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/cstree_universe.csv"
+  --out "$DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/strategy_universe.csv"
 ```
 
 输出格式：
@@ -135,12 +135,12 @@ trade_date,symbol,selected
 2026-06-19,688111.SH,true
 ```
 
-在 cstree 配置中使用：
+在 strategy-pipeline 配置中使用：
 
 ```yaml
 research_universe:
   mode: pit
-  by_date_file: strategy_outputs/hot_sector_screener/by_date/cstree_universe.csv
+  by_date_file: strategy_outputs/hot_sector_screener/by_date/strategy_universe.csv
 ```
 
 详细输出契约见 [hotsector 项目文档](https://github.com/runchengxie/hot-sector-screener/blob/main/docs/output-contract.md)（不在本仓库内）。
@@ -183,7 +183,7 @@ a-share-factor-core = { git = "https://github.com/runchengxie/a-share-factor-cor
 | 脚本 | 方向 | 用途 |
 |------|------|------|
 | `scripts/publish_etf_industry_signal.py` | ETF → 数据平台 | 复制 ETF 行业信号到标准位置 |
-| `scripts/hotsector_to_cstree_universe.py` | hotsector → cstree | 转换候选池为 cstree by_date 格式 |
+| `scripts/hotsector_to_strategy_universe.py` | hotsector → strategy-pipeline | 转换候选池为 strategy-pipeline by-date 格式 |
 
 脚本规则与 workspace 其他顶层脚本一致：
 - 不 import 子模块 Python 包
@@ -195,4 +195,4 @@ a-share-factor-core = { git = "https://github.com/runchengxie/a-share-factor-cor
 1. research-workspace 已有的五段核心架构（数据→alpha→组合回测→策略编排→执行）边界清晰，硬门禁测试覆盖完整。
 2. 两个策略项目体量和成熟度不同，强制纳入 core release matrix 会拖慢 CI 和版本锁定。
 3. 核心链路已通过 `signals.parquet`、`positions_by_rebalance.csv` 和 `targets.json` 标准化。策略卫星的角色是可选输入源，核心组件仍是五段主链路。
-4. 应先验证 candidate universe 作为 cstree research_universe 后的 OOS 表现，再评估提升为 optional submodule。
+4. 应先验证 candidate universe 作为 strategy-pipeline research universe 后的 OOS 表现，再评估提升为 optional submodule。

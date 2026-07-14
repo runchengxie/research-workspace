@@ -18,7 +18,7 @@
 阶段 4 的拆分方向转成可 ratchet 的预算：`alpha-research` 不应增加对
 `strategy_pipeline.pipeline` / `portfolio_backtester` 的运行时依赖，`portfolio-backtester`
 不应增加对 `strategy_pipeline.pipeline`、strategy-pipeline 根模块或 `alpha_research` 的运行时依赖，
-数据平台和执行引擎不应导入 `cstree` 内部，strategy-pipeline 不应导入执行引擎实现；
+数据平台和执行引擎不应导入已移除的共享命名空间，strategy-pipeline 不应导入执行引擎实现；
 同时 strategy-pipeline 不应重新承载本地 `alpha_research` / `portfolio_backtester`
 实现源码。当前预算只封顶既有反向依赖和 source layout；清掉一批后再下调对应
 `max_allowed`。

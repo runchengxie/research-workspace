@@ -1,35 +1,38 @@
 {
   "compatibility": {
-    "legacy_cli": "cstree",
-    "legacy_python_package": "cstree",
     "owner": "strategy-pipeline",
-    "removal_release": "workspace-2.0"
+    "removed_in": "workspace-2.0",
+    "status": "removed"
   },
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "a5cfedea34f163553b24c929e113384f9a42c182",
+      "commit": "d8657fd7af6b147a9315dffd01d47d5f964b2561",
       "legacy_source_tree_allowed": false,
       "pr": 6,
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "329f1fa2e47d8cb1e4ef4156cee03b45448a1d06",
+      "commit": "fb8fcc750f64ce8df10ee225043ec31940ba73fe",
       "legacy_source_tree_allowed": false,
       "pr": 8,
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "d0eb4742a9b48d36fb7b0df9cc6c836f4232c6ab",
-      "compatibility_package_allowed": true,
+      "commit": "bdb9ff38846da7bf767448b48c130eb77bcd9f85",
+      "compatibility_package_allowed": false,
       "pr": 20,
-      "version": "1.1.0"
+      "version": "2.0.0"
     }
   },
-  "schema": "owner_native_namespace_release.v1",
-  "status": "merged-main-validated",
+  "schema": "owner_native_namespace_release.v2",
+  "status": "workspace-2.0-migration",
+  "worktree": {
+    "base_gitlinks_recorded_in_package_commit_fields": false,
+    "release_commits_pending": false
+  },
   "validation": {
     "alpha_namespace_job": 29306434651,
     "portfolio_namespace_job": 29306440619,

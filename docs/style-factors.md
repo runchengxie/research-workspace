@@ -87,8 +87,8 @@ date,return
 ```bash
 uv run python -m src.style_factors \
   --strategy-csv returns.csv \
-  --strategy-name cstree \
-  --outdir artifacts/style_analysis_cstree
+  --strategy-name strategy \
+  --outdir artifacts/style_analysis_strategy
 ```
 
 归因使用 OLS：

@@ -130,10 +130,10 @@
       "owner_repo": "strategy-pipeline",
       "entrypoint": "cstree alloc-hk",
       "kind": "deprecated_cli",
-      "replacement": "cstree alloc plus cstree export-targets",
-      "current_consumers": "active cstree CLI entry and alloc_hk implementation modules removed on 2026-06-13; private restore-only archive retains previous implementation",
+      "replacement": "strategy alloc plus strategy export-targets",
+      "current_consumers": "active legacy CLI entry and alloc_hk implementation modules removed on 2026-06-13; private restore-only archive retains previous implementation",
       "target_milestone": "completed in active A-share workspace cleanup",
-      "removal_condition": "No active cstree CLI or alloc_hk module exposure; rollback restores deprecated handler and modules from hk-freeze-20260613 or private archive.",
+      "removal_condition": "No active legacy CLI or alloc_hk module exposure; rollback restores deprecated handler and modules from hk-freeze-20260613 or private archive.",
       "rollback_path": "restore deprecated CLI handler and alloc_hk modules from hk-freeze-20260613 or private archive",
       "restore_evidence_required": true,
       "focused_tests": [

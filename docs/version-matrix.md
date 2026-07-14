@@ -55,3 +55,4 @@ python scripts/print_version_matrix.py
 | 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |
 | --- | --- | --- | --- | --- | --- |
 | 2026-07-14 | `a5cfede` / 0.2.0 | `329f1fa` / 0.2.0 | `d0eb474` / 1.1.0 | 已合并并验证：实现全部位于 owner-native package；活跃 smoke、文档、runtime module 和 canonical CLI 已切换到 owner 入口；`cstree` 仅由 strategy 在 1.x 提供限期兼容 facade。alpha 215、portfolio 197、strategy 735（另 1 skipped）项测试通过，workspace 边界、hard quality 与 doctor 通过 | `docs/owner-native-namespace-release.json`、`docs/evidence/owner-native-namespace-integration-20260714.json`、ADR-0002、PR #6/#8/#20 |
+| 2026-07-14 | `d8657fd` / 0.3.0 | `fb8fcc7` / 0.3.0 | `bdb9ff3` / 2.0.0 | workspace 2.0 已发布：删除 1.x 共享 namespace facade、旧 CLI 与环境变量 fallback；运行时 logger、artifact contract 和活跃脚本统一为 owner-native 名称；三个仓库均完成 full gate、推送并与远端 `main` 同步。 | `docs/owner-native-namespace-release.json`、ADR-0002 |

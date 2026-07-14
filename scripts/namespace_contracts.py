@@ -33,8 +33,17 @@ def check_manifest() -> list[str]:
         actual = gitlink_sha(repo)
         if actual != package["commit"]:
             errors.append(f"{repo}: gitlink {actual} != manifest {package['commit']}")
+        project_path = ROOT / repo / "pyproject.toml"
+        if project_path.is_file():
+            project = tomllib.loads(project_path.read_text(encoding="utf-8"))["project"]
+            if project["version"] != package["version"]:
+                errors.append(
+                    f"{repo}: project version {project['version']} != manifest {package['version']}"
+                )
     if manifest["compatibility"]["owner"] != "strategy-pipeline":
-        errors.append("legacy compatibility owner must be strategy-pipeline")
+        errors.append("removed compatibility record must be owned by strategy-pipeline")
+    if manifest["compatibility"].get("status") != "removed":
+        errors.append("shared namespace compatibility status must be removed")
     return errors
 
 
@@ -49,14 +58,10 @@ def check_initialized_layout() -> list[str]:
         repo_root = ROOT / repo
         if not (repo_root / "src" / package / "__init__.py").is_file():
             errors.append(f"{repo}: missing canonical package src/{package}")
-    for repo in ("alpha-research", "portfolio-backtester"):
-        legacy_tree = ROOT / repo / "src/cstree"
-        if any(legacy_tree.rglob("*.py")):
-            errors.append(f"{repo}: legacy src/cstree must not exist")
-    compat = ROOT / "strategy-pipeline/src/cstree"
-    actual = {path.name for path in compat.glob("*.py")} if compat.exists() else set()
-    if actual != {"__init__.py", "__main__.py"}:
-        errors.append(f"strategy-pipeline: unexpected compatibility files {sorted(actual)}")
+    for repo in expected:
+        removed_tree = ROOT / repo / "src/cstree"
+        if any(removed_tree.rglob("*.py")):
+            errors.append(f"{repo}: removed shared namespace source must not exist")
     for repo in expected:
         src = ROOT / repo / "src"
         if src.exists():
@@ -65,10 +70,12 @@ def check_initialized_layout() -> list[str]:
                     errors.append(f"shared namespace mechanism: {path.relative_to(ROOT)}")
     project = tomllib.loads((ROOT / "strategy-pipeline/pyproject.toml").read_text(encoding="utf-8"))
     scripts = project["project"]["scripts"]
-    if scripts.get("strategy") != "strategy_pipeline.cli:main":
-        errors.append("strategy-pipeline: canonical strategy CLI missing")
-    if scripts.get("cstree") != "strategy_pipeline.legacy_cli:main":
-        errors.append("strategy-pipeline: cstree compatibility CLI missing")
+    expected_scripts = {
+        "strategy": "strategy_pipeline.cli:main",
+        "strategy-pipeline": "strategy_pipeline.cli:main",
+    }
+    if scripts != expected_scripts:
+        errors.append(f"strategy-pipeline: unexpected console scripts {scripts!r}")
     return errors
 
 

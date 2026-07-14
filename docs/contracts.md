@@ -57,18 +57,18 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 
 | Artifact | Contract | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
-| `signals.parquet` | `cstree.signals` | `alpha-research` | `alpha_research.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
-| `signals.meta.json` | `cstree.signals metadata` | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
-| `positions_by_rebalance.csv` | `cstree.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
+| `signals.parquet` | `alpha_research.signals` | `alpha-research` | `alpha_research.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
+| `signals.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `signal_artifact_summary` | contract name、schema version、文件路径、行数、required columns |
+| `positions_by_rebalance.csv` | `portfolio_backtester.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`；常见字段包括 `entry_date`、`side`、`signal`、`rank` |
 | `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
 | `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `strategy export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
-| `signals_style_replica.parquet` | `cstree.signals` (style_replica variant) | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
-| `signals_style_replica.meta.json` | `cstree.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | contract name、schema version、model_version、config (a/b slots、theme quotas) |
+| `signals_style_replica.parquet` | `alpha_research.signals` (style_replica variant) | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
+| `signals_style_replica.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | contract name、schema version、model_version、config (a/b slots、theme quotas) |
 | `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
 | `selection_receipt.json` | `daily_watch20.selection.v1 receipt` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | passed/quality 状态、A4/B16/20唯一计数、权重、分钟 required-date/as-of/lag、多周期标签、模型复用、热点输入、构造门禁和 artifact 哈希 |
 
 `signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
-也可以作为外部 producer 生成同一 `cstree.signals` 契约的每日热点候选信号。该外部信号只表示
+也可以作为外部 producer 生成同一 `alpha_research.signals` 契约的每日热点候选信号。该外部信号只表示
 候选池排序；是否构造成组合由 `strategy-pipeline` 的 `external_signals` / `hotsector_overlay`
 显式处理，是否导出执行目标由 `strategy export-targets` 显式处理。
 外部热点信号可携带 `daily_confirm_score`、`confidence_score`、`confidence_label`

@@ -105,18 +105,6 @@
       "status": "active_compatibility"
     },
     {
-      "path": "strategy-pipeline/src/cstree/__init__.py",
-      "owner_repo": "strategy-pipeline",
-      "kind": "deprecated_namespace_facade",
-      "replacement": "strategy_pipeline, alpha_research, and portfolio_backtester owner-native packages",
-      "current_consumers": "kept for the documented 1.x compatibility window while downstream Python imports migrate from cstree.*",
-      "removal_condition": "remove in workspace 2.0 only after the consumer audit finds no active cstree Python imports and canonical owner-native import docs/tests cover every supported mapping",
-      "rollback_path": "restore the two-file cstree compatibility package from the previous strategy-pipeline 1.x release tag",
-      "focused_tests": ["strategy-pipeline namespace migration tests", "workspace namespace contract tests"],
-      "consumer_audit": "manual_review_required before workspace 2.0 removal",
-      "status": "active_compatibility"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/data_providers.py",
       "owner_repo": "market-data-platform",
       "kind": "module_facade",

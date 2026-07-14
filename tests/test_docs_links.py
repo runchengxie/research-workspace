@@ -104,9 +104,9 @@ class DocsLinksTest(unittest.TestCase):
         contracts = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
 
         for phrase in (
-            "cstree.signals",
+            "alpha_research.signals",
             "signals.meta.json",
-            "cstree.positions_by_rebalance",
+            "portfolio_backtester.positions_by_rebalance",
             "positions_by_rebalance.csv",
             "quant-execution-engine.targets/v2",
             "targets.json.lineage.json",

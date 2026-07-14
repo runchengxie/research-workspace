@@ -242,8 +242,8 @@
       "action": "delete_after_split",
       "public_safety": "restore_sensitive",
       "restore_dependency": "previous implementation retained in hk-freeze-20260613 and private restore-only archives",
-      "consumer_audit_status": "repo-local focused audit passed; active cstree alloc-hk CLI and alloc_hk modules removed on 2026-06-13",
-      "replacement_path": "cstree alloc plus cstree export-targets for active flows",
+      "consumer_audit_status": "repo-local focused audit passed; active legacy allocation CLI and alloc_hk modules removed on 2026-06-13",
+      "replacement_path": "strategy alloc plus strategy export-targets for active flows",
       "required_redactions": [
         "provider assumptions",
         "private portfolio or execution references"

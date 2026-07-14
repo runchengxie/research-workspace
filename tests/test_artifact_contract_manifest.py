@@ -61,6 +61,34 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
     assert "eligible_for_live" in records["selection_receipt.json"]["required_fields"]
 
 
+def test_orchestration_contract_identities_match_owner_packages() -> None:
+    from alpha_research.signal_artifact import SIGNAL_CONTRACT_NAME as alpha_signal_name
+    from portfolio_backtester.contracts import (
+        BACKTEST_PRICING_CONTRACT_NAME as portfolio_pricing_name,
+    )
+    from portfolio_backtester.contracts import (
+        STRATEGY_SPEC_CONTRACT_NAME as portfolio_strategy_name,
+    )
+    from strategy_pipeline.contracts.backtest import (
+        BACKTEST_PRICING_CONTRACT_NAME as orchestration_pricing_name,
+    )
+    from strategy_pipeline.contracts.signals import (
+        SIGNAL_CONTRACT_NAME as orchestration_signal_name,
+    )
+    from strategy_pipeline.contracts.strategy import (
+        STRATEGY_SPEC_CONTRACT_NAME as orchestration_strategy_name,
+    )
+
+    records = {
+        str(record["artifact"]): record
+        for record in _load_manifest()["artifacts"]  # type: ignore[index]
+    }
+    assert alpha_signal_name == orchestration_signal_name == "alpha_research.signals"
+    assert records["signals.parquet"]["contract"] == alpha_signal_name
+    assert portfolio_pricing_name == orchestration_pricing_name
+    assert portfolio_strategy_name == orchestration_strategy_name
+
+
 def test_artifact_contract_manifest_is_docs_and_path_validated() -> None:
     contracts = _load_contracts_package()
     result = contracts.validate_artifact_contract_manifest(

@@ -11,9 +11,9 @@
 | `rqdata-hk-depth` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-tick` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-hk-assets` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
-| `cstree alloc-hk` | `strategy-pipeline` | `cstree alloc` plus `cstree export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
+| 历史港股 allocation CLI | `strategy-pipeline` | `strategy alloc` plus `strategy export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
 | HK historical experiment configs | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | active experiment configs archived 2026-06-13 |
-| `cstree` Python namespace、CLI 与 `CSTREE_*` | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | deprecated | remove in workspace 2.0 |
+| 旧共享 Python namespace、CLI 与环境变量 fallback | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
 
 ## 删除门禁
 
@@ -25,7 +25,7 @@
 - 负责仓库中的 focused tests；
 - restore-sensitive 入口需要恢复证据。
 
-实际删除必须在负责仓库内做 focused verification，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股 provider 生产命令、`cstree alloc-hk`、`alloc_hk` 模块、HK research implementation modules 和活跃 HK experiment configs 移出活跃区；需要复现时从 freeze tag 或恢复专用归档恢复。
+实际删除必须在负责仓库内做 focused verification，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股 provider 生产命令、历史港股 allocation CLI、`alloc_hk` 模块、HK research implementation modules 和活跃 HK experiment configs 移出活跃区；需要复现时从 freeze tag 或恢复专用归档恢复。
 
 框架替换产生的兼容 facade 还必须满足以下条件：
 
@@ -39,6 +39,6 @@
 
 ## Owner-native namespace compatibility
 
-`cstree` 兼容面只能由 `strategy-pipeline` 提供。alpha 和 portfolio distribution
+旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio distribution
 不得重新安装共享 namespace。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
 配置 dotted path、日志 namespace、外部 notebook 与命令行 consumer audit。

@@ -41,7 +41,7 @@
   "artifacts": [
     {
       "artifact": "signals.parquet",
-      "contract": "cstree.signals",
+      "contract": "alpha_research.signals",
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
@@ -66,7 +66,7 @@
           "repo": "strategy-pipeline",
           "module": "strategy_pipeline.contracts.signals",
           "path": "src/strategy_pipeline/contracts/signals.py",
-          "role": "compatibility_contract"
+          "role": "orchestration_schema_helper"
         }
       ],
       "required_fields": [
@@ -94,11 +94,11 @@
         "confidence_score",
         "confidence_label"
       ],
-      "notes": "Alpha owns canonical research signal generation and validation; market-intel/hot-sector-screener may produce external cstree.signals-compatible daily candidate signals with optional explanation columns. strategy-pipeline keeps only compatibility/orchestration-facing helpers until this moves into a shared package."
+      "notes": "Alpha owns canonical research signal generation and validation; market-intel/hot-sector-screener may produce external alpha_research.signals-compatible daily candidate signals with optional explanation columns. strategy-pipeline keeps only orchestration-facing helpers until this moves into a shared package."
     },
     {
       "artifact": "signals.meta.json",
-      "contract": "cstree.signals metadata",
+      "contract": "alpha_research.signals metadata",
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
@@ -132,7 +132,7 @@
     },
     {
       "artifact": "positions_by_rebalance.csv",
-      "contract": "cstree.positions_by_rebalance",
+      "contract": "portfolio_backtester.positions_by_rebalance",
       "schema_version": 1,
       "owner": "portfolio-backtester",
       "producer": "portfolio-backtester",

@@ -38,7 +38,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | --- | --- | --- |
 | 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、manifest、registry |
 | 研究数据集 | `alpha-research` / `strategy-pipeline` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
-| 模型 | `alpha-research` | `CSTreeModel.detail()`、`feature_importance.csv`、`model_detail` summary |
+| 模型 | `alpha-research` | `ResearchModel.detail()`、`feature_importance.csv`、`model_detail` summary |
 | 信号 | `alpha-research` | `signals.parquet` |
 | 组合 | `portfolio-backtester` | named `StrategySpec`、`positions_by_rebalance.csv`、`positions_current*.csv` |
 | 执行交接 | `strategy-pipeline` -> `quant-execution-engine` | `targets.json`、`targets.json.lineage.json`、`qexec rebalance` |
@@ -50,7 +50,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、A 股资产发布和港股归档 freeze / hydrate 恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
-| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，保留 CLI、兼容门面、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
+| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责 CLI、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界

@@ -16,7 +16,13 @@ def test_owner_native_manifest_matches_gitlinks() -> None:
     assert MODULE.check_manifest() == []
 
 
-def test_manifest_declares_single_compatibility_owner() -> None:
+def test_manifest_records_removed_compatibility_surface() -> None:
     manifest = MODULE.load_manifest()
+    assert manifest["schema"] == "owner_native_namespace_release.v2"
     assert manifest["compatibility"]["owner"] == "strategy-pipeline"
-    assert manifest["compatibility"]["removal_release"] == "workspace-2.0"
+    assert manifest["compatibility"]["removed_in"] == "workspace-2.0"
+    assert manifest["compatibility"]["status"] == "removed"
+    assert manifest["packages"]["alpha-research"]["version"] == "0.3.0"
+    assert manifest["packages"]["portfolio-backtester"]["version"] == "0.3.0"
+    assert manifest["packages"]["strategy-pipeline"]["version"] == "2.0.0"
+    assert manifest["packages"]["strategy-pipeline"]["compatibility_package_allowed"] is False
