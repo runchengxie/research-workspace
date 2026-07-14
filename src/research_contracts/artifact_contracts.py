@@ -71,15 +71,25 @@ def _strings(values: object) -> list[str]:
     return [value for value in values if isinstance(value, str) and value.strip()]
 
 
+def _load_contract_docs(docs_path: Path) -> str:
+    """Load the main contract page and owner-focused contract extensions."""
+
+    documents = [docs_path]
+    extension_dir = docs_path.parent / "contracts.d"
+    if extension_dir.is_dir():
+        documents.extend(sorted(extension_dir.glob("*.md")))
+    return "\n\n".join(path.read_text(encoding="utf-8") for path in documents)
+
+
 def _docs_sync_issues(record: Mapping[str, Any], docs_text: str) -> list[str]:
     issues: list[str] = []
     artifact = str(record.get("artifact", "")).strip()
     contract = str(record.get("contract", "")).strip()
     owner = str(record.get("owner", "")).strip()
     expected_tokens = [
-        (artifact, f"{artifact}: missing from docs/contracts.md"),
-        (contract, f"{artifact}: contract {contract!r} missing from docs/contracts.md"),
-        (owner, f"{artifact}: owner {owner!r} missing from docs/contracts.md"),
+        (artifact, f"{artifact}: missing from docs/contracts.md or docs/contracts.d"),
+        (contract, f"{artifact}: contract {contract!r} missing from contract docs"),
+        (owner, f"{artifact}: owner {owner!r} missing from contract docs"),
     ]
     for token, message in expected_tokens:
         if token and token not in docs_text:
@@ -164,7 +174,7 @@ def validate_artifact_contract_manifest(
 ) -> ContractValidationResult:
     try:
         manifest = load_artifact_contract_manifest(manifest_path)
-        docs_text = docs_path.read_text(encoding="utf-8")
+        docs_text = _load_contract_docs(docs_path)
     except (FileNotFoundError, json.JSONDecodeError, OSError, ValueError) as exc:
         return ContractValidationResult((str(exc),))
 
