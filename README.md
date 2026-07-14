@@ -1,144 +1,109 @@
-# 量化研发平台
+# 量化研发工作区
 
-这个仓库是量化研发平台，负责把数据平台、alpha 研究、组合回测、策略编排和交易执行固定在一组可以一起工作的版本上，并说明它们之间怎样交接。
-
-如果你是第一次接触这个项目，可以把这里理解成一张入口地图：
+`research-workspace` 用 Git 子模块锁定一组可以协同工作的量化研发仓库，并维护跨仓库文件约定、版本组合和轻量检查。
 
 ```text
 market-data-platform
-  生产并发布数据资产
-        |
-        v
+  发布数据资产
+        ↓
 alpha-research
-  因子、模型、稳健性和信号产物
-        |
-        v
+  生成特征、模型和信号产物
+        ↓
 portfolio-backtester
-  组合构造、回测、容量和报告
-        |
-        v
+  构造组合并完成回测、成本和容量分析
+        ↓
 strategy-pipeline
-  研究编排、CLI 兼容层和目标持仓导出
-        |
-        v
+  编排研究流程并导出 targets.json
+        ↓
 quant-execution-engine
-  读取 targets.json，做预演、模拟盘或受控实盘执行
+  预演、风控、执行和审计
 ```
 
-当前活跃方向是 A 股数据、研究和执行交接。中国香港市场真实资产和研究输出按冷存储和
-显式恢复流程保留。公开展示使用工作区外、暂停维护状态的合成演示仓库：
-`https://github.com/runchengxie/hk-cross-sectional-strategy-demo`。该演示仓库独立于本工作区，
-不进入顶层 CI、发布矩阵或日常工作流。
+当前活跃主线是 A 股数据、研究和执行交接。港股真实资产与历史研究输出进入恢复专用归档。公开合成演示仓库独立维护，不参与本工作区的版本锁定和检查。
 
-## 先知道什么
+## 仓库组成
 
-- 顶层仓库只做集成、文档、轻量检查和子模块版本锁定。
-- 顶层 Git 当前锁定 5 个活跃子模块；`src/research_contracts` 是顶层直接追踪的本地契约校验薄包，不登记为子模块。
-- 大型市场数据、研究输出、provider 缓存、交易审计日志不要放在顶层仓库。
-- 数据资产的正式入口是共享数据根目录下的 `metadata/current_assets/*.json` 和 `metadata/dataset_registry.csv`。
-- 研究到执行的正式交接文件是 `targets.json`，由 `strategy-pipeline` 编排导出，由 `quant-execution-engine` 读取。
-- 模拟盘和实盘能力由执行引擎自己的安全门禁控制；顶层脚本不会直接触发真实券商交易。
+| 目录 | 职责 |
+| --- | --- |
+| `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
+| `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
+| `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
+| `strategy-pipeline/` | 研究编排、CLI、运行目录、持仓快照和目标文件导出 |
+| `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
+| `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
 
-## 第一次启动
+三个研究侧 Python 包已经采用各自的权威命名空间：
 
-克隆仓库并拉取子模块：
+- `alpha_research`
+- `portfolio_backtester`
+- `strategy_pipeline`
+
+历史 `cstree` 兼容入口只由 `strategy-pipeline` 在 1.x 期间提供，计划在工作区 2.0 删除。
+
+## 快速开始
 
 ```bash
 git clone --recurse-submodules https://github.com/runchengxie/research-workspace.git
 cd research-workspace
+python scripts/workspace_doctor.py
+python src/research_contracts/smoke_contracts.py
 ```
 
-如果你已经克隆了顶层仓库：
+已有本地仓库时先同步子模块：
 
 ```bash
 git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
-先跑顶层健康检查：
+新机器的完整安装步骤见 [docs/bootstrap.md](docs/bootstrap.md)。
+
+## 常用检查
+
+顶层测试：
 
 ```bash
-python scripts/workspace_doctor.py
-python src/research_contracts/smoke_contracts.py
-```
-
-更完整的新机器配置，包括子项目依赖、`DATA_PLATFORM_ROOT` 和委托检查，见 [新机器初始化](docs/bootstrap.md)。
-
-## 你现在要做什么
-
-| 目标 | 建议入口 |
-| --- | --- |
-| 先把工作区跑起来 | [docs/bootstrap.md](docs/bootstrap.md) |
-| 了解数据、研究、执行怎样衔接 | [docs/platform-workflow.md](docs/platform-workflow.md) |
-| 推进 A 股主线或恢复港股归档 | [docs/data-transition-playbook.md](docs/data-transition-playbook.md) |
-| 做 A 股市场风格复盘或策略归因 | [docs/style-factors.md](docs/style-factors.md) |
-| 查看中国香港市场归档状态 | [docs/archive/hk/README.md](docs/archive/hk/README.md) |
-| 查看港股公开拆分清单 | [docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml) |
-| 按阶段4收敛清单推进架构边界 | [docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md) |
-| 查跨仓库文件约定和边界 | [docs/contracts.md](docs/contracts.md) |
-| 查看维护债治理入口 | [docs/maintainability-governance.md](docs/maintainability-governance.md) |
-| 查看文档生命周期和归档规则 | [docs/documentation-lifecycle.md](docs/documentation-lifecycle.md) |
-| 查看废弃入口删除条件 | [docs/deprecations.md](docs/deprecations.md) |
-| 看当前锁定的子模块组合 | [docs/version-matrix.md](docs/version-matrix.md) |
-| 查看顶层测试和质量检查入口 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md) |
-| 更新子模块指针或发布一组组合 | [docs/workspace-maintenance.md](docs/workspace-maintenance.md)、[docs/release-checklist.md](docs/release-checklist.md) |
-| 找全部顶层文档入口 | [docs/README.md](docs/README.md) |
-
-## 工作区组成
-
-| 子项目 | 负责什么 | 从哪里读 |
-| --- | --- | --- |
-| [market-data-platform](market-data-platform/) | 维护共享数据目录、当前数据契约、资产索引、A 股 RQData/TuShare 入口，以及港股冷存储冻结与恢复控制面。 | [market-data-platform/README.md](market-data-platform/README.md) |
-| [alpha-research](alpha-research/) | 承载 `alpha_research.*`：特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断。 | [alpha-research/README.md](alpha-research/README.md) |
-| [portfolio-backtester](portfolio-backtester/) | 承载 `portfolio_backtester.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
-| [strategy-pipeline](strategy-pipeline/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容门面、持仓快照和 `targets.json` 导出。 | [strategy-pipeline/README.md](strategy-pipeline/README.md) |
-| [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
-| [research-contracts](src/research_contracts/) | 顶层普通目录，提供跨仓库产物契约清单的加载和校验，不独立提交子模块指针。 | [docs/contracts.md](docs/contracts.md) |
-
-港股公开演示仓库独立于这些活跃子项目，仅用于作品集展示。真实港股历史复现以
-[中国香港市场归档](docs/archive/hk/README.md)、冷存储发布包、清单、恢复演练
-和对应子仓库兼容入口为准；迁出或删除候选面由
-[港股公开拆分清单](docs/hk-public-split-manifest.yml) 记录。旧的兼容面和公开演示说明页仍作为兼容入口保留；默认阅读路径从 [docs/README.md](docs/README.md) 开始。
-
-## 常用顶层命令
-
-```bash
-python scripts/workspace_doctor.py
-python src/research_contracts/smoke_contracts.py
-python src/research_contracts/a_share_readiness.py --artifacts-root "$DATA_PLATFORM_ROOT" --pretty
-python scripts/print_version_matrix.py
 uv run --project strategy-pipeline --extra dev \
   --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
   python -m pytest tests -q
-python scripts/run_submodule_checks.py --profile smoke
-python scripts/run_submodule_checks.py --profile full --dry-run
-python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
+```
+
+顶层质量检查：
+
+```bash
 python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile basedpyright
 ```
 
-`run_submodule_checks.py` 只按清单进入子项目运行它们自己的命令，不读取或解释子项目内部源码结构。`full` 默认使用 Ruff、ty 和 pytest；`release_typecheck` 统一运行 BasedPyright 建议项。执行引擎自己的 `Makefile` 也使用 Ruff、ty 和 pytest 作为基础门禁，mypy 保留为单独建议项。更详细的维护方式见 [工作区维护](docs/workspace-maintenance.md)。
+委托子仓库执行各自的检查：
 
-`a_share_readiness.py` 只读检查 A 股迁移证据，不会下载数据、训练模型或连接券商。完整 baseline 验收时通过 `--evidence-manifest <json>` 提供研究输出、目标文件 lineage 和执行 dry-run 报告。
-
-## 协作边界
-
-日常开发通常在对应子项目中完成；跨仓库文件约定、子模块指针、顶层 doctor、发布检查清单或工作区说明需要变化时，再修改顶层仓库。
-
-团队级协作入口见 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [ARCHITECTURE.md](ARCHITECTURE.md)。
-新增废弃兼容面、一次性脚本、质量检查排除项、`targets.json` 文件约定影响，或新增 provider / broker 凭证读取时，先更新对应治理文档。
-
-修改文档时请保持市场称谓清晰：优先使用中国香港市场、港股、港股通、中国大陆市场、A 股等业务表述。当前 A 股权威 current contract 文件名是：
-
-```text
-metadata/current_assets/a_share_current.json
+```bash
+python scripts/run_submodule_checks.py --profile smoke
+python scripts/run_submodule_checks.py --profile full --dry-run
+python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-旧称 `cn_current.json` 只作为历史兼容或 alias 说明，不作为新文档里的权威入口。
+`full` 运行各仓库当前的 Ruff、格式、`ty` 和 `pytest` 检查。`release_typecheck` 运行 BasedPyright 诊断。
 
-## Python 命名空间
+当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板，本地命令和人工发布检查仍是当前事实来源。
 
-工作区使用 owner-native package：`alpha_research`、`portfolio_backtester` 和
-`strategy_pipeline`。历史 `cstree` 只由 `strategy-pipeline` 提供 1.x 兼容 facade，
-不再通过多个 distribution 拼接，并计划在工作区 2.0 删除。详见
-[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
+## 重要边界
+
+- 大型市场数据、研究输出、缓存和交易审计日志放在仓库外。
+- 数据资产从 `$DATA_PLATFORM_ROOT/metadata/current_assets/*.json` 和 `dataset_registry.csv` 读取。
+- A 股权威 current contract 是 `metadata/current_assets/a_share_current.json`。
+- 研究到执行的交接文件是 `targets.json`。
+- 顶层脚本不会绕过执行引擎的模拟盘或实盘安全门禁。
+- 凭证只放在对应子仓库规定的私有位置，不进入顶层 `.env`。
+
+## 文档入口
+
+- [新机器初始化](docs/bootstrap.md)
+- [平台工作流](docs/platform-workflow.md)
+- [架构边界](ARCHITECTURE.md)
+- [跨仓库文件约定](docs/contracts.md)
+- [工作区维护](docs/workspace-maintenance.md)
+- [质量治理](docs/quality-governance.md)
+- [版本矩阵](docs/version-matrix.md)
+- [发布检查清单](docs/release-checklist.md)
+- [文档总入口](docs/README.md)
