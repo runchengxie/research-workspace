@@ -1,0 +1,264 @@
+name: owner-native namespace integration v2
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.head_ref == 'architecture/owner-native-namespaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ github.token }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Apply corrected workspace contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          git show b5b4945cb630442cc0250ab30744decc4b6c0b00:.github/workflows/owner-native-namespace-integration.yml > /tmp/integration.yml
+          python - <<'PY'
+          from pathlib import Path
+
+          text = Path('/tmp/integration.yml').read_text(encoding='utf-8')
+          marker = "          python - <<'PY'\n"
+          start = text.index(marker) + len(marker)
+          end = text.index("\n          PY", start)
+          body = text[start:end]
+          lines = [line[10:] if line.startswith('          ') else line for line in body.splitlines()]
+          Path('/tmp/integrate.py').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+          python /tmp/integrate.py
+          cat > tests/test_workspace_import_boundaries.py <<'PY'
+          from __future__ import annotations
+
+          import importlib.util
+          import sys
+          import textwrap
+          from pathlib import Path
+
+          import pytest
+
+          ROOT = Path(__file__).resolve().parents[1]
+          SCRIPT = ROOT / "scripts" / "workspace_import_boundaries.py"
+
+          spec = importlib.util.spec_from_file_location("workspace_import_boundaries", SCRIPT)
+          workspace_import_boundaries = importlib.util.module_from_spec(spec)
+          assert spec.loader is not None
+          sys.modules[spec.name] = workspace_import_boundaries
+          spec.loader.exec_module(workspace_import_boundaries)
+
+
+          def _submodules_initialized() -> bool:
+              return all(
+                  path.is_file()
+                  for path in (
+                      ROOT / "alpha-research/src/alpha_research/__init__.py",
+                      ROOT / "portfolio-backtester/src/portfolio_backtester/__init__.py",
+                      ROOT / "strategy-pipeline/src/strategy_pipeline/__init__.py",
+                      ROOT / "market-data-platform/src/market_data_platform/__init__.py",
+                      ROOT / "quant-execution-engine/src/quant_execution_engine/__init__.py",
+                  )
+              )
+
+
+          def test_current_workspace_import_boundary_budgets_hold() -> None:
+              if not _submodules_initialized():
+                  pytest.skip("source-level boundary scan requires initialized submodules")
+
+              report = workspace_import_boundaries.build_report(ROOT)
+
+              assert report["issues"] == []
+              assert {
+                  "research-workspace:contracts-no-direct-framework-imports",
+                  "alpha-research:alpha-to-pipeline",
+                  "alpha-research:alpha-to-backtesting",
+                  "alpha-research:alpha-to-strategy-core-metrics",
+                  "alpha-research:alpha-to-strategy-compat",
+                  "alpha-research:alpha-to-strategy-rebalance",
+                  "alpha-research:alpha-to-strategy-signal-contract",
+                  "portfolio-backtester:backtesting-to-pipeline",
+                  "portfolio-backtester:backtesting-to-alpha",
+                  "portfolio-backtester:backtesting-to-strategy-core-metrics",
+                  "portfolio-backtester:backtesting-to-strategy-rebalance",
+                  "portfolio-backtester:backtesting-to-strategy-liquidity-proxy",
+                  "portfolio-backtester:backtesting-to-strategy-contracts",
+                  "market-data-platform:no-cstree-imports",
+                  "quant-execution-engine:no-cstree-imports",
+                  "strategy-pipeline:no-execution-engine-imports",
+                  "strategy-pipeline:contracts-pure-handoff",
+                  "strategy-pipeline:target-contract-no-direct-framework-imports",
+                  "market-data-platform:published-contract-no-direct-qlib-imports",
+                  "alpha-research:artifact-contract-no-direct-qlib-imports",
+                  "alpha-research:signal-contract-no-direct-qlib-imports",
+                  "portfolio-backtester:contracts-no-direct-framework-imports",
+                  "quant-execution-engine:domain-no-direct-vnpy-imports",
+                  "quant-execution-engine:legacy-domain-no-direct-vnpy-imports",
+                  "quant-execution-engine:targets-no-direct-vnpy-imports",
+                  "research-workspace:legacy-hotsector-internal-imports",
+              } == {rule["id"] for rule in report["rules"]}
+              assert {
+                  "strategy-pipeline:no-local-alpha-backtesting-source",
+              } == {rule["id"] for rule in report["source_layout_rules"]}
+              assert all(rule["count"] == 0 for rule in report["source_layout_rules"])
+
+
+          def test_owner_native_cross_imports_are_detected(tmp_path: Path) -> None:
+              source = tmp_path / "alpha-research" / "src" / "alpha_research"
+              source.mkdir(parents=True)
+              (source / "example.py").write_text(
+                  textwrap.dedent(
+                      """
+                      from strategy_pipeline.pipeline.dates import build_walk_forward_windows
+                      from portfolio_backtester.engine import backtest_topk
+                      """
+                  ),
+                  encoding="utf-8",
+              )
+              rules = (
+                  workspace_import_boundaries.BoundaryRule(
+                      identifier="alpha-to-pipeline",
+                      description="test",
+                      repo="alpha-research",
+                      source="src/alpha_research",
+                      forbidden=("strategy_pipeline",),
+                      max_allowed=0,
+                  ),
+                  workspace_import_boundaries.BoundaryRule(
+                      identifier="alpha-to-backtesting",
+                      description="test",
+                      repo="alpha-research",
+                      source="src/alpha_research",
+                      forbidden=("portfolio_backtester",),
+                      max_allowed=0,
+                  ),
+              )
+
+              report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+              assert report["issues"] == [
+                  "alpha-to-pipeline: 1 imports exceed budget 0",
+                  "alpha-to-backtesting: 1 imports exceed budget 0",
+              ]
+
+
+          def test_single_file_contract_rule_blocks_optional_framework_import(tmp_path: Path) -> None:
+              contract = tmp_path / "owner" / "src" / "owner" / "contract.py"
+              contract.parent.mkdir(parents=True)
+              contract.write_text("from qlib.data.dataset import DatasetH\n", encoding="utf-8")
+              rules = (
+                  workspace_import_boundaries.BoundaryRule(
+                      identifier="contract-no-framework",
+                      description="test",
+                      repo="owner",
+                      source="src/owner/contract.py",
+                      forbidden=("qlib",),
+                      max_allowed=0,
+                  ),
+              )
+
+              report = workspace_import_boundaries.build_report(tmp_path, rules, ())
+
+              assert report["issues"] == ["contract-no-framework: 1 imports exceed budget 0"]
+              assert report["rules"][0]["findings"] == [
+                  {
+                      "path": "owner/src/owner/contract.py",
+                      "line": 1,
+                      "module": "qlib.data.dataset",
+                      "matched": "qlib",
+                  }
+              ]
+
+
+          def test_strategy_pipeline_source_layout_rule_blocks_embedded_owner_code(
+              tmp_path: Path,
+          ) -> None:
+              source = tmp_path / "strategy-pipeline" / "src" / "portfolio_backtester"
+              source.mkdir(parents=True)
+              (source / "engine.py").write_text(
+                  "def backtest_topk():\n    return None\n",
+                  encoding="utf-8",
+              )
+              rules = (
+                  workspace_import_boundaries.SourceLayoutRule(
+                      identifier="no-local-backtesting",
+                      description="test",
+                      repo="strategy-pipeline",
+                      forbidden_sources=("src/portfolio_backtester",),
+                      max_allowed=0,
+                  ),
+              )
+
+              report = workspace_import_boundaries.build_report(tmp_path, (), rules)
+
+              assert report["issues"] == [
+                  "no-local-backtesting: 1 source files exceed budget 0",
+              ]
+              assert report["source_layout_rules"][0]["findings"] == [
+                  {
+                      "matched": "src/portfolio_backtester",
+                      "path": "strategy-pipeline/src/portfolio_backtester/engine.py",
+                  }
+              ]
+
+
+          def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
+              tmp_path: Path,
+          ) -> None:
+              source = tmp_path / "strategy-pipeline" / "src" / "strategy_pipeline" / "contracts"
+              source.mkdir(parents=True)
+              (source / "signals.py").write_text(
+                  textwrap.dedent(
+                      """
+                      from ..pipeline.runner import run_pipeline
+                      from quant_execution_engine.targets import TargetSet
+                      """
+                  ),
+                  encoding="utf-8",
+              )
+              rules = (
+                  workspace_import_boundaries.BoundaryRule(
+                      identifier="contracts-pure-handoff",
+                      description="test",
+                      repo="strategy-pipeline",
+                      source="src/strategy_pipeline/contracts",
+                      forbidden=("strategy_pipeline.pipeline", "quant_execution_engine"),
+                      max_allowed=0,
+                  ),
+              )
+
+              report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+              assert report["issues"] == [
+                  "contracts-pure-handoff: 2 imports exceed budget 0",
+              ]
+              assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
+                  "strategy_pipeline.pipeline",
+                  "quant_execution_engine",
+              ]
+          PY
+          python -m pip install --disable-pip-version-check pytest
+          python -m compileall -q scripts src tests
+          python scripts/namespace_contracts.py --manifest-only
+          python -m pytest -q tests/test_namespace_contracts.py tests/test_workspace_import_boundaries.py
+          git rm .github/workflows/owner-native-namespace-integration.yml
+          git rm .github/workflows/namespace-integration-debug.yml
+          git rm .github/workflows/owner-native-namespace-integration-v2.yml
+      - name: Commit workspace integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(namespace): enforce owner-native workspace contracts'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
