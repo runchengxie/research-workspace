@@ -1,0 +1,26 @@
+name: namespace source export
+
+on:
+  push:
+    branches:
+      - artifact/namespace-integration-export
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: artifact/namespace-integration-export
+          fetch-depth: 1
+          submodules: false
+      - name: Build source snapshot
+        run: tar --exclude=.git --exclude=.venv --exclude=artifacts --exclude=alpha-research --exclude=portfolio-backtester --exclude=strategy-pipeline --exclude=market-data-platform --exclude=quant-execution-engine -czf /tmp/research-workspace-source.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: research-workspace-source
+          path: /tmp/research-workspace-source.tar.gz
+          if-no-files-found: error
