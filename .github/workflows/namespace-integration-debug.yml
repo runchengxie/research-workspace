@@ -1,73 +1,10 @@
-name: namespace integration debug
+name: retired namespace integration debug
 
 on:
-  pull_request:
-    branches: [main]
-
-permissions:
-  contents: read
+  workflow_dispatch:
 
 jobs:
-  debug:
-    if: github.head_ref == 'architecture/owner-native-namespaces'
+  retired:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-      - name: Capture integration traceback
-        shell: bash
-        run: |
-          set +e
-          git show b5b4945cb630442cc0250ab30744decc4b6c0b00:.github/workflows/owner-native-namespace-integration.yml > /tmp/integration.yml 2> /tmp/extract.log
-          python - <<'PY' >> /tmp/extract.log 2>&1
-          from pathlib import Path
-          text = Path('/tmp/integration.yml').read_text(encoding='utf-8')
-          marker = "          python - <<'PY'\n"
-          start = text.index(marker) + len(marker)
-          end = text.index("\n          PY", start)
-          body = text[start:end]
-          lines = [line[10:] if line.startswith('          ') else line for line in body.splitlines()]
-          Path('/tmp/integrate.py').write_text('\n'.join(lines) + '\n', encoding='utf-8')
-          PY
-          extract_status=$?
-          if [ "$extract_status" -eq 0 ]; then
-            python /tmp/integrate.py > /tmp/integration.log 2>&1
-            script_status=$?
-          else
-            script_status=99
-            cp /tmp/extract.log /tmp/integration.log
-          fi
-          if [ "$script_status" -eq 0 ]; then
-            python -m pip install --disable-pip-version-check pytest >> /tmp/integration.log 2>&1
-            install_status=$?
-            python -m compileall -q scripts src tests >> /tmp/integration.log 2>&1
-            compile_status=$?
-            python scripts/namespace_contracts.py --manifest-only >> /tmp/integration.log 2>&1
-            manifest_status=$?
-            python -m pytest -q tests/test_namespace_contracts.py tests/test_workspace_import_boundaries.py >> /tmp/integration.log 2>&1
-            pytest_status=$?
-          else
-            install_status=98
-            compile_status=98
-            manifest_status=98
-            pytest_status=98
-          fi
-          printf 'extract_status=%s\nscript_status=%s\ninstall_status=%s\ncompile_status=%s\nmanifest_status=%s\npytest_status=%s\n' \
-            "$extract_status" "$script_status" "$install_status" "$compile_status" "$manifest_status" "$pytest_status" > /tmp/status.txt
-          cp /tmp/integrate.py /tmp/integrate-captured.py 2>/dev/null || true
-          exit 0
-      - uses: actions/upload-artifact@v4
-        with:
-          name: workspace-namespace-integration-debug
-          path: |
-            /tmp/status.txt
-            /tmp/extract.log
-            /tmp/integration.log
-            /tmp/integrate-captured.py
-          if-no-files-found: error
+      - run: echo 'Root cause captured; superseded by owner-native-namespace-integration-v2.yml'
