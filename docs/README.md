@@ -15,6 +15,7 @@
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
+| 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
 | 维护子模块和运行检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量检查分类 | [quality-governance.md](quality-governance.md) |
