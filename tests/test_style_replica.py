@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from cstree.alpha.style_replica import (
+from alpha_research.style_replica import (
     AI_HARDWARE_THEME_QUOTAS,
     StyleReplicaPortfolioConfig,
     build_style_replica_positions,
@@ -28,9 +28,9 @@ from cstree.alpha.style_replica import (
     generate_daily_signals,
     map_stock_to_theme,
 )
-from cstree.alpha.style_replica.factors import compute_all_style_factors
-from cstree.alpha.style_replica.resvol import compute_resvol_factor
-from cstree.alpha.style_replica.theme_map import build_theme_map, get_theme_label
+from alpha_research.style_replica.factors import compute_all_style_factors
+from alpha_research.style_replica.resvol import compute_resvol_factor
+from alpha_research.style_replica.theme_map import build_theme_map, get_theme_label
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 

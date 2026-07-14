@@ -49,3 +49,9 @@ python scripts/print_version_matrix.py
 - 是否验证了模拟盘端到端流程。
 - 是否涉及实盘；实盘状态只能按人工监督下的真实结果填写。
 - 子模块是否存在未提交改动；如存在，请标为本地工作状态，发布前先清理或提交。
+
+## Owner-native namespace 候选组合
+
+| 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |
+| --- | --- | --- | --- | --- | --- |
+| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `24d4458` / 1.1.0 | 已验证候选：三个下游 namespace jobs 通过；真实五仓源码组合的 canonical/compatibility imports、完整 workspace import boundary、CLI parser、环境变量 fallback 和 compileall 通过；strategy lockfile 已与两个 0.2.0 owner package 对齐。合并后仍需刷新可能变化的 merge SHA | `docs/owner-native-namespace-release.json`、`docs/evidence/owner-native-namespace-integration-20260714.json`、ADR-0002、PR #6/#8/#20 |

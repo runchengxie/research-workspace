@@ -58,14 +58,14 @@
       "entrypoints": [
         {
           "repo": "alpha-research",
-          "module": "cstree.alpha.signal_artifact",
-          "path": "src/cstree/alpha/signal_artifact.py",
+          "module": "alpha_research.signal_artifact",
+          "path": "src/alpha_research/signal_artifact.py",
           "role": "canonical_implementation"
         },
         {
           "repo": "strategy-pipeline",
-          "module": "cstree.contracts.signals",
-          "path": "src/cstree/contracts/signals.py",
+          "module": "strategy_pipeline.contracts.signals",
+          "path": "src/strategy_pipeline/contracts/signals.py",
           "role": "compatibility_contract"
         }
       ],
@@ -115,8 +115,8 @@
       "entrypoints": [
         {
           "repo": "alpha-research",
-          "module": "cstree.alpha.signal_artifact",
-          "path": "src/cstree/alpha/signal_artifact.py",
+          "module": "alpha_research.signal_artifact",
+          "path": "src/alpha_research/signal_artifact.py",
           "role": "canonical_implementation"
         }
       ],
@@ -145,8 +145,8 @@
       "entrypoints": [
         {
           "repo": "portfolio-backtester",
-          "module": "cstree.backtesting.contracts",
-          "path": "src/cstree/backtesting/contracts.py",
+          "module": "portfolio_backtester.contracts",
+          "path": "src/portfolio_backtester/contracts.py",
           "role": "canonical_implementation"
         }
       ],
@@ -180,7 +180,7 @@
         {
           "repo": "strategy-pipeline",
           "module": "cstree.liveops.export_targets",
-          "path": "src/cstree/liveops/export_targets.py",
+          "path": "src/strategy_pipeline/liveops/export_targets.py",
           "role": "producer"
         },
         {
@@ -216,7 +216,7 @@
         {
           "repo": "strategy-pipeline",
           "module": "cstree.daily_watch20_publish",
-          "path": "src/cstree/daily_watch20_publish.py",
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
           "role": "canonical_producer"
         }
       ],
@@ -256,7 +256,7 @@
         {
           "repo": "strategy-pipeline",
           "module": "cstree.daily_watch20_publish",
-          "path": "src/cstree/daily_watch20_publish.py",
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
           "role": "canonical_producer"
         }
       ],

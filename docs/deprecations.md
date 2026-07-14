@@ -13,6 +13,7 @@
 | `rqdata-hk-assets` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `cstree alloc-hk` | `strategy-pipeline` | `cstree alloc` plus `cstree export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
 | HK historical experiment configs | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | active experiment configs archived 2026-06-13 |
+| `cstree` Python namespace、CLI 与 `CSTREE_*` | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | deprecated | remove in workspace 2.0 |
 
 ## 删除门禁
 
@@ -35,3 +36,9 @@
 - 对应 workstream 已在 [`framework-integration-ledger.yml`](framework-integration-ledger.yml) 达到退出条件。
 
 早期私有 legacy archive 暂存本身不授权删除；本页的 removed 状态必须同时引用恢复演练、consumer audit、source tag、focused verification 和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
+
+## Owner-native namespace compatibility
+
+`cstree` 兼容面只能由 `strategy-pipeline` 提供。alpha 和 portfolio distribution
+不得重新安装共享 namespace。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
+配置 dotted path、日志 namespace、外部 notebook 与命令行 consumer audit。

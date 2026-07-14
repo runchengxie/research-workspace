@@ -89,8 +89,8 @@ python src/research_contracts/smoke_contracts.py
 | 子项目 | 负责什么 | 从哪里读 |
 | --- | --- | --- |
 | [market-data-platform](market-data-platform/) | 维护共享数据目录、当前数据契约、资产索引、A 股 RQData/TuShare 入口，以及港股冷存储冻结与恢复控制面。 | [market-data-platform/README.md](market-data-platform/README.md) |
-| [alpha-research](alpha-research/) | 承载 `cstree.alpha.*`：特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断。 | [alpha-research/README.md](alpha-research/README.md) |
-| [portfolio-backtester](portfolio-backtester/) | 承载 `cstree.backtesting.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
+| [alpha-research](alpha-research/) | 承载 `alpha_research.*`：特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断。 | [alpha-research/README.md](alpha-research/README.md) |
+| [portfolio-backtester](portfolio-backtester/) | 承载 `portfolio_backtester.*`：组合构造、回测、执行模拟、容量、暴露、turnover 和报告。 | [portfolio-backtester/README.md](portfolio-backtester/README.md) |
 | [strategy-pipeline](strategy-pipeline/) | 只读消费已发布数据资产，保留研究编排、CLI、兼容门面、持仓快照和 `targets.json` 导出。 | [strategy-pipeline/README.md](strategy-pipeline/README.md) |
 | [quant-execution-engine](quant-execution-engine/) | 读取标准 `targets.json`，负责解析、dry-run、风控、模拟盘、实盘门禁和执行审计。 | [quant-execution-engine/README.md](quant-execution-engine/README.md) |
 | [research-contracts](src/research_contracts/) | 顶层普通目录，提供跨仓库产物契约清单的加载和校验，不独立提交子模块指针。 | [docs/contracts.md](docs/contracts.md) |
@@ -135,3 +135,10 @@ metadata/current_assets/a_share_current.json
 ```
 
 旧称 `cn_current.json` 只作为历史兼容或 alias 说明，不作为新文档里的权威入口。
+
+## Python 命名空间
+
+工作区使用 owner-native package：`alpha_research`、`portfolio_backtester` 和
+`strategy_pipeline`。历史 `cstree` 只由 `strategy-pipeline` 提供 1.x 兼容 facade，
+不再通过多个 distribution 拼接，并计划在工作区 2.0 删除。详见
+[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。

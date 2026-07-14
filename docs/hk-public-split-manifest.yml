@@ -235,7 +235,7 @@
       "id": "strategy-research-hk-allocation-compat",
       "owner_repo": "strategy-pipeline",
       "paths": [
-        "strategy-pipeline/src/cstree/liveops/alloc_hk*.py",
+        "strategy-pipeline/src/strategy_pipeline/liveops/alloc_hk*.py",
         "strategy-pipeline/tests/test_alloc_hk.py"
       ],
       "path_kind": "historical_git",

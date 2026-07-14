@@ -27,8 +27,8 @@
    - `strategy-pipeline` 只做编排与导出，不在同层重算内部逻辑。
 
 3. 回测引擎不绑定 alpha 实现细节
-   - `portfolio-backtester` 不应在 runtime import 回到 `cstree.alpha`。
-   - `alpha-research` 不应在 runtime import 回到 `cstree.backtesting`。
+   - `portfolio-backtester` 不应在 runtime import 回到 `alpha_research`。
+   - `alpha-research` 不应在 runtime import 回到 `portfolio_backtester`。
 
 4. 执行与回测严格分离
    - `quant-execution-engine` 只消费 `targets.json`。
