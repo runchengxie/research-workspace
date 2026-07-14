@@ -1,0 +1,34 @@
+{
+  "date": "2026-07-14",
+  "inputs": {
+    "alpha-research": "e24fce61845061705e44c0445001bc4b9a7226e5",
+    "market-data-platform": "f84d5bf83668acd174c7bbf5e3ea8e489aff72eb",
+    "portfolio-backtester": "426083f2e988f1e5003e19df28ebda8dafb3324b",
+    "quant-execution-engine": "ae20db3da07c1de42dc6ebb3b1f431fd84d1419a",
+    "strategy-pipeline": "5509966fbd284271d21cc06cace68f828278d22c"
+  },
+  "method": "GitHub Actions source snapshots assembled into one isolated local workspace",
+  "results": {
+    "alpha_namespace_tests": "2 passed",
+    "canonical_cli_parser": "passed",
+    "canonical_imports": "passed",
+    "compatibility_imports": [
+      "cstree.pipeline -> strategy_pipeline.pipeline",
+      "cstree.alpha.signal_artifact -> alpha_research.signal_artifact",
+      "cstree.backtesting.api -> portfolio_backtester.api"
+    ],
+    "compileall": "passed for all five active source trees and superproject src",
+    "environment_alias": "CSTREE_ARTIFACTS_ROOT -> STRATEGY_PIPELINE_ARTIFACTS_ROOT passed with deprecation warning",
+    "portfolio_namespace_tests": "2 passed",
+    "shared_namespace_layout": "alpha and portfolio have no src/cstree; strategy facade contains only __init__.py and __main__.py",
+    "strategy_namespace_tests": "5 passed",
+    "workspace_boundary_fixture_tests": "6 passed with gitlink-only test executed separately in PR checkout",
+    "workspace_import_boundary_scan": "passed; all required active owner boundaries at budget"
+  },
+  "schema": "owner_native_namespace_integration_evidence.v1",
+  "status": "passed",
+  "validation_limits": {
+    "full_uv_install_ci": "not run because WORKSPACE_SUBMODULE_READ_TOKEN is not configured in research-workspace Actions",
+    "gitlink_manifest": "passed in GitHub Actions run 29306709607 using a real repository checkout"
+  }
+}
