@@ -54,4 +54,4 @@ python scripts/print_version_matrix.py
 
 | 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |
 | --- | --- | --- | --- | --- | --- |
-| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `5a4bc49` / 1.1.0 | 候选：三个下游 PR 可合并，namespace compile/boundary/pytest jobs 通过；等待本 superproject 组合验证和按顺序合并 | `docs/owner-native-namespace-release.json`、ADR-0002、PR #6/#8/#20 |
+| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `5509966` / 1.1.0 | 已验证候选：三个下游 namespace jobs 通过；真实五仓源码组合的 canonical/compatibility imports、完整 workspace import boundary、CLI parser、环境变量 fallback 和 compileall 通过。合并后仍需刷新可能变化的 merge SHA | `docs/owner-native-namespace-release.json`、`docs/evidence/owner-native-namespace-integration-20260714.json`、ADR-0002、PR #6/#8/#20 |
