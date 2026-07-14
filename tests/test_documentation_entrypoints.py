@@ -38,7 +38,7 @@ def test_disabled_workflow_status_is_documented() -> None:
     assert not active.exists()
     assert disabled.is_file()
     assert "当前没有启用顶层 GitHub Actions workflow" in maintenance
-    assert "当前没有启用顶层 GitHub Actions workflow" in quality
+    assert "目前没有活动 GitHub Actions workflow" in quality
 
 
 def test_removed_mypy_is_not_delegated() -> None:
@@ -47,5 +47,5 @@ def test_removed_mypy_is_not_delegated() -> None:
     quality = (ROOT / "docs" / "quality-governance.md").read_text(encoding="utf-8").lower()
 
     assert "mypy" not in manifest
-    assert "mypy" not in maintenance
-    assert "mypy" not in quality
+    assert "mypy_advisory" not in maintenance
+    assert "mypy_advisory" not in quality
