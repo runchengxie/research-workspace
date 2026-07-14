@@ -43,7 +43,7 @@
       "repo": "strategy-pipeline",
       "max_large_files": 34,
       "max_long_functions": 96,
-      "max_complexity_hotspots": 49,
+      "max_complexity_hotspots": 48,
       "max_large_classes": 1,
       "owner_decision": "2026-07-14 DailyWatch20 strict hotspot-pool selection, freshness validation, and end-to-end scenario coverage expand the fail-closed delivery contract. Split the registered freshness and pipeline test hotspots before another delivery-policy family is added."
     },
