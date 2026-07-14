@@ -1,0 +1,56 @@
+name: final owner-native candidate pin validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.head_ref == 'architecture/owner-native-namespaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          submodules: false
+          token: ${{ github.token }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check pytest
+      - name: Validate gitlinks, manifest and evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m compileall -q scripts src tests
+          python scripts/namespace_contracts.py --manifest-only
+          python -m pytest -q tests/test_namespace_contracts.py tests/test_workspace_import_boundaries.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('docs/owner-native-namespace-release.json').read_text())
+          evidence = json.loads(
+              Path('docs/evidence/owner-native-namespace-integration-20260714.json').read_text()
+          )
+          expected = '24d4458d40444fe4e55e831c53a21fc8a61db786'
+          assert manifest['packages']['strategy-pipeline']['commit'] == expected
+          assert evidence['inputs']['strategy-pipeline'] == expected
+          assert manifest['validation']['strategy_lockfile_job'] == 29307638113
+          assert manifest['status'] == 'validated-candidate'
+          assert evidence['status'] == 'passed'
+          PY
+          git rm .github/workflows/namespace-final-pin-validation.yml
+      - name: Record successful final validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(namespace): record final candidate pin validation' .github/workflows/namespace-final-pin-validation.yml
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
