@@ -22,18 +22,21 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "5a4bc49f90dbff43a68a6c79a326565e4bdd7dd2",
+      "commit": "5509966fbd284271d21cc06cace68f828278d22c",
       "compatibility_package_allowed": true,
       "pr": 20,
       "version": "1.1.0"
     }
   },
   "schema": "owner_native_namespace_release.v1",
-  "status": "candidate",
+  "status": "validated-candidate",
   "validation": {
     "alpha_namespace_job": 29306434651,
     "portfolio_namespace_job": 29306440619,
     "strategy_followup_job": 29306422924,
-    "strategy_migration_job": 29306199840
+    "strategy_migration_job": 29306199840,
+    "strategy_owner_import_job": 29307124967,
+    "workspace_manifest_and_fixture_job": 29306709607,
+    "workspace_source_artifact_integration": "passed-2026-07-14"
   }
 }
