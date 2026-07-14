@@ -1,0 +1,48 @@
+name: final owner-native namespace validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.head_ref == 'architecture/owner-native-namespaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          submodules: false
+          token: ${{ github.token }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check pytest
+      - name: Validate final manifest and workspace gates
+        run: |
+          python -m compileall -q scripts src tests
+          python scripts/namespace_contracts.py --manifest-only
+          python -m pytest -q tests/test_namespace_contracts.py tests/test_workspace_import_boundaries.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('docs/owner-native-namespace-release.json').read_text())
+          evidence = json.loads(
+              Path('docs/evidence/owner-native-namespace-integration-20260714.json').read_text()
+          )
+          assert manifest['status'] == 'validated-candidate'
+          assert manifest['packages']['strategy-pipeline']['commit'] == evidence['inputs']['strategy-pipeline']
+          assert evidence['status'] == 'passed'
+          PY
+          git rm .github/workflows/namespace-final-validation.yml
+      - name: Record final validation cleanup
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(namespace): record final manifest validation' .github/workflows/namespace-final-validation.yml
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
