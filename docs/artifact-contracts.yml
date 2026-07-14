@@ -132,8 +132,8 @@
       "consumers": ["strategy-pipeline"],
       "canonical_files": ["sample_weights.receipt.json"],
       "entrypoints": [{"repo": "alpha-research", "module": "alpha_research.sample_weighting", "path": "src/alpha_research/sample_weighting.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "mode", "event_count", "bar_count", "average_uniqueness", "effective_sample_size", "weight_concentration_hhi", "events_sha256", "config"],
-      "notes": "Reproducibility receipt for sample weights and sequential-bootstrap evidence."
+      "required_fields": ["schema_version", "mode", "event_count", "bar_count", "group_count", "average_uniqueness", "effective_sample_size", "weight_concentration_hhi", "events_sha256", "config"],
+      "notes": "Reproducibility receipt for grouped sample weights and sequential-bootstrap evidence."
     },
     {
       "artifact": "research_features.parquet",
@@ -143,7 +143,10 @@
       "producer": "market-data-platform",
       "consumers": ["alpha-research", "strategy-pipeline"],
       "canonical_files": ["research_features.parquet"],
-      "entrypoints": [{"repo": "market-data-platform", "module": "market_data_platform.research_features", "path": "src/market_data_platform/research_features.py", "role": "canonical_implementation"}],
+      "entrypoints": [
+        {"repo": "market-data-platform", "module": "market_data_platform.research_features", "path": "src/market_data_platform/research_features.py", "role": "canonical_implementation"},
+        {"repo": "market-data-platform", "module": "market_data_platform.cli_research_features", "path": "src/market_data_platform/cli_research_features.py", "role": "artifact_producer"}
+      ],
       "required_fields": ["symbol", "trade_date", "parkinson_volatility", "corwin_schultz_spread", "amihud_illiquidity"],
       "notes": "Published low-frequency liquidity features; order-flow and book features require licensed intraday source contracts."
     },
@@ -155,33 +158,54 @@
       "producer": "strategy-pipeline",
       "consumers": ["quant-execution-engine"],
       "canonical_files": ["sizing_receipt.json"],
-      "entrypoints": [{"repo": "portfolio-backtester", "module": "portfolio_backtester.bet_sizing", "path": "src/portfolio_backtester/bet_sizing.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "method", "config", "target_count", "gross_exposure", "maximum_weight", "weights_sha256"],
-      "notes": "Records calibrated probability/confidence sizing, volatility scaling, caps, and discretization without becoming an execution instruction."
+      "entrypoints": [
+        {"repo": "portfolio-backtester", "module": "portfolio_backtester.evidence_receipts", "path": "src/portfolio_backtester/evidence_receipts.py", "role": "canonical_implementation"},
+        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      ],
+      "required_fields": ["schema_version", "method", "config", "target_count", "gross_exposure", "net_exposure", "maximum_weight", "weights_sha256"],
+      "notes": "Describes the final portfolio sizing method and constraints without becoming an execution instruction."
     },
     {
       "artifact": "strategy_risk_report.json",
       "contract": "portfolio_backtester.strategy_risk.v1",
       "schema_version": 1,
       "owner": "portfolio-backtester",
-      "producer": "portfolio-backtester",
-      "consumers": ["strategy-pipeline"],
+      "producer": "strategy-pipeline",
+      "consumers": ["strategy-pipeline", "quant-execution-engine"],
       "canonical_files": ["strategy_risk_report.json"],
-      "entrypoints": [{"repo": "portfolio-backtester", "module": "portfolio_backtester.strategy_risk", "path": "src/portfolio_backtester/strategy_risk.py", "role": "canonical_implementation"}],
-      "required_fields": ["observations", "periods_per_year", "sharpe", "probabilistic_sharpe", "positive_return_hhi", "negative_return_hhi", "time_concentration_hhi", "hit_ratio", "strategy_failure_probability"],
-      "notes": "Strategy-mechanism risk evidence including PSR, return concentration, hit/miss economics, and failure probability."
+      "entrypoints": [
+        {"repo": "portfolio-backtester", "module": "portfolio_backtester.strategy_risk", "path": "src/portfolio_backtester/strategy_risk.py", "role": "canonical_implementation"},
+        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      ],
+      "required_fields": ["schema_version", "observations", "periods_per_year", "sharpe", "probabilistic_sharpe", "positive_return_hhi", "negative_return_hhi", "time_concentration_hhi", "hit_ratio", "strategy_failure_probability", "implementation_shortfall"],
+      "notes": "Strategy-mechanism risk evidence including PSR, return concentration, hit/miss economics, failure probability, and cost resilience."
     },
     {
       "artifact": "hrp_receipt.json",
       "contract": "portfolio_backtester.hrp_receipt.v1",
       "schema_version": 1,
       "owner": "portfolio-backtester",
-      "producer": "portfolio-backtester",
+      "producer": "strategy-pipeline",
       "consumers": ["strategy-pipeline"],
-      "canonical_files": ["hrp_receipt.json"],
-      "entrypoints": [{"repo": "portfolio-backtester", "module": "portfolio_backtester.hrp", "path": "src/portfolio_backtester/hrp.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "method", "ordered_assets", "config", "gross_weight", "maximum_weight", "minimum_weight"],
+      "canonical_files": ["hrp_receipt.json", "hrp_weights.csv"],
+      "entrypoints": [
+        {"repo": "portfolio-backtester", "module": "portfolio_backtester.hrp", "path": "src/portfolio_backtester/hrp.py", "role": "canonical_implementation"},
+        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      ],
+      "required_fields": ["schema_version", "method", "ordered_assets", "config", "gross_weight", "maximum_weight", "minimum_weight", "returns_sha256", "weights_sha256"],
       "notes": "HRP allocation receipt for model or sleeve portfolios; rolling estimates must use returns strictly before rebalance."
+    },
+    {
+      "artifact": "afml_evidence_fragment.json",
+      "contract": "strategy_pipeline.afml_evidence_fragment.v1",
+      "schema_version": 1,
+      "owner": "strategy-pipeline",
+      "producer": "strategy-pipeline",
+      "consumers": ["strategy-pipeline"],
+      "canonical_files": ["afml_evidence_fragment.json"],
+      "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "canonical_implementation"}],
+      "required_fields": ["schema_version", "run_dir", "evidence", "outputs"],
+      "notes": "Machine-generated protocol fragment containing artifact paths and SHA-256 values for sizing, strategy-risk, and optional HRP evidence."
     },
     {
       "artifact": "research_protocol_report.json",
@@ -193,7 +217,7 @@
       "canonical_files": ["research_protocol_report.json"],
       "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.research_protocols", "path": "src/strategy_pipeline/research_protocols.py", "role": "canonical_implementation"}],
       "required_fields": ["schema_version", "level", "status", "required_count", "satisfied_count", "missing", "failed", "manifest_sha256", "policy", "evidence"],
-      "notes": "Graduated exploratory/candidate/release evidence gate. It determines whether a candidate may be handed off but never changes target semantics."
+      "notes": "Graduated exploratory/candidate/release evidence gate with artifact existence and SHA-256 verification. It determines whether a candidate may be handed off but never changes target semantics."
     },
     {
       "artifact": "execution_policy_receipt.json",
