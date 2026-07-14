@@ -1,43 +1,28 @@
 # 新机器初始化
 
-本页说明如何在新机器上拉起 `research-workspace`，并检查活跃子项目是否处在顶层仓库记录的版本。各子项目的完整依赖、凭证和业务命令仍以各自 README 和 docs 为准。
+本页给出 `research-workspace` 的最短可复现安装路径。子仓库的凭证、可选依赖和业务命令以各自文档为准。
 
-## 克隆仓库
+## 克隆与同步
 
 ```bash
 git clone --recurse-submodules https://github.com/runchengxie/research-workspace.git
 cd research-workspace
+git submodule status
+python scripts/workspace_doctor.py
 ```
 
-如果已经克隆了顶层仓库：
+已有本地仓库时运行：
 
 ```bash
 git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
-普通 zip 或 source snapshot 没有 Git 子模块提交信息，也通常没有子模块内容；它适合阅读顶层文档，
-不能作为完整测试、版本矩阵或文档链接检查的运行目录。
+普通 zip 或 source snapshot 没有完整 Git 子模块信息，只适合阅读文档。
 
-确认子模块指针和本地状态：
+## 安装子仓库依赖
 
-```bash
-git submodule status
-python scripts/workspace_doctor.py
-```
-
-发布前或更新子模块指针前建议使用严格模式：
-
-```bash
-python scripts/workspace_doctor.py --strict
-```
-
-## 安装依赖
-
-推荐在每个子项目目录中独立安装依赖。顶层仓库只做工作区检查，不提供共享 Python 包或
-共享虚拟环境。`alpha-research` 和 `portfolio-backtester` 的基础 import smoke / typecheck
-不应手工注入 sibling source path；完整研究编排命令从 `strategy-pipeline` 的
-`strategy` CLI 进入。
+每个子仓库维护独立环境：
 
 ```bash
 cd market-data-platform
@@ -50,7 +35,7 @@ cd ../portfolio-backtester
 uv sync --extra dev
 
 cd ../strategy-pipeline
-uv sync --extra dev --extra rqdata
+uv sync --extra dev
 
 cd ../quant-execution-engine
 uv sync --group dev --extra cli
@@ -58,31 +43,17 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
-中国香港市场 provider 生产面已从活跃 `market-data-platform` 主线归档。日常运行不再使用
-`marketdata rqdata hk-*` 或旧 `rqdata-hk-*` 命令；需要历史复现时，先通过
-`marketdata migration hydrate-hk` 从恢复专用归档恢复。工作区已停止追踪
-`rqdata-hk-depth-snapshots` 子模块，也不承诺 `rqdata_tick_data.*` 旧 Python import 路径。
+需要 RQData、TuShare、DuckDB 或券商 SDK 时，在对应子仓库安装相应可选依赖。
 
-如果只需要只读文档和顶层检查脚本，顶层不需要额外安装依赖；`scripts/` 和 `tests/` 只使用 Python 标准库。
+## 配置数据根目录
 
-## 环境变量
-
-共享数据根目录应放在仓库外部，并通过环境变量传给各模块：
+共享数据产物放在仓库外：
 
 ```bash
 export DATA_PLATFORM_ROOT=/path/to/research-artifacts
 ```
 
-也可以复制顶层示例文件，给本机 `workspace_doctor.py` 和跨仓库检查提供默认路径：
-
-```bash
-cp .env.example .env
-```
-
-顶层 `.env` 只允许记录 `DATA_PLATFORM_ROOT` 这类工作区路径配置；provider token、券商凭证、
-密码和其他 secret 仍必须放在对应子项目约定的私有位置，不能放进顶层 `.env`。
-
-常见共享路径：
+常见目录：
 
 ```text
 $DATA_PLATFORM_ROOT/
@@ -90,23 +61,14 @@ $DATA_PLATFORM_ROOT/
   metadata/
     current_assets/
       a_share_current.json
-    frozen_markets/
-      hk.json
     dataset_registry.csv
   reports/
+  standardized/
 ```
 
-`metadata/frozen_markets/hk.json` 表示港股资产已经整体移入独立冷存储。需要港股历史复现或明确跟踪时，先用 `marketdata migration hydrate-hk` 恢复。
+顶层 `.env` 只保存 `DATA_PLATFORM_ROOT` 一类路径配置。数据服务商 token、券商凭证和密码按子仓库规则保存。
 
-不要把以下内容提交到顶层 Git：
-
-- `.env`、`.env.*`、`.envrc`、本地凭证文件；`.env.example` 是唯一可提交的示例文件。
-- `artifacts/`、`outputs/`、`data/`、`cache/` 等大型产物或缓存。
-- 券商实盘凭证。实盘凭证应遵循 `quant-execution-engine` 自身文档，放在用户私有位置。
-
-## 轻量检查
-
-顶层只提供轻量检查。子项目测试仍在对应子项目中运行：
+## 顶层检查
 
 ```bash
 python scripts/workspace_doctor.py
@@ -114,21 +76,30 @@ python src/research_contracts/smoke_contracts.py
 uv run --project strategy-pipeline --extra dev \
   --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
   python -m pytest tests -q
+python scripts/run_quality_checks.py --profile hard
 ```
 
-`smoke_contracts.py` 只运行无写入、无真实下单的命令行和文件约定检查。任何需要凭证、网络、下载数据或提交订单的流程，都必须在对应子项目内显式执行。顶层测试包含 pytest 风格函数和 fixture，完整测试入口使用 `pytest`。
+发布前增加严格检查：
 
-## 子项目委托检查
+```bash
+python scripts/workspace_doctor.py --strict
+python src/research_contracts/smoke_contracts.py --strict
+python scripts/run_quality_checks.py --profile basedpyright
+```
 
-如果已经按上文安装了各子项目依赖，可以从顶层统一委托子项目自己的检查：
+## 委托子仓库检查
 
 ```bash
 python scripts/run_submodule_checks.py --list-profiles
 python scripts/run_submodule_checks.py --profile smoke
-python scripts/run_submodule_checks.py --profile lint --submodule strategy-pipeline
 python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-配置文件是 [scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层脚本只进入对应子项目目录并运行清单中声明的命令；`full` 默认使用 `ruff`、`ty check` 和 `pytest`，`release_typecheck` 统一运行 BasedPyright 建议项，`mypy_advisory` 仍是执行引擎的单独观察项。
-`lint` profile 还会委托子仓库已有的边界和维护债检查，例如数据平台质量治理与策略编排 maintainability ratchet。
+配置见 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。
+
+`full` 运行各仓库当前的 Ruff、格式、`ty` 和 `pytest` 检查。`release_typecheck` 运行 BasedPyright 诊断。
+
+## 自动化状态
+
+当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板。新机器验收应以本页命令的实际输出为准。
