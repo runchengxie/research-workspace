@@ -1,0 +1,169 @@
+name: owner-native namespace integration
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.head_ref == 'architecture/owner-native-namespaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ github.token }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Apply workspace namespace contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from __future__ import annotations
+
+          import json
+          import subprocess
+          from pathlib import Path
+
+          root = Path.cwd()
+          suffixes = {'.py', '.md', '.yml', '.yaml', '.toml', '.txt'}
+          replacements = (
+              ('src/cstree/alpha', 'src/alpha_research'),
+              ('src/cstree/backtesting', 'src/portfolio_backtester'),
+              ('src/cstree/contracts', 'src/strategy_pipeline/contracts'),
+              ('src/cstree/liveops', 'src/strategy_pipeline/liveops'),
+              ('src/cstree', 'src/strategy_pipeline'),
+              ('cstree.alpha', 'alpha_research'),
+              ('cstree.backtesting', 'portfolio_backtester'),
+              ('cstree.pipeline', 'strategy_pipeline.pipeline'),
+              ('cstree.metrics', 'strategy_pipeline.metrics'),
+              ('cstree.return_metrics', 'strategy_pipeline.return_metrics'),
+              ('cstree.compat', 'strategy_pipeline.compat'),
+              ('cstree.contracts', 'strategy_pipeline.contracts'),
+              ('cstree.liquidity_proxy', 'strategy_pipeline.liquidity_proxy'),
+              ('cstree.benchmarking', 'strategy_pipeline.benchmarking'),
+          )
+          for raw in subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0'):
+              if not raw or raw.startswith('docs/archive/') or raw.startswith('docs/evidence/'):
+                  continue
+              path = root / raw
+              if not path.exists() or not path.is_file() or path.suffix.lower() not in suffixes:
+                  continue
+              try:
+                  text = path.read_text(encoding='utf-8')
+              except UnicodeDecodeError:
+                  continue
+              updated = text
+              for before, after in replacements:
+                  updated = updated.replace(before, after)
+              if updated != text:
+                  path.write_text(updated, encoding='utf-8')
+
+          manifest = {
+              'compatibility': {
+                  'legacy_cli': 'cstree',
+                  'legacy_python_package': 'cstree',
+                  'owner': 'strategy-pipeline',
+                  'removal_release': 'workspace-2.0',
+              },
+              'packages': {
+                  'alpha-research': {
+                      'canonical_package': 'alpha_research',
+                      'commit': 'e24fce61845061705e44c0445001bc4b9a7226e5',
+                      'legacy_source_tree_allowed': False,
+                      'pr': 6,
+                      'version': '0.2.0',
+                  },
+                  'portfolio-backtester': {
+                      'canonical_package': 'portfolio_backtester',
+                      'commit': '426083f2e988f1e5003e19df28ebda8dafb3324b',
+                      'legacy_source_tree_allowed': False,
+                      'pr': 8,
+                      'version': '0.2.0',
+                  },
+                  'strategy-pipeline': {
+                      'canonical_package': 'strategy_pipeline',
+                      'commit': '5a4bc49f90dbff43a68a6c79a326565e4bdd7dd2',
+                      'compatibility_package_allowed': True,
+                      'pr': 20,
+                      'version': '1.1.0',
+                  },
+              },
+              'schema': 'owner_native_namespace_release.v1',
+              'status': 'candidate',
+              'validation': {
+                  'alpha_namespace_job': 29306434651,
+                  'portfolio_namespace_job': 29306440619,
+                  'strategy_migration_job': 29306199840,
+                  'strategy_followup_job': 29306422924,
+              },
+          }
+          manifest_path = root / 'docs/owner-native-namespace-release.json'
+          manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+
+          adr = root / 'docs/adr/0002-owner-native-python-namespaces.md'
+          adr.write_text('''# ADR-0002：采用 owner-native Python 命名空间\n\n- 状态：accepted\n- 日期：2026-07-14\n- 范围：`research-workspace`、`alpha-research`、`portfolio-backtester`、`strategy-pipeline`\n- 发布清单：[`../owner-native-namespace-release.json`](../owner-native-namespace-release.json)\n\n## 背景\n\n历史上的 `cstree` 同时表示项目品牌、CLI 和三个 distribution 拼接的 Python\nnamespace。平台开始采用 Qlib、LEAN 和 vn.py 的可替换集成边界后，这个名称既错误暗示\n单一截面树模型，也让物理拆仓继续以共享包形式耦合。\n\n## 决策\n\n- `alpha-research` 独占 `alpha_research.*`。\n- `portfolio-backtester` 独占 `portfolio_backtester.*`。\n- `strategy-pipeline` 独占 `strategy_pipeline.*`。\n- 三个 distribution 不再使用 `pkgutil.extend_path`，也不再共同贡献 Python package。\n- `strategy-pipeline` 在 1.x 内集中提供唯一的 `cstree` Python facade 和 CLI alias。\n- `strategy` 与 `strategy-pipeline` 是权威 CLI；`STRATEGY_PIPELINE_*` 是权威环境变量前缀。\n- 旧 Python namespace、CLI alias 和 `CSTREE_*` fallback 在工作区 2.0 删除。\n\n## 不变量\n\n1. alpha 和 portfolio 仓库不得出现 `src/cstree`。\n2. strategy 仓库的 `src/cstree` 只能包含 `__init__.py` 与 `__main__.py`。\n3. 跨仓库 API 使用 owner-native package；artifact contract 不携带第三方 runtime type。\n4. 新代码、adapter、测试、文档和配置不得增加旧 namespace 依赖。\n5. superproject 在下游提交验证完成后才更新 gitlinks。\n\n## 后果\n\n这是一组协调的 breaking migration。1.x compatibility facade 降低现有脚本的迁移峰值，\n但不会继续充当实现所有者。2.0 删除前必须完成 consumer audit、替代入口文档、\nfocused tests、回滚说明和序列化对象审计。\n''', encoding='utf-8')
+
+          migration_doc = root / 'docs/namespace-migration.md'
+          migration_doc.write_text('''# Owner-native 命名空间迁移\n\n## 权威入口\n\n| Distribution | Python package | CLI |\n| --- | --- | --- |\n| `alpha-research` | `alpha_research.*` | n/a |\n| `portfolio-backtester` | `portfolio_backtester.*` | n/a |\n| `strategy-pipeline` | `strategy_pipeline.*` | `strategy`, `strategy-pipeline` |\n\n`cstree` 只由 `strategy-pipeline` 提供 1.x 兼容 facade。它不再是共享 namespace，\n也不再承载业务实现。兼容面计划在工作区 2.0 删除。\n\n## 合并顺序\n\n1. 合并 alpha-research PR #6；\n2. 合并 portfolio-backtester PR #8；\n3. 合并 strategy-pipeline PR #20；\n4. 更新并验证本 superproject PR 的 gitlinks；\n5. 发布 0.2.0 / 0.2.0 / 1.1.0 组合。\n\n## 删除门槛\n\n删除旧 facade 前必须完成 import、CLI、环境变量、日志过滤、配置 dotted path、pickle/joblib\n类路径和外部 notebook 的 consumer audit，并保留可执行回滚说明。\n''', encoding='utf-8')
+
+          deprecations = root / 'docs/deprecations.md'
+          dep_text = deprecations.read_text(encoding='utf-8')
+          row = '| `cstree` Python namespace、CLI 与 `CSTREE_*` | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | deprecated | remove in workspace 2.0 |\n'
+          if row not in dep_text:
+              marker = '| HK historical experiment configs |'
+              lines = dep_text.splitlines(keepends=True)
+              index = next(i for i, line in enumerate(lines) if line.startswith(marker)) + 1
+              lines.insert(index, row)
+              dep_text = ''.join(lines)
+          section = '''\n## Owner-native namespace compatibility\n\n`cstree` 兼容面只能由 `strategy-pipeline` 提供。alpha 和 portfolio distribution\n不得重新安装共享 namespace。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、\n配置 dotted path、日志 namespace、外部 notebook 与命令行 consumer audit。\n'''
+          if '## Owner-native namespace compatibility\n' not in dep_text:
+              dep_text = dep_text.rstrip() + '\n' + section
+          deprecations.write_text(dep_text, encoding='utf-8')
+
+          version_matrix = root / 'docs/version-matrix.md'
+          vm_text = version_matrix.read_text(encoding='utf-8')
+          candidate = '''\n## Owner-native namespace 候选组合\n\n| 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |\n| --- | --- | --- | --- | --- | --- |\n| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `5a4bc49` / 1.1.0 | 候选：三个下游 PR 可合并，namespace compile/boundary/pytest jobs 通过；等待本 superproject 组合验证和按顺序合并 | `docs/owner-native-namespace-release.json`、ADR-0002、PR #6/#8/#20 |\n'''
+          if '## Owner-native namespace 候选组合\n' not in vm_text:
+              vm_text = vm_text.rstrip() + '\n' + candidate
+          version_matrix.write_text(vm_text, encoding='utf-8')
+
+          adr_index = root / 'docs/adr/README.md'
+          adr_index_text = adr_index.read_text(encoding='utf-8')
+          entry = '- [ADR-0002：采用 owner-native Python 命名空间](0002-owner-native-python-namespaces.md)\n'
+          if entry not in adr_index_text:
+              adr_index.write_text(adr_index_text.rstrip() + '\n' + entry, encoding='utf-8')
+
+          readme = root / 'README.md'
+          readme_text = readme.read_text(encoding='utf-8')
+          section = '''\n## Python 命名空间\n\n工作区使用 owner-native package：`alpha_research`、`portfolio_backtester` 和\n`strategy_pipeline`。历史 `cstree` 只由 `strategy-pipeline` 提供 1.x 兼容 facade，\n不再通过多个 distribution 拼接，并计划在工作区 2.0 删除。详见\n[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。\n'''
+          if '## Python 命名空间\n' not in readme_text:
+              readme.write_text(readme_text.rstrip() + '\n' + section, encoding='utf-8')
+
+          script = root / 'scripts/namespace_contracts.py'
+          script.write_text('''#!/usr/bin/env python3\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport subprocess\nimport tomllib\nfrom pathlib import Path\nfrom typing import Any\n\nROOT = Path(__file__).resolve().parents[1]\nMANIFEST = ROOT / "docs/owner-native-namespace-release.json"\n\n\ndef load_manifest() -> dict[str, Any]:\n    return json.loads(MANIFEST.read_text(encoding="utf-8"))\n\n\ndef gitlink_sha(path: str) -> str:\n    output = subprocess.check_output(["git", "ls-tree", "HEAD", path], cwd=ROOT, text=True).strip()\n    if not output:\n        raise RuntimeError(f"missing gitlink: {path}")\n    mode, object_type, sha, name = output.split(maxsplit=3)\n    if mode != "160000" or object_type != "commit" or name != path:\n        raise RuntimeError(f"invalid gitlink entry for {path}: {output}")\n    return sha\n\n\ndef check_manifest() -> list[str]:\n    manifest = load_manifest()\n    errors: list[str] = []\n    for repo, package in manifest["packages"].items():\n        actual = gitlink_sha(repo)\n        if actual != package["commit"]:\n            errors.append(f"{repo}: gitlink {actual} != manifest {package['commit']}")\n    if manifest["compatibility"]["owner"] != "strategy-pipeline":\n        errors.append("legacy compatibility owner must be strategy-pipeline")\n    return errors\n\n\ndef check_initialized_layout() -> list[str]:\n    errors: list[str] = []\n    expected = {\n        "alpha-research": "alpha_research",\n        "portfolio-backtester": "portfolio_backtester",\n        "strategy-pipeline": "strategy_pipeline",\n    }\n    for repo, package in expected.items():\n        repo_root = ROOT / repo\n        if not (repo_root / "src" / package / "__init__.py").is_file():\n            errors.append(f"{repo}: missing canonical package src/{package}")\n    for repo in ("alpha-research", "portfolio-backtester"):\n        if (ROOT / repo / "src/cstree").exists():\n            errors.append(f"{repo}: legacy src/cstree must not exist")\n    compat = ROOT / "strategy-pipeline/src/cstree"\n    actual = {path.name for path in compat.glob("*.py")} if compat.exists() else set()\n    if actual != {"__init__.py", "__main__.py"}:\n        errors.append(f"strategy-pipeline: unexpected compatibility files {sorted(actual)}")\n    for repo in expected:\n        src = ROOT / repo / "src"\n        if src.exists():\n            for path in src.rglob("*.py"):\n                if "pkgutil import extend_path" in path.read_text(encoding="utf-8"):\n                    errors.append(f"shared namespace mechanism: {path.relative_to(ROOT)}")\n    project = tomllib.loads((ROOT / "strategy-pipeline/pyproject.toml").read_text(encoding="utf-8"))\n    scripts = project["project"]["scripts"]\n    if scripts.get("strategy") != "strategy_pipeline.cli:main":\n        errors.append("strategy-pipeline: canonical strategy CLI missing")\n    if scripts.get("cstree") != "strategy_pipeline.legacy_cli:main":\n        errors.append("strategy-pipeline: cstree compatibility CLI missing")\n    return errors\n\n\ndef main() -> int:\n    parser = argparse.ArgumentParser()\n    parser.add_argument("--manifest-only", action="store_true")\n    args = parser.parse_args()\n    errors = check_manifest()\n    if not args.manifest_only:\n        errors.extend(check_initialized_layout())\n    if errors:\n        raise SystemExit("\\n".join(errors))\n    print(json.dumps({"status": "ok", "manifest_only": args.manifest_only}, sort_keys=True))\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n''', encoding='utf-8')
+
+          test = root / 'tests/test_namespace_contracts.py'
+          test.write_text('''from __future__ import annotations\n\nimport importlib.util\nfrom pathlib import Path\n\nROOT = Path(__file__).resolve().parents[1]\nSPEC = importlib.util.spec_from_file_location(\n    "namespace_contracts", ROOT / "scripts/namespace_contracts.py"\n)\nassert SPEC is not None and SPEC.loader is not None\nMODULE = importlib.util.module_from_spec(SPEC)\nSPEC.loader.exec_module(MODULE)\n\n\ndef test_owner_native_manifest_matches_gitlinks() -> None:\n    assert MODULE.check_manifest() == []\n\n\ndef test_manifest_declares_single_compatibility_owner() -> None:\n    manifest = MODULE.load_manifest()\n    assert manifest["compatibility"]["owner"] == "strategy-pipeline"\n    assert manifest["compatibility"]["removal_release"] == "workspace-2.0"\n''', encoding='utf-8')
+          PY
+          python -m pip install --disable-pip-version-check pytest
+          python -m compileall -q scripts src tests
+          python scripts/namespace_contracts.py --manifest-only
+          python -m pytest -q tests/test_namespace_contracts.py tests/test_workspace_import_boundaries.py
+          git rm .github/workflows/owner-native-namespace-integration.yml
+      - name: Commit workspace integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(namespace): enforce owner-native workspace contracts'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
