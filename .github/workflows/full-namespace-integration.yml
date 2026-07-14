@@ -1,0 +1,109 @@
+name: full owner-native namespace integration
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.head_ref == 'architecture/owner-native-namespaces'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      HAS_WORKSPACE_SUBMODULE_TOKEN: ${{ secrets.WORKSPACE_SUBMODULE_READ_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          submodules: false
+          token: ${{ github.token }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: '0.10.11'
+          enable-cache: true
+      - name: Checkout pinned private submodules
+        env:
+          WORKSPACE_SUBMODULE_READ_TOKEN: ${{ secrets.WORKSPACE_SUBMODULE_READ_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${HAS_WORKSPACE_SUBMODULE_TOKEN}" != "true" ]]; then
+            echo 'WORKSPACE_SUBMODULE_READ_TOKEN is required for the full namespace integration.' >&2
+            exit 1
+          fi
+          git config --global url."https://x-access-token:${WORKSPACE_SUBMODULE_READ_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git submodule sync --recursive
+          git submodule update --init --recursive
+      - name: Validate workspace and package boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/namespace_contracts.py
+          python scripts/workspace_import_boundaries.py --check
+          python scripts/run_quality_checks.py --profile hard
+          uv lock --project alpha-research --check
+          uv lock --project portfolio-backtester --check
+          uv lock --project strategy-pipeline --check
+          uv sync --project strategy-pipeline --extra dev --locked
+          uv run --project alpha-research --with pytest python -m pytest -q tests/test_namespace_migration.py
+          uv run --project portfolio-backtester --with pytest python -m pytest -q tests/test_namespace_migration.py
+          uv run --project strategy-pipeline --extra dev python -m pytest -q tests/test_namespace_migration.py
+      - name: Validate canonical and compatibility imports
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run --project strategy-pipeline --locked python - <<'PY'
+          from __future__ import annotations
+
+          import importlib
+          import warnings
+
+          import alpha_research
+          import portfolio_backtester
+          import strategy_pipeline
+
+          assert alpha_research.__name__ == 'alpha_research'
+          assert portfolio_backtester.__name__ == 'portfolio_backtester'
+          assert strategy_pipeline.__name__ == 'strategy_pipeline'
+
+          with warnings.catch_warnings(record=True) as caught:
+              warnings.simplefilter('always')
+              import cstree
+              importlib.import_module('cstree.pipeline')
+              importlib.import_module('cstree.alpha.signal_artifact')
+              importlib.import_module('cstree.backtesting.api')
+
+          assert cstree.__name__ == 'cstree'
+          assert any('deprecated' in str(item.message).lower() for item in caught)
+          PY
+          uv run --project strategy-pipeline --locked strategy --help >/tmp/strategy-help.txt
+          uv run --project strategy-pipeline --locked strategy-pipeline --help >/tmp/strategy-pipeline-help.txt
+          uv run --project strategy-pipeline --locked cstree --help >/tmp/cstree-help.txt 2>/tmp/cstree-warning.txt
+          grep -q 'deprecated' /tmp/cstree-warning.txt
+      - name: Run focused superproject tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run --project strategy-pipeline --extra dev --locked \
+            --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
+            python -m pytest -q \
+            tests/test_namespace_contracts.py \
+            tests/test_workspace_import_boundaries.py \
+            tests/test_root_quality.py \
+            tests/test_run_submodule_checks.py
+      - name: Record successful integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git rm .github/workflows/full-namespace-integration.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore(namespace): record full workspace integration' .github/workflows/full-namespace-integration.yml
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
