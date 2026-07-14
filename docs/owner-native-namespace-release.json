@@ -1,0 +1,39 @@
+{
+  "compatibility": {
+    "legacy_cli": "cstree",
+    "legacy_python_package": "cstree",
+    "owner": "strategy-pipeline",
+    "removal_release": "workspace-2.0"
+  },
+  "packages": {
+    "alpha-research": {
+      "canonical_package": "alpha_research",
+      "commit": "e24fce61845061705e44c0445001bc4b9a7226e5",
+      "legacy_source_tree_allowed": false,
+      "pr": 6,
+      "version": "0.2.0"
+    },
+    "portfolio-backtester": {
+      "canonical_package": "portfolio_backtester",
+      "commit": "426083f2e988f1e5003e19df28ebda8dafb3324b",
+      "legacy_source_tree_allowed": false,
+      "pr": 8,
+      "version": "0.2.0"
+    },
+    "strategy-pipeline": {
+      "canonical_package": "strategy_pipeline",
+      "commit": "5a4bc49f90dbff43a68a6c79a326565e4bdd7dd2",
+      "compatibility_package_allowed": true,
+      "pr": 20,
+      "version": "1.1.0"
+    }
+  },
+  "schema": "owner_native_namespace_release.v1",
+  "status": "candidate",
+  "validation": {
+    "alpha_namespace_job": 29306434651,
+    "portfolio_namespace_job": 29306440619,
+    "strategy_followup_job": 29306422924,
+    "strategy_migration_job": 29306199840
+  }
+}

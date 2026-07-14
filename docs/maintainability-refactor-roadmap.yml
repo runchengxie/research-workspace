@@ -84,7 +84,7 @@
       "non_goals": "do not change public CLI flags or A-share artifact paths"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/eval.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
       "owner_repo": "strategy-pipeline",
       "risk": "high",
       "first_safe_extraction": "rendering_reporting",
@@ -95,7 +95,7 @@
       "non_goals": "do not change evaluation metrics"
     },
     {
-      "path": "strategy-pipeline/src/cstree/commands/tune.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/commands/tune.py",
       "owner_repo": "strategy-pipeline",
       "risk": "medium",
       "first_safe_extraction": "cli_parser_extraction",
@@ -106,7 +106,7 @@
       "non_goals": "do not change command flags"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/context_builder.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/context_builder.py",
       "owner_repo": "strategy-pipeline",
       "risk": "medium",
       "first_safe_extraction": "workflow_orchestration_separation",
@@ -117,7 +117,7 @@
       "non_goals": "do not change TrainEvalRequest fields or panel loading behavior"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/stats.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/stats.py",
       "owner_repo": "strategy-pipeline",
       "risk": "medium",
       "first_safe_extraction": "rendering_reporting",
@@ -163,43 +163,43 @@
   ],
   "accepted_hotspots": [
     {
-      "path": "alpha-research/src/cstree/alpha/daily_watch20.py",
+      "path": "alpha-research/src/alpha_research/daily_watch20.py",
       "owner_repo": "alpha-research",
       "reason": "DailyWatch20 keeps the ranker contract, point-in-time training policy, model restoration, and scoring lineage in one alpha-owned MVP boundary",
       "next_action": "extract model lifecycle and attribution helpers if another ranker family or another persisted-model contract is added"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/daily_watch20_features.py",
+      "path": "alpha-research/src/alpha_research/daily_watch20_features.py",
       "owner_repo": "alpha-research",
       "reason": "DailyWatch20 daily, minute, Hermite, and multi-horizon feature definitions remain colocated so their point-in-time alignment and feature-set identity are auditable for the MVP",
       "next_action": "split feature families behind the existing feature-set contract when another minute transform or stability family is introduced"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/daily_watch20.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/daily_watch20.py",
       "owner_repo": "portfolio-backtester",
       "reason": "DailyWatch20 keeps strict A4/B16 selection, guardrails, retention, and its fail-closed receipt in one model-agnostic boundary for the MVP",
       "next_action": "extract validation and retention helpers if new sleeves or additional portfolio constraints are added"
     },
     {
-      "path": "strategy-pipeline/src/cstree/daily_watch20_pipeline.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_pipeline.py",
       "owner_repo": "strategy-pipeline",
       "reason": "DailyWatch20 orchestration is split into short stage functions but remains one auditable transaction for the first delivery",
       "next_action": "extract candidate preparation and receipt assembly after the MVP contract stabilizes"
     },
     {
-      "path": "strategy-pipeline/src/cstree/daily_watch20_minute.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_minute.py",
       "owner_repo": "strategy-pipeline",
       "reason": "DailyWatch20 minute-cache planning, incremental partition reads, validation, and receipt evidence share one fail-closed publication boundary for the initial scheduled workflow",
       "next_action": "extract cache planning and partition aggregation before adding another minute source or changing the minute-feature schema"
     },
     {
-      "path": "strategy-pipeline/src/cstree/daily_watch20_ablation.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_ablation.py",
       "owner_repo": "strategy-pipeline",
       "reason": "The research-only ablation runner keeps fold construction, frozen variants, conditional-coverage metrics, and lineage assembly in one auditable workflow after publication and statistics helpers were extracted",
       "next_action": "split variant evaluation from run orchestration before adding another model family or promoting any ablation result"
     },
     {
-      "path": "strategy-pipeline/src/cstree/daily_watch20_oos.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_oos.py",
       "owner_repo": "strategy-pipeline",
       "reason": "Watch20 out-of-sample helpers keep next-open label eligibility, frozen Top4/Top20 coverage, and fail-closed tradability semantics together for the research contract",
       "next_action": "split label-panel construction from portfolio outcome policy before adding a cash/carry execution simulator"
@@ -271,7 +271,7 @@
       "next_action": "split by scenario when pipeline e2e tests change"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/config.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/config.py",
       "owner_repo": "strategy-pipeline",
       "reason": "pipeline config debt is lower priority than eval orchestration split",
       "next_action": "split schema and resolver after contract modules stay typed"
@@ -283,25 +283,25 @@
       "next_action": "split by filter family when backtest filter tests change"
     },
     {
-      "path": "strategy-pipeline/src/cstree/release_tools/package_runs.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/release_tools/package_runs.py",
       "owner_repo": "strategy-pipeline",
       "reason": "release packaging debt is lower priority than research pipeline refactor",
       "next_action": "split packaging checks when release tooling changes resume"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/panel_loader.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/panel_loader.py",
       "owner_repo": "strategy-pipeline",
       "reason": "platform asset loading debt entered the refreshed baseline after A-share panel support expanded",
       "next_action": "split path resolution, validation, and load orchestration when panel loading changes resume"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/panel_load_steps.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/panel_load_steps.py",
       "owner_repo": "strategy-pipeline",
       "reason": "panel loading was split into step helpers, but the step module remains a large-file hotspot after feature dataset tests moved out",
       "next_action": "split source fetch, benchmark separation, pricing preparation, and lifecycle diagnostics when panel loading changes resume"
     },
     {
-      "path": "strategy-pipeline/src/cstree/commands/tune_runner.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/commands/tune_runner.py",
       "owner_repo": "strategy-pipeline",
       "reason": "tune runner became visible in the refreshed baseline after tune CLI extraction work moved orchestration out of tune.py",
       "next_action": "split job materialization, execution, and result collection when tune workflow work resumes"
@@ -319,37 +319,37 @@
       "next_action": "split after summarize_runs.py reporting extraction"
     },
     {
-      "path": "strategy-pipeline/src/cstree/commands/linear_sweep.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/commands/linear_sweep.py",
       "owner_repo": "strategy-pipeline",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
       "next_action": "split parser and runner only when sweep command changes resume"
     },
     {
-      "path": "strategy-pipeline/src/cstree/commands/run_grid.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/commands/run_grid.py",
       "owner_repo": "strategy-pipeline",
       "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
       "next_action": "split parser, fixed-signal runner, and summary writer only when grid command changes resume"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/fundamentals_enrichment.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/fundamentals_enrichment.py",
       "owner_repo": "strategy-pipeline",
       "reason": "fundamental enrichment debt waits behind pipeline contract typing",
       "next_action": "split enrichment schema and resolver when fundamentals work resumes"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/output_artifacts.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_artifacts.py",
       "owner_repo": "strategy-pipeline",
       "reason": "output artifact module is newly included in staged BasedPyright coverage",
       "next_action": "promote further only after focused typecheck stays green"
     },
     {
-      "path": "strategy-pipeline/src/cstree/cli/liveops.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/cli/liveops.py",
       "owner_repo": "strategy-pipeline",
       "reason": "liveops CLI wiring debt waits behind allocation/export contract modules",
       "next_action": "split parser wiring after alloc-hk compatibility decision"
     },
     {
-      "path": "strategy-pipeline/src/cstree/liveops/holdings.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/liveops/holdings.py",
       "owner_repo": "strategy-pipeline",
       "reason": "holdings C901 debt was cleared, but the file remains a liveops large-file hotspot",
       "next_action": "split parser, run selection, and output rendering when holdings changes resume"
@@ -523,133 +523,133 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/cpcv.py",
+      "path": "alpha-research/src/alpha_research/cpcv.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/dynamic_signal_ensemble.py",
+      "path": "alpha-research/src/alpha_research/dynamic_signal_ensemble.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/factor_diagnostics.py",
+      "path": "alpha-research/src/alpha_research/factor_diagnostics.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/train_eval_stage.py",
+      "path": "alpha-research/src/alpha_research/train_eval_stage.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/walk_forward.py",
+      "path": "alpha-research/src/alpha_research/walk_forward.py",
       "owner_repo": "alpha-research",
       "reason": "walk-forward alpha evaluation remains a large-file hotspot after backtesting dependency injection removed direct backtester imports",
       "next_action": "split feature-importance reporting and injected backtest orchestration when walk-forward evaluation changes resume"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/feature_evidence.py",
+      "path": "alpha-research/src/alpha_research/feature_evidence.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/feature_dataset.py",
+      "path": "alpha-research/src/alpha_research/feature_dataset.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/split.py",
+      "path": "alpha-research/src/alpha_research/split.py",
       "owner_repo": "alpha-research",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/execution_sim/core.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/core.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/exposure.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/exposure.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/construction_grid.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/construction_grid.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/tearsheet.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/tearsheet.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/engine.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/engine.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/execution.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/execution.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/portfolio_positions.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/portfolio_positions.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/position_backtest.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/position_backtest.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/capacity_report.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/capacity_report.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/evaluation.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/evaluation.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/position_postprocess.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/position_postprocess.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/post_buffer_exposure_repair.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/post_buffer_exposure_repair.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/a_share_round_lot.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/a_share_round_lot.py",
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/output_summary_sections.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_summary_sections.py",
       "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
@@ -667,7 +667,7 @@
       "next_action": "promotion gate 测试变更时按证据类型拆分"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/dataset_sampling.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/dataset_sampling.py",
       "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
@@ -691,37 +691,37 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/src/cstree/release_tools/release_runs.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/release_tools/release_runs.py",
       "owner_repo": "strategy-pipeline",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/src/cstree/liveops/alloc_core.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/liveops/alloc_core.py",
       "owner_repo": "strategy-pipeline",
       "reason": "live allocation core remains a large typed-island-adjacent module outside this tooling migration",
       "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
     },
     {
-      "path": "strategy-pipeline/src/cstree/data_interface.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/data_interface.py",
       "owner_repo": "strategy-pipeline",
       "reason": "DataInterface is a class-size hotspot behind the current data access compatibility boundary",
       "next_action": "split path resolution and data loading helpers when data interface work resumes"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/promotion_gate.py",
+      "path": "alpha-research/src/alpha_research/promotion_gate.py",
       "owner_repo": "alpha-research",
       "reason": "promotion gate 的主体实现已经迁到 alpha-research，当前先登记为 alpha 研究侧维护性债务",
       "next_action": "promotion gate 变更时拆分证据读取、阈值判定和报告渲染逻辑"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/research_ops/summarize_runs.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/summarize_runs.py",
       "owner_repo": "strategy-pipeline",
       "reason": "汇总报告实现进入当前基线，先登记为研究汇总流程的现有债务",
       "next_action": "summarize_runs 变更时拆分读取、指标汇总和渲染逻辑"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/a_share_executable_oos_topk.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/a_share_executable_oos_topk.py",
       "owner_repo": "portfolio-backtester",
       "reason": "A-share executable OOS backtest module is outside this quality-tooling migration",
       "next_action": "split selection, execution, and reporting helpers when A-share OOS work resumes"
@@ -859,13 +859,13 @@
       "next_action": "split plan construction from execution when backfill scheduling changes"
     },
     {
-      "path": "alpha-research/src/cstree/alpha/style_replica/portfolio.py",
+      "path": "alpha-research/src/alpha_research/style_replica/portfolio.py",
       "owner_repo": "alpha-research",
       "reason": "StyleReplica portfolio ownership moved into the alpha package with its signal rules",
       "next_action": "keep leg selection and position assembly cohesive unless the alpha-owned module grows past its current boundary"
     },
     {
-      "path": "portfolio-backtester/src/cstree/backtesting/metrics.py",
+      "path": "portfolio-backtester/src/portfolio_backtester/metrics.py",
       "owner_repo": "portfolio-backtester",
       "reason": "core metric surface is just over the large-file threshold after final backtest integration",
       "next_action": "extract specialized metric families when this module next changes"
@@ -883,13 +883,13 @@
       "next_action": "extract scenario construction and reporting helpers if the experiment is extended"
     },
     {
-      "path": "strategy-pipeline/src/cstree/pipeline/external_signals.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/external_signals.py",
       "owner_repo": "strategy-pipeline",
       "reason": "external signal ingestion centralizes schema validation, alignment, and diagnostics",
       "next_action": "split loaders from alignment diagnostics when external signal support expands"
     },
     {
-      "path": "strategy-pipeline/src/cstree/style_replica_pipeline.py",
+      "path": "strategy-pipeline/src/strategy_pipeline/style_replica_pipeline.py",
       "owner_repo": "strategy-pipeline",
       "reason": "StyleReplica orchestration remains a large integration module after oversize functions were extracted",
       "next_action": "split artifact loading from daily run orchestration when StyleReplica workflow changes"

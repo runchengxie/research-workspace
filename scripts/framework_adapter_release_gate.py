@@ -32,7 +32,7 @@ EVIDENCE_SOURCE_SCHEMAS = {
     "execution": "execution_recovery_matrix.v1",
 }
 REQUIRED_VERIFIED_PATHS = (
-    "alpha-research/src/cstree/alpha/research_artifacts.py",
+    "alpha-research/src/alpha_research/research_artifacts.py",
     "quant-execution-engine/src/quant_execution_engine/domain.py",
 )
 

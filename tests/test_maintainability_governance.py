@@ -25,8 +25,8 @@ REPOS = {
 REQUIRED_ROADMAP_PATHS = {
     "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
     "market-data-platform/src/market_data_platform/tushare_cli.py",
-    "strategy-pipeline/src/cstree/pipeline/eval.py",
-    "strategy-pipeline/src/cstree/commands/tune.py",
+    "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
+    "strategy-pipeline/src/strategy_pipeline/commands/tune.py",
     "quant-execution-engine/src/quant_execution_engine/cli.py",
     "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
     "quant-execution-engine/project_tools/smoke_operator_harness.py",

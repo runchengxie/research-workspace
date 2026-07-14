@@ -23,11 +23,11 @@ REMOVED_ACTIVE_HK_SURFACES = (
     "market-data-platform/src/market_data_platform/hk_assets",
     "market-data-platform/src/market_data_platform/hk_depth",
     "market-data-platform/src/hk_data_platform",
-    "strategy-pipeline/src/cstree/liveops/alloc_hk.py",
+    "strategy-pipeline/src/strategy_pipeline/liveops/alloc_hk.py",
     "strategy-pipeline/configs/presets/data/hk_rqdata.yml",
 )
 REMOVED_ACTIVE_HK_GLOBS = (
-    "strategy-pipeline/src/cstree/liveops/alloc_hk*.py",
+    "strategy-pipeline/src/strategy_pipeline/liveops/alloc_hk*.py",
     "strategy-pipeline/configs/presets/hk*.yml",
     "strategy-pipeline/configs/field_profiles/hk_*",
     "strategy-pipeline/configs/experiments/**/*hk*.yml",

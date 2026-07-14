@@ -5,6 +5,8 @@ import sys
 import textwrap
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "workspace_import_boundaries.py"
 
@@ -15,7 +17,23 @@ sys.modules[spec.name] = workspace_import_boundaries
 spec.loader.exec_module(workspace_import_boundaries)
 
 
+def _submodules_initialized() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            ROOT / "alpha-research/src/alpha_research/__init__.py",
+            ROOT / "portfolio-backtester/src/portfolio_backtester/__init__.py",
+            ROOT / "strategy-pipeline/src/strategy_pipeline/__init__.py",
+            ROOT / "market-data-platform/src/market_data_platform/__init__.py",
+            ROOT / "quant-execution-engine/src/quant_execution_engine/__init__.py",
+        )
+    )
+
+
 def test_current_workspace_import_boundary_budgets_hold() -> None:
+    if not _submodules_initialized():
+        pytest.skip("source-level boundary scan requires initialized submodules")
+
     report = workspace_import_boundaries.build_report(ROOT)
 
     assert report["issues"] == []
@@ -53,14 +71,14 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
     assert all(rule["count"] == 0 for rule in report["source_layout_rules"])
 
 
-def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path) -> None:
-    source = tmp_path / "alpha-research" / "src" / "cstree" / "alpha"
+def test_owner_native_cross_imports_are_detected(tmp_path: Path) -> None:
+    source = tmp_path / "alpha-research" / "src" / "alpha_research"
     source.mkdir(parents=True)
     (source / "example.py").write_text(
         textwrap.dedent(
             """
-            from ..pipeline.dates import build_walk_forward_windows
-            from cstree.backtesting.engine import backtest_topk
+            from strategy_pipeline.pipeline.dates import build_walk_forward_windows
+            from portfolio_backtester.engine import backtest_topk
             """
         ),
         encoding="utf-8",
@@ -70,16 +88,16 @@ def test_relative_imports_are_resolved_against_namespace_package(tmp_path: Path)
             identifier="alpha-to-pipeline",
             description="test",
             repo="alpha-research",
-            source="src/cstree/alpha",
-            forbidden=("cstree.pipeline",),
+            source="src/alpha_research",
+            forbidden=("strategy_pipeline",),
             max_allowed=0,
         ),
         workspace_import_boundaries.BoundaryRule(
             identifier="alpha-to-backtesting",
             description="test",
             repo="alpha-research",
-            source="src/cstree/alpha",
-            forbidden=("cstree.backtesting",),
+            source="src/alpha_research",
+            forbidden=("portfolio_backtester",),
             max_allowed=0,
         ),
     )
@@ -120,18 +138,21 @@ def test_single_file_contract_rule_blocks_optional_framework_import(tmp_path: Pa
     ]
 
 
-def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_code(
+def test_strategy_pipeline_source_layout_rule_blocks_embedded_owner_code(
     tmp_path: Path,
 ) -> None:
-    source = tmp_path / "strategy-pipeline" / "src" / "cstree" / "backtesting"
+    source = tmp_path / "strategy-pipeline" / "src" / "portfolio_backtester"
     source.mkdir(parents=True)
-    (source / "engine.py").write_text("def backtest_topk():\n    return None\n", encoding="utf-8")
+    (source / "engine.py").write_text(
+        "def backtest_topk():\n    return None\n",
+        encoding="utf-8",
+    )
     rules = (
         workspace_import_boundaries.SourceLayoutRule(
             identifier="no-local-backtesting",
             description="test",
             repo="strategy-pipeline",
-            forbidden_sources=("src/cstree/backtesting",),
+            forbidden_sources=("src/portfolio_backtester",),
             max_allowed=0,
         ),
     )
@@ -143,8 +164,8 @@ def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_cod
     ]
     assert report["source_layout_rules"][0]["findings"] == [
         {
-            "matched": "src/cstree/backtesting",
-            "path": "strategy-pipeline/src/cstree/backtesting/engine.py",
+            "matched": "src/portfolio_backtester",
+            "path": "strategy-pipeline/src/portfolio_backtester/engine.py",
         }
     ]
 
@@ -152,7 +173,7 @@ def test_strategy_pipeline_source_layout_rule_blocks_local_alpha_backtesting_cod
 def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
     tmp_path: Path,
 ) -> None:
-    source = tmp_path / "strategy-pipeline" / "src" / "cstree" / "contracts"
+    source = tmp_path / "strategy-pipeline" / "src" / "strategy_pipeline" / "contracts"
     source.mkdir(parents=True)
     (source / "signals.py").write_text(
         textwrap.dedent(
@@ -168,8 +189,8 @@ def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
             identifier="contracts-pure-handoff",
             description="test",
             repo="strategy-pipeline",
-            source="src/cstree/contracts",
-            forbidden=("cstree.pipeline", "quant_execution_engine"),
+            source="src/strategy_pipeline/contracts",
+            forbidden=("strategy_pipeline.pipeline", "quant_execution_engine"),
             max_allowed=0,
         ),
     )
@@ -180,6 +201,6 @@ def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
         "contracts-pure-handoff: 2 imports exceed budget 0",
     ]
     assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
-        "cstree.pipeline",
+        "strategy_pipeline.pipeline",
         "quant_execution_engine",
     ]

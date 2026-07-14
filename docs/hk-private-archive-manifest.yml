@@ -73,7 +73,7 @@
       "archive_action": "include",
       "lifecycle": "archived_provenance",
       "paths": [
-        "src/cstree/liveops/alloc_hk*.py",
+        "src/strategy_pipeline/liveops/alloc_hk*.py",
         "configs/presets/hk*.yml",
         "configs/presets/data/hk_rqdata.yml",
         "configs/field_profiles/hk_*",

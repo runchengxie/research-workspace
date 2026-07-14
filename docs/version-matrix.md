@@ -49,3 +49,9 @@ python scripts/print_version_matrix.py
 - 是否验证了模拟盘端到端流程。
 - 是否涉及实盘；实盘状态只能按人工监督下的真实结果填写。
 - 子模块是否存在未提交改动；如存在，请标为本地工作状态，发布前先清理或提交。
+
+## Owner-native namespace 候选组合
+
+| 日期 | alpha-research | portfolio-backtester | strategy-pipeline | 状态 | 证据 |
+| --- | --- | --- | --- | --- | --- |
+| 2026-07-14 | `e24fce6` / 0.2.0 | `426083f` / 0.2.0 | `5a4bc49` / 1.1.0 | 候选：三个下游 PR 可合并，namespace compile/boundary/pytest jobs 通过；等待本 superproject 组合验证和按顺序合并 | `docs/owner-native-namespace-release.json`、ADR-0002、PR #6/#8/#20 |

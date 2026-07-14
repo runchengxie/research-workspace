@@ -23,8 +23,8 @@ quant-execution-engine
   解析 targets.json，执行 dry-run、风控门禁和受控券商执行
 ```
 
-`alpha-research` 承载 alpha 研究模块（`cstree.alpha.*`），`portfolio-backtester` 承载
-组合回测模块（`cstree.backtesting.*`）。当前是阶段 3 过渡态：代码已经物理拆成子模块，
+`alpha-research` 承载 alpha 研究模块（`alpha_research.*`），`portfolio-backtester` 承载
+组合回测模块（`portfolio_backtester.*`）。当前是阶段 3 过渡态：代码已经物理拆成子模块，
 但运行时仍通过同一个 `cstree` namespace 与 `strategy-pipeline` 中的 pipeline、
 contracts 和 shared helpers 组合使用。`cstree` 是 research-workspace 核心框架的历史名称
 （源自 cross-sectional-trees），现已演化为通用的策略研究管线，不再特指某一种策略。
