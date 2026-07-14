@@ -328,7 +328,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 156,
-      "python_loc": 64061,
+      "python_loc": 64130,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 45,
@@ -409,7 +409,7 @@
         },
         {
           "path": "src/market_data_platform/cli_data.py",
-          "loc": 1068,
+          "loc": 1077,
           "hk_related": false
         },
         {
@@ -424,7 +424,7 @@
         },
         {
           "path": "tests/test_cli_data_minutes.py",
-          "loc": 895,
+          "loc": 955,
           "hk_related": false
         },
         {
