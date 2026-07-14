@@ -5,10 +5,11 @@
     "market-data-platform": "f84d5bf83668acd174c7bbf5e3ea8e489aff72eb",
     "portfolio-backtester": "426083f2e988f1e5003e19df28ebda8dafb3324b",
     "quant-execution-engine": "ae20db3da07c1de42dc6ebb3b1f431fd84d1419a",
-    "strategy-pipeline": "5509966fbd284271d21cc06cace68f828278d22c"
+    "strategy-pipeline": "24d4458d40444fe4e55e831c53a21fc8a61db786"
   },
-  "method": "GitHub Actions source snapshots assembled into one isolated local workspace",
+  "method": "GitHub Actions source snapshots assembled into one isolated local workspace, followed by an isolated lockfile-only strategy validation",
   "results": {
+    "alpha_lockfile": "public-PyPI uv lock --check passed without changes",
     "alpha_namespace_tests": "2 passed",
     "canonical_cli_parser": "passed",
     "canonical_imports": "passed",
@@ -19,13 +20,16 @@
     ],
     "compileall": "passed for all five active source trees and superproject src",
     "environment_alias": "CSTREE_ARTIFACTS_ROOT -> STRATEGY_PIPELINE_ARTIFACTS_ROOT passed with deprecation warning",
+    "portfolio_lockfile": "public-PyPI uv lock --check passed without changes",
     "portfolio_namespace_tests": "2 passed",
     "shared_namespace_layout": "alpha and portfolio have no src/cstree; strategy facade contains only __init__.py and __main__.py",
+    "strategy_lockfile": "path dependency package versions aligned to alpha-research 0.2.0 and portfolio-backtester 0.2.0 in Actions run 29307638113",
     "strategy_namespace_tests": "5 passed",
     "workspace_boundary_fixture_tests": "6 passed with gitlink-only test executed separately in PR checkout",
     "workspace_import_boundary_scan": "passed; all required active owner boundaries at budget"
   },
   "schema": "owner_native_namespace_integration_evidence.v1",
+  "source_snapshot_strategy_commit": "5509966fbd284271d21cc06cace68f828278d22c",
   "status": "passed",
   "validation_limits": {
     "full_uv_install_ci": "not run because WORKSPACE_SUBMODULE_READ_TOKEN is not configured in research-workspace Actions",
