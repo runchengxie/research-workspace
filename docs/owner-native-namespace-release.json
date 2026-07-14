@@ -22,7 +22,7 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "5509966fbd284271d21cc06cace68f828278d22c",
+      "commit": "24d4458d40444fe4e55e831c53a21fc8a61db786",
       "compatibility_package_allowed": true,
       "pr": 20,
       "version": "1.1.0"
@@ -34,6 +34,7 @@
     "alpha_namespace_job": 29306434651,
     "portfolio_namespace_job": 29306440619,
     "strategy_followup_job": 29306422924,
+    "strategy_lockfile_job": 29307638113,
     "strategy_migration_job": 29306199840,
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
