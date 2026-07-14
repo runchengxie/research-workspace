@@ -41,11 +41,11 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 34,
-      "max_long_functions": 96,
-      "max_complexity_hotspots": 48,
+      "max_large_files": 42,
+      "max_long_functions": 108,
+      "max_complexity_hotspots": 58,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-14 DailyWatch20 strict hotspot-pool selection, freshness validation, and end-to-end scenario coverage expand the fail-closed delivery contract. Split the registered freshness and pipeline test hotspots before another delivery-policy family is added."
+      "owner_decision": "2026-07-14 DailyWatch20 immutable policy, lock-time live evidence, strict PIT v2 reconstruction, and gap-aware OOS research add an explicitly reviewed safety surface. Hold this synchronized baseline; split candidate OOS, policy validation, publication evidence, and their safety tests before adding another delivery-policy family."
     },
     {
       "repo": "quant-execution-engine",
@@ -207,6 +207,36 @@
       "owner_repo": "strategy-pipeline",
       "reason": "Watch20 out-of-sample helpers keep next-open label eligibility, frozen Top4/Top20 coverage, and fail-closed tradability semantics together for the research contract",
       "next_action": "split label-panel construction from portfolio outcome policy before adding a cash/carry execution simulator"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_oos.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The research-only candidate comparison keeps complete-calendar status rows, segment-aware churn, missing-return diagnostics, and paired scenario statistics in one reproducible OOS contract",
+      "next_action": "split scenario construction from path and paired-statistics evaluation before adding account-state execution replay"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "Strict v1/v2 THS-hot loaders retain exact-partition reading, snapshot selection, rank evidence, positive-change filtering, and receipt lineage behind one fail-closed pool interface",
+      "next_action": "split parquet provenance loading from v1 snapshot assembly before adding another candidate source"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_policy.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The immutable strategy policy validator deliberately keeps canonicalization plus cross-section validation for model, feature, label, candidate, news, construction, and safety sections in one identity boundary",
+      "next_action": "extract section validators into a policy package before adding a second production policy schema"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_publication_inputs.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "Lock-time publication evidence reconstruction binds current assets, minute lineage, candidate rows, freshness, news heat, and model metadata before the live latest pointer can move",
+      "next_action": "split asset, candidate, minute, and model evidence validators into dedicated modules before expanding production inputs"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_daily_watch20_publication_safety.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The publication safety suite shares one realistic canonical input fixture while covering immutable identity, namespace isolation, lock timing, evidence rehashing, candidate binding, and finalized-state recovery",
+      "next_action": "split namespace, evidence, identity, and recovery scenarios after the production receipt schema stabilizes"
     },
     {
       "path": "strategy-pipeline/tests/test_daily_watch20_ablation.py",
