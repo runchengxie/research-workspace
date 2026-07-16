@@ -68,7 +68,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 委托配置见 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。
 
 - `smoke` 检查公开入口是否可达
-- `full` 运行各仓库的 Ruff、格式、`ty` 和 `pytest`
+- `full` 运行各仓库的 Ruff、格式、`ty` 和测试。`market-data-platform` 的 pytest 按文件分批执行
 - `release_typecheck` 运行 BasedPyright 诊断
 
 ## 本地 pre-push 门禁

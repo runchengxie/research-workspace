@@ -1,30 +1,30 @@
-## Scope
+## 改动范围
 
-- [ ] Superproject-only change
-- [ ] Data platform change
-- [ ] Alpha research change
-- [ ] Portfolio backtester change
-- [ ] Strategy research change
-- [ ] Trading execution change
-- [ ] Submodule gitlink update
+- [ ] 仅修改 superproject
+- [ ] 数据平台
+- [ ] Alpha 研究
+- [ ] 组合回测
+- [ ] 策略编排
+- [ ] 交易执行
+- [ ] 更新子模块 gitlink
 
-## Maintainability
+## 维护性
 
-- [ ] No new deprecated surface, or deprecation record updated
-- [ ] No new one-off script, or script lifecycle metadata added
-- [ ] No new Ruff/BasedPyright/mypy exclude, or quality-governance exception added
-- [ ] No `targets.json` contract impact, or contract docs/tests updated
-- [ ] No provider/broker credential dependency, or safety docs/tests updated
-- [ ] Migration note, rollback path, or restore evidence added when needed
+- [ ] 没有新增废弃入口，或已更新废弃记录
+- [ ] 没有新增一次性脚本，或已登记脚本生命周期
+- [ ] 没有新增 Ruff、`ty` 或 BasedPyright 排除项，或已登记质量治理例外
+- [ ] 没有影响 `targets.json` 契约，或已同步文档和测试
+- [ ] 没有新增数据供应商或券商凭证依赖，或已补充安全说明和测试
+- [ ] 需要时已补充迁移说明、回退路径或恢复证据
 
-## Verification
+## 验证结果
 
-Report checks in this order:
+按以下顺序记录：
 
-1. Data platform:
-2. Alpha research:
-3. Portfolio backtester:
-4. Strategy orchestration:
-5. Trading execution:
-6. Top-level docs/doctor:
-7. Remaining limitations:
+1. 数据平台
+2. Alpha 研究
+3. 组合回测
+4. 策略编排
+5. 交易执行
+6. 顶层文档和 doctor
+7. 剩余限制

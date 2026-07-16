@@ -52,7 +52,7 @@ for owner_hook in "${owner_hooks[@]}"; do
   if [[ "$already_seen" == false ]]; then
     seen_paths+=("$owner_path")
     echo "[pre-push] running owner-native hook: $owner_hook"
-    "$owner_hook" "$@" < "$stdin_cache"
+    "${clean_git_env[@]}" "$owner_hook" "$@" < "$stdin_cache"
   fi
 done
 

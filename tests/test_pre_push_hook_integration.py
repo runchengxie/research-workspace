@@ -319,16 +319,10 @@ def test_shared_pre_push_replays_identical_stdin_to_native_and_runner(tmp_path: 
     assert list(cache_dir.iterdir()) == []
 
 
-def test_shared_pre_push_clears_git_local_env_only_for_shared_runner(tmp_path: Path) -> None:
+def test_shared_pre_push_clears_git_local_env_for_shared_and_native_hooks(tmp_path: Path) -> None:
     repository, env = _prepare_hook_execution(tmp_path, native_exit=0)
     hook = repository.parent / ".githooks/pre-push"
-    git_dir = subprocess.run(
-        ("git", "rev-parse", "--absolute-git-dir"),
-        cwd=repository,
-        check=True,
-        capture_output=True,
-        text=True,
-    ).stdout.strip()
+    git_dir = str(repository / ".git")
     env["GIT_DIR"] = git_dir
 
     completed = subprocess.run(
@@ -341,7 +335,7 @@ def test_shared_pre_push_clears_git_local_env_only_for_shared_runner(tmp_path: P
     assert completed.returncode == 0
     assert Path(env["PREFLIGHT_GIT_DIR"]).read_text(encoding="utf-8") == "<unset>"
     assert Path(env["RUNNER_GIT_DIR"]).read_text(encoding="utf-8") == "<unset>"
-    assert Path(env["NATIVE_GIT_DIR"]).read_text(encoding="utf-8") == git_dir
+    assert Path(env["NATIVE_GIT_DIR"]).read_text(encoding="utf-8") == "<unset>"
 
 
 def test_shared_pre_push_rejects_refs_before_owner_native_side_effects(tmp_path: Path) -> None:
@@ -444,23 +438,30 @@ def test_shared_pre_push_invokes_executable_default_git_hook(tmp_path: Path) -> 
     assert Path(env["RUNNER_STDIN"]).read_text(encoding="utf-8") == payload
 
 
-def test_shared_pre_commit_delegates_to_owner_native_hook_without_recursion(tmp_path: Path) -> None:
+def test_shared_pre_commit_delegates_and_clears_git_local_environment(tmp_path: Path) -> None:
     workspace = tmp_path / "workspace"
     repository = workspace / "repo"
     _copy_shared_hooks(workspace)
     _init_repo(repository)
     marker = tmp_path / "native-pre-commit"
     native = repository / ".githooks/pre-commit"
-    _write_hook(native, f"echo native > {marker!s}\n")
+    _write_hook(
+        native,
+        f'printf "%s|%s" "${{GIT_DIR-<unset>}}" "${{GIT_WORK_TREE-<unset>}}" > {marker!s}\n',
+    )
+    env = dict(os.environ)
+    env["GIT_DIR"] = str(repository / ".git")
+    env["GIT_WORK_TREE"] = str(repository)
 
     completed = subprocess.run(
         (str(workspace / ".githooks/pre-commit"),),
         cwd=repository,
+        env=env,
         check=False,
     )
 
     assert completed.returncode == 0
-    assert marker.is_file()
+    assert marker.read_text(encoding="utf-8") == "<unset>|<unset>"
 
 
 def test_shared_pre_commit_invokes_executable_default_git_hook(tmp_path: Path) -> None:

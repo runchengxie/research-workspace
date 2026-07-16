@@ -113,22 +113,23 @@ class DocsLinksTest(unittest.TestCase):
         ):
             self.assertIn(phrase, contracts)
 
-    def test_strategy_satellites_preserve_stage3_core_chain(self) -> None:
+    def test_external_strategy_projects_use_current_file_contracts(self) -> None:
         satellites = (ROOT / "docs" / "strategy-satellites.md").read_text(encoding="utf-8")
 
-        self.assertNotIn(
-            "`market-data-platform` → `strategy-pipeline` → `quant-execution-engine`",
-            satellites,
-        )
         for phrase in (
-            "核心链路依次经过 `market-data-platform`、`alpha-research`",
-            "`portfolio-backtester`、`strategy-pipeline` 和",
-            "signals.parquet + signals.meta.json",
-            "positions_by_rebalance.csv + backtest evidence",
-            "targets.json + targets.json.lineage.json",
-            "五段核心架构",
+            "`market-intel`",
+            "`hot-sector-screener`",
+            "`ai-stock-picker`",
+            "`a-share-factor-core`",
+            "candidate_universe.json",
+            "signals.parquet",
+            "selection.json",
+            "post_observation_generation",
+            "append-only",
         ):
             self.assertIn(phrase, satellites)
+        self.assertNotIn("~/code/guan-etf-rotation-v3", satellites)
+        self.assertNotIn("~/code/hot-sector-screener", satellites)
 
 
 if __name__ == "__main__":

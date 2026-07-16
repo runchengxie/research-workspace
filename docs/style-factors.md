@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-06-29
+> last_verified: 2026-07-16
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -36,22 +36,23 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 
 这个工具适合做市场风格复盘、候选策略收益归因和研究解释。账户级风险引擎还需要补充行业中性化、协方差风险预测、特异风险建模、组合优化和 PIT 指数成分约束。
 
-## 数据窗口
+## 参考运行窗口
 
-本机共享数据当前覆盖：
+2026-06-29 发布的参考运行使用以下输入窗口：
 
 ```text
 daily / daily_basic: 2008-01-02 ~ 2026-06-26
 ```
 
-全量运行默认读取全部可用日期。`--quick` 从 `2020-01-01` 开始读取分区，用于调试和快速产出。
+这段日期用于复现该次报告，不代表 current contract 的实时截止日。全量运行默认读取执行时
+可用的全部日期。`--quick` 从 `2020-01-01` 开始读取分区，用于调试和快速产出。
 
 ## 运行命令
 
 本地临时输出：
 
 ```bash
-DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform \
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
   uv run python -m src.style_factors \
   --outdir artifacts/style_analysis
 ```
@@ -67,7 +68,7 @@ uv run python -m src.style_factors \
 发布到共享数据根的标准位置：
 
 ```bash
-DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform \
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
   uv run python src/style_factors/style_factor_attribution.py \
   --out-name 20260629
 ```
@@ -121,6 +122,6 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 
 - 估值类输入中，非正 PB/PE_TTM 会被视为缺失，避免把异常值当成极端低估值或高质量。
 - Growth 和 Leverage 依赖 `fina_indicator`，按 `ann_date` 对齐，避免使用尚未公告的数据。
-- 财务指标来自当前可用 raw fundamentals 链路；正式研究引用时仍应结合 `market-data-platform` 的 PIT fundamentals 质量说明。
+- 财务指标来自当前可用 raw fundamentals 链路。正式研究引用时仍应结合 `market-data-platform` 的 PIT fundamentals 质量说明。
 - 因子收益是全市场等权多空代理因子收益，暂未纳入交易成本、涨跌停成交约束、ST 过滤和行业中性化。
 - 2026 年这类未完整年度的 `period_return` 是年初至数据截止日收益，`annual_return` 是按日均收益年化。

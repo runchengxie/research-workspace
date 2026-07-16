@@ -191,7 +191,7 @@ def _repository_toplevel(repository: Path) -> Path | None:
 
 def check_local_git_hooks(root: Path) -> list[Check]:
     expected = (root / ".githooks").resolve()
-    issues = [
+    issues: list[str] = [
         f"{name} is missing or not executable"
         for name in SHARED_HOOK_NAMES
         if not (expected / name).is_file() or not os.access(expected / name, os.X_OK)

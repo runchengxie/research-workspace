@@ -15,13 +15,21 @@
           ["uv", "run", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
         ],
         "test": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pytest"]
+          ["uv", "run", "--extra", "dev", "python", "scripts/dev/run_pytest_isolated.py", "--", "-q"]
         ],
         "type": [
           ["uv", "run", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--extra", "dev", "basedpyright"]
+          [
+            "uv",
+            "run",
+            "--extra",
+            "dev",
+            "basedpyright",
+            "--project",
+            "basedpyrightconfig.core-basic.json"
+          ]
         ],
         "full": ["@smoke", "@lint", "@type", "@test"]
       }
@@ -88,7 +96,7 @@
           ["uv", "run", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "basedpyright"]
+          ["scripts/dev/run_tests.sh", "typecheck-release"]
         ],
         "full": ["@smoke", "@lint", "@type", "@test"]
       }

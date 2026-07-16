@@ -1,64 +1,39 @@
-# 架构拆分收敛清单（stage 4）
+# 架构边界发布清单
 
-本页是从阶段 3.5 物理拆分走向阶段 4 长期可维护边界的可执行清单。
+> status: active
+> owner: workspace
+> last_verified: 2026-07-16
+> source_of_truth: yes
+> superseded_by: n/a
 
-## 一、先确认现在是什么状态（已具备）
+物理拆分已经完成。本页只保留当前版本组合发布前需要复核的架构边界。历史阶段记录见
+[归档入口](archive/README.md)。
 
-- `alpha-research`、`portfolio-backtester` 已成为独立 submodule。
-- `strategy-pipeline` 负责运行编排、CLI 与 `targets.json` 导出。
-- 文件交接主链路是：
-  - `signals.parquet` / `signals.meta.json`（alpha 输出）
-  - `positions_by_rebalance.csv`（回测输出）
-  - `targets.json` / `targets.json.lineage.json`（执行交接输出）
-- `market-data-platform` 和 `quant-execution-engine` 已经不承接研究核心实现。
-- Import boundary 脚本与 test 已包含：
-  - `workspace_import_boundaries.py`
-  - `strategy-pipeline/tests/test_import_boundary.py`
+## 当前边界
 
-## 二、落地目标（你这次强调的四条风险对齐）
+- `market-data-platform` 发布数据契约、资产、manifest 和 registry。
+- `alpha-research` 使用 `alpha_research.*`，输出 `signals.parquet` 和 `signals.meta.json`。
+- `portfolio-backtester` 使用 `portfolio_backtester.*`，输出 `positions_by_rebalance.csv`。
+- `strategy-pipeline` 使用 `strategy_pipeline.*`，负责编排和 `targets.json` 导出。命令行入口为 `strategy`。
+- `quant-execution-engine` 读取 `targets.json`，研究仓库不连接券商或提交订单。
+- 跨仓库交接使用文件契约，各仓库不导入其他仓库的内部实现。
 
-1. owner-native namespace 已落地，兼容面限期退出
-   - `alpha-research`、`portfolio-backtester` 和 `strategy-pipeline` 已各自独占
-     `alpha_research.*`、`portfolio_backtester.*` 和 `strategy_pipeline.*` namespace。
-   - `strategy-pipeline` 在 2.0 中已删除旧 facade 与 CLI alias；它不再是多个
-     distribution 共同贡献的共享 namespace，权威 CLI 是 `strategy`。
+## 发布前检查
 
-2. 所有关键交接都走 artifact contract
-   - `alpha-research` 仅输出信号与诊断契约化产物。
-   - `portfolio-backtester` 仅消费这些 artifact，输出持仓/回测契约产物。
-   - `strategy-pipeline` 只做编排与导出，不在同层重算内部逻辑。
-
-3. 回测引擎不绑定 alpha 实现细节
-   - `portfolio-backtester` 不应在 runtime import 回到 `alpha_research`。
-   - `alpha-research` 不应在 runtime import 回到 `portfolio_backtester`。
-
-4. 执行与回测严格分离
-   - `quant-execution-engine` 只消费 `targets.json`。
-   - `strategy export-targets` 不触发下单、不会做券商预演。
-
-## 三、硬性验收项（建议按版本组合发布前逐项打勾）
-
-- [ ] 框架边界符合 [ADR-0001](adr/0001-framework-integration-boundaries.md)，迁移状态同步到 [`framework-integration-ledger.yml`](framework-integration-ledger.yml)。
-- [ ] Qlib、vn.py 或 LEAN 类型没有进入跨仓库 Python public result 或 artifact schema。
-- [ ] 没有安装 Qlib 或 vn.py 时，native 端到端路径仍可导入和运行。
+- [ ] 框架边界符合 [ADR-0001](adr/0001-framework-integration-boundaries.md)，状态已同步到 [`framework-integration-ledger.yml`](framework-integration-ledger.yml)。
+- [ ] Qlib、vn.py 和 LEAN 类型没有进入跨仓库 Python 公共返回值或 artifact schema。
+- [ ] 未安装 Qlib 或 vn.py 时，原生端到端路径仍可导入和运行。
 - [ ] 边界扫描通过：`python scripts/workspace_import_boundaries.py --check`
-- [ ] 边界测试通过：`python -m pytest tests/test_workspace_import_boundaries.py -q`
-- [ ] `strategy-pipeline` 内部边界通过：`scripts/dev/run_tests.sh import-boundary`
-- [ ] 顶层文件约定检查通过：`python src/research_contracts/smoke_contracts.py --strict`
+- [ ] 边界测试通过：`uv run python -m pytest tests/test_workspace_import_boundaries.py -q`
+- [ ] 策略仓库内部边界通过：`cd strategy-pipeline && scripts/dev/run_tests.sh import-boundary`
+- [ ] 顶层文件约定通过：`python src/research_contracts/smoke_contracts.py --strict`
 - [ ] 顶层质量门禁通过：`python scripts/run_quality_checks.py --profile hard`
-- [ ] 文档契约一致：`docs/contracts.md` 与 `docs/platform-workflow.md` 的链路说明与清单保持一致。
+- [ ] `docs/contracts.md`、`docs/platform-workflow.md` 和机器可读契约保持一致。
 
-## 四、建议的长期方向（可逐步推进）
+## 变更规则
 
-- 按 ADR-0001 以 adapter 方式接入 Qlib 和 vn.py；LEAN 仅通过 framework-neutral scenario 做对照。
-- native 通用实现只在 parity evidence、兼容窗口和回滚证据齐全后删除。
-- 为长期治理保留明确的 owner API（例如通过 `alpha-research` 与 `portfolio-backtester` 入口），
-  并已在 workspace 2.0 删除原由 `strategy-pipeline` 单独持有的兼容出口。
-- 将研究流程按因子挖掘、组合构建、风控容量、执行交接这条链路逐步沉淀为固定 sidecar。
-- 对每类新增功能，优先补 `contracts` + `tests`，再补 `strategy-pipeline` 编排与 `workspace-import-boundary` 例外。
-
-## 五、注意事项（容易误解的边界）
-
-- 这条链路需要反复补证据：每次完成新特征或新构造层扫验后，回到前一层（通常是 alpha / backtest / 风险层）补齐证据，再决定是否晋升。
-- 本清单不建议把 `targets.json` 的成功 dry-run 解释为真实券商就绪。
-- 安装第三方依赖或跑通 happy-path demo 不代表迁移完成；退出条件以机器可读迁移账本为准。
+- 第三方框架通过 adapter 接入。LEAN 只通过框架无关的场景契约做对照。
+- 删除原生实现前，先保存等价性证据、兼容窗口和回滚方案。
+- 新的跨仓库字段先更新文件契约和测试，再更新编排层。
+- 新增边界例外时，记录 owner、原因、移除条件和对应测试。
+- `targets.json` dry-run 只证明文件可以交接。券商能力由执行仓库单独验收。

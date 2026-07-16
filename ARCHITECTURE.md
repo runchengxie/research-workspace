@@ -1,59 +1,61 @@
 # 架构边界
 
-本工作区协调数据平台、alpha 研究、组合回测、策略编排和交易执行之间的文件交接：
+本工作区通过文件产物连接数据、研究、回测、编排和执行：
 
 ```text
 market-data-platform
-  生产并发布数据资产
+  发布数据资产
         |
         v
 alpha-research
-  因子、模型、稳健性和信号产物
+  生成特征、模型评估和信号产物
         |
         v
 portfolio-backtester
-  组合构造、回测、容量和报告
+  构造组合并评估成本、容量和风险
         |
         v
 strategy-pipeline
-  编排研究流程，并导出 targets.json
+  编排研究流程并导出 targets.json
         |
         v
 quant-execution-engine
-  解析 targets.json，执行 dry-run、风控门禁和受控券商执行
+  解析 targets.json，执行预演、风控和受控交易
 ```
 
-`alpha-research` 承载 alpha 研究模块（`alpha_research.*`），`portfolio-backtester` 承载
-组合回测模块（`portfolio_backtester.*`），`strategy-pipeline` 承载编排模块
-（`strategy_pipeline.*`）。三个 distribution 已各自独占 owner-native namespace，不再通过共享
-namespace 或 `pkgutil.extend_path` 拼装运行时。工作区 2.0 已删除旧 Python facade、
-CLI alias 与环境变量 fallback；权威命令是 `strategy` 与 `strategy-pipeline`。命名边界见
-[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
+每个子仓库维护自己的 Python 命名空间：
 
-## 代码边界
+- `alpha_research.*` 归 `alpha-research`
+- `portfolio_backtester.*` 归 `portfolio-backtester`
+- `strategy_pipeline.*` 归 `strategy-pipeline`
 
-- 活跃代码：当前 A 股数据、研究、执行流程，以及多市场共享文件约定。
-- 兼容代码：保留中的港股 deprecated surface。删除前需要完成 consumer audit、replacement docs、rollback notes、restore evidence 和 focused tests。
-- 归档和来源说明：带日期的交接记录、冻结记录、恢复演练证据和历史研究背景。
-- 演示仓库 staging：`demo/` 下的 clean-room synthetic public demo 模板，独立于活跃工作区，不作为子模块或发布门禁。
-- 私有运行环境：provider adapter、broker adapter、凭证、本地数据根目录和执行审计日志。这些内容不进入公开演示仓库。
+工作区 2.0 已删除旧共享命名空间、CLI 别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
+
+## 代码和数据边界
+
+- 活跃代码服务当前 A 股数据与研究主线，以及多市场共用的执行契约。
+- 兼容入口必须登记负责人、替代路径、删除条件和验证证据。
+- 带日期的交接、冻结、恢复演练和历史研究记录进入归档。
+- 公开合成数据示例由外部演示仓库维护，不属于本工作区的子模块或发布门禁。
+- 数据供应商适配器、券商适配器、凭证、本地数据和交易审计日志留在对应私有运行环境。
+
+跨仓库协作使用稳定文件或公开 API。第三方框架对象不得进入跨仓库契约。
+
+## 外部框架
+
+- Qlib 可作为研究和差分回测后端。数据资产、PIT 语义和跨仓库产物仍由本工作区维护。
+- vn.py 可作为执行传输、Gateway 和 OMS 适配层。审批、幂等、持久证据和对账归 `quant-execution-engine`。
+- LEAN 只用于领域对象和参考场景对照，不进入当前 Python 主运行时。
+
+适配器需要把输入和输出转换为本工作区的稳定类型或文件产物。
 
 ## 治理入口
 
-- 框架集成决策：[docs/adr/0001-framework-integration-boundaries.md](docs/adr/0001-framework-integration-boundaries.md)
-- 框架采用评估：[docs/framework-adoption-assessment.md](docs/framework-adoption-assessment.md)
-- 框架迁移账本：[docs/framework-integration-ledger.yml](docs/framework-integration-ledger.yml)
-- 废弃入口：[docs/deprecations.md](docs/deprecations.md)
-- 港股公开拆分：[docs/hk-public-split-manifest.yml](docs/hk-public-split-manifest.yml)
-- 脚本生命周期：[docs/script-lifecycle.yml](docs/script-lifecycle.yml)
-- 质量覆盖和排除项：[docs/quality-coverage-governance.yml](docs/quality-coverage-governance.yml)
-- 重构路线图：[docs/maintainability-refactor-roadmap.yml](docs/maintainability-refactor-roadmap.yml)
-- 当前文件约定：[docs/contracts.md](docs/contracts.md)
-- 拆分收敛清单：[docs/architecture-split-closure-checklist.md](docs/architecture-split-closure-checklist.md)
-
-## 外部框架边界
-
-- Qlib 只作为可选研究和差分回测后端，不拥有数据资产、PIT 语义或跨仓库 artifact。
-- vn.py 只作为可选执行 transport、Gateway 和 OMS bridge；执行审批、幂等、持久证据和对账继续由 `quant-execution-engine` 拥有。
-- LEAN 只作为领域对象和 golden-reference 参照，不进入当前 Python 主运行时。
-- 第三方框架对象不得跨 repository contract。适配器必须把输入和输出转换为本工作区的稳定类型或文件产物。
+- [框架集成边界](docs/adr/0001-framework-integration-boundaries.md)
+- [命名空间边界](docs/adr/0002-owner-native-python-namespaces.md)
+- [跨仓库文件契约](docs/contracts.md)
+- [废弃入口](docs/deprecations.md)
+- [脚本生命周期](docs/script-lifecycle.yml)
+- [质量覆盖](docs/quality-coverage-governance.yml)
+- [维护性重构路线图](docs/maintainability-refactor-roadmap.yml)
+- [发布检查](docs/release-checklist.md)

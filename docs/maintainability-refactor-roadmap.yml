@@ -41,11 +41,11 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 42,
-      "max_long_functions": 108,
-      "max_complexity_hotspots": 59,
+      "max_large_files": 45,
+      "max_long_functions": 112,
+      "max_complexity_hotspots": 64,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-14 graduated AFML evidence protocols and lineage binding add one reviewed complexity hotspot while preserving the existing large-file and long-function budgets. Hold this synchronized baseline and split protocol parsing from artifact verification before adding another promotion level."
+      "owner_decision": "2026-07-16 DeepSeek 稳定性实验新增了执行、证据和分析模块。三个模块均低于项目自身的 800 行硬门槛，并有专项测试和冻结证据。当前预算与基线实测值完全一致。后续改动应先拆分调度、账本校验和指标分析，再扩展新的实验协议。"
     },
     {
       "repo": "quant-execution-engine",
@@ -945,6 +945,24 @@
       "owner_repo": "strategy-pipeline",
       "reason": "StyleReplica orchestration remains a large integration module after oversize functions were extracted",
       "next_action": "split artifact loading from daily run orchestration when StyleReplica workflow changes"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DeepSeek 稳定性实验的执行调度、失败分类和追加式账本写入集中在同一个可审计边界内，当前版本已经绑定冻结证据并通过专项测试",
+      "next_action": "实验协议再次变更时，先拆分重试调度、尝试历史校验和账本写入逻辑"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "活动计划、输入绑定和证据复核共用一套严格失败语义，当前模块低于项目的 800 行硬门槛",
+      "next_action": "增加新的活动类型前，将计划构造和证据复核提取为独立模块"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_stability.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "稳定性分析集中保存预注册指标、置信区间和晋级判定，便于复现实验结论并核对冻结产物",
+      "next_action": "新增指标族前，将位置偏差分析和重合度分析拆成独立的纯函数模块"
     }
   ]
 }

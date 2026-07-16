@@ -9,6 +9,12 @@ fi
 repo_root="$(git rev-parse --show-toplevel)"
 hook_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$0")"
 git_dir="$(git -C "$repo_root" rev-parse --absolute-git-dir)"
+clean_git_env=(env)
+while IFS= read -r variable; do
+  if [[ -n "$variable" ]]; then
+    clean_git_env+=("-u" "$variable")
+  fi
+done < <(git -C "$repo_root" rev-parse --local-env-vars)
 
 owner_hooks=(
   "$repo_root/.githooks/pre-commit"
@@ -33,7 +39,7 @@ for owner_hook in "${owner_hooks[@]}"; do
   if [[ "$already_seen" == false ]]; then
     seen_paths+=("$owner_path")
     echo "[pre-commit] running owner-native hook: $owner_hook"
-    "$owner_hook" "$@"
+    "${clean_git_env[@]}" "$owner_hook" "$@"
   fi
 done
 

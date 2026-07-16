@@ -6,7 +6,7 @@ from __future__ import annotations
 import ast
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeGuard
 
 from workspace_governance_common import Check
 from workspace_governance_quality import check_quality_coverage
@@ -129,7 +129,7 @@ def _deprecation_removal_issues(manifest: dict[str, Any]) -> list[str]:
     return issues
 
 
-def _valid_budget_limit(value: Any) -> bool:
+def _valid_budget_limit(value: Any) -> TypeGuard[int]:
     return isinstance(value, int) and not isinstance(value, bool) and value >= 0
 
 

@@ -481,18 +481,18 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
     assert "/strategy-pipeline/" in owners
     assert "/quant-execution-engine/" in owners
     for phrase in (
-        "deprecated surface",
-        "one-off script",
+        "废弃入口",
+        "一次性脚本",
         "Ruff",
+        "ty",
         "BasedPyright",
-        "mypy",
         "targets.json",
-        "provider",
-        "broker",
-        "migration note",
-        "focused",
+        "数据供应商",
+        "券商",
+        "迁移说明",
+        "定点验证",
     ):
         assert phrase in combined
-    assert "Data platform" in pr_template
-    assert "Strategy research" in pr_template
-    assert "Trading execution" in pr_template
+    assert "数据平台" in pr_template
+    assert "策略编排" in pr_template
+    assert "交易执行" in pr_template

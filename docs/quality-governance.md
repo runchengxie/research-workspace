@@ -29,6 +29,11 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `hard` 包含 Ruff、格式、`ty`、工作区导入边界和 secret scan。`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
 
+顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
+`workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py` 和
+`maintainability_baseline.py`。新增质量门禁脚本时，应同时判断是否加入 `ty` 与
+BasedPyright 的目标列表。
+
 ## 跨仓库边界
 
 `python scripts/workspace_import_boundaries.py --check` 检查以下方向：
@@ -40,6 +45,9 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 - 第三方框架对象不跨仓库文件契约
 
 顶层委托配置是 `scripts/submodule_checks.json`。子仓库的维护性阈值和排除项留在各自仓库。
+
+维护性 baseline 是已知债务上限。删除大文件、长函数或复杂热点后，应在同一提交中下调
+baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个数值来吸收新增债务。
 
 ## 自动化状态
 

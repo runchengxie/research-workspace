@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 71,
-      "python_loc": 16237,
+      "python_loc": 16309,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -247,7 +247,11 @@
           "scripts/run_quality_checks.py",
           "scripts/run_submodule_checks.py",
           "scripts/scan_workspace_secrets.py",
+          "scripts/maintainability_baseline.py",
+          "scripts/workspace_doctor.py",
+          "scripts/workspace_governance.py",
           "scripts/workspace_governance_common.py",
+          "scripts/workspace_governance_quality.py",
           "scripts/workspace_governance_submodules.py",
           "scripts/workspace_import_boundaries.py",
           "src/research_contracts/__init__.py",
@@ -274,7 +278,11 @@
           "scripts/run_quality_checks.py",
           "scripts/run_submodule_checks.py",
           "scripts/scan_workspace_secrets.py",
+          "scripts/maintainability_baseline.py",
+          "scripts/workspace_doctor.py",
+          "scripts/workspace_governance.py",
           "scripts/workspace_governance_common.py",
+          "scripts/workspace_governance_quality.py",
           "scripts/workspace_governance_submodules.py",
           "scripts/workspace_import_boundaries.py",
           "src/research_contracts/__init__.py",
@@ -333,8 +341,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 160,
-      "python_loc": 66204,
+      "python_file_count": 162,
+      "python_loc": 66481,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 45,
@@ -839,6 +847,7 @@
         "scripts/dev/quality_baseline.json",
         "scripts/dev/quality_debt.py",
         "scripts/dev/repair_manifest.py",
+        "scripts/dev/run_pytest_isolated.py",
         "scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py",
         "scripts/operations/archive_guan_mobile.py",
         "scripts/operations/audit_minute_overlap.py",
@@ -852,7 +861,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 116,
-      "python_loc": 28639,
+      "python_loc": 28708,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 13,
@@ -1261,7 +1270,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 98,
-      "python_loc": 28300,
+      "python_loc": 28344,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1672,13 +1681,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 316,
-      "python_loc": 80191,
+      "python_file_count": 337,
+      "python_loc": 86097,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 42,
-        "long_functions": 108,
-        "complexity_hotspots": 59,
+        "large_files": 45,
+        "long_functions": 112,
+        "complexity_hotspots": 64,
         "large_classes": 1
       },
       "large_files": [
@@ -1758,6 +1767,11 @@
           "hk_related": false
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_stability.py",
+          "loc": 749,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/pipeline/config.py",
           "loc": 749,
           "hk_related": false
@@ -1788,23 +1802,18 @@
           "hk_related": false
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "loc": 680,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
+          "loc": 649,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/daily_watch20_candidate_oos.py",
           "loc": 643,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_publication_inputs.py",
-          "loc": 640,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/commands/run_grid.py",
-          "loc": 629,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_candidate_pool.py",
-          "loc": 619,
           "hk_related": false
         }
       ],
@@ -1974,6 +1983,18 @@
           "complexity": 24
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "name": "_validate_attempt_history",
+          "line_count": 42,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "name": "run_deepseek_campaign_execution",
+          "line_count": 81,
+          "complexity": 24
+        },
+        {
           "path": "src/strategy_pipeline/release_tools/package_runs.py",
           "name": "_gather_relative_files",
           "line_count": 48,
@@ -2097,18 +2118,6 @@
           "path": "src/strategy_pipeline/daily_watch20_model_lifecycle.py",
           "name": "restore_prior_ranker",
           "line_count": 59,
-          "complexity": 19
-        },
-        {
-          "path": "src/strategy_pipeline/liveops/holdings.py",
-          "name": "_resolve_run_dir",
-          "line_count": 46,
-          "complexity": 19
-        },
-        {
-          "path": "src/strategy_pipeline/liveops/snapshot.py",
-          "name": "main",
-          "line_count": 108,
           "complexity": 19
         }
       ],
@@ -2253,6 +2262,8 @@
       },
       "script_inventory": [
         "scripts/README.md",
+        "scripts/dev/basedpyright_baseline.json",
+        "scripts/dev/basedpyright_ratchet.py",
         "scripts/dev/check_c901_debt.py",
         "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
@@ -2281,6 +2292,8 @@
         "scripts/research/daily_watch20_slow_volume_campaign.py",
         "scripts/research/hotsector_ai_shadow.py",
         "scripts/research/hotsector_ai_shadow_observation.py",
+        "scripts/research/hotsector_challenger_campaign.py",
+        "scripts/research/hotsector_deepseek_campaign.py",
         "scripts/research/reconcile_slow_volume_labels.py",
         "scripts/research/verify_slow_volume_campaign.py"
       ]
@@ -2289,7 +2302,7 @@
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
       "python_file_count": 92,
-      "python_loc": 27754,
+      "python_loc": 27780,
       "hk_related_file_count": 12,
       "hotspot_counts": {
         "large_files": 14,

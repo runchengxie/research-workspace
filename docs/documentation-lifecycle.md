@@ -2,16 +2,16 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-06-28
+> last_verified: 2026-07-16
 > source_of_truth: yes
 > superseded_by: n/a
 
 本页定义顶层文档的生命周期字段和归档判断。它只约束 `research-workspace`
-这一层；子仓库仍在自己的 `docs/README.md`、`AGENTS.md` 和测试中维护更细的文档规则。
+这一层。子仓库仍在自己的 `docs/README.md`、`AGENTS.md` 和测试中维护更细的文档规则。
 
 ## 状态块
 
-入口文档、归档记录和兼容页应在标题后放一个短状态块：
+文档索引、归档入口和兼容跳转页在标题后放一个短状态块：
 
 ```text
 > status: active | reference | archived | superseded
@@ -26,10 +26,13 @@
 | 字段 | 用途 |
 | --- | --- |
 | `status` | `active` 是当前操作入口，`reference` 是稳定参考，`archived` 是历史记录，`superseded` 是兼容跳转页。 |
-| `owner` | 谁负责业务含义和后续更新；跨仓库页面写 `workspace`。 |
+| `owner` | 谁负责业务含义和后续更新。跨仓库页面写 `workspace`。 |
 | `last_verified` | 最近一次检查链接、contract 名称和市场称谓的日期。 |
 | `source_of_truth` | 是否是当前权威入口。兼容页和历史记录通常写 `no`。 |
-| `superseded_by` | 被替代时写当前入口；未替代写 `n/a`。 |
+| `superseded_by` | 被替代时写当前入口。未替代写 `n/a`。 |
+
+普通操作页不重复状态块。它们的生命周期统一记录在本页的入口表中，减少多页同步维护
+同一组字段。
 
 ## 活跃入口
 
@@ -60,7 +63,7 @@
 
 ## 兼容入口
 
-以下页面用于旧链接、测试和人工查找；新的权威入口见右列：
+以下页面用于旧链接、测试和人工查找。新的权威入口见右列：
 
 | 旧入口 | 当前权威入口 |
 | --- | --- |
@@ -71,8 +74,9 @@
 ## 路由规则
 
 - 新人 30 分钟内需要读的当前路径留在 active docs。
-- 跨仓库文件约定、release gate 和 doctor 依赖的页面保留为 active 或 reference。
-- 一次性 handoff、freeze note、release note、历史复查和恢复演练进入 archive records。
-- Manifest 已记录的 inventory 不在 Markdown 里重复维护长表；Markdown 只解释边界并链接 manifest。
+- 跨仓库文件约定、发布门禁和 doctor 依赖的页面保留为 active 或 reference。
+- 一次性交接、冻结说明、发布说明、历史复查和恢复演练进入 archive records。
+- Manifest 已记录的清单不在 Markdown 里重复维护长表。Markdown 只解释边界并链接 manifest。
 - 超过 300 行且需要人工持续维护的文档，应拆分、生成，或降级到 archive。
-- 旧称 `metadata/current_assets/cn_current.json` 只能作为历史兼容 alias 说明；当前 A 股权威 contract 是 `metadata/current_assets/a_share_current.json`。
+- 旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容说明。当前 A 股权威 contract
+  是 `metadata/current_assets/a_share_current.json`。

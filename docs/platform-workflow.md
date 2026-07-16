@@ -4,7 +4,7 @@
 
 ## 当前工作流
 
-截至 2026-06-29，工作区已经锁定并验证到研究结果交给执行引擎生成离线计划这一段：
+截至 2026-07-16，工作区已经锁定并验证到研究结果交给执行引擎生成离线计划这一段：
 
 ```text
 数据维护和盘口加工
@@ -26,10 +26,12 @@ targets.json
   -> 券商执行
 ```
 
-当前 `strategy-pipeline` 已经可以导出标准格式的 `targets.json` 和对应审计文件；`quant-execution-engine` 已经固定为工作区子模块，用于复现文件交接和离线计划验证。模拟盘、实盘和运行门禁仍由执行引擎自己负责。
+当前 `strategy-pipeline` 可以导出标准格式的 `targets.json` 和对应审计文件。
+`quant-execution-engine` 已固定为工作区子模块，用于复现文件交接和离线计划验证。
+模拟盘、实盘和运行门禁仍由执行引擎负责。
 
 A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
-`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档；完整 PIT、
+`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整 PIT、
 长窗口策略证据和真实券商能力必须独立验收。
 
 ## 六段式研究地图
@@ -47,7 +49,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
-| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引；承载中国大陆市场数据入口、A 股资产发布和港股归档 freeze / hydrate 恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
+| 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引，承载中国大陆市场数据入口、A 股资产发布和港股归档恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
 | 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责 CLI、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
@@ -64,13 +66,22 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 回测稳健性 | `portfolio-backtester` | turnover/cost、capacity、benchmark ladder、execution simulation、exposure 和报告复核 | [`portfolio-backtester/README.md`](../portfolio-backtester/README.md) |
 | 执行隔离和审计 | `quant-execution-engine` | 标准 `targets.json` 输入、dry-run / paper / live 分层、风控预检、订单审计、对账和 evidence bundle | [`quant-execution-engine/docs/research-handoff-governance.md`](../quant-execution-engine/docs/research-handoff-governance.md) |
 
-数据平台不读取研究 run 指标；研究仓库不生产市场数据资产或提交券商订单；执行引擎不重新评估模型，也不把 lineage sidecar 作为下单参数。这样可以避免数据发布、模型选择和真实执行互相污染。
+数据平台不读取研究运行指标。研究仓库不生产市场数据资产，也不提交券商订单。
+执行引擎不重新评估模型，也不把 lineage sidecar 作为下单参数。这些边界用于隔离
+数据发布、模型选择和真实执行。
 
 ## 研究主线
 
-当前工作区政策是：A 股作为后续研究主线迁移方向；中国香港市场数据资产整体移入独立冷存储，以冻结维护和可复现归档为主；港股策略研究从默认入口降级为恢复专用历史研究线，工作区内公开演示路线和独立港股研究线已退役。迁出动作和保留边界见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 与 [`archive/hk/README.md`](archive/hk/README.md)。具体 default 切换、港股 frozen-active / sunset 条件以 `strategy-pipeline/docs/market-lifecycle.md` 为准。
+当前研究主线是 A 股。中国香港市场数据资产放在独立冷存储中，主要用于历史恢复和
+复现。工作区内的公开港股演示路线和独立港股研究线已经退役。保留边界见
+[`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 和
+[`archive/hk/README.md`](archive/hk/README.md)。市场生命周期以
+`strategy-pipeline/docs/market-lifecycle.md` 为准。
 
-当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)：活跃 `DATA_PLATFORM_ROOT` 保留 A 股 contract、资产和 registry；港股需要复现或明确跟踪时先 hydrate；A 股主线使用 `default`，`default_next` 只作为迁移兼容别名保留。完整 PIT、长窗口证据和券商能力仍按就绪度分层单独验收。
+当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)。活跃
+`DATA_PLATFORM_ROOT` 保留 A 股 current contract、资产和 registry。港股需要复现时先
+执行 hydrate。A 股主线使用 `default`，`default_next` 只保留迁移兼容用途。完整 PIT、
+长窗口证据和券商能力继续按就绪度分层验收。
 
 ### 1. 发布数据资产
 
@@ -88,13 +99,23 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
   reports/
 ```
 
-`market-data-platform` 已经提供中国大陆市场数据入口、统一维护命令、A 股资产发布和港股冷存储 freeze / hydrate 恢复控制面。A 股主线迁移应优先读取 `metadata/current_assets/a_share_current.json` 指向的 TuShare 平台资产；港股长期不使用时由 `metadata/frozen_markets/hk.json` 记录冷存储位置，需要复现时再恢复。港股 provider 生产模块和 `rqdata-hk-depth-snapshots` 均不作为活跃工作区入口。
+`market-data-platform` 已提供中国大陆市场数据入口、统一维护命令、A 股资产发布和
+港股冷存储恢复控制面。A 股研究优先读取
+`metadata/current_assets/a_share_current.json` 指向的已发布资产。分钟资产还要携带
+供应商、来源层级和 bar coverage，用于区分 Guan 与 TuShare 数据阶段。港股冷存储位置
+由 `metadata/frozen_markets/hk.json` 记录，需要复现时再恢复。
 
-共享数据运维的新入口必须进入 `market-data-platform`。`strategy-pipeline` 仅保留只读消费逻辑和少量兼容 wrapper；其边界清单由 `strategy-pipeline/docs/internal/data-ops-boundary-inventory.md` 维护，下载、健康检查、current refresh、registry 或资产发布实现不应回流到研究仓库。
+共享数据运维的新入口进入 `market-data-platform`。`strategy-pipeline` 只保留只读消费
+逻辑和少量兼容包装。边界清单见
+`strategy-pipeline/docs/internal/data-ops-boundary-inventory.md`。
 
 ### 2. 读取数据并完成研究
 
-`strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 workspace 中的 `alpha-research` 和 `portfolio-backtester` 完成研究流程。A 股主入口是 `strategy run --config default`；`default_next` 继续作为同一 A 股 preset 的迁移兼容别名。港股只用于恢复专用历史复现，不作为新增研究默认入口。
+`strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 `alpha-research` 和
+`portfolio-backtester` 完成研究流程。A 股主入口是 `strategy run --config default`。
+`default_next` 是同一 A 股 preset 的迁移兼容别名。分钟因子、DailyWatch20、
+staggered cohort 和热点 AI shadow 目前属于 research-only campaign，不能直接修改
+线上模型或执行目标。港股只用于历史恢复。
 
 - 特征工程、训练与评估。
 - 历史回测、基准对比和研究证据管理。
@@ -111,7 +132,9 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 研究侧可以通过 `strategy export-targets` 将 `positions_by_rebalance.csv`、`positions_current*.csv` 或已保存持仓导出为标准 `targets.json`。导出器会拒绝空头持仓、非法权重和隐式杠杆，并把运行编号、输入文件、时间口径和质量检查信息写入审计附属文件。
 
-执行引擎已经作为固定子模块纳入工作区。当前已用真实研究导出文件验证了执行引擎的解析逻辑和离线调仓计划路径，包括目标列表以外持仓的清仓处理。港股等非 USD 报价需要先配置汇率并换算至 USD 估值；A 股目标解析和基础 dry-run 仍应显式配置 CNY 汇率。
+执行引擎已经作为固定子模块纳入工作区。当前已用真实研究导出文件验证了解析逻辑、
+离线调仓计划和目标列表以外持仓的清仓处理。非 USD 报价资产需要先配置汇率并换算至
+USD 估值。A 股基础 dry-run 仍需显式配置 CNY 汇率。
 
 仍需补齐的证据：
 
@@ -121,7 +144,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 当前约束：
 
 - README 和子模块指针只表达已验证的研究到执行文件交接。
-- `export-targets` 只导出文件；顶层脚本不得把研究结果直接提交给真实券商。
+- `export-targets` 只导出文件。顶层脚本不得把研究结果直接提交给真实券商。
 - 模拟盘或实盘路径的放行状态以执行仓库的券商证据和操作员记录为准。
 
 ### 执行放行门槛
@@ -130,8 +153,8 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | --- | --- |
 | 目标持仓文件 | 已落地：研究侧输出 `quant-execution-engine.targets/v2` 格式的 `targets.json` |
 | 导出能力 | 已落地：`strategy export-targets` 输出目标文件和审计附属文件 |
-| 输入验证 | 已落地：执行侧可读取真实导出文件；港股和 A 股目标可生成基础计划；缺少汇率时会阻断非 USD 调仓 |
-| 联调证据 | 部分落地：已具备解析和离线计划验证；仍需模拟盘端到端验证记录 |
+| 输入验证 | 已落地：执行侧可读取真实导出文件，港股和 A 股目标可生成基础计划，缺少汇率时会阻断非 USD 调仓 |
+| 联调证据 | 部分落地：已具备解析和离线计划验证，仍需模拟盘端到端验证记录 |
 | 实盘门禁 | 实盘下单仍要求执行引擎独立启用、执行前检查和人工监督 |
 
 ## 调度原则
@@ -141,7 +164,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 1. 只调用各模块公开命令行。
 2. 每一步检查版本化输入、当前数据清单和输出状态。
 3. 将运行编号、输入资产版本、子模块提交和质量检查结论写入审计记录。
-4. 数据维护与研究可以被编排；真实券商执行必须由执行系统自己的门禁和人工确认控制。
+4. 数据维护与研究可以被编排。真实券商执行必须由执行系统自己的门禁和人工确认控制。
 
 ## 推荐阅读
 

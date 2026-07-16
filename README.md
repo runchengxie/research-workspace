@@ -38,8 +38,8 @@ quant-execution-engine
 - `portfolio_backtester`
 - `strategy_pipeline`
 
-工作区 2.0 已删除旧共享 namespace、兼容 CLI 和环境变量 fallback。权威命令是
-`strategy` 与 `strategy-pipeline`。详见
+工作区 2.0 已删除旧共享命名空间、兼容命令和隐式环境变量回退。权威命令是
+`strategy` 与 `strategy-pipeline`。具体边界见
 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 
 ## 快速开始
@@ -60,36 +60,25 @@ git submodule update --init --recursive
 
 新机器的完整安装步骤见 [docs/bootstrap.md](docs/bootstrap.md)。
 
-## 常用检查
+## 本地质量门禁
 
-顶层测试：
+先查看 pre-push 将运行哪些检查：
 
 ```bash
-uv run --project strategy-pipeline --extra dev \
-  --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
-  python -m pytest tests -q
+python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 ```
 
-顶层质量检查：
+日常检查常用以下三个入口：
 
 ```bash
 python scripts/run_quality_checks.py --profile hard
-python scripts/run_quality_checks.py --profile basedpyright
-```
-
-委托子仓库执行各自的检查：
-
-```bash
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
-python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-`full` 运行各仓库当前的 Ruff、格式、`ty` 和 `pytest` 检查。`release_typecheck` 运行 BasedPyright 诊断。
-
-当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板。
-截至 2026-07-16，superproject 与五个 submodule 的仓库级 GitHub Actions 开关均有意关闭。
-本地命令和人工发布检查是当前事实来源，重新开启 Actions 需要显式的 owner 决策。
+`full` 运行各仓库登记的 Ruff、格式、`ty` 和 `pytest`。安装方法、完整命令和当前
+GitHub Actions 状态统一记录在[工作区维护](docs/workspace-maintenance.md)和
+[质量治理](docs/quality-governance.md)中。
 
 ## 重要边界
 

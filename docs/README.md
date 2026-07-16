@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-07-14
+> last_verified: 2026-07-16
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -31,8 +31,8 @@
 - 废弃入口：[deprecations.md](deprecations.md)
 - 维护性治理：[maintainability-governance.md](maintainability-governance.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
-- 架构拆分收敛清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
-- 策略卫星项目：[strategy-satellites.md](strategy-satellites.md)
+- 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
+- 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - A 股风格因子：[style-factors.md](style-factors.md)
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。
@@ -42,6 +42,9 @@
 - 活跃链路包含五个 Git 子模块
 - `src/research_contracts` 是顶层普通目录
 - A 股 current contract 是 `metadata/current_assets/a_share_current.json`
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16，PIT 财务和历史行业资产已发布
+- `normalized_fundamentals` 尚未写入 current contract，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 - 顶层 GitHub Actions workflow 当前停用
+- 六个仓库使用共享本地 pre-push 门禁，远端只维护 `main`

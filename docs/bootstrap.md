@@ -2,6 +2,18 @@
 
 本页给出 `research-workspace` 的最短可复现安装路径。子仓库的凭证、可选依赖和业务命令以各自文档为准。
 
+## 环境要求
+
+准备 Git、uv 和 Python 3.12。Python 3.12 是六个仓库当前共同支持的版本。顶层仓库与
+`market-data-platform` 最低支持 3.11，三个研究仓库最低支持 3.12，
+`quant-execution-engine` 支持 3.10 至 3.12。
+
+```bash
+python --version
+uv --version
+git --version
+```
+
 ## 克隆与同步
 
 ```bash
@@ -112,7 +124,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 配置见 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。
 
-`full` 运行各仓库当前的 Ruff、格式、`ty` 和 `pytest` 检查。`release_typecheck` 运行 BasedPyright 诊断。
+`full` 运行各仓库当前的 Ruff、格式、`ty` 和测试检查。`market-data-platform` 会分批启动 pytest 进程，避免完整测试在单个进程中持续累积内存。`release_typecheck` 运行 BasedPyright 诊断。
 
 ## 自动化状态
 

@@ -148,6 +148,32 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             self.assertNotIn("../alpha-research/src", command_text)
             self.assertNotIn("../portfolio-backtester/src", command_text)
 
+    def test_market_data_tests_use_bounded_process_batches(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        tests = run_submodule_checks.plan_commands(
+            ROOT,
+            configs,
+            profile="test",
+            submodules=["market-data-platform"],
+        )
+
+        self.assertEqual(
+            [
+                (
+                    "uv",
+                    "run",
+                    "--extra",
+                    "dev",
+                    "python",
+                    "scripts/dev/run_pytest_isolated.py",
+                    "--",
+                    "-q",
+                )
+            ],
+            [item.command for item in tests],
+        )
+
     def test_type_profiles_match_current_tooling(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
 
@@ -160,12 +186,22 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         }
         expected_release = {
             "alpha-research": [("uv", "run", "--extra", "dev", "basedpyright")],
-            "market-data-platform": [("uv", "run", "--extra", "dev", "basedpyright")],
+            "market-data-platform": [
+                (
+                    "uv",
+                    "run",
+                    "--extra",
+                    "dev",
+                    "basedpyright",
+                    "--project",
+                    "basedpyrightconfig.core-basic.json",
+                )
+            ],
             "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
             "quant-execution-engine": [
                 ("uv", "run", "--group", "dev", "python", "-m", "basedpyright")
             ],
-            "strategy-pipeline": [("uv", "run", "--extra", "dev", "python", "-m", "basedpyright")],
+            "strategy-pipeline": [("scripts/dev/run_tests.sh", "typecheck-release")],
         }
 
         for name in sorted(configs):
