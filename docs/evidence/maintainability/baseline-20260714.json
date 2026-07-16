@@ -341,8 +341,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 162,
-      "python_loc": 67619,
+      "python_file_count": 163,
+      "python_loc": 67706,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -1687,7 +1687,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 346,
-      "python_loc": 89857,
+      "python_loc": 89919,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 48,
@@ -2130,7 +2130,7 @@
         {
           "path": "src/strategy_pipeline/data_interface.py",
           "name": "DataInterface",
-          "line_count": 310,
+          "line_count": 312,
           "method_count": 12
         }
       ],
