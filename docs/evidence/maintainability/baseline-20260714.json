@@ -342,12 +342,12 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 162,
-      "python_loc": 66481,
+      "python_loc": 67619,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 45,
-        "long_functions": 62,
-        "complexity_hotspots": 35,
+        "large_files": 47,
+        "long_functions": 64,
+        "complexity_hotspots": 38,
         "large_classes": 1
       },
       "large_files": [
@@ -442,6 +442,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "loc": 897,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
           "loc": 877,
           "hk_related": false
@@ -469,11 +474,6 @@
         {
           "path": "tests/test_a_share_minute_build.py",
           "loc": 858,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/operations/detach_a_share_minute_v3.py",
-          "loc": 837,
           "hk_related": false
         }
       ],
@@ -513,6 +513,12 @@
           "name": "_aggregate_polars_deal_batch",
           "line_count": 182,
           "complexity": 3
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_run_campaign",
+          "line_count": 174,
+          "complexity": 38
         },
         {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
@@ -621,12 +627,6 @@
           "name": "validate_pit_fundamentals",
           "line_count": 124,
           "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/current_path_audit.py",
-          "name": "_audit_asset",
-          "line_count": 120,
-          "complexity": 15
         }
       ],
       "complexity_hotspots": [
@@ -655,6 +655,12 @@
           "complexity": 39
         },
         {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_run_campaign",
+          "line_count": 174,
+          "complexity": 38
+        },
+        {
           "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "cutover_minute_current",
           "line_count": 185,
@@ -665,6 +671,12 @@
           "name": "_build_fused_minute_dataset",
           "line_count": 216,
           "complexity": 35
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_run_commands",
+          "line_count": 104,
+          "complexity": 34
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -767,18 +779,6 @@
           "name": "_validate_tree_layout",
           "line_count": 43,
           "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/contract_health.py",
-          "name": "inspect_current_contract",
-          "line_count": 79,
-          "complexity": 16
-        },
-        {
-          "path": "src/market_data_platform/guan_mobile_raw.py",
-          "name": "verify_guan_mobile_promotion",
-          "line_count": 58,
-          "complexity": 16
         }
       ],
       "large_classes": [
@@ -798,7 +798,12 @@
           "B",
           "C4",
           "RET",
-          "RUF100"
+          "RUF100",
+          "C90",
+          "PLR0911",
+          "PLR0912",
+          "PLR0913",
+          "PLR0915"
         ],
         "ruff_extend_exclude": [
           ".venv",
@@ -1681,13 +1686,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 337,
-      "python_loc": 86097,
+      "python_file_count": 346,
+      "python_loc": 89857,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 45,
-        "long_functions": 112,
-        "complexity_hotspots": 64,
+        "large_files": 48,
+        "long_functions": 114,
+        "complexity_hotspots": 67,
         "large_classes": 1
       },
       "large_files": [
@@ -1797,23 +1802,23 @@
           "hk_related": false
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "loc": 720,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 716,
           "hk_related": false
         },
         {
+          "path": "tests/test_hotsector_deepseek_v4_month.py",
+          "loc": 685,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
           "loc": 680,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
-          "loc": 649,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_candidate_oos.py",
-          "loc": 643,
           "hk_related": false
         }
       ],
@@ -1995,6 +2000,12 @@
           "complexity": 24
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "name": "_validate_cell_aliases",
+          "line_count": 30,
+          "complexity": 24
+        },
+        {
           "path": "src/strategy_pipeline/release_tools/package_runs.py",
           "name": "_gather_relative_files",
           "line_count": 48,
@@ -2091,6 +2102,12 @@
           "complexity": 20
         },
         {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_execution_support.py",
+          "name": "_validate_attempt_pairs",
+          "line_count": 34,
+          "complexity": 20
+        },
+        {
           "path": "src/strategy_pipeline/pipeline/research_ops/summarize_runs_scoring.py",
           "name": "_compute_grouped_dsr",
           "line_count": 57,
@@ -2107,18 +2124,6 @@
           "name": "_package_cmd_from_args",
           "line_count": 33,
           "complexity": 20
-        },
-        {
-          "path": "src/strategy_pipeline/research_protocols.py",
-          "name": "_evaluate_evidence_item",
-          "line_count": 50,
-          "complexity": 20
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_model_lifecycle.py",
-          "name": "restore_prior_ranker",
-          "line_count": 59,
-          "complexity": 19
         }
       ],
       "large_classes": [
@@ -2294,6 +2299,7 @@
         "scripts/research/hotsector_ai_shadow_observation.py",
         "scripts/research/hotsector_challenger_campaign.py",
         "scripts/research/hotsector_deepseek_campaign.py",
+        "scripts/research/hotsector_deepseek_v4_month.py",
         "scripts/research/reconcile_slow_volume_labels.py",
         "scripts/research/verify_slow_volume_campaign.py"
       ]
