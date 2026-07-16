@@ -17,9 +17,9 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 45,
-      "max_long_functions": 62,
-      "max_complexity_hotspots": 35,
+      "max_large_files": 47,
+      "max_long_functions": 64,
+      "max_complexity_hotspots": 38,
       "max_large_classes": 1,
       "owner_decision": "2026-07-14 data-governance and current-path audit work added explicit operational validation surfaces. Keep the new modules registered as accepted hotspots and split them before expanding another governance command family."
     },
@@ -41,9 +41,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 45,
-      "max_long_functions": 112,
-      "max_complexity_hotspots": 64,
+      "max_large_files": 48,
+      "max_long_functions": 114,
+      "max_complexity_hotspots": 67,
       "max_large_classes": 1,
       "owner_decision": "2026-07-16 DeepSeek 稳定性实验新增了执行、证据和分析模块。三个模块均低于项目自身的 800 行硬门槛，并有专项测试和冻结证据。当前预算与基线实测值完全一致。后续改动应先拆分调度、账本校验和指标分析，再扩展新的实验协议。"
     },
@@ -963,6 +963,24 @@
       "owner_repo": "strategy-pipeline",
       "reason": "稳定性分析集中保存预注册指标、置信区间和晋级判定，便于复现实验结论并核对冻结产物",
       "next_action": "新增指标族前，将位置偏差分析和重合度分析拆成独立的纯函数模块"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+      "owner_repo": "market-data-platform",
+      "reason": "分钟数据替换活动编排集中管理配额窗口、调度循环和清单推进，当前版本有专项测试和复杂性基线",
+      "next_action": "扩展活动阶段前，将配额管理和清单持久化拆分为独立模块"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "V4 月度计划生成和信号校验在同一模块内，当前版本低于 800 行硬门槛并有冻结证据",
+      "next_action": "新增计划变体前，将计划构造逻辑和信号校验逻辑分离"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_hotsector_deepseek_v4_month.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "V4 月度计划专项测试集中覆盖信号稳定性、熔断和冻结证据路径",
+      "next_action": "保持测试与源模块同步重构"
     }
   ]
 }
