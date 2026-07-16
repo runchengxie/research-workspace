@@ -327,34 +327,34 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 156,
-      "python_loc": 64130,
+      "python_file_count": 160,
+      "python_loc": 66204,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 45,
         "long_functions": 62,
-        "complexity_hotspots": 37,
+        "complexity_hotspots": 35,
         "large_classes": 1
       },
       "large_files": [
         {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
-          "loc": 2287,
+          "loc": 2284,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1791,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "loc": 1754,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "loc": 1711,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 1683,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "loc": 1633,
           "hk_related": false
         },
         {
@@ -368,6 +368,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "loc": 1484,
+          "hk_related": false
+        },
+        {
           "path": "scripts/operations/cutover_a_share_minute.py",
           "loc": 1460,
           "hk_related": false
@@ -375,11 +380,6 @@
         {
           "path": "src/market_data_platform/providers/guan_annual_minbar.py",
           "loc": 1373,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "loc": 1347,
           "hk_related": false
         },
         {
@@ -393,13 +393,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_cutover_a_share_minute.py",
-          "loc": 1222,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1299,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1164,
+          "path": "tests/test_cutover_a_share_minute.py",
+          "loc": 1228,
           "hk_related": false
         },
         {
@@ -444,7 +444,7 @@
         },
         {
           "path": "src/market_data_platform/tushare_minute_backfill.py",
-          "loc": 866,
+          "loc": 867,
           "hk_related": false
         },
         {
@@ -465,16 +465,16 @@
       ],
       "long_functions": [
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "name": "mirror_minute_bars",
-          "line_count": 347,
-          "complexity": 69
-        },
-        {
           "path": "tests/test_cutover_a_share_minute.py",
           "name": "_fixture",
-          "line_count": 342,
+          "line_count": 309,
           "complexity": 12
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "name": "mirror_minute_bars",
+          "line_count": 298,
+          "complexity": 56
         },
         {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
@@ -545,7 +545,7 @@
         {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
           "name": "_materialize_tushare_full_days",
-          "line_count": 146,
+          "line_count": 143,
           "complexity": 22
         },
         {
@@ -619,8 +619,8 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "name": "mirror_minute_bars",
-          "line_count": 347,
-          "complexity": 69
+          "line_count": 298,
+          "complexity": 56
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -703,7 +703,7 @@
         {
           "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
           "name": "_materialize_tushare_full_days",
-          "line_count": 146,
+          "line_count": 143,
           "complexity": 22
         },
         {
@@ -711,12 +711,6 @@
           "name": "validate_fused_minute_dataset",
           "line_count": 53,
           "complexity": 21
-        },
-        {
-          "path": "src/market_data_platform/published_assets.py",
-          "name": "load",
-          "line_count": 82,
-          "complexity": 19
         },
         {
           "path": "src/market_data_platform/tushare_minute_backfill.py",
@@ -764,6 +758,12 @@
           "path": "src/market_data_platform/contract_health.py",
           "name": "inspect_current_contract",
           "line_count": 79,
+          "complexity": 16
+        },
+        {
+          "path": "src/market_data_platform/guan_mobile_raw.py",
+          "name": "verify_guan_mobile_promotion",
+          "line_count": 58,
           "complexity": 16
         }
       ],
@@ -838,14 +838,15 @@
         "scripts/operations/audit_minute_overlap.py",
         "scripts/operations/cutover_a_share_minute.py",
         "scripts/operations/detach_a_share_minute_v3.py",
-        "scripts/operations/promote_guan_mobile.py"
+        "scripts/operations/promote_guan_mobile.py",
+        "scripts/operations/tushare_minute_replacement_campaign.py"
       ]
     },
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 114,
-      "python_loc": 28027,
+      "python_file_count": 116,
+      "python_loc": 28639,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 13,
@@ -1253,8 +1254,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 94,
-      "python_loc": 27636,
+      "python_file_count": 98,
+      "python_loc": 28300,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1665,8 +1666,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 263,
-      "python_loc": 68425,
+      "python_file_count": 316,
+      "python_loc": 80191,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 42,
@@ -2268,7 +2269,14 @@
         "scripts/research/a_share_next_open_to_high_minute_benchmark.py",
         "scripts/research/a_share_next_open_to_high_minute_execution.py",
         "scripts/research/a_share_next_open_to_high_reporting.py",
-        "scripts/research/daily_watch20_candidate_oos.py"
+        "scripts/research/daily_watch20_candidate_oos.py",
+        "scripts/research/daily_watch20_flite_campaign.py",
+        "scripts/research/daily_watch20_minute_campaign.py",
+        "scripts/research/daily_watch20_slow_volume_campaign.py",
+        "scripts/research/hotsector_ai_shadow.py",
+        "scripts/research/hotsector_ai_shadow_observation.py",
+        "scripts/research/reconcile_slow_volume_labels.py",
+        "scripts/research/verify_slow_volume_campaign.py"
       ]
     },
     {

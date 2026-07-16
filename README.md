@@ -87,7 +87,9 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `full` 运行各仓库当前的 Ruff、格式、`ty` 和 `pytest` 检查。`release_typecheck` 运行 BasedPyright 诊断。
 
-当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板，本地命令和人工发布检查仍是当前事实来源。
+当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板。
+截至 2026-07-16，superproject 与五个 submodule 的仓库级 GitHub Actions 开关均有意关闭。
+本地命令和人工发布检查是当前事实来源，重新开启 Actions 需要显式的 owner 决策。
 
 ## 重要边界
 

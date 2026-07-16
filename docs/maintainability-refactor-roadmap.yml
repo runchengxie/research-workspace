@@ -19,7 +19,7 @@
       "repo": "market-data-platform",
       "max_large_files": 45,
       "max_long_functions": 62,
-      "max_complexity_hotspots": 37,
+      "max_complexity_hotspots": 35,
       "max_large_classes": 1,
       "owner_decision": "2026-07-14 data-governance and current-path audit work added explicit operational validation surfaces. Keep the new modules registered as accepted hotspots and split them before expanding another governance command family."
     },
