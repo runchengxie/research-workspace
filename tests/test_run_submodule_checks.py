@@ -65,7 +65,38 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             )
         ]
 
-        self.assertIn(
+        expected_market_governance = [
+            (
+                "uv",
+                "run",
+                "--extra",
+                "dev",
+                "python",
+                "scripts/dev/quality_debt.py",
+                "--skip-ruff",
+                "--complexity",
+                "--check-baseline",
+                "--check-ratchet",
+                "--skip-basedpyright-ratchet",
+            ),
+            (
+                "uv",
+                "run",
+                "--extra",
+                "dev",
+                "python",
+                "scripts/dev/maintainability_metrics.py",
+                "--check-baseline",
+            ),
+            (
+                "uv",
+                "run",
+                "--extra",
+                "dev",
+                "python",
+                "scripts/dev/compatibility_governance.py",
+                "--check",
+            ),
             (
                 "uv",
                 "run",
@@ -75,8 +106,20 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 "scripts/dev/architecture_governance.py",
                 "--check",
             ),
-            market_lint,
-        )
+        ]
+        self.assertEqual(expected_market_governance, market_lint[-4:])
+        market_full = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="full",
+                submodules=["market-data-platform"],
+            )
+        ]
+        for command in expected_market_governance:
+            self.assertEqual(1, market_full.count(command))
+        self.assertNotIn("--basedpyright-basic", " ".join(" ".join(cmd) for cmd in market_full))
         self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), strategy_lint)
 
     def test_split_package_profiles_use_repo_local_tools(self) -> None:

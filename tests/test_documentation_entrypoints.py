@@ -41,6 +41,16 @@ def test_disabled_workflow_status_is_documented() -> None:
     assert "目前没有活动 GitHub Actions workflow" in quality
 
 
+def test_local_hook_installation_is_in_bootstrap_and_maintenance_docs() -> None:
+    bootstrap = (ROOT / "docs" / "bootstrap.md").read_text(encoding="utf-8")
+    maintenance = (ROOT / "docs" / "workspace-maintenance.md").read_text(encoding="utf-8")
+
+    for text in (bootstrap, maintenance):
+        assert "python scripts/install_pre_push_hooks.py --dry-run" in text
+        assert "python scripts/install_pre_push_hooks.py --check" in text
+    assert "git push --no-verify" in maintenance
+
+
 def test_removed_mypy_is_not_delegated() -> None:
     manifest = (ROOT / "scripts" / "submodule_checks.json").read_text(encoding="utf-8").lower()
     maintenance = (ROOT / "docs" / "workspace-maintenance.md").read_text(encoding="utf-8").lower()

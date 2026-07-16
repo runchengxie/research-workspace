@@ -268,6 +268,16 @@
       "removal_condition": "remove only after submodule version locking no longer appears in release/doctor checks for two release reviews"
     },
     {
+      "path": "scripts/install_pre_push_hooks.py",
+      "owner": "research-workspace",
+      "purpose": "Install and inspect the shared local Git hook dispatcher across the superproject and managed submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "repo-local core.hooksPath values in Git configuration when installation is requested",
+      "external_dependencies": "git checkout with initialized submodules and tracked .githooks dispatchers",
+      "removal_condition": "remove only after local cross-repo push gates move to an equivalent managed hook installer and contributor documentation no longer calls this command for two release reviews"
+    },
+    {
       "path": "scripts/run_quality_checks.py",
       "owner": "research-workspace",
       "purpose": "Top-level quality profile dispatcher",
@@ -296,6 +306,16 @@
       "writes_files": "stdout only",
       "external_dependencies": "initialized workspace submodules",
       "removal_condition": "remove only after repo split import direction budgets move into repo-local CI gates and no workspace quality profile calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/run_pre_push_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Run the complete quality gate owned by the repository currently being pushed",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only, except outputs created by delegated repository-native quality commands",
+      "external_dependencies": "git checkout with initialized submodules and tools declared by the selected root or submodule full profile",
+      "removal_condition": "remove only after per-repository local push enforcement moves to an equivalent fail-closed dispatcher and no installed hook or contributor documentation calls this command for two release reviews"
     },
     {
       "path": "scripts/run_submodule_checks.py",

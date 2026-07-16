@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 67,
-      "python_loc": 14388,
+      "python_file_count": 71,
+      "python_loc": 16237,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -42,7 +42,7 @@
         },
         {
           "path": "scripts/workspace_doctor.py",
-          "loc": 523,
+          "loc": 589,
           "hk_related": false
         }
       ],
@@ -210,8 +210,8 @@
         {
           "path": "tests/test_workspace_doctor.py",
           "name": "WorkspaceDoctorTest",
-          "line_count": 361,
-          "method_count": 19
+          "line_count": 429,
+          "method_count": 21
         }
       ],
       "quality_config": {
@@ -242,6 +242,8 @@
           "scripts/framework_adapter_evidence.py",
           "scripts/framework_adapter_execution_evidence.py",
           "scripts/framework_adapter_release_gate.py",
+          "scripts/install_pre_push_hooks.py",
+          "scripts/run_pre_push_checks.py",
           "scripts/run_quality_checks.py",
           "scripts/run_submodule_checks.py",
           "scripts/scan_workspace_secrets.py",
@@ -267,6 +269,8 @@
           "scripts/framework_adapter_evidence.py",
           "scripts/framework_adapter_execution_evidence.py",
           "scripts/framework_adapter_release_gate.py",
+          "scripts/install_pre_push_hooks.py",
+          "scripts/run_pre_push_checks.py",
           "scripts/run_quality_checks.py",
           "scripts/run_submodule_checks.py",
           "scripts/scan_workspace_secrets.py",
@@ -304,12 +308,14 @@
         "scripts/framework_adapter_release_gate.py",
         "scripts/hk_archive_gate.py",
         "scripts/hotsector_to_strategy_universe.py",
+        "scripts/install_pre_push_hooks.py",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
         "scripts/path_b_production.py",
         "scripts/path_c_m1_validate.py",
         "scripts/print_version_matrix.py",
         "scripts/publish_etf_industry_signal.py",
+        "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
         "scripts/run_submodule_checks.py",
         "scripts/scan_workspace_secrets.py",

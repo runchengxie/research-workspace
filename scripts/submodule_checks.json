@@ -9,6 +9,9 @@
         "lint": [
           ["uv", "run", "--extra", "dev", "ruff", "check", "."],
           ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."],
+          ["uv", "run", "--extra", "dev", "python", "scripts/dev/quality_debt.py", "--skip-ruff", "--complexity", "--check-baseline", "--check-ratchet", "--skip-basedpyright-ratchet"],
+          ["uv", "run", "--extra", "dev", "python", "scripts/dev/maintainability_metrics.py", "--check-baseline"],
+          ["uv", "run", "--extra", "dev", "python", "scripts/dev/compatibility_governance.py", "--check"],
           ["uv", "run", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
         ],
         "test": [

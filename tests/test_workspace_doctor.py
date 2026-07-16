@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 import tempfile
 import textwrap
@@ -64,6 +65,74 @@ class WorkspaceDoctorTest(unittest.TestCase):
         errors = [check.message for check in checks if check.severity == "ERROR"]
         self.assertTrue(any("Missing expected submodule paths" in message for message in errors))
         self.assertTrue(any("market-data-platform is missing" in message for message in errors))
+
+    def test_local_git_hooks_warn_until_all_repo_local_paths_are_installed(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            hooks = root / ".githooks"
+            hooks.mkdir()
+            for hook_name in workspace_doctor.SHARED_HOOK_NAMES:
+                hook = hooks / hook_name
+                hook.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+                hook.chmod(0o755)
+            repositories = [root]
+            for name in workspace_doctor.EXPECTED_SUBMODULES:
+                repository = root / name
+                repository.mkdir()
+                repositories.append(repository)
+            for repository in repositories:
+                subprocess.run(("git", "init", "-q", str(repository)), check=True)
+
+            missing = workspace_doctor.check_local_git_hooks(root)
+            for repository in repositories:
+                subprocess.run(
+                    (
+                        "git",
+                        "-C",
+                        str(repository),
+                        "config",
+                        "--local",
+                        "core.hooksPath",
+                        str(hooks),
+                    ),
+                    check=True,
+                )
+            installed = workspace_doctor.check_local_git_hooks(root)
+
+        self.assertEqual(["WARN"], [check.severity for check in missing])
+        self.assertIn("install_pre_push_hooks.py", missing[0].message)
+        self.assertEqual(["OK"], [check.severity for check in installed])
+
+    def test_local_git_hooks_reject_uninitialized_submodule_that_resolves_to_parent(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            subprocess.run(("git", "init", "-q", str(root)), check=True)
+            hooks = root / ".githooks"
+            hooks.mkdir()
+            for hook_name in workspace_doctor.SHARED_HOOK_NAMES:
+                hook = hooks / hook_name
+                hook.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+                hook.chmod(0o755)
+            for name in workspace_doctor.EXPECTED_SUBMODULES:
+                (root / name).mkdir()
+            subprocess.run(
+                (
+                    "git",
+                    "-C",
+                    str(root),
+                    "config",
+                    "--local",
+                    "core.hooksPath",
+                    str(hooks),
+                ),
+                check=True,
+            )
+
+            checks = workspace_doctor.check_local_git_hooks(root)
+
+        self.assertEqual(["WARN"], [check.severity for check in checks])
+        self.assertIn("resolves to", checks[0].message)
+        self.assertIn("alpha-research", checks[0].message)
 
     def test_top_level_script_importing_submodule_package_is_an_error(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

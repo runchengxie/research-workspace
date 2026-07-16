@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-commit requires 'python3' on PATH" >&2
+  exit 1
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+hook_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$0")"
+git_dir="$(git -C "$repo_root" rev-parse --absolute-git-dir)"
+
+owner_hooks=(
+  "$repo_root/.githooks/pre-commit"
+  "$git_dir/hooks/pre-commit"
+)
+seen_paths=()
+for owner_hook in "${owner_hooks[@]}"; do
+  if [[ ! -x "$owner_hook" ]]; then
+    continue
+  fi
+  owner_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$owner_hook")"
+  if [[ "$owner_path" == "$hook_path" ]]; then
+    continue
+  fi
+  already_seen=false
+  for seen_path in "${seen_paths[@]}"; do
+    if [[ "$owner_path" == "$seen_path" ]]; then
+      already_seen=true
+      break
+    fi
+  done
+  if [[ "$already_seen" == false ]]; then
+    seen_paths+=("$owner_path")
+    echo "[pre-commit] running owner-native hook: $owner_hook"
+    "$owner_hook" "$@"
+  fi
+done
+
+exit 0

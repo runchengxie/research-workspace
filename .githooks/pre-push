@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "pre-push requires 'python3' on PATH" >&2
+  exit 1
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+hook_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$0")"
+workspace_root="$(dirname -- "$(dirname -- "$hook_path")")"
+git_dir="$(git -C "$repo_root" rev-parse --absolute-git-dir)"
+expected_head="$(git -C "$repo_root" rev-parse --verify 'HEAD^{commit}')"
+clean_git_env=(env)
+while IFS= read -r variable; do
+  if [[ -n "$variable" ]]; then
+    clean_git_env+=("-u" "$variable")
+  fi
+done < <(git -C "$repo_root" rev-parse --local-env-vars)
+
+umask 077
+stdin_cache="$(mktemp "${TMPDIR:-/tmp}/research-workspace-pre-push.XXXXXX")"
+trap 'rm -f -- "$stdin_cache"' EXIT
+cat > "$stdin_cache"
+
+"${clean_git_env[@]}" python3 "$workspace_root/scripts/run_pre_push_checks.py" \
+  --root "$workspace_root" \
+  --repository "$repo_root" \
+  --expected-head "$expected_head" \
+  --validate-push-refs-only < "$stdin_cache"
+
+owner_hooks=(
+  "$repo_root/.githooks/pre-push"
+  "$git_dir/hooks/pre-push"
+)
+seen_paths=()
+for owner_hook in "${owner_hooks[@]}"; do
+  if [[ ! -x "$owner_hook" ]]; then
+    continue
+  fi
+  owner_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$owner_hook")"
+  if [[ "$owner_path" == "$hook_path" ]]; then
+    continue
+  fi
+  already_seen=false
+  for seen_path in "${seen_paths[@]}"; do
+    if [[ "$owner_path" == "$seen_path" ]]; then
+      already_seen=true
+      break
+    fi
+  done
+  if [[ "$already_seen" == false ]]; then
+    seen_paths+=("$owner_path")
+    echo "[pre-push] running owner-native hook: $owner_hook"
+    "$owner_hook" "$@" < "$stdin_cache"
+  fi
+done
+
+"${clean_git_env[@]}" python3 "$workspace_root/scripts/run_pre_push_checks.py" \
+  --root "$workspace_root" \
+  --repository "$repo_root" \
+  --expected-head "$expected_head" < "$stdin_cache"

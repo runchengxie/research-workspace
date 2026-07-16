@@ -20,6 +20,20 @@ git submodule update --init --recursive
 
 普通 zip 或 source snapshot 没有完整 Git 子模块信息，只适合阅读文档。
 
+## 安装本地 Git 门禁
+
+新 clone 需要显式安装共享 hook。安装器只写入顶层和五个子仓库各自的本地 `core.hooksPath`：
+
+```bash
+python scripts/install_pre_push_hooks.py --dry-run
+python scripts/install_pre_push_hooks.py
+python scripts/install_pre_push_hooks.py --check
+```
+
+安装后，推送哪个仓库就运行哪个仓库的完整门禁。推送顶层仓库还会检查全部 gitlink 和子模块工作树。`strategy-pipeline` 原有的 pre-commit 与 pre-push hook 会继续运行。
+
+安装器会链式保留仓库 `.githooks` 和默认 Git hooks 目录中的可执行 hook。若已有其他 `core.hooksPath`，安装会停止并提示先人工处理冲突。
+
 ## 安装子仓库依赖
 
 每个子仓库维护独立环境：

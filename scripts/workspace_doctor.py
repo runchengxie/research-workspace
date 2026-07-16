@@ -40,6 +40,7 @@ FORBIDDEN_SCRIPT_IMPORTS = {
     "quant_execution_engine",
 }
 HK_PRIVATE_ARCHIVE_MANIFEST = "docs/hk-private-archive-manifest.yml"
+SHARED_HOOK_NAMES = ("pre-commit", "pre-push")
 
 
 def parse_gitmodules(root: Path) -> dict[str, str]:
@@ -159,6 +160,70 @@ def check_submodule_state(root: Path) -> list[Check]:
         else:
             checks.append(Check("OK", "submodule-clean", f"{path} is clean."))
     return checks
+
+
+def _configured_hooks_path(repository: Path) -> Path | None:
+    completed = subprocess.run(
+        ["git", "-C", str(repository), "config", "--local", "--get", "core.hooksPath"],
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if completed.returncode != 0 or not completed.stdout.strip():
+        return None
+    configured = Path(completed.stdout.strip()).expanduser()
+    if not configured.is_absolute():
+        configured = repository / configured
+    return configured.resolve()
+
+
+def _repository_toplevel(repository: Path) -> Path | None:
+    completed = subprocess.run(
+        ["git", "-C", str(repository), "rev-parse", "--show-toplevel"],
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if completed.returncode != 0 or not completed.stdout.strip():
+        return None
+    return Path(completed.stdout.strip()).resolve()
+
+
+def check_local_git_hooks(root: Path) -> list[Check]:
+    expected = (root / ".githooks").resolve()
+    issues = [
+        f"{name} is missing or not executable"
+        for name in SHARED_HOOK_NAMES
+        if not (expected / name).is_file() or not os.access(expected / name, os.X_OK)
+    ]
+    targets = {"research-workspace": root}
+    targets.update({name: root / name for name in EXPECTED_SUBMODULES})
+    for name, repository in targets.items():
+        actual = _repository_toplevel(repository)
+        if actual != repository.resolve():
+            value = "not a Git worktree" if actual is None else f"resolves to {actual}"
+            issues.append(f"{name} is {value}, expected {repository.resolve()}")
+            continue
+        configured = _configured_hooks_path(repository)
+        if configured != expected:
+            value = "unset" if configured is None else str(configured)
+            issues.append(f"{name} has core.hooksPath={value}")
+    if issues:
+        return [
+            Check(
+                "WARN",
+                "local-git-hooks",
+                "; ".join(issues)
+                + ". Run python scripts/install_pre_push_hooks.py and then --check.",
+            )
+        ]
+    return [
+        Check(
+            "OK",
+            "local-git-hooks",
+            "Shared local hooks are installed for the superproject and all submodules.",
+        )
+    ]
 
 
 def check_public_clis(root: Path) -> list[Check]:
@@ -483,6 +548,7 @@ def run_checks(root: Path) -> list[Check]:
     checks.extend(check_gitmodules(root))
     checks.extend(check_readme(root))
     checks.extend(check_submodule_state(root))
+    checks.extend(check_local_git_hooks(root))
     checks.extend(check_public_clis(root))
     checks.extend(check_data_platform_root(root))
     checks.extend(check_top_level_outputs(root))
