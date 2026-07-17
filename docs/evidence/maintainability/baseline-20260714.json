@@ -1686,8 +1686,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 357,
-      "python_loc": 92335,
+      "python_file_count": 364,
+      "python_loc": 94540,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 48,
@@ -2301,6 +2301,7 @@
         "scripts/research/hotsector_deepseek_campaign.py",
         "scripts/research/hotsector_deepseek_v4_month.py",
         "scripts/research/hotsector_numeric_v2_retrospective.py",
+        "scripts/research/hotsector_session_challenger.py",
         "scripts/research/reconcile_slow_volume_labels.py",
         "scripts/research/verify_slow_volume_campaign.py"
       ]
