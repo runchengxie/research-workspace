@@ -34,10 +34,10 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 18,
-      "max_long_functions": 19,
+      "max_long_functions": 18,
       "max_complexity_hotspots": 21,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-14 calibrated sizing, HRP allocation, and strategy-risk diagnostics add one reviewed complexity hotspot without increasing the large-file or long-function budgets. Hold this synchronized baseline and extract diagnostic families before adding another allocation method."
+      "owner_decision": "2026-07-17 low-turnover selection controls were split into typed policy and routing helpers, preserving the large-file and complexity budgets while reducing the measured long-function count from 19 to 18. Keep the lower synchronized budget and split another execution-accounting path before adding further portfolio controls."
     },
     {
       "repo": "strategy-pipeline",

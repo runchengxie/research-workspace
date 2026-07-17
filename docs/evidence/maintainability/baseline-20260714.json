@@ -1280,12 +1280,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 98,
-      "python_loc": 28344,
+      "python_file_count": 101,
+      "python_loc": 29182,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
-        "long_functions": 19,
+        "long_functions": 18,
         "complexity_hotspots": 21,
         "large_classes": 0
       },
@@ -1327,17 +1327,17 @@
         },
         {
           "path": "src/portfolio_backtester/portfolio_positions.py",
-          "loc": 771,
-          "hk_related": false
-        },
-        {
-          "path": "src/portfolio_backtester/engine.py",
-          "loc": 765,
+          "loc": 797,
           "hk_related": false
         },
         {
           "path": "tests/test_backtest.py",
           "loc": 754,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "loc": 740,
           "hk_related": false
         },
         {
@@ -1352,7 +1352,7 @@
         },
         {
           "path": "src/portfolio_backtester/evaluation.py",
-          "loc": 635,
+          "loc": 641,
           "hk_related": false
         },
         {
@@ -1390,9 +1390,9 @@
         },
         {
           "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_backtest_leg",
-          "line_count": 100,
-          "complexity": 5
+          "name": "_evaluate_long_short_period",
+          "line_count": 99,
+          "complexity": 6
         },
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
@@ -1407,12 +1407,6 @@
           "complexity": 15
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_long_only_period",
-          "line_count": 96,
-          "complexity": 2
-        },
-        {
           "path": "tests/test_position_backtest.py",
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
@@ -1423,6 +1417,12 @@
           "name": "_build_variant_backtest_options",
           "line_count": 94,
           "complexity": 3
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "name": "_evaluate_backtest_leg",
+          "line_count": 94,
+          "complexity": 11
         },
         {
           "path": "src/portfolio_backtester/evaluation.py",
@@ -1443,10 +1443,16 @@
           "complexity": 6
         },
         {
-          "path": "src/portfolio_backtester/portfolio_positions.py",
-          "name": "_process_long_short_rebalance",
+          "path": "src/portfolio_backtester/engine.py",
+          "name": "_evaluate_backtest_rebalance_period",
+          "line_count": 91,
+          "complexity": 14
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "name": "_evaluate_long_only_period",
           "line_count": 89,
-          "complexity": 7
+          "complexity": 2
         },
         {
           "path": "tests/test_backtest_tearsheet.py",
@@ -1455,16 +1461,10 @@
           "complexity": 1
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_backtest_rebalance_period",
-          "line_count": 88,
-          "complexity": 12
-        },
-        {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_long_short_period",
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
           "line_count": 87,
-          "complexity": 3
+          "complexity": 7
         },
         {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
@@ -1477,12 +1477,6 @@
           "name": "test_construction_grid_reuses_existing_scores",
           "line_count": 84,
           "complexity": 5
-        },
-        {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
-          "line_count": 83,
-          "complexity": 7
         },
         {
           "path": "src/portfolio_backtester/evaluation.py",
@@ -1692,8 +1686,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 346,
-      "python_loc": 89944,
+      "python_file_count": 357,
+      "python_loc": 92335,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 48,
@@ -1753,6 +1747,11 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_hotsector_deepseek_v4_month.py",
+          "loc": 776,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/release_tools/package_runs.py",
           "loc": 770,
           "hk_related": false
@@ -1760,6 +1759,11 @@
         {
           "path": "src/strategy_pipeline/daily_watch20_freshness.py",
           "loc": 769,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "loc": 767,
           "hk_related": false
         },
         {
@@ -1803,11 +1807,6 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
-          "loc": 734,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/commands/linear_sweep.py",
           "loc": 723,
           "hk_related": false
@@ -1815,11 +1814,6 @@
         {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 716,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_hotsector_deepseek_v4_month.py",
-          "loc": 691,
           "hk_related": false
         },
         {
@@ -2306,6 +2300,7 @@
         "scripts/research/hotsector_challenger_campaign.py",
         "scripts/research/hotsector_deepseek_campaign.py",
         "scripts/research/hotsector_deepseek_v4_month.py",
+        "scripts/research/hotsector_numeric_v2_retrospective.py",
         "scripts/research/reconcile_slow_volume_labels.py",
         "scripts/research/verify_slow_volume_campaign.py"
       ]
