@@ -341,12 +341,12 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 163,
-      "python_loc": 67706,
+      "python_file_count": 171,
+      "python_loc": 71880,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
-        "long_functions": 64,
+        "long_functions": 63,
         "complexity_hotspots": 38,
         "large_classes": 1
       },
@@ -357,18 +357,33 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "loc": 2283,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_tushare_a_share.py",
           "loc": 1791,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "loc": 1754,
+          "loc": 1765,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "loc": 1711,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "loc": 1533,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1528,
           "hk_related": false
         },
         {
@@ -379,11 +394,6 @@
         {
           "path": "tests/test_a_share_minute_coverage.py",
           "loc": 1486,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "loc": 1484,
           "hk_related": false
         },
         {
@@ -407,13 +417,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1299,
+          "path": "tests/test_cutover_a_share_minute.py",
+          "loc": 1228,
           "hk_related": false
         },
         {
-          "path": "tests/test_cutover_a_share_minute.py",
-          "loc": 1228,
+          "path": "tests/test_tushare_minute_replacement_campaign_runner.py",
+          "loc": 1160,
           "hk_related": false
         },
         {
@@ -442,8 +452,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
-          "loc": 897,
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "loc": 887,
           "hk_related": false
         },
         {
@@ -462,18 +472,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/tushare_minute_backfill.py",
-          "loc": 867,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
           "loc": 863,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_a_share_minute_build.py",
-          "loc": 858,
           "hk_related": false
         }
       ],
@@ -487,8 +487,8 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "name": "mirror_minute_bars",
-          "line_count": 298,
-          "complexity": 56
+          "line_count": 297,
+          "complexity": 49
         },
         {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
@@ -517,7 +517,7 @@
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
           "name": "_run_campaign",
-          "line_count": 174,
+          "line_count": 170,
           "complexity": 38
         },
         {
@@ -633,8 +633,8 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
           "name": "mirror_minute_bars",
-          "line_count": 298,
-          "complexity": 56
+          "line_count": 297,
+          "complexity": 49
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -657,7 +657,7 @@
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
           "name": "_run_campaign",
-          "line_count": 174,
+          "line_count": 170,
           "complexity": 38
         },
         {
@@ -671,12 +671,6 @@
           "name": "_build_fused_minute_dataset",
           "line_count": 216,
           "complexity": 35
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
-          "name": "_run_commands",
-          "line_count": 104,
-          "complexity": 34
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -737,6 +731,12 @@
           "name": "validate_fused_minute_dataset",
           "line_count": 53,
           "complexity": 21
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_validate_phase_outcome",
+          "line_count": 63,
+          "complexity": 20
         },
         {
           "path": "src/market_data_platform/tushare_minute_backfill.py",
@@ -859,7 +859,13 @@
         "scripts/operations/cutover_a_share_minute.py",
         "scripts/operations/detach_a_share_minute_v3.py",
         "scripts/operations/promote_guan_mobile.py",
-        "scripts/operations/tushare_minute_replacement_campaign.py"
+        "scripts/operations/tushare_minute_replacement_campaign.py",
+        "scripts/systemd/README.md",
+        "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.service",
+        "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.timer",
+        "scripts/systemd/tushare-minute-replacement-campaign-status.service",
+        "scripts/systemd/tushare-minute-replacement-campaign.service",
+        "scripts/systemd/tushare-minute-replacement-campaign.timer"
       ]
     },
     {
@@ -1687,7 +1693,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 346,
-      "python_loc": 89919,
+      "python_loc": 89944,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 48,
@@ -1797,13 +1803,13 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/commands/linear_sweep.py",
-          "loc": 723,
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "loc": 734,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
-          "loc": 720,
+          "path": "src/strategy_pipeline/commands/linear_sweep.py",
+          "loc": 723,
           "hk_related": false
         },
         {
@@ -1813,7 +1819,7 @@
         },
         {
           "path": "tests/test_hotsector_deepseek_v4_month.py",
-          "loc": 685,
+          "loc": 691,
           "hk_related": false
         },
         {

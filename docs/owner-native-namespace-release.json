@@ -21,7 +21,7 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "14463ff539715a58c184326b1b3556b4ec2139b9",
+      "commit": "b96a71e711a06bccfde342f582a6d71e832830ab",
       "compatibility_package_allowed": false,
       "pr": 20,
       "version": "2.0.0"
@@ -42,6 +42,6 @@
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
     "workspace_source_artifact_integration": "passed-2026-07-14",
-    "final_main_local_validation": "passed-2026-07-16"
+    "final_main_local_validation": "passed-2026-07-17"
   }
 }

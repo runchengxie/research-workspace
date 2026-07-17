@@ -141,6 +141,18 @@
       "status": "active_compatibility"
     },
     {
+      "path": "market-data-platform/src/market_data_platform/tushare_minute_quota.py",
+      "owner_repo": "market-data-platform",
+      "kind": "public_facade",
+      "replacement": "market_data_platform._tushare_minute_quota_* implementation modules for internal ownership only",
+      "current_consumers": "retained as the stable public quota API for minute mirror, backfill, and replacement campaign callers",
+      "removal_condition": "do not remove while shared minute quota accounting remains a documented public API; any replacement requires consumer migration and two release reviews",
+      "rollback_path": "restore the public quota facade and implementation modules from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform minute quota tests", "market-data-platform TuShare minute integration tests"],
+      "consumer_audit": "not_applicable while retained as public API",
+      "status": "retained_public_api"
+    },
+    {
       "path": "quant-execution-engine/src/quant_execution_engine/execution.py",
       "owner_repo": "quant-execution-engine",
       "kind": "module_facade",

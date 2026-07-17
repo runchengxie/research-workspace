@@ -18,10 +18,10 @@
     {
       "repo": "market-data-platform",
       "max_large_files": 47,
-      "max_long_functions": 64,
+      "max_long_functions": 63,
       "max_complexity_hotspots": 38,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-14 data-governance and current-path audit work added explicit operational validation surfaces. Keep the new modules registered as accepted hotspots and split them before expanding another governance command family."
+      "owner_decision": "2026-07-17 the quota-aware minute replacement campaign added fail-closed operational validation while reducing the measured long-function count from 64 to 63. Keep the runner and scenario suite registered as accepted hotspots, and split them before expanding another campaign phase."
     },
     {
       "repo": "alpha-research",
@@ -969,6 +969,12 @@
       "owner_repo": "market-data-platform",
       "reason": "分钟数据替换活动编排集中管理配额窗口、调度循环和清单推进，当前版本有专项测试和复杂性基线",
       "next_action": "扩展活动阶段前，将配额管理和清单持久化拆分为独立模块"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_minute_replacement_campaign_runner.py",
+      "owner_repo": "market-data-platform",
+      "reason": "替换活动场景测试集中覆盖安全窗口、配额检查点、进程信号、readiness 证据和失败关闭路径",
+      "next_action": "活动协议再次变更时，按调度、配额和 readiness 证据拆分场景与共享 fixture"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
