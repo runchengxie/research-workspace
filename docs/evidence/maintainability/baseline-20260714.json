@@ -341,12 +341,12 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 171,
-      "python_loc": 71880,
+      "python_file_count": 177,
+      "python_loc": 73192,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 47,
-        "long_functions": 63,
+        "large_files": 48,
+        "long_functions": 65,
         "complexity_hotspots": 38,
         "large_classes": 1
       },
@@ -871,13 +871,13 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 116,
-      "python_loc": 28708,
+      "python_file_count": 122,
+      "python_loc": 29639,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 13,
         "long_functions": 20,
-        "complexity_hotspots": 23,
+        "complexity_hotspots": 25,
         "large_classes": 0
       },
       "large_files": [
@@ -1101,6 +1101,12 @@
           "complexity": 20
         },
         {
+          "path": "src/alpha_research/daily_watch20_model_lifecycle.py",
+          "name": "restore_prior_ranker",
+          "line_count": 66,
+          "complexity": 19
+        },
+        {
           "path": "src/alpha_research/dynamic_signal_ensemble_calibration.py",
           "name": "calibrate_signal_directions",
           "line_count": 70,
@@ -1177,6 +1183,12 @@
           "name": "_build_label_event_windows",
           "line_count": 49,
           "complexity": 16
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_model_lifecycle.py",
+          "name": "passed_prior_runs",
+          "line_count": 45,
+          "complexity": 15
         },
         {
           "path": "src/alpha_research/dataset_sampling_core.py",
@@ -1280,13 +1292,13 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 106,
-      "python_loc": 30473,
+      "python_file_count": 117,
+      "python_loc": 32719,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
-        "long_functions": 18,
-        "complexity_hotspots": 21,
+        "long_functions": 21,
+        "complexity_hotspots": 23,
         "large_classes": 0
       },
       "large_files": [
@@ -1327,12 +1339,17 @@
         },
         {
           "path": "src/portfolio_backtester/portfolio_positions.py",
-          "loc": 784,
+          "loc": 795,
           "hk_related": false
         },
         {
           "path": "tests/test_backtest.py",
           "loc": 761,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "loc": 709,
           "hk_related": false
         },
         {
@@ -1348,11 +1365,6 @@
         {
           "path": "src/portfolio_backtester/evaluation.py",
           "loc": 659,
-          "hk_related": false
-        },
-        {
-          "path": "src/portfolio_backtester/engine.py",
-          "loc": 607,
           "hk_related": false
         },
         {
@@ -1389,10 +1401,16 @@
           "complexity": 21
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_backtest_leg",
-          "line_count": 98,
-          "complexity": 11
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 99,
+          "complexity": 7
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "build_positions_by_rebalance",
+          "line_count": 99,
+          "complexity": 4
         },
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
@@ -1413,6 +1431,12 @@
           "complexity": 1
         },
         {
+          "path": "src/portfolio_backtester/leg_helpers.py",
+          "name": "_build_backtest_leg_result",
+          "line_count": 95,
+          "complexity": 3
+        },
+        {
           "path": "src/portfolio_backtester/construction_grid.py",
           "name": "_build_variant_backtest_options",
           "line_count": 94,
@@ -1431,16 +1455,10 @@
           "complexity": 5
         },
         {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
-          "line_count": 93,
-          "complexity": 7
-        },
-        {
-          "path": "src/portfolio_backtester/leg_helpers.py",
-          "name": "_build_backtest_leg_result",
-          "line_count": 93,
-          "complexity": 2
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "_build_selection_inputs",
+          "line_count": 92,
+          "complexity": 12
         },
         {
           "path": "src/portfolio_backtester/construction_grid.py",
@@ -1461,12 +1479,6 @@
           "complexity": 1
         },
         {
-          "path": "src/portfolio_backtester/portfolio_positions.py",
-          "name": "build_positions_by_rebalance",
-          "line_count": 87,
-          "complexity": 4
-        },
-        {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
           "name": "simulate",
           "line_count": 84,
@@ -1485,10 +1497,28 @@
           "complexity": 15
         },
         {
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "select_holdings",
+          "line_count": 82,
+          "complexity": 6
+        },
+        {
           "path": "src/portfolio_backtester/capacity_report.py",
           "name": "_build_grid_row",
           "line_count": 81,
           "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "_process_long_short_rebalance",
+          "line_count": 81,
+          "complexity": 9
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "_process_long_only_rebalance",
+          "line_count": 80,
+          "complexity": 8
         }
       ],
       "complexity_hotspots": [
@@ -1496,6 +1526,12 @@
           "path": "src/portfolio_backtester/execution_sim/core.py",
           "name": "_summarize_adjusted_nav",
           "line_count": 77,
+          "complexity": 22
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "apply_rebalance_buffer",
+          "line_count": 45,
           "complexity": 22
         },
         {
@@ -1517,6 +1553,18 @@
           "complexity": 20
         },
         {
+          "path": "src/portfolio_backtester/portfolio_weights.py",
+          "name": "build_position_weights",
+          "line_count": 55,
+          "complexity": 19
+        },
+        {
+          "path": "src/portfolio_backtester/backends/base.py",
+          "name": "validate",
+          "line_count": 51,
+          "complexity": 18
+        },
+        {
           "path": "scripts/dev/namespace_boundary.py",
           "name": "main",
           "line_count": 38,
@@ -1532,12 +1580,6 @@
           "path": "src/portfolio_backtester/bet_sizing.py",
           "name": "build_sized_weights",
           "line_count": 55,
-          "complexity": 17
-        },
-        {
-          "path": "src/portfolio_backtester/portfolio_selection.py",
-          "name": "apply_rebalance_buffer",
-          "line_count": 36,
           "complexity": 17
         },
         {
@@ -1686,13 +1728,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 372,
-      "python_loc": 96480,
+      "python_file_count": 377,
+      "python_loc": 98371,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 48,
+        "large_files": 49,
         "long_functions": 114,
-        "complexity_hotspots": 67,
+        "complexity_hotspots": 72,
         "large_classes": 1
       },
       "large_files": [
@@ -1749,6 +1791,11 @@
         {
           "path": "tests/test_hotsector_deepseek_v4_month.py",
           "loc": 776,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_three_arm_shadow.py",
+          "loc": 773,
           "hk_related": false
         },
         {
@@ -1814,11 +1861,6 @@
         {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 716,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
-          "loc": 680,
           "hk_related": false
         }
       ],
@@ -1982,6 +2024,12 @@
           "complexity": 35
         },
         {
+          "path": "src/strategy_pipeline/hotsector_three_arm_shadow.py",
+          "name": "_validated_owner_metadata",
+          "line_count": 74,
+          "complexity": 28
+        },
+        {
           "path": "scripts/dev/config_lifecycle.py",
           "name": "_validate_catalog",
           "line_count": 58,
@@ -2021,6 +2069,12 @@
           "path": "src/strategy_pipeline/daily_watch20_publish.py",
           "name": "_finalized_run_identities",
           "line_count": 65,
+          "complexity": 23
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_holdings_overlay_selection.py",
+          "name": "_validate_owner_summary",
+          "line_count": 70,
           "complexity": 23
         },
         {
@@ -2111,18 +2165,6 @@
           "path": "src/strategy_pipeline/pipeline/research_ops/summarize_runs_scoring.py",
           "name": "_compute_grouped_dsr",
           "line_count": 57,
-          "complexity": 20
-        },
-        {
-          "path": "src/strategy_pipeline/release_tools/package_runs.py",
-          "name": "_apply_run_filters",
-          "line_count": 57,
-          "complexity": 20
-        },
-        {
-          "path": "src/strategy_pipeline/release_tools/release_runs.py",
-          "name": "_package_cmd_from_args",
-          "line_count": 33,
           "complexity": 20
         }
       ],
