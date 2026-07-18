@@ -17,35 +17,35 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 47,
-      "max_long_functions": 63,
+      "max_large_files": 48,
+      "max_long_functions": 65,
       "max_complexity_hotspots": 38,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-17 the quota-aware minute replacement campaign added fail-closed operational validation while reducing the measured long-function count from 64 to 63. Keep the runner and scenario suite registered as accepted hotspots, and split them before expanding another campaign phase."
+      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration added point-in-time candidate and published-data views. Repo-local Ruff, ty, BasedPyright, governance, maintainability ratchet, and 616-test validation passed. Keep this synchronized budget only for the migrated owner surface; split partition provenance from v1/v2 snapshot assembly before adding another candidate source."
     },
     {
       "repo": "alpha-research",
       "max_large_files": 13,
       "max_long_functions": 20,
-      "max_complexity_hotspots": 23,
+      "max_complexity_hotspots": 25,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-14 AFML event labeling, grouped uniqueness weighting, probability calibration, fractional differentiation, and structural-break diagnostics expand the standalone research surface. Keep sample weighting registered as an accepted hotspot and split interval attribution from receipt construction before adding another weighting family."
+      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, ty, BasedPyright, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family."
     },
     {
       "repo": "portfolio-backtester",
       "max_large_files": 18,
-      "max_long_functions": 18,
-      "max_complexity_hotspots": 21,
+      "max_long_functions": 21,
+      "max_complexity_hotspots": 23,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-17 low-turnover selection controls were split into typed policy and routing helpers, preserving the large-file and complexity budgets while reducing the measured long-function count from 19 to 18. Keep the lower synchronized budget and split another execution-accounting path before adding further portfolio controls."
+      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, ty, BasedPyright, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm."
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 48,
+      "max_large_files": 49,
       "max_long_functions": 114,
-      "max_complexity_hotspots": 67,
+      "max_complexity_hotspots": 72,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-16 DeepSeek 稳定性实验新增了执行、证据和分析模块。三个模块均低于项目自身的 800 行硬门槛，并有专项测试和冻结证据。当前预算与基线实测值完全一致。后续改动应先拆分调度、账本校验和指标分析，再扩展新的实验协议。"
+      "owner_decision": "2026-07-18 the bounded three-arm shadow evaluation added fail-closed lineage, paired outcomes, milestone gates, and append-only evidence while remaining below the repo-local 800-line hard limit. Repo-local Ruff, ty, BasedPyright ratchet, maintainability ratchet, and 1055-test validation passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
     },
     {
       "repo": "quant-execution-engine",
@@ -951,6 +951,12 @@
       "owner_repo": "strategy-pipeline",
       "reason": "DeepSeek 稳定性实验的执行调度、失败分类和追加式账本写入集中在同一个可审计边界内，当前版本已经绑定冻结证据并通过专项测试",
       "next_action": "实验协议再次变更时，先拆分重试调度、尝试历史校验和账本写入逻辑"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_three_arm_shadow.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "The frozen Numeric, bounded-ranking, and risk-veto evaluator keeps owner validation, complete date-by-arm run quality, paired outcomes, and append-only outcome evidence in one fail-closed research boundary for the initial prospective campaign",
+      "next_action": "extract owner metadata validation and content-addressed outcome persistence before adding another arm, horizon family, or promotion rule"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
