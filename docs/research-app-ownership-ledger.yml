@@ -1,0 +1,97 @@
+schema_version: research_app_ownership_ledger.v1
+decision: docs/adr/0003-research-application-ownership.md
+status: in_progress
+repository_layout_decided: false
+
+invariants:
+  - research_apps_must_not_import_strategy_pipeline
+  - legacy_paths_are_identity_preserving_facades_only
+  - third_party_framework_objects_do_not_cross_owner_boundaries
+  - historical_artifacts_and_receipts_remain_readable
+  - atomic_publication_and_execution_handoff_remain_strategy_pipeline_owned
+  - submodule_pins_change_only_after_owner_merges_and_combined_validation
+
+pull_requests:
+  market_data_platform:
+    repository: runchengxie/market-data-platform
+    number: 10
+    branch: refactor/research-app-ownership
+    status: draft
+    owns:
+      - published_asset_views
+      - pit_candidate_pool
+      - exact_date_snapshot_validation
+      - source_lineage
+  alpha_research:
+    repository: runchengxie/alpha-research
+    number: 11
+    branch: refactor/research-app-ownership
+    status: draft
+    owns:
+      - model_lifecycle
+      - rolling_oos_signals
+      - signal_statistics
+      - news_heat_overlay
+  portfolio_backtester:
+    repository: runchengxie/portfolio-backtester
+    number: 13
+    branch: refactor/research-app-ownership
+    status: draft
+    owns:
+      - portfolio_construction
+      - turnover_and_costs
+      - tradability_audit
+  strategy_pipeline:
+    repository: runchengxie/strategy-pipeline
+    number: 26
+    branch: refactor/research-app-ownership
+    status: draft
+    owns:
+      - strategy_cli
+      - external_call_runners
+      - run_receipts
+      - atomic_publication
+      - release_gates
+      - target_handoff
+    embeds_extractable_package: research_apps
+
+research_apps:
+  current_distribution: strategy-pipeline
+  extraction_ready: true
+  final_visibility: undecided
+  package_roots:
+    - research_apps.daily_watch20
+    - research_apps.hotsector
+    - research_apps.campaign_specs
+
+validation:
+  foundational_combined_tests:
+    status: passed
+    passed: 47
+    strategy_pipeline_validated_head: 74763e020445efdf3f4e9969733f4b272aabe2bc
+  latest_combined_validation:
+    status: pending
+  required_before_ready:
+    - bump_owner_package_versions
+    - refresh_all_lockfiles
+    - run_latest_four_branch_pytest
+    - run_latest_ruff_format_and_type_checks
+    - run_fresh_wheel_resource_smoke
+  required_before_workspace_pin:
+    - merge_all_owner_pull_requests
+    - merge_strategy_pipeline_pull_request
+    - run_workspace_smoke_profile
+    - run_workspace_full_profile
+
+remaining_work:
+  - split_minute_materialization_from_alpha_transforms
+  - split_live_input_availability_from_release_freshness
+  - replace_mixed_dailywatch20_policy_with_owner_native_specs
+  - split_final_flite_and_slow_volume_runners
+  - move_staggered_cash_carry_state_machine_to_portfolio_backtester
+  - split_deepseek_v4_replay_from_execution_summary
+
+rollback:
+  - retain_native_owner_packages
+  - keep_legacy_strategy_pipeline_facades_during_documented_window
+  - do_not_update_workspace_pins_until_combined_validation_passes
