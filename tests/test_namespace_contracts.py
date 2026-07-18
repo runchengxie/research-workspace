@@ -16,6 +16,20 @@ def test_owner_native_manifest_matches_gitlinks() -> None:
     assert MODULE.check_manifest() == []
 
 
+def test_gitlink_sha_reads_the_staged_index(monkeypatch) -> None:
+    calls: list[list[str]] = []
+    sha = "1" * 40
+
+    def fake_check_output(command, **_kwargs) -> str:
+        calls.append(command)
+        return f"160000 {sha} 0\tstrategy-pipeline\n"
+
+    monkeypatch.setattr(MODULE.subprocess, "check_output", fake_check_output)
+
+    assert MODULE.gitlink_sha("strategy-pipeline") == sha
+    assert calls == [["git", "ls-files", "--stage", "--", "strategy-pipeline"]]
+
+
 def test_manifest_records_removed_compatibility_surface() -> None:
     manifest = MODULE.load_manifest()
     assert manifest["schema"] == "owner_native_namespace_release.v2"

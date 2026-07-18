@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 71,
-      "python_loc": 16309,
+      "python_loc": 16329,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 5,
@@ -1280,8 +1280,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 101,
-      "python_loc": 29182,
+      "python_file_count": 106,
+      "python_loc": 30473,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1327,17 +1327,12 @@
         },
         {
           "path": "src/portfolio_backtester/portfolio_positions.py",
-          "loc": 797,
+          "loc": 784,
           "hk_related": false
         },
         {
           "path": "tests/test_backtest.py",
-          "loc": 754,
-          "hk_related": false
-        },
-        {
-          "path": "src/portfolio_backtester/engine.py",
-          "loc": 740,
+          "loc": 761,
           "hk_related": false
         },
         {
@@ -1352,7 +1347,12 @@
         },
         {
           "path": "src/portfolio_backtester/evaluation.py",
-          "loc": 641,
+          "loc": 659,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "loc": 607,
           "hk_related": false
         },
         {
@@ -1390,9 +1390,9 @@
         },
         {
           "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_long_short_period",
-          "line_count": 99,
-          "complexity": 6
+          "name": "_evaluate_backtest_leg",
+          "line_count": 98,
+          "complexity": 11
         },
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
@@ -1419,12 +1419,6 @@
           "complexity": 3
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_backtest_leg",
-          "line_count": 94,
-          "complexity": 11
-        },
-        {
           "path": "src/portfolio_backtester/evaluation.py",
           "name": "_record_backtest_outputs",
           "line_count": 94,
@@ -1435,6 +1429,18 @@
           "name": "main",
           "line_count": 93,
           "complexity": 5
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 93,
+          "complexity": 7
+        },
+        {
+          "path": "src/portfolio_backtester/leg_helpers.py",
+          "name": "_build_backtest_leg_result",
+          "line_count": 93,
+          "complexity": 2
         },
         {
           "path": "src/portfolio_backtester/construction_grid.py",
@@ -1449,22 +1455,16 @@
           "complexity": 14
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
-          "name": "_evaluate_long_only_period",
-          "line_count": 89,
-          "complexity": 2
-        },
-        {
           "path": "tests/test_backtest_tearsheet.py",
           "name": "test_build_backtest_tearsheet_html_includes_core_sections_and_escapes_title",
           "line_count": 89,
           "complexity": 1
         },
         {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "build_positions_by_rebalance",
           "line_count": 87,
-          "complexity": 7
+          "complexity": 4
         },
         {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
@@ -1686,8 +1686,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 364,
-      "python_loc": 94540,
+      "python_file_count": 372,
+      "python_loc": 96480,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 48,
@@ -2300,6 +2300,7 @@
         "scripts/research/hotsector_challenger_campaign.py",
         "scripts/research/hotsector_deepseek_campaign.py",
         "scripts/research/hotsector_deepseek_v4_month.py",
+        "scripts/research/hotsector_low_turnover_retrospective.py",
         "scripts/research/hotsector_numeric_v2_retrospective.py",
         "scripts/research/hotsector_session_challenger.py",
         "scripts/research/reconcile_slow_volume_labels.py",

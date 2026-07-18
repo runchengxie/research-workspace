@@ -14,14 +14,14 @@
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "aa1c88f53dda92948797b0948edce2cd2d4241e0",
+      "commit": "11eb09935ef9f5d56e69b686b92c1d621e2fc69a",
       "legacy_source_tree_allowed": false,
       "pr": 8,
       "version": "0.3.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "a5cf55074c51efc20e4937dd23fed309e5af6392",
+      "commit": "e1b02e4e305efd750c6967f7898e103adc5541b4",
       "compatibility_package_allowed": false,
       "pr": 20,
       "version": "2.0.0"
@@ -42,6 +42,6 @@
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
     "workspace_source_artifact_integration": "passed-2026-07-14",
-    "final_main_local_validation": "passed-2026-07-17"
+    "final_main_local_validation": "passed-2026-07-18"
   }
 }

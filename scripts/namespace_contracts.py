@@ -17,11 +17,17 @@ def load_manifest() -> dict[str, Any]:
 
 
 def gitlink_sha(path: str) -> str:
-    output = subprocess.check_output(["git", "ls-tree", "HEAD", path], cwd=ROOT, text=True).strip()
+    """Read the index gitlink so checks cover the exact state about to be committed."""
+    output = subprocess.check_output(
+        ["git", "ls-files", "--stage", "--", path],
+        cwd=ROOT,
+        text=True,
+    ).strip()
     if not output:
         raise RuntimeError(f"missing gitlink: {path}")
-    mode, object_type, sha, name = output.split(maxsplit=3)
-    if mode != "160000" or object_type != "commit" or name != path:
+    mode, sha, stage_and_name = output.split(maxsplit=2)
+    stage, name = stage_and_name.split("\t", maxsplit=1)
+    if mode != "160000" or stage != "0" or name != path:
         raise RuntimeError(f"invalid gitlink entry for {path}: {output}")
     return sha
 
