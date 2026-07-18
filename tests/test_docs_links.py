@@ -12,6 +12,7 @@ EXPECTED_SUBMODULES = {
     "portfolio-backtester",
     "strategy-pipeline",
     "quant-execution-engine",
+    "research-apps",
 }
 
 

@@ -2,11 +2,12 @@
 
 > status: reference
 > owner: workspace
-> last_verified: 2026-07-16
+> last_verified: 2026-07-19
 > source_of_truth: no
 > superseded_by: n/a
 
-`research-workspace` 只锁定五个核心子模块。热点候选、AI 重排和共享 A 股因子目前由
+`research-workspace` 锁定六个核心子模块，其中 `research-apps` 承载工作区内研究应用。
+热点候选、AI 重排和共享 A 股因子的外部输入目前由
 独立的 `market-intel` 仓库维护。外部项目通过版本化文件接入，业务实现和运行命令以
 `market-intel` 自身文档为准。
 

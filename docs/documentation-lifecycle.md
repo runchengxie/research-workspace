@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-07-16
+> last_verified: 2026-07-19
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -15,7 +15,7 @@
 
 ```text
 > status: active | reference | archived | superseded
-> owner: workspace | market-data-platform | alpha-research | portfolio-backtester | strategy-pipeline | quant-execution-engine
+> owner: workspace | market-data-platform | alpha-research | portfolio-backtester | research-apps | strategy-pipeline | quant-execution-engine
 > last_verified: YYYY-MM-DD
 > source_of_truth: yes | no
 > superseded_by: n/a | <relative path>

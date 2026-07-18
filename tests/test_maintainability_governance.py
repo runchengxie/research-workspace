@@ -19,6 +19,7 @@ REPOS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
+    "research-apps",
     "strategy-pipeline",
     "quant-execution-engine",
 }
@@ -64,8 +65,7 @@ HOTSPOT_COUNT_FIELDS = {
     "large_classes",
 }
 HOTSPOT_BUDGET_FIELDS = {"repo"} | {f"max_{field}" for field in HOTSPOT_COUNT_FIELDS}
-COMPATIBILITY_FACADE_FIELDS = {
-    "path",
+COMPATIBILITY_FACADE_COMMON_FIELDS = {
     "owner_repo",
     "kind",
     "replacement",
@@ -258,16 +258,107 @@ def test_deprecation_budget_blocks_new_pending_surfaces() -> None:
 def test_compatibility_facade_register_covers_detected_facades() -> None:
     manifest = _load_json_doc("docs/compatibility-facades.yml")
     module = _load_workspace_governance_module()
-    records = {record["path"]: record for record in manifest["records"]}
+    registered_paths: set[str] = set()
 
-    assert manifest["schema_version"] == "compatibility_facades.v1"
-    assert set(records) == module._tracked_compatibility_facade_paths(ROOT)
-    for record in records.values():
-        assert COMPATIBILITY_FACADE_FIELDS <= set(record)
-        assert (ROOT / record["path"]).is_file()
+    assert manifest["schema_version"] == "compatibility_facades.v2"
+    for record in manifest["records"]:
+        assert ("path" in record) != ("paths" in record)
+        paths = record.get("paths", [record.get("path")])
+        assert paths
+        assert len(paths) == len(set(paths))
+        assert COMPATIBILITY_FACADE_COMMON_FIELDS <= set(record)
+        for path in paths:
+            assert module._is_concrete_facade_path(path)
+            assert (ROOT / path).is_file()
+            assert path not in registered_paths
+            registered_paths.add(path)
         assert record["focused_tests"]
         assert record["removal_condition"]
         assert record["rollback_path"]
+
+    tracked_paths = module._tracked_compatibility_facade_paths(ROOT)
+    assert registered_paths == tracked_paths
+    groups = [
+        record
+        for record in manifest["records"]
+        if record["kind"] == "migration_compatibility_group"
+    ]
+    assert len(groups) == 1
+    assert len(groups[0]["paths"]) > 1
+    assert all(path.startswith("strategy-pipeline/") for path in groups[0]["paths"])
+    assert groups[0]["status"] == "active_compatibility"
+    assert "ADR-0004" in groups[0]["removal_condition"]
+
+
+def test_compatibility_facade_group_missing_path_is_rejected() -> None:
+    manifest = _load_json_doc("docs/compatibility-facades.yml")
+    module = _load_workspace_governance_module()
+    mutated = copy.deepcopy(manifest)
+    group = next(
+        record for record in mutated["records"] if record["kind"] == "migration_compatibility_group"
+    )
+    removed = group["paths"].pop()
+
+    checks = module._check_compatibility_facades(ROOT, mutated)
+
+    assert any(
+        check.severity == "ERROR"
+        and check.code == "governance-compatibility-facades"
+        and "unregistered=" in check.message
+        and removed in check.message
+        for check in checks
+    )
+
+
+def test_compatibility_facade_group_extra_path_is_rejected() -> None:
+    manifest = _load_json_doc("docs/compatibility-facades.yml")
+    module = _load_workspace_governance_module()
+    mutated = copy.deepcopy(manifest)
+    group = next(
+        record for record in mutated["records"] if record["kind"] == "migration_compatibility_group"
+    )
+    extra = "strategy-pipeline/src/strategy_pipeline/__init__.py"
+    assert (ROOT / extra).is_file()
+    assert extra not in module._tracked_compatibility_facade_paths(ROOT)
+    group["paths"].append(extra)
+
+    checks = module._check_compatibility_facades(ROOT, mutated)
+
+    assert any(
+        check.severity == "ERROR"
+        and check.code == "governance-compatibility-facades"
+        and "stale=" in check.message
+        and extra in check.message
+        for check in checks
+    )
+
+
+def test_compatibility_facade_group_requires_exact_concrete_unique_paths() -> None:
+    manifest = _load_json_doc("docs/compatibility-facades.yml")
+    module = _load_workspace_governance_module()
+    group_index = next(
+        index
+        for index, record in enumerate(manifest["records"])
+        if record["kind"] == "migration_compatibility_group"
+    )
+    first_path = manifest["records"][group_index]["paths"][0]
+    invalid_cases = (
+        ({"path": first_path}, "exactly one of path or paths"),
+        ({"paths": []}, "paths must be a non-empty list"),
+        ({"paths": [first_path, first_path]}, "paths must be unique"),
+        ({"paths": ["strategy-pipeline/src/**/*.py"]}, "must be a concrete"),
+    )
+
+    for replacement, expected_message in invalid_cases:
+        mutated = copy.deepcopy(manifest)
+        mutated["records"][group_index].update(replacement)
+        checks = module._check_compatibility_facades(ROOT, mutated)
+        assert any(
+            check.severity == "ERROR"
+            and check.code == "governance-compatibility-facades"
+            and expected_message in check.message
+            for check in checks
+        )
 
 
 def test_script_lifecycle_manifest_classifies_all_tracked_scripts() -> None:
@@ -311,6 +402,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     cross_config = _load_pyproject("strategy-pipeline")
     market_config = _load_pyproject("market-data-platform")
     portfolio_config = _load_pyproject("portfolio-backtester")
+    research_apps_config = _load_pyproject("research-apps")
     execution_config = _load_pyproject("quant-execution-engine")
 
     assert manifest["schema_version"] == "quality_coverage_governance.v1"
@@ -326,6 +418,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         "strategy-pipeline",
         "market-data-platform",
         "portfolio-backtester",
+        "research-apps",
         "quant-execution-engine",
     }
     assert set(repos["alpha-research"]["basedpyright"]["include_targets"]) == set(
@@ -359,6 +452,13 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert "extraPaths" not in portfolio_config["tool"]["basedpyright"]
     assert set(repos["portfolio-backtester"]["ty"]["include_targets"]) == set(
         portfolio_config["tool"]["ty"]["src"]["include"]
+    )
+
+    assert set(repos["research-apps"]["ruff"]["staged_select"]) == set(
+        research_apps_config["tool"]["ruff"]["lint"]["select"]
+    )
+    assert set(repos["research-apps"]["ty"]["include_targets"]) == set(
+        research_apps_config["tool"]["ty"]["src"]["include"]
     )
 
     assert set(repos["quant-execution-engine"]["basedpyright"]["include_targets"]) == set(
@@ -478,6 +578,7 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
     assert "/market-data-platform/" in owners
     assert "/alpha-research/" in owners
     assert "/portfolio-backtester/" in owners
+    assert "/research-apps/" in owners
     assert "/strategy-pipeline/" in owners
     assert "/quant-execution-engine/" in owners
     for phrase in (

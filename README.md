@@ -12,6 +12,9 @@ alpha-research
 portfolio-backtester
   构造组合并完成回测、成本和容量分析
         ↓
+research-apps
+  组合 owner API 并运行研究应用
+        ↓
 strategy-pipeline
   编排研究流程并导出 targets.json
         ↓
@@ -28,19 +31,23 @@ quant-execution-engine
 | `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
 | `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
+| `research-apps/` | 组合数据、alpha 和回测 owner API，运行 F-lite、slow-volume 与 DeepSeek V4 研究应用 |
 | `strategy-pipeline/` | 研究编排、CLI、运行目录、持仓快照和目标文件导出 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
 
-三个研究侧 Python 包使用各自的权威命名空间：
+四个研究侧 Python 包使用各自的权威命名空间：
 
 - `alpha_research`
 - `portfolio_backtester`
+- `research_apps`
 - `strategy_pipeline`
 
 工作区 2.0 已删除旧共享命名空间、兼容命令和隐式环境变量回退。权威命令是
 `strategy` 与 `strategy-pipeline`。具体边界见
 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
+独立研究应用的 owner 边界见
+[ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
 
 ## 快速开始
 
@@ -76,8 +83,9 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-`full` 运行各仓库登记的 Ruff、格式、`ty` 和 `pytest`。安装方法、完整命令和当前
-GitHub Actions 状态统一记录在[工作区维护](docs/workspace-maintenance.md)和
+`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。当前顶层和六个子模块的
+GitHub Actions 权限均禁用，检查以本地 pre-push 为主。安装方法、完整命令和
+自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)和
 [质量治理](docs/quality-governance.md)中。
 
 ## 重要边界

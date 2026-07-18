@@ -7,30 +7,30 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "02ffb48bc4f78068065e84d6e54976a05c66f0ec",
+      "commit": "6c739f013d7eb6039708e5f1015baf018e39ce88",
       "legacy_source_tree_allowed": false,
       "pr": 6,
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "460f72eebcbe9b57b782a55c1daccdb8d468f136",
+      "commit": "4296018ab220921eab6f932cdb2f221f5f6ea3b3",
       "legacy_source_tree_allowed": false,
       "pr": 8,
-      "version": "0.3.0"
+      "version": "0.4.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "021b131213b436c1931515571ac046f2d3e13ebe",
+      "commit": "8d29531c6f70741325bc6b1190fe5f03521d83ab",
       "compatibility_package_allowed": false,
       "pr": 20,
-      "version": "2.0.0"
+      "version": "2.1.0"
     }
   },
   "schema": "owner_native_namespace_release.v2",
   "status": "workspace-2.0-migration",
   "worktree": {
-    "base_gitlinks_recorded_in_package_commit_fields": false,
+    "base_gitlinks_recorded_in_package_commit_fields": true,
     "release_commits_pending": false
   },
   "validation": {
@@ -42,6 +42,6 @@
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
     "workspace_source_artifact_integration": "passed-2026-07-14",
-    "final_main_local_validation": "passed-2026-07-18"
+    "final_main_local_validation": "passed-2026-07-19"
   }
 }

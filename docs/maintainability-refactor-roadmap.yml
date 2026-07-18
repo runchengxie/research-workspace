@@ -10,18 +10,18 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 5,
-      "max_long_functions": 12,
+      "max_large_files": 7,
+      "max_long_functions": 14,
       "max_complexity_hotspots": 14,
-      "max_large_classes": 1
+      "max_large_classes": 2
     },
     {
       "repo": "market-data-platform",
       "max_large_files": 48,
       "max_long_functions": 65,
-      "max_complexity_hotspots": 38,
+      "max_complexity_hotspots": 39,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration added point-in-time candidate and published-data views. Repo-local Ruff, ty, BasedPyright, governance, maintainability ratchet, and 616-test validation passed. Keep this synchronized budget only for the migrated owner surface; split partition provenance from v1/v2 snapshot assembly before adding another candidate source."
+      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, ty, BasedPyright, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly."
     },
     {
       "repo": "alpha-research",
@@ -40,12 +40,20 @@
       "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, ty, BasedPyright, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm."
     },
     {
+      "repo": "research-apps",
+      "max_large_files": 2,
+      "max_long_functions": 2,
+      "max_complexity_hotspots": 1,
+      "max_large_classes": 0,
+      "owner_decision": "2026-07-19 the standalone owner migration moved 54 importable modules and four packaged resources behind a fresh-wheel gate. Ruff, strict ty, maintainability ratchet, 98 tests, sdist and wheel checks passed. Keep the two auditable research workflows intact until their frozen contracts change, then split reporting from orchestration before adding variants."
+    },
+    {
       "repo": "strategy-pipeline",
-      "max_large_files": 49,
-      "max_long_functions": 114,
-      "max_complexity_hotspots": 72,
+      "max_large_files": 46,
+      "max_long_functions": 111,
+      "max_complexity_hotspots": 69,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-18 the bounded three-arm shadow evaluation added fail-closed lineage, paired outcomes, milestone gates, and append-only evidence while remaining below the repo-local 800-line hard limit. Repo-local Ruff, ty, BasedPyright ratchet, maintainability ratchet, and 1055-test validation passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
+      "owner_decision": "2026-07-19 the standalone research-app extraction removed the embedded fallback, lowered cross-repo hotspot budgets, and added fail-closed DeepSeek lineage plus a clean sdist-to-wheel install gate. Repo-local Ruff, ty, BasedPyright ratchet, maintainability ratchet, 1086-pass/1-skip validation, and a 206-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
     },
     {
       "repo": "quant-execution-engine",
@@ -166,6 +174,36 @@
     }
   ],
   "accepted_hotspots": [
+    {
+      "path": "tests/test_maintainability_governance.py",
+      "owner_repo": "research-workspace",
+      "reason": "The cross-repo governance contract keeps baseline, ratchet, quality-registry, facade, CODEOWNERS, and roadmap invariants together so drift is reviewed as one release decision",
+      "next_action": "split facade and quality-registry assertions into focused files before adding another governance manifest"
+    },
+    {
+      "path": "scripts/workspace_governance.py",
+      "owner_repo": "research-workspace",
+      "reason": "The stdlib-only workspace gate loads and validates the small set of release governance manifests through one deterministic CLI and shared Check model",
+      "next_action": "extract compatibility-facade and maintainability-roadmap validators into modules before adding another manifest family"
+    },
+    {
+      "path": "tests/test_run_submodule_checks.py",
+      "owner_repo": "research-workspace",
+      "reason": "One test class verifies profile expansion, lock discipline, canonical owner gates, and invalid-manifest behavior for all six submodules",
+      "next_action": "split profile-contract and parser-failure cases into separate test classes before adding another submodule profile"
+    },
+    {
+      "path": "research-apps/src/research_apps/hotsector/hotsector_deepseek_stability.py",
+      "owner_repo": "research-apps",
+      "reason": "The frozen five-arm stability workflow keeps deterministic trial construction, bounded evidence aggregation, and decision reporting in one auditable research contract",
+      "next_action": "extract report rendering from trial analysis if the frozen arm set or decision schema changes"
+    },
+    {
+      "path": "research-apps/src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
+      "owner_repo": "research-apps",
+      "reason": "The research-only candidate comparison keeps calendar gaps, fail-closed pool status, churn scenarios, paired inference, and receipt semantics together for reproducibility",
+      "next_action": "split daily calendar construction from result receipt assembly before adding another candidate-pool scenario"
+    },
     {
       "path": "alpha-research/src/alpha_research/daily_watch20.py",
       "owner_repo": "alpha-research",

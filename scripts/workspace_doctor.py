@@ -24,6 +24,7 @@ EXPECTED_SUBMODULES: dict[str, str | None] = {
     "portfolio-backtester": None,
     "strategy-pipeline": "strategy",
     "quant-execution-engine": "qexec",
+    "research-apps": None,
 }
 
 DATA_PLATFORM_ROOT_CANDIDATES = (

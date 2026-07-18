@@ -34,11 +34,66 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         )
         self.assertEqual(
             [
-                ("uv", "run", "--group", "dev", "--extra", "cli", "qexec", "--help"),
-                ("uv", "run", "--group", "dev", "ruff", "check", "."),
-                ("uv", "run", "--group", "dev", "ruff", "format", "--check", "."),
-                ("uv", "run", "--group", "dev", "ty", "check"),
-                ("uv", "run", "--group", "dev", "python", "-m", "pytest"),
+                ("uv", "lock", "--check"),
+                ("uv", "run", "--locked", "--group", "dev", "ruff", "check", "."),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "ruff",
+                    "format",
+                    "--check",
+                    ".",
+                ),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "python",
+                    "scripts/dev/maintainability_metrics.py",
+                    "--ratchet",
+                ),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "--extra",
+                    "cli",
+                    "qexec",
+                    "--help",
+                ),
+                ("uv", "run", "--locked", "--group", "dev", "ty", "check"),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "python",
+                    "-m",
+                    "pytest",
+                ),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "python",
+                    "-m",
+                    "pytest",
+                    "-q",
+                    "-o",
+                    "addopts=",
+                    "-m",
+                    "integration or e2e or slow",
+                ),
             ],
             [item.command for item in planned],
         )
@@ -69,6 +124,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             (
                 "uv",
                 "run",
+                "--locked",
                 "--extra",
                 "dev",
                 "python",
@@ -82,6 +138,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             (
                 "uv",
                 "run",
+                "--locked",
                 "--extra",
                 "dev",
                 "python",
@@ -91,6 +148,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             (
                 "uv",
                 "run",
+                "--locked",
                 "--extra",
                 "dev",
                 "python",
@@ -100,6 +158,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             (
                 "uv",
                 "run",
+                "--locked",
                 "--extra",
                 "dev",
                 "python",
@@ -122,6 +181,104 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         self.assertNotIn("--basedpyright-basic", " ".join(" ".join(cmd) for cmd in market_full))
         self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), strategy_lint)
 
+        for submodule in ("alpha-research", "portfolio-backtester"):
+            lint = [
+                item.command
+                for item in run_submodule_checks.plan_commands(
+                    ROOT,
+                    configs,
+                    profile="lint",
+                    submodules=[submodule],
+                )
+            ]
+            self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), lint)
+
+        quant_lint = [
+            item.command
+            for item in run_submodule_checks.plan_commands(
+                ROOT,
+                configs,
+                profile="lint",
+                submodules=["quant-execution-engine"],
+            )
+        ]
+        self.assertIn(
+            (
+                "uv",
+                "run",
+                "--locked",
+                "--group",
+                "dev",
+                "python",
+                "scripts/dev/maintainability_metrics.py",
+                "--ratchet",
+            ),
+            quant_lint,
+        )
+
+    def test_lint_and_full_profiles_start_with_lock_check(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        for name in sorted(configs):
+            for profile in ("lint", "full"):
+                planned = run_submodule_checks.plan_commands(
+                    ROOT,
+                    configs,
+                    profile=profile,
+                    submodules=[name],
+                )
+                self.assertEqual(("uv", "lock", "--check"), planned[0].command)
+
+        for config in configs.values():
+            for entries in config.profiles.values():
+                for entry in entries:
+                    if isinstance(entry, list) and entry[:2] == ["uv", "run"]:
+                        self.assertIn("--locked", entry)
+
+    def test_research_apps_full_uses_canonical_gate(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        planned = run_submodule_checks.plan_commands(
+            ROOT,
+            configs,
+            profile="full",
+            submodules=["research-apps"],
+        )
+
+        self.assertEqual(
+            [
+                ("uv", "lock", "--check"),
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--extra",
+                    "dev",
+                    "python",
+                    "scripts/dev/check.py",
+                ),
+            ],
+            [item.command for item in planned],
+        )
+
+    def test_strategy_full_uses_canonical_gate(self) -> None:
+        configs = run_submodule_checks.load_manifest(MANIFEST)
+
+        planned = run_submodule_checks.plan_commands(
+            ROOT,
+            configs,
+            profile="full",
+            submodules=["strategy-pipeline"],
+        )
+
+        self.assertEqual(
+            [
+                ("uv", "lock", "--check"),
+                ("scripts/dev/run_tests.sh", "full"),
+            ],
+            [item.command for item in planned],
+        )
+
     def test_split_package_profiles_use_repo_local_tools(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
 
@@ -133,7 +290,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 submodules=[submodule],
             )
             self.assertEqual(
-                [("uv", "run", "--extra", "dev", "python", "-m", "pytest")],
+                [("uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest")],
                 [item.command for item in tests],
             )
 
@@ -163,6 +320,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 (
                     "uv",
                     "run",
+                    "--locked",
                     "--extra",
                     "dev",
                     "python",
@@ -178,18 +336,20 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         configs = run_submodule_checks.load_manifest(MANIFEST)
 
         expected_type = {
-            "alpha-research": [("uv", "run", "--extra", "dev", "ty", "check")],
-            "market-data-platform": [("uv", "run", "--extra", "dev", "ty", "check")],
-            "portfolio-backtester": [("uv", "run", "--extra", "dev", "ty", "check")],
-            "quant-execution-engine": [("uv", "run", "--group", "dev", "ty", "check")],
-            "strategy-pipeline": [("uv", "run", "--extra", "dev", "ty", "check")],
+            "alpha-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "market-data-platform": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "portfolio-backtester": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "quant-execution-engine": [("uv", "run", "--locked", "--group", "dev", "ty", "check")],
+            "research-apps": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "strategy-pipeline": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
         }
         expected_release = {
-            "alpha-research": [("uv", "run", "--extra", "dev", "basedpyright")],
+            "alpha-research": [("uv", "run", "--locked", "--extra", "dev", "basedpyright")],
             "market-data-platform": [
                 (
                     "uv",
                     "run",
+                    "--locked",
                     "--extra",
                     "dev",
                     "basedpyright",
@@ -197,10 +357,20 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                     "basedpyrightconfig.core-basic.json",
                 )
             ],
-            "portfolio-backtester": [("uv", "run", "--extra", "dev", "basedpyright")],
+            "portfolio-backtester": [("uv", "run", "--locked", "--extra", "dev", "basedpyright")],
             "quant-execution-engine": [
-                ("uv", "run", "--group", "dev", "python", "-m", "basedpyright")
+                (
+                    "uv",
+                    "run",
+                    "--locked",
+                    "--group",
+                    "dev",
+                    "python",
+                    "-m",
+                    "basedpyright",
+                )
             ],
+            "research-apps": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("scripts/dev/run_tests.sh", "typecheck-release")],
         }
 

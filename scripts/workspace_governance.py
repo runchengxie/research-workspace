@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import ast
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Any, TypeGuard
 
 from workspace_governance_common import Check
@@ -21,7 +21,7 @@ __all__ = [
 GOVERNANCE_DOC_SCHEMAS = {
     "docs/deprecations.yml": "deprecation_register.v1",
     "docs/script-lifecycle.yml": "script_lifecycle.v1",
-    "docs/compatibility-facades.yml": "compatibility_facades.v1",
+    "docs/compatibility-facades.yml": "compatibility_facades.v2",
     "docs/quality-coverage-governance.yml": "quality_coverage_governance.v1",
     "docs/maintainability-refactor-roadmap.yml": "maintainability_refactor_roadmap.v1",
     "docs/evidence/maintainability/baseline-20260714.json": "maintainability_baseline.v1",
@@ -45,8 +45,7 @@ SCRIPT_LIFECYCLE_EXTRA_PATHS = {
 }
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
 DEPRECATION_PENDING_STATUSES = {"blocked_pending_audit", "follow_up_required"}
-COMPATIBILITY_FACADE_FIELDS = {
-    "path",
+COMPATIBILITY_FACADE_COMMON_FIELDS = {
     "owner_repo",
     "kind",
     "replacement",
@@ -70,6 +69,7 @@ COMPATIBILITY_FACADE_MARKERS = (
     "Backward-compatible",
     "backward-compatible",
 )
+COMPATIBILITY_FACADE_GLOB_MARKERS = frozenset("*?[]{}")
 HOTSPOT_COUNT_FIELDS = {
     "large_files",
     "long_functions",
@@ -304,41 +304,95 @@ def _tracked_compatibility_facade_paths(root: Path) -> set[str]:
     return paths
 
 
-def _check_compatibility_facades(root: Path, manifest: dict[str, Any]) -> list[Check]:
-    records = [record for record in manifest.get("records", []) if isinstance(record, dict)]
-    record_paths = {str(record.get("path", "")) for record in records}
-    tracked_paths = _tracked_compatibility_facade_paths(root)
-    issues: list[str] = []
+def _is_concrete_facade_path(value: Any) -> TypeGuard[str]:
+    if not isinstance(value, str) or not value or value != value.strip() or "\\" in value:
+        return False
+    path = PurePosixPath(value)
+    return (
+        not path.is_absolute()
+        and bool(path.parts)
+        and path.as_posix() == value
+        and ".." not in path.parts
+        and not COMPATIBILITY_FACADE_GLOB_MARKERS.intersection(value)
+    )
 
+
+def _compatibility_facade_record_paths(
+    record: dict[str, Any], label: str
+) -> tuple[list[str], list[str]]:
+    has_path = "path" in record
+    has_paths = "paths" in record
+    if has_path == has_paths:
+        return [], [f"{label}: exactly one of path or paths is required"]
+
+    raw_paths = record["paths"] if has_paths else [record["path"]]
+    if not isinstance(raw_paths, list) or not raw_paths:
+        return [], [f"{label}: paths must be a non-empty list"]
+
+    issues: list[str] = []
+    paths: list[str] = []
+    for index, value in enumerate(raw_paths):
+        if not _is_concrete_facade_path(value):
+            issues.append(f"{label}: path[{index}] must be a concrete workspace-relative file")
+            continue
+        paths.append(value)
+    if len(paths) != len(set(paths)):
+        issues.append(f"{label}: paths must be unique")
+    return paths, issues
+
+
+def _compatibility_facade_common_issues(record: dict[str, Any], label: str) -> list[str]:
+    issues: list[str] = []
+    missing_fields = sorted(COMPATIBILITY_FACADE_COMMON_FIELDS - set(record))
+    if missing_fields:
+        issues.append(f"{label}: missing fields {', '.join(missing_fields)}")
+    focused_tests = record.get("focused_tests")
+    if not isinstance(focused_tests, list) or not focused_tests:
+        issues.append(f"{label}: focused_tests must be non-empty")
+    for field in COMPATIBILITY_FACADE_COMMON_FIELDS - {"focused_tests"}:
+        if not str(record.get(field, "")).strip():
+            issues.append(f"{label}: {field} must be non-empty")
+    return issues
+
+
+def _check_compatibility_facades(root: Path, manifest: dict[str, Any]) -> list[Check]:
+    raw_records = manifest.get("records", [])
+    issues: list[str] = []
+    if not isinstance(raw_records, list):
+        raw_records = []
+        issues.append("records must be a list")
+    records = [record for record in raw_records if isinstance(record, dict)]
+    invalid_record_indexes = [
+        str(index) for index, record in enumerate(raw_records) if not isinstance(record, dict)
+    ]
+    if invalid_record_indexes:
+        issues.append(
+            "records must contain objects at indexes " + ", ".join(invalid_record_indexes)
+        )
+    record_paths: set[str] = set()
+    path_records: dict[str, list[str]] = {}
+    tracked_paths = _tracked_compatibility_facade_paths(root)
+
+    for index, record in enumerate(records):
+        label = str(record.get("id", f"record[{index}]"))
+        paths, path_issues = _compatibility_facade_record_paths(record, label)
+        issues.extend(path_issues)
+        issues.extend(_compatibility_facade_common_issues(record, label))
+        for path in paths:
+            record_paths.add(path)
+            path_records.setdefault(path, []).append(label)
+            if not (root / path).is_file():
+                issues.append(f"{label}: {path}: file missing")
+
+    duplicate_paths = sorted(path for path, labels in path_records.items() if len(labels) > 1)
+    if duplicate_paths:
+        issues.append("multiply-registered=" + ", ".join(duplicate_paths))
     missing = sorted(tracked_paths - record_paths)
     stale = sorted(record_paths - tracked_paths)
     if missing:
         issues.append("unregistered=" + ", ".join(missing))
     if stale:
         issues.append("stale=" + ", ".join(stale))
-
-    for record in records:
-        path = str(record.get("path", ""))
-        missing_fields = sorted(COMPATIBILITY_FACADE_FIELDS - set(record))
-        if missing_fields:
-            issues.append(f"{path}: missing fields {', '.join(missing_fields)}")
-        if path and not (root / path).is_file():
-            issues.append(f"{path}: file missing")
-        focused_tests = record.get("focused_tests")
-        if not isinstance(focused_tests, list) or not focused_tests:
-            issues.append(f"{path}: focused_tests must be non-empty")
-        for field in (
-            "owner_repo",
-            "kind",
-            "replacement",
-            "current_consumers",
-            "removal_condition",
-            "rollback_path",
-            "consumer_audit",
-            "status",
-        ):
-            if not str(record.get(field, "")).strip():
-                issues.append(f"{path}: {field} must be non-empty")
 
     if issues:
         return [

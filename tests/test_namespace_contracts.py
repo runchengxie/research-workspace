@@ -36,7 +36,7 @@ def test_manifest_records_removed_compatibility_surface() -> None:
     assert manifest["compatibility"]["owner"] == "strategy-pipeline"
     assert manifest["compatibility"]["removed_in"] == "workspace-2.0"
     assert manifest["compatibility"]["status"] == "removed"
-    assert manifest["packages"]["alpha-research"]["version"] == "0.3.0"
-    assert manifest["packages"]["portfolio-backtester"]["version"] == "0.3.0"
-    assert manifest["packages"]["strategy-pipeline"]["version"] == "2.0.0"
+    assert manifest["packages"]["alpha-research"]["version"] == "0.4.0"
+    assert manifest["packages"]["portfolio-backtester"]["version"] == "0.4.0"
+    assert manifest["packages"]["strategy-pipeline"]["version"] == "2.1.0"
     assert manifest["packages"]["strategy-pipeline"]["compatibility_package_allowed"] is False

@@ -17,6 +17,7 @@ DEFAULT_REPOS = [
     "market-data-platform",
     "alpha-research",
     "portfolio-backtester",
+    "research-apps",
     "strategy-pipeline",
     "quant-execution-engine",
 ]
@@ -32,6 +33,7 @@ SUBMODULE_DIRS = {
     "market-data-platform",
     "portfolio-backtester",
     "quant-execution-engine",
+    "research-apps",
 }
 EXCLUDED_PARTS = {
     ".git",

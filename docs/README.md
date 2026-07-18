@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-07-16
+> last_verified: 2026-07-19
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -39,12 +39,12 @@
 
 ## 当前事实
 
-- 活跃链路包含五个 Git 子模块
+- 活跃链路包含六个 Git 子模块
 - `src/research_contracts` 是顶层普通目录
 - A 股 current contract 是 `metadata/current_assets/a_share_current.json`
 - A 股日频基线覆盖 2015-01-05 至 2026-07-16，PIT 财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current contract，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
-- 顶层 GitHub Actions workflow 当前停用
-- 六个仓库使用共享本地 pre-push 门禁，远端只维护 `main`
+- 顶层和子模块 GitHub Actions workflow 当前停用，`research-apps` 的仓库 Actions 权限也禁用
+- 七个仓库使用共享本地 pre-push 门禁，远端只维护 `main`

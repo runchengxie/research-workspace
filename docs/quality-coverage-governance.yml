@@ -20,13 +20,15 @@
           "B905",
           "C90"
         ],
-        "current_hard_gate": "uv run --extra dev ruff check .",
+        "current_hard_gate": "uv run --locked --extra dev ruff check .",
         "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
       },
       "ty": {
-        "current_hard_gate": "uv run --extra dev ty check",
+        "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
-          "src/alpha_research/backends"
+          "src/alpha_research/backends",
+          "src/alpha_research/daily_watch20_minute_features.py",
+          "src/alpha_research/daily_watch20_policy.py"
         ],
         "promotion_criteria": "expand after package interfaces are extracted and transitional namespace imports are narrower"
       },
@@ -170,7 +172,7 @@
           "RET",
           "RUF100"
         ],
-        "current_hard_gate": "uv run python -m ruff check .",
+        "current_hard_gate": "uv run --locked --extra dev ruff check .",
         "promotion_criteria": "whole-repo Ruff hard gate stays green after HK provider production modules are archived"
       },
       "basedpyright": {
@@ -181,7 +183,7 @@
         "promotion_criteria": "run before release; raise type coverage after provider adapter contract tests are refreshed"
       },
       "ty": {
-        "current_hard_gate": "uv run --extra dev ty check",
+        "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
           "src/market_data_platform/artifacts.py",
           "src/market_data_platform/contract.py",
@@ -192,6 +194,9 @@
           "src/market_data_platform/paths.py",
           "src/market_data_platform/published_assets.py",
           "src/market_data_platform/published_frames.py",
+          "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
+          "src/market_data_platform/research_views/daily_watch20_minute_source.py",
+          "src/market_data_platform/research_views/daily_watch20_policy.py",
           "src/market_data_platform/registry.py"
         ],
         "promotion_criteria": "expand after provider adapter contracts and artifact roots stay type-clean"
@@ -211,11 +216,11 @@
           "B905",
           "C90"
         ],
-        "current_hard_gate": "uv run --extra dev ruff check .",
+        "current_hard_gate": "uv run --locked --extra dev ruff check .",
         "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
       },
       "ty": {
-        "current_hard_gate": "uv run --extra dev ty check",
+        "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
           "src/portfolio_backtester/api.py",
           "src/portfolio_backtester/backtest_spec.py",
@@ -241,6 +246,34 @@
       }
     },
     {
+      "repo": "research-apps",
+      "ruff": {
+        "staged_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
+          "C90"
+        ],
+        "current_hard_gate": "uv run --locked --extra dev python scripts/dev/check.py",
+        "promotion_criteria": "the complete owner package, tests, wheel imports, resources, and complexity ratchet remain green"
+      },
+      "ty": {
+        "current_hard_gate": "uv run --locked --extra dev ty check",
+        "include_targets": [
+          "src",
+          "scripts",
+          "tests"
+        ],
+        "promotion_criteria": "keep the full standalone owner surface under the strict warning-as-error gate"
+      }
+    },
+    {
       "repo": "quant-execution-engine",
       "ruff": {
         "staged_select": [
@@ -250,7 +283,7 @@
           "UP",
           "B"
         ],
-        "current_hard_gate": "uv run python -m ruff check .",
+        "current_hard_gate": "uv run --locked --group dev ruff check .",
         "promotion_criteria": "existing hard gate stays green"
       },
       "basedpyright": {
@@ -273,7 +306,7 @@
         "promotion_criteria": "run before release; execution-critical modules pass stricter checks before optional broker adapters are tightened"
       },
       "ty": {
-        "current_hard_gate": "uv run --group dev ty check",
+        "current_hard_gate": "uv run --locked --group dev ty check",
         "include_targets": [
           "src/quant_execution_engine/domain.py",
           "src/quant_execution_engine/_serialization_common.py",

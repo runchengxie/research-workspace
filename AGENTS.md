@@ -6,7 +6,7 @@
 
 顶层仓库负责以下内容：
 
-- 锁定五个子模块的提交版本
+- 锁定六个子模块的提交版本
 - 维护跨仓库文件约定和 `src/research_contracts`
 - 维护工作区 doctor、质量检查和子仓库委托脚本
 - 记录版本组合、发布检查和归档入口
@@ -21,6 +21,7 @@
 | `market-data-platform` | 数据资产生产、检查、发布和读取 |
 | `alpha-research` | 特征、模型、研究评估和信号产物 |
 | `portfolio-backtester` | 组合构造、回测、成本、容量、暴露和报告 |
+| `research-apps` | 组合 owner API，运行 F-lite、slow-volume 和 DeepSeek V4 研究应用 |
 | `strategy-pipeline` | 研究编排、CLI、运行目录和 `targets.json` 导出 |
 | `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
@@ -43,7 +44,8 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `run_submodule_checks.py` 只执行 `scripts/submodule_checks.json` 中登记的命令。不要在顶层复制子仓库内部检查逻辑。
 
-当前没有启用顶层 GitHub Actions workflow。文档中不得把 `.github/workflows/superproject.yml.disabled` 描述为正在运行的 CI。
+当前顶层和六个子模块的 GitHub Actions 仓库权限均禁用。`portfolio-backtester` 虽保留
+workflow 定义，也不会触发远端检查。文档中不得把停用模板或本地命令描述为正在运行的远端 CI。
 
 ## 文件约定
 

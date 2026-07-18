@@ -4,8 +4,8 @@
 
 ## 环境要求
 
-准备 Git、uv 和 Python 3.12。Python 3.12 是六个仓库当前共同支持的版本。顶层仓库与
-`market-data-platform` 最低支持 3.11，三个研究仓库最低支持 3.12，
+准备 Git、uv 和 Python 3.12。Python 3.12 是七个仓库当前共同支持的版本。顶层仓库与
+`market-data-platform` 最低支持 3.11，四个研究仓库最低支持 3.12，
 `quant-execution-engine` 支持 3.10 至 3.12。
 
 ```bash
@@ -34,7 +34,7 @@ git submodule update --init --recursive
 
 ## 安装本地 Git 门禁
 
-新 clone 需要显式安装共享 hook。安装器只写入顶层和五个子仓库各自的本地 `core.hooksPath`：
+新 clone 需要显式安装共享 hook。安装器只写入顶层和六个子仓库各自的本地 `core.hooksPath`：
 
 ```bash
 python scripts/install_pre_push_hooks.py --dry-run
@@ -58,6 +58,9 @@ cd ../alpha-research
 uv sync --extra dev
 
 cd ../portfolio-backtester
+uv sync --extra dev
+
+cd ../research-apps
 uv sync --extra dev
 
 cd ../strategy-pipeline
@@ -124,8 +127,13 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 配置见 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。
 
-`full` 运行各仓库当前的 Ruff、格式、`ty` 和测试检查。`market-data-platform` 会分批启动 pytest 进程，避免完整测试在单个进程中持续累积内存。`release_typecheck` 运行 BasedPyright 诊断。
+`full` 先验证 lockfile，再运行各仓库当前登记的质量检查。`market-data-platform` 会分批
+启动 pytest 进程，避免完整测试在单个进程中持续累积内存。`research-apps` 使用自己的
+`scripts/dev/check.py` 权威门禁。`release_typecheck` 运行各仓库登记的发布类型检查。
 
 ## 自动化状态
 
-当前没有启用顶层 GitHub Actions workflow。`.github/workflows/superproject.yml.disabled` 只保存停用模板。新机器验收应以本页命令的实际输出为准。
+当前顶层和六个子模块的 GitHub Actions 仓库权限均禁用。顶层
+`.github/workflows/superproject.yml.disabled`、`research-apps` 的 CI 文件和 Strategy
+兼容检查都只保存停用模板。`portfolio-backtester` 虽保留 `ci.yml`，权限关闭时也不会
+触发远端检查。新机器验收应以本地 pre-push 和本页命令的实际输出为准。

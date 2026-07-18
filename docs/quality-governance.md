@@ -10,6 +10,7 @@
 | `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | BasedPyright、依赖审计 | 数据权限、数据质量和 current contract 发布 |
 | `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、研究证据定点测试 | signal artifact 和候选晋升证据 |
 | `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、回测定点测试 | 成本、换手、容量和报告口径 |
+| `research-apps` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
 | `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | BasedPyright、依赖审计 | 长窗口研究、编排和目标文件导出 |
 | `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | BasedPyright、集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
 
@@ -44,14 +45,19 @@ BasedPyright 的目标列表。
 - `strategy-pipeline` 不重新承载 `alpha_research` 或 `portfolio_backtester` 源码
 - 第三方框架对象不跨仓库文件契约
 
-顶层委托配置是 `scripts/submodule_checks.json`。子仓库的维护性阈值和排除项留在各自仓库。
+顶层委托配置是 `scripts/submodule_checks.json`。所有委托 `lint` 和 `full` 都先验证
+lockfile，清单里的直接 `uv run` 使用 `--locked`。子仓库的维护性阈值和排除项留在
+各自仓库。
 
 维护性 baseline 是已知债务上限。删除大文件、长函数或复杂热点后，应在同一提交中下调
 baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个数值来吸收新增债务。
 
 ## 自动化状态
 
-`.github/workflows/superproject.yml.disabled` 是停用模板。当前检查需要在本地或人工触发环境中运行。恢复远端自动化时，应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。
+`.github/workflows/superproject.yml.disabled` 是停用模板，顶层与六个子仓库的 Actions
+权限均禁用。`portfolio-backtester` 保留一份 `ci.yml` 定义，但当前不会运行。其余仓库只
+保留停用模板或没有 workflow。当前检查以本地 pre-push 为权威入口。恢复远端自动化时，
+应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。
 
 ## 依赖与安全
 

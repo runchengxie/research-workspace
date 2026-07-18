@@ -4,26 +4,28 @@
       "path": "market-data-platform",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "marketdata", "--help"]
+          ["uv", "run", "--locked", "--extra", "dev", "marketdata", "--help"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."],
-          ["uv", "run", "--extra", "dev", "python", "scripts/dev/quality_debt.py", "--skip-ruff", "--complexity", "--check-baseline", "--check-ratchet", "--skip-basedpyright-ratchet"],
-          ["uv", "run", "--extra", "dev", "python", "scripts/dev/maintainability_metrics.py", "--check-baseline"],
-          ["uv", "run", "--extra", "dev", "python", "scripts/dev/compatibility_governance.py", "--check"],
-          ["uv", "run", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/quality_debt.py", "--skip-ruff", "--complexity", "--check-baseline", "--check-ratchet", "--skip-basedpyright-ratchet"],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/maintainability_metrics.py", "--check-baseline"],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/compatibility_governance.py", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
         ],
         "test": [
-          ["uv", "run", "--extra", "dev", "python", "scripts/dev/run_pytest_isolated.py", "--", "-q"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/run_pytest_isolated.py", "--", "-q"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "ty", "check"]
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
           [
             "uv",
             "run",
+            "--locked",
             "--extra",
             "dev",
             "basedpyright",
@@ -31,96 +33,133 @@
             "basedpyrightconfig.core-basic.json"
           ]
         ],
-        "full": ["@smoke", "@lint", "@type", "@test"]
+        "full": ["@lint", "@smoke", "@type", "@test"]
       }
     },
     "alpha-research": {
       "path": "alpha-research",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "python", "-c", "import alpha_research.cpcv; import alpha_research.signal_artifact"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import alpha_research.cpcv; import alpha_research.signal_artifact"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."],
+          ["scripts/dev/run_tests.sh", "maintainability"]
         ],
         "test": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pytest"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "ty", "check"]
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--extra", "dev", "basedpyright"]
+          ["uv", "run", "--locked", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@type", "@test"]
+        "full": ["@lint", "@smoke", "@type", "@test"]
       }
     },
     "portfolio-backtester": {
       "path": "portfolio-backtester",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "python", "-c", "import portfolio_backtester.engine; import portfolio_backtester.metrics"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import portfolio_backtester.engine; import portfolio_backtester.metrics"]
         ],
         "lint": [
-          ["uv", "run", "--extra", "dev", "ruff", "check", "."],
-          ["uv", "run", "--extra", "dev", "ruff", "format", "--check", "."]
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."],
+          ["scripts/dev/run_tests.sh", "maintainability"]
         ],
         "test": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pytest"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "ty", "check"]
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--extra", "dev", "basedpyright"]
+          ["uv", "run", "--locked", "--extra", "dev", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@type", "@test"]
+        "full": ["@lint", "@smoke", "@type", "@test"]
       }
     },
     "strategy-pipeline": {
       "path": "strategy-pipeline",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--extra", "dev", "strategy", "--help"]
+          ["uv", "run", "--locked", "--extra", "dev", "strategy", "--help"]
         ],
         "lint": [
+          ["uv", "lock", "--check"],
           ["scripts/dev/run_tests.sh", "lint"],
           ["scripts/dev/run_tests.sh", "format-all"],
           ["scripts/dev/run_tests.sh", "maintainability"]
         ],
         "test": [
-          ["uv", "run", "--extra", "dev", "python", "-m", "pytest"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest"]
         ],
         "type": [
-          ["uv", "run", "--extra", "dev", "ty", "check"]
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
           ["scripts/dev/run_tests.sh", "typecheck-release"]
         ],
-        "full": ["@smoke", "@lint", "@type", "@test"]
+        "full": [
+          ["uv", "lock", "--check"],
+          ["scripts/dev/run_tests.sh", "full"]
+        ]
       }
     },
     "quant-execution-engine": {
       "path": "quant-execution-engine",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--group", "dev", "--extra", "cli", "qexec", "--help"]
+          ["uv", "run", "--locked", "--group", "dev", "--extra", "cli", "qexec", "--help"]
         ],
         "lint": [
-          ["uv", "run", "--group", "dev", "ruff", "check", "."],
-          ["uv", "run", "--group", "dev", "ruff", "format", "--check", "."]
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--group", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--group", "dev", "ruff", "format", "--check", "."],
+          ["uv", "run", "--locked", "--group", "dev", "python", "scripts/dev/maintainability_metrics.py", "--ratchet"]
         ],
         "test": [
-          ["uv", "run", "--group", "dev", "python", "-m", "pytest"]
+          ["uv", "run", "--locked", "--group", "dev", "python", "-m", "pytest"],
+          ["uv", "run", "--locked", "--group", "dev", "python", "-m", "pytest", "-q", "-o", "addopts=", "-m", "integration or e2e or slow"]
         ],
         "type": [
-          ["uv", "run", "--group", "dev", "ty", "check"]
+          ["uv", "run", "--locked", "--group", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--group", "dev", "python", "-m", "basedpyright"]
+          ["uv", "run", "--locked", "--group", "dev", "python", "-m", "basedpyright"]
         ],
-        "full": ["@smoke", "@lint", "@type", "@test"]
+        "full": ["@lint", "@smoke", "@type", "@test"]
+      }
+    },
+    "research-apps": {
+      "path": "research-apps",
+      "profiles": {
+        "smoke": [
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import research_apps"]
+        ],
+        "lint": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest"]
+        ],
+        "type": [
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
+        ],
+        "release_typecheck": [
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
+        ],
+        "full": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/check.py"]
+        ]
       }
     }
   }

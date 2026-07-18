@@ -1,8 +1,8 @@
 schema_version: research_app_ownership_ledger.v2
 decision: docs/adr/0003-research-application-ownership.md
 amendment: docs/adr/0004-standalone-research-apps-repository.md
-status: implementation_draft_validation_pending
-repository_layout_decided: false
+status: implementation_validated
+repository_layout_decided: true
 standalone_research_apps_repository_created: true
 
 invariants:
@@ -23,8 +23,8 @@ standalone_extraction_stack:
   market_data_platform:
     repository: runchengxie/market-data-platform
     number: 11
-    branch: refactor/minute-source-boundary
-    status: draft
+    branch: main
+    status: merged
     release: 0.2.0
     owns:
       - minute_source_catalog
@@ -35,8 +35,8 @@ standalone_extraction_stack:
   alpha_research:
     repository: runchengxie/alpha-research
     number: 12
-    branch: refactor/minute-alpha-boundary
-    status: draft
+    branch: main
+    status: merged
     release: 0.4.0
     owns:
       - minute_transform_contract
@@ -45,8 +45,8 @@ standalone_extraction_stack:
   portfolio_backtester:
     repository: runchengxie/portfolio-backtester
     number: 14
-    branch: refactor/staggered-cohort-owner
-    status: draft
+    branch: main
+    status: merged
     release: 0.4.0
     owns:
       - staggered_cash_carry_execution
@@ -57,8 +57,8 @@ standalone_extraction_stack:
   research_apps:
     repository: runchengxie/research-apps
     number: 1
-    branch: feat/standalone-research-apps
-    status: draft
+    branch: main
+    status: merged
     release: 0.1.0
     owns:
       - research_policy_composition
@@ -70,8 +70,8 @@ standalone_extraction_stack:
   strategy_pipeline:
     repository: runchengxie/strategy-pipeline
     number: 27
-    branch: refactor/extract-research-apps
-    status: draft
+    branch: main
+    status: merged
     release: 2.1.0
     retains:
       - strategy_cli
@@ -92,10 +92,10 @@ highlighted_remaining_work:
 
 compatibility_window:
   strategy_pipeline_source_fallback:
-    status: active
+    status: removed
     packaged_in_strategy_pipeline_wheel: false
-    lookup_order: standalone_first_local_fallback_second
-    exit_condition: copy_or_retire_remaining_historical_public_modules_then_delete_local_tree
+    lookup_order: standalone_git_pinned_dependency_only
+    exit_condition: completed_on_2026_07_19_after_all_public_modules_were_migrated_or_owner_delegated
 
 validation:
   foundational_combined_tests:
@@ -103,20 +103,38 @@ validation:
     passed: 47
     strategy_pipeline_validated_head: 74763e020445efdf3f4b272aabe2bcf
   latest_combined_validation:
-    status: pending
+    status: passed
+    date: 2026-07-19
+    owner_results:
+      market_data_platform: 621_passed_1_skipped
+      alpha_research: 246_passed
+      portfolio_backtester: 310_passed
+      research_apps: 98_passed
+      strategy_pipeline: 1086_passed_1_skipped
+      quant_execution_engine: 269_passed_3_skipped
+    package_results:
+      research_apps: sdist_wheel_54_modules_4_resources_passed
+      strategy_pipeline: isolated_install_206_modules_5_git_pins_passed
+    workspace_results:
+      superproject_tests: 176_passed
+      delegated_full_profile: 36_commands_passed
+      hard_quality_profile: passed
+      doctor: errors_0_warnings_3_registered
   repository_workflows:
-    research_apps: action_required_no_job
-    market_data_platform: no_pr_run
-    alpha_research: no_pr_run
-    portfolio_backtester: no_pr_run
+    research_apps: actions_disabled
+    market_data_platform: actions_disabled
+    alpha_research: actions_disabled
+    portfolio_backtester: actions_disabled
     strategy_pipeline: actions_disabled
-  required_before_ready:
+    quant_execution_engine: actions_disabled
+    research_workspace: actions_disabled
+  completed_before_ready:
     - refresh_all_lockfiles
     - install_all_owner_branches_and_research_apps_together
     - run_latest_combined_pytest
     - run_latest_ruff_format_and_type_checks
     - run_fresh_wheel_resource_smoke
-  required_before_workspace_pin:
+  completed_before_workspace_pin:
     - merge_owner_pull_requests_in_order
     - merge_research_apps_pull_request
     - merge_strategy_pipeline_pull_request
@@ -126,5 +144,5 @@ validation:
 
 rollback:
   - retain_native_owner_packages
-  - keep_legacy_strategy_pipeline_facades_during_documented_window
-  - do_not_update_workspace_pins_until_combined_validation_passes
+  - restore_an_owner_delegating_public_facade_from_the_previous_release_tag_only_if_needed
+  - never_restore_the_embedded_strategy_pipeline_research_apps_source_tree

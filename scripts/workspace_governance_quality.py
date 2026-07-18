@@ -37,6 +37,7 @@ EXPECTED_QUALITY_REPOS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
+    "research-apps",
     "strategy-pipeline",
     "quant-execution-engine",
 }

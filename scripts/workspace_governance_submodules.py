@@ -14,6 +14,7 @@ REQUIRED_SUBMODULE_GOVERNANCE_GATES = {
         "command": [
             "uv",
             "run",
+            "--locked",
             "--extra",
             "dev",
             "python",
@@ -25,6 +26,7 @@ REQUIRED_SUBMODULE_GOVERNANCE_GATES = {
     "strategy-pipeline": {
         "profile": "lint",
         "command": ["scripts/dev/run_tests.sh", "maintainability"],
+        "canonical_full_command": ["scripts/dev/run_tests.sh", "full"],
         "reason": "strategy-research maintainability ratchet",
     },
 }
@@ -87,7 +89,8 @@ def check_submodule_governance_gates(root: Path) -> list[Check]:
         if command not in commands:
             issues.append(f"{submodule}:{profile} missing {reason}")
         full_commands = _submodule_profile_commands(manifest, submodule=submodule, profile="full")
-        if "@lint" not in full_commands:
+        canonical_full = gate.get("canonical_full_command")
+        if "@lint" not in full_commands and canonical_full not in full_commands:
             issues.append(f"{submodule}:full does not include @lint")
 
     if issues:

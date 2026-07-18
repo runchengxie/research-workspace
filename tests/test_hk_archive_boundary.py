@@ -9,6 +9,7 @@ EXPECTED_ACTIVE_SUBMODULES = {
     "market-data-platform",
     "alpha-research",
     "portfolio-backtester",
+    "research-apps",
     "strategy-pipeline",
     "quant-execution-engine",
 }
