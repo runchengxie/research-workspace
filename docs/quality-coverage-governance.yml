@@ -150,6 +150,11 @@
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
+          "src/market_data_platform/_tushare_minute_campaign_quota_args.py",
+          "src/market_data_platform/_tushare_minute_quota_config.py",
+          "src/market_data_platform/_tushare_minute_quota_db.py",
+          "src/market_data_platform/_tushare_minute_quota_holds.py",
+          "src/market_data_platform/_tushare_minute_quota_requests.py",
           "src/market_data_platform/artifacts.py",
           "src/market_data_platform/cli.py",
           "src/market_data_platform/cli_tushare_core.py",
@@ -167,7 +172,8 @@
           "src/market_data_platform/research_views/daily_watch20_minute_source.py",
           "src/market_data_platform/research_views/daily_watch20_policy.py",
           "src/market_data_platform/registry.py",
-          "src/market_data_platform/symbols.py"
+          "src/market_data_platform/symbols.py",
+          "src/market_data_platform/tushare_minute_quota.py"
         ],
         "promotion_criteria": "expand after provider adapter contracts and artifact roots stay type-clean"
       }

@@ -7,7 +7,7 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "445debd1b8285a737b26c8f6c28f8fac5128801f",
+      "commit": "d9af0976eb5a6579db3663741787b0a1aa0c6d9d",
       "legacy_source_tree_allowed": false,
       "pr": 6,
       "version": "0.4.0"
@@ -21,7 +21,7 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "b3d1b206006f63f71678f963448b1a431fd340f1",
+      "commit": "b8a45cc72bd3078770eb30e5a6ee45b90b587d7e",
       "compatibility_package_allowed": false,
       "pr": 20,
       "version": "2.1.0"
@@ -42,6 +42,6 @@
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
     "workspace_source_artifact_integration": "passed-2026-07-14",
-    "final_main_local_validation": "passed-2026-07-19"
+    "final_main_local_validation": "passed-2026-07-20"
   }
 }
