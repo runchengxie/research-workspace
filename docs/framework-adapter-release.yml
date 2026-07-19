@@ -1,7 +1,8 @@
 {
   "schema_version": "framework_adapter_release.v1",
   "release_id": "framework-adapters-2026-07",
-  "status": "blocked_on_downstream_merge",
+  "status": "superseded",
+  "superseded_reason": "historical stacked candidates did not form a verified owner-native release on the current main branches",
   "evidence_status": "pending",
   "pin_policy": "after_downstream_merge_only",
   "integration_evidence": {

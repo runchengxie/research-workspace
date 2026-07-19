@@ -6,8 +6,8 @@
 
 ## 背景
 
-`research_apps` 已从“可抽取的内嵌 Python 包”进入独立仓库。工作区继续采用带锁定
-gitlink 的多仓组合；未来是否增加公开镜像不影响当前 owner 边界。
+`research_apps` 已从可抽取的内嵌 Python 包进入独立仓库。工作区继续采用带锁定
+gitlink 的多仓组合。未来是否增加公开镜像不影响当前 owner 边界。
 
 ## 决策
 
@@ -15,9 +15,9 @@ gitlink 的多仓组合；未来是否增加公开镜像不影响当前 owner �
 2. `market_data_platform` 提供分钟源目录、overlay 完整性、缓存分区指纹、输入可用性和 universe policy。
 3. `alpha_research` 提供分钟 transform/evidence 和 alpha policy。
 4. `portfolio_backtester` 提供 staggered cash/carry 状态机、受阻交易会计、终态口径和 public execution summary。
-5. `research_apps` 组合上述 owner API，拥有 F-lite、slow-volume 与 DeepSeek V4 研究 runner；runner 返回普通 frames/report，不进行最终发布。
+5. `research_apps` 组合上述 owner API，拥有 F-lite、slow-volume 与 DeepSeek V4 研究 runner。runner 返回普通 frames/report，不进行最终发布。
 6. `strategy_pipeline` 保留 provider 调用、操作员控制、原子发布、receipt、release gate 与 target handoff。
-7. `strategy_pipeline` wheel 和源码 checkout 均不再包含内嵌 `research_apps`；历史
+7. `strategy_pipeline` wheel 和源码 checkout 均不再包含内嵌 `research_apps`。历史
    `strategy_pipeline.*` public module 仅保留直接委派 owner API 的薄兼容 facade，并由
    `docs/compatibility-facades.yml` 单独管理退役条件。
 
@@ -33,15 +33,15 @@ gitlink 的多仓组合；未来是否增加公开镜像不影响当前 owner �
 
 ## 验证门禁
 
-所有 PR 在以下条件完成前保持 draft：
+实施期间需要先满足以下条件，再更新工作区固定版本：
 
-- owner 版本与 lockfile 一致；
-- 四个 owner/应用分支在同一环境安装成功；
-- 最新 pytest、Ruff、format、type check 通过；
-- fresh wheel 包含 content-addressed campaign specs；
+- owner 版本与 lockfile 一致。
+- 四个 owner/应用分支在同一环境安装成功。
+- 最新 pytest、Ruff、格式和类型检查通过
+- 全新构建的 wheel 包含按内容寻址的 campaign specs
 - workspace smoke/full profile 通过。
 
-当前 workflow 缺失、禁用或 `action_required` 均不得解释为测试通过。软件已经有足够多的民间传说，不再增加 CI 神话。
+远端 workflow 缺失、禁用或处于 `action_required` 状态时，应记录为未运行。权威结论来自本地门禁的实际输出。
 
 ## 实施结果
 

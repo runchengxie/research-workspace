@@ -1,6 +1,6 @@
 # ADR-0003：研究应用归属与仓库布局解耦
 
-- 状态：proposed
+- 状态：superseded by ADR-0004
 - 日期：2026-07-18
 - 决策范围：研究侧四个 owner 包、`research_apps` 与 `strategy-pipeline`
 
@@ -10,6 +10,8 @@
 
 `strategy-pipeline` 已同时承载数据快照读取、alpha 模型生命周期、组合回放、策略实验、外部模型运行与发布控制。该混合边界使 owner port 只停留在调用外形，代码归属和依赖方向仍不稳定。
 
+本页保存独立仓库建立前的决策背景。`research-apps` 已于 2026-07-19 成为独立子模块，当前做法见 [ADR-0004](0004-standalone-research-apps-repository.md)。
+
 ## 决策
 
 1. `market_data_platform.research_views` 拥有 PIT 数据视图、当前资产解析、候选池快照与来源 lineage。
@@ -18,7 +20,7 @@
 4. `research_apps` 拥有 DailyWatch20、hotsector 等策略专用合同、预注册实验、证据解释与决策组合。
 5. `strategy_pipeline` 仅保留 CLI、配置合成、运行目录、外部调用 runner、操作员控制、原子发布、release gate 与 `targets.json` 交接。
 6. 仓库布局延后决定。`research_apps` 先作为独立 Python 包存在于当前私有 distribution 中，不得反向 import `strategy_pipeline`，以后可原样抽取为公开或私有仓库。
-7. 旧 `strategy_pipeline.*` 路径在迁移窗口内只允许保留 identity-preserving facade；不得新增领域实现。
+7. 旧 `strategy_pipeline.*` 路径在迁移窗口内只允许保留 identity-preserving facade。不得新增领域实现。
 
 ## 不变量
 

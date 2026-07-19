@@ -105,6 +105,7 @@ GitHub Actions 权限均禁用，检查以本地 pre-push 为主。安装方法�
 - [跨仓库文件约定](docs/contracts.md)
 - [工作区维护](docs/workspace-maintenance.md)
 - [质量治理](docs/quality-governance.md)
+- [外部框架支持矩阵](docs/framework-support-matrix.md)
 - [版本矩阵](docs/version-matrix.md)
 - [发布检查清单](docs/release-checklist.md)
 - [文档总入口](docs/README.md)

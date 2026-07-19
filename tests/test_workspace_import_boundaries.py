@@ -26,6 +26,7 @@ def _submodules_initialized() -> bool:
             ROOT / "strategy-pipeline/src/strategy_pipeline/__init__.py",
             ROOT / "market-data-platform/src/market_data_platform/__init__.py",
             ROOT / "quant-execution-engine/src/quant_execution_engine/__init__.py",
+            ROOT / "research-apps/src/research_apps/__init__.py",
         )
     )
 
@@ -110,17 +111,28 @@ def test_owner_native_cross_imports_are_detected(tmp_path: Path) -> None:
     ]
 
 
-def test_single_file_contract_rule_blocks_optional_framework_import(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    ("statement", "framework"),
+    (
+        ("from qlib.data.dataset import DatasetH\n", "qlib"),
+        ("import backtrader\n", "backtrader"),
+    ),
+)
+def test_single_file_contract_rule_blocks_optional_framework_import(
+    tmp_path: Path,
+    statement: str,
+    framework: str,
+) -> None:
     contract = tmp_path / "owner" / "src" / "owner" / "contract.py"
     contract.parent.mkdir(parents=True)
-    contract.write_text("from qlib.data.dataset import DatasetH\n", encoding="utf-8")
+    contract.write_text(statement, encoding="utf-8")
     rules = (
         workspace_import_boundaries.BoundaryRule(
             identifier="contract-no-framework",
             description="test",
             repo="owner",
             source="src/owner/contract.py",
-            forbidden=("qlib",),
+            forbidden=(framework,),
             max_allowed=0,
         ),
     )
@@ -132,8 +144,8 @@ def test_single_file_contract_rule_blocks_optional_framework_import(tmp_path: Pa
         {
             "path": "owner/src/owner/contract.py",
             "line": 1,
-            "module": "qlib.data.dataset",
-            "matched": "qlib",
+            "module": "qlib.data.dataset" if framework == "qlib" else "backtrader",
+            "matched": framework,
         }
     ]
 

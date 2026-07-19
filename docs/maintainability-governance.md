@@ -11,7 +11,7 @@
 | 脚本生命周期和安全边界 | [script-lifecycle.yml](script-lifecycle.yml) |
 | 质量覆盖和排除项 | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
 | 大文件和重构路线图 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
-| 生成的维护债基线 | [evidence/maintainability/baseline-20260714.json](evidence/maintainability/baseline-20260714.json) |
+| 生成的维护债基线 | [evidence/maintainability/baseline-20260719.json](evidence/maintainability/baseline-20260719.json) |
 | 中国香港市场归档路由 | [archive/hk/README.md](archive/hk/README.md) |
 | 港股公开拆分边界 | [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | 港股私有 legacy archive 门禁 | [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
@@ -19,7 +19,7 @@
 ## 基线命令
 
 ```bash
-python scripts/maintainability_baseline.py --out docs/evidence/maintainability/baseline-20260714.json
+python scripts/maintainability_baseline.py --out docs/evidence/maintainability/baseline-20260719.json
 ```
 
 报告使用标准库 AST 解析，记录 Python LOC、港股相关文件数量、大文件、长函数、近似复杂度热点、大类热点、热点计数预算输入、质量配置和脚本清单。
@@ -30,5 +30,5 @@ python scripts/maintainability_baseline.py --out docs/evidence/maintainability/b
 - 新增或保留兼容 facade、wrapper、星号重导出时，需要登记 replacement、consumer audit、removal condition、rollback path 和 focused tests。
 - 新增非平凡脚本并用于发布或迁移流程前，需要补齐 lifecycle 元数据。
 - 新增大范围 Ruff、`ty` 或 BasedPyright 排除项，需要登记负责人、原因、复核节点和下一批纳入范围。
-- 大文件、大类、长函数和复杂度热点由路线图预算 ratchet 约束；计数下降时同步下调预算，不保留松动空间。
+- 大文件、大类、长函数和复杂度热点由路线图预算 ratchet 约束。计数下降时同步下调预算，不保留松动空间。
 - 删除 restore-sensitive 港股兼容代码需要后续变更，并附上负责仓库的证据。

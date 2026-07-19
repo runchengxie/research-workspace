@@ -23,7 +23,12 @@ EXPECTED_COMPONENTS = {
     "quant-execution-engine",
 }
 MERGE_STATES = {"draft", "open", "merged"}
-RELEASE_STATES = {"blocked_on_downstream_merge", "ready_to_validate", "verified"}
+RELEASE_STATES = {
+    "blocked_on_downstream_merge",
+    "ready_to_validate",
+    "superseded",
+    "verified",
+}
 EVIDENCE_STATES = {"pending", "accepted"}
 EVIDENCE_SCHEMA = "framework_adapter_integration_evidence.v1"
 EVIDENCE_SOURCE_SCHEMAS = {
@@ -93,6 +98,24 @@ def load_manifest(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _integration_evidence_metadata_issues(
+    evidence: object,
+    evidence_state: object,
+) -> list[str]:
+    if not isinstance(evidence, Mapping):
+        return ["integration_evidence must be an object"]
+    issues: list[str] = []
+    evidence_path = evidence.get("path")
+    if not isinstance(evidence_path, str) or not evidence_path:
+        issues.append("integration_evidence.path must be non-empty")
+    evidence_digest = evidence.get("sha256")
+    if evidence_digest is not None and not _is_sha256(evidence_digest):
+        issues.append("integration_evidence.sha256 must be null or a lowercase SHA-256")
+    if evidence_state == "accepted" and not _is_sha256(evidence_digest):
+        issues.append("accepted evidence requires integration_evidence.sha256")
+    return issues
+
+
 def _manifest_issues(payload: Mapping[str, Any]) -> list[str]:
     issues: list[str] = []
     if payload.get("schema_version") != SCHEMA:
@@ -102,23 +125,21 @@ def _manifest_issues(payload: Mapping[str, Any]) -> list[str]:
     release_state = payload.get("status")
     if release_state not in RELEASE_STATES:
         issues.append("release status is invalid")
+    if release_state == "superseded":
+        reason = payload.get("superseded_reason")
+        if not isinstance(reason, str) or not reason.strip():
+            issues.append("superseded release requires superseded_reason")
     evidence_state = payload.get("evidence_status")
     if evidence_state not in EVIDENCE_STATES:
         issues.append("evidence_status must be pending or accepted")
     if not isinstance(payload.get("release_id"), str) or not payload.get("release_id"):
         issues.append("release_id must be non-empty")
-    evidence = payload.get("integration_evidence")
-    if not isinstance(evidence, Mapping):
-        issues.append("integration_evidence must be an object")
-    else:
-        evidence_path = evidence.get("path")
-        if not isinstance(evidence_path, str) or not evidence_path:
-            issues.append("integration_evidence.path must be non-empty")
-        evidence_digest = evidence.get("sha256")
-        if evidence_digest is not None and not _is_sha256(evidence_digest):
-            issues.append("integration_evidence.sha256 must be null or a lowercase SHA-256")
-        if evidence_state == "accepted" and not _is_sha256(evidence_digest):
-            issues.append("accepted evidence requires integration_evidence.sha256")
+    issues.extend(
+        _integration_evidence_metadata_issues(
+            payload.get("integration_evidence"),
+            evidence_state,
+        )
+    )
     return issues
 
 
@@ -158,7 +179,12 @@ def _component_pin_issues(
     return issues
 
 
-def _check_component(root: Path, raw: object) -> ComponentCheck:
+def _check_component(
+    root: Path,
+    raw: object,
+    *,
+    enforce_pin_policy: bool = True,
+) -> ComponentCheck:
     if not isinstance(raw, Mapping):
         return ComponentCheck(None, None, ("every component must be an object",))
     repository = raw.get("repository")
@@ -167,7 +193,8 @@ def _check_component(root: Path, raw: object) -> ComponentCheck:
     typed_raw = cast(Mapping[str, Any], raw)
     issues = _component_metadata_issues(repository, typed_raw)
     pinned_commit = _gitlink_commit(root, repository)
-    issues.extend(_component_pin_issues(repository, typed_raw, pinned_commit))
+    if enforce_pin_policy:
+        issues.extend(_component_pin_issues(repository, typed_raw, pinned_commit))
     merged_commit = typed_raw.get("merged_commit")
     report = {
         "repository": repository,
@@ -201,6 +228,10 @@ def _release_state_issues(
     all_pinned: bool,
 ) -> list[str]:
     issues: list[str] = []
+    if release_state == "superseded":
+        if evidence_state != "pending":
+            issues.append("superseded release must keep evidence_status pending")
+        return issues
     if release_state == "blocked_on_downstream_merge" and all_merged:
         issues.append("release status is stale: all downstream components are merged")
     if release_state in {"ready_to_validate", "verified"} and not all_merged:
@@ -329,6 +360,7 @@ def _verified_surface_issues(root: Path, release_state: object) -> list[str]:
 
 def build_report(root: Path, payload: Mapping[str, Any]) -> dict[str, Any]:
     issues = _manifest_issues(payload)
+    release_state = payload.get("status")
 
     raw_components = payload.get("components")
     if not isinstance(raw_components, list):
@@ -337,7 +369,11 @@ def build_report(root: Path, payload: Mapping[str, Any]) -> dict[str, Any]:
     components: list[dict[str, Any]] = []
     seen: set[str] = set()
     for raw in raw_components:
-        checked = _check_component(root, raw)
+        checked = _check_component(
+            root,
+            raw,
+            enforce_pin_policy=release_state != "superseded",
+        )
         issues.extend(checked.issues)
         if checked.repository is None or checked.report is None:
             continue
@@ -353,7 +389,6 @@ def build_report(root: Path, payload: Mapping[str, Any]) -> dict[str, Any]:
     all_pinned = len(components) == len(EXPECTED_COMPONENTS) and all(
         item["pinned"] is True for item in components
     )
-    release_state = payload.get("status")
     evidence_state = payload.get("evidence_status")
     issues.extend(
         _release_state_issues(
@@ -370,6 +405,8 @@ def build_report(root: Path, payload: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "schema_version": "framework_adapter_release_gate.v1",
         "release_id": payload.get("release_id"),
+        "release_state": release_state,
+        "superseded_reason": payload.get("superseded_reason"),
         "status": "failed" if issues else ("blocked" if blocked else "passed"),
         "blocked_reason": "downstream PRs are not merged" if blocked else None,
         "issues": issues,

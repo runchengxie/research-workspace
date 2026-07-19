@@ -5,4 +5,6 @@
 | 编号 | 决策 | 状态 |
 | --- | --- | --- |
 | [ADR-0001](0001-framework-integration-boundaries.md) | Qlib、vn.py 与 LEAN 的集成边界 | accepted |
-- [ADR-0002：采用 owner-native Python 命名空间](0002-owner-native-python-namespaces.md)
+| [ADR-0002](0002-owner-native-python-namespaces.md) | 采用 owner-native Python 命名空间 | accepted |
+| [ADR-0003](0003-research-application-ownership.md) | 研究应用归属与仓库布局解耦 | superseded by ADR-0004 |
+| [ADR-0004](0004-standalone-research-apps-repository.md) | 独立 `research-apps` 仓库与收尾迁移栈 | accepted |

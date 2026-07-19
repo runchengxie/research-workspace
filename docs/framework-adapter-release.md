@@ -1,50 +1,39 @@
 # 外部框架适配器候选发布
 
-> status: reference
+> status: superseded
 > owner: workspace
-> last_verified: 2026-07-16
+> last_verified: 2026-07-19
 > source_of_truth: `framework-adapter-release.yml`
+> current_status: [外部框架支持矩阵](framework-support-matrix.md)
 
-`framework-adapters-2026-07` 仍处于 `blocked_on_downstream_merge`。清单保存当时的候选提交和 PR 记录，superproject 没有锁定这些提交。当前各远端只保留 `main`，清单中的功能分支名称属于历史候选记录。
+`framework-adapters-2026-07` 是一批已经终止的历史候选。相关改动后来合入不同的堆叠式开发分支，但候选实现没有共同形成当前职责仓原生 `main` 上可验证的发布组合。当前子模块指针也已正常前进到后续提交。
 
-## 责任边界
+清单继续保存当时的分支、候选提交和合并前快照，用于解释历史。它不再承担当前功能声明，也不要求工作区回退到旧基线提交。
 
-- `market-data-platform` 继续负责数据资产，可通过只读适配器向 Qlib 提供已发布数据。
-- `alpha-research` 继续负责 PIT、防泄漏、CPCV、PBO、研究证据和晋级规则。Qlib 只作可选研究后端。
-- `portfolio-backtester` 继续负责确定性 A 股回放，并可与 Qlib 或 LEAN 参考场景比较。
-- `strategy-pipeline` 继续负责研究编排和确定性目标导出。
-- `quant-execution-engine` 继续负责策略规则、审批、幂等、持久日志和对账。vn.py 只作可选传输层。
+## 当前处理方式
 
-Qlib、vn.py 和 LEAN 的运行时对象不得进入跨仓库契约。原生路径继续保留，只有通过差分证据后才考虑启用适配器。
+- `scripts/framework_adapter_release_gate.py` 会校验历史清单结构，并把该批次报告为 `superseded`
+- 严格模式不再阻止正常的工作区检查
+- 当前能力以 [外部框架支持矩阵](framework-support-matrix.md) 为准
+- 新的适配器发布需要创建新的发布标识、当前职责仓原生候选提交和真实运行时证据
 
-## 恢复候选发布的顺序
+运行历史清单检查：
 
-1. 在各负责仓库重新建立并评审候选改动。
-2. 将真实合并提交写入清单的 `merged_commit`，并把 `merge_state` 更新为 `merged`。
-3. 所有下游改动合并后，再更新五个子模块 gitlink。
-4. 运行严格门禁：
+```bash
+python scripts/framework_adapter_release_gate.py --strict
+```
 
-   ```bash
-   python scripts/framework_adapter_release_gate.py --strict
-   ```
+## 重新启动适配器发布时
 
-5. 生成各负责仓库的差分证据，再构建集成 envelope：
+1. 在负责仓库的当前 `main` 上建立职责仓原生实现。
+2. 记录可选依赖、无框架导入测试和真实运行时测试。
+3. 生成框架中立的差分或恢复证据。
+4. 先把负责仓库提交推入 `main`，再更新工作区 gitlink。
+5. 运行原生路径和适配器路径的组合检查。
+6. 把证据文件、SHA-256 和回滚方法写入新的发布清单。
 
-   ```bash
-   python scripts/framework_adapter_evidence.py \
-     --release-manifest docs/framework-adapter-release.yml \
-     --alpha <backend-comparison-replay-receipt.json> \
-     --backtest <backtest-differential.json> \
-     --execution <execution-recovery-matrix.json> \
-     --output <integration-evidence.json>
-   ```
+旧批次没有生成 `docs/evidence/framework-adapters/framework-adapters-2026-07.json`。测试中的合成 receipt 只验证 schema 和 gate 行为，不构成 Qlib、LEAN 或 vn.py 的运行时证据。
 
-6. 将 envelope 路径和 SHA-256 写回清单，再次运行严格门禁。
-7. 原生路径和适配器路径都通过后，将证据状态更新为 `accepted`，发布状态更新为 `verified`。
-8. 在 `version-matrix.md` 记录最终合并、锁定和验证的版本组合。
+## 回退原则
 
-普通门禁在阻塞状态下只报告现状。严格模式会持续失败，直到下游合并、gitlink 和证据全部完成。
-
-## 回退
-
-合并前可以关闭候选 PR，并在新的候选批次中重新登记。合并后若验证失败，应恢复最近一次已验证的子模块组合并保留失败证据。执行日志、幂等键和既有产物 schema 不得静默改写。
+适配器验证失败时，继续使用最近一次已验证的原生组合并保留失败证据。既有产物 schema、执行日志和幂等键不得静默改写。

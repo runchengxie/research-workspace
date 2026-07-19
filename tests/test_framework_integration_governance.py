@@ -27,6 +27,7 @@ def test_framework_integration_ledger_has_owned_reversible_workstreams() -> None
         "backtest-differential",
         "strategy-pipeline-thinning",
         "vnpy-execution-transport",
+        "backtrader-backtest-evaluation",
     }
     for item in workstreams:
         assert item["owner"]
@@ -42,5 +43,11 @@ def test_framework_policy_keeps_framework_types_out_of_contracts() -> None:
 
     assert policy["native_default_until_parity"] is True
     assert policy["optional_framework_dependencies"] == ["qlib", "vnpy"]
-    assert policy["forbidden_contract_types"] == ["qlib.*", "vnpy.*", "QuantConnect.*"]
+    assert policy["planned_optional_framework_dependencies"] == ["backtrader"]
+    assert policy["forbidden_contract_types"] == [
+        "qlib.*",
+        "vnpy.*",
+        "QuantConnect.*",
+        "backtrader.*",
+    ]
     assert policy["submodule_pin_after_downstream_merge"] is True

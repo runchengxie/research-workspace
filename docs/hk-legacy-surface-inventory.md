@@ -6,7 +6,7 @@
 > source_of_truth: no
 > superseded_by: archive/hk/README.md
 
-本页保留给旧链接。当前权威入口是 [中国香港市场归档](archive/hk/README.md)；
+本页保留给旧链接。当前权威入口是 [中国香港市场归档](archive/hk/README.md)。
 repo-local surface、public safety、consumer audit、replacement path 和 removal condition
 由 [hk-public-split-manifest.yml](hk-public-split-manifest.yml) 记录。
 
@@ -33,13 +33,13 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 `hkdata`、`hk_data_platform.*`、`rqdata-hk-*`、`cstree alloc-hk` 或港股历史配置，需要先在
 `hk-public-split-manifest.yml` 中把对应记录推进到 deletion gate `ready`，并补齐：
 
-- 恢复证据；
-- downstream consumer audit；
-- replacement docs；
-- rollback notes；
-- owning repo focused tests；
+- 恢复证据。
+- downstream consumer audit。
+- replacement docs。
+- rollback notes。
+- owning repo focused tests。
 - 公开演示路线已退役，不再新增 public split evidence 要求。
 
-港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究线；仓库中仍保留的
+港股 run / sweep / report / live / benchmark / export 产物已经迁出活跃研究线。仓库中仍保留的
 港股配置、历史笔记和工具入口只作为 `archived_provenance` 或 `frozen_compatibility`
 兼容面存在。

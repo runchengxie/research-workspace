@@ -97,7 +97,7 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
         ),
         repo=".",
         source="src/research_contracts",
-        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports"),
+        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports", "backtrader"),
         max_allowed=0,
     ),
     BoundaryRule(
@@ -256,11 +256,11 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     BoundaryRule(
         identifier="strategy-pipeline:target-contract-no-direct-framework-imports",
         description=(
-            "target handoff contracts must not directly import Qlib, vn.py or LEAN runtimes"
+            "target handoff contracts must not directly import optional framework runtimes"
         ),
         repo="strategy-pipeline",
         source="src/strategy_pipeline/liveops",
-        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports"),
+        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports", "backtrader"),
         max_allowed=0,
     ),
     BoundaryRule(
@@ -290,10 +290,10 @@ BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
     ),
     BoundaryRule(
         identifier="portfolio-backtester:contracts-no-direct-framework-imports",
-        description="backtest exchange contracts must not import Qlib or LEAN runtimes",
+        description="backtest exchange contracts must not import framework runtimes",
         repo="portfolio-backtester",
         source="src/portfolio_backtester/contracts.py",
-        forbidden=("qlib", "QuantConnect", "AlgorithmImports"),
+        forbidden=("qlib", "QuantConnect", "AlgorithmImports", "backtrader"),
         max_allowed=0,
     ),
     BoundaryRule(

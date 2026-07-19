@@ -5,22 +5,21 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ENTRY_DOCS = (
+ROOT_ENTRY_DOCS = (
     ROOT / "README.md",
     ROOT / "AGENTS.md",
     ROOT / "ARCHITECTURE.md",
     ROOT / "CONTRIBUTING.md",
     ROOT / ".github" / "pull_request_template.md",
-    ROOT / "docs" / "README.md",
-    ROOT / "docs" / "bootstrap.md",
-    ROOT / "docs" / "documentation-lifecycle.md",
-    ROOT / "docs" / "framework-adapter-release.md",
-    ROOT / "docs" / "platform-workflow.md",
-    ROOT / "docs" / "release-checklist.md",
-    ROOT / "docs" / "strategy-satellites.md",
-    ROOT / "docs" / "workspace-maintenance.md",
-    ROOT / "docs" / "quality-governance.md",
 )
+ACTIVE_DOCS = tuple(
+    path
+    for path in sorted((ROOT / "docs").rglob("*.md"))
+    if "archive" not in path.relative_to(ROOT / "docs").parts
+    and "evidence" not in path.relative_to(ROOT / "docs").parts
+    and "prereg" not in path.name.lower()
+)
+STYLE_DOCS = (*ROOT_ENTRY_DOCS, *ACTIVE_DOCS)
 FORBIDDEN_FRAGMENTS = ("**", "；", "——", "“", "”")
 INDIRECT_CONTRAST = re.compile(r"不是[^。]{0,100}而是|而不是")
 
@@ -28,7 +27,7 @@ INDIRECT_CONTRAST = re.compile(r"不是[^。]{0,100}而是|而不是")
 def test_entry_docs_use_concise_chinese_style() -> None:
     offenders: list[str] = []
 
-    for path in ENTRY_DOCS:
+    for path in STYLE_DOCS:
         text = path.read_text(encoding="utf-8")
         for fragment in FORBIDDEN_FRAGMENTS:
             for match in re.finditer(re.escape(fragment), text):
@@ -51,6 +50,21 @@ def test_disabled_workflow_status_is_documented() -> None:
     assert disabled.is_file()
     assert "当前没有启用顶层 GitHub Actions workflow" in maintenance
     assert "目前没有活动 GitHub Actions workflow" in quality
+
+
+def test_framework_matrix_matches_current_main_surfaces() -> None:
+    matrix = (ROOT / "docs" / "framework-support-matrix.md").read_text(encoding="utf-8")
+
+    assert "`market-data-platform` | 已实现，条件化验证" in matrix
+    assert "`alpha-research` | 仅有接口，适配器规划中" in matrix
+    assert "`portfolio-backtester` | 仅有接口，差分后端规划中 | 设计参考" in matrix
+    assert "`quant-execution-engine` | 范围外 | 范围外 | 仅有通用执行接口" in matrix
+    assert "Backtrader 仍处于规划阶段" in matrix
+    assert (ROOT / "market-data-platform/src/market_data_platform/integrations/qlib.py").is_file()
+    assert (ROOT / "alpha-research/src/alpha_research/backends/native.py").is_file()
+    assert (ROOT / "portfolio-backtester/src/portfolio_backtester/backends/native.py").is_file()
+    vnpy_transport = ROOT / "quant-execution-engine/src/quant_execution_engine/vnpy_transport.py"
+    assert not vnpy_transport.exists()
 
 
 def test_local_hook_installation_is_in_bootstrap_and_maintenance_docs() -> None:

@@ -4,7 +4,8 @@
   "policy": {
     "native_default_until_parity": true,
     "optional_framework_dependencies": ["qlib", "vnpy"],
-    "forbidden_contract_types": ["qlib.*", "vnpy.*", "QuantConnect.*"],
+    "planned_optional_framework_dependencies": ["backtrader"],
+    "forbidden_contract_types": ["qlib.*", "vnpy.*", "QuantConnect.*", "backtrader.*"],
     "submodule_pin_after_downstream_merge": true
   },
   "workstreams": [
@@ -31,6 +32,12 @@
       "id": "qlib-data-adapter",
       "owner": "market-data-platform",
       "status": "in_progress",
+      "current_state": "implemented_conditional",
+      "current_evidence": [
+        "market-data-platform/src/market_data_platform/integrations/qlib.py",
+        "market-data-platform/tests/test_published_assets.py"
+      ],
+      "remaining_gap": "the standard dev profile does not install pyqlib, so the real-runtime test can skip",
       "implementation_prs": [
         "https://github.com/runchengxie/market-data-platform/pull/7"
       ],
@@ -48,7 +55,14 @@
     {
       "id": "qlib-research-backend",
       "owner": "alpha-research",
-      "status": "in_progress",
+      "status": "planned",
+      "current_state": "port_only",
+      "current_evidence": [
+        "alpha-research/src/alpha_research/backends/base.py",
+        "alpha-research/src/alpha_research/backends/native.py",
+        "alpha-research/tests/test_research_backends.py"
+      ],
+      "historical_note": "the old cstree Qlib candidate did not enter the current owner-native main branch",
       "implementation_prs": [
         "https://github.com/runchengxie/alpha-research/pull/3",
         "https://github.com/runchengxie/alpha-research/pull/4",
@@ -68,7 +82,14 @@
     {
       "id": "backtest-differential",
       "owner": "portfolio-backtester",
-      "status": "in_progress",
+      "status": "planned",
+      "current_state": "native_only",
+      "current_evidence": [
+        "portfolio-backtester/src/portfolio_backtester/backends/base.py",
+        "portfolio-backtester/src/portfolio_backtester/backends/native.py",
+        "portfolio-backtester/tests/fixtures/backends/liquid_long_only.expected.json"
+      ],
+      "historical_note": "the old cstree Qlib and LEAN candidates did not enter the current owner-native main branch",
       "implementation_prs": [
         "https://github.com/runchengxie/portfolio-backtester/pull/5",
         "https://github.com/runchengxie/portfolio-backtester/pull/6",
@@ -89,6 +110,7 @@
       "id": "strategy-pipeline-thinning",
       "owner": "strategy-pipeline",
       "status": "in_progress",
+      "current_state": "owner_ports_and_standalone_research_apps",
       "implementation_prs": [
         "https://github.com/runchengxie/strategy-pipeline/pull/17",
         "https://github.com/runchengxie/strategy-pipeline/pull/19",
@@ -108,7 +130,14 @@
     {
       "id": "vnpy-execution-transport",
       "owner": "quant-execution-engine",
-      "status": "in_progress",
+      "status": "planned",
+      "current_state": "generic_broker_boundary_only",
+      "current_evidence": [
+        "quant-execution-engine/src/quant_execution_engine/broker/base.py",
+        "quant-execution-engine/src/quant_execution_engine/domain.py",
+        "quant-execution-engine/tests/unit/test_typed_execution_domain.py"
+      ],
+      "historical_note": "the historical vn.py transport stack did not enter the current main branch",
       "implementation_prs": [
         "https://github.com/runchengxie/quant-execution-engine/pull/5",
         "https://github.com/runchengxie/quant-execution-engine/pull/6",
@@ -128,6 +157,23 @@
         "restart and reconciliation evidence is deterministic"
       ],
       "rollback": "disable the vn.py transport and replay qexec journal through the native paper transport"
+    },
+    {
+      "id": "backtrader-backtest-evaluation",
+      "owner": "portfolio-backtester",
+      "status": "planned",
+      "current_state": "evaluation_only",
+      "implementation_prs": [],
+      "entry_criteria": [
+        "a concrete backtest use case is not covered by native replay or Qlib differential testing",
+        "the adapter can stay behind the existing framework-neutral backend interface"
+      ],
+      "exit_criteria": [
+        "Backtrader is an optional dependency",
+        "framework objects do not cross public result or artifact boundaries",
+        "deterministic fixtures classify position, turnover, cost and PnL differences"
+      ],
+      "rollback": "remove the optional adapter and keep the native backend as canonical"
     }
   ]
 }

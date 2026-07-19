@@ -39,7 +39,7 @@ python scripts/hk_archive_gate.py \
   --format json
 ```
 
-exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256；它不复制
+exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256。它不复制
 `.git`，不创建远端仓库，不修改 submodule，不删除源文件。
 
 ## 删除门禁
@@ -47,12 +47,12 @@ exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生�
 删除或迁出兼容入口前，先从 [archive/hk/README.md](archive/hk/README.md) 进入当前 gate，
 并确认下列证据齐全：
 
-- 恢复证据；
-- consumer audit；
-- replacement docs；
-- rollback notes；
-- owning repo focused tests；
-- 私有暂存证据；
+- 恢复证据。
+- consumer audit。
+- replacement docs。
+- rollback notes。
+- owning repo focused tests。
+- 私有暂存证据。
 - zero-usage release window。
 
 LongPort、标准 `targets.json` 多市场解析、FX、dry-run、风控、审计，以及

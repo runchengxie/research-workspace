@@ -19,6 +19,7 @@
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
 | 维护子模块和运行检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量检查分类 | [quality-governance.md](quality-governance.md) |
+| 核对 Qlib、LEAN、vn.py 和 Backtrader 的当前状态 | [framework-support-matrix.md](framework-support-matrix.md) |
 | 查看当前锁定组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
@@ -26,6 +27,7 @@
 
 ## 参考资料
 
+- 外部框架采用评估：[framework-adoption-assessment.md](framework-adoption-assessment.md)
 - 框架集成边界：[adr/0001-framework-integration-boundaries.md](adr/0001-framework-integration-boundaries.md)
 - Python 命名空间决策：[adr/0002-owner-native-python-namespaces.md](adr/0002-owner-native-python-namespaces.md)
 - 废弃入口：[deprecations.md](deprecations.md)

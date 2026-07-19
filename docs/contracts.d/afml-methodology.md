@@ -19,9 +19,9 @@
 ## 边界
 
 - `label_events.parquet` 是标签和事件跨度的唯一跨模块事实来源。
-- `sample_weights.parquet` 只能由训练窗口内可用的 label outcome 信息计算，并只用于训练；不同 symbol 的并发度独立计算。
+- `sample_weights.parquet` 只能由训练窗口内可用的 label outcome 信息计算，并只用于训练。不同 symbol 的并发度独立计算。
 - `research_features.parquet` 中的盘口或订单流特征必须有真实、授权的逐笔源数据。
-- `portfolio-backtester` 拥有 sizing、strategy-risk 和 HRP 的算法语义；`strategy-pipeline` 可以从 run 产物生成其 sidecar。
+- `portfolio-backtester` 拥有 sizing、strategy-risk 和 HRP 的算法语义。`strategy-pipeline` 可以从 run 产物生成其 sidecar。
 - `sizing_receipt.json` 和 `strategy_risk_report.json` 属于研究证据，不是执行指令。
 - `afml_evidence_fragment.json` 只合并路径、状态和 SHA-256，不替代正式 protocol report。
 - `research_protocol_report.json` 只决定候选是否允许交接，不改变 `targets.json`。

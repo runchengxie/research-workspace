@@ -103,7 +103,7 @@ def test_merged_release_requires_and_accepts_exact_merged_gitlinks(
     assert report["all_merged_commits_pinned"] is True
 
 
-def test_checked_in_release_manifest_is_valid_and_merge_gated(monkeypatch) -> None:
+def test_checked_in_release_manifest_is_valid_and_superseded(monkeypatch) -> None:
     manifest = framework_adapter_release_gate.load_manifest(
         ROOT / "docs" / "framework-adapter-release.yml"
     )
@@ -118,8 +118,10 @@ def test_checked_in_release_manifest_is_valid_and_merge_gated(monkeypatch) -> No
 
     report = framework_adapter_release_gate.build_report(ROOT, manifest)
 
-    assert report["status"] == "blocked"
+    assert report["status"] == "passed"
     assert report["issues"] == []
+    assert report["release_state"] == "superseded"
+    assert report["superseded_reason"]
     assert report["all_downstream_merged"] is False
     assert report["evidence_status"] == "pending"
     assert {component["repository"] for component in report["components"]} == (
