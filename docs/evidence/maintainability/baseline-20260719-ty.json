@@ -331,7 +331,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 182,
-      "python_loc": 74007,
+      "python_loc": 74027,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -845,6 +845,7 @@
         "scripts/operations/promote_guan_mobile.py",
         "scripts/operations/tushare_minute_replacement_campaign.py",
         "scripts/systemd/README.md",
+        "scripts/systemd/tushare-minute-replacement-campaign-accelerate.service",
         "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.service",
         "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.timer",
         "scripts/systemd/tushare-minute-replacement-campaign-status.service",
