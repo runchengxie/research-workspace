@@ -46,7 +46,6 @@ git push
 | 契约冒烟 | `python src/research_contracts/smoke_contracts.py` |
 | 顶层测试 | `uv run --project strategy-pipeline --extra dev --with 'matplotlib>=3.8' --with 'tabulate>=0.9' python -m pytest tests -q` |
 | 硬质量门禁 | `python scripts/run_quality_checks.py --profile hard` |
-| BasedPyright 诊断 | `python scripts/run_quality_checks.py --profile basedpyright` |
 | 跨仓库导入边界 | `python scripts/workspace_import_boundaries.py --check` |
 
 发布前增加：
@@ -71,7 +70,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 - `full` 先验证 lockfile，再运行各仓库登记的 Ruff、格式、`ty`、维护性门禁和测试。
   `market-data-platform` 的 pytest 按文件分批执行，`research-apps` 委托给仓库自己的
   `scripts/dev/check.py` 权威门禁
-- `release_typecheck` 运行 BasedPyright 诊断
+- `release_typecheck` 运行各仓库登记的 `ty` 检查
 
 ## 本地 pre-push 门禁
 

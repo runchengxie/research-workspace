@@ -11,17 +11,17 @@
     {
       "repo": "research-workspace",
       "max_large_files": 7,
-      "max_long_functions": 14,
+      "max_long_functions": 13,
       "max_complexity_hotspots": 14,
       "max_large_classes": 2
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 48,
+      "max_large_files": 47,
       "max_long_functions": 65,
       "max_complexity_hotspots": 39,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, ty, BasedPyright, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly."
+      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly."
     },
     {
       "repo": "alpha-research",
@@ -29,7 +29,7 @@
       "max_long_functions": 20,
       "max_complexity_hotspots": 25,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, ty, BasedPyright, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family."
+      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family."
     },
     {
       "repo": "portfolio-backtester",
@@ -37,7 +37,7 @@
       "max_long_functions": 21,
       "max_complexity_hotspots": 23,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, ty, BasedPyright, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm."
+      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm."
     },
     {
       "repo": "research-apps",
@@ -53,7 +53,7 @@
       "max_long_functions": 111,
       "max_complexity_hotspots": 69,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the standalone research-app extraction removed the embedded fallback, lowered cross-repo hotspot budgets, and added fail-closed DeepSeek lineage plus a clean sdist-to-wheel install gate. Repo-local Ruff, ty, BasedPyright ratchet, maintainability ratchet, 1086-pass/1-skip validation, and a 206-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
+      "owner_decision": "2026-07-19 the standalone research-app extraction removed the embedded fallback, lowered cross-repo hotspot budgets, and added fail-closed DeepSeek lineage plus a clean sdist-to-wheel install gate. Repo-local Ruff, type-check ratchet, maintainability ratchet, 1086-pass/1-skip validation, and a 206-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
     },
     {
       "repo": "quant-execution-engine",
@@ -417,7 +417,7 @@
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_artifacts.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "output artifact module is newly included in staged BasedPyright coverage",
+      "reason": "output artifact module is newly included in staged ty coverage",
       "next_action": "promote further only after focused typecheck stays green"
     },
     {

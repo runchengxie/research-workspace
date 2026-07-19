@@ -24,7 +24,7 @@ GOVERNANCE_DOC_SCHEMAS = {
     "docs/compatibility-facades.yml": "compatibility_facades.v2",
     "docs/quality-coverage-governance.yml": "quality_coverage_governance.v1",
     "docs/maintainability-refactor-roadmap.yml": "maintainability_refactor_roadmap.v1",
-    "docs/evidence/maintainability/baseline-20260714.json": "maintainability_baseline.v1",
+    "docs/evidence/maintainability/baseline-20260719-ty.json": "maintainability_baseline.v1",
 }
 SCRIPT_LIFECYCLE_ROOTS = (
     "scripts",
@@ -542,7 +542,7 @@ def check_maintainability_governance(root: Path) -> list[Check]:
         checks.extend(check_quality_coverage(root, quality))
 
     roadmap = docs.get("docs/maintainability-refactor-roadmap.yml")
-    baseline = docs.get("docs/evidence/maintainability/baseline-20260714.json")
+    baseline = docs.get("docs/evidence/maintainability/baseline-20260719-ty.json")
     if roadmap and baseline:
         checks.extend(_check_refactor_roadmap(roadmap, baseline))
 

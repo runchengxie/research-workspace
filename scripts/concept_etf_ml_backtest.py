@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# pyright: basic
 """
 Path B prototype: Concept-based ETF features → ML ranking → walk-forward backtest.
 

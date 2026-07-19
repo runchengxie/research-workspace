@@ -10,7 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_SCRIPT = ROOT / "scripts" / "maintainability_baseline.py"
-BASELINE_RELATIVE = "docs/evidence/maintainability/baseline-20260719.json"
+BASELINE_RELATIVE = "docs/evidence/maintainability/baseline-20260719-ty.json"
 BASELINE_PATH = ROOT / BASELINE_RELATIVE
 QUALITY_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance_quality.py"
 WORKSPACE_GOVERNANCE_SCRIPT = ROOT / "scripts" / "workspace_governance.py"
@@ -405,6 +405,16 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     research_apps_config = _load_pyproject("research-apps")
     execution_config = _load_pyproject("quant-execution-engine")
 
+    for config in (
+        alpha_config,
+        cross_config,
+        market_config,
+        portfolio_config,
+        research_apps_config,
+        execution_config,
+    ):
+        assert "basedpyright" not in config["tool"]
+
     assert manifest["schema_version"] == "quality_coverage_governance.v1"
     assert QUALITY_DEBT_BUDGET_FIELDS <= set(manifest["debt_budget"])
     assert manifest["debt_budget"]["broad_exclude_register_max"] == len(
@@ -421,10 +431,6 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         "research-apps",
         "quant-execution-engine",
     }
-    assert set(repos["alpha-research"]["basedpyright"]["include_targets"]) == set(
-        alpha_config["tool"]["basedpyright"]["include"]
-    )
-    assert "extraPaths" not in alpha_config["tool"]["basedpyright"]
     assert set(repos["alpha-research"]["ty"]["include_targets"]) == set(
         alpha_config["tool"]["ty"]["src"]["include"]
     )
@@ -432,24 +438,14 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         "ruff_staged_select"
     ]
     assert set(cross_staged_select) == set(repos["strategy-pipeline"]["ruff"]["staged_select"])
-    assert set(repos["strategy-pipeline"]["basedpyright"]["next_include_targets"]) <= set(
-        cross_config["tool"]["basedpyright"]["include"]
-    )
     assert set(repos["strategy-pipeline"]["ty"]["include_targets"]) == set(
         cross_config["tool"]["ty"]["src"]["include"]
     )
 
     assert "maintainability" not in market_config["tool"]
-    assert set(repos["market-data-platform"]["basedpyright"]["include_targets"]) == set(
-        market_config["tool"]["basedpyright"]["include"]
-    )
     assert set(repos["market-data-platform"]["ty"]["include_targets"]) == set(
         market_config["tool"]["ty"]["src"]["include"]
     )
-    assert set(repos["portfolio-backtester"]["basedpyright"]["include_targets"]) == set(
-        portfolio_config["tool"]["basedpyright"]["include"]
-    )
-    assert "extraPaths" not in portfolio_config["tool"]["basedpyright"]
     assert set(repos["portfolio-backtester"]["ty"]["include_targets"]) == set(
         portfolio_config["tool"]["ty"]["src"]["include"]
     )
@@ -461,11 +457,6 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         research_apps_config["tool"]["ty"]["src"]["include"]
     )
 
-    assert set(repos["quant-execution-engine"]["basedpyright"]["include_targets"]) == set(
-        execution_config["tool"]["maintainability"]["quality_targets"][
-            "basedpyright_include_targets"
-        ]
-    )
     assert set(repos["quant-execution-engine"]["ty"]["include_targets"]) == set(
         execution_config["tool"]["ty"]["src"]["include"]
     )
@@ -586,7 +577,6 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
         "一次性脚本",
         "Ruff",
         "ty",
-        "BasedPyright",
         "targets.json",
         "数据供应商",
         "券商",

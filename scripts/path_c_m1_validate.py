@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# pyright: basic
 """
 Path C M1: Hypothesis validation for concept-level ML ranking.
 

@@ -44,9 +44,6 @@ jobs:
       - name: Run superproject smoke quality profile without private submodules
         if: env.HAS_WORKSPACE_SUBMODULE_TOKEN != 'true'
         run: python scripts/run_quality_checks.py --profile ci-smoke
-      # - name: Run superproject BasedPyright advisory
-      #   continue-on-error: true
-      #   run: python scripts/run_quality_checks.py --profile basedpyright
       - name: Run superproject tests
         if: env.HAS_WORKSPACE_SUBMODULE_TOKEN == 'true'
         run: >

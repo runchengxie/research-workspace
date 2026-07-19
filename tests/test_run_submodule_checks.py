@@ -133,7 +133,6 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 "--complexity",
                 "--check-baseline",
                 "--check-ratchet",
-                "--skip-basedpyright-ratchet",
             ),
             (
                 "uv",
@@ -178,7 +177,6 @@ class RunSubmoduleChecksTest(unittest.TestCase):
         ]
         for command in expected_market_governance:
             self.assertEqual(1, market_full.count(command))
-        self.assertNotIn("--basedpyright-basic", " ".join(" ".join(cmd) for cmd in market_full))
         self.assertIn(("scripts/dev/run_tests.sh", "maintainability"), strategy_lint)
 
         for submodule in ("alpha-research", "portfolio-backtester"):
@@ -344,7 +342,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             "strategy-pipeline": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
         }
         expected_release = {
-            "alpha-research": [("uv", "run", "--locked", "--extra", "dev", "basedpyright")],
+            "alpha-research": [("scripts/dev/run_tests.sh", "typecheck-release")],
             "market-data-platform": [
                 (
                     "uv",
@@ -352,24 +350,13 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                     "--locked",
                     "--extra",
                     "dev",
-                    "basedpyright",
-                    "--project",
-                    "basedpyrightconfig.core-basic.json",
+                    "ty",
+                    "check",
+                    "--error-on-warning",
                 )
             ],
-            "portfolio-backtester": [("uv", "run", "--locked", "--extra", "dev", "basedpyright")],
-            "quant-execution-engine": [
-                (
-                    "uv",
-                    "run",
-                    "--locked",
-                    "--group",
-                    "dev",
-                    "python",
-                    "-m",
-                    "basedpyright",
-                )
-            ],
+            "portfolio-backtester": [("scripts/dev/run_tests.sh", "typecheck-release")],
+            "quant-execution-engine": [("make", "typecheck")],
             "research-apps": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("scripts/dev/run_tests.sh", "typecheck-release")],
         }

@@ -36,7 +36,6 @@ uv run --project strategy-pipeline --extra dev \
   --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
   python -m pytest tests -q
 python scripts/run_quality_checks.py --profile hard
-python scripts/run_quality_checks.py --profile basedpyright
 python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run

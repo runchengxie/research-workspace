@@ -1,0 +1,2832 @@
+{
+  "schema_version": "maintainability_baseline.v1",
+  "thresholds": {
+    "large_file_loc": 500,
+    "long_function_lines": 80,
+    "complexity": 15,
+    "large_class_lines": 300
+  },
+  "repos": [
+    {
+      "repo": "research-workspace",
+      "root": ".",
+      "python_file_count": 71,
+      "python_loc": 16677,
+      "hk_related_file_count": 4,
+      "hotspot_counts": {
+        "large_files": 7,
+        "long_functions": 13,
+        "complexity_hotspots": 14,
+        "large_classes": 2
+      },
+      "large_files": [
+        {
+          "path": "scripts/path_b_production.py",
+          "loc": 934,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "loc": 696,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "loc": 646,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/workspace_import_boundaries.py",
+          "loc": 592,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/workspace_doctor.py",
+          "loc": 590,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_maintainability_governance.py",
+          "loc": 589,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/workspace_governance.py",
+          "loc": 549,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "walk_forward_backtest",
+          "line_count": 173,
+          "complexity": 29
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "walk_forward_backtest",
+          "line_count": 150,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h1_consecutive_days",
+          "line_count": 127,
+          "complexity": 25
+        },
+        {
+          "path": "tests/test_run_submodule_checks.py",
+          "name": "test_lint_profiles_include_repo_local_governance_gates",
+          "line_count": 115,
+          "complexity": 8
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h2_rank_momentum",
+          "line_count": 110,
+          "complexity": 16
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_technical_features",
+          "line_count": 109,
+          "complexity": 22
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "main",
+          "line_count": 106,
+          "complexity": 21
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h3_constituent_features",
+          "line_count": 103,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_concept_features",
+          "line_count": 99,
+          "complexity": 36
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_feature_matrix",
+          "line_count": 97,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "main",
+          "line_count": 95,
+          "complexity": 11
+        },
+        {
+          "path": "src/research_contracts/smoke_contracts.py",
+          "name": "run_smoke",
+          "line_count": 87,
+          "complexity": 5
+        },
+        {
+          "path": "scripts/workspace_governance.py",
+          "name": "_check_refactor_roadmap",
+          "line_count": 84,
+          "complexity": 19
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_concept_features",
+          "line_count": 99,
+          "complexity": 36
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_feature_matrix",
+          "line_count": 97,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "walk_forward_backtest",
+          "line_count": 150,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h3_constituent_features",
+          "line_count": 103,
+          "complexity": 30
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "walk_forward_backtest",
+          "line_count": 173,
+          "complexity": 29
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h1_consecutive_days",
+          "line_count": 127,
+          "complexity": 25
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "build_technical_features",
+          "line_count": 109,
+          "complexity": 22
+        },
+        {
+          "path": "scripts/path_b_production.py",
+          "name": "main",
+          "line_count": 106,
+          "complexity": 21
+        },
+        {
+          "path": "scripts/workspace_governance.py",
+          "name": "_check_refactor_roadmap",
+          "line_count": 84,
+          "complexity": 19
+        },
+        {
+          "path": "scripts/concept_etf_ml_backtest.py",
+          "name": "build_concept_features_for_date",
+          "line_count": 71,
+          "complexity": 17
+        },
+        {
+          "path": "tests/test_maintainability_governance.py",
+          "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
+          "line_count": 49,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h2_rank_momentum",
+          "line_count": 110,
+          "complexity": 16
+        },
+        {
+          "path": "scripts/path_c_m1_validate.py",
+          "name": "test_h4_kpl_stability",
+          "line_count": 73,
+          "complexity": 16
+        },
+        {
+          "path": "src/style_factors/charts.py",
+          "name": "plot_yearly_barchart",
+          "line_count": 68,
+          "complexity": 16
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "tests/test_workspace_doctor.py",
+          "name": "WorkspaceDoctorTest",
+          "line_count": 430,
+          "method_count": 21
+        },
+        {
+          "path": "tests/test_run_submodule_checks.py",
+          "name": "RunSubmoduleChecksTest",
+          "line_count": 409,
+          "method_count": 11
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B"
+        ],
+        "ruff_extend_exclude": [
+          ".git",
+          ".pytest_cache",
+          ".venv",
+          "alpha-research",
+          "strategy-pipeline",
+          "market-data-platform",
+          "portfolio-backtester",
+          "quant-execution-engine",
+          "research-apps",
+          "demo",
+          "scripts/concept_etf_ml_backtest.py",
+          "scripts/export_holdings_html.py",
+          "scripts/path_b_production.py",
+          "scripts/path_c_m1_validate.py",
+          "scripts/publish_etf_industry_signal.py"
+        ],
+        "ty_include": [
+          "scripts/framework_adapter_evidence.py",
+          "scripts/framework_adapter_execution_evidence.py",
+          "scripts/framework_adapter_release_gate.py",
+          "scripts/install_pre_push_hooks.py",
+          "scripts/run_pre_push_checks.py",
+          "scripts/run_quality_checks.py",
+          "scripts/run_submodule_checks.py",
+          "scripts/scan_workspace_secrets.py",
+          "scripts/maintainability_baseline.py",
+          "scripts/workspace_doctor.py",
+          "scripts/workspace_governance.py",
+          "scripts/workspace_governance_common.py",
+          "scripts/workspace_governance_quality.py",
+          "scripts/workspace_governance_submodules.py",
+          "scripts/workspace_import_boundaries.py",
+          "src/research_contracts/__init__.py",
+          "src/research_contracts/artifact_envelope.py",
+          "src/research_contracts/artifact_contracts.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "alpha-research",
+          "artifacts",
+          "build",
+          "dist",
+          "market-data-platform",
+          "portfolio-backtester",
+          "quant-execution-engine",
+          "research-apps",
+          "strategy-pipeline"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/concept_etf_ml_backtest.py",
+        "scripts/dead_code_advisory.py",
+        "scripts/export_hk_legacy_archive.py",
+        "scripts/export_holdings_html.py",
+        "scripts/framework_adapter_evidence.py",
+        "scripts/framework_adapter_execution_evidence.py",
+        "scripts/framework_adapter_release_gate.py",
+        "scripts/hk_archive_gate.py",
+        "scripts/hotsector_to_strategy_universe.py",
+        "scripts/install_pre_push_hooks.py",
+        "scripts/maintainability_baseline.py",
+        "scripts/namespace_contracts.py",
+        "scripts/path_b_production.py",
+        "scripts/path_c_m1_validate.py",
+        "scripts/print_version_matrix.py",
+        "scripts/publish_etf_industry_signal.py",
+        "scripts/run_pre_push_checks.py",
+        "scripts/run_quality_checks.py",
+        "scripts/run_submodule_checks.py",
+        "scripts/scan_workspace_secrets.py",
+        "scripts/submodule_checks.json",
+        "scripts/workspace_doctor.py",
+        "scripts/workspace_env.py",
+        "scripts/workspace_governance.py",
+        "scripts/workspace_governance_common.py",
+        "scripts/workspace_governance_hk_split.py",
+        "scripts/workspace_governance_quality.py",
+        "scripts/workspace_governance_submodules.py",
+        "scripts/workspace_import_boundaries.py"
+      ]
+    },
+    {
+      "repo": "market-data-platform",
+      "root": "market-data-platform",
+      "python_file_count": 182,
+      "python_loc": 74007,
+      "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 47,
+        "long_functions": 65,
+        "complexity_hotspots": 39,
+        "large_classes": 1
+      },
+      "large_files": [
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "loc": 2284,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "loc": 2283,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1791,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share.py",
+          "loc": 1765,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "loc": 1711,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "loc": 1533,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1528,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+          "loc": 1488,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_a_share_minute_coverage.py",
+          "loc": 1486,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "loc": 1460,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
+          "loc": 1373,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_build.py",
+          "loc": 1339,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
+          "loc": 1299,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_cutover_a_share_minute.py",
+          "loc": 1228,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_minute_replacement_campaign_runner.py",
+          "loc": 1160,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/guan_mobile_raw.py",
+          "loc": 1127,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/cli_data.py",
+          "loc": 1077,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/operations/archive_guan_mobile.py",
+          "loc": 994,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_hotspot_features.py",
+          "loc": 971,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_cli_data_minutes.py",
+          "loc": 955,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "loc": 887,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+          "loc": 877,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "loc": 871,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_refresh.py",
+          "loc": 870,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
+          "loc": 863,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "tests/test_cutover_a_share_minute.py",
+          "name": "_fixture",
+          "line_count": 309,
+          "complexity": 12
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "name": "mirror_minute_bars",
+          "line_count": 297,
+          "complexity": 49
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_build.py",
+          "name": "_build_fused_minute_dataset",
+          "line_count": 216,
+          "complexity": 35
+        },
+        {
+          "path": "tests/test_cli_data_minutes.py",
+          "name": "test_finalize_minute_coverage_materializes_before_strict_audit",
+          "line_count": 192,
+          "complexity": 1
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "cutover_minute_current",
+          "line_count": 185,
+          "complexity": 35
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
+          "name": "_aggregate_polars_deal_batch",
+          "line_count": 182,
+          "complexity": 3
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_run_campaign",
+          "line_count": 170,
+          "complexity": 38
+        },
+        {
+          "path": "scripts/operations/detach_a_share_minute_v3.py",
+          "name": "detach_version_hardlinks",
+          "line_count": 165,
+          "complexity": 32
+        },
+        {
+          "path": "scripts/operations/archive_guan_mobile.py",
+          "name": "verify_archive",
+          "line_count": 160,
+          "complexity": 23
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_bj_overlay_evidence",
+          "line_count": 158,
+          "complexity": 43
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_audit_partition",
+          "line_count": 157,
+          "complexity": 18
+        },
+        {
+          "path": "tests/test_a_share_minute_coverage.py",
+          "name": "test_audit_passes_exact_tiers_and_writes_manifest",
+          "line_count": 152,
+          "complexity": 6
+        },
+        {
+          "path": "src/market_data_platform/providers/guan_annual_minbar.py",
+          "name": "_copy_source_to_raw_staging",
+          "line_count": 151,
+          "complexity": 3
+        },
+        {
+          "path": "scripts/operations/archive_guan_mobile.py",
+          "name": "archive_directory",
+          "line_count": 146,
+          "complexity": 14
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_materialize_tushare_full_days",
+          "line_count": 143,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "name": "build_minute_backfill_plan",
+          "line_count": 143,
+          "complexity": 19
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "validate_cutover_receipt",
+          "line_count": 140,
+          "complexity": 46
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_full_day_evidence",
+          "line_count": 139,
+          "complexity": 33
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_raw_promotion_evidence",
+          "line_count": 135,
+          "complexity": 39
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+          "name": "build_a_share_daily_clean",
+          "line_count": 133,
+          "complexity": 13
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
+          "name": "build_a_share_flow_ownership_features",
+          "line_count": 131,
+          "complexity": 14
+        },
+        {
+          "path": "tests/test_a_share_minute_coverage.py",
+          "name": "test_production_input_discovery_reads_calendar_manifest_and_file_names",
+          "line_count": 131,
+          "complexity": 3
+        },
+        {
+          "path": "src/market_data_platform/cli_tushare_core.py",
+          "name": "_tushare_date_mirror_commands",
+          "line_count": 128,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_a_share_minute_fusion.py",
+          "name": "test_deal_file_row_group_aggregation_units_buckets_and_mapping",
+          "line_count": 125,
+          "complexity": 1
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_pit_fundamentals",
+          "line_count": 124,
+          "complexity": 16
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "name": "mirror_minute_bars",
+          "line_count": 297,
+          "complexity": 49
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "validate_cutover_receipt",
+          "line_count": 140,
+          "complexity": 46
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_bj_overlay_evidence",
+          "line_count": 158,
+          "complexity": 43
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_raw_promotion_evidence",
+          "line_count": 135,
+          "complexity": 39
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_run_campaign",
+          "line_count": 170,
+          "complexity": 38
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "cutover_minute_current",
+          "line_count": 185,
+          "complexity": 35
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_build.py",
+          "name": "_build_fused_minute_dataset",
+          "line_count": 216,
+          "complexity": 35
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_full_day_evidence",
+          "line_count": 139,
+          "complexity": 33
+        },
+        {
+          "path": "scripts/operations/detach_a_share_minute_v3.py",
+          "name": "detach_version_hardlinks",
+          "line_count": 165,
+          "complexity": 32
+        },
+        {
+          "path": "src/market_data_platform/data_warehouse_catalog.py",
+          "name": "_catalog_artifact_from_manifest",
+          "line_count": 87,
+          "complexity": 27
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_production_contract",
+          "line_count": 88,
+          "complexity": 25
+        },
+        {
+          "path": "scripts/operations/detach_a_share_minute_v3.py",
+          "name": "_entry_state",
+          "line_count": 65,
+          "complexity": 24
+        },
+        {
+          "path": "src/market_data_platform/providers/_a_share_minute_coverage_audit.py",
+          "name": "_coverage_audit_plan",
+          "line_count": 103,
+          "complexity": 24
+        },
+        {
+          "path": "scripts/operations/archive_guan_mobile.py",
+          "name": "verify_archive",
+          "line_count": 160,
+          "complexity": 23
+        },
+        {
+          "path": "scripts/operations/detach_a_share_minute_v3.py",
+          "name": "_scan_tree",
+          "line_count": 63,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_materialize_tushare_full_days",
+          "line_count": 143,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_build.py",
+          "name": "validate_fused_minute_dataset",
+          "line_count": 53,
+          "complexity": 21
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+          "name": "_validate_phase_outcome",
+          "line_count": 63,
+          "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill.py",
+          "name": "build_minute_backfill_plan",
+          "line_count": 143,
+          "complexity": 19
+        },
+        {
+          "path": "scripts/operations/cutover_a_share_minute.py",
+          "name": "_validate_sh_sz_gap_contract",
+          "line_count": 59,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_coverage.py",
+          "name": "_audit_partition",
+          "line_count": 157,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/registry.py",
+          "name": "build_dataset_registry_rows",
+          "line_count": 58,
+          "complexity": 18
+        },
+        {
+          "path": "src/market_data_platform/cli_data.py",
+          "name": "_source_audit_lineage",
+          "line_count": 77,
+          "complexity": 17
+        },
+        {
+          "path": "src/market_data_platform/research_views/daily_watch20_minute_source.py",
+          "name": "scan_daily_watch20_minute_sources",
+          "line_count": 69,
+          "complexity": 17
+        },
+        {
+          "path": "scripts/dev/compatibility_governance.py",
+          "name": "inventory_issues",
+          "line_count": 38,
+          "complexity": 16
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "tests/test_tushare_a_share.py",
+          "name": "FakeDataClient",
+          "line_count": 345,
+          "method_count": 17
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "RUF100",
+          "C90",
+          "PLR0911",
+          "PLR0912",
+          "PLR0913",
+          "PLR0915"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "data",
+          "reports"
+        ],
+        "ty_include": [
+          "src/market_data_platform/artifacts.py",
+          "src/market_data_platform/cli.py",
+          "src/market_data_platform/cli_tushare_core.py",
+          "src/market_data_platform/cli_tushare_fundamentals.py",
+          "src/market_data_platform/cli_tushare_research.py",
+          "src/market_data_platform/contract.py",
+          "src/market_data_platform/current_path_audit.py",
+          "src/market_data_platform/data_governance.py",
+          "src/market_data_platform/data_provider_contracts.py",
+          "src/market_data_platform/manifest.py",
+          "src/market_data_platform/paths.py",
+          "src/market_data_platform/published_assets.py",
+          "src/market_data_platform/published_frames.py",
+          "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
+          "src/market_data_platform/research_views/daily_watch20_minute_source.py",
+          "src/market_data_platform/research_views/daily_watch20_policy.py",
+          "src/market_data_platform/registry.py",
+          "src/market_data_platform/symbols.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "artifacts",
+          "data",
+          "reports"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/dev/architecture_governance.py",
+        "scripts/dev/compatibility_governance.py",
+        "scripts/dev/maintainability_baseline.json",
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/quality_baseline.json",
+        "scripts/dev/quality_debt.py",
+        "scripts/dev/repair_manifest.py",
+        "scripts/dev/run_pytest_isolated.py",
+        "scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py",
+        "scripts/operations/archive_guan_mobile.py",
+        "scripts/operations/audit_minute_overlap.py",
+        "scripts/operations/cutover_a_share_minute.py",
+        "scripts/operations/detach_a_share_minute_v3.py",
+        "scripts/operations/promote_guan_mobile.py",
+        "scripts/operations/tushare_minute_replacement_campaign.py",
+        "scripts/systemd/README.md",
+        "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.service",
+        "scripts/systemd/tushare-minute-replacement-campaign-hard-stop.timer",
+        "scripts/systemd/tushare-minute-replacement-campaign-status.service",
+        "scripts/systemd/tushare-minute-replacement-campaign.service",
+        "scripts/systemd/tushare-minute-replacement-campaign.timer"
+      ]
+    },
+    {
+      "repo": "alpha-research",
+      "root": "alpha-research",
+      "python_file_count": 126,
+      "python_loc": 30116,
+      "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 13,
+        "long_functions": 20,
+        "complexity_hotspots": 25,
+        "large_classes": 0
+      },
+      "large_files": [
+        {
+          "path": "src/alpha_research/promotion_gate.py",
+          "loc": 1142,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/cpcv.py",
+          "loc": 1053,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/dynamic_signal_ensemble.py",
+          "loc": 783,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/factor_diagnostics.py",
+          "loc": 782,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/train_eval_stage.py",
+          "loc": 772,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/feature_evidence.py",
+          "loc": 726,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_promotion_gate.py",
+          "loc": 686,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/feature_dataset.py",
+          "loc": 685,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "loc": 661,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_features.py",
+          "loc": 641,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/daily_watch20.py",
+          "loc": 615,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/sample_weighting.py",
+          "loc": 512,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/walk_forward.py",
+          "loc": 512,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/alpha_research/train_eval_stage.py",
+          "name": "_build_walk_forward_context",
+          "line_count": 103,
+          "complexity": 1
+        },
+        {
+          "path": "src/alpha_research/research_dataset.py",
+          "name": "_processor_records",
+          "line_count": 102,
+          "complexity": 10
+        },
+        {
+          "path": "src/alpha_research/cpcv.py",
+          "name": "_path_metric_row",
+          "line_count": 100,
+          "complexity": 39
+        },
+        {
+          "path": "src/alpha_research/train_eval_stage.py",
+          "name": "_build_period_eval_context",
+          "line_count": 100,
+          "complexity": 1
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "name": "time_series_cv_ic",
+          "line_count": 98,
+          "complexity": 11
+        },
+        {
+          "path": "src/alpha_research/cpcv.py",
+          "name": "_evaluate_split_backtest",
+          "line_count": 97,
+          "complexity": 11
+        },
+        {
+          "path": "src/alpha_research/train_eval_result.py",
+          "name": "build_train_eval_stage_result",
+          "line_count": 96,
+          "complexity": 2
+        },
+        {
+          "path": "src/alpha_research/overfitting_diagnostics.py",
+          "name": "negative_control_report",
+          "line_count": 94,
+          "complexity": 10
+        },
+        {
+          "path": "src/alpha_research/walk_forward.py",
+          "name": "_evaluate_walk_forward_window",
+          "line_count": 94,
+          "complexity": 4
+        },
+        {
+          "path": "src/alpha_research/event_labeling.py",
+          "name": "label_triple_barrier",
+          "line_count": 91,
+          "complexity": 11
+        },
+        {
+          "path": "src/alpha_research/feature_evidence.py",
+          "name": "factor_ic_report",
+          "line_count": 91,
+          "complexity": 18
+        },
+        {
+          "path": "src/alpha_research/sample_weighting.py",
+          "name": "build_event_sample_weights",
+          "line_count": 89,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/train_eval_stage.py",
+          "name": "_run_train_eval_stage_impl",
+          "line_count": 89,
+          "complexity": 2
+        },
+        {
+          "path": "src/alpha_research/feature_dataset.py",
+          "name": "_prepare_feature_dataset",
+          "line_count": 83,
+          "complexity": 1
+        },
+        {
+          "path": "src/alpha_research/promotion_gate.py",
+          "name": "build_promotion_record",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "name": "_event_sample_weights",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
+          "path": "src/alpha_research/feature_correlation.py",
+          "name": "correlation_audit_report",
+          "line_count": 82,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/promotion_gate.py",
+          "name": "flatten_promotion_record",
+          "line_count": 82,
+          "complexity": 10
+        },
+        {
+          "path": "src/alpha_research/train_eval_stage.py",
+          "name": "_run_cv_and_fit_model",
+          "line_count": 82,
+          "complexity": 7
+        },
+        {
+          "path": "src/alpha_research/feature_evidence.py",
+          "name": "permutation_active_return_importance",
+          "line_count": 80,
+          "complexity": 27
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/alpha_research/cpcv.py",
+          "name": "_path_metric_row",
+          "line_count": 100,
+          "complexity": 39
+        },
+        {
+          "path": "src/alpha_research/feature_evidence.py",
+          "name": "permutation_active_return_importance",
+          "line_count": 80,
+          "complexity": 27
+        },
+        {
+          "path": "src/alpha_research/promotion_gate.py",
+          "name": "build_promotion_record",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "name": "_event_sample_weights",
+          "line_count": 83,
+          "complexity": 22
+        },
+        {
+          "path": "src/alpha_research/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_model_lifecycle.py",
+          "name": "restore_prior_ranker",
+          "line_count": 66,
+          "complexity": 19
+        },
+        {
+          "path": "src/alpha_research/dynamic_signal_ensemble_calibration.py",
+          "name": "calibrate_signal_directions",
+          "line_count": 70,
+          "complexity": 19
+        },
+        {
+          "path": "src/alpha_research/promotion_gate.py",
+          "name": "_is_missing_evidence_category",
+          "line_count": 39,
+          "complexity": 19
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "name": "_time_decay_weights",
+          "line_count": 52,
+          "complexity": 19
+        },
+        {
+          "path": "src/alpha_research/factor_diagnostics_config.py",
+          "name": "factor_diagnostics_options_from_config",
+          "line_count": 46,
+          "complexity": 18
+        },
+        {
+          "path": "src/alpha_research/feature_evidence.py",
+          "name": "factor_ic_report",
+          "line_count": 91,
+          "complexity": 18
+        },
+        {
+          "path": "scripts/dev/namespace_boundary.py",
+          "name": "main",
+          "line_count": 38,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/dynamic_signal_ensemble.py",
+          "name": "_select_factors",
+          "line_count": 69,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/feature_correlation.py",
+          "name": "correlation_audit_report",
+          "line_count": 82,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/sample_weighting.py",
+          "name": "build_event_sample_weights",
+          "line_count": 89,
+          "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/benchmarking.py",
+          "name": "warn_if_delay_exit_lag",
+          "line_count": 43,
+          "complexity": 16
+        },
+        {
+          "path": "src/alpha_research/cpcv.py",
+          "name": "build_cpcv_splits",
+          "line_count": 63,
+          "complexity": 16
+        },
+        {
+          "path": "src/alpha_research/factor_diagnostics.py",
+          "name": "_correlation_rows",
+          "line_count": 48,
+          "complexity": 16
+        },
+        {
+          "path": "src/alpha_research/split.py",
+          "name": "_build_label_event_windows",
+          "line_count": 49,
+          "complexity": 16
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_model_lifecycle.py",
+          "name": "passed_prior_runs",
+          "line_count": 45,
+          "complexity": 15
+        },
+        {
+          "path": "src/alpha_research/dataset_sampling_core.py",
+          "name": "apply_feature_missing_fill",
+          "line_count": 50,
+          "complexity": 15
+        },
+        {
+          "path": "src/alpha_research/dynamic_signal_ensemble_io.py",
+          "name": "_load_from_signal_files",
+          "line_count": 48,
+          "complexity": 15
+        },
+        {
+          "path": "src/alpha_research/freshness_overlay.py",
+          "name": "apply_freshness_overlay",
+          "line_count": 54,
+          "complexity": 15
+        },
+        {
+          "path": "src/alpha_research/overfitting_diagnostics.py",
+          "name": "uniqueness_report",
+          "line_count": 76,
+          "complexity": 15
+        },
+        {
+          "path": "src/alpha_research/style_replica/portfolio.py",
+          "name": "_select_b_leg_for_date",
+          "line_count": 42,
+          "complexity": 15
+        }
+      ],
+      "large_classes": [],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
+          "C90"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "ty_include": [
+          "src/alpha_research/cpcv_audit.py",
+          "src/alpha_research/backends",
+          "src/alpha_research/dataset_sampling.py",
+          "src/alpha_research/dataset_sampling_core.py",
+          "src/alpha_research/daily_watch20_minute_features.py",
+          "src/alpha_research/daily_watch20_policy.py",
+          "src/alpha_research/dynamic_signal_ensemble_types.py",
+          "src/alpha_research/evaluation.py",
+          "src/alpha_research/feature_windows.py",
+          "src/alpha_research/modeling_dataset.py",
+          "src/alpha_research/period_evaluation.py",
+          "src/alpha_research/promotion_gate_thresholds.py",
+          "src/alpha_research/signal_artifact.py",
+          "src/alpha_research/train_eval.py",
+          "src/alpha_research/train_eval_contracts.py",
+          "src/alpha_research/train_eval_request_builder.py",
+          "src/alpha_research/train_eval_result.py",
+          "src/alpha_research/walk_forward_windows.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/namespace_boundary.py",
+        "scripts/dev/run_tests.sh"
+      ]
+    },
+    {
+      "repo": "portfolio-backtester",
+      "root": "portfolio-backtester",
+      "python_file_count": 125,
+      "python_loc": 34287,
+      "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 18,
+        "long_functions": 21,
+        "complexity_hotspots": 23,
+        "large_classes": 0
+      },
+      "large_files": [
+        {
+          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "loc": 2393,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/exposure.py",
+          "loc": 1202,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/construction_grid.py",
+          "loc": 1015,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/tearsheet.py",
+          "loc": 952,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/execution.py",
+          "loc": 805,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
+          "loc": 804,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/position_backtest.py",
+          "loc": 799,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "loc": 795,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_backtest.py",
+          "loc": 761,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "loc": 709,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/daily_watch20.py",
+          "loc": 708,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/capacity_report.py",
+          "loc": 692,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/evaluation.py",
+          "loc": 659,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/position_postprocess.py",
+          "loc": 598,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/post_buffer_exposure_repair.py",
+          "loc": 579,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_execution_sim.py",
+          "loc": 568,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_round_lot.py",
+          "loc": 518,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/metrics.py",
+          "loc": 503,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/portfolio_backtester/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 102,
+          "complexity": 21
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 99,
+          "complexity": 7
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "build_positions_by_rebalance",
+          "line_count": 99,
+          "complexity": 4
+        },
+        {
+          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "name": "_execute_buy_orders",
+          "line_count": 97,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/exposure.py",
+          "name": "_industry_exposure_rows",
+          "line_count": 97,
+          "complexity": 15
+        },
+        {
+          "path": "tests/test_position_backtest.py",
+          "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
+          "line_count": 96,
+          "complexity": 1
+        },
+        {
+          "path": "src/portfolio_backtester/leg_helpers.py",
+          "name": "_build_backtest_leg_result",
+          "line_count": 95,
+          "complexity": 3
+        },
+        {
+          "path": "src/portfolio_backtester/construction_grid.py",
+          "name": "_build_variant_backtest_options",
+          "line_count": 94,
+          "complexity": 3
+        },
+        {
+          "path": "src/portfolio_backtester/evaluation.py",
+          "name": "_record_backtest_outputs",
+          "line_count": 94,
+          "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
+          "name": "main",
+          "line_count": 93,
+          "complexity": 5
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "_build_selection_inputs",
+          "line_count": 92,
+          "complexity": 12
+        },
+        {
+          "path": "src/portfolio_backtester/construction_grid.py",
+          "name": "_init_row",
+          "line_count": 91,
+          "complexity": 6
+        },
+        {
+          "path": "src/portfolio_backtester/engine.py",
+          "name": "_evaluate_backtest_rebalance_period",
+          "line_count": 91,
+          "complexity": 14
+        },
+        {
+          "path": "tests/test_backtest_tearsheet.py",
+          "name": "test_build_backtest_tearsheet_html_includes_core_sections_and_escapes_title",
+          "line_count": 89,
+          "complexity": 1
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
+          "name": "simulate",
+          "line_count": 84,
+          "complexity": 12
+        },
+        {
+          "path": "tests/test_construction_grid.py",
+          "name": "test_construction_grid_reuses_existing_scores",
+          "line_count": 84,
+          "complexity": 5
+        },
+        {
+          "path": "src/portfolio_backtester/evaluation.py",
+          "name": "_record_period_execution_sim",
+          "line_count": 83,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "select_holdings",
+          "line_count": 82,
+          "complexity": 6
+        },
+        {
+          "path": "src/portfolio_backtester/capacity_report.py",
+          "name": "_build_grid_row",
+          "line_count": 81,
+          "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "_process_long_short_rebalance",
+          "line_count": 81,
+          "complexity": 9
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_positions.py",
+          "name": "_process_long_only_rebalance",
+          "line_count": 80,
+          "complexity": 8
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "name": "_summarize_adjusted_nav",
+          "line_count": 77,
+          "complexity": 22
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_selection.py",
+          "name": "apply_rebalance_buffer",
+          "line_count": 45,
+          "complexity": 22
+        },
+        {
+          "path": "src/portfolio_backtester/construction_grid.py",
+          "name": "_prepare_signal_column",
+          "line_count": 102,
+          "complexity": 21
+        },
+        {
+          "path": "src/portfolio_backtester/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
+          "path": "src/portfolio_backtester/daily_watch20.py",
+          "name": "_validate_config",
+          "line_count": 31,
+          "complexity": 20
+        },
+        {
+          "path": "src/portfolio_backtester/portfolio_weights.py",
+          "name": "build_position_weights",
+          "line_count": 55,
+          "complexity": 19
+        },
+        {
+          "path": "src/portfolio_backtester/backends/base.py",
+          "name": "validate",
+          "line_count": 51,
+          "complexity": 18
+        },
+        {
+          "path": "scripts/dev/namespace_boundary.py",
+          "name": "main",
+          "line_count": 38,
+          "complexity": 17
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
+          "name": "allocate_with_redistribution",
+          "line_count": 63,
+          "complexity": 17
+        },
+        {
+          "path": "src/portfolio_backtester/bet_sizing.py",
+          "name": "build_sized_weights",
+          "line_count": 55,
+          "complexity": 17
+        },
+        {
+          "path": "src/portfolio_backtester/benchmarking.py",
+          "name": "warn_if_delay_exit_lag",
+          "line_count": 44,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/capacity_report.py",
+          "name": "run",
+          "line_count": 66,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "name": "_execute_buy_orders",
+          "line_count": 97,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/exposure.py",
+          "name": "_build_active_exposure_summary_table",
+          "line_count": 66,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/periods.py",
+          "name": "resolve_backtest_period_plan",
+          "line_count": 76,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/tearsheet.py",
+          "name": "_summarize_series",
+          "line_count": 52,
+          "complexity": 16
+        },
+        {
+          "path": "src/portfolio_backtester/a_share_round_lot.py",
+          "name": "allocate_round_lot",
+          "line_count": 72,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/capacity_report.py",
+          "name": "_evaluate_row",
+          "line_count": 40,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/evaluation.py",
+          "name": "_record_period_execution_sim",
+          "line_count": 83,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/execution_calendar.py",
+          "name": "resolve_execution_open_dates",
+          "line_count": 50,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/exposure.py",
+          "name": "_industry_exposure_rows",
+          "line_count": 97,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/freshness_overlay.py",
+          "name": "apply_freshness_overlay",
+          "line_count": 56,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/strategy.py",
+          "name": "strategy_from_config",
+          "line_count": 55,
+          "complexity": 15
+        }
+      ],
+      "large_classes": [],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
+          "C90"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "ty_include": [
+          "src/portfolio_backtester/__init__.py",
+          "src/portfolio_backtester/api.py",
+          "src/portfolio_backtester/backtest_spec.py",
+          "src/portfolio_backtester/capacity.py",
+          "src/portfolio_backtester/execution_sim/__init__.py",
+          "src/portfolio_backtester/execution_sim/results.py",
+          "src/portfolio_backtester/period_outputs.py",
+          "src/portfolio_backtester/portfolio.py",
+          "src/portfolio_backtester/reports.py",
+          "src/portfolio_backtester/types.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/namespace_boundary.py",
+        "scripts/dev/run_tests.sh"
+      ]
+    },
+    {
+      "repo": "research-apps",
+      "root": "research-apps",
+      "python_file_count": 76,
+      "python_loc": 15758,
+      "hk_related_file_count": 0,
+      "hotspot_counts": {
+        "large_files": 2,
+        "long_functions": 2,
+        "complexity_hotspots": 1,
+        "large_classes": 0
+      },
+      "large_files": [
+        {
+          "path": "src/research_apps/hotsector/hotsector_deepseek_stability.py",
+          "loc": 749,
+          "hk_related": false
+        },
+        {
+          "path": "src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
+          "loc": 662,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
+          "name": "_daily_row",
+          "line_count": 97,
+          "complexity": 12
+        },
+        {
+          "path": "src/research_apps/daily_watch20/minute_cache.py",
+          "name": "build_daily_watch20_minute_cache_bundle",
+          "line_count": 92,
+          "complexity": 12
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/research_apps/hotsector/hotsector_deepseek_stability.py",
+          "name": "_design_diagnostics",
+          "line_count": 42,
+          "complexity": 15
+        }
+      ],
+      "large_classes": [],
+      "quality_config": {
+        "ruff_select": [
+          "A",
+          "ARG",
+          "ASYNC",
+          "B",
+          "C4",
+          "C90",
+          "E",
+          "EXE",
+          "F",
+          "FA",
+          "FIX",
+          "FLY",
+          "G",
+          "I",
+          "ICN",
+          "INT",
+          "LOG",
+          "PERF",
+          "PGH",
+          "PIE",
+          "PT",
+          "PTH",
+          "Q",
+          "RET",
+          "RSE",
+          "RUF",
+          "SIM",
+          "SLOT",
+          "T10",
+          "UP",
+          "YTT"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "dist",
+          "outputs"
+        ],
+        "ty_include": [
+          "src",
+          "scripts",
+          "tests"
+        ],
+        "ty_exclude": [],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/dev/check.py",
+        "scripts/dev/maintainability_baseline.json",
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/wheel_smoke.py"
+      ]
+    },
+    {
+      "repo": "strategy-pipeline",
+      "root": "strategy-pipeline",
+      "python_file_count": 391,
+      "python_loc": 86458,
+      "hk_related_file_count": 2,
+      "hotspot_counts": {
+        "large_files": 46,
+        "long_functions": 111,
+        "complexity_hotspots": 69,
+        "large_classes": 1
+      },
+      "large_files": [
+        {
+          "path": "tests/test_daily_watch20_pipeline.py",
+          "loc": 798,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_policy.py",
+          "loc": 797,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_cli_research.py",
+          "loc": 793,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_next_open_to_high_research.py",
+          "loc": 792,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
+          "loc": 791,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/a_share_next_open_to_high_minute_audit.py",
+          "loc": 790,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_ablation.py",
+          "loc": 788,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/pipeline/output_artifacts.py",
+          "loc": 785,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/a_share_next_high_explore.py",
+          "loc": 779,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_daily_watch20_publication_safety.py",
+          "loc": 776,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_hotsector_deepseek_v4_month.py",
+          "loc": 776,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_three_arm_shadow.py",
+          "loc": 773,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
+          "loc": 770,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/package_runs.py",
+          "loc": 770,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "loc": 767,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "loc": 760,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_daily_watch20_ablation.py",
+          "loc": 757,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/pipeline/config.py",
+          "loc": 749,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/commands/tune.py",
+          "loc": 745,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/a_share_next_open_to_high_backtest.py",
+          "loc": 743,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "loc": 741,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/commands/linear_sweep.py",
+          "loc": 724,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/liveops/holdings.py",
+          "loc": 717,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "loc": 680,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
+          "loc": 649,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "tests/test_pipeline_filters_backtest_reports.py",
+          "name": "test_pipeline_backtest_outputs_style_and_industry_exposure_artifacts",
+          "line_count": 224,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_derived_ratios.py",
+          "name": "test_pipeline_hk_file_fundamentals_supports_trailing_stability_features",
+          "line_count": 201,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_offline",
+          "line_count": 179,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_run_release_scripts.py",
+          "name": "_write_demo_run",
+          "line_count": 157,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e_benchmarks.py",
+          "name": "test_pipeline_backtest_writes_compare_benchmark_reports",
+          "line_count": 155,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_overlay.py",
+          "name": "test_pipeline_hk_file_fundamentals_provider_overlay_stays_daily",
+          "line_count": 148,
+          "complexity": 4
+        },
+        {
+          "path": "tests/test_pipeline_filters_industry.py",
+          "name": "test_pipeline_industry_file_join_preserves_labels_for_dataset_and_bucket_ic",
+          "line_count": 146,
+          "complexity": 5
+        },
+        {
+          "path": "tests/test_pipeline_train_eval_contracts.py",
+          "name": "_request",
+          "line_count": 143,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_output_summary_metadata.py",
+          "name": "test_build_inputs_lock_records_symlink_resolution_and_manifest_metadata",
+          "line_count": 139,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_derived.py",
+          "name": "test_pipeline_hk_file_fundamentals_derived_slow_features",
+          "line_count": 139,
+          "complexity": 2
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_derived_ratios.py",
+          "name": "test_pipeline_hk_file_fundamentals_supports_growth_and_structure_ratios",
+          "line_count": 139,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_summarize_runs.py",
+          "name": "test_summarize_runs_collects_metrics_and_flags",
+          "line_count": 139,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_feature_formulas.py",
+          "name": "test_pipeline_feature_formulas",
+          "line_count": 135,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_with_local_rqdata_assets_smoke",
+          "line_count": 130,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e_benchmarks.py",
+          "name": "test_pipeline_benchmark_compare_accepts_symbol_sources",
+          "line_count": 129,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_pipeline_filters_provider_fundamentals.py",
+          "name": "test_pipeline_a_share_rqdata_provider_fundamentals_enabled",
+          "line_count": 129,
+          "complexity": 3
+        },
+        {
+          "path": "tests/test_tune.py",
+          "name": "test_tune_generates_configs_runs_and_best_trial",
+          "line_count": 129,
+          "complexity": 7
+        },
+        {
+          "path": "tests/test_pipeline_e2e_benchmarks.py",
+          "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
+          "line_count": 126,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e_walk_forward.py",
+          "name": "test_pipeline_walk_forward_feature_stability_outputs",
+          "line_count": 121,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_overlay.py",
+          "name": "test_pipeline_hk_file_fundamentals_provider_overlay_required_fails_when_empty",
+          "line_count": 121,
+          "complexity": 2
+        },
+        {
+          "path": "tests/test_pipeline_filters_backtest_reports.py",
+          "name": "test_pipeline_backtest_industry_exposure_uses_prior_sparse_labels",
+          "line_count": 119,
+          "complexity": 5
+        },
+        {
+          "path": "tests/test_pipeline_filters_file_build.py",
+          "name": "test_pipeline_hk_file_fundamentals_built_from_pit_asset",
+          "line_count": 119,
+          "complexity": 1
+        },
+        {
+          "path": "scripts/internal/export_repo_source.py",
+          "name": "combine_project_files",
+          "line_count": 117,
+          "complexity": 16
+        },
+        {
+          "path": "tests/test_pipeline_e2e_walk_forward.py",
+          "name": "test_pipeline_walk_forward_backtest_benchmark_summary",
+          "line_count": 116,
+          "complexity": 4
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_offline_with_train_target_transform",
+          "line_count": 112,
+          "complexity": 1
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_inputs.py",
+          "name": "validate_minute_evidence",
+          "line_count": 75,
+          "complexity": 35
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_three_arm_shadow.py",
+          "name": "_validated_owner_metadata",
+          "line_count": 74,
+          "complexity": 28
+        },
+        {
+          "path": "scripts/dev/config_lifecycle.py",
+          "name": "_validate_catalog",
+          "line_count": 58,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "name": "_validate_attempt_history",
+          "line_count": 42,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "name": "run_deepseek_campaign_execution",
+          "line_count": 81,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
+          "name": "_validate_cell_aliases",
+          "line_count": 30,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/package_runs.py",
+          "name": "_gather_relative_files",
+          "line_count": 48,
+          "complexity": 24
+        },
+        {
+          "path": "src/strategy_pipeline/commands/run_grid.py",
+          "name": "_resolve_grid_values",
+          "line_count": 51,
+          "complexity": 23
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "name": "_finalized_run_identities",
+          "line_count": 65,
+          "complexity": 23
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_holdings_overlay_selection.py",
+          "name": "_validate_owner_summary",
+          "line_count": 70,
+          "complexity": 23
+        },
+        {
+          "path": "scripts/dev/namespace_boundary.py",
+          "name": "main",
+          "line_count": 66,
+          "complexity": 22
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
+          "name": "inspect_daily_watch20_inputs",
+          "line_count": 95,
+          "complexity": 22
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "name": "_validate_watchlist",
+          "line_count": 54,
+          "complexity": 22
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/release_runs.py",
+          "name": "_selected_runs",
+          "line_count": 49,
+          "complexity": 22
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "name": "guard_live_input_contract",
+          "line_count": 80,
+          "complexity": 21
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "name": "validate_candidate_file_manifest",
+          "line_count": 36,
+          "complexity": 21
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "name": "validate_strict_candidate_pool_receipt",
+          "line_count": 62,
+          "complexity": 21
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "name": "validate_strict_candidate_pool_rows",
+          "line_count": 61,
+          "complexity": 21
+        },
+        {
+          "path": "src/strategy_pipeline/pipeline/research_ops/summarize_runs.py",
+          "name": "run",
+          "line_count": 56,
+          "complexity": 21
+        },
+        {
+          "path": "src/strategy_pipeline/benchmarking.py",
+          "name": "build_benchmark_series",
+          "line_count": 65,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
+          "name": "_delivery_candidate_pool_reasons",
+          "line_count": 64,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_execution_support.py",
+          "name": "_validate_attempt_pairs",
+          "line_count": 34,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/pipeline/research_ops/summarize_runs_scoring.py",
+          "name": "_compute_grouped_dsr",
+          "line_count": 57,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/package_runs.py",
+          "name": "_apply_run_filters",
+          "line_count": 57,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/release_runs.py",
+          "name": "_package_cmd_from_args",
+          "line_count": 33,
+          "complexity": 20
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "src/strategy_pipeline/data_interface.py",
+          "name": "DataInterface",
+          "line_count": 312,
+          "method_count": 12
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
+          "C90"
+        ],
+        "ruff_extend_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "configs/local",
+          "dist",
+          "docs/archive"
+        ],
+        "ty_include": [
+          "src/strategy_pipeline/__init__.py",
+          "src/strategy_pipeline/__main__.py",
+          "src/strategy_pipeline/cli/common.py",
+          "src/strategy_pipeline/contracts/__init__.py",
+          "src/strategy_pipeline/contracts/backtest.py",
+          "src/strategy_pipeline/contracts/signals.py",
+          "src/strategy_pipeline/contracts/strategy.py",
+          "src/strategy_pipeline/daily_watch20_ablation.py",
+          "src/strategy_pipeline/daily_watch20_candidate_oos.py",
+          "src/strategy_pipeline/daily_watch20_candidate_oos_reporting.py",
+          "src/strategy_pipeline/daily_watch20_candidate_pool.py",
+          "src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
+          "src/strategy_pipeline/daily_watch20_data.py",
+          "src/strategy_pipeline/daily_watch20_freshness.py",
+          "src/strategy_pipeline/daily_watch20_live_inputs.py",
+          "src/strategy_pipeline/daily_watch20_minute.py",
+          "src/strategy_pipeline/daily_watch20_oos.py",
+          "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "src/strategy_pipeline/daily_watch20_pipeline_publication.py",
+          "src/strategy_pipeline/daily_watch20_policy.py",
+          "src/strategy_pipeline/daily_watch20_policy_snapshot.py",
+          "src/strategy_pipeline/daily_watch20_publication_inputs.py",
+          "src/strategy_pipeline/daily_watch20_publication_tier.py",
+          "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "src/strategy_pipeline/daily_watch20_publication_window.py",
+          "src/strategy_pipeline/daily_watch20_publish.py",
+          "src/strategy_pipeline/dataset.py",
+          "src/strategy_pipeline/date_utils.py",
+          "src/strategy_pipeline/identity.py",
+          "src/strategy_pipeline/liveops/__init__.py",
+          "src/strategy_pipeline/liveops/alloc_core.py",
+          "src/strategy_pipeline/liveops/alloc_rendering.py",
+          "src/strategy_pipeline/liveops/alloc_selection.py",
+          "src/strategy_pipeline/liveops/export_targets.py",
+          "src/strategy_pipeline/liveops/snapshot.py",
+          "src/strategy_pipeline/return_metrics.py",
+          "src/strategy_pipeline/pipeline/contracts.py",
+          "src/strategy_pipeline/pipeline/dataset_sampling.py",
+          "src/strategy_pipeline/pipeline/dates.py",
+          "src/strategy_pipeline/pipeline/diagnostic_artifacts.py",
+          "src/strategy_pipeline/pipeline/eval_benchmark.py",
+          "src/strategy_pipeline/pipeline/freshness_overlay.py",
+          "src/strategy_pipeline/pipeline/fundamentals_enrichment.py",
+          "src/strategy_pipeline/pipeline/fundamentals_overlay.py",
+          "src/strategy_pipeline/pipeline/output_context.py",
+          "src/strategy_pipeline/pipeline/output.py",
+          "src/strategy_pipeline/pipeline/output_summary.py",
+          "src/strategy_pipeline/pipeline/owner_ports.py",
+          "src/strategy_pipeline/pipeline/panel_enrichment.py",
+          "src/strategy_pipeline/pipeline/panel_loader.py",
+          "src/strategy_pipeline/pipeline/panel_load_workflow.py",
+          "src/strategy_pipeline/pipeline/position_output_artifacts.py",
+          "src/strategy_pipeline/pipeline/position_postprocess_artifacts.py",
+          "src/strategy_pipeline/pipeline/stats.py",
+          "src/strategy_pipeline/pipeline/train_eval_request_builder.py",
+          "src/strategy_pipeline/pipeline/train_eval_result.py",
+          "src/strategy_pipeline/sharpe_stats.py"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "artifacts",
+          "build",
+          "configs/local",
+          "dist",
+          "docs/archive"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "scripts/README.md",
+        "scripts/dev/check_c901_debt.py",
+        "scripts/dev/config_lifecycle.py",
+        "scripts/dev/data_ops_boundary.py",
+        "scripts/dev/import_boundary.py",
+        "scripts/dev/install_git_hooks.sh",
+        "scripts/dev/maintainability_metrics.py",
+        "scripts/dev/namespace_boundary.py",
+        "scripts/dev/run_tests.sh",
+        "scripts/dev/split_smoke.py",
+        "scripts/dev/test_impact.py",
+        "scripts/dev/wheel_smoke.py",
+        "scripts/internal/export_repo_source.py",
+        "scripts/internal/freeze_hk_research_outputs.py",
+        "scripts/internal/package_repo.sh",
+        "scripts/research/a_share_next_high_explore.py",
+        "scripts/research/a_share_next_open_to_high_backtest.py",
+        "scripts/research/a_share_next_open_to_high_common.py",
+        "scripts/research/a_share_next_open_to_high_cost_stress.py",
+        "scripts/research/a_share_next_open_to_high_daily_benchmark.py",
+        "scripts/research/a_share_next_open_to_high_minute_audit.py",
+        "scripts/research/a_share_next_open_to_high_minute_benchmark.py",
+        "scripts/research/a_share_next_open_to_high_minute_execution.py",
+        "scripts/research/a_share_next_open_to_high_reporting.py",
+        "scripts/research/daily_watch20_candidate_oos.py",
+        "scripts/research/daily_watch20_flite_campaign.py",
+        "scripts/research/daily_watch20_minute_campaign.py",
+        "scripts/research/daily_watch20_slow_volume_campaign.py",
+        "scripts/research/hotsector_ai_shadow.py",
+        "scripts/research/hotsector_ai_shadow_observation.py",
+        "scripts/research/hotsector_challenger_campaign.py",
+        "scripts/research/hotsector_deepseek_campaign.py",
+        "scripts/research/hotsector_deepseek_v4_month.py",
+        "scripts/research/hotsector_low_turnover_retrospective.py",
+        "scripts/research/hotsector_numeric_v2_retrospective.py",
+        "scripts/research/hotsector_session_challenger.py",
+        "scripts/research/reconcile_slow_volume_labels.py",
+        "scripts/research/verify_slow_volume_campaign.py"
+      ]
+    },
+    {
+      "repo": "quant-execution-engine",
+      "root": "quant-execution-engine",
+      "python_file_count": 92,
+      "python_loc": 27801,
+      "hk_related_file_count": 12,
+      "hotspot_counts": {
+        "large_files": 14,
+        "long_functions": 37,
+        "complexity_hotspots": 38,
+        "large_classes": 7
+      },
+      "large_files": [
+        {
+          "path": "tests/unit/test_execution_foundation.py",
+          "loc": 1633,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "loc": 1523,
+          "hk_related": false
+        },
+        {
+          "path": "tests/unit/test_smoke_operator_harness.py",
+          "loc": 1335,
+          "hk_related": false
+        },
+        {
+          "path": "tests/unit/test_cli_longport_commands.py",
+          "loc": 1098,
+          "hk_related": true
+        },
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "loc": 1037,
+          "hk_related": true
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "loc": 1036,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/table.py",
+          "loc": 885,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/state_tools.py",
+          "loc": 692,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/domain.py",
+          "loc": 689,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/evidence_bundle.py",
+          "loc": 627,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "loc": 613,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_state_reconcile_ops.py",
+          "loc": 548,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "loc": 537,
+          "hk_related": false
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_recovery_actions.py",
+          "loc": 536,
+          "hk_related": false
+        }
+      ],
+      "long_functions": [
+        {
+          "path": "src/quant_execution_engine/cli_parser.py",
+          "name": "create_parser",
+          "line_count": 344,
+          "complexity": 1
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "run_operator_smoke_workflow",
+          "line_count": 311,
+          "complexity": 17
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "main",
+          "line_count": 242,
+          "complexity": 34
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_config",
+          "line_count": 207,
+          "complexity": 52
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/diff.py",
+          "name": "render_rebalance_diff",
+          "line_count": 191,
+          "complexity": 47
+        },
+        {
+          "path": "src/quant_execution_engine/preflight.py",
+          "name": "run_preflight_checks",
+          "line_count": 186,
+          "complexity": 24
+        },
+        {
+          "path": "tests/unit/test_smoke_operator_harness.py",
+          "name": "test_run_operator_smoke_workflow_writes_blocked_operator_outcome_evidence",
+          "line_count": 170,
+          "complexity": 2
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/diff.py",
+          "name": "_build_rich_diff",
+          "line_count": 153,
+          "complexity": 23
+        },
+        {
+          "path": "src/quant_execution_engine/evidence_bundle.py",
+          "name": "create_evidence_bundle",
+          "line_count": 151,
+          "complexity": 25
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "plan_rebalance",
+          "line_count": 144,
+          "complexity": 35
+        },
+        {
+          "path": "src/quant_execution_engine/evidence_bundle.py",
+          "name": "_build_order_trace_artifact",
+          "line_count": 126,
+          "complexity": 13
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_rebalance",
+          "line_count": 119,
+          "complexity": 26
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "execute_orders",
+          "line_count": 119,
+          "complexity": 18
+        },
+        {
+          "path": "tests/unit/test_smoke_operator_harness.py",
+          "name": "test_latest_tracked_order_ref_uses_current_target_input_path_over_stale_symbol_match",
+          "line_count": 119,
+          "complexity": 1
+        },
+        {
+          "path": "project_tools/export_repo_source.py",
+          "name": "combine_project_files",
+          "line_count": 117,
+          "complexity": 16
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_recovery_actions.py",
+          "name": "reprice_order",
+          "line_count": 114,
+          "complexity": 22
+        },
+        {
+          "path": "tests/unit/test_smoke_operator_harness.py",
+          "name": "test_run_operator_smoke_workflow_uses_subprocess_cleanup_for_longport",
+          "line_count": 114,
+          "complexity": 7
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "latest_operator_outcome",
+          "line_count": 109,
+          "complexity": 34
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/table.py",
+          "name": "render_order_trace",
+          "line_count": 104,
+          "complexity": 26
+        },
+        {
+          "path": "src/quant_execution_engine/diagnostics.py",
+          "name": "diagnose_order_issue",
+          "line_count": 102,
+          "complexity": 37
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "get_order_trace",
+          "line_count": 101,
+          "complexity": 13
+        },
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "name": "place_order",
+          "line_count": 97,
+          "complexity": 13
+        },
+        {
+          "path": "src/quant_execution_engine/handoff_audit.py",
+          "name": "_audit_lineage",
+          "line_count": 95,
+          "complexity": 15
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "save_audit_log",
+          "line_count": 95,
+          "complexity": 12
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "write_evidence",
+          "line_count": 92,
+          "complexity": 21
+        }
+      ],
+      "complexity_hotspots": [
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_config",
+          "line_count": 207,
+          "complexity": 52
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/diff.py",
+          "name": "render_rebalance_diff",
+          "line_count": 191,
+          "complexity": 47
+        },
+        {
+          "path": "src/quant_execution_engine/diagnostics.py",
+          "name": "diagnose_order_issue",
+          "line_count": 102,
+          "complexity": 37
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "plan_rebalance",
+          "line_count": 144,
+          "complexity": 35
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "latest_operator_outcome",
+          "line_count": 109,
+          "complexity": 34
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "main",
+          "line_count": 242,
+          "complexity": 34
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_rebalance",
+          "line_count": 119,
+          "complexity": 26
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/table.py",
+          "name": "render_order_trace",
+          "line_count": 104,
+          "complexity": 26
+        },
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "name": "_cash_snapshot_from_asset",
+          "line_count": 55,
+          "complexity": 25
+        },
+        {
+          "path": "src/quant_execution_engine/evidence_bundle.py",
+          "name": "create_evidence_bundle",
+          "line_count": 151,
+          "complexity": 25
+        },
+        {
+          "path": "src/quant_execution_engine/preflight.py",
+          "name": "run_preflight_checks",
+          "line_count": 186,
+          "complexity": 24
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/table.py",
+          "name": "render_tracked_order_detail",
+          "line_count": 85,
+          "complexity": 24
+        },
+        {
+          "path": "src/quant_execution_engine/renderers/diff.py",
+          "name": "_build_rich_diff",
+          "line_count": 153,
+          "complexity": 23
+        },
+        {
+          "path": "src/quant_execution_engine/state_tools.py",
+          "name": "_derive_parent_aggregate",
+          "line_count": 66,
+          "complexity": 23
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_recovery_actions.py",
+          "name": "reprice_order",
+          "line_count": 114,
+          "complexity": 22
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "write_evidence",
+          "line_count": 92,
+          "complexity": 21
+        },
+        {
+          "path": "src/quant_execution_engine/broker/ibkr.py",
+          "name": "get_account_snapshot",
+          "line_count": 69,
+          "complexity": 21
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "list_exception_orders",
+          "line_count": 81,
+          "complexity": 21
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "_compute_effective_total",
+          "line_count": 43,
+          "complexity": 21
+        },
+        {
+          "path": "src/quant_execution_engine/cli.py",
+          "name": "run_broker_orders",
+          "line_count": 71,
+          "complexity": 18
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "execute_orders",
+          "line_count": 119,
+          "complexity": 18
+        },
+        {
+          "path": "project_tools/smoke_operator_harness.py",
+          "name": "run_operator_smoke_workflow",
+          "line_count": 311,
+          "complexity": 17
+        },
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "name": "fund_positions",
+          "line_count": 54,
+          "complexity": 17
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_state_reconcile_ops.py",
+          "name": "_merge_reconcile_report",
+          "line_count": 54,
+          "complexity": 17
+        },
+        {
+          "path": "src/quant_execution_engine/health.py",
+          "name": "render_health_result",
+          "line_count": 53,
+          "complexity": 17
+        }
+      ],
+      "large_classes": [
+        {
+          "path": "src/quant_execution_engine/broker/longport.py",
+          "name": "LongPortClient",
+          "line_count": 666,
+          "method_count": 23
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service.py",
+          "name": "OrderLifecycleService",
+          "line_count": 564,
+          "method_count": 9
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_state_reconcile_ops.py",
+          "name": "OrderLifecycleStateReconcileOpsMixin",
+          "line_count": 505,
+          "method_count": 24
+        },
+        {
+          "path": "src/quant_execution_engine/execution_service_recovery_actions.py",
+          "name": "OrderLifecycleRecoveryActionsMixin",
+          "line_count": 500,
+          "method_count": 9
+        },
+        {
+          "path": "src/quant_execution_engine/rebalance.py",
+          "name": "RebalanceService",
+          "line_count": 499,
+          "method_count": 15
+        },
+        {
+          "path": "src/quant_execution_engine/broker/ibkr.py",
+          "name": "IbkrPaperBrokerAdapter",
+          "line_count": 329,
+          "method_count": 14
+        },
+        {
+          "path": "src/quant_execution_engine/broker/ibkr_runtime.py",
+          "name": "IbkrRuntime",
+          "line_count": 320,
+          "method_count": 21
+        }
+      ],
+      "quality_config": {
+        "ruff_select": [
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C90"
+        ],
+        "ruff_extend_exclude": [],
+        "ty_include": [
+          "src/quant_execution_engine"
+        ],
+        "ty_exclude": [
+          ".venv",
+          "outputs",
+          "build",
+          "dist"
+        ],
+        "mypy_present": false
+      },
+      "script_inventory": [
+        "project_tools/export_repo_source.py",
+        "project_tools/package.sh",
+        "project_tools/smoke_operator_harness.py",
+        "project_tools/smoke_signal_harness.py",
+        "project_tools/smoke_target_harness.py",
+        "scripts/dev/maintainability_metrics.py"
+      ]
+    }
+  ]
+}

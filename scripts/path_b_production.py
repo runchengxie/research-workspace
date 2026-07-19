@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# pyright: basic
 """
 Path B production version: Concept + Technical feature fusion for ETF rotation.
 

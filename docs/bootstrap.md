@@ -113,7 +113,6 @@ python scripts/run_quality_checks.py --profile hard
 ```bash
 python scripts/workspace_doctor.py --strict
 python src/research_contracts/smoke_contracts.py --strict
-python scripts/run_quality_checks.py --profile basedpyright
 ```
 
 ## 委托子仓库检查

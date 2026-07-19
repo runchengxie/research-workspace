@@ -1,7 +1,7 @@
 {
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
-    "broad_exclude_register_max": 3,
+    "broad_exclude_register_max": 2,
     "per_file_ignore_register_max": 1,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
@@ -26,19 +26,12 @@
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
-          "src/alpha_research/backends",
-          "src/alpha_research/daily_watch20_minute_features.py",
-          "src/alpha_research/daily_watch20_policy.py"
-        ],
-        "promotion_criteria": "expand after package interfaces are extracted and transitional namespace imports are narrower"
-      },
-      "basedpyright": {
-        "current_mode": "release_advisory_basic",
-        "include_targets": [
           "src/alpha_research/cpcv_audit.py",
           "src/alpha_research/backends",
           "src/alpha_research/dataset_sampling.py",
           "src/alpha_research/dataset_sampling_core.py",
+          "src/alpha_research/daily_watch20_minute_features.py",
+          "src/alpha_research/daily_watch20_policy.py",
           "src/alpha_research/dynamic_signal_ensemble_types.py",
           "src/alpha_research/evaluation.py",
           "src/alpha_research/feature_windows.py",
@@ -52,7 +45,7 @@
           "src/alpha_research/train_eval_result.py",
           "src/alpha_research/walk_forward_windows.py"
         ],
-        "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
+        "promotion_criteria": "expand after package interfaces are extracted and transitional namespace imports are narrower"
       }
     },
     {
@@ -74,9 +67,9 @@
         "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/strategy_pipeline/pipeline/contracts.py src/strategy_pipeline/pipeline/output_context.py src/strategy_pipeline/pipeline/output_artifacts.py src/strategy_pipeline/pipeline/output.py src/strategy_pipeline/pipeline/output_orchestration.py src/strategy_pipeline/pipeline/output_summary.py src/strategy_pipeline/pipeline/final_oos_stage.py src/strategy_pipeline/liveops/export_targets.py src/strategy_pipeline/liveops/alloc_core.py src/strategy_pipeline/liveops/alloc_selection.py",
         "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
       },
-      "basedpyright": {
-        "current_mode": "release_advisory_basic",
-        "next_include_targets": [
+      "ty": {
+        "current_hard_gate": "scripts/dev/run_tests.sh typecheck",
+        "include_targets": [
           "src/strategy_pipeline/__init__.py",
           "src/strategy_pipeline/__main__.py",
           "src/strategy_pipeline/cli/common.py",
@@ -85,15 +78,34 @@
           "src/strategy_pipeline/contracts/signals.py",
           "src/strategy_pipeline/contracts/strategy.py",
           "src/strategy_pipeline/daily_watch20_ablation.py",
+          "src/strategy_pipeline/daily_watch20_candidate_oos.py",
+          "src/strategy_pipeline/daily_watch20_candidate_oos_reporting.py",
+          "src/strategy_pipeline/daily_watch20_candidate_pool.py",
+          "src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
           "src/strategy_pipeline/daily_watch20_data.py",
+          "src/strategy_pipeline/daily_watch20_freshness.py",
+          "src/strategy_pipeline/daily_watch20_live_inputs.py",
           "src/strategy_pipeline/daily_watch20_minute.py",
           "src/strategy_pipeline/daily_watch20_oos.py",
           "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "src/strategy_pipeline/daily_watch20_pipeline_publication.py",
+          "src/strategy_pipeline/daily_watch20_policy.py",
+          "src/strategy_pipeline/daily_watch20_policy_snapshot.py",
+          "src/strategy_pipeline/daily_watch20_publication_inputs.py",
+          "src/strategy_pipeline/daily_watch20_publication_tier.py",
+          "src/strategy_pipeline/daily_watch20_publication_validation.py",
+          "src/strategy_pipeline/daily_watch20_publication_window.py",
           "src/strategy_pipeline/daily_watch20_publish.py",
+          "src/strategy_pipeline/dataset.py",
           "src/strategy_pipeline/date_utils.py",
           "src/strategy_pipeline/identity.py",
+          "src/strategy_pipeline/liveops/__init__.py",
+          "src/strategy_pipeline/liveops/alloc_core.py",
+          "src/strategy_pipeline/liveops/alloc_rendering.py",
+          "src/strategy_pipeline/liveops/alloc_selection.py",
+          "src/strategy_pipeline/liveops/export_targets.py",
+          "src/strategy_pipeline/liveops/snapshot.py",
           "src/strategy_pipeline/return_metrics.py",
-          "src/strategy_pipeline/sharpe_stats.py",
           "src/strategy_pipeline/pipeline/contracts.py",
           "src/strategy_pipeline/pipeline/dataset_sampling.py",
           "src/strategy_pipeline/pipeline/dates.py",
@@ -114,47 +126,7 @@
           "src/strategy_pipeline/pipeline/stats.py",
           "src/strategy_pipeline/pipeline/train_eval_request_builder.py",
           "src/strategy_pipeline/pipeline/train_eval_result.py",
-          "src/strategy_pipeline/liveops/__init__.py",
-          "src/strategy_pipeline/liveops/export_targets.py",
-          "src/strategy_pipeline/liveops/alloc_core.py",
-          "src/strategy_pipeline/liveops/alloc_rendering.py",
-          "src/strategy_pipeline/liveops/alloc_selection.py",
-          "src/strategy_pipeline/liveops/snapshot.py"
-        ],
-        "promotion_criteria": "run before release; contract/liveops modules pass before broader orchestration modules are added"
-      },
-      "ty": {
-        "current_hard_gate": "scripts/dev/run_tests.sh typecheck",
-        "include_targets": [
-          "src/strategy_pipeline/cli/common.py",
-          "src/strategy_pipeline/contracts/__init__.py",
-          "src/strategy_pipeline/contracts/backtest.py",
-          "src/strategy_pipeline/contracts/signals.py",
-          "src/strategy_pipeline/contracts/strategy.py",
-          "src/strategy_pipeline/date_utils.py",
-          "src/strategy_pipeline/daily_watch20_candidate_oos.py",
-          "src/strategy_pipeline/daily_watch20_candidate_oos_reporting.py",
-          "src/strategy_pipeline/daily_watch20_candidate_pool.py",
-          "src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
-          "src/strategy_pipeline/daily_watch20_data.py",
-          "src/strategy_pipeline/daily_watch20_freshness.py",
-          "src/strategy_pipeline/daily_watch20_live_inputs.py",
-          "src/strategy_pipeline/daily_watch20_minute.py",
-          "src/strategy_pipeline/daily_watch20_policy.py",
-          "src/strategy_pipeline/daily_watch20_policy_snapshot.py",
-          "src/strategy_pipeline/daily_watch20_pipeline_publication.py",
-          "src/strategy_pipeline/daily_watch20_publication_inputs.py",
-          "src/strategy_pipeline/daily_watch20_publication_window.py",
-          "src/strategy_pipeline/daily_watch20_publication_tier.py",
-          "src/strategy_pipeline/daily_watch20_publication_validation.py",
-          "src/strategy_pipeline/daily_watch20_publish.py",
-          "src/strategy_pipeline/dataset.py",
-          "src/strategy_pipeline/return_metrics.py",
-          "src/strategy_pipeline/pipeline/contracts.py",
-          "src/strategy_pipeline/pipeline/output_context.py",
-          "src/strategy_pipeline/pipeline/output.py",
-          "src/strategy_pipeline/pipeline/output_summary.py",
-          "src/strategy_pipeline/pipeline/owner_ports.py"
+          "src/strategy_pipeline/sharpe_stats.py"
         ],
         "promotion_criteria": "expand typed islands after staged modules are free of dynamic protocol assumptions"
       }
@@ -175,17 +147,14 @@
         "current_hard_gate": "uv run --locked --extra dev ruff check .",
         "promotion_criteria": "whole-repo Ruff hard gate stays green after HK provider production modules are archived"
       },
-      "basedpyright": {
-        "current_mode": "release_advisory_off",
-        "include_targets": [
-          "src/market_data_platform"
-        ],
-        "promotion_criteria": "run before release; raise type coverage after provider adapter contract tests are refreshed"
-      },
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
           "src/market_data_platform/artifacts.py",
+          "src/market_data_platform/cli.py",
+          "src/market_data_platform/cli_tushare_core.py",
+          "src/market_data_platform/cli_tushare_fundamentals.py",
+          "src/market_data_platform/cli_tushare_research.py",
           "src/market_data_platform/contract.py",
           "src/market_data_platform/current_path_audit.py",
           "src/market_data_platform/data_governance.py",
@@ -197,7 +166,8 @@
           "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
           "src/market_data_platform/research_views/daily_watch20_minute_source.py",
           "src/market_data_platform/research_views/daily_watch20_policy.py",
-          "src/market_data_platform/registry.py"
+          "src/market_data_platform/registry.py",
+          "src/market_data_platform/symbols.py"
         ],
         "promotion_criteria": "expand after provider adapter contracts and artifact roots stay type-clean"
       }
@@ -222,27 +192,18 @@
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
         "include_targets": [
-          "src/portfolio_backtester/api.py",
-          "src/portfolio_backtester/backtest_spec.py",
-          "src/portfolio_backtester/types.py"
-        ],
-        "promotion_criteria": "expand after backtesting interfaces are extracted from transitional namespace imports"
-      },
-      "basedpyright": {
-        "current_mode": "release_advisory_basic",
-        "include_targets": [
           "src/portfolio_backtester/__init__.py",
           "src/portfolio_backtester/api.py",
           "src/portfolio_backtester/backtest_spec.py",
           "src/portfolio_backtester/capacity.py",
+          "src/portfolio_backtester/execution_sim/__init__.py",
+          "src/portfolio_backtester/execution_sim/results.py",
           "src/portfolio_backtester/period_outputs.py",
           "src/portfolio_backtester/portfolio.py",
           "src/portfolio_backtester/reports.py",
-          "src/portfolio_backtester/types.py",
-          "src/portfolio_backtester/execution_sim/__init__.py",
-          "src/portfolio_backtester/execution_sim/results.py"
+          "src/portfolio_backtester/types.py"
         ],
-        "promotion_criteria": "run before release; promote only after ty coverage remains green and shared interfaces are extracted"
+        "promotion_criteria": "expand after backtesting interfaces are extracted from transitional namespace imports"
       }
     },
     {
@@ -307,41 +268,10 @@
         "current_hard_gate": "uv run --locked --group dev ruff check .",
         "promotion_criteria": "existing hard gate stays green"
       },
-      "basedpyright": {
-        "current_mode": "release_advisory_basic",
-        "include_targets": [
-          "src/quant_execution_engine/domain.py",
-          "src/quant_execution_engine/_serialization_common.py",
-          "src/quant_execution_engine/_serialization_v1.py",
-          "src/quant_execution_engine/_serialization_v2.py",
-          "src/quant_execution_engine/serialization.py",
-          "src/quant_execution_engine/targets.py",
-          "src/quant_execution_engine/risk.py",
-          "src/quant_execution_engine/preflight.py",
-          "src/quant_execution_engine/rebalance.py",
-          "src/quant_execution_engine/execution_state.py",
-          "src/quant_execution_engine/broker/base.py",
-          "src/quant_execution_engine/execution_service.py",
-          "src/quant_execution_engine/cli.py"
-        ],
-        "promotion_criteria": "run before release; execution-critical modules pass stricter checks before optional broker adapters are tightened"
-      },
       "ty": {
         "current_hard_gate": "uv run --locked --group dev ty check",
         "include_targets": [
-          "src/quant_execution_engine/domain.py",
-          "src/quant_execution_engine/_serialization_common.py",
-          "src/quant_execution_engine/_serialization_v1.py",
-          "src/quant_execution_engine/_serialization_v2.py",
-          "src/quant_execution_engine/serialization.py",
-          "src/quant_execution_engine/targets.py",
-          "src/quant_execution_engine/risk.py",
-          "src/quant_execution_engine/preflight.py",
-          "src/quant_execution_engine/rebalance.py",
-          "src/quant_execution_engine/execution_state.py",
-          "src/quant_execution_engine/broker/base.py",
-          "src/quant_execution_engine/execution_service.py",
-          "src/quant_execution_engine/cli.py"
+          "src/quant_execution_engine"
         ],
         "promotion_criteria": "expand after execution-critical modules remain green under default ty gate"
       }
@@ -352,18 +282,6 @@
       "repo": "strategy-pipeline",
       "path": "configs/local",
       "tool": "ruff",
-      "owner": "strategy-pipeline",
-      "reason": "local override configs are personal and not active package code",
-      "next_include_target": "not_applicable",
-      "review_milestone": "keep excluded by policy",
-      "coverage_patterns": [
-        "configs/local"
-      ]
-    },
-    {
-      "repo": "strategy-pipeline",
-      "path": "configs/local",
-      "tool": "basedpyright",
       "owner": "strategy-pipeline",
       "reason": "local override configs are personal and not active package code",
       "next_include_target": "not_applicable",

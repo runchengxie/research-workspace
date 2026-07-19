@@ -67,12 +67,6 @@ def test_ci_smoke_profile_skips_workspace_import_boundary_gate() -> None:
     assert "workspace-import-boundaries" not in names
 
 
-def test_basedpyright_profile_is_advisory() -> None:
-    commands = run_quality_checks.plan_commands("basedpyright")
-
-    assert [item.name for item in commands] == ["basedpyright-advisory"]
-
-
 def test_dead_code_profile_runs_advisory_wrapper() -> None:
     commands = run_quality_checks.plan_commands("dead-code")
 
@@ -93,8 +87,6 @@ def test_superproject_ci_runs_top_level_quality_gates() -> None:
     assert "python scripts/run_quality_checks.py --profile hard" in workflow
     assert "Run superproject smoke quality profile without private submodules" in workflow
     assert "python scripts/run_quality_checks.py --profile ci-smoke" in workflow
-    assert "python scripts/run_quality_checks.py --profile basedpyright" in workflow
-    assert "continue-on-error: true" in workflow
     assert "uv run --project strategy-pipeline --extra dev" in workflow
     assert "--with 'matplotlib>=3.8' --with 'tabulate>=0.9'" in workflow
     assert "python -m pytest tests -q" in workflow

@@ -6,13 +6,13 @@
 
 | 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、contract smoke | BasedPyright、依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
-| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | BasedPyright、依赖审计 | 数据权限、数据质量和 current contract 发布 |
-| `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、研究证据定点测试 | signal artifact 和候选晋升证据 |
-| `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | BasedPyright、回测定点测试 | 成本、换手、容量和报告口径 |
+| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、contract smoke | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current contract 发布 |
+| `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
+| `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
 | `research-apps` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
-| `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | BasedPyright、依赖审计 | 长窗口研究、编排和目标文件导出 |
-| `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | BasedPyright、集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
+| `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | 依赖审计 | 长窗口研究、编排和目标文件导出 |
+| `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | 集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
 
 执行引擎已经移除 mypy。顶层委托配置不再提供对应的建议检查 profile。
 
@@ -21,7 +21,6 @@
 ```bash
 python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile ci-smoke
-python scripts/run_quality_checks.py --profile basedpyright
 python scripts/run_quality_checks.py --profile architecture
 python scripts/run_quality_checks.py --profile secrets
 python scripts/run_quality_checks.py --profile dead-code
@@ -32,8 +31,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
 `workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py` 和
-`maintainability_baseline.py`。新增质量门禁脚本时，应同时判断是否加入 `ty` 与
-BasedPyright 的目标列表。
+`maintainability_baseline.py`。新增质量门禁脚本时，应同时判断是否加入 `ty` 的目标列表。
 
 ## 跨仓库边界
 

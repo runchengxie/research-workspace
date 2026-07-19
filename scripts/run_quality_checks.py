@@ -33,13 +33,6 @@ def _ty_command(*args: str) -> tuple[str, ...]:
     return ("uv", "run", "--with", "ty", "ty", *args)
 
 
-def _basedpyright_command(*args: str) -> tuple[str, ...]:
-    resolved = shutil.which("basedpyright")
-    if resolved:
-        return (resolved, *args)
-    return ("uv", "run", "--with", "basedpyright", "basedpyright", *args)
-
-
 def plan_commands(profile: str) -> list[PlannedCommand]:
     commands = {
         "lint": [
@@ -48,9 +41,6 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
         ],
         "type": [
             PlannedCommand("ty-check", _ty_command("check")),
-        ],
-        "basedpyright": [
-            PlannedCommand("basedpyright-advisory", _basedpyright_command()),
         ],
         "secrets": [
             PlannedCommand(
@@ -123,7 +113,6 @@ def main(argv: list[str] | None = None) -> int:
         choices=(
             "lint",
             "type",
-            "basedpyright",
             "architecture",
             "secrets",
             "dead-code",

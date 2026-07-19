@@ -10,7 +10,7 @@
           ["uv", "lock", "--check"],
           ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
           ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."],
-          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/quality_debt.py", "--skip-ruff", "--complexity", "--check-baseline", "--check-ratchet", "--skip-basedpyright-ratchet"],
+          ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/quality_debt.py", "--skip-ruff", "--complexity", "--check-baseline", "--check-ratchet"],
           ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/maintainability_metrics.py", "--check-baseline"],
           ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/compatibility_governance.py", "--check"],
           ["uv", "run", "--locked", "--extra", "dev", "python", "scripts/dev/architecture_governance.py", "--check"]
@@ -22,16 +22,7 @@
           ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          [
-            "uv",
-            "run",
-            "--locked",
-            "--extra",
-            "dev",
-            "basedpyright",
-            "--project",
-            "basedpyrightconfig.core-basic.json"
-          ]
+          ["uv", "run", "--locked", "--extra", "dev", "ty", "check", "--error-on-warning"]
         ],
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
@@ -55,7 +46,7 @@
           ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--locked", "--extra", "dev", "basedpyright"]
+          ["scripts/dev/run_tests.sh", "typecheck-release"]
         ],
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
@@ -79,7 +70,7 @@
           ["uv", "run", "--locked", "--extra", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--locked", "--extra", "dev", "basedpyright"]
+          ["scripts/dev/run_tests.sh", "typecheck-release"]
         ],
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
@@ -131,7 +122,7 @@
           ["uv", "run", "--locked", "--group", "dev", "ty", "check"]
         ],
         "release_typecheck": [
-          ["uv", "run", "--locked", "--group", "dev", "python", "-m", "basedpyright"]
+          ["make", "typecheck"]
         ],
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
