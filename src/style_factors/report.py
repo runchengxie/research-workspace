@@ -16,7 +16,7 @@ def _factor_definition_lines() -> list[str]:
         "| Size 大市值 | 多-空 | ln(总市值)，月度分层 |",
         "| Value 低估值 | 多-空 | 1/PB，月度分层 |",
         "| Momentum 动量 | 多-空 | 21日收益（跳过T日），月度分层 |",
-        "| Quality 盈利 | 多-空 | 1/PE_TTM，月度分层 |",
+        "| Earnings Yield 盈利估值 | 多-空 | 1/PE_TTM，月度分层（估值代理，非盈利质量） |",
         "| LowVol 低波动 | 多-空 | -20日波动率，月度分层 |",
         "| Growth 成长 | 多-空 | 净利润同比和营收同比，按公告日对齐 |",
         "| Leverage 低杠杆 | 多-空 | -资产负债率，按公告日对齐 |",

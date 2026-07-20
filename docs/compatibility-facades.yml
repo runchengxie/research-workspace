@@ -113,6 +113,7 @@
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_data.py",
+        "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_base_scores.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_campaign_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_contract.py",

@@ -1,6 +1,9 @@
 """A-share style factor analysis — 9-factor Barra CNE5-inspired model.
 
-Size, Value, Momentum, Quality, LowVol, Growth, Leverage, Beta, Liquidity.
+Size, Value, Momentum, Earnings Yield, LowVol, Growth, Leverage, Beta, Liquidity.
+
+The serialized key ``quality`` is retained for compatibility, but its current
+construction is earnings yield (1/PE_TTM), not an operating-quality factor.
 """
 
 from __future__ import annotations
@@ -39,7 +42,7 @@ FACTOR_LABELS = {
     "size": "Size 大市值",
     "value": "Value 低估值",
     "momentum": "Momentum 动量",
-    "quality": "Quality 盈利",
+    "quality": "Earnings Yield 盈利估值",
     "lowvol": "LowVol 低波动",
     "growth": "Growth 成长",
     "leverage": "Leverage 低杠杆",

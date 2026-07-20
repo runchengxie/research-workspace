@@ -5,6 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 
+from src.style_factors import FACTOR_LABELS
 from src.style_factors.attribution import run_strategy_attribution, run_yearly_strategy_attribution
 from src.style_factors.factor_backtest import (
     available_factor_names,
@@ -13,6 +14,7 @@ from src.style_factors.factor_backtest import (
     get_rebalance_dates,
 )
 from src.style_factors.factor_calc import compute_factors
+from src.style_factors.report import _factor_definition_lines
 
 
 def _sample_market_frames(days: int = 90, symbols: int = 60) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -56,6 +58,14 @@ def test_compute_factors_without_fundamentals_skips_optional_factors() -> None:
     assert {"size", "value", "momentum", "quality", "lowvol"} <= set(
         available_factor_names(factors)
     )
+
+
+def test_legacy_quality_key_is_presented_as_earnings_yield_valuation() -> None:
+    definitions = "\n".join(_factor_definition_lines())
+
+    assert FACTOR_LABELS["quality"] == "Earnings Yield 盈利估值"
+    assert "估值代理，非盈利质量" in definitions
+    assert "Quality 盈利" not in definitions
 
 
 def test_compute_factors_does_not_turn_negative_valuation_into_top_signal() -> None:

@@ -108,6 +108,8 @@ def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
     df["factor_value"] = 1.0 / df["pb_clean"]
 
     df["pe_clean"] = df["pe_ttm"].where(df["pe_ttm"] > 0).clip(lower=1, upper=500)
+    # ``factor_quality`` is a compatibility key.  The value is earnings yield,
+    # so reports must describe it as valuation rather than earnings quality.
     df["factor_quality"] = 1.0 / df["pe_clean"]
 
     df["ret_1d"] = df.groupby("symbol")["close"].pct_change()

@@ -25,7 +25,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 | Size 大市值 | 大市值 - 小市值 | `total_mv` |
 | Value 低估值 | 低 PB - 高 PB | `pb` |
 | Momentum 动量 | 高 21 日动量 - 低 21 日动量 | `close` |
-| Quality 盈利 | 低 PE_TTM - 高 PE_TTM | `pe_ttm` |
+| Earnings Yield 盈利估值 | 低 PE_TTM - 高 PE_TTM | `pe_ttm` |
 | LowVol 低波动 | 低 20 日波动 - 高 20 日波动 | `close` |
 | Growth 成长 | 高增长 - 低增长 | `netprofit_yoy`、`or_yoy` |
 | Leverage 低杠杆 | 低资产负债率 - 高资产负债率 | `debt_to_assets` |
@@ -33,6 +33,10 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 | Liquidity 低换手 | 低换手 - 高换手 | `turnover_rate` |
 
 每个交易日先做截面缩尾和标准化。每个月最后一个交易日按因子排序分成 5 组，等权持有到下个月末，输出最高五分位组合减最低五分位组合的日收益序列。
+
+历史产物和代码为兼容仍使用键名 `quality` / `factor_quality`，但其当前构造严格是
+`1/PE_TTM` 的盈利收益率估值代理，不应解释为盈利质量。真正的盈利质量需要利润率、资产回报、
+现金流和应计等 PIT 基本面证据。
 
 这个工具适合做市场风格复盘、候选策略收益归因和研究解释。账户级风险引擎还需要补充行业中性化、协方差风险预测、特异风险建模、组合优化和 PIT 指数成分约束。
 
@@ -120,7 +124,7 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 
 ## 方法边界
 
-- 估值类输入中，非正 PB/PE_TTM 会被视为缺失，避免把异常值当成极端低估值或高质量。
+- 估值类输入中，非正 PB/PE_TTM 会被视为缺失，避免把异常值当成极端低估值或高盈利收益率。
 - Growth 和 Leverage 依赖 `fina_indicator`，按 `ann_date` 对齐，避免使用尚未公告的数据。
 - 财务指标来自当前可用 raw fundamentals 链路。正式研究引用时仍应结合 `market-data-platform` 的 PIT fundamentals 质量说明。
 - 因子收益是全市场等权多空代理因子收益，暂未纳入交易成本、涨跌停成交约束、ST 过滤和行业中性化。
