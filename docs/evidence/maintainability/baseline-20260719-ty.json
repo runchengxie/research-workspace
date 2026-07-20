@@ -331,7 +331,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 188,
-      "python_loc": 76533,
+      "python_loc": 76618,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -1804,24 +1804,29 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 391,
-      "python_loc": 86458,
+      "python_file_count": 392,
+      "python_loc": 86736,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 46,
-        "long_functions": 111,
-        "complexity_hotspots": 69,
+        "long_functions": 110,
+        "complexity_hotspots": 68,
         "large_classes": 1
       },
       "large_files": [
         {
-          "path": "tests/test_daily_watch20_pipeline.py",
-          "loc": 798,
+          "path": "src/strategy_pipeline/daily_watch20_policy.py",
+          "loc": 799,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_policy.py",
-          "loc": 797,
+          "path": "tests/test_daily_watch20_pipeline.py",
+          "loc": 799,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_daily_watch20_publication_safety.py",
+          "loc": 795,
           "hk_related": false
         },
         {
@@ -1857,11 +1862,6 @@
         {
           "path": "scripts/research/a_share_next_high_explore.py",
           "loc": 779,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_daily_watch20_publication_safety.py",
-          "loc": 776,
           "hk_related": false
         },
         {
@@ -2179,12 +2179,6 @@
         },
         {
           "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
-          "name": "guard_live_input_contract",
-          "line_count": 80,
-          "complexity": 21
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_publication_validation.py",
           "name": "validate_candidate_file_manifest",
           "line_count": 36,
           "complexity": 21
@@ -2241,6 +2235,12 @@
           "path": "src/strategy_pipeline/release_tools/release_runs.py",
           "name": "_package_cmd_from_args",
           "line_count": 33,
+          "complexity": 20
+        },
+        {
+          "path": "src/strategy_pipeline/research_protocols.py",
+          "name": "_evaluate_evidence_item",
+          "line_count": 50,
           "complexity": 20
         }
       ],

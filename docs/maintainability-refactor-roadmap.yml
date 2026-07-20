@@ -50,10 +50,10 @@
     {
       "repo": "strategy-pipeline",
       "max_large_files": 46,
-      "max_long_functions": 111,
-      "max_complexity_hotspots": 69,
+      "max_long_functions": 110,
+      "max_complexity_hotspots": 68,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the standalone research-app extraction removed the embedded fallback, lowered cross-repo hotspot budgets, and added fail-closed DeepSeek lineage plus a clean sdist-to-wheel install gate. Repo-local Ruff, type-check ratchet, maintainability ratchet, 1086-pass/1-skip validation, and a 206-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
+      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
     },
     {
       "repo": "quant-execution-engine",
