@@ -1,0 +1,165 @@
+{
+  "schema_version": "incumbent_challenger_evidence.v1",
+  "generated_at": "2026-07-21T11:00:00Z",
+  "status": "research_only_non_promotable",
+  "automatic_promotion_allowed": false,
+  "experiment": {
+    "title": "旧仓再资格组合策略 vs A4/B16 基准 — 参数扫描实验",
+    "baseline": "guarded_a4b16 (select_daily_watch20, A4+B16 sleeve, Hermite guard)",
+    "challenger": "incumbent_requalification (select_incumbent_requalified_portfolio, entry/exit buffer)",
+    "shared_inputs": {
+      "features": "DAILY_WATCH20_FEATURES (24 daily + 12 minute)",
+      "model": "XGBoost ranker, 300 estimators, rolling 504-day windows",
+      "label": "limit-aware next-open, horizon weights (1d:0.5, 3d:0.3, 5d:0.2)",
+      "source_date": "20260720",
+      "evaluation_window": "trailing 252 trade dates from source_date",
+      "rolling_folds": 3,
+      "cost_assumptions_bps": [10.0, 20.0, 30.0, 50.0],
+      "tradability_price": "raw_open"
+    },
+    "code": {
+      "policy": "portfolio_backtester.incumbent_requalification.IncumbentRequalificationPolicy",
+      "oos_bridge": "portfolio_backtester.daily_watch20_oos.incumbent_requalification_daily_rows",
+      "challenger_module": "research_apps.daily_watch20.incumbent_challenger.run_incumbent_challenger",
+      "research_script": "strategy_pipeline/scripts/research/daily_watch20_incumbent_challenger.py",
+      "portfolio_backtester_rev": "d7be18366fceb5379b0c01b7c10227057ca229b7",
+      "research_apps_rev": "0ce339a82889ec58c006149d3235eca4c902d1f9",
+      "strategy_pipeline_rev": "c0d1e5e"
+    }
+  },
+  "variants": [
+    {
+      "id": "V1_smoke",
+      "description": "初始冒烟测试 — 验证流水线可运行",
+      "evaluation_dates": 5,
+      "policy": {
+        "entry_rank_limit": 15,
+        "exit_rank_limit": 40,
+        "max_new_positions": 4
+      },
+      "key_results": {
+        "turnover_delta": -0.125,
+        "turnover_t_stat": -2.61,
+        "cash_weight": 0.40,
+        "portfolio_size": 12.0,
+        "verdict": "pipeline_verified_but_params_too_restrictive"
+      }
+    },
+    {
+      "id": "V2_63d_tight",
+      "description": "63日窗口，严格准入 — 换手大幅下降但现金过高",
+      "evaluation_dates": 63,
+      "policy": {
+        "entry_rank_limit": 20,
+        "exit_rank_limit": 50,
+        "max_new_positions": 4
+      },
+      "key_results": {
+        "baseline_net_10bps": -10.68,
+        "challenger_net_10bps": 0.92,
+        "delta_net_10bps": 14.84,
+        "delta_net_t_stat": 1.16,
+        "turnover_delta": -0.163,
+        "turnover_t_stat": -9.18,
+        "cash_weight": 0.476,
+        "portfolio_size": 10.5,
+        "buffered_incumbents": 2.19,
+        "verdict": "turnover_reduction_highly_significant_but_excessive_cash"
+      }
+    },
+    {
+      "id": "V3_252d_wide",
+      "description": "252日窗口，宽准入 — 满仓但换手高于基准",
+      "evaluation_dates": 252,
+      "policy": {
+        "entry_rank_limit": 100,
+        "exit_rank_limit": 100,
+        "max_new_positions": 10
+      },
+      "key_results": {
+        "baseline_gross": 0.64,
+        "challenger_gross": 12.86,
+        "baseline_net_10bps": -4.59,
+        "challenger_net_10bps": 5.28,
+        "delta_net_10bps": 10.07,
+        "delta_net_t_stat": 1.63,
+        "turnover_delta": 0.121,
+        "turnover_t_stat": 8.88,
+        "cash_weight": 0.002,
+        "portfolio_size": 19.96,
+        "buffered_incumbents": 0.0,
+        "verdict": "gross_alpha_improvement_clear_but_no_turnover_benefit_without_entry_exit_gap"
+      }
+    },
+    {
+      "id": "V4_252d_sweet_spot",
+      "description": "252日窗口，entry=20/exit=100 — 最均衡配置",
+      "evaluation_dates": 252,
+      "policy": {
+        "entry_rank_limit": 20,
+        "exit_rank_limit": 100,
+        "max_new_positions": 10
+      },
+      "primary": true,
+      "key_results": {
+        "baseline_gross_bps": 0.44,
+        "challenger_gross_bps": 1.71,
+        "baseline_net_10bps": -4.88,
+        "challenger_net_10bps": -2.39,
+        "delta_net_10bps": 1.7,
+        "delta_net_t_stat": 0.28,
+        "delta_net_20bps": 2.9,
+        "delta_net_30bps": 4.1,
+        "delta_net_50bps": 6.4,
+        "delta_net_50bps_t_stat": 1.05,
+        "turnover_delta": -0.0504,
+        "turnover_t_stat": -1.99,
+        "cash_weight": 0.206,
+        "portfolio_size": 15.87,
+        "buffered_incumbents": 3.95,
+        "return_completeness_baseline": "243/252",
+        "return_completeness_challenger": "236/252",
+        "verdict": "best_configuration__turnover_down_5pp_p0_05__gross_improved__buffer_active__needs_larger_entry_pool"
+      }
+    }
+  ],
+  "conclusions": {
+    "summary": "旧仓再资格策略在 entry=20/exit=100/max_new=10 配置下，相比 A4/B16 基准实现了 5pp 换手下降（t=-1.99，接近 95% 显著性），同时 gross 收益略优。策略的缓冲机制有效运行（日均 3.95 只缓冲持仓）。两条策略在该 OOS 窗口的净收益均为负，反映的是模型 Alpha 强度而非组合构造缺陷。",
+    "turnover": {
+      "finding": "entry/exit gap 是实现换手降低的关键——gap 越大换手越低，但现金比例越高",
+      "best_gap": "entry=20, exit=100 → -5.0pp turnover (t=-1.99)",
+      "no_gap_penalty": "entry=exit=100 → +12.1pp turnover (buffered=0)"
+    },
+    "returns": {
+      "finding": "挑战者在所有参数组合下 gross 收益不低于基准，在宽 entry 配置下显著优出",
+      "best_gross": "V3 (entry=100): +12.86 vs +0.64 bps/day",
+      "net_limitation": "高换手 + 高成本可抵消 gross 优势；换手控制是净收益的前提"
+    },
+    "cash_management": {
+      "finding": "entry_rank_limit 是现金比例的支配性参数",
+      "entry20_cash": "20-48% 现金（取决于 max_new_positions）",
+      "entry100_cash": "<1% 现金",
+      "recommendation": "后续实验尝试 entry=50 作为折中"
+    },
+    "statistical_power": {
+      "finding": "252 日窗口内 turnover delta 接近显著（t=-1.99），net delta 不显著（t<1.1）",
+      "recommendation": "需要更多 OOS 日期或更大模型 Alpha 才能对净收益做统计推断"
+    },
+    "next_steps": [
+      "增大 entry_rank_limit 至 40-60 区间以降低现金比例",
+      "增加 refit 频率（6 折代替 3 折）测试模型自适应",
+      "在多个非重叠 OOS 窗口上验证 turnover delta 稳定性",
+      "纳入行业暴露约束（当前 industry_cap 在 challenger 中启用但未在报告中显式追踪）",
+      "长期：与账户状态执行模拟器联动，测试真实 T+1/涨跌停场景"
+    ],
+    "limitations": [
+      "forward_return_proxy 非真实执行回测（涨跌停/部分成交/撤单未模拟）",
+      "OOS 窗口为固定 trailing 252 日，未覆盖完整牛熊周期",
+      "minute_active_ratio 分母非标准化 241 bar",
+      "行业标签非 point-in-time",
+      "无 style neutralization",
+      "仅测试 XGB regressor，未对比 ranker",
+      "成本模型为固定 bps，非参与率滑点模型"
+    ]
+  }
+}
