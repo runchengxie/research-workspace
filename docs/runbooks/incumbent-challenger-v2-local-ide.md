@@ -6,8 +6,8 @@
 
 把 2026-07-21 的旧仓再资格探索升级为可审计的三臂研究协议：
 
-1. guarded A4/B16 生产式基准；
-2. 同分数、同 entry membership、每日重置状态的 stateless control；
+1. guarded A4/B16 生产式基准，
+2. 同分数、同 entry membership、每日重置状态的 stateless control，
 3. 仅增加旧仓状态携带的 stateful challenger。
 
 这份笔记只覆盖必须在本地数据盘和完整工作区中执行的步骤。当前 V1–V4 结果属于 retrospective exploration，不计作新 OOS，也不授权生产切换。
@@ -19,10 +19,10 @@
 - PR：https://github.com/runchengxie/portfolio-backtester/pull/17
 - 分支：`feat/incumbent-oos-controls-v2`
 - 内容：
-  - 严格 stateful OOS bridge；
-  - stateless control bridge；
-  - 缺少 `entry_eligible` 时失败关闭；
-  - 自定义日期和证券列映射；
+  - 严格 stateful OOS bridge，
+  - stateless control bridge，
+  - 缺少 `entry_eligible` 时失败关闭，
+  - 自定义日期和证券列映射，
   - 两日状态、membership 和列映射测试。
 
 ### 2. Research Apps
@@ -31,10 +31,10 @@
 - 分支：`feat/incumbent-challenger-v2-controls`
 - 依赖：portfolio-backtester PR #17
 - 内容：
-  - 三臂 challenger v2；
-  - 内容寻址实验规格；
-  - pairwise common-complete 统计口径；
-  - 禁止自动晋级；
+  - 三臂 challenger v2，
+  - 内容寻址实验规格，
+  - pairwise common-complete 统计口径，
+  - 禁止自动晋级，
   - 状态隔离和失败关闭测试。
 
 ### 3. Strategy evidence contract
@@ -42,10 +42,10 @@
 - PR：https://github.com/runchengxie/strategy-pipeline/pull/28
 - 分支：`feat/incumbent-evidence-contract-v2`
 - 内容：
-  - PIT entry membership 合并和覆盖审计；
-  - 5 日 embargo refit ledger 校验；
-  - NaN/Infinity 转换为 null 的严格 JSON；
-  - 机器生成 evidence payload；
+  - PIT entry membership 合并和覆盖审计，
+  - 5 日 embargo refit ledger 校验，
+  - NaN/Infinity 转换为 null 的严格 JSON，
+  - 机器生成 evidence payload，
   - 禁止人工抄录统计指标。
 
 ## 合并和依赖顺序
@@ -71,9 +71,9 @@ git submodule update --init --recursive
 
 要求：
 
-- 所有仓库工作树干净；
-- 不在已有实验输出目录上覆盖写入；
-- 数据根目录继续使用 `~/data/market-data-platform`；
+- 所有仓库工作树干净，
+- 不在已有实验输出目录上覆盖写入，
+- 数据根目录继续使用 `~/data/market-data-platform`，
 - 新产物放入带版本和时间戳的新目录。
 
 ## Step 1：验证并合并 portfolio-backtester PR #17
@@ -94,11 +94,11 @@ scripts/dev/run_tests.sh maintainability
 
 验收：
 
-- stateful 第二日保留跌出 entry 区但仍在 exit buffer 内的旧仓；
-- stateless 第二日按当日 entry membership 重选；
-- stateful 换手低于 stateless；
-- 缺少 `entry_eligible` 明确失败；
-- 自定义日期和证券列测试通过；
+- stateful 第二日保留跌出 entry 区但仍在 exit buffer 内的旧仓，
+- stateless 第二日按当日 entry membership 重选，
+- stateful 换手低于 stateless，
+- 缺少 `entry_eligible` 明确失败，
+- 自定义日期和证券列测试通过，
 - 全量测试无排除项。
 
 合并后记录：
@@ -155,11 +155,11 @@ PY
 
 验收：
 
-- daily 输出同时包含 `baseline_*`、`stateless_*`、`stateful_*`；
-- `stateful_minus_stateless` 是主要缓冲归因；
-- `stateful_minus_baseline` 仅表示整套替代策略差异；
-- receipt 包含 spec SHA、完整 policy 和 `automatic_promotion_allowed=false`；
-- 缺少 `entry_eligible` 时失败；
+- daily 输出同时包含 `baseline_*`、`stateless_*`、`stateful_*`，
+- `stateful_minus_stateless` 是主要缓冲归因，
+- `stateful_minus_baseline` 仅表示整套替代策略差异，
+- receipt 包含 spec SHA、完整 policy 和 `automatic_promotion_allowed=false`，
+- 缺少 `entry_eligible` 时失败，
 - `uv.lock` 与最终依赖 SHA 一致。
 
 ## Step 3：验证并合并 Strategy evidence contract PR #28
@@ -178,10 +178,10 @@ scripts/dev/run_tests.sh all
 
 验收：
 
-- membership 缺日期、重复键或每日成员数不足时失败；
-- embargo 小于 5 或 fit as-of 不早于评估块时失败；
-- JSON 中不存在 `NaN`、`Infinity` 或 `-Infinity`；
-- evidence payload 始终为 `research_only_non_promotable`；
+- membership 缺日期、重复键或每日成员数不足时失败，
+- embargo 小于 5 或 fit as-of 不早于评估块时失败，
+- JSON 中不存在 `NaN`、`Infinity` 或 `-Infinity`，
+- evidence payload 始终为 `research_only_non_promotable`，
 - `manual_metric_transcription_allowed=false`。
 
 ## Step 4：生成历史 THS strict-v2 entry membership
@@ -214,21 +214,21 @@ trade_date,symbol
 
 `membership_receipt.json` 至少包含：
 
-- candidate pool mode 和 policy ID；
-- 日期起止；
-- 每日成员数最小值、最大值和分位数；
-- rank coverage 状态；
-- 缺失日期；
-- 原始输入路径和 SHA-256；
-- market-data-platform commit；
+- candidate pool mode 和 policy ID，
+- 日期起止，
+- 每日成员数最小值、最大值和分位数，
+- rank coverage 状态，
+- 缺失日期，
+- 原始输入路径和 SHA-256，
+- market-data-platform commit，
 - current contract 和相关 manifest SHA-256。
 
 硬门槛：
 
-- 每个评估日期都有 membership；
-- 每日正成员数至少 20；
-- `(trade_date, symbol)` 唯一；
-- 不使用当前快照回填历史日期；
+- 每个评估日期都有 membership，
+- 每日正成员数至少 20，
+- `(trade_date, symbol)` 唯一，
+- 不使用当前快照回填历史日期，
 - 缺失日期不得自动退化到 all-market。
 
 随后用 Strategy PR #28 的公共函数校验：
@@ -257,9 +257,9 @@ strategy-pipeline/scripts/research/daily_watch20_incumbent_challenger_v2.py
 
 至少使用：
 
-- alpha-research：`528c40af26737468e41da85ed4baa591ed2099dc` 或之后包含 embargo ledger 的 main SHA；
-- portfolio-backtester：PR #17 合并后的 main SHA；
-- research-apps：PR #2 合并后的 main SHA；
+- alpha-research：`528c40af26737468e41da85ed4baa591ed2099dc` 或之后包含 embargo ledger 的 main SHA，
+- portfolio-backtester：PR #17 合并后的 main SHA，
+- research-apps：PR #2 合并后的 main SHA，
 - market-data-platform：membership 生成时使用的精确 SHA。
 
 更新：
@@ -350,14 +350,14 @@ write_strict_json(output_dir / 'incumbent_evidence_v2.json', payload)
 
 lineage 至少包含：
 
-- 五个 owner repo commit；
-- research-workspace commit；
-- feature policy ID；
-- label policy ID；
-- model version 和完整 model params；
-- current contract SHA；
-- daily、minute、membership manifest SHA；
-- campaign spec SHA；
+- 五个 owner repo commit，
+- research-workspace commit，
+- feature policy ID，
+- label policy ID，
+- model version 和完整 model params，
+- current contract SHA，
+- daily、minute、membership manifest SHA，
+- campaign spec SHA，
 - daily CSV、summary JSON、refit ledger 和 membership 文件 SHA。
 
 ## Step 6：参数政策
@@ -366,8 +366,8 @@ lineage 至少包含：
 
 禁止：
 
-- 在同一 252 日窗口继续扫描 entry=40、50、60 后选最优；
-- 把 nominal p 值称为确认性显著；
+- 在同一 252 日窗口继续扫描 entry=40、50、60 后选最优，
+- 把 nominal p 值称为确认性显著，
 - 根据本轮结果自动晋级。
 
 推荐二选一：
@@ -391,29 +391,29 @@ allow_cash=true
 
 可以扫描，但必须：
 
-- 明确标记 exploratory retrospective；
-- 冻结完整参数族和多重检验族；
-- 只用于挑选一个未来 shadow 候选；
-- 所有历史 p 值做 Holm 或同类修正；
+- 明确标记 exploratory retrospective，
+- 冻结完整参数族和多重检验族，
+- 只用于挑选一个未来 shadow 候选，
+- 所有历史 p 值做 Holm 或同类修正，
 - 不把扫描窗口结果计入最终晋级证据。
 
 ## Step 7：历史稳定性诊断
 
 在 252 日历史范围内拆成四个非重叠 63 日窗口，仅作稳定性诊断：
 
-- stateful - stateless turnover delta；
-- stateful - stateless gross/net paired delta；
-- cash weight；
-- buffered incumbent count；
-- industry exposure；
-- gross exposure；
-- return completeness；
+- stateful - stateless turnover delta，
+- stateful - stateless gross/net paired delta，
+- cash weight，
+- buffered incumbent count，
+- industry exposure，
+- gross exposure，
+- return completeness，
 - blocked trade weight。
 
 同时输出：
 
-1. 实际 NAV 口径，现金收益按冻结假设；
-2. invested-capital return；
+1. 实际 NAV 口径，现金收益按冻结假设，
+2. invested-capital return，
 3. 与 challenger 每日 gross exposure 匹配的缩放 baseline。
 
 任何绝对均值必须携带：
@@ -443,10 +443,10 @@ T+120 成熟检查
 
 规则：
 
-- 只追加，不回写；
-- 中途不改参数；
-- 参数变化必须开启新 policy ID 和新 shadow series；
-- 每日保存三臂目标、membership receipt、refit identity 和执行审计；
+- 只追加，不回写，
+- 中途不改参数，
+- 参数变化必须开启新 policy ID 和新 shadow series，
+- 每日保存三臂目标、membership receipt、refit identity 和执行审计，
 - 未达到 T+120 不进入生产晋级讨论。
 
 ## Step 9：质量门禁
