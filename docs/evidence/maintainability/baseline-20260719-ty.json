@@ -331,7 +331,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 190,
-      "python_loc": 79365,
+      "python_loc": 79366,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 49,
@@ -1296,7 +1296,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 130,
-      "python_loc": 35270,
+      "python_loc": 35334,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
@@ -1727,8 +1727,8 @@
     {
       "repo": "research-apps",
       "root": "research-apps",
-      "python_file_count": 79,
-      "python_loc": 16551,
+      "python_file_count": 85,
+      "python_loc": 17857,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
