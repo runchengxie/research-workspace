@@ -13,3 +13,6 @@ artifacts/
 outputs/
 data/
 cache/
+
+# Local AI-agent state
+.codewhale/
