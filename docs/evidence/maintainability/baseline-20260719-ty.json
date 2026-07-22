@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 71,
-      "python_loc": 16677,
+      "python_loc": 16692,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 7,
@@ -330,13 +330,13 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 188,
-      "python_loc": 76618,
+      "python_file_count": 190,
+      "python_loc": 79365,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 47,
-        "long_functions": 65,
-        "complexity_hotspots": 39,
+        "large_files": 49,
+        "long_functions": 70,
+        "complexity_hotspots": 42,
         "large_classes": 1
       },
       "large_files": [
@@ -351,6 +351,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "loc": 2012,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share.py",
           "loc": 1792,
           "hk_related": false
@@ -361,13 +366,13 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 1711,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1686,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1686,
+          "path": "tests/test_tushare_a_share_fundamentals.py",
+          "loc": 1570,
           "hk_related": false
         },
         {
@@ -446,6 +451,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+          "loc": 888,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
           "loc": 877,
           "hk_related": false
@@ -453,16 +463,6 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
           "loc": 871,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/tushare_refresh.py",
-          "loc": 870,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
-          "loc": 863,
           "hk_related": false
         }
       ],
@@ -612,10 +612,10 @@
           "complexity": 1
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "name": "validate_pit_fundamentals",
-          "line_count": 124,
-          "complexity": 16
+          "path": "src/market_data_platform/current_path_audit.py",
+          "name": "_audit_asset",
+          "line_count": 120,
+          "complexity": 15
         }
       ],
       "complexity_hotspots": [
@@ -642,6 +642,12 @@
           "name": "_validate_raw_promotion_evidence",
           "line_count": 135,
           "complexity": 39
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "name": "raw_bundle_completeness",
+          "line_count": 94,
+          "complexity": 38
         },
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
@@ -716,10 +722,28 @@
           "complexity": 22
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "name": "bundle_observation_state",
+          "line_count": 61,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/contract_health.py",
+          "name": "inspect_current_contract",
+          "line_count": 84,
+          "complexity": 21
+        },
+        {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
           "name": "validate_fused_minute_dataset",
           "line_count": 53,
           "complexity": 21
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "name": "validate_normalized_fundamentals",
+          "line_count": 106,
+          "complexity": 20
         },
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
@@ -744,30 +768,6 @@
           "name": "_audit_partition",
           "line_count": 157,
           "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/registry.py",
-          "name": "build_dataset_registry_rows",
-          "line_count": 58,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/cli_data.py",
-          "name": "_source_audit_lineage",
-          "line_count": 77,
-          "complexity": 17
-        },
-        {
-          "path": "src/market_data_platform/research_views/daily_watch20_minute_source.py",
-          "name": "scan_daily_watch20_minute_sources",
-          "line_count": 69,
-          "complexity": 17
-        },
-        {
-          "path": "scripts/dev/compatibility_governance.py",
-          "name": "inventory_issues",
-          "line_count": 38,
-          "complexity": 16
         }
       ],
       "large_classes": [
@@ -812,6 +812,7 @@
           "src/market_data_platform/cli_tushare_fundamentals.py",
           "src/market_data_platform/cli_tushare_research.py",
           "src/market_data_platform/contract.py",
+          "src/market_data_platform/contract_health.py",
           "src/market_data_platform/current_path_audit.py",
           "src/market_data_platform/data_governance.py",
           "src/market_data_platform/data_provider_contracts.py",
@@ -819,11 +820,15 @@
           "src/market_data_platform/paths.py",
           "src/market_data_platform/published_assets.py",
           "src/market_data_platform/published_frames.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
           "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
           "src/market_data_platform/research_views/daily_watch20_minute_source.py",
           "src/market_data_platform/research_views/daily_watch20_policy.py",
           "src/market_data_platform/registry.py",
           "src/market_data_platform/symbols.py",
+          "src/market_data_platform/tushare_cli_fundamentals.py",
           "src/market_data_platform/tushare_minute_quota.py"
         ],
         "ty_exclude": [
@@ -873,11 +878,11 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 126,
-      "python_loc": 30116,
+      "python_loc": 30467,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 13,
-        "long_functions": 20,
+        "long_functions": 21,
         "complexity_hotspots": 25,
         "large_classes": 0
       },
@@ -908,6 +913,11 @@
           "hk_related": false
         },
         {
+          "path": "src/alpha_research/daily_watch20_features.py",
+          "loc": 762,
+          "hk_related": false
+        },
+        {
           "path": "src/alpha_research/feature_evidence.py",
           "loc": 726,
           "hk_related": false
@@ -925,11 +935,6 @@
         {
           "path": "src/alpha_research/split.py",
           "loc": 661,
-          "hk_related": false
-        },
-        {
-          "path": "src/alpha_research/daily_watch20_features.py",
-          "loc": 641,
           "hk_related": false
         },
         {
@@ -984,6 +989,12 @@
           "name": "_evaluate_split_backtest",
           "line_count": 97,
           "complexity": 11
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_oos.py",
+          "name": "score_rolling_oos",
+          "line_count": 97,
+          "complexity": 13
         },
         {
           "path": "src/alpha_research/train_eval_result.py",
@@ -1249,6 +1260,8 @@
           "src/alpha_research/dataset_sampling.py",
           "src/alpha_research/dataset_sampling_core.py",
           "src/alpha_research/daily_watch20_minute_features.py",
+          "src/alpha_research/daily_watch20_features.py",
+          "src/alpha_research/daily_watch20_oos.py",
           "src/alpha_research/daily_watch20_policy.py",
           "src/alpha_research/dynamic_signal_ensemble_types.py",
           "src/alpha_research/evaluation.py",
@@ -1257,6 +1270,7 @@
           "src/alpha_research/period_evaluation.py",
           "src/alpha_research/promotion_gate_thresholds.py",
           "src/alpha_research/signal_artifact.py",
+          "src/alpha_research/style_replica/factors.py",
           "src/alpha_research/train_eval.py",
           "src/alpha_research/train_eval_contracts.py",
           "src/alpha_research/train_eval_request_builder.py",
@@ -1281,13 +1295,13 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 125,
-      "python_loc": 34287,
+      "python_file_count": 130,
+      "python_loc": 35270,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 18,
-        "long_functions": 21,
-        "complexity_hotspots": 23,
+        "long_functions": 22,
+        "complexity_hotspots": 24,
         "large_classes": 0
       },
       "large_files": [
@@ -1337,13 +1351,13 @@
           "hk_related": false
         },
         {
-          "path": "src/portfolio_backtester/engine.py",
+          "path": "src/portfolio_backtester/daily_watch20.py",
           "loc": 709,
           "hk_related": false
         },
         {
-          "path": "src/portfolio_backtester/daily_watch20.py",
-          "loc": 708,
+          "path": "src/portfolio_backtester/engine.py",
+          "loc": 709,
           "hk_related": false
         },
         {
@@ -1474,6 +1488,12 @@
           "complexity": 12
         },
         {
+          "path": "src/portfolio_backtester/incumbent_requalification.py",
+          "name": "_select_symbols",
+          "line_count": 84,
+          "complexity": 17
+        },
+        {
           "path": "tests/test_construction_grid.py",
           "name": "test_construction_grid_reuses_existing_scores",
           "line_count": 84,
@@ -1569,6 +1589,12 @@
           "path": "src/portfolio_backtester/bet_sizing.py",
           "name": "build_sized_weights",
           "line_count": 55,
+          "complexity": 17
+        },
+        {
+          "path": "src/portfolio_backtester/incumbent_requalification.py",
+          "name": "_select_symbols",
+          "line_count": 84,
           "complexity": 17
         },
         {
@@ -1701,8 +1727,8 @@
     {
       "repo": "research-apps",
       "root": "research-apps",
-      "python_file_count": 76,
-      "python_loc": 15758,
+      "python_file_count": 79,
+      "python_loc": 16551,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
@@ -1804,13 +1830,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 392,
-      "python_loc": 86736,
+      "python_file_count": 415,
+      "python_loc": 95104,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 46,
-        "long_functions": 110,
-        "complexity_hotspots": 68,
+        "large_files": 51,
+        "long_functions": 119,
+        "complexity_hotspots": 70,
         "large_classes": 1
       },
       "large_files": [
@@ -1822,6 +1848,11 @@
         {
           "path": "tests/test_daily_watch20_pipeline.py",
           "loc": 799,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/a_share_next_open_to_high_minute_audit.py",
+          "loc": 796,
           "hk_related": false
         },
         {
@@ -1842,11 +1873,6 @@
         {
           "path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
           "loc": 791,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/research/a_share_next_open_to_high_minute_audit.py",
-          "loc": 790,
           "hk_related": false
         },
         {
@@ -1900,6 +1926,11 @@
           "hk_related": false
         },
         {
+          "path": "scripts/research/daily_watch20_candidate_oos.py",
+          "loc": 749,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/pipeline/config.py",
           "loc": 749,
           "hk_related": false
@@ -1925,18 +1956,13 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_daily_watch20_fundamental_shadow.py",
+          "loc": 718,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 717,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
-          "loc": 680,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
-          "loc": 649,
           "hk_related": false
         }
       ],
@@ -2288,7 +2314,15 @@
           "src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
           "src/strategy_pipeline/daily_watch20_data.py",
           "src/strategy_pipeline/daily_watch20_freshness.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_contract.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_evidence.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_features.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_shadow_publish.py",
+          "src/strategy_pipeline/daily_watch20_fundamental_stability.py",
           "src/strategy_pipeline/daily_watch20_live_inputs.py",
+          "src/strategy_pipeline/daily_watch20_market_shadow.py",
+          "src/strategy_pipeline/daily_watch20_market_shadow_publish.py",
           "src/strategy_pipeline/daily_watch20_minute.py",
           "src/strategy_pipeline/daily_watch20_oos.py",
           "src/strategy_pipeline/daily_watch20_pipeline.py",
@@ -2300,6 +2334,9 @@
           "src/strategy_pipeline/daily_watch20_publication_validation.py",
           "src/strategy_pipeline/daily_watch20_publication_window.py",
           "src/strategy_pipeline/daily_watch20_publish.py",
+          "src/strategy_pipeline/daily_watch20_shadow_guard.py",
+          "src/strategy_pipeline/daily_watch20_shadow_metrics.py",
+          "src/strategy_pipeline/daily_watch20_shadow_review.py",
           "src/strategy_pipeline/dataset.py",
           "src/strategy_pipeline/date_utils.py",
           "src/strategy_pipeline/identity.py",
@@ -2330,7 +2367,9 @@
           "src/strategy_pipeline/pipeline/stats.py",
           "src/strategy_pipeline/pipeline/train_eval_request_builder.py",
           "src/strategy_pipeline/pipeline/train_eval_result.py",
-          "src/strategy_pipeline/sharpe_stats.py"
+          "src/strategy_pipeline/sharpe_stats.py",
+          "scripts/research/daily_watch20_candidate_oos.py",
+          "scripts/research/daily_watch20_fundamental_shadow.py"
         ],
         "ty_exclude": [
           ".venv",
@@ -2362,6 +2401,7 @@
         "scripts/research/a_share_next_open_to_high_backtest.py",
         "scripts/research/a_share_next_open_to_high_common.py",
         "scripts/research/a_share_next_open_to_high_cost_stress.py",
+        "scripts/research/a_share_next_open_to_high_coverage_manifest.py",
         "scripts/research/a_share_next_open_to_high_daily_benchmark.py",
         "scripts/research/a_share_next_open_to_high_minute_audit.py",
         "scripts/research/a_share_next_open_to_high_minute_benchmark.py",
@@ -2369,6 +2409,8 @@
         "scripts/research/a_share_next_open_to_high_reporting.py",
         "scripts/research/daily_watch20_candidate_oos.py",
         "scripts/research/daily_watch20_flite_campaign.py",
+        "scripts/research/daily_watch20_fundamental_shadow.py",
+        "scripts/research/daily_watch20_incumbent_challenger.py",
         "scripts/research/daily_watch20_minute_campaign.py",
         "scripts/research/daily_watch20_slow_volume_campaign.py",
         "scripts/research/hotsector_ai_shadow.py",
