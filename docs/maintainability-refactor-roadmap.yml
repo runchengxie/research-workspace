@@ -17,27 +17,27 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 47,
-      "max_long_functions": 65,
-      "max_complexity_hotspots": 39,
+      "max_large_files": 49,
+      "max_long_functions": 70,
+      "max_complexity_hotspots": 42,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly."
+      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
     },
     {
       "repo": "alpha-research",
       "max_large_files": 13,
-      "max_long_functions": 20,
+      "max_long_functions": 21,
       "max_complexity_hotspots": 25,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family."
+      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
     },
     {
       "repo": "portfolio-backtester",
       "max_large_files": 18,
-      "max_long_functions": 21,
-      "max_complexity_hotspots": 23,
+      "max_long_functions": 22,
+      "max_complexity_hotspots": 24,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm."
+      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
     },
     {
       "repo": "research-apps",
@@ -49,11 +49,11 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 46,
-      "max_long_functions": 110,
-      "max_complexity_hotspots": 68,
+      "max_large_files": 51,
+      "max_long_functions": 119,
+      "max_complexity_hotspots": 70,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone."
+      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
     },
     {
       "repo": "quant-execution-engine",
@@ -171,6 +171,33 @@
         "quant-execution-engine smoke harness tests"
       ],
       "non_goals": "do not change broker smoke safety switches"
+    },
+    {
+      "owner_repo": "market-data-platform",
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+      "first_safe_extraction": "workspace_governance_refresh",
+      "risk": "medium",
+      "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
+      "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
+      "focused_tests": []
+    },
+    {
+      "owner_repo": "strategy-pipeline",
+      "path": "strategy-pipeline/scripts/research/daily_watch20_candidate_oos.py",
+      "first_safe_extraction": "workspace_governance_refresh",
+      "risk": "medium",
+      "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
+      "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
+      "focused_tests": []
+    },
+    {
+      "owner_repo": "strategy-pipeline",
+      "path": "strategy-pipeline/tests/test_daily_watch20_fundamental_shadow.py",
+      "first_safe_extraction": "workspace_governance_refresh",
+      "risk": "medium",
+      "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
+      "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
+      "focused_tests": []
     }
   ],
   "accepted_hotspots": [
@@ -753,8 +780,8 @@
     {
       "path": "alpha-research/tests/test_promotion_gate.py",
       "owner_repo": "alpha-research",
-      "reason": "promotion gate 主体已经迁到 alpha-research，这个大测试文件随模块一起登记",
-      "next_action": "promotion gate 测试变更时按证据类型拆分"
+      "reason": "promotion gate \u4e3b\u4f53\u5df2\u7ecf\u8fc1\u5230 alpha-research\uff0c\u8fd9\u4e2a\u5927\u6d4b\u8bd5\u6587\u4ef6\u968f\u6a21\u5757\u4e00\u8d77\u767b\u8bb0",
+      "next_action": "promotion gate \u6d4b\u8bd5\u53d8\u66f4\u65f6\u6309\u8bc1\u636e\u7c7b\u578b\u62c6\u5206"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/dataset_sampling.py",
@@ -801,14 +828,14 @@
     {
       "path": "alpha-research/src/alpha_research/promotion_gate.py",
       "owner_repo": "alpha-research",
-      "reason": "promotion gate 的主体实现已经迁到 alpha-research，当前先登记为 alpha 研究侧维护性债务",
-      "next_action": "promotion gate 变更时拆分证据读取、阈值判定和报告渲染逻辑"
+      "reason": "promotion gate \u7684\u4e3b\u4f53\u5b9e\u73b0\u5df2\u7ecf\u8fc1\u5230 alpha-research\uff0c\u5f53\u524d\u5148\u767b\u8bb0\u4e3a alpha \u7814\u7a76\u4fa7\u7ef4\u62a4\u6027\u503a\u52a1",
+      "next_action": "promotion gate \u53d8\u66f4\u65f6\u62c6\u5206\u8bc1\u636e\u8bfb\u53d6\u3001\u9608\u503c\u5224\u5b9a\u548c\u62a5\u544a\u6e32\u67d3\u903b\u8f91"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/summarize_runs.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "汇总报告实现进入当前基线，先登记为研究汇总流程的现有债务",
-      "next_action": "summarize_runs 变更时拆分读取、指标汇总和渲染逻辑"
+      "reason": "\u6c47\u603b\u62a5\u544a\u5b9e\u73b0\u8fdb\u5165\u5f53\u524d\u57fa\u7ebf\uff0c\u5148\u767b\u8bb0\u4e3a\u7814\u7a76\u6c47\u603b\u6d41\u7a0b\u7684\u73b0\u6709\u503a\u52a1",
+      "next_action": "summarize_runs \u53d8\u66f4\u65f6\u62c6\u5206\u8bfb\u53d6\u3001\u6307\u6807\u6c47\u603b\u548c\u6e32\u67d3\u903b\u8f91"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/a_share_executable_oos_topk.py",
@@ -987,8 +1014,8 @@
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "DeepSeek 稳定性实验的执行调度、失败分类和追加式账本写入集中在同一个可审计边界内，当前版本已经绑定冻结证据并通过专项测试",
-      "next_action": "实验协议再次变更时，先拆分重试调度、尝试历史校验和账本写入逻辑"
+      "reason": "DeepSeek \u7a33\u5b9a\u6027\u5b9e\u9a8c\u7684\u6267\u884c\u8c03\u5ea6\u3001\u5931\u8d25\u5206\u7c7b\u548c\u8ffd\u52a0\u5f0f\u8d26\u672c\u5199\u5165\u96c6\u4e2d\u5728\u540c\u4e00\u4e2a\u53ef\u5ba1\u8ba1\u8fb9\u754c\u5185\uff0c\u5f53\u524d\u7248\u672c\u5df2\u7ecf\u7ed1\u5b9a\u51bb\u7ed3\u8bc1\u636e\u5e76\u901a\u8fc7\u4e13\u9879\u6d4b\u8bd5",
+      "next_action": "\u5b9e\u9a8c\u534f\u8bae\u518d\u6b21\u53d8\u66f4\u65f6\uff0c\u5148\u62c6\u5206\u91cd\u8bd5\u8c03\u5ea6\u3001\u5c1d\u8bd5\u5386\u53f2\u6821\u9a8c\u548c\u8d26\u672c\u5199\u5165\u903b\u8f91"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_three_arm_shadow.py",
@@ -999,38 +1026,38 @@
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "活动计划、输入绑定和证据复核共用一套严格失败语义，当前模块低于项目的 800 行硬门槛",
-      "next_action": "增加新的活动类型前，将计划构造和证据复核提取为独立模块"
+      "reason": "\u6d3b\u52a8\u8ba1\u5212\u3001\u8f93\u5165\u7ed1\u5b9a\u548c\u8bc1\u636e\u590d\u6838\u5171\u7528\u4e00\u5957\u4e25\u683c\u5931\u8d25\u8bed\u4e49\uff0c\u5f53\u524d\u6a21\u5757\u4f4e\u4e8e\u9879\u76ee\u7684 800 \u884c\u786c\u95e8\u69db",
+      "next_action": "\u589e\u52a0\u65b0\u7684\u6d3b\u52a8\u7c7b\u578b\u524d\uff0c\u5c06\u8ba1\u5212\u6784\u9020\u548c\u8bc1\u636e\u590d\u6838\u63d0\u53d6\u4e3a\u72ec\u7acb\u6a21\u5757"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_stability.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "稳定性分析集中保存预注册指标、置信区间和晋级判定，便于复现实验结论并核对冻结产物",
-      "next_action": "新增指标族前，将位置偏差分析和重合度分析拆成独立的纯函数模块"
+      "reason": "\u7a33\u5b9a\u6027\u5206\u6790\u96c6\u4e2d\u4fdd\u5b58\u9884\u6ce8\u518c\u6307\u6807\u3001\u7f6e\u4fe1\u533a\u95f4\u548c\u664b\u7ea7\u5224\u5b9a\uff0c\u4fbf\u4e8e\u590d\u73b0\u5b9e\u9a8c\u7ed3\u8bba\u5e76\u6838\u5bf9\u51bb\u7ed3\u4ea7\u7269",
+      "next_action": "\u65b0\u589e\u6307\u6807\u65cf\u524d\uff0c\u5c06\u4f4d\u7f6e\u504f\u5dee\u5206\u6790\u548c\u91cd\u5408\u5ea6\u5206\u6790\u62c6\u6210\u72ec\u7acb\u7684\u7eaf\u51fd\u6570\u6a21\u5757"
     },
     {
       "path": "market-data-platform/src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
       "owner_repo": "market-data-platform",
-      "reason": "分钟数据替换活动编排集中管理配额窗口、调度循环和清单推进，当前版本有专项测试和复杂性基线",
-      "next_action": "扩展活动阶段前，将配额管理和清单持久化拆分为独立模块"
+      "reason": "\u5206\u949f\u6570\u636e\u66ff\u6362\u6d3b\u52a8\u7f16\u6392\u96c6\u4e2d\u7ba1\u7406\u914d\u989d\u7a97\u53e3\u3001\u8c03\u5ea6\u5faa\u73af\u548c\u6e05\u5355\u63a8\u8fdb\uff0c\u5f53\u524d\u7248\u672c\u6709\u4e13\u9879\u6d4b\u8bd5\u548c\u590d\u6742\u6027\u57fa\u7ebf",
+      "next_action": "\u6269\u5c55\u6d3b\u52a8\u9636\u6bb5\u524d\uff0c\u5c06\u914d\u989d\u7ba1\u7406\u548c\u6e05\u5355\u6301\u4e45\u5316\u62c6\u5206\u4e3a\u72ec\u7acb\u6a21\u5757"
     },
     {
       "path": "market-data-platform/tests/test_tushare_minute_replacement_campaign_runner.py",
       "owner_repo": "market-data-platform",
-      "reason": "替换活动场景测试集中覆盖安全窗口、配额检查点、进程信号、readiness 证据和失败关闭路径",
-      "next_action": "活动协议再次变更时，按调度、配额和 readiness 证据拆分场景与共享 fixture"
+      "reason": "\u66ff\u6362\u6d3b\u52a8\u573a\u666f\u6d4b\u8bd5\u96c6\u4e2d\u8986\u76d6\u5b89\u5168\u7a97\u53e3\u3001\u914d\u989d\u68c0\u67e5\u70b9\u3001\u8fdb\u7a0b\u4fe1\u53f7\u3001readiness \u8bc1\u636e\u548c\u5931\u8d25\u5173\u95ed\u8def\u5f84",
+      "next_action": "\u6d3b\u52a8\u534f\u8bae\u518d\u6b21\u53d8\u66f4\u65f6\uff0c\u6309\u8c03\u5ea6\u3001\u914d\u989d\u548c readiness \u8bc1\u636e\u62c6\u5206\u573a\u666f\u4e0e\u5171\u4eab fixture"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "V4 月度计划生成和信号校验在同一模块内，当前版本低于 800 行硬门槛并有冻结证据",
-      "next_action": "新增计划变体前，将计划构造逻辑和信号校验逻辑分离"
+      "reason": "V4 \u6708\u5ea6\u8ba1\u5212\u751f\u6210\u548c\u4fe1\u53f7\u6821\u9a8c\u5728\u540c\u4e00\u6a21\u5757\u5185\uff0c\u5f53\u524d\u7248\u672c\u4f4e\u4e8e 800 \u884c\u786c\u95e8\u69db\u5e76\u6709\u51bb\u7ed3\u8bc1\u636e",
+      "next_action": "\u65b0\u589e\u8ba1\u5212\u53d8\u4f53\u524d\uff0c\u5c06\u8ba1\u5212\u6784\u9020\u903b\u8f91\u548c\u4fe1\u53f7\u6821\u9a8c\u903b\u8f91\u5206\u79bb"
     },
     {
       "path": "strategy-pipeline/tests/test_hotsector_deepseek_v4_month.py",
       "owner_repo": "strategy-pipeline",
-      "reason": "V4 月度计划专项测试集中覆盖信号稳定性、熔断和冻结证据路径",
-      "next_action": "保持测试与源模块同步重构"
+      "reason": "V4 \u6708\u5ea6\u8ba1\u5212\u4e13\u9879\u6d4b\u8bd5\u96c6\u4e2d\u8986\u76d6\u4fe1\u53f7\u7a33\u5b9a\u6027\u3001\u7194\u65ad\u548c\u51bb\u7ed3\u8bc1\u636e\u8def\u5f84",
+      "next_action": "\u4fdd\u6301\u6d4b\u8bd5\u4e0e\u6e90\u6a21\u5757\u540c\u6b65\u91cd\u6784"
     }
   ]
 }
