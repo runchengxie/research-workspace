@@ -1727,8 +1727,8 @@
     {
       "repo": "research-apps",
       "root": "research-apps",
-      "python_file_count": 85,
-      "python_loc": 17905,
+      "python_file_count": 89,
+      "python_loc": 18720,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
