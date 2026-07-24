@@ -69,6 +69,7 @@
 |------|--------|------|
 | hotsector | 热点板块研究（research-apps 下的研究包），也指 hot-sector-screener 子模块 | 英文是中文（热点板块）的拼接缩写 |
 | Hermes | 消息投递层（基于 Feishu/lark 的推送框架），负责把报告发到飞书 | 专有名词，保留英文 |
+| Hermite | 稳定性守卫（因子之上的因子变换），用作 B 袖 guard | 与 Hermes（飞书投递层）不是一回事 |
 | DailyWatch、DailyWatch20 | 本工作区通过 strategy-pipeline 产出并发布给 market-intel 的 20 只 A 股每日观察名单 | DailyWatch 意为每日观察，20 表示 20 只 |
 | watchlist20 | 20 股观察名单的产出物与命令（strategy watchlist20 run），与 DailyWatch20 同义 | 策略层的叫法 |
 | A4、B16 | DailyWatch20 的内部两袖结构：A 袖 4 只、B 袖 16 只，合计 20 只 | 选型与权重约束的内部叫法 |
