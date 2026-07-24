@@ -8,7 +8,7 @@
 - 数据平台改动进入 `market-data-platform`。
 - Alpha、因子和信号研究改动进入 `alpha-research`。
 - 组合构造和研究回测改动进入 `portfolio-backtester`。
-- 策略编排、CLI 兼容层和执行目标导出改动进入 `strategy-pipeline`。
+- 策略编排、命令行（CLI） 兼容层和执行目标导出改动进入 `strategy-pipeline`。
 - 交易执行改动进入 `quant-execution-engine`。
 - 顶层文档和脚本只覆盖跨仓库交接、文件约定、发布、健康检查和治理事项。
 

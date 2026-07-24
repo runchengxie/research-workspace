@@ -15,8 +15,8 @@ gitlink 的多仓组合。未来是否增加公开镜像不影响当前 owner �
 2. `market_data_platform` 提供分钟源目录、overlay 完整性、缓存分区指纹、输入可用性和 universe policy。
 3. `alpha_research` 提供分钟 transform/evidence 和 alpha policy。
 4. `portfolio_backtester` 提供 staggered cash/carry 状态机、受阻交易会计、终态口径和 public execution summary。
-5. `research_apps` 组合上述 owner API，拥有 F-lite、slow-volume 与 DeepSeek V4 研究 runner。runner 返回普通 frames/report，不进行最终发布。
-6. `strategy_pipeline` 保留 provider 调用、操作员控制、原子发布、receipt、release gate 与 target handoff。
+5. `research_apps` 组合上述 owner 应用程序接口（API），拥有 F-lite、slow-volume 与 DeepSeek V4 研究 runner。runner 返回普通 frames/report，不进行最终发布。
+6. `strategy_pipeline` 保留 provider 调用、操作员控制、原子发布、receipt、release gate 与 target 交接。
 7. `strategy_pipeline` wheel 和源码 checkout 均不再包含内嵌 `research_apps`。历史
    `strategy_pipeline.*` public module 仅保留直接委派 owner API 的薄兼容 facade，并由
    `docs/compatibility-facades.yml` 单独管理退役条件。
@@ -45,7 +45,7 @@ gitlink 的多仓组合。未来是否增加公开镜像不影响当前 owner �
 
 ## 实施结果
 
-2026-07-19 已按上述顺序合并 owner PR，并将六个子模块固定到各自 `main`。Strategy 删除
+2026-07-19 已按上述顺序合并 owner 拉取请求（PR），并将六个子模块固定到各自 `main`。Strategy 删除
 内嵌 `research_apps` 源码，只保留登记过的 owner-delegating public facade。最终本地验证包括
 176 个 superproject 测试、36 条 delegated full-profile 命令、research-apps 的 54 模块和
 4 资源 wheel smoke，以及 Strategy 的 206 模块隔离安装 smoke。所有仓库的 GitHub Actions

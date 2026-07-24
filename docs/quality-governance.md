@@ -6,8 +6,8 @@
 
 | 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、contract smoke | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
-| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current contract 发布 |
+| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current 契约 发布 |
 | `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
 | `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
 | `research-apps` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
@@ -67,6 +67,6 @@ uvx deptry .
 uvx bandit -q -r src -lll
 ```
 
-provider SDK、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
+provider 软件开发工具包（SDK）、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
 
 coverage 按高风险模块逐步提高，不设置跨仓库统一阈值。

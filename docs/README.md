@@ -24,6 +24,7 @@
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看港股恢复专用归档 | [archive/hk/README.md](archive/hk/README.md) |
+| 术语表 | [glossary.md](glossary.md) |
 
 ## 参考资料
 
@@ -43,9 +44,9 @@
 
 - 活跃链路包含六个 Git 子模块
 - `src/research_contracts` 是顶层普通目录
-- A 股 current contract 是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16，PIT 财务和历史行业资产已发布
-- `normalized_fundamentals` 尚未写入 current contract，完整 PIT 策略证据仍待补齐
+- A 股 current 契约 是 `metadata/current_assets/a_share_current.json`
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（point-in-time）（PIT） 财务和历史行业资产已发布
+- `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 - 顶层和子模块 GitHub Actions workflow 当前停用，`research-apps` 的仓库 Actions 权限也禁用

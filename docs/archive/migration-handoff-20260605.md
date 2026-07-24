@@ -1,10 +1,10 @@
-# 迁移交接 - 2026-06-05
+# 迁移交接（2026-06-05）
 
-> status: archived
-> owner: workspace
-> last_verified: 2026-06-13
-> source_of_truth: no
-> superseded_by: ../bootstrap.md
+> status：archived
+> owner：workspace
+> last_verified：2026-06-13
+> source_of_truth：no
+> superseded_by：../bootstrap.md
 
 本历史交接记录保存 2026-06-05 使用的定向 USB 迁移包和 WSL 恢复步骤。
 当前新机器初始化从 [bootstrap.md](../bootstrap.md) 开始；当前 A 股迁移和恢复决策从
@@ -14,7 +14,7 @@
 
 ## 目标
 
-从 USB 盘恢复研究工作区，为 A 股 2015-2026 PIT top800 内存探针配置 WSL，
+从 USB 盘恢复研究工作区，为 A 股 2015-2026 时间点（point-in-time）（PIT） top800 内存探针配置 WSL，
 并在长任务运行前完成聚焦验证。
 
 ## USB 文件

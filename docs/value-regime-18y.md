@@ -8,11 +8,11 @@
 >
 > 数据范围：2008-03-03 ~ 2026-06-26（18 年，4,452 个交易日）
 > 因子来源：research-workspace `style_factors` 9 因子 Barra 模型
-> 关联调度：market-intel 每周六通过 Hermes cron 生成价值因子周报并投递飞书
+> 关联调度：market-intel 每周六通过 Hermes 定时任务 生成价值因子周报并投递飞书
 
 ## 一、因子概述
 
-Value 因子定义为 `1/PB`（市净率倒数），经 winsorize（1%/99%）和 z-score 标准化后，月度调仓构建 long-short 组合。组合做多低 PB 股票、做空高 PB 股票，日收益序列代表低估值风格相对于市场的超额表现。
+Value 因子定义为 `1/PB`（市净率倒数），经 winsorize（1%/99%）和 z-score 标准化后，月度调仓构建 long-short 组合。组合做多低 市净率（PB） 股票、做空高 PB 股票，日收益序列代表低估值风格相对于市场的超额表现。
 
 18 年累计收益 +174.9%，年化 +5.9%，最大回撤 -38.7%。
 
@@ -162,7 +162,7 @@ MOMENTUM 的 4 周胜率仅 51%，短期噪音很大。中长期趋势延续性�
 | 因子计算 | `research-workspace/src/style_factors/` |
 | 因子产出 | `research-workspace/artifacts/style_analysis_codex_full_20260629/` |
 | 周报脚本 | `market-intel/src/a_share_analysis/value_regime_weekly.py` |
-| Cron 任务 | `7c350edbf47c`（每周六 09:00）|
+| 定时任务 任务 | `7c350edbf47c`（每周六 09:00）|
 | 分析文档 | `research-workspace/docs/value-regime-18y.md`（本文件）|
 
 *生成时间：2026-06-29，基于 2008-2026 全量数据*

@@ -39,8 +39,8 @@ python scripts/hk_archive_gate.py \
   --format json
 ```
 
-exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256。它不复制
-`.git`，不创建远端仓库，不修改 submodule，不删除源文件。
+exporter 只从 清单 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256。它不复制
+`.git`，不创建远端仓库，不修改 子模块，不删除源文件。
 
 ## 删除门禁
 
@@ -51,7 +51,7 @@ exporter 只从 manifest 中 pin 的 Git revision 导出 allowlist 文件并生�
 - consumer audit。
 - replacement docs。
 - rollback notes。
-- owning repo focused tests。
+- owning 仓库 focused tests。
 - 私有暂存证据。
 - zero-usage release window。
 

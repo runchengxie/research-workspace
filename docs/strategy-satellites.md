@@ -36,7 +36,7 @@ portfolio-backtester / staggered execution
 ```
 
 AI 选择还要保存准确 Prompt、原始响应、模型标识、代码版本、哈希和 `available_at`。
-缺少这些正文时，只能保留为 retrospective 或 tombstone，不能补写成 OOS。
+缺少这些正文时，只能保留为 retrospective 或 tombstone，不能补写成 样本外（OOS）。
 
 ## 接入规则
 

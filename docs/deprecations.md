@@ -11,9 +11,9 @@
 | `rqdata-hk-depth` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-tick` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-hk-assets` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
-| 历史港股 allocation CLI | `strategy-pipeline` | `strategy alloc` plus `strategy export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
+| 历史港股 allocation 命令行（CLI） | `strategy-pipeline` | `strategy alloc` plus `strategy export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
 | HK historical experiment configs | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | active experiment configs archived 2026-06-13 |
-| 旧共享 Python namespace、CLI 与环境变量 fallback | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
+| 旧共享 Python 命名空间、CLI 与环境变量 兜底 | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
 
 ## 删除门禁
 
@@ -32,13 +32,13 @@
 - 在 [`compatibility-facades.yml`](compatibility-facades.yml) 登记 owner、替代入口和 removal release。
 - native 与替代 backend 的差分 fixture 已通过，行为差异有明确分类。
 - 第三方框架关闭或卸载后，回滚路径仍可运行。
-- 删除不会把 Qlib、vn.py 或 LEAN 类型提升为跨仓库 contract。
+- 删除不会把 Qlib、vn.py 或 LEAN 类型提升为跨仓库 契约。
 - 对应 workstream 已在 [`framework-integration-ledger.yml`](framework-integration-ledger.yml) 达到退出条件。
 
 早期私有 legacy archive 暂存本身不授权删除。本页的 removed 状态必须同时引用恢复演练、consumer audit、source tag、focused verification 和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
 
-## Owner-native namespace compatibility
+## Owner-native 命名空间 compatibility
 
 旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio distribution
-不得重新安装共享 namespace。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
-配置 dotted path、日志 namespace、外部 notebook 与命令行 consumer audit。
+不得重新安装共享 命名空间。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
+配置 dotted path、日志 命名空间、外部 notebook 与命令行 consumer audit。

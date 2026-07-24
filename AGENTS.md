@@ -21,8 +21,8 @@
 | `market-data-platform` | 数据资产生产、检查、发布和读取 |
 | `alpha-research` | 特征、模型、研究评估和信号产物 |
 | `portfolio-backtester` | 组合构造、回测、成本、容量、暴露和报告 |
-| `research-apps` | 组合 owner API，运行 F-lite、slow-volume 和 DeepSeek V4 研究应用 |
-| `strategy-pipeline` | 研究编排、CLI、运行目录和 `targets.json` 导出 |
+| `research-apps` | 组合 owner 应用程序接口（API），运行 F-lite、slow-volume 和 DeepSeek V4 研究应用 |
+| `strategy-pipeline` | 研究编排、命令行（CLI）、运行目录和 `targets.json` 导出 |
 | `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
 顶层不保存大型数据、研究运行产物、provider 缓存、券商凭证或交易审计日志。
@@ -48,7 +48,7 @@ workflow 定义，也不会触发远端检查。文档中不得把停用模板�
 
 ## 文件约定
 
-A 股权威 current contract：
+A 股权威 current 契约：
 
 ```text
 metadata/current_assets/a_share_current.json
@@ -74,7 +74,7 @@ targets.json
 - 避免中英混杂的长句、翻译腔和先否定再转折的表达
 - 尽量不用双引号、加粗、分号和破折号
 - 文档中的命令、文件名和默认值必须能从代码或测试中核对
-- 外部框架能力以 `docs/framework-support-matrix.md` 为准，历史 PR 和跳过的测试不能写成当前支持
+- 外部框架能力以 `docs/framework-support-matrix.md` 为准，历史 拉取请求（PR） 和跳过的测试不能写成当前支持
 
 文档润色不得顺手修改公开接口、路径、资产键或历史产物名称。
 
@@ -84,13 +84,13 @@ targets.json
 - 修改 `scripts/submodule_checks.json` 时同步更新 `tests/test_run_submodule_checks.py`
 - 修改子模块列表时同步更新 `.gitmodules`、doctor、版本矩阵和测试
 - 修改 Python 命名空间边界时运行 `tests/test_namespace_contracts.py` 和 `tests/test_workspace_import_boundaries.py`
-- 修改 `targets.json` 或 current contract 时运行对应契约测试
+- 修改 `targets.json` 或 current 契约 时运行对应契约测试
 
 ## Git 工作流
 
 当前远端只维护 `main`。先在对应子仓库完成检查、提交并推送 `main`，再更新顶层
 gitlink 和版本记录。需要并行开发时使用独立 clone，避免多个 worktree 共享并改写
-同一组 hook 配置。
+同一组 钩子 配置。
 
 提交前检查暂存区，避免加入以下内容：
 

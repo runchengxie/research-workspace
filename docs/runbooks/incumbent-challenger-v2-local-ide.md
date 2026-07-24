@@ -1,4 +1,4 @@
-# DailyWatch20 旧仓再资格 v2：本地 IDE 执行笔记
+# DailyWatch20（每日观察的 20 只 A 股名单，由 strategy-pipeline 产出给 market-intel） 旧仓再资格 v2：本地 IDE 执行笔记
 
 生成日期：2026-07-21
 
@@ -6,13 +6,13 @@
 
 把 2026-07-21 的旧仓再资格探索升级为可审计的三臂研究协议：
 
-1. guarded A4/B16 生产式基准，
+1. guarded A4/B16（DailyWatch20 内部两袖：A 袖 4 只、B 袖 16 只） 生产式基准，
 2. 同分数、同 entry membership、每日重置状态的 stateless control，
 3. 仅增加旧仓状态携带的 stateful challenger。
 
-这份笔记只覆盖必须在本地数据盘和完整工作区中执行的步骤。当前 V1–V4 结果属于 retrospective exploration，不计作新 OOS，也不授权生产切换。
+这份笔记只覆盖必须在本地数据盘和完整工作区中执行的步骤。当前 V1–V4 结果属于 retrospective exploration，不计作新 样本外（OOS），也不授权生产切换。
 
-## 已创建的 PR
+## 已创建的 拉取请求（PR）
 
 ### 1. Portfolio owner
 
@@ -37,12 +37,12 @@
   - 禁止自动晋级，
   - 状态隔离和失败关闭测试。
 
-### 3. Strategy evidence contract
+### 3. Strategy evidence 契约
 
 - PR：https://github.com/runchengxie/strategy-pipeline/pull/28
 - 分支：`feat/incumbent-evidence-contract-v2`
 - 内容：
-  - PIT entry membership 合并和覆盖审计，
+  - 时间点（point-in-time）（PIT） entry membership 合并和覆盖审计，
   - 5 日 embargo refit ledger 校验，
   - NaN/Infinity 转换为 null 的严格 JSON，
   - 机器生成 evidence payload，
@@ -59,7 +59,7 @@
 5. 跑完整 Research Apps 门禁，通过后把 PR #2 标记 Ready 并合并。
 6. Strategy PR #28 可独立验证和合并。
 7. Strategy 的 v2 运行脚本接入最终 alpha、portfolio 和 research-apps main SHA 后，再更新 `pyproject.toml` 与 `uv.lock`。
-8. 最后更新 research-workspace submodule 指针、workspace manifest 和治理基线。
+8. 最后更新 research-workspace 子模块 指针、workspace 清单 和治理基线。
 
 ## 本地准备
 
@@ -162,7 +162,7 @@ PY
 - 缺少 `entry_eligible` 时失败，
 - `uv.lock` 与最终依赖 SHA 一致。
 
-## Step 3：验证并合并 Strategy evidence contract PR #28
+## Step 3：验证并合并 Strategy evidence 契约 PR #28
 
 ```bash
 cd /home/richard/code/research-workspace/strategy-pipeline
@@ -221,7 +221,7 @@ trade_date,symbol
 - 缺失日期，
 - 原始输入路径和 SHA-256，
 - market-data-platform commit，
-- current contract 和相关 manifest SHA-256。
+- current 契约 和相关 清单 SHA-256。
 
 硬门槛：
 
@@ -350,13 +350,13 @@ write_strict_json(output_dir / 'incumbent_evidence_v2.json', payload)
 
 lineage 至少包含：
 
-- 五个 owner repo commit，
+- 五个 owner 仓库 commit，
 - research-workspace commit，
 - feature policy ID，
 - label policy ID，
 - model version 和完整 model params，
-- current contract SHA，
-- daily、minute、membership manifest SHA，
+- current 契约 SHA，
+- daily、minute、membership 清单 SHA，
 - campaign spec SHA，
 - daily CSV、summary JSON、refit ledger 和 membership 文件 SHA。
 

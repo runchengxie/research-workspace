@@ -1,10 +1,10 @@
-# 港股冷存储冻结记录 - 2026-06-01
+# 港股冷存储冻结记录（2026-06-01）
 
-> status: archived
-> owner: market-data-platform
-> last_verified: 2026-06-10
-> source_of_truth: no
-> superseded_by: ../README.md
+> status：archived
+> owner：market-data-platform
+> last_verified：2026-06-10
+> source_of_truth：no
+> superseded_by：../README.md
 
 ## 结果
 
@@ -27,7 +27,7 @@ bytes: 6922830594
 checksum: sha256
 ```
 
-活跃根目录中的 `metadata/dataset_registry.csv` 已重建为 A 股 contract 索引。冷存储保留：
+活跃根目录中的 `metadata/dataset_registry.csv` 已重建为 A 股 契约 索引。冷存储保留：
 
 ```text
 metadata/current_assets/hk_current.json
@@ -72,11 +72,11 @@ https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_cold_freeze
 /home/richard/data/market-data-platform/metadata/archive/repo_local_artifacts_pre_cleanup_20260601
 ```
 
-该目录中的 `cleanup-manifest.json` 记录了保留文件、SHA-256、迁移记录和远端港股 freeze manifest 的关联。
+该目录中的 `cleanup-manifest.json` 记录了保留文件、SHA-256、迁移记录和远端港股 freeze 清单 的关联。
 
 ## Tick-Depth 限制
 
-港股 tick-depth 平台资产只保留索引、manifest 和派生产物。manifest 中记录的原始盘口缓存路径已经不在本机：
+港股 tick-depth 平台资产只保留索引、清单 和派生产物。清单 中记录的原始盘口缓存路径已经不在本机：
 
 ```text
 /home/richard/code/research-workspace/rqdata-hk-depth-snapshots/artifacts/cache/rqdata/hk_tick_depth

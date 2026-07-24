@@ -1,10 +1,10 @@
-# 港股研究产物冷存储冻结记录 - 2026-06-01
+# 港股研究产物冷存储冻结记录（2026-06-01）
 
-> status: archived
-> owner: cross-sectional-trees
-> last_verified: 2026-06-10
-> source_of_truth: no
-> superseded_by: ../README.md
+> status：archived
+> owner：cross-sectional-trees
+> last_verified：2026-06-10
+> source_of_truth：no
+> superseded_by：../README.md
 
 ## 结果
 
@@ -32,7 +32,7 @@ checksum: sha256
 
 ## 发布包
 
-快照已经压缩为单文件归档，并附带 manifest、marker 和 SHA-256 清单：
+快照已经压缩为单文件归档，并附带 清单、marker 和 SHA-256 清单：
 
 ```text
 package dir: /home/richard/data/cross-sectional-trees-cold/packages/hk-research-freeze-20260601
@@ -65,7 +65,7 @@ https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_research_fr
 
 ## 与数据平台冻结的关系
 
-研究包是数据平台 release 的补充，不是替代：
+研究包补充数据平台 release，二者承担不同职责：
 
 ```text
 data assets: /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526

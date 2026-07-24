@@ -23,7 +23,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 | 因子 | 当前方向 | 主要输入 |
 | --- | --- | --- |
 | Size 大市值 | 大市值 - 小市值 | `total_mv` |
-| Value 低估值 | 低 PB - 高 PB | `pb` |
+| Value 低估值 | 低 市净率（PB） - 高 PB | `pb` |
 | Momentum 动量 | 高 21 日动量 - 低 21 日动量 | `close` |
 | Earnings Yield 盈利估值 | 低 PE_TTM - 高 PE_TTM | `pe_ttm` |
 | LowVol 低波动 | 低 20 日波动 - 高 20 日波动 | `close` |
@@ -36,7 +36,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 
 历史产物和代码为兼容仍使用键名 `quality` / `factor_quality`，但其当前构造严格是
 `1/PE_TTM` 的盈利收益率估值代理，不应解释为盈利质量。真正的盈利质量需要利润率、资产回报、
-现金流和应计等 PIT 基本面证据。
+现金流和应计等 时间点（point-in-time）（PIT） 基本面证据。
 
 这个工具适合做市场风格复盘、候选策略收益归因和研究解释。账户级风险引擎还需要补充行业中性化、协方差风险预测、特异风险建模、组合优化和 PIT 指数成分约束。
 
@@ -48,7 +48,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 daily / daily_basic: 2008-01-02 ~ 2026-06-26
 ```
 
-这段日期用于复现该次报告，不代表 current contract 的实时截止日。全量运行默认读取执行时
+这段日期用于复现该次报告，不代表 current 契约 的实时截止日。全量运行默认读取执行时
 可用的全部日期。`--quick` 从 `2020-01-01` 开始读取分区，用于调试和快速产出。
 
 ## 运行命令
@@ -96,7 +96,7 @@ uv run python -m src.style_factors \
   --outdir artifacts/style_analysis_strategy
 ```
 
-归因使用 OLS：
+归因使用 普通最小二乘（OLS）：
 
 ```text
 strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * liquidity + residual

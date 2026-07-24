@@ -1,10 +1,10 @@
-# 港股冷存储快照 - 2026-05-26
+# 港股冷存储快照（2026-05-26）
 
-> status: archived
-> owner: market-data-platform
-> last_verified: 2026-06-10
-> source_of_truth: no
-> superseded_by: ../README.md
+> status：archived
+> owner：market-data-platform
+> last_verified：2026-06-10
+> source_of_truth：no
+> superseded_by：../README.md
 
 ## 状态
 
@@ -41,11 +41,11 @@ archive sha256: cbbe642736c2d0f51c52cf8f0ee6113d5d85f77a1ce2c422e4fba5b82edd0184
 
 ## 内容
 
-归档包含港股数据平台冻结快照中的资产、港股 universe、style 产物、intraday cache、报告、current contract 和 registry 切片。`freeze-manifest.json` 保留逐路径 SHA-256 清单，`hk-frozen-marker.json` 保留活跃数据根目录切换到冷存储后的定位信息。
+归档包含港股数据平台冻结快照中的资产、港股 universe、style 产物、intraday cache、报告、current 契约 和 registry 切片。`freeze-manifest.json` 保留逐路径 SHA-256 清单，`hk-frozen-marker.json` 保留活跃数据根目录切换到冷存储后的定位信息。
 
 ## Tick-Depth 限制
 
-本快照不包含 manifest 中记录的约 `41.1GB` 原始盘口缓存。该来源路径冻结前已经不在本机。归档中仍保留港股 tick-depth 的索引、manifest 和派生产物，因此不要把本 Release 描述为完整原始盘口归档。
+本快照不包含 清单 中记录的约 `41.1GB` 原始盘口缓存。该来源路径冻结前已经不在本机。归档中仍保留港股 tick-depth 的索引、清单 和派生产物，因此不要把本 Release 描述为完整原始盘口归档。
 
 ## 下载后验证
 

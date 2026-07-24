@@ -27,7 +27,7 @@
 | --- | --- |
 | `status` | `active` 是当前操作入口，`reference` 是稳定参考，`archived` 是历史记录，`superseded` 是兼容跳转页。 |
 | `owner` | 谁负责业务含义和后续更新。跨仓库页面写 `workspace`。 |
-| `last_verified` | 最近一次检查链接、contract 名称和市场称谓的日期。 |
+| `last_verified` | 最近一次检查链接、契约 名称和市场称谓的日期。 |
 | `source_of_truth` | 是否是当前权威入口。兼容页和历史记录通常写 `no`。 |
 | `superseded_by` | 被替代时写当前入口。未替代写 `n/a`。 |
 
@@ -58,8 +58,8 @@
 | --- | --- |
 | A 股迁移机器交接、WSL 恢复和一次性迁移包记录 | [archive/migration-handoff-20260605.md](archive/migration-handoff-20260605.md) |
 | 中国香港市场冷存储、恢复、公开/私有拆分和清理门禁 | [archive/hk/README.md](archive/hk/README.md) |
-| 冻结发布说明、session handoff 和历史复核记录 | `archive/hk/records/` |
-| 证据 JSON | `evidence/`，由对应脚本或 manifest 引用 |
+| 冻结发布说明、session 交接 和历史复核记录 | `archive/hk/records/` |
+| 证据 JSON | `evidence/`，由对应脚本或 清单 引用 |
 
 ## 兼容入口
 
@@ -76,7 +76,7 @@
 - 新人 30 分钟内需要读的当前路径留在 active docs。
 - 跨仓库文件约定、发布门禁和 doctor 依赖的页面保留为 active 或 reference。
 - 一次性交接、冻结说明、发布说明、历史复查和恢复演练进入 archive records。
-- Manifest 已记录的清单不在 Markdown 里重复维护长表。Markdown 只解释边界并链接 manifest。
+- 清单 已记录的清单不在 Markdown 里重复维护长表。Markdown 只解释边界并链接 清单。
 - 超过 300 行且需要人工持续维护的文档，应拆分、生成，或降级到 archive。
-- 旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容说明。当前 A 股权威 contract
+- 旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容说明。当前 A 股权威 契约
   是 `metadata/current_assets/a_share_current.json`。

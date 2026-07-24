@@ -1,10 +1,10 @@
 # 中国香港市场归档
 
-> status: active
-> owner: workspace
-> last_verified: 2026-06-29
+> status：active
+> owner：workspace
+> last_verified：2026-06-29
 > source_of_truth: yes
-> superseded_by: n/a
+> superseded_by：n/a
 
 本页收口中国香港市场历史数据、研究产物和恢复专用归档入口。当前活跃主线是 A 股数据、研究和执行交接；港股真实资产按冷存储和显式恢复流程维护。
 
@@ -15,7 +15,7 @@
 - 代码组合：`hk-freeze-20260613` 已在 `research-workspace`、`market-data-platform`、
   `strategy-pipeline`、`quant-execution-engine` 推送，用作后续港股恢复专用工作区的源版本。
 - 私有旧代码：已发布到外部私有、暂停维护、恢复专用仓库
-  `git@github.com:runchengxie/hk-quant-legacy-archive.git`，不作为本工作区 submodule、
+  `git@github.com:runchengxie/hk-quant-legacy-archive.git`，不作为本工作区 子模块、
   CI 目标或运行依赖。
 - 港股恢复专用工作区：已发布到外部私有仓库
   `git@github.com:runchengxie/hk-research-workspace-archive.git`，仅 pin 三个子模块到
@@ -44,14 +44,14 @@
 | 类型 | 文档 |
 | --- | --- |
 | 数据平台发布说明 | [records/hk-cold-freeze-20260526.md](records/hk-cold-freeze-20260526.md) |
-| 数据平台 session handoff | [records/hk-cold-storage-20260601.md](records/hk-cold-storage-20260601.md) |
+| 数据平台 session 交接 | [records/hk-cold-storage-20260601.md](records/hk-cold-storage-20260601.md) |
 | 研究产物发布说明 | [records/hk-research-freeze-20260601.md](records/hk-research-freeze-20260601.md) |
-| 研究产物 session handoff | [records/hk-research-cold-storage-20260601.md](records/hk-research-cold-storage-20260601.md) |
+| 研究产物 session 交接 | [records/hk-research-cold-storage-20260601.md](records/hk-research-cold-storage-20260601.md) |
 | 私有旧代码归档证据 | [../../evidence/hk-private-archive-stage-20260613.json](../../evidence/hk-private-archive-stage-20260613.json) |
 | 港股 provider 旧入口删除审计 | [../../evidence/hk-provider-legacy-removal-20260613.json](../../evidence/hk-provider-legacy-removal-20260613.json) |
 | 港股恢复专用工作区证据 | [../../evidence/hk-research-workspace-archive-20260613.json](../../evidence/hk-research-workspace-archive-20260613.json) |
 
-恢复前先从对应 session handoff 读取冷存储路径、manifest、校验命令和已知限制。
+恢复前先从对应 session 交接 读取冷存储路径、清单、校验命令和已知限制。
 
 ## 公开拆分门禁
 

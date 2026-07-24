@@ -1,10 +1,10 @@
 # 主动收益指标迁移记录
 
-> status: completed
-> owner: workspace
-> completed_at: 2026-07-14
+> status：completed
+> owner：workspace
+> completed_at：2026-07-14
 
-本页记录 `portfolio-backtester#11` 与 `strategy-pipeline#25` 已完成的职责迁移。当前使用方式以各仓库 README 和公开 API 文档为准。
+本页记录 `portfolio-backtester#11` 与 `strategy-pipeline#25` 已完成的职责迁移。当前使用方式以各仓库 README 和公开 应用程序接口（API） 文档为准。
 
 ## 已完成内容
 

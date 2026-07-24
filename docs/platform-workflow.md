@@ -32,14 +32,14 @@ targets.json
 模拟盘、实盘和运行门禁仍由执行引擎负责。
 
 A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
-`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整 PIT、
+`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整 时间点（point-in-time）（PIT）、
 长窗口策略证据和真实券商能力必须独立验收。
 
 ## 七段式研究地图
 
 | 阶段 | 所有者 | 稳定对象 / 文件 |
 | --- | --- | --- |
-| 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、manifest、registry |
+| 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、清单、registry |
 | 研究数据集 | `alpha-research` / `strategy-pipeline` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
 | 模型 | `alpha-research` | `ResearchModel.detail()`、`feature_importance.csv`、`model_detail` summary |
 | 信号 | `alpha-research` | `signals.parquet` |
@@ -54,8 +54,8 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引，承载中国大陆市场数据入口、A 股资产发布和港股归档恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
-| 研究应用 | `research-apps` | 组合数据、alpha 和回测 owner API，运行 F-lite、slow-volume 与 DeepSeek V4 研究 runner，不负责最终发布 | `research_apps.*`、普通 frames/report |
-| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责 CLI、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
+| 研究应用 | `research-apps` | 组合数据、alpha 和回测 owner 应用程序接口（API），运行 F-lite、slow-volume 与 DeepSeek V4 研究 runner，不负责最终发布 | `research_apps.*`、普通 frames/report |
+| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责 命令行（CLI）、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界
@@ -64,8 +64,8 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 | 层级 | 仓库 | 负责的防线 | 文档入口 |
 | --- | --- | --- | --- |
-| 数据防泄漏 | `market-data-platform` | current contract、manifest、PIT universe、PIT fundamentals、历史行业、research validation、current health 和 release evidence | [`market-data-platform/docs/research-integrity.md`](../market-data-platform/docs/research-integrity.md) |
-| Alpha 防过拟合 | `alpha-research` | time-series CV、rolling / walk-forward、final OOS、CPCV、purge / embargo、feature evidence、DSR、promotion gate 和候选晋升证据 | [`alpha-research/README.md`](../alpha-research/README.md) |
+| 数据防泄漏 | `market-data-platform` | current 契约、清单、PIT universe、PIT fundamentals、历史行业、research validation、current health 和 release evidence | [`market-data-platform/docs/research-integrity.md`](../market-data-platform/docs/research-integrity.md) |
+| Alpha 防过拟合 | `alpha-research` | time-series CV、rolling / walk-forward、final 样本外（OOS）、组合对称交叉验证（CPCV）、purge / embargo、feature evidence、DSR、promotion gate 和候选晋升证据 | [`alpha-research/README.md`](../alpha-research/README.md) |
 | 回测稳健性 | `portfolio-backtester` | turnover/cost、capacity、benchmark ladder、execution simulation、exposure 和报告复核 | [`portfolio-backtester/README.md`](../portfolio-backtester/README.md) |
 | 应用组合边界 | `research-apps` | 只组合 owner API，runner 返回普通 frames/report，不进行最终发布 | [`research-apps/README.md`](../research-apps/README.md) |
 | 执行隔离和审计 | `quant-execution-engine` | 标准 `targets.json` 输入、dry-run / paper / live 分层、风控预检、订单审计、对账和 evidence bundle | [`quant-execution-engine/docs/research-handoff-governance.md`](../quant-execution-engine/docs/research-handoff-governance.md) |
@@ -83,7 +83,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 `strategy-pipeline/docs/market-lifecycle.md` 为准。
 
 当前执行顺序见 [data-transition-playbook.md](data-transition-playbook.md)。活跃
-`DATA_PLATFORM_ROOT` 保留 A 股 current contract、资产和 registry。港股需要复现时先
+`DATA_PLATFORM_ROOT` 保留 A 股 current 契约、资产和 registry。港股需要复现时先
 执行 hydrate。A 股主线使用 `default`，`default_next` 只保留迁移兼容用途。完整 PIT、
 长窗口证据和券商能力继续按就绪度分层验收。
 
@@ -118,7 +118,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 `strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 `alpha-research`、
 `portfolio-backtester` 和 `research-apps` 完成研究流程。`research-apps` 拥有独立研究
 runner，`strategy-pipeline` 继续负责 provider 调用、操作员控制、原子发布和 target
-handoff。A 股主入口是 `strategy run --config default`。
+交接。A 股主入口是 `strategy run --config default`。
 `default_next` 是同一 A 股 preset 的迁移兼容别名。分钟因子、DailyWatch20、
 staggered cohort 和热点 AI shadow 目前属于 research-only campaign，不能直接修改
 线上模型或执行目标。港股只用于历史恢复。

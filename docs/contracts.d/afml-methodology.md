@@ -1,8 +1,8 @@
 # AFML 方法产物契约
 
-本页是 `docs/contracts.md` 的 owner-native 扩展，由 artifact contract validator 一并读取。
+本页是 `docs/contracts.md` 的 owner-native 扩展，由 artifact 契约 validator 一并读取。
 
-| Artifact | Contract | Owner | Canonical file | 用途 |
+| Artifact | 契约 | Owner | Canonical file | 用途 |
 | --- | --- | --- | --- | --- |
 | `label_events.parquet` | `alpha_research.label_events` | `alpha-research` | `label_events.parquet` | 统一标签、purging、embargo 和 overlap 事件窗口 |
 | `sample_weights.parquet` | `alpha_research.sample_weights` | `alpha-research` | `sample_weights.parquet` | uniqueness、time decay 和 return-attribution 训练权重 |
@@ -26,4 +26,4 @@
 - `afml_evidence_fragment.json` 只合并路径、状态和 SHA-256，不替代正式 protocol report。
 - `research_protocol_report.json` 只决定候选是否允许交接，不改变 `targets.json`。
 - `execution_policy_receipt.json` 关联目标 artifact hash，但不反向修改研究模型。
-- `handoff_audit_report.json` 验证完整性，不解释 Sharpe、IC、DSR 或 PBO。
+- `handoff_audit_report.json` 验证完整性，不解释 Sharpe、信息系数（IC）、DSR 或 回测过拟合概率（PBO）。

@@ -1,10 +1,10 @@
-# 港股研究产物冷存储快照 - 2026-06-01
+# 港股研究产物冷存储快照（2026-06-01）
 
-> status: archived
-> owner: cross-sectional-trees
-> last_verified: 2026-06-10
-> source_of_truth: no
-> superseded_by: ../README.md
+> status：archived
+> owner：cross-sectional-trees
+> last_verified：2026-06-10
+> source_of_truth：no
+> superseded_by：../README.md
 
 ## 状态
 
