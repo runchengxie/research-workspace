@@ -8,9 +8,9 @@
 
 ## 状态
 
-这是 `cross-sectional-trees` 中国香港市场历史研究产物的私有冷存储快照。Release 创建时暂不上传附件；待手工复核后，再上传下列文件。
+这是 `cross-sectional-trees` 中国香港市场历史研究产物的私有冷存储快照。Release（发布包）创建时暂时不上传附件。待手工复核后，再上传下列文件。
 
-本快照与港股数据平台 release `hk_cold_freeze_20260526_full` 配套使用。数据平台 release 保存输入数据资产，本 release 保存研究侧生成物。
+本快照与港股数据平台的 release（发布包）`hk_cold_freeze_20260526_full` 配套使用。数据平台的 release 保存输入数据资产，本 release 保存研究侧产物。
 
 ```text
 paths: 879
@@ -37,15 +37,15 @@ archive bytes: 205106541
 archive sha256: 32ff3cd048eb33d5aaa067449932e4528b91700ee07995de46289565f271c6f4
 ```
 
-主归档小于 GitHub Release 单附件 `2 GiB` 限制，不需要分片。
+主归档小于 GitHub Release（发布包）单附件 `2 GiB` 限制，不需要拆分。
 
 ## 内容
 
-归档包含历史港股 runs、sweeps、reports、live runs、benchmarks、exports、残留 intraday cache 和港股 universe metadata。`research-freeze-manifest.json` 保留逐路径 SHA-256 树摘要，`hk-research-frozen-marker.json` 保留活跃研究仓库切换到冷存储后的定位信息。
+归档包含历史港股的 runs（运行记录）、sweeps（参数扫描）、reports（报告）、live runs（实盘运行）、benchmarks（基准测试）、exports（导出文件）、残留的盘中缓存（intraday cache），以及港股股票池的 metadata（元数据）。`research-freeze-manifest.json` 保留逐路径的 SHA-256 树摘要，`hk-research-frozen-marker.json` 保留活跃研究仓库切换到冷存储后的定位信息。
 
 ## 排除项
 
-本快照不包含 A 股 cache、数据平台 asset symlink、共享 catalog 或 `artifacts/migration_backups/20260525_hk_data_platform_pre_switch`。最后一项是迁移时代的平台审计备份，保留旧 symlink 拓扑价值，但不应重复装入研究包。
+本快照不包含 A 股的 cache（缓存）、数据平台的 asset symlink（资产符号链接）、共享 catalog（目录），或 `artifacts/migration_backups/20260525_hk_data_platform_pre_switch`。最后一项是迁移时代的平台审计备份，保留旧 symlink（符号链接）拓扑价值，但不应重复装入研究包。
 
 ## 下载后验证
 

@@ -27,7 +27,7 @@ bytes: 6922830594
 checksum: sha256
 ```
 
-活跃根目录中的 `metadata/dataset_registry.csv` 已重建为 A 股 契约 索引。冷存储保留：
+活跃根目录中的 `metadata/dataset_registry.csv` 已重建为 A 股数据契约（约定数据格式与来源的配置文件）索引。冷存储保留：
 
 ```text
 metadata/current_assets/hk_current.json
@@ -37,7 +37,7 @@ metadata/dataset_registry.pre-freeze.csv
 
 ## 发布包
 
-冻结快照已经聚合为单文件归档，并附带便于单独审阅的 sidecar 元数据：
+冻结快照已聚合为单个归档文件，并附带便于单独审阅的 sidecar（伴随）元数据：
 
 ```text
 package dir: /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526
@@ -48,7 +48,7 @@ tar entries: 86082
 compression: tar | zstd -12 -T0 --long=27
 ```
 
-主归档小于 GitHub Release 单附件 `2 GiB` 限制，不需要分片。上传前和下载后都应验证：
+主归档小于 GitHub Release（发布包）单附件 `2 GiB` 限制，不需要拆分。上传前和下载后都应验证：
 
 ```bash
 cd /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526
@@ -64,19 +64,19 @@ zstd -t hk-freeze-20260526.tar.zst
 https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_cold_freeze_20260526_full
 ```
 
-上传复核完成后，本地解包快照和 package 副本已经删除。活跃数据根目录中的 freeze marker 仍保留预期解压路径；恢复前必须先下载 release 附件、校验 SHA-256，并将主归档解压回该路径。
+上传复核完成后，本地的已解包快照和归档包副本已删除。活跃数据根目录中的 freeze marker（冻结标记）仍保留预期的解压路径。恢复之前必须先下载 release（发布包）附件、校验 SHA-256，再把主归档解压回该路径。
 
-仓库内旧 `market-data-platform/artifacts/` 也已删除，`.env.local` 已切换到 `/home/richard/data/market-data-platform`。删除前，未进入外部迁移记录的 `39` 个文件和旧目录中的 `639` 条 symlink 拓扑已经保存到：
+仓库内旧 `market-data-platform/artifacts/` 也已删除，`.env.local` 已切换到 `/home/richard/data/market-data-platform`。删除之前，未进入外部迁移记录的 `39` 个文件和旧目录中的 `639` 条 symlink（符号链接）拓扑结构已保存到：
 
 ```text
 /home/richard/data/market-data-platform/metadata/archive/repo_local_artifacts_pre_cleanup_20260601
 ```
 
-该目录中的 `cleanup-manifest.json` 记录了保留文件、SHA-256、迁移记录和远端港股 freeze 清单 的关联。
+该目录中的 `cleanup-manifest.json` 记录了保留文件、SHA-256、迁移记录，以及远端港股 freeze（冻结）清单之间的关联。
 
 ## Tick-Depth 限制
 
-港股 tick-depth 平台资产只保留索引、清单 和派生产物。清单 中记录的原始盘口缓存路径已经不在本机：
+港股盘口深度（tick-depth）平台资产只保留索引、清单和派生产物。清单中记录的原始盘口缓存路径已不在本机：
 
 ```text
 /home/richard/code/research-workspace/rqdata-hk-depth-snapshots/artifacts/cache/rqdata/hk_tick_depth
@@ -94,7 +94,7 @@ marketdata migration hydrate-hk \
   --json
 ```
 
-确认活跃根目录没有港股路径冲突后，显式恢复：
+确认活跃根目录中没有港股路径冲突后，再显式执行恢复：
 
 ```bash
 marketdata migration hydrate-hk \
@@ -102,7 +102,7 @@ marketdata migration hydrate-hk \
   --apply
 ```
 
-恢复命令会重建中国香港市场 / A 股双市场 registry。
+恢复命令会重建中国香港市场与 A 股的双市场注册表（registry）。
 
 ## 冻结后验证
 
@@ -116,7 +116,7 @@ A-share stale assets: 0
 workspace smoke contracts: errors=0 warnings=0
 ```
 
-迁移后的 A 股 health 报告：
+迁移后的 A 股 health（健康状态）报告：
 
 ```text
 /home/richard/data/market-data-platform/reports/a_share_current_health_20260529_after_hk_freeze_20260601.json

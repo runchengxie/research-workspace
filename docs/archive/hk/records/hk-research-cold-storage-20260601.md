@@ -28,11 +28,11 @@ bytes: 1997093905
 checksum: sha256
 ```
 
-迁出范围包括历史港股 runs、sweeps、reports、live runs、benchmarks、exports、残留 intraday cache 和港股 universe metadata。活跃仓库仍保留 A 股 cache、数据平台 asset symlink、`metadata/current_assets` symlink 和共享 catalog。
+迁出范围包括历史港股的 runs（运行记录）、sweeps（参数扫描）、reports（报告）、live runs（实盘运行）、benchmarks（基准测试）、exports（导出文件）、残留的盘中缓存（intraday cache），以及港股股票池的 metadata（元数据）。活跃仓库仍保留 A 股的 cache（缓存）、数据平台的 asset symlink（资产符号链接）、`metadata/current_assets` symlink，以及共享 catalog（目录）。
 
 ## 发布包
 
-快照已经压缩为单文件归档，并附带 清单、marker 和 SHA-256 清单：
+快照已压缩为单个归档文件，并附带清单、marker（标记）和 SHA-256 清单：
 
 ```text
 package dir: /home/richard/data/cross-sectional-trees-cold/packages/hk-research-freeze-20260601
@@ -55,24 +55,24 @@ zstd -t hk-research-freeze-20260601.tar.zst
 
 ## 本地清理
 
-归档已上传到 private GitHub Release：
+归档已上传到私有 GitHub Release（发布包）：
 
 ```text
 https://github.com/runchengxie/cross-sectional-trees/releases/tag/hk_research_freeze_20260601_full
 ```
 
-上传复核完成后，本地解包快照和 package 副本已经删除。活跃仓库中的 freeze marker 仍保留预期解压路径；恢复前必须先下载 release 附件、校验 SHA-256，并将主归档解压回该路径。
+上传复核完成后，本地的已解包快照和归档包副本已删除。活跃仓库中的 freeze marker（冻结标记）仍保留预期的解压路径。恢复之前必须先下载 release（发布包）附件、校验 SHA-256，再把主归档解压回该路径。
 
 ## 与数据平台冻结的关系
 
-研究包补充数据平台 release，二者承担不同职责：
+研究包是对数据平台 release（发布包）的补充，二者职责不同：
 
 ```text
 data assets: /home/richard/data/market-data-platform-cold/packages/hk-freeze-20260526
 research outputs: /home/richard/data/cross-sectional-trees-cold/packages/hk-research-freeze-20260601
 ```
 
-`cross-sectional-trees/artifacts/migration_backups/20260525_hk_data_platform_pre_switch` 曾是迁移时代的平台审计备份，没有重复装入研究包。该目录包含旧 symlink 拓扑的审计价值；在两个 release 上传复核完成后，本地副本已删除。
+`cross-sectional-trees/artifacts/migration_backups/20260525_hk_data_platform_pre_switch` 曾是迁移时代的平台审计备份，没有重复装入研究包。该目录保留旧 symlink（符号链接）拓扑的审计价值。在两个 release（发布包）上传复核完成后，本地副本已删除。
 
 ## 恢复
 
@@ -83,7 +83,7 @@ cd /home/richard/code/research-workspace/cross-sectional-trees
 python scripts/internal/freeze_hk_research_outputs.py hydrate
 ```
 
-确认活跃目录没有冲突后，显式恢复：
+确认活跃目录没有冲突后，再显式执行恢复：
 
 ```bash
 python scripts/internal/freeze_hk_research_outputs.py hydrate --apply

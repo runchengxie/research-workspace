@@ -6,16 +6,16 @@
 > source_of_truth：no
 > superseded_by：../bootstrap.md
 
-本历史交接记录保存 2026-06-05 使用的定向 USB 迁移包和 WSL 恢复步骤。
-当前新机器初始化从 [bootstrap.md](../bootstrap.md) 开始；当前 A 股迁移和恢复决策从
+本历史交接记录保存 2026-06-05 使用的一份精简 USB 迁移包（仅含本次迁移所需内容）和 WSL 恢复步骤。
+当前新机器初始化从 [bootstrap.md](../bootstrap.md) 开始。当前 A 股迁移和恢复决策从
 [data-transition-playbook.md](../data-transition-playbook.md) 开始。
 
-本文最初用于新 32GB Windows + WSL 机器上的 Codex 交接。
+本文最初用于在新购的 32GB 内存 Windows + WSL 机器上向 Codex（AI 编码助手）交接。
 
 ## 目标
 
-从 USB 盘恢复研究工作区，为 A 股 2015-2026 时间点（point-in-time）（PIT） top800 内存探针配置 WSL，
-并在长任务运行前完成聚焦验证。
+从 USB 盘恢复研究工作区，并为 A 股 2015-2026 时间点（point-in-time，简称 PIT，指只使用当时已经公开的数据做回测）的 `top800`（市值排名前 800 的股票池）内存探针任务配置 WSL，
+在长任务运行前先完成一轮针对性验证。
 
 ## USB 文件
 
@@ -32,10 +32,10 @@ research_migration_targeted_20260605.tar.zst.sha256
 765853fa0ce93e569d233571fdfebbc2ff7c1c8ee9e21feb4364069fcdd095a5
 ```
 
-该归档是定向迁移包，包含顶层仓库代码、子仓库代码、
-`cross-sectional-trees` 的配置、股票池和基准文件，以及 PIT top800
+该归档是一份精简迁移包（仅含本次所需内容），包含顶层仓库代码、子仓库代码、
+`cross-sectional-trees` 的配置、股票池和基准文件，以及 PIT `top800`
 运行所需的 A 股 TuShare 2015-2026 平台资产。它不包含 `.venv`、
-pytest / ruff / mypy 缓存、`.env` 文件和 `cross-sectional-trees/artifacts/cache`。
+`pytest` / `ruff` / `mypy` 缓存、`.env` 文件和 `cross-sectional-trees/artifacts/cache`。
 
 ## 恢复步骤
 
@@ -134,7 +134,7 @@ cd /home/richard/code/research-workspace/cross-sectional-trees
 uv sync --extra dev
 ```
 
-如果运行需要可选依赖 extras，查看项目文档和当前 `pyproject.toml`。这次 A 股
+如果运行需要可选依赖 extras（额外功能所需的依赖包），查看项目文档和当前 `pyproject.toml`。这次 A 股
 TuShare 平台资产运行不应需要在线数据源凭证。
 
 ## 首轮检查
@@ -146,7 +146,7 @@ cd /home/richard/code/research-workspace/cross-sectional-trees
 DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform uv run python -m pytest tests/test_pipeline_memory_path.py -q
 ```
 
-如有需要，再运行已有的小型 smoke 配置：
+如有需要，再运行已有的小型冒烟测试（smoke test）配置：
 
 ```bash
 DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform \
@@ -163,7 +163,7 @@ DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform \
 uv run cstree run --config configs/local/a_share_pit_top800_2015_memory_probe.yml
 ```
 
-旧 8GB 可见内存的 WSL 机器在接近 6.5GB 内存保护阈值时失败：
+旧的那台 WSL 机器只有 8GB 可用内存，在用到接近 6.5GB 这个内存上限时任务就失败了：
 
 ```text
 PIT pushdown: 9,322,611 -> 3,845,583 rows
@@ -185,6 +185,6 @@ Stopped after Price column diagnostics, before Engineering features ...
 
 - 不要直接从 USB 盘运行长流水线。
 - 数据保留在 `/home/richard/data/market-data-platform`，不要放在 `/mnt/c` 或 `/mnt/d` 下运行。
-- `cross-sectional-trees/artifacts/cache` 需要在新机器上重建；迁移包有意排除了它。
+- `cross-sectional-trees/artifacts/cache` 需要在新机器上重建。迁移包有意排除了它。
 - 迁移包不包含 `.env` 或 `.env.local`。
 - 如果 `sha256sum -c` 只因为校验文件路径不同而失败，手动比较哈希值。

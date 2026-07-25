@@ -8,9 +8,9 @@
 
 ## 状态
 
-这是中国香港市场历史生成物的私有冷存储快照。Release 创建时暂不上传附件；待本地归档复核完成后，再手工上传下列文件。
+这是中国香港市场历史产物的私有冷存储快照。Release（发布包）创建时暂时不上传附件。等本地归档复核完成后，再手动上传下列文件。
 
-冻结快照以 `20260526` 为目标日期，于 `2026-06-01` 完成迁移：
+冻结快照以 `20260526` 为基准日期，于 `2026-06-01` 完成迁移：
 
 ```text
 paths: 330
@@ -37,15 +37,15 @@ archive bytes: 1939478781
 archive sha256: cbbe642736c2d0f51c52cf8f0ee6113d5d85f77a1ce2c422e4fba5b82edd0184
 ```
 
-主归档小于 GitHub Release 单附件 `2 GiB` 限制，不需要分片。
+主归档小于 GitHub Release（发布包）单附件 `2 GiB` 限制，不需要拆分。
 
 ## 内容
 
-归档包含港股数据平台冻结快照中的资产、港股 universe、style 产物、intraday cache、报告、current 契约 和 registry 切片。`freeze-manifest.json` 保留逐路径 SHA-256 清单，`hk-frozen-marker.json` 保留活跃数据根目录切换到冷存储后的定位信息。
+归档包含港股数据平台冻结快照中的资产、港股股票池（universe）、风格因子产物、盘中缓存（intraday cache）、报告、当前契约（current contract）以及注册表（registry）的切片。`freeze-manifest.json` 保存逐路径的 SHA-256 清单，`hk-frozen-marker.json` 保存活跃数据根目录切换到冷存储后的定位信息。
 
 ## Tick-Depth 限制
 
-本快照不包含 清单 中记录的约 `41.1GB` 原始盘口缓存。该来源路径冻结前已经不在本机。归档中仍保留港股 tick-depth 的索引、清单 和派生产物，因此不要把本 Release 描述为完整原始盘口归档。
+本快照不含清单中记录的约 `41.1GB` 原始盘口缓存。该来源路径在冻结前已不在本机。归档中仍保留港股盘口深度（tick-depth）的索引、清单和派生产物，因此不要把本 Release 描述为完整原始盘口归档。
 
 ## 下载后验证
 
@@ -55,4 +55,4 @@ zstd -t hk-freeze-20260526.tar.zst
 tar -I unzstd -xf hk-freeze-20260526.tar.zst
 ```
 
-恢复到活跃共享数据根目录前，先阅读 [`hk-cold-storage-20260601.md`](hk-cold-storage-20260601.md)，并执行 `marketdata migration hydrate-hk` 的 dry-run。
+恢复到活跃共享数据根目录之前，先阅读 [`hk-cold-storage-20260601.md`](hk-cold-storage-20260601.md)，并执行 `marketdata migration hydrate-hk` 的 dry-run（试运行，只检查不实际写入）。
