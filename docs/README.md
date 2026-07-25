@@ -36,6 +36,7 @@
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
 - 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
+- 策略总览导航索引（术语澄清 + 链接入口）：[strategy-catalog.md](strategy-catalog.md)
 - A 股风格因子：[style-factors.md](style-factors.md)
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。
