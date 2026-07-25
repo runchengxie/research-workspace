@@ -7,7 +7,7 @@
 适合放在顶层的内容：
 
 - 跨仓库文件约定和发布治理
-- 子模块 gitlink
+- Git 子模块指针（gitlink）
 - `src/research_contracts`
 - 工作区 doctor、质量检查和委托脚本
 - 版本矩阵、发布清单和归档入口
@@ -26,7 +26,7 @@ git commit -m "..."
 git push
 ```
 
-再回到顶层更新 gitlink：
+再回到顶层更新子模块指针：
 
 ```bash
 cd ..
@@ -36,7 +36,7 @@ git commit -m "chore: update alpha-research"
 git push
 ```
 
-一次更新多个子仓库时，应先分别验证，再统一更新顶层 gitlink 和 [version-matrix.md](version-matrix.md)。
+一次更新多个子仓库时，应先分别验证，再统一更新顶层子模块指针和 [version-matrix.md](version-matrix.md)。
 
 ## 顶层验证
 
@@ -84,7 +84,7 @@ python scripts/install_pre_push_hooks.py --check
 
 共享 pre-push 钩子 根据当前推送仓库选择门禁：
 
-- 推送顶层仓库时运行硬质量检查、workspace doctor、严格契约冒烟和顶层测试，并检查全部 gitlink 与子模块工作树
+- 推送顶层仓库时运行硬质量检查、workspace doctor、严格契约冒烟和顶层测试，并检查全部子模块指针与子模块工作树
 - 推送子仓库时只运行 `scripts/submodule_checks.json` 中该仓库的 `full` profile
 - `strategy-pipeline` 和 `research-apps` 先运行仓库原有 pre-push 钩子，成功后再运行共享完整门禁
 - 当前推送仓库必须保持工作树干净，任一检查失败都会阻止推送

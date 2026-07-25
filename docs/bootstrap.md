@@ -42,7 +42,7 @@ python scripts/install_pre_push_hooks.py
 python scripts/install_pre_push_hooks.py --check
 ```
 
-安装后，推送哪个仓库就运行哪个仓库的完整门禁。推送顶层仓库还会检查全部 gitlink 和子模块工作树。`strategy-pipeline` 原有的 pre-commit 与 pre-push 钩子 会继续运行。
+安装后，推送哪个仓库就运行哪个仓库的完整门禁。推送顶层仓库还会检查全部 Git 子模块指针（gitlink）和子模块工作树。`strategy-pipeline` 原有的 pre-commit 与 pre-push 钩子 会继续运行。
 
 安装器会链式保留仓库 `.githooks` 和默认 Git 钩子 目录中的可执行 钩子。若已有其他 `core.hooksPath`，安装会停止并提示先人工处理冲突。
 

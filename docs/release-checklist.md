@@ -8,7 +8,7 @@
 - [ ] 顶层和本次涉及的子仓库都位于 `main`，工作树只包含预期改动。
 - [ ] `git fetch --all --prune` 后，各仓库与远端 `main` 都没有 ahead 或 behind。
 - [ ] `git branch --no-merged main` 没有待合并分支，远端也没有遗留功能分支。
-- [ ] `git submodule status --recursive` 与准备发布的 gitlink 一致。
+- [ ] `git submodule status --recursive` 与准备发布的 Git 子模块指针（gitlink）一致。
 - [ ] `python scripts/install_pre_push_hooks.py --check` 通过。
 - [ ] `python scripts/workspace_doctor.py --strict` 通过，或每条警告都有发布记录。
 - [ ] `python src/research_contracts/smoke_contracts.py --strict` 通过。
@@ -16,7 +16,7 @@
 - [ ] `python scripts/run_quality_checks.py --profile hard` 通过。
 - [ ] `python scripts/run_submodule_checks.py --profile full` 对本次涉及的子仓库通过。
 - [ ] `python scripts/run_submodule_checks.py --profile release_typecheck` 已运行并记录结果。
-- [ ] `python scripts/print_version_matrix.py` 的结果与准备提交的 gitlink 一致。
+- [ ] `python scripts/print_version_matrix.py` 的结果与准备提交的子模块指针一致。
 - [ ] 暂存区不含凭证、`.env`、大型数据、缓存、`artifacts/`、`outputs/` 或本地绝对路径。
 
 ## 按改动范围追加检查
@@ -39,7 +39,7 @@ python src/research_contracts/a_share_readiness.py \
   --pretty
 ```
 
-涉及 `targets.json` 时，确认目标文件和 lineage sidecar 来自同一研究运行。执行侧至少完成
+涉及 `targets.json` 时，确认目标文件和血缘（lineage）sidecar 来自同一研究运行。执行侧至少完成
 解析和 dry-run。模拟盘与实盘仍由 `quant-execution-engine` 的门禁和人工操作记录决定。
 
 ## 发布记录

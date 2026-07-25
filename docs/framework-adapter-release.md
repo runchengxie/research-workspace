@@ -28,12 +28,12 @@ python scripts/framework_adapter_release_gate.py --strict
 1. 在负责仓库的当前 `main` 上建立职责仓原生实现。
 2. 记录可选依赖、无框架导入测试和真实运行时测试。
 3. 生成框架中立的差分或恢复证据。
-4. 先把负责仓库提交推入 `main`，再更新工作区 gitlink。
+4. 先把负责仓库提交推入 `main`，再更新工作区 Git 子模块指针（gitlink）。
 5. 运行原生路径和适配器路径的组合检查。
-6. 把证据文件、SHA-256 和回滚方法写入新的发布清单。
+6. 把证据文件、安全哈希算法（SHA-256）和回滚方法写入新的发布清单。
 
-旧批次没有生成 `docs/evidence/framework-adapters/framework-adapters-2026-07.json`。测试中的合成 receipt 只验证 schema 和 gate 行为，不构成 Qlib、LEAN 或 vn.py 的运行时证据。
+旧批次没有生成 `docs/evidence/framework-adapters/framework-adapters-2026-07.json`。测试中的合成回执（receipt）只验证 schema 和 gate 行为，不构成 Qlib、LEAN 或 vn.py 的运行时证据。
 
 ## 回退原则
 
-适配器验证失败时，继续使用最近一次已验证的原生组合并保留失败证据。既有产物 schema、执行日志和幂等键不得静默改写。
+适配器验证失败时，继续使用最近一次已验证的原生组合并保留失败证据。既有产物（artifact）schema、执行日志和幂等键不得静默改写。

@@ -7,7 +7,7 @@
 | 领域 | 权威入口 |
 | --- | --- |
 | 废弃兼容入口 | [deprecations.md](deprecations.md)、[deprecations.yml](deprecations.yml) |
-| 兼容 facade 和 wrapper | [compatibility-facades.yml](compatibility-facades.yml) |
+| 兼容门面（facade）和 wrapper | [compatibility-facades.yml](compatibility-facades.yml) |
 | 脚本生命周期和安全边界 | [script-lifecycle.yml](script-lifecycle.yml) |
 | 质量覆盖和排除项 | [quality-coverage-governance.yml](quality-coverage-governance.yml) |
 | 大文件和重构路线图 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) |
@@ -26,9 +26,9 @@ python scripts/maintainability_baseline.py --out docs/evidence/maintainability/b
 
 ## 规则
 
-- 新增 deprecated surface 需要 owner、replacement、removal condition、rollback path 和 focused tests。
-- 新增或保留兼容 facade、wrapper、星号重导出时，需要登记 replacement、consumer audit、removal condition、rollback path 和 focused tests。
-- 新增非平凡脚本并用于发布或迁移流程前，需要补齐 lifecycle 元数据。
+- 新增已废弃（deprecated）surface 需要 owner、replacement、删除条件（removal condition）、rollback path 和 focused tests。
+- 新增或保留兼容门面、wrapper、星号重导出时，需要登记 replacement、下游消费审计（consumer audit）、删除条件（removal condition）、rollback path 和 focused tests。
+- 新增非平凡脚本并用于发布或迁移流程前，需要补齐生命周期（lifecycle）元数据。
 - 新增大范围 Ruff 或 `ty` 排除项，需要登记负责人、原因、复核节点和下一批纳入范围。
-- 大文件、大类、长函数和复杂度热点由路线图预算 ratchet 约束。计数下降时同步下调预算，不保留松动空间。
+- 大文件、大类、长函数和复杂度热点由路线图预算棘轮（ratchet）约束。计数下降时同步下调预算，不保留松动空间。
 - 删除 restore-sensitive 港股兼容代码需要后续变更，并附上负责仓库的证据。

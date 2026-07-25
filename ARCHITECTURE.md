@@ -35,7 +35,7 @@ quant-execution-engine
 - `strategy_pipeline.*` 归 `strategy-pipeline`
 
 工作区 2.0 已删除旧共享命名空间、命令行（CLI） 别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
-研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有 provider 调用、
+研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有数据提供方（provider）调用、
 操作员控制、原子发布和执行交接。边界见
 [ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
 
@@ -51,7 +51,7 @@ quant-execution-engine
 
 ## 外部框架
 
-- Qlib 可作为研究和差分回测后端。数据资产、时间点（point-in-time）（PIT） 语义和跨仓库产物仍由本工作区维护。
+- Qlib 可作为研究和差分回测后端。数据资产、时间点（PIT） 语义和跨仓库产物仍由本工作区维护。
 - vn.py 可作为执行传输、Gateway 和 订单管理系统（OMS） 适配层。审批、幂等、持久证据和对账归 `quant-execution-engine`。
 - LEAN 只用于领域对象和参考场景对照，不进入当前 Python 主运行时。
 

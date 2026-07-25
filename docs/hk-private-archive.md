@@ -14,10 +14,10 @@
 
 - 私有仓库是 `git@github.com:runchengxie/hk-quant-legacy-archive.git`，必须保持
   私有、暂停维护、恢复专用。
-- 私有归档可以保留清单约束下的 provider 业务代码、历史配置和测试。
+- 私有归档可以保留清单约束下的数据提供方（provider）业务代码、历史配置和测试。
 - 公开 demo 只承接 synthetic / public-safe clean-room 示例。
-- 两条路径都不承接凭证、行情文件、provider cache、研究 run、券商 adapter 或交易审计日志。
-- 私有暂存、恢复演练或 consumer audit 通过，都不自动授权删除活跃仓库中的恢复敏感代码。
+- 两条路径都不承接凭证、行情文件、数据提供方缓存、研究 run、券商 adapter 或交易审计日志。
+- 私有暂存、恢复演练或下游消费审计（consumer audit）通过，都不自动授权删除活跃仓库中的恢复敏感代码。
 
 ## 操作入口
 
@@ -39,7 +39,7 @@ python scripts/hk_archive_gate.py \
   --format json
 ```
 
-exporter 只从 清单 中 pin 的 Git revision 导出 allowlist 文件并生成 SHA-256。它不复制
+exporter 只从 清单 中 pin 的 Git revision 导出 allowlist 文件并生成安全哈希算法（SHA-256）。它不复制
 `.git`，不创建远端仓库，不修改 子模块，不删除源文件。
 
 ## 删除门禁
@@ -48,7 +48,7 @@ exporter 只从 清单 中 pin 的 Git revision 导出 allowlist 文件并生成
 并确认下列证据齐全：
 
 - 恢复证据。
-- consumer audit。
+- 下游消费审计。
 - replacement docs。
 - rollback notes。
 - owning 仓库 focused tests。

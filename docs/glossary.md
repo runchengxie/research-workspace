@@ -16,11 +16,16 @@
 | LLM | 大语言模型 |
 | ML | 机器学习 |
 | OOS | 样本外 |
-| PIT | 时间点（point-in-time） |
-| CPCV | 组合对称交叉验证 |
+| PIT | 时间点 |
+| EOD | 数据截止日 |
+| CPCV | 组合式带清理交叉验证 |
+| PSR | 概率夏普比 |
+| DSR | 修正夏普比 |
+| HRP | 分层风险平价 |
+| Rank IC | 截面排序信息系数 |
 | MDP | 市场数据平台 |
 | OMS | 订单管理系统 |
-| PBO | 回测过拟合概率 |
+| PBO | 过拟合概率 |
 | OLS | 普通最小二乘 |
 | IC | 信息系数 |
 | PB | 市净率 |
@@ -30,6 +35,9 @@
 | CST | 中国标准时间 |
 | ET | 美国东部时间 |
 | UTC | 协调世界时 |
+| gitlink | Git 子模块指针 |
+| SHA-256 | 安全哈希算法 |
+| AFML | 微观结构特征学习 |
 
 ## 中英混用术语（统一用中文，英文只保留在代码标识符里）
 
@@ -53,6 +61,39 @@
 | delivery | 投递 |
 | repo | 仓库 |
 | cron | 定时任务 |
+| provider | 数据提供方 |
+| lineage | 血缘 |
+| artifact | 产物 |
+| ratchet | 棘轮 |
+| ledger | 账本 |
+| consumer audit | 下游消费审计 |
+| staggered | 错峰 |
+| facade | 门面 |
+| registry | 注册表 |
+| receipt | 回执 |
+| coverage receipt | 覆盖回执 |
+| deferred stub | 延迟占位 |
+| bootstrap | 引导 |
+| embargo | 隔离窗口 |
+| purging | 数据剔除 |
+| walk-forward | 滚动前向 |
+| winsorize | 缩尾 |
+| z-score | 标准分数 |
+| long-short | 多空 |
+| logistic regression | 逻辑回归 |
+| Spearman rank | 斯皮尔曼秩 |
+| Mean rank | 均值排名 |
+| tick bar | 分笔 K 线柱 |
+| volume bar | 成交量 K 线柱 |
+| dollar bar | 金额 K 线柱 |
+| triple barrier | 三重屏障 |
+| meta-label | 元标签 |
+| event window | 事件窗口 |
+| uniqueness weighting | 唯一性加权 |
+| sequential bootstrap | 序贯自助法 |
+| Layer 1 | GitHub Actions 兜底层 |
+| Layer 2 | 本机刷新层 |
+| distribution | 子仓库 |
 
 ## 保留英文（专有名词，不翻译）
 

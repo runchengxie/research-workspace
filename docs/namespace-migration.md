@@ -2,7 +2,7 @@
 
 ## 权威入口
 
-| Distribution | Python package | 命令行（CLI） |
+| 子仓库（Distribution） | Python 包（package） | 命令行（CLI） |
 | --- | --- | --- |
 | `alpha-research` | `alpha_research.*` | n/a |
 | `portfolio-backtester` | `portfolio_backtester.*` | n/a |
@@ -16,15 +16,15 @@
 1. 合并 alpha-research 拉取请求（PR） #6。
 2. 合并 portfolio-backtester PR #8。
 3. 合并 strategy-pipeline PR #20。
-4. 更新并验证本 superproject PR 的 gitlinks。
+4. 更新并验证本 superproject PR 的 Git 子模块指针（gitlink）。
 5. 发布 0.2.0 / 0.2.0 / 1.1.0 兼容组合。
 
 该顺序记录 1.x 过渡过程。工作区 2.0 在此基础上完成 breaking cleanup。各子仓库的
-2.0 变更和 superproject gitlink 应作为同一组协调发布提交合并。
+2.0 变更和 superproject 子模块指针应作为同一组协调发布提交合并。
 
 ## 2.0 删除结果
 
-repo-local import、CLI、环境变量、日志过滤、配置 dotted path 和序列化类路径均已迁到
-owner-native 名称。旧 artifact 原样保留用于 provenance 与离线审计，但 2.0 reader 不承诺接受
+仓库本地导入（repo-local import）、CLI、环境变量、日志过滤、配置点分路径（dotted path）和序列化类路径均已迁到
+owner-native 名称。旧产物（artifact）原样保留用于来源（provenance）与离线审计，但 2.0 reader 不承诺接受
 旧 契约 identity。需要复现时使用 1.x release tag 或一次性迁移工具。新的 producer 只写
 owner-native 契约 名称，2.0 主线不保留双入口。

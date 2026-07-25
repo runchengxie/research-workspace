@@ -42,7 +42,7 @@
 - PR：https://github.com/runchengxie/strategy-pipeline/pull/28
 - 分支：`feat/incumbent-evidence-contract-v2`
 - 内容：
-  - 时间点（point-in-time）（PIT） entry membership 合并和覆盖审计，
+  - 时间点（PIT） entry membership 合并和覆盖审计，
   - 5 日 embargo refit ledger 校验，
   - NaN/Infinity 转换为 null 的严格 JSON，
   - 机器生成 evidence payload，

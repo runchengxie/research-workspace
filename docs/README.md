@@ -45,7 +45,7 @@
 - 活跃链路包含六个 Git 子模块
 - `src/research_contracts` 是顶层普通目录
 - A 股 current 契约 是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（point-in-time）（PIT） 财务和历史行业资产已发布
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（PIT） 财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理

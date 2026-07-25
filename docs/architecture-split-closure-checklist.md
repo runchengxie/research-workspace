@@ -21,7 +21,7 @@
 ## 发布前检查
 
 - [ ] 框架边界符合 [ADR-0001](adr/0001-framework-integration-boundaries.md)，状态已同步到 [`framework-integration-ledger.yml`](framework-integration-ledger.yml)。
-- [ ] Qlib、vn.py 和 LEAN 类型没有进入跨仓库 Python 公共返回值或 artifact schema。
+- [ ] Qlib、vn.py 和 LEAN 类型没有进入跨仓库 Python 公共返回值或产物（artifact）schema。
 - [ ] 未安装 Qlib 或 vn.py 时，原生端到端路径仍可导入和运行。
 - [ ] 边界扫描通过：`python scripts/workspace_import_boundaries.py --check`
 - [ ] 边界测试通过：`uv run python -m pytest tests/test_workspace_import_boundaries.py -q`

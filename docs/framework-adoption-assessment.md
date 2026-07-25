@@ -28,7 +28,7 @@ Qlib 适合数据读取、研究生命周期和差分回测。vn.py 适合执行
 
 | 能力 | 平台职责仓 | 外部框架的角色 |
 | --- | --- | --- |
-| 原始数据、时间点（point-in-time）（PIT） 和资产发布 | `market-data-platform` | Qlib 只读消费已发布资产 |
+| 原始数据、时间点（PIT） 和资产发布 | `market-data-platform` | Qlib 只读消费已发布资产 |
 | Dataset、Trainer 和 Recorder | `alpha-research` | Qlib 可作为后续可选后端 |
 | 组合对称交叉验证（CPCV）、回测过拟合概率（PBO） 和晋级证据 | `alpha-research` | 保留平台规则 |
 | A 股确定性回放 | `portfolio-backtester` | Qlib 可做差分基线，LEAN 可做独立场景 |
@@ -46,7 +46,7 @@ Qlib 适合数据读取、研究生命周期和差分回测。vn.py 适合执行
 
 ### 研究可信度
 
-alpha 层的 CPCV、PBO、purging、embargo、时间与截面泄漏检查、特征证据和晋级门禁属于平台规则。外部框架可以完成训练和实验记录，晋级结论仍由平台证据决定。
+alpha 层的 CPCV、PBO、数据剔除（purging）、隔离窗口（embargo）、时间与截面泄漏检查、特征证据和晋级门禁属于平台规则。外部框架可以完成训练和实验记录，晋级结论仍由平台证据决定。
 
 ### A 股回放
 

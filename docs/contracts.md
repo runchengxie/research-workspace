@@ -50,7 +50,7 @@
 - artifact、run 和 producer 身份。
 - producer commit/version 与 backend provenance。
 - timezone-aware 创建时间。
-- artifact、配置和上游 lineage 的 SHA-256。
+- artifact、配置和上游 lineage 的安全哈希算法（SHA-256）。
 - 对执行目标可选的 validity、portfolio/account scope、policy reference 和 幂等 scope。
 
 envelope 不包含数据加载、路径解析、模型训练或组合计算 helper。Qlib、vn.py 和 LEAN 对象不得进入 envelope。v2 writer 在各 owner 仓库完成 parity 前保持 opt-in。未携带 envelope 的 v1 metadata 继续由兼容 reader 原样读取。
@@ -76,7 +76,7 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
 DailyWatch20（每日观察的 20 只 A 股名单，由 strategy-pipeline 产出给 market-intel） 是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、默认
-50%/30%/20% 权重的 1/3/5 日 时间点（point-in-time）（PIT） 标签和
+50%/30%/20% 权重的 1/3/5 日 时间点（PIT） 标签和
 feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline` 负责读取已发布数据、
 同日完整性门禁、增量分钟缓存、周期重训/每日打分、滚动 样本外（OOS） 消融和原子发布。`market-intel`
 生产严格时点化热点输入，并分别生成客户统一 20 股展示和内部审计展示。
@@ -97,7 +97,7 @@ A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。�
 
 以下能力需要对应资产可用后才能进入正式研究或执行验收：
 
-- PIT universe：CSI300/500/800 或全 A 动态成分需要 point-in-time 成分来源。如果 TuShare 账户权限不足，应使用已授权 RQData/指数供应商资产或人工归档的历史成分资产。当前成分只适合当前截面说明。
+- PIT universe：CSI300/500/800 或全 A 动态成分需要时间点（PIT）成分来源。如果 TuShare 账户权限不足，应使用已授权 RQData/指数供应商资产或人工归档的历史成分资产。当前成分只适合当前截面说明。
 - PIT fundamentals：需要披露日、报告期、公告延迟和字段映射。仅有最新财报快照不满足无未来函数研究。
 - `daily_basic` 的 PE、市净率（PB）、市值和换手率属于逐日估值 overlay。财务报表 PIT 口径需要单独的披露日和报告期链路。
 - 平台原生财报链路必须按 raw -> normalized -> PIT 分层，并在 validation 通过后才发布
@@ -110,7 +110,7 @@ A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。�
 
 ## 港股生命周期边界
 
-中国香港市场 provider 生产面已从活跃 `market-data-platform` 主线归档。活跃数据平台只保留 `marketdata migration freeze-hk` / `hydrate-hk` 恢复控制面和 `metadata/frozen_markets/hk.json` 检查。`strategy-pipeline` 不再保留显式港股 provider/research preset 入口，港股策略研究在当前工作区中定位为恢复专用历史研究线。工作区内公开演示路线和独立港股研究线已退役，清理记录见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 和 [`archive/hk/README.md`](archive/hk/README.md)。其中 `quant-execution-engine` 的标准 `targets.json`、FX、broker adapter、风控和审计逻辑始终保留在执行仓库。需要港股历史复现时，先运行 `marketdata migration hydrate-hk` 恢复资产，并从 freeze tag 或恢复专用归档取回旧 provider / config 实现。
+中国香港市场数据提供方（provider）生产面已从活跃 `market-data-platform` 主线归档。活跃数据平台只保留 `marketdata migration freeze-hk` / `hydrate-hk` 恢复控制面和 `metadata/frozen_markets/hk.json` 检查。`strategy-pipeline` 不再保留显式港股 provider/research preset 入口，港股策略研究在当前工作区中定位为恢复专用历史研究线。工作区内公开演示路线和独立港股研究线已退役，清理记录见 [`hk-public-split-manifest.yml`](hk-public-split-manifest.yml) 和 [`archive/hk/README.md`](archive/hk/README.md)。其中 `quant-execution-engine` 的标准 `targets.json`、FX、broker adapter、风控和审计逻辑始终保留在执行仓库。需要港股历史复现时，先运行 `marketdata migration hydrate-hk` 恢复资产，并从 freeze tag 或恢复专用归档取回旧 provider / config 实现。
 
 ## 数据资产交接
 
@@ -201,4 +201,4 @@ python scripts/run_submodule_checks.py --profile full
 ```
 
 委托检查的命令定义在 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。顶层只负责调度和汇总结果，不解析子模块内部源码，也不把 SOLID 或内聚耦合做成顶层评分。
-其中 `lint` profile 包含子仓库自己定义的边界和维护债 gate。例如数据平台的港股拆分边界检查和策略编排的 maintainability ratchet。
+其中 `lint` profile 包含子仓库自己定义的边界和维护债 gate。例如数据平台的港股拆分边界检查和策略编排的维护性棘轮（ratchet）。

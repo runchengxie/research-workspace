@@ -12,7 +12,7 @@
 
 ## 一、因子概述
 
-Value 因子定义为 `1/PB`（市净率倒数），经 winsorize（1%/99%）和 z-score 标准化后，月度调仓构建 long-short 组合。组合做多低 市净率（PB） 股票、做空高 PB 股票，日收益序列代表低估值风格相对于市场的超额表现。
+Value 因子定义为 `1/PB`（市净率倒数），经缩尾（winsorize，1%/99%）和标准分数（z-score）标准化后，月度调仓构建多空（long-short）组合。组合做多低 市净率（PB） 股票、做空高 PB 股票，日收益序列代表低估值风格相对于市场的超额表现。
 
 18 年累计收益 +174.9%，年化 +5.9%，最大回撤 -38.7%。
 
@@ -146,7 +146,7 @@ MOMENTUM 的 4 周胜率仅 51%，短期噪音很大。中长期趋势延续性�
 1. 年频规律可靠：18 年从未出现三年连败。当前（2025-2026）两连败已达历史极限，按统计规律 2027 年价值因子大概率转正
 2. CONTRARIAN 是战略信号：触发后 4 周内不要抄底（短期惯性下跌），但 1-2 年持有历史上未亏过
 3. 当前 -43.5% 回撤空前：比 2014 年初（-21.5%）和 2020 年（-31.2%）深得多，既是风险也是机会
-4. 不做日频预测：已用 logistic regression 验证，12 个特征、walk-forward 测试，准确率 48.8% 低于 baseline 52.3%，日频噪声主导、regime 切换罕见
+4. 不做日频预测：已用逻辑回归（logistic regression）验证，12 个特征、滚动前向（walk-forward）测试，准确率 48.8% 低于 baseline 52.3%，日频噪声主导、regime 切换罕见
 
 ## 十、局限
 
@@ -162,7 +162,7 @@ MOMENTUM 的 4 周胜率仅 51%，短期噪音很大。中长期趋势延续性�
 | 因子计算 | `research-workspace/src/style_factors/` |
 | 因子产出 | `research-workspace/artifacts/style_analysis_codex_full_20260629/` |
 | 周报脚本 | `market-intel/src/a_share_analysis/value_regime_weekly.py` |
-| 定时任务 任务 | `7c350edbf47c`（每周六 09:00）|
+| 定时任务 | `7c350edbf47c`（每周六 09:00）|
 | 分析文档 | `research-workspace/docs/value-regime-18y.md`（本文件）|
 
 *生成时间：2026-06-29，基于 2008-2026 全量数据*

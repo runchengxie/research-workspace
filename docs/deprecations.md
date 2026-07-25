@@ -25,9 +25,9 @@
 - 负责仓库中的 focused tests。
 - restore-sensitive 入口需要恢复证据。
 
-实际删除必须在负责仓库内做 focused verification，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股 provider 生产命令、历史港股 allocation CLI、`alloc_hk` 模块、HK research implementation modules 和活跃 HK experiment configs 移出活跃区。需要复现时从 freeze tag 或恢复专用归档恢复。
+实际删除必须在负责仓库内做 focused verification，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股数据提供方（provider）生产命令、历史港股 allocation CLI、`alloc_hk` 模块、HK research implementation modules 和活跃 HK experiment configs 移出活跃区。需要复现时从 freeze tag 或恢复专用归档恢复。
 
-框架替换产生的兼容 facade 还必须满足以下条件：
+框架替换产生的兼容门面（facade）还必须满足以下条件：
 
 - 在 [`compatibility-facades.yml`](compatibility-facades.yml) 登记 owner、替代入口和 removal release。
 - native 与替代 backend 的差分 fixture 已通过，行为差异有明确分类。
@@ -35,10 +35,10 @@
 - 删除不会把 Qlib、vn.py 或 LEAN 类型提升为跨仓库 契约。
 - 对应 workstream 已在 [`framework-integration-ledger.yml`](framework-integration-ledger.yml) 达到退出条件。
 
-早期私有 legacy archive 暂存本身不授权删除。本页的 removed 状态必须同时引用恢复演练、consumer audit、source tag、focused verification 和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
+早期私有 legacy archive 暂存本身不授权删除。本页的 removed 状态必须同时引用恢复演练、下游消费审计（consumer audit）、source tag、focused verification 和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
 
 ## Owner-native 命名空间 compatibility
 
-旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio distribution
+旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio 子仓库（distribution）
 不得重新安装共享 命名空间。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
-配置 dotted path、日志 命名空间、外部 notebook 与命令行 consumer audit。
+配置点分路径（dotted path）、日志 命名空间、外部 notebook 与命令行下游消费审计。

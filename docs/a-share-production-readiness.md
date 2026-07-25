@@ -4,10 +4,10 @@
 > owner: workspace
 > last_verified: 2026-06-10
 > source_of_truth: no
-> superseded_by: data-transition-playbook.md#a-股-readiness-分层
+> superseded_by: data-transition-playbook.md#a-股就绪度readiness分层
 
 本页保留给旧链接。当前权威入口已经并入
-[数据迁移优先级 playbook](data-transition-playbook.md#a-股-readiness-分层)。
+[数据迁移优先级 playbook](data-transition-playbook.md#a-股就绪度readiness分层)。
 
 ## 当前口径
 
@@ -15,8 +15,8 @@
 
 | 状态 | 含义 |
 | --- | --- |
-| `baseline_reproducible` | current 契约、registry、`daily_clean`、by-date universe、研究输出、targets lineage 和 CN dry-run 可复现 |
-| `complete_pit_research_data` | 时间点（point-in-time）（PIT） universe、财务报表 PIT、历史行业 membership 和研究窗口覆盖已完整 |
+| `baseline_reproducible` | current 契约、registry、`daily_clean`、by-date universe、研究输出、目标血缘（lineage）和 CN dry-run 可复现 |
+| `complete_pit_research_data` | 时间点（PIT） universe、财务报表 PIT、历史行业 membership 和研究窗口覆盖已完整 |
 | `production_strategy_evidence` | 长窗口、benchmark ladder、feature evidence、最终 样本外（OOS） 或替代说明、组合对称交叉验证（CPCV）、turnover/cost 和 capacity 复核完成 |
 | `broker_trading_enabled` | 执行仓库另行证明真实券商 adapter、账户权限、受监督 smoke、对账、kill switch 和操作批准 |
 
