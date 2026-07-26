@@ -107,18 +107,16 @@
     {
       "id": "strategy-owner-delegating-public-facades",
       "paths": [
-        "strategy-pipeline/src/strategy_pipeline/_hotsector_ai_shadow_v2_validation.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_oos.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_oos_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_data.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_base_scores.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_campaign_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_contract.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_factors.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_metrics.py",
+        "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_guard_ablation.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_model_lifecycle.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_news_heat.py",
@@ -126,8 +124,8 @@
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_analysis.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_inputs.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_reporting.py",
+        "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_inputs.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_source_regimes.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_statistics.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_windows.py",
@@ -149,7 +147,6 @@
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_ranking.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_session_challenger_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_session_challenger_prompt_contract.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_session_challenger_response_contract.py",
         "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution.py",
         "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_records.py",
@@ -168,7 +165,7 @@
         "research-apps pytest",
         "portfolio-backtester staggered cohort tests"
       ],
-      "consumer_audit": "manual_review_required before removing any owner-delegating public wrapper",
+      "consumer_audit": "2026-07-26 cross-repo consumer audit (fully-qualified strategy_pipeline.<name> imports) flagged 9 zero-reference facades. On removal, 6 were found to be load-bearing and were restored: (a) imported intra-repo via relative `from .<name>` imports — daily_watch20_flite_base_scores (consumed by daily_watch20_flite_inputs), daily_watch20_slow_minute_campaign_inputs (consumed by daily_watch20_slow_minute_campaign), staggered_cohort_inputs (consumed by daily_watch20_slow_minute_execution); (b) hashed in the frozen canonical provenance manifest hotsector_numeric_v2_provenance.IMPLEMENTATION_SOURCE_FILES — staggered_cohort_execution_records, staggered_cohort_execution_reporting, staggered_cohort_execution_state. Removing those would break the frozen provenance hash contract (byte-identical arms governance). Only 3 true orphans were removed: _hotsector_ai_shadow_v2_validation, daily_watch20_candidate_oos_reporting, hotsector_session_challenger_prompt_contract (zero repo-local imports; the only text match for daily_watch20_candidate_oos_reporting points at research_apps.daily_watch20.*, a different package). 39 wrappers remain referenced by strategy-pipeline production src or ownership tests and require caller redirect to owner APIs before removal.",
       "status": "active_compatibility"
     },
     {

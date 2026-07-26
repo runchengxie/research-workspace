@@ -7,7 +7,7 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "8aa419289593313d96607429727acfc7672c8cd7",
+      "commit": "91ee5e180a12dd270c7ddf4ee293bdc9ade940dc",
       "legacy_source_tree_allowed": false,
       "pr": 6,
       "version": "0.4.0"
@@ -21,7 +21,7 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "bc2d5147a9126119ea2a5d3708324e50ceb07932",
+      "commit": "e3187c63b3559bd44fcdda073d423c18eca17d46",
       "compatibility_package_allowed": false,
       "pr": 20,
       "version": "2.1.0"

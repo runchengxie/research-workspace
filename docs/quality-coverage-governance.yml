@@ -10,18 +10,20 @@
       "repo": "alpha-research",
       "ruff": {
         "staged_select": [
-          "E9",
-          "F401",
-          "F821",
-          "F822",
-          "F823",
-          "F841",
-          "I001",
-          "B905",
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
           "C90"
         ],
         "current_hard_gate": "uv run --locked --extra dev ruff check .",
-        "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
+        "promotion_criteria": "package-local Ruff stays green before standalone tests expand",
+        "note": "2026-07-26 reconciled with alpha-research/pyproject.toml which already selects the broad set above (max-complexity=14). Prior staged_select listing (E9/F401/F821/F822/F823/F841/I001/B905/C90) understated the real gate."
       },
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
@@ -158,10 +160,16 @@
           "B",
           "C4",
           "RET",
-          "RUF100"
+          "RUF100",
+          "C90",
+          "PLR0911",
+          "PLR0912",
+          "PLR0913",
+          "PLR0915"
         ],
         "current_hard_gate": "uv run --locked --extra dev ruff check .",
-        "promotion_criteria": "whole-repo Ruff hard gate stays green after HK provider production modules are archived"
+        "promotion_criteria": "whole-repo Ruff hard gate stays green after HK provider production modules are archived",
+        "note": "2026-07-26 reconciled with market-data-platform/pyproject.toml (max-complexity=14, PLR091x for arg/branch/return counts). Prior staged_select omitted C90/PLR families, understating the real gate."
       },
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
@@ -203,18 +211,20 @@
       "repo": "portfolio-backtester",
       "ruff": {
         "staged_select": [
-          "E9",
-          "F401",
-          "F821",
-          "F822",
-          "F823",
-          "F841",
-          "I001",
-          "B905",
+          "E",
+          "F",
+          "I",
+          "UP",
+          "B",
+          "C4",
+          "RET",
+          "SIM",
+          "RUF",
           "C90"
         ],
         "current_hard_gate": "uv run --locked --extra dev ruff check .",
-        "promotion_criteria": "package-local Ruff stays green before standalone tests expand"
+        "promotion_criteria": "package-local Ruff stays green before standalone tests expand",
+        "note": "2026-07-26 reconciled with portfolio-backtester/pyproject.toml which already selects the broad set above (max-complexity=14). Prior staged_select listing understated the real gate."
       },
       "ty": {
         "current_hard_gate": "uv run --locked --extra dev ty check",
