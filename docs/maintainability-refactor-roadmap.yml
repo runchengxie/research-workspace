@@ -11,13 +11,13 @@
     {
       "repo": "research-workspace",
       "max_large_files": 7,
-      "max_long_functions": 13,
+      "max_long_functions": 12,
       "max_complexity_hotspots": 14,
       "max_large_classes": 2
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 49,
+      "max_large_files": 46,
       "max_long_functions": 70,
       "max_complexity_hotspots": 42,
       "max_large_classes": 1,

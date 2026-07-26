@@ -11,11 +11,11 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 71,
-      "python_loc": 16692,
+      "python_loc": 16676,
       "hk_related_file_count": 4,
       "hotspot_counts": {
         "large_files": 7,
-        "long_functions": 13,
+        "long_functions": 12,
         "complexity_hotspots": 14,
         "large_classes": 2
       },
@@ -122,12 +122,6 @@
           "name": "main",
           "line_count": 95,
           "complexity": 11
-        },
-        {
-          "path": "src/research_contracts/smoke_contracts.py",
-          "name": "run_smoke",
-          "line_count": 87,
-          "complexity": 5
         },
         {
           "path": "scripts/workspace_governance.py",
@@ -330,11 +324,11 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 190,
-      "python_loc": 79398,
+      "python_file_count": 177,
+      "python_loc": 76678,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 49,
+        "large_files": 46,
         "long_functions": 70,
         "complexity_hotspots": 42,
         "large_classes": 1
@@ -352,7 +346,7 @@
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "loc": 2012,
+          "loc": 2006,
           "hk_related": false
         },
         {
