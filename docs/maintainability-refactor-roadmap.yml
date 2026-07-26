@@ -1064,7 +1064,7 @@
     {
       "path": "quant-execution-engine/src/quant_execution_engine/renderers/diff.py",
       "owner_repo": "quant-execution-engine",
-      "reason": "2026-07-26 the approved qexec complexity refactor extracted helper functions from render_rebalance_diff / _build_rich_diff; the file crossed the 500-LOC large-file threshold as a side-effect. It is a cohesive rebalance-diff renderer and is accepted as-is rather than force-split, which would raise coupling across the rendering layer.",
+      "reason": "2026-07-26 the approved qexec complexity refactor extracted helper functions from render_rebalance_diff / _build_rich_diff; the file briefly crossed the 500-LOC large-file threshold during helper extraction but fell back to 496 LOC once reformatted, so it stays below the large-file threshold. It is a cohesive rebalance-diff renderer and is accepted as-is rather than force-split, which would raise coupling across the rendering layer.",
       "next_action": "split summary/table/row rendering helpers behind the existing renderer contract only if the file gains another diff variant or a second rendering backend"
     }
   ]
