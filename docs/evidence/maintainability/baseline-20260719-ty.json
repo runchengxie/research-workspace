@@ -1829,8 +1829,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 426,
-      "python_loc": 96417,
+      "python_file_count": 428,
+      "python_loc": 96570,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 49,
@@ -1870,11 +1870,6 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_ablation.py",
-          "loc": 790,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/release_tools/package_runs.py",
           "loc": 790,
           "hk_related": false
@@ -1902,6 +1897,11 @@
         {
           "path": "src/strategy_pipeline/hotsector_three_arm_shadow.py",
           "loc": 773,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_ablation.py",
+          "loc": 769,
           "hk_related": false
         },
         {
