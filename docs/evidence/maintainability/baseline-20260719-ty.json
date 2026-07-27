@@ -324,8 +324,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 186,
-      "python_loc": 77144,
+      "python_file_count": 194,
+      "python_loc": 78683,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -336,7 +336,7 @@
       "large_files": [
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
-          "loc": 2272,
+          "loc": 2277,
           "hk_related": false
         },
         {
@@ -400,13 +400,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_cutover_a_share_minute.py",
-          "loc": 1228,
+          "path": "tests/test_tushare_minute_replacement_campaign_runner.py",
+          "loc": 1241,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_minute_replacement_campaign_runner.py",
-          "loc": 1212,
+          "path": "tests/test_cutover_a_share_minute.py",
+          "loc": 1228,
           "hk_related": false
         },
         {
@@ -512,7 +512,7 @@
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
           "name": "_run_campaign",
-          "line_count": 160,
+          "line_count": 159,
           "complexity": 36
         },
         {
@@ -646,7 +646,7 @@
         {
           "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
           "name": "_run_campaign",
-          "line_count": 160,
+          "line_count": 159,
           "complexity": 36
         },
         {
@@ -850,6 +850,7 @@
         "scripts/operations/detach_a_share_minute_v3.py",
         "scripts/operations/promote_guan_mobile.py",
         "scripts/operations/render_tushare_minute_campaign_units.py",
+        "scripts/operations/tushare_minute_candidate.py",
         "scripts/operations/tushare_minute_quota_schedule.py",
         "scripts/operations/tushare_minute_replacement_campaign.py",
         "scripts/systemd/README.md",
