@@ -123,8 +123,8 @@
         "quant-execution-engine longport unit tests"
       ],
       "non_goals": "do not change broker credentials or live execution gates",
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS."
+      "resolved": false,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
     },
     {
       "owner_repo": "market-data-platform",
@@ -134,8 +134,8 @@
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
       "focused_tests": [],
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
+      "resolved": false,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
     },
     {
       "owner_repo": "strategy-pipeline",
@@ -145,8 +145,8 @@
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
       "focused_tests": [],
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
+      "resolved": false,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
     },
     {
       "owner_repo": "strategy-pipeline",
@@ -156,8 +156,8 @@
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
       "focused_tests": [],
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
+      "resolved": false,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
     }
   ],
   "accepted_hotspots": [
@@ -1025,6 +1025,30 @@
       "owner_repo": "market-data-platform",
       "reason": "1314-LOC provider adapter layer created by the 2026-07-27 tushare_a_share.py split (1792->81 line shell). Pure physical relocation of mirror_a_share_* functions and request-policy helpers, not a genuine maintainability reduction; it is the largest single receiver of that debt transfer and the 13th-largest large_file in the baseline.",
       "next_action": "split mirror_a_share_* adapters behind contract tests once TuShare workflow work resumes"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "Longport broker adapter concentrates session, order, and position handling; still a large_file after the 2026-07-26 qexec refactor. Accepted as-is pending a focused split.",
+      "next_action": "split session/order/position handling behind the broker contract when the adapter changes for feature work"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+      "owner_repo": "market-data-platform",
+      "reason": "A-share fundamentals point-in-time provider module sits outside the HK maintainability first wave; still a large_file. Accepted pending provider schema split.",
+      "next_action": "split provider schema and request planning when provider work resumes"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/daily_watch20_candidate_oos.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DailyWatch20 candidate out-of-sample research script is large; accepted as a research-only script with a cohesive workflow.",
+      "next_action": "split candidate generation and oos evaluation when the script gains a second workflow"
+    },
+    {
+      "path": "strategy-pipeline/tests/test_daily_watch20_fundamental_shadow.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DailyWatch20 fundamental shadow test concentrates fixture-heavy comparison cases; accepted as a large test file.",
+      "next_action": "keep the test in sync with the source module refactor"
     }
   ]
 }
