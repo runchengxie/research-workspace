@@ -325,7 +325,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 199,
-      "python_loc": 79718,
+      "python_loc": 79918,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -1726,8 +1726,8 @@
     {
       "repo": "research-apps",
       "root": "research-apps",
-      "python_file_count": 87,
-      "python_loc": 18708,
+      "python_file_count": 88,
+      "python_loc": 18787,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
@@ -1829,8 +1829,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 421,
-      "python_loc": 95553,
+      "python_file_count": 426,
+      "python_loc": 96417,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 49,
@@ -1841,7 +1841,7 @@
       "large_files": [
         {
           "path": "tests/test_daily_watch20_pipeline.py",
-          "loc": 799,
+          "loc": 800,
           "hk_related": false
         },
         {
@@ -1870,13 +1870,13 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/release_tools/package_runs.py",
+          "path": "src/strategy_pipeline/daily_watch20_ablation.py",
           "loc": 790,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_ablation.py",
-          "loc": 788,
+          "path": "src/strategy_pipeline/release_tools/package_runs.py",
+          "loc": 790,
           "hk_related": false
         },
         {
@@ -1886,6 +1886,11 @@
         },
         {
           "path": "scripts/research/a_share_next_high_explore.py",
+          "loc": 779,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
           "loc": 779,
           "hk_related": false
         },
@@ -1900,23 +1905,18 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
-          "loc": 770,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
           "loc": 767,
           "hk_related": false
         },
         {
-          "path": "tests/test_pipeline_e2e.py",
-          "loc": 760,
+          "path": "tests/test_daily_watch20_ablation.py",
+          "loc": 757,
           "hk_related": false
         },
         {
-          "path": "tests/test_daily_watch20_ablation.py",
-          "loc": 757,
+          "path": "tests/test_pipeline_e2e.py",
+          "loc": 754,
           "hk_related": false
         },
         {
@@ -1935,23 +1935,23 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
-          "loc": 741,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/commands/linear_sweep.py",
           "loc": 724,
           "hk_related": false
         },
         {
           "path": "src/strategy_pipeline/liveops/holdings.py",
-          "loc": 721,
+          "loc": 722,
           "hk_related": false
         },
         {
           "path": "tests/test_daily_watch20_fundamental_shadow.py",
           "loc": 718,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
+          "loc": 717,
           "hk_related": false
         },
         {
@@ -2045,12 +2045,6 @@
           "complexity": 1
         },
         {
-          "path": "tests/test_pipeline_e2e.py",
-          "name": "test_pipeline_run_with_local_rqdata_assets_smoke",
-          "line_count": 130,
-          "complexity": 1
-        },
-        {
           "path": "tests/test_pipeline_e2e_benchmarks.py",
           "name": "test_pipeline_benchmark_compare_accepts_symbol_sources",
           "line_count": 129,
@@ -2072,6 +2066,12 @@
           "path": "tests/test_pipeline_e2e_benchmarks.py",
           "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
           "line_count": 126,
+          "complexity": 1
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "name": "test_pipeline_run_with_local_rqdata_assets_smoke",
+          "line_count": 124,
           "complexity": 1
         },
         {
@@ -2149,16 +2149,16 @@
           "complexity": 23
         },
         {
+          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
+          "name": "inspect_daily_watch20_inputs",
+          "line_count": 99,
+          "complexity": 23
+        },
+        {
           "path": "src/strategy_pipeline/daily_watch20_publish.py",
           "name": "_finalized_run_identities",
           "line_count": 65,
           "complexity": 23
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_freshness.py",
-          "name": "inspect_daily_watch20_inputs",
-          "line_count": 95,
-          "complexity": 22
         },
         {
           "path": "src/strategy_pipeline/release_tools/release_runs.py",
@@ -2273,7 +2273,7 @@
         {
           "path": "src/strategy_pipeline/data_interface.py",
           "name": "DataInterface",
-          "line_count": 312,
+          "line_count": 330,
           "method_count": 12
         }
       ],
@@ -2307,12 +2307,14 @@
           "src/strategy_pipeline/contracts/signals.py",
           "src/strategy_pipeline/contracts/strategy.py",
           "src/strategy_pipeline/daily_watch20_ablation.py",
+          "src/strategy_pipeline/daily_watch20_ablation_reporting.py",
           "src/strategy_pipeline/daily_watch20_candidate_oos.py",
           "src/strategy_pipeline/daily_watch20_candidate_oos_reporting.py",
           "src/strategy_pipeline/daily_watch20_candidate_pool.py",
           "src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
           "src/strategy_pipeline/daily_watch20_data.py",
           "src/strategy_pipeline/daily_watch20_freshness.py",
+          "src/strategy_pipeline/daily_watch20_freshness_receipt.py",
           "src/strategy_pipeline/daily_watch20_fundamental_contract.py",
           "src/strategy_pipeline/daily_watch20_fundamental_evidence.py",
           "src/strategy_pipeline/daily_watch20_fundamental_features.py",
@@ -2325,6 +2327,7 @@
           "src/strategy_pipeline/daily_watch20_minute.py",
           "src/strategy_pipeline/daily_watch20_oos.py",
           "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "src/strategy_pipeline/daily_watch20_pipeline_inputs.py",
           "src/strategy_pipeline/daily_watch20_pipeline_publication.py",
           "src/strategy_pipeline/daily_watch20_policy.py",
           "src/strategy_pipeline/daily_watch20_policy_snapshot.py",
@@ -2339,6 +2342,7 @@
           "src/strategy_pipeline/dataset.py",
           "src/strategy_pipeline/date_utils.py",
           "src/strategy_pipeline/identity.py",
+          "src/strategy_pipeline/legacy_rqdata_runtime.py",
           "src/strategy_pipeline/liveops/__init__.py",
           "src/strategy_pipeline/liveops/alloc_core.py",
           "src/strategy_pipeline/liveops/alloc_rendering.py",
