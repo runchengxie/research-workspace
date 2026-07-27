@@ -50,7 +50,7 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 50,
+      "max_large_files": 49,
       "max_long_functions": 118,
       "max_complexity_hotspots": 67,
       "max_large_classes": 1,
@@ -250,12 +250,6 @@
       "owner_repo": "strategy-pipeline",
       "reason": "Strict v1/v2 THS-hot loaders retain exact-partition reading, snapshot selection, rank evidence, positive-change filtering, and receipt lineage behind one fail-closed pool interface",
       "next_action": "split parquet provenance loading from v1 snapshot assembly before adding another candidate source"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_policy.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The immutable strategy policy validator deliberately keeps canonicalization plus cross-section validation for model, feature, label, candidate, news, construction, and safety sections in one identity boundary",
-      "next_action": "extract section validators into a policy package before adding a second production policy schema"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_publication_inputs.py",

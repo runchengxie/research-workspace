@@ -1824,21 +1824,16 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 417,
-      "python_loc": 95382,
+      "python_file_count": 421,
+      "python_loc": 95553,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 50,
+        "large_files": 49,
         "long_functions": 118,
         "complexity_hotspots": 67,
         "large_classes": 1
       },
       "large_files": [
-        {
-          "path": "src/strategy_pipeline/daily_watch20_policy.py",
-          "loc": 799,
-          "hk_related": false
-        },
         {
           "path": "tests/test_daily_watch20_pipeline.py",
           "loc": 799,
@@ -1957,6 +1952,11 @@
         {
           "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
           "loc": 715,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_publication_inputs.py",
+          "loc": 680,
           "hk_related": false
         }
       ],
