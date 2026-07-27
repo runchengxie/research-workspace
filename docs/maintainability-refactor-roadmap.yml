@@ -85,7 +85,7 @@
       ],
       "non_goals": "do not change A-share asset contract, output schema, or TuShare request semantics",
       "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json (fell below 500 LOC via downstream provider splits). Remediation tracked as accepted debt in accepted_hotspots; dropped from REQUIRED_ROADMAP_PATHS."
+      "resolved_note": "2026-07-27: refactored into provider submodules (_env/_io/_frame/_client/_adapters) with tushare_a_share.py reduced to an 81-line re-export shell; no longer a large_file. Pure physical relocation, public API and runtime behavior unchanged. market-data-platform commit 4ea0c14."
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
@@ -1019,6 +1019,12 @@
       "owner_repo": "quant-execution-engine",
       "reason": "2026-07-26 the approved qexec complexity refactor extracted helper functions from render_rebalance_diff / _build_rich_diff; the file briefly crossed the 500-LOC large-file threshold during helper extraction but fell back to 496 LOC once reformatted, so it stays below the large-file threshold. It is a cohesive rebalance-diff renderer and is accepted as-is rather than force-split, which would raise coupling across the rendering layer.",
       "next_action": "split summary/table/row rendering helpers behind the existing renderer contract only if the file gains another diff variant or a second rendering backend"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/_adapters.py",
+      "owner_repo": "market-data-platform",
+      "reason": "1314-LOC provider adapter layer created by the 2026-07-27 tushare_a_share.py split (1792->81 line shell). Pure physical relocation of mirror_a_share_* functions and request-policy helpers, not a genuine maintainability reduction; it is the largest single receiver of that debt transfer and the 13th-largest large_file in the baseline.",
+      "next_action": "split mirror_a_share_* adapters behind contract tests once TuShare workflow work resumes"
     }
   ]
 }

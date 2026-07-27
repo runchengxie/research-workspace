@@ -324,8 +324,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 177,
-      "python_loc": 76678,
+      "python_file_count": 182,
+      "python_loc": 76892,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 46,
@@ -347,11 +347,6 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "loc": 2006,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share.py",
-          "loc": 1792,
           "hk_related": false
         },
         {
@@ -397,6 +392,11 @@
         {
           "path": "src/market_data_platform/providers/a_share_minute_build.py",
           "loc": 1339,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/_adapters.py",
+          "loc": 1306,
           "hk_related": false
         },
         {
