@@ -23,11 +23,12 @@ REPOS = {
     "strategy-pipeline",
     "quant-execution-engine",
 }
-REQUIRED_ROADMAP_PATHS = {
-    "market-data-platform/src/market_data_platform/providers/tushare_a_share.py",
-    "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
-    "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
-}
+# 2026-07-27: the three prior high-risk entries (tushare_a_share.py, eval.py,
+# longport.py) were all resolved via downstream submodule refactors and no longer
+# appear as large_files in baseline-20260719-ty.json. They remain registered in
+# roadmap "records" with resolved:true for audit, but are dropped from the forced
+# tracking set because none is currently over the 500-LOC threshold.
+REQUIRED_ROADMAP_PATHS: set[str] = set()
 QUALITY_REGISTER_FIELDS = {
     "repo",
     "path",

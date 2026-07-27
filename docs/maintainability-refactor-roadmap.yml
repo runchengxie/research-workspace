@@ -7,7 +7,7 @@
     "large_class_lines": 300
   },
   "hotspot_budget_policy": "Budgets must match the committed maintainability baseline. Lower budgets in the same change when hotspot counts fall; do not raise them without an explicit owner decision.",
-  "complexity_threshold_drift_note": "2026-07-26: declared complexity ceiling is 15, but strategy-pipeline/pyproject.toml max-complexity=17 and quant-execution-engine/pyproject.toml max-complexity=18, so their Ruff C901 gate cannot surface hotspots at the declared ceiling. Align those two configs to 14 (matching market-data-platform/alpha/portfolio) before relying on this threshold. tracked under risk-batch gate tightening.",
+  "complexity_threshold_drift_note": "RESOLVED 2026-07-27: as recorded on 2026-07-26, strategy-pipeline/pyproject.toml max-complexity was 17 and quant-execution-engine/pyproject.toml was 18, above the declared ceiling of 15. Re-verified against current submodule gitlinks (strategy-pipeline 57fbcc9, quant-execution-engine 0cb17c1): strategy-pipeline is now 15 and quant-execution-engine is now 14, while market-data-platform/alpha/portfolio stay at 14. All repos are now <= the declared ceiling of 15, so the C901 gate can surface hotspots at the declared ceiling. The original drift no longer exists; keeping this note only as an audit trail.",
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
@@ -83,7 +83,9 @@
       "focused_tests": [
         "market-data-platform/tests/test_tushare_a_share.py"
       ],
-      "non_goals": "do not change A-share asset contract, output schema, or TuShare request semantics"
+      "non_goals": "do not change A-share asset contract, output schema, or TuShare request semantics",
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json (fell below 500 LOC via downstream provider splits). Remediation tracked as accepted debt in accepted_hotspots; dropped from REQUIRED_ROADMAP_PATHS."
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
@@ -94,7 +96,9 @@
       "focused_tests": [
         "strategy-pipeline pipeline and docs contract tests"
       ],
-      "non_goals": "do not change evaluation metrics"
+      "non_goals": "do not change evaluation metrics",
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS; remaining debt tracked under accepted_hotspots if re-surfaces."
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/context_builder.py",
@@ -105,7 +109,9 @@
       "focused_tests": [
         "strategy-pipeline pipeline context and panel loading tests"
       ],
-      "non_goals": "do not change TrainEvalRequest fields or panel loading behavior"
+      "non_goals": "do not change TrainEvalRequest fields or panel loading behavior",
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
     },
     {
       "path": "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
@@ -116,7 +122,9 @@
       "focused_tests": [
         "quant-execution-engine longport unit tests"
       ],
-      "non_goals": "do not change broker credentials or live execution gates"
+      "non_goals": "do not change broker credentials or live execution gates",
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS."
     },
     {
       "owner_repo": "market-data-platform",
@@ -125,7 +133,9 @@
       "risk": "medium",
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
-      "focused_tests": []
+      "focused_tests": [],
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
     },
     {
       "owner_repo": "strategy-pipeline",
@@ -134,7 +144,9 @@
       "risk": "medium",
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
-      "focused_tests": []
+      "focused_tests": [],
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
     },
     {
       "owner_repo": "strategy-pipeline",
@@ -143,7 +155,9 @@
       "risk": "medium",
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
-      "focused_tests": []
+      "focused_tests": [],
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
     }
   ],
   "accepted_hotspots": [
