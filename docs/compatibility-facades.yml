@@ -263,6 +263,18 @@
       "focused_tests": ["quant-execution-engine facade tests", "quant-execution-engine import smoke"],
       "consumer_audit": "not_applicable while retained as public external API",
       "status": "retained_public_api"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_coverage.py",
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.providers._coverage_common, _coverage_classify, _coverage_manifest, _coverage_materialize",
+      "current_consumers": "kept for existing coverage/minute imports during the functional-domain split",
+      "removal_condition": "remove after two release reviews show no repo-local or downstream imports of a_share_minute_coverage and replacement docs cover direct submodule imports",
+      "rollback_path": "restore facade module from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform tests/test_a_share_minute_coverage.py", "market-data-platform import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     }
   ]
 }

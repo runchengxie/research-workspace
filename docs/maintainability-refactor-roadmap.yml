@@ -18,11 +18,11 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 46,
+      "max_large_files": 47,
       "max_long_functions": 70,
       "max_complexity_hotspots": 42,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
+      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-27 explicit owner decision: a_share_minute_coverage.py (2284 LOC) was split into four functional-domain submodules (_coverage_common 380 / _coverage_classify 180 / _coverage_manifest 530 / _coverage_materialize 1194); the original file became a re-export shell. Net effect is +1 large_file (_coverage_materialize and _coverage_manifest both exceed the 500-LOC threshold while the original shell drops out), so max_large_files is raised 46->47. This is a debt transfer, not a maintainability gain; _coverage_materialize remains the largest single receiver and is tracked in accepted_hotspots."
     },
     {
       "repo": "alpha-research",
