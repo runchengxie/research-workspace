@@ -1824,11 +1824,11 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 412,
-      "python_loc": 95218,
+      "python_file_count": 415,
+      "python_loc": 95324,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 51,
+        "large_files": 50,
         "long_functions": 118,
         "complexity_hotspots": 67,
         "large_classes": 1
@@ -1930,11 +1930,6 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/commands/tune.py",
-          "loc": 745,
-          "hk_related": false
-        },
-        {
           "path": "scripts/research/a_share_next_open_to_high_backtest.py",
           "loc": 743,
           "hk_related": false
@@ -1957,6 +1952,11 @@
         {
           "path": "tests/test_daily_watch20_fundamental_shadow.py",
           "loc": 718,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+          "loc": 715,
           "hk_related": false
         }
       ],
@@ -2422,11 +2422,11 @@
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 92,
-      "python_loc": 27901,
+      "python_file_count": 107,
+      "python_loc": 28348,
       "hk_related_file_count": 12,
       "hotspot_counts": {
-        "large_files": 14,
+        "large_files": 12,
         "long_functions": 36,
         "complexity_hotspots": 37,
         "large_classes": 7
@@ -2438,29 +2438,19 @@
           "hk_related": false
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
-          "loc": 1523,
-          "hk_related": false
-        },
-        {
           "path": "tests/unit/test_smoke_operator_harness.py",
-          "loc": 1335,
+          "loc": 1341,
           "hk_related": false
         },
         {
           "path": "tests/unit/test_cli_longport_commands.py",
-          "loc": 1148,
+          "loc": 1155,
           "hk_related": true
         },
         {
           "path": "src/quant_execution_engine/broker/longport.py",
           "loc": 1037,
           "hk_related": true
-        },
-        {
-          "path": "project_tools/smoke_operator_harness.py",
-          "loc": 1036,
-          "hk_related": false
         },
         {
           "path": "src/quant_execution_engine/renderers/table.py",
@@ -2505,25 +2495,25 @@
       ],
       "long_functions": [
         {
-          "path": "src/quant_execution_engine/cli_parser.py",
+          "path": "src/quant_execution_engine/cli/parser.py",
           "name": "create_parser",
           "line_count": 344,
           "complexity": 1
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
+          "path": "project_tools/smoke_operator/workflow.py",
           "name": "run_operator_smoke_workflow",
-          "line_count": 311,
+          "line_count": 328,
           "complexity": 17
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/__init__.py",
           "name": "main",
           "line_count": 242,
           "complexity": 34
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/commands/account.py",
           "name": "run_config",
           "line_count": 207,
           "complexity": 52
@@ -2565,7 +2555,7 @@
           "complexity": 13
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/commands/rebalance.py",
           "name": "run_rebalance",
           "line_count": 119,
           "complexity": 26
@@ -2601,10 +2591,10 @@
           "complexity": 7
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
+          "path": "project_tools/smoke_operator/state.py",
           "name": "latest_operator_outcome",
           "line_count": 109,
-          "complexity": 34
+          "complexity": 33
         },
         {
           "path": "src/quant_execution_engine/diagnostics.py",
@@ -2637,7 +2627,7 @@
           "complexity": 12
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
+          "path": "project_tools/smoke_operator/evidence.py",
           "name": "write_evidence",
           "line_count": 92,
           "complexity": 21
@@ -2657,7 +2647,7 @@
       ],
       "complexity_hotspots": [
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/commands/account.py",
           "name": "run_config",
           "line_count": 207,
           "complexity": 52
@@ -2681,19 +2671,19 @@
           "complexity": 35
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
-          "name": "latest_operator_outcome",
-          "line_count": 109,
-          "complexity": 34
-        },
-        {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/__init__.py",
           "name": "main",
           "line_count": 242,
           "complexity": 34
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "project_tools/smoke_operator/state.py",
+          "name": "latest_operator_outcome",
+          "line_count": 109,
+          "complexity": 33
+        },
+        {
+          "path": "src/quant_execution_engine/cli/commands/rebalance.py",
           "name": "run_rebalance",
           "line_count": 119,
           "complexity": 26
@@ -2735,7 +2725,7 @@
           "complexity": 22
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
+          "path": "project_tools/smoke_operator/evidence.py",
           "name": "write_evidence",
           "line_count": 92,
           "complexity": 21
@@ -2765,7 +2755,7 @@
           "complexity": 20
         },
         {
-          "path": "src/quant_execution_engine/cli.py",
+          "path": "src/quant_execution_engine/cli/commands/orders.py",
           "name": "run_broker_orders",
           "line_count": 71,
           "complexity": 18
@@ -2777,15 +2767,21 @@
           "complexity": 18
         },
         {
-          "path": "project_tools/smoke_operator_harness.py",
+          "path": "project_tools/smoke_operator/workflow.py",
           "name": "run_operator_smoke_workflow",
-          "line_count": 311,
+          "line_count": 328,
           "complexity": 17
         },
         {
           "path": "src/quant_execution_engine/broker/longport.py",
           "name": "fund_positions",
           "line_count": 54,
+          "complexity": 17
+        },
+        {
+          "path": "src/quant_execution_engine/cli/render.py",
+          "name": "render_run_report",
+          "line_count": 48,
           "complexity": 17
         },
         {
@@ -2798,12 +2794,6 @@
           "path": "src/quant_execution_engine/health.py",
           "name": "render_health_result",
           "line_count": 53,
-          "complexity": 17
-        },
-        {
-          "path": "src/quant_execution_engine/report.py",
-          "name": "render_run_report",
-          "line_count": 48,
           "complexity": 17
         }
       ],
@@ -2876,8 +2866,16 @@
         "mypy_present": false
       },
       "script_inventory": [
+        "project_tools/__init__.py",
         "project_tools/export_repo_source.py",
         "project_tools/package.sh",
+        "project_tools/smoke_operator/__init__.py",
+        "project_tools/smoke_operator/audit.py",
+        "project_tools/smoke_operator/evidence.py",
+        "project_tools/smoke_operator/parser.py",
+        "project_tools/smoke_operator/state.py",
+        "project_tools/smoke_operator/steps.py",
+        "project_tools/smoke_operator/workflow.py",
         "project_tools/smoke_operator_harness.py",
         "project_tools/smoke_signal_harness.py",
         "project_tools/smoke_target_harness.py",

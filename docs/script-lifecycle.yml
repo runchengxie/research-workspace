@@ -478,6 +478,86 @@
       "removal_condition": "split or remove only after execution smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
     },
     {
+      "path": "quant-execution-engine/project_tools/__init__.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Package marker so project_tools is importable as a package for operator smoke tooling",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after project_tools is no longer imported as a package, confirmed by no owner-repo references"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/__init__.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Re-export facade for the operator smoke package (public API surface)",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/parser.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Argparse parser and main() entry for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/workflow.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Operator smoke workflow orchestration (config/account/quote/rebalance/orders/order/reconcile/exceptions/cancel-all steps)",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/steps.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Step execution primitives (env capture/apply, subprocess step runner, broker workflow steps)",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "none",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/state.py",
+      "owner": "quant-execution-engine",
+      "purpose": "State and outcome queries for the operator smoke harness (latest tracked order, outcome classification)",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/audit.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Audit-log discovery and summarization for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/evidence.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Evidence JSON writer for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
       "path": "quant-execution-engine/project_tools/smoke_signal_harness.py",
       "owner": "quant-execution-engine",
       "purpose": "Signal handoff smoke harness",

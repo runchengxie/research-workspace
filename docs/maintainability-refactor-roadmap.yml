@@ -50,7 +50,7 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 51,
+      "max_large_files": 50,
       "max_long_functions": 118,
       "max_complexity_hotspots": 67,
       "max_large_classes": 1,
@@ -58,7 +58,7 @@
     },
     {
       "repo": "quant-execution-engine",
-      "max_large_files": 14,
+      "max_large_files": 12,
       "max_long_functions": 36,
       "max_complexity_hotspots": 37,
       "max_large_classes": 7,
@@ -86,17 +86,6 @@
       "non_goals": "do not change A-share asset contract, output schema, or TuShare request semantics"
     },
     {
-      "path": "market-data-platform/src/market_data_platform/tushare_cli.py",
-      "owner_repo": "market-data-platform",
-      "risk": "medium",
-      "first_safe_extraction": "cli_parser_extraction",
-      "target_layout": "tushare_cli/{parser.py,runner.py,render.py}",
-      "focused_tests": [
-        "market-data-platform TuShare CLI and provider tests"
-      ],
-      "non_goals": "do not change public CLI flags or A-share artifact paths"
-    },
-    {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
       "owner_repo": "strategy-pipeline",
       "risk": "high",
@@ -106,17 +95,6 @@
         "strategy-pipeline pipeline and docs contract tests"
       ],
       "non_goals": "do not change evaluation metrics"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/commands/tune.py",
-      "owner_repo": "strategy-pipeline",
-      "risk": "medium",
-      "first_safe_extraction": "cli_parser_extraction",
-      "target_layout": "commands/tune/{parser.py,report.py}; runner logic already started in commands/tune_runner.py",
-      "focused_tests": [
-        "strategy-pipeline CLI tests"
-      ],
-      "non_goals": "do not change command flags"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/context_builder.py",
@@ -130,28 +108,6 @@
       "non_goals": "do not change TrainEvalRequest fields or panel loading behavior"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/stats.py",
-      "owner_repo": "strategy-pipeline",
-      "risk": "medium",
-      "first_safe_extraction": "rendering_reporting",
-      "target_layout": "pipeline/stats/{pricing_fields.py,recency_diagnostics.py,summary_metrics.py}",
-      "focused_tests": [
-        "strategy-pipeline pipeline stats and output summary tests"
-      ],
-      "non_goals": "do not change metric formulas or report schema"
-    },
-    {
-      "path": "quant-execution-engine/src/quant_execution_engine/cli.py",
-      "owner_repo": "quant-execution-engine",
-      "risk": "medium",
-      "first_safe_extraction": "cli_parser_extraction",
-      "target_layout": "cli/{parser.py,commands.py,render.py}",
-      "focused_tests": [
-        "quant-execution-engine CLI unit tests"
-      ],
-      "non_goals": "do not change qexec command behavior"
-    },
-    {
       "path": "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
       "owner_repo": "quant-execution-engine",
       "risk": "high",
@@ -161,17 +117,6 @@
         "quant-execution-engine longport unit tests"
       ],
       "non_goals": "do not change broker credentials or live execution gates"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
-      "owner_repo": "quant-execution-engine",
-      "risk": "medium",
-      "first_safe_extraction": "workflow_orchestration_separation",
-      "target_layout": "project_tools/smoke_operator/{parser.py,runner.py,evidence.py}",
-      "focused_tests": [
-        "quant-execution-engine smoke harness tests"
-      ],
-      "non_goals": "do not change broker smoke safety switches"
     },
     {
       "owner_repo": "market-data-platform",
