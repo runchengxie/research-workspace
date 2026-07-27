@@ -158,6 +158,19 @@
       "focused_tests": [],
       "resolved": false,
       "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_coverage.py",
+      "owner_repo": "market-data-platform",
+      "risk": "high",
+      "first_safe_extraction": "schema_model_extraction",
+      "target_layout": "providers/_coverage_common.py (shared data classes/constants/tools), _coverage_classify.py (classification), _coverage_manifest.py (manifest discovery/load), _coverage_materialize.py (materialization)",
+      "focused_tests": [
+        "market-data-platform/tests/test_a_share_minute_coverage.py"
+      ],
+      "non_goals": "do not change coverage policy, promotion workflow, or audit contract",
+      "resolved": true,
+      "resolved_note": "2026-07-27: split into four functional-domain submodules (_coverage_common/_coverage_classify/_coverage_manifest/_coverage_materialize) with a_share_minute_coverage.py reduced to a thin re-export shell; __all__ preserved so callers and tests are unchanged. Pure physical relocation, public API and runtime behavior unchanged. market-data-platform commit 262b403."
     }
   ],
   "accepted_hotspots": [
@@ -829,12 +842,6 @@
       "next_action": "split repository discovery from boundary evaluation when this governance script changes"
     },
     {
-      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_coverage.py",
-      "owner_repo": "market-data-platform",
-      "reason": "minute coverage classification, materialization, and audit logic landed together with the hardened promotion workflow",
-      "next_action": "split coverage classification, source materialization, and partition audit behind the existing coverage tests"
-    },
-    {
       "path": "market-data-platform/tests/test_a_share_minute_coverage.py",
       "owner_repo": "market-data-platform",
       "reason": "large scenario suite covers the minute coverage and promotion safety contract",
@@ -1049,6 +1056,12 @@
       "owner_repo": "strategy-pipeline",
       "reason": "DailyWatch20 fundamental shadow test concentrates fixture-heavy comparison cases; accepted as a large test file.",
       "next_action": "keep the test in sync with the source module refactor"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/_coverage_materialize.py",
+      "owner_repo": "market-data-platform",
+      "reason": "1194-LOC materialization submodule created by the 2026-07-27 a_share_minute_coverage.py split (2284->shell). Pure physical relocation of the promotion/materialization and partition-audit helpers, not a genuine maintainability reduction; it is the largest single receiver of that debt transfer.",
+      "next_action": "split promotion decisioning from partition reconciliation when materialization gains a second output sink"
     }
   ]
 }
