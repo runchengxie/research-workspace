@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 70,
-      "python_loc": 16466,
+      "python_loc": 16464,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 7,
@@ -41,12 +41,12 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "loc": 592,
+          "path": "scripts/workspace_doctor.py",
+          "loc": 590,
           "hk_related": false
         },
         {
-          "path": "scripts/workspace_doctor.py",
+          "path": "tests/test_maintainability_governance.py",
           "loc": 590,
           "hk_related": false
         },
@@ -188,7 +188,7 @@
         {
           "path": "tests/test_maintainability_governance.py",
           "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
-          "line_count": 56,
+          "line_count": 54,
           "complexity": 19
         },
         {
@@ -316,7 +316,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 199,
-      "python_loc": 79918,
+      "python_loc": 80023,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
