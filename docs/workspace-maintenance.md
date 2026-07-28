@@ -107,7 +107,7 @@ python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 `.github/workflows/superproject.yml.disabled` 作为停用模板。顶层和六个
 子仓库的 GitHub Actions 权限均禁用。`portfolio-backtester` 保留 `ci.yml` 定义，
 `research-apps` 与 Strategy 只保留停用模板，但这些文件当前都不会触发远端检查。
-权威检查在本地 pre-push 执行，文档和 拉取请求（PR） 不应把本地质量命令描述成已经由远端 CI 自动
+权威检查在本地 pre-push 执行，文档和 拉取请求（PR）不应把本地质量命令描述成已经由远端 CI 自动
 执行。恢复自动化时，需要显式开启对应仓库权限，并同步更新本页、质量治理文档和测试。
 
 ## 更新文档时

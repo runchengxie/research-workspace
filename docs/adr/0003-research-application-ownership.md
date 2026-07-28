@@ -14,8 +14,8 @@
 
 ## 决策
 
-1. `market_data_platform.research_views` 拥有 时间点（PIT） 数据视图、当前资产解析、候选池快照与来源血缘（lineage）。
-2. `alpha_research` 拥有特征、标签、模型生命周期、滚动 样本外（OOS） 信号、统计推断与信号覆盖层。
+1. `market_data_platform.research_views` 拥有 时间点（PIT）数据视图、当前资产解析、候选池快照与来源血缘（lineage）。
+2. `alpha_research` 拥有特征、标签、模型生命周期、滚动 样本外（OOS）信号、统计推断与信号覆盖层。
 3. `portfolio_backtester` 拥有组合构造、换手、成本、可交易性和研究会计状态机。
 4. `research_apps` 拥有 DailyWatch20、hotsector 等策略专用合同、预注册实验、证据解释与决策组合。
 5. `strategy_pipeline` 仅保留 命令行（CLI）、配置合成、运行目录、外部调用 runner、操作员控制、原子发布、release gate 与 `targets.json` 交接。
@@ -28,7 +28,7 @@
 - 历史回执（receipt）、campaign spec digest 与产物（artifact）schema 必须保持可读。
 - 原子发布、不可覆盖写入、操作员时间窗和执行交接安全门禁不得因研究代码迁移而下沉。
 - 组合会计状态机不得通过 portfolio 包反向 import 流水线 伪装成迁移。
-- owner 版本、lockfile、最新组合测试和 workspace pin 未完成前，所有迁移 拉取请求（PR） 保持 draft。
+- owner 版本、lockfile、最新组合测试和 workspace pin 未完成前，所有迁移 拉取请求（PR）保持 draft。
 
 ## 合并栈
 
@@ -41,4 +41,4 @@
 
 ## 后果
 
-短期内会增加门面与跨仓迁移测试。完成后，仓库布局可独立调整，owner 应用程序接口（API） 和 `research_apps` import surface 不需要再次改名。未完成的 mixed module 必须登记在机器可读账本中，不以 README 声明代替退出证据。
+短期内会增加门面与跨仓迁移测试。完成后，仓库布局可独立调整，owner 应用程序接口（API）和 `research_apps` import surface 不需要再次改名。未完成的 mixed module 必须登记在机器可读账本中，不以 README 声明代替退出证据。

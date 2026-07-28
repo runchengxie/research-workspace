@@ -17,7 +17,7 @@
 | --- | --- |
 | `baseline_reproducible` | current 契约、registry、`daily_clean`、by-date universe、研究输出、目标血缘（lineage）和 CN dry-run 可复现 |
 | `complete_pit_research_data` | 时间点（PIT） universe、财务报表 PIT、历史行业 membership 和研究窗口覆盖已完整 |
-| `production_strategy_evidence` | 长窗口、benchmark ladder、feature evidence、最终 样本外（OOS） 或替代说明、组合对称交叉验证（CPCV）、turnover/cost 和 capacity 复核完成 |
+| `production_strategy_evidence` | 长窗口、benchmark ladder、feature evidence、最终 样本外（OOS）或替代说明、组合对称交叉验证（CPCV）、turnover/cost 和 capacity 复核完成 |
 | `broker_trading_enabled` | 执行仓库另行证明真实券商 adapter、账户权限、受监督 smoke、对账、kill switch 和操作批准 |
 
 旧键 `research_default_promotable` 只保留为兼容 alias，对应

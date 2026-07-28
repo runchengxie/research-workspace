@@ -36,7 +36,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 
 历史产物和代码为兼容仍使用键名 `quality` / `factor_quality`，但其当前构造严格是
 `1/PE_TTM` 的盈利收益率估值代理，不应解释为盈利质量。真正的盈利质量需要利润率、资产回报、
-现金流和应计等 时间点（PIT） 基本面证据。
+现金流和应计等 时间点（PIT）基本面证据。
 
 这个工具适合做市场风格复盘、候选策略收益归因和研究解释。账户级风险引擎还需要补充行业中性化、协方差风险预测、特异风险建模、组合优化和 PIT 指数成分约束。
 
@@ -69,7 +69,7 @@ uv run python -m src.style_factors \
   --outdir artifacts/style_analysis_quick
 ```
 
-发布到共享数据根的标准位置：
+发布到共享数据根的标准位置（输出写入 `$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<out-name>/`）：
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \

@@ -8,7 +8,7 @@ import json
 from pathlib import Path, PurePosixPath
 from typing import Any, TypeGuard
 
-from workspace_governance_common import Check
+from workspace_governance_common import Check, valid_budget_limit
 from workspace_governance_quality import check_quality_coverage
 from workspace_governance_submodules import check_submodule_governance_gates
 
@@ -129,10 +129,6 @@ def _deprecation_removal_issues(manifest: dict[str, Any]) -> list[str]:
     return issues
 
 
-def _valid_budget_limit(value: Any) -> TypeGuard[int]:
-    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
-
-
 def _check_deprecation_budget(manifest: dict[str, Any], pending_count: int) -> list[Check]:
     budget = manifest.get("deprecation_budget")
     if not isinstance(budget, dict):
@@ -156,7 +152,7 @@ def _check_deprecation_budget(manifest: dict[str, Any], pending_count: int) -> l
     limit = budget["pending_follow_up_max"]
     policy = budget["policy"]
     issues: list[str] = []
-    if not _valid_budget_limit(limit):
+    if not valid_budget_limit(limit):
         issues.append("pending_follow_up_max must be a non-negative integer")
     elif pending_count > limit:
         issues.append(f"pending deprecated surface count {pending_count} exceeds max {limit}")
@@ -483,9 +479,9 @@ def _check_refactor_roadmap(roadmap: dict[str, Any], baseline: dict[str, Any]) -
         for field in sorted(HOTSPOT_COUNT_FIELDS):
             count = counts.get(field)
             limit = budget.get(f"max_{field}")
-            if not _valid_budget_limit(count):
+            if not valid_budget_limit(count):
                 budget_issues.append(f"{repo_name}: invalid {field} count")
-            elif not _valid_budget_limit(limit):
+            elif not valid_budget_limit(limit):
                 budget_issues.append(f"{repo_name}: invalid max_{field} budget")
             elif count > limit:
                 budget_issues.append(f"{repo_name}: {field} count {count} exceeds budget {limit}")

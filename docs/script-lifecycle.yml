@@ -88,16 +88,6 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/export_hk_legacy_archive.py",
-      "owner": "research-workspace",
-      "purpose": "Private paused-maintenance HK legacy source archive staging",
-      "lifecycle": "archive",
-      "safe_to_run_locally": true,
-      "writes_files": "external staging directory passed via --out",
-      "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "remove only after private legacy restore provenance is archived with manifest evidence and no restore checklist calls this script for two release reviews"
-    },
-    {
       "path": "scripts/hk_archive_gate.py",
       "owner": "research-workspace",
       "purpose": "Read-only HK private archive evidence and removal gate",
@@ -106,26 +96,6 @@
       "writes_files": "only when --out is provided",
       "external_dependencies": "git checkout with initialized submodules",
       "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
-    },
-    {
-      "path": "scripts/concept_etf_ml_backtest.py",
-      "owner": "research-workspace",
-      "purpose": "Legacy concept ETF ML backtest experiment script; not part of the hotsector daily handoff",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
-    },
-    {
-      "path": "scripts/export_holdings_html.py",
-      "owner": "research-workspace",
-      "purpose": "Export latest strategy-pipeline holdings snapshot to standalone HTML",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout by default; HTML file only when --out is provided",
-      "external_dependencies": "strategy-pipeline run artifacts and optional market-data-platform instruments parquet",
-      "removal_condition": "remove after holdings snapshot export moves into strategy-pipeline or two release reviews record no active use"
     },
     {
       "path": "scripts/maintainability_baseline.py",
@@ -146,46 +116,6 @@
       "writes_files": "none",
       "external_dependencies": "git checkout with initialized alpha-research, portfolio-backtester, and strategy-pipeline submodules",
       "removal_condition": "remove only after the owner-native namespace migration release gate moves to a versioned successor and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/path_b_production.py",
-      "owner": "research-workspace",
-      "purpose": "Legacy Path B experiment script; not part of the hotsector daily handoff",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
-    },
-    {
-      "path": "scripts/path_c_m1_validate.py",
-      "owner": "research-workspace",
-      "purpose": "Legacy Path C M1 validation script; not part of the hotsector daily handoff",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout and configured output paths",
-      "external_dependencies": "DATA_PLATFORM_ROOT, legacy direct hot_sector_screener internals",
-      "removal_condition": "remove or archive after the experiment is reproduced through alpha_research.signals artifacts, or after two release reviews record no active use"
-    },
-    {
-      "path": "scripts/publish_etf_industry_signal.py",
-      "owner": "research-workspace",
-      "purpose": "Publish guan-etf-rotation-v3 industry signal to DATA_PLATFORM_ROOT standard location",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/etf_rotation_v3/<run>/",
-      "external_dependencies": "DATA_PLATFORM_ROOT, guan-etf-rotation-v3 artifacts",
-      "removal_condition": "remove after guan-etf-rotation-v3 writes directly to standard location or two release reviews record no active use"
-    },
-    {
-      "path": "scripts/hotsector_to_strategy_universe.py",
-      "owner": "research-workspace",
-      "purpose": "Converter for pre-alpha_research.signals hot-sector outputs",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/hot_sector_screener/by_date/",
-      "external_dependencies": "DATA_PLATFORM_ROOT, hot-sector-screener outputs",
-      "removal_condition": "archive after hot-sector-screener alpha_research.signals handoff is stable for two release reviews; new daily handoff should use signals.parquet directly"
     },
     {
       "path": "src/style_factors/style_factor_attribution.py",
@@ -386,16 +316,6 @@
       "writes_files": "none; imported by workspace governance modules",
       "external_dependencies": "none",
       "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_governance_hk_split.py",
-      "owner": "research-workspace",
-      "purpose": "Archived HK split manifest validator retained for restore/removal review only",
-      "lifecycle": "archive",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "remove after two release reviews confirm no restore/removal review calls this validator and tests/test_hk_archive_boundary.py remains the active workspace guard"
     },
     {
       "path": "scripts/workspace_governance_submodules.py",

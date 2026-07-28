@@ -72,7 +72,7 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
-需要 RQData、TuShare、DuckDB 或券商 软件开发工具包（SDK） 时，在对应子仓库安装相应可选依赖。
+需要 RQData、TuShare、DuckDB 或券商 软件开发工具包（SDK）时，在对应子仓库安装相应可选依赖。
 
 ## 配置数据根目录
 

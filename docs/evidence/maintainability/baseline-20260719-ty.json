@@ -10,9 +10,9 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 71,
-      "python_loc": 16673,
-      "hk_related_file_count": 4,
+      "python_file_count": 70,
+      "python_loc": 16466,
+      "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 7,
         "long_functions": 12,
@@ -21,17 +21,17 @@
       },
       "large_files": [
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "loc": 934,
           "hk_related": false
         },
         {
-          "path": "scripts/concept_etf_ml_backtest.py",
+          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "loc": 696,
           "hk_related": false
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "loc": 646,
           "hk_related": false
         },
@@ -41,36 +41,36 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_maintainability_governance.py",
+          "loc": 592,
+          "hk_related": false
+        },
+        {
           "path": "scripts/workspace_doctor.py",
           "loc": 590,
           "hk_related": false
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "loc": 586,
-          "hk_related": false
-        },
-        {
           "path": "scripts/workspace_governance.py",
-          "loc": 549,
+          "loc": 545,
           "hk_related": false
         }
       ],
       "long_functions": [
         {
-          "path": "scripts/concept_etf_ml_backtest.py",
+          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "name": "walk_forward_backtest",
           "line_count": 173,
           "complexity": 29
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "walk_forward_backtest",
           "line_count": 150,
           "complexity": 30
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h1_consecutive_days",
           "line_count": 127,
           "complexity": 25
@@ -82,43 +82,43 @@
           "complexity": 8
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h2_rank_momentum",
           "line_count": 110,
           "complexity": 16
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_technical_features",
           "line_count": 109,
           "complexity": 22
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "main",
           "line_count": 106,
           "complexity": 21
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h3_constituent_features",
           "line_count": 103,
           "complexity": 30
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_concept_features",
           "line_count": 99,
           "complexity": 36
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_feature_matrix",
           "line_count": 97,
           "complexity": 30
         },
         {
-          "path": "scripts/concept_etf_ml_backtest.py",
+          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "name": "main",
           "line_count": 95,
           "complexity": 11
@@ -132,49 +132,49 @@
       ],
       "complexity_hotspots": [
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_concept_features",
           "line_count": 99,
           "complexity": 36
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_feature_matrix",
           "line_count": 97,
           "complexity": 30
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "walk_forward_backtest",
           "line_count": 150,
           "complexity": 30
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h3_constituent_features",
           "line_count": 103,
           "complexity": 30
         },
         {
-          "path": "scripts/concept_etf_ml_backtest.py",
+          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "name": "walk_forward_backtest",
           "line_count": 173,
           "complexity": 29
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h1_consecutive_days",
           "line_count": 127,
           "complexity": 25
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "build_technical_features",
           "line_count": 109,
           "complexity": 22
         },
         {
-          "path": "scripts/path_b_production.py",
+          "path": "docs/archive/adhoc/path_b_production.py",
           "name": "main",
           "line_count": 106,
           "complexity": 21
@@ -186,25 +186,25 @@
           "complexity": 19
         },
         {
-          "path": "scripts/concept_etf_ml_backtest.py",
+          "path": "tests/test_maintainability_governance.py",
+          "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
+          "line_count": 56,
+          "complexity": 19
+        },
+        {
+          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "name": "build_concept_features_for_date",
           "line_count": 71,
           "complexity": 17
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
-          "line_count": 49,
-          "complexity": 17
-        },
-        {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h2_rank_momentum",
           "line_count": 110,
           "complexity": 16
         },
         {
-          "path": "scripts/path_c_m1_validate.py",
+          "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "name": "test_h4_kpl_stability",
           "line_count": 73,
           "complexity": 16
@@ -248,18 +248,17 @@
           "portfolio-backtester",
           "quant-execution-engine",
           "research-apps",
-          "demo",
-          "scripts/concept_etf_ml_backtest.py",
-          "scripts/export_holdings_html.py",
-          "scripts/path_b_production.py",
-          "scripts/path_c_m1_validate.py",
-          "scripts/publish_etf_industry_signal.py"
+          "demo"
         ],
         "ty_include": [
+          "scripts/dead_code_advisory.py",
           "scripts/framework_adapter_evidence.py",
           "scripts/framework_adapter_execution_evidence.py",
           "scripts/framework_adapter_release_gate.py",
+          "scripts/hk_archive_gate.py",
           "scripts/install_pre_push_hooks.py",
+          "scripts/namespace_contracts.py",
+          "scripts/print_version_matrix.py",
           "scripts/run_pre_push_checks.py",
           "scripts/run_quality_checks.py",
           "scripts/run_submodule_checks.py",
@@ -290,22 +289,15 @@
         "mypy_present": false
       },
       "script_inventory": [
-        "scripts/concept_etf_ml_backtest.py",
         "scripts/dead_code_advisory.py",
-        "scripts/export_hk_legacy_archive.py",
-        "scripts/export_holdings_html.py",
         "scripts/framework_adapter_evidence.py",
         "scripts/framework_adapter_execution_evidence.py",
         "scripts/framework_adapter_release_gate.py",
         "scripts/hk_archive_gate.py",
-        "scripts/hotsector_to_strategy_universe.py",
         "scripts/install_pre_push_hooks.py",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
-        "scripts/path_b_production.py",
-        "scripts/path_c_m1_validate.py",
         "scripts/print_version_matrix.py",
-        "scripts/publish_etf_industry_signal.py",
         "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
         "scripts/run_submodule_checks.py",
@@ -315,7 +307,6 @@
         "scripts/workspace_env.py",
         "scripts/workspace_governance.py",
         "scripts/workspace_governance_common.py",
-        "scripts/workspace_governance_hk_split.py",
         "scripts/workspace_governance_quality.py",
         "scripts/workspace_governance_submodules.py",
         "scripts/workspace_import_boundaries.py"

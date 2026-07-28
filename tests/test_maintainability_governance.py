@@ -28,7 +28,6 @@ REPOS = {
 # appear as large_files in baseline-20260719-ty.json. They remain registered in
 # roadmap "records" with resolved:true for audit, but are dropped from the forced
 # tracking set because none is currently over the 500-LOC threshold.
-REQUIRED_ROADMAP_PATHS: set[str] = set()
 QUALITY_REGISTER_FIELDS = {
     "repo",
     "path",
@@ -496,7 +495,12 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     hotspot_budgets = {record["repo"]: record for record in roadmap["hotspot_budgets"]}
 
     assert roadmap["schema_version"] == "maintainability_refactor_roadmap.v1"
-    assert REQUIRED_ROADMAP_PATHS <= planned
+    # 守卫已解决记录：它们仍登记在 roadmap 中、标记为 resolved 且文件仍然存在，
+    # 避免之前空集断言沦为恒真的 no-op。
+    resolved_paths = {record["path"] for record in roadmap["records"] if record.get("resolved")}
+    assert resolved_paths <= planned
+    for path in resolved_paths:
+        assert (ROOT / path).exists()
     assert set(hotspot_budgets) == REPOS
     for record in roadmap["records"]:
         assert {

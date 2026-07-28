@@ -28,11 +28,6 @@ extend-exclude = [
   "quant-execution-engine",
   "research-apps",
   "demo",
-  "scripts/concept_etf_ml_backtest.py",
-  "scripts/export_holdings_html.py",
-  "scripts/path_b_production.py",
-  "scripts/path_c_m1_validate.py",
-  "scripts/publish_etf_industry_signal.py",
 ]
 
 [tool.ruff.lint]
@@ -40,10 +35,14 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.ty.src]
 include = [
+  "scripts/dead_code_advisory.py",
   "scripts/framework_adapter_evidence.py",
   "scripts/framework_adapter_execution_evidence.py",
   "scripts/framework_adapter_release_gate.py",
+  "scripts/hk_archive_gate.py",
   "scripts/install_pre_push_hooks.py",
+  "scripts/namespace_contracts.py",
+  "scripts/print_version_matrix.py",
   "scripts/run_pre_push_checks.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",

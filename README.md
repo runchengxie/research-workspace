@@ -31,7 +31,7 @@ quant-execution-engine
 | `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
 | `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
-| `research-apps/` | 组合数据、alpha 和回测 owner 应用程序接口（API），运行 F-lite（轻量因子研究应用）、slow-volume（低成交量/低换手研究）与 DeepSeek V4（深度求索 V4 模型） 研究应用 |
+| `research-apps/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 F-lite（轻量因子研究应用）、slow-volume（低成交量与低换手研究）和 DeepSeek V4 三款研究应用 |
 | `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |

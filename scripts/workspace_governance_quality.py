@@ -6,7 +6,7 @@ import tomllib
 from pathlib import Path
 from typing import Any
 
-from workspace_governance_common import Check
+from workspace_governance_common import Check, valid_budget_limit
 
 QUALITY_REGISTER_FIELDS = {
     "repo",
@@ -247,10 +247,6 @@ def _check_per_file_ignore_drift(
     return []
 
 
-def _valid_budget_limit(value: Any) -> bool:
-    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
-
-
 def _check_quality_debt_budget(
     manifest: dict[str, Any],
     *,
@@ -280,13 +276,13 @@ def _check_quality_debt_budget(
     broad_limit = budget["broad_exclude_register_max"]
     per_file_limit = budget["per_file_ignore_register_max"]
     policy = budget["policy"]
-    if not _valid_budget_limit(broad_limit):
+    if not valid_budget_limit(broad_limit):
         issues.append("broad_exclude_register_max must be a non-negative integer")
     elif broad_exclude_count > broad_limit:
         issues.append(
             f"broad_exclude_register count {broad_exclude_count} exceeds max {broad_limit}"
         )
-    if not _valid_budget_limit(per_file_limit):
+    if not valid_budget_limit(per_file_limit):
         issues.append("per_file_ignore_register_max must be a non-negative integer")
     elif per_file_ignore_count > per_file_limit:
         issues.append(

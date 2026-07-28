@@ -12,7 +12,7 @@
 
 ## 当前决策
 
-截至 2026-07-16，A 股长窗口日线、时间点（PIT） 财务报表和历史行业变更已经写入 current
+截至 2026-07-16，A 股长窗口日线、时间点（PIT）财务报表和历史行业变更已经写入 current
 契约。港股继续按恢复专用归档管理。
 
 1. 活跃 `DATA_PLATFORM_ROOT` 保留 A 股 契约、资产和 registry。
@@ -73,7 +73,7 @@ python src/research_contracts/a_share_readiness.py \
 | 完整策略证据 | 就绪度 的 `production_strategy_evidence` | 尚未因数据发布自动通过 |
 
 生产策略 evidence 至少包含全 A 等权 benchmark、可获得时的指数族 cohort、feature evidence、
-最终 样本外（OOS） 或书面替代说明、CPCV、turnover/cost、capacity 和压力窗口复核。候选未通过要求的
+最终 样本外（OOS）或书面替代说明、CPCV、turnover/cost、capacity 和压力窗口复核。候选未通过要求的
 benchmark 时，不能描述成生产级策略。capacity evidence 由 `strategy-pipeline` 的
 `strategy capacity-report` 基于日线 pricing panel 和 `positions_by_rebalance.csv` 生成。
 顶层就绪度仍要求 `turnover_cost_report` 和 `capacity_report` 同时通过。

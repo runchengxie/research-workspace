@@ -110,15 +110,15 @@
 |------|--------|------|
 | hotsector | 热点板块研究（research-apps 下的研究包），也指 hot-sector-screener 子模块 | 英文是中文（热点板块）的拼接缩写 |
 | Hermes | 消息投递层（基于 Feishu/lark 的推送框架），负责把报告发到飞书 | 专有名词，保留英文 |
-| Hermite | 稳定性守卫（因子之上的因子变换），用作 B 袖 guard | 与 Hermes（飞书投递层）不是一回事 |
+| Hermite | 稳定性守卫（因子之上的因子变换），用作 B 袖 guard | 容易与飞书投递层 Hermes 混淆，两者是不同概念 |
 | DailyWatch、DailyWatch20 | 本工作区通过 strategy-pipeline 产出并发布给 market-intel 的 20 只 A 股每日观察名单 | DailyWatch 意为每日观察，20 表示 20 只 |
 | watchlist20 | 20 股观察名单的产出物与命令（strategy watchlist20 run），与 DailyWatch20 同义 | 策略层的叫法 |
 | A4、B16 | DailyWatch20 的内部两袖结构：A 袖 4 只、B 袖 16 只，合计 20 只 | 选型与权重约束的内部叫法 |
 | F-lite | 轻量因子研究应用（daily_watch20_flite_factors），用于 DailyWatch20 的因子构造 | F 指因子（factor），lite 表示轻量版 |
 | slow-volume | 低成交量研究（slow-volume campaign），用低成交量因子筛选股票 | 也写作低换手 |
-| 五臂（五臂稳定性实验） | 研究方法术语：在同一批冻结数据上跑 5 个实验臂，用拉丁方设计减少顺序偏差，检验模型输出是否稳定 | 不是产品名，是实验设计 |
+| 五臂（五臂稳定性实验） | 研究方法术语：在同一批冻结数据上跑 5 个实验臂，用拉丁方设计减少顺序偏差，检验模型输出是否稳定 | 一种实验设计，不是产品 |
 | AI精选 | AI 选股器产出的 AI 精选股票列表 | 中文名，含义直白 |
 | DeepSeek V4 | 深度求索的 V4 模型 | 模型名，专有名词，保留英文 |
 | Numeric（Numeric 排名） | 一种用数值打分排序的方法 | 与五臂是两个不同概念 |
 
-补充：项目里没有 Numeric Shadow 这个名称。容易混淆的两个真实术语是 Numeric 排名（一种排序方法）和五臂稳定性实验（一种实验设计），两者不是一回事。
+补充：项目里没有 Numeric Shadow 这个名称。容易混淆的两个真实术语是 Numeric 排名（一种排序方法）和五臂稳定性实验（一种实验设计），两者是不同概念。

@@ -7,7 +7,7 @@
 
 ## 背景
 
-历史上的 `cstree` 同时表示项目品牌、命令行（CLI） 和三个 distribution 拼接的 Python
+历史上的 `cstree` 同时表示项目品牌、命令行（CLI）和三个 distribution 拼接的 Python
 命名空间。平台开始采用 Qlib、LEAN 和 vn.py 的可替换集成边界后，这个名称既错误暗示
 单一截面树模型，也让物理拆仓继续以共享包形式耦合。
 
@@ -26,7 +26,7 @@
 
 1. 三个仓库均不得重新引入旧共享 Python package。
 2. strategy 仓库只发布 `strategy` 与 `strategy-pipeline` 两个 console script。
-3. 跨仓库 应用程序接口（API） 使用 owner-native package。artifact 契约 不携带第三方 runtime type。
+3. 跨仓库 应用程序接口（API）使用 owner-native package。artifact 契约 不携带第三方 runtime type。
 4. 新代码、adapter、测试、文档和配置不得增加旧 命名空间 依赖。
 5. superproject 在下游提交验证完成后才更新 gitlinks。
 

@@ -38,6 +38,14 @@
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - 策略总览导航索引（术语澄清 + 链接入口）：[strategy-catalog.md](strategy-catalog.md)
 - A 股风格因子：[style-factors.md](style-factors.md)
+- Owner-native 命名空间迁移记录：[namespace-migration.md](namespace-migration.md)
+- 价值因子长周期轮动分析：[value-regime-18y.md](value-regime-18y.md)
+- AFML 方法落地与跨仓库版本组合：[afml-methodology-rollout.md](afml-methodology-rollout.md)
+- 概念级机器学习探索路线图：[concept-level-ml-exploration.md](concept-level-ml-exploration.md)
+- 港股兼容面清单（已取代）：[hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md)
+- 港股私有 legacy 归档（已取代）：[hk-private-archive.md](hk-private-archive.md)
+- A 股生产就绪度与长窗口扩展（已取代）：[a-share-production-readiness.md](a-share-production-readiness.md)
+- 外部框架适配器候选发布（已取代）：[framework-adapter-release.md](framework-adapter-release.md)
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。
 
@@ -46,7 +54,7 @@
 - 活跃链路包含六个 Git 子模块
 - `src/research_contracts` 是顶层普通目录
 - A 股 current 契约 是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（PIT） 财务和历史行业资产已发布
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（PIT）财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理

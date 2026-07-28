@@ -24,16 +24,16 @@ market-data-platform   提供已发布资产与来源标识（不直接调供应
         ↓
 alpha-research         通用特征、标签、模型 → 信号产物 signals.parquet
         ↓
-research-apps          策略级研究：组合研究流程、预注册合同、证据解释（返回 Python 值 / DataFrame / 报告 / 回执）
-        ↓
-strategy-pipeline      外部模型调用、操作时段、统计验证、导出 targets.json
-        ↓
 portfolio-backtester   组合构造、成本 / 容量 / 风险、错峰（staggered）队列执行
+        ↓
+research-apps          策略级研究：组合研究流程、预注册合同、证据解释（返回 Python 值 / 数据帧 / 报告 / 回执）
+        ↓
+strategy-pipeline      外部模型调用、操作时段、统计验证、从持仓导出 targets.json
         ↓
 quant-execution-engine 解析 targets.json、盘前仿真、风险、受控交易
 ```
 
-外部卫星的输入在 `strategy-pipeline` 之前汇入（见下方链接）。
+外部卫星的输入在 `strategy-pipeline` 之前汇入（见下方链接）。`targets.json` 由 `strategy export-targets` 从 `portfolio-backtester` 的 `positions_by_rebalance.csv` 生成，所以组合构造先于策略导出。
 
 ## 去哪里找细节（按问题选文档）
 
@@ -47,9 +47,9 @@ quant-execution-engine 解析 targets.json、盘前仿真、风险、受控交�
 | 单个 campaign 的预注册、结果与回执 | [strategy-pipeline/docs/research/README.md](../strategy-pipeline/docs/research/README.md) |
 | 研究协议与结果归档（迁移字节身份） | [research-apps/docs/research/README.md](../research-apps/docs/research/README.md) |
 
-## market-intel 有没有策略
+## market-intel 的角色
 
-没有。market-intel 是数据 / 情报 / 投递层：它产出因子（`a-share-factor-core`）、候选池与信号（`hot-sector-screener`，`eligible_for_live=false`）、AI 重排列表（`ai-stock-picker`），但这些都不含买卖 / 仓位 / 执行逻辑。真正端到端的策略与执行在本工作区的 `research-apps` → `strategy-pipeline` → `quant-execution-engine` 链路中。market-intel 在本索引里只以卫星身份出现（见 [strategy-satellites.md](strategy-satellites.md)）。
+market-intel 是数据、情报与投递层。它产出因子（`a-share-factor-core`）、候选池与信号（`hot-sector-screener`，`eligible_for_live=false`）、AI 重排列表（`ai-stock-picker`），但不承载买卖、仓位或执行逻辑。端到端的策略与执行在本工作区的 `research-apps` → `strategy-pipeline` → `quant-execution-engine` 链路中完成。market-intel 在本索引里只以卫星身份出现（见 [strategy-satellites.md](strategy-satellites.md)）。
 
 ## 维护提示
 
