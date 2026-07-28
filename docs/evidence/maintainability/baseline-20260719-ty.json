@@ -301,10 +301,10 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 278,
-      "python_loc": 83226,
+      "python_loc": 83978,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 25,
+        "large_files": 33,
         "long_functions": 70,
         "complexity_hotspots": 40,
         "large_classes": 1
@@ -382,7 +382,7 @@
         },
         {
           "path": "src/market_data_platform/_campaign_run.py",
-          "loc": 707,
+          "loc": 703,
           "hk_related": false
         },
         {
@@ -411,28 +411,28 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
+          "loc": 539,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_tushare_a_share_clean.py",
           "loc": 530,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
-          "loc": 512,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_paths.py",
-          "loc": 507,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part01.py",
-          "loc": 500,
+          "loc": 522,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay_part01.py",
+          "loc": 520,
           "hk_related": false
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
-          "loc": 500,
+          "loc": 515,
           "hk_related": false
         }
       ],
