@@ -52,6 +52,7 @@
 ## 当前事实
 
 - 活跃链路包含六个 Git 子模块
+- `market-intel` 是外部卫星仓，通过版本化文件接入，不属于六个子模块，也不参与 `print_version_matrix.py` 的版本锁定
 - `src/research_contracts` 是顶层普通目录
 - A 股 current 契约 是 `metadata/current_assets/a_share_current.json`
 - A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（PIT）财务和历史行业资产已发布
@@ -59,4 +60,4 @@
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 - 顶层和子模块 GitHub Actions workflow 当前停用，`research-apps` 的仓库 Actions 权限也禁用
-- 七个仓库使用共享本地 pre-push 门禁，远端只维护 `main`
+- 顶层与六个子模块共七个仓库使用共享本地 pre-push 门禁，远端只维护 `main`

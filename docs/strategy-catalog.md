@@ -10,7 +10,7 @@
 
 ## 先澄清几个容易混淆的词
 
-本工作区里策略一词被重载使用，读文档前先对齐：
+策略一词在本工作区有几种不同含义，读文档前先明确：
 
 - `研究应用`（research app）：`research-apps` 仓里真正承载策略研究逻辑的单元，分 `DailyWatch20` 与热点板块选股两族（候选池 OOS、F-lite、慢速成交量、旧仓再资格、Numeric v2、低换手、AI 影子、DeepSeek 等）。这是新人最常问的策略所指。
 - `信号`（signal）：`alpha_research.signals` 契约规定的 `signals.parquet` 产物，是带评分的模型输出（含 `raw_pred`、`rank`、`model_version`、`eligible_for_backtest/live` 等字段），由 `alpha-research` 产出。
