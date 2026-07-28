@@ -19,51 +19,51 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 47,
+      "max_large_files": 25,
       "max_long_functions": 70,
-      "max_complexity_hotspots": 42,
+      "max_complexity_hotspots": 40,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-27 explicit owner decision: a_share_minute_coverage.py (2284 LOC) was split into four functional-domain submodules (_coverage_common 380 / _coverage_classify 180 / _coverage_manifest 530 / _coverage_materialize 1194); the original file became a re-export shell. Net effect is +1 large_file (_coverage_materialize and _coverage_manifest both exceed the 500-LOC threshold while the original shell drops out), so max_large_files is raised 46->47. This is a debt transfer, not a maintainability gain; _coverage_materialize remains the largest single receiver and is tracked in accepted_hotspots."
+      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-27 explicit owner decision: a_share_minute_coverage.py (2284 LOC) was split into four functional-domain submodules (_coverage_common 380 / _coverage_classify 180 / _coverage_manifest 530 / _coverage_materialize 1194); the original file became a re-export shell. Net effect is +1 large_file (_coverage_materialize and _coverage_manifest both exceed the 500-LOC threshold while the original shell drops out), so max_large_files is raised 46->47. This is a debt transfer, not a maintainability gain; _coverage_materialize remains the largest single receiver and is tracked in accepted_hotspots. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the six-submodule module-split release: large_files 47->25 and complexity_hotspots 42->40 ratchet down (the fundamentals _partNN split and coverage materialize/manifest re-export shells moved below threshold); counts may rise only with an explicit owner decision."
     },
     {
       "repo": "alpha-research",
-      "max_large_files": 13,
+      "max_large_files": 4,
       "max_long_functions": 21,
       "max_complexity_hotspots": 25,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
+      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 13->4 ratchets down (cpcv/walk_forward/features_calc split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 18,
+      "max_large_files": 7,
       "max_long_functions": 22,
       "max_complexity_hotspots": 24,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision."
+      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 18->7 ratchets down (exposure_style/portfolio_positions_select/position_backtest_engine split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
     },
     {
       "repo": "research-apps",
-      "max_large_files": 2,
+      "max_large_files": 1,
       "max_long_functions": 2,
       "max_complexity_hotspots": 1,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-19 the standalone owner migration moved 54 importable modules and four packaged resources behind a fresh-wheel gate. Ruff, strict ty, maintainability ratchet, 98 tests, sdist and wheel checks passed. Keep the two auditable research workflows intact until their frozen contracts change, then split reporting from orchestration before adding variants."
+      "owner_decision": "2026-07-19 the standalone owner migration moved 54 importable modules and four packaged resources behind a fresh-wheel gate. Ruff, strict ty, maintainability ratchet, 98 tests, sdist and wheel checks passed. Keep the two auditable research workflows intact until their frozen contracts change, then split reporting from orchestration before adding variants. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 2->1 ratchets down; counts may rise only with an explicit owner decision."
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 49,
+      "max_large_files": 34,
       "max_long_functions": 118,
       "max_complexity_hotspots": 67,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-26 refreshed again after the C901 gate was lowered to the declared ceiling of 15 and seven over-complex functions were refactored into helpers (long_functions 119->118, complexity_hotspots 70->67); these are genuine reductions, so the budgets ratchet down."
+      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-26 refreshed again after the C901 gate was lowered to the declared ceiling of 15 and seven over-complex functions were refactored into helpers (long_functions 119->118, complexity_hotspots 70->67); these are genuine reductions, so the budgets ratchet down. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 49->34 ratchets down (the re-export _api/_core split submodules transferred debt below threshold; the three still-large _api/_core units are registered in accepted_hotspots); counts may rise only with an explicit owner decision."
     },
     {
       "repo": "quant-execution-engine",
-      "max_large_files": 12,
-      "max_long_functions": 36,
+      "max_large_files": 4,
+      "max_long_functions": 35,
       "max_complexity_hotspots": 37,
-      "max_large_classes": 7,
-      "owner_decision": "2026-07-14 dynamic execution policy and evidence-handoff auditing add two reviewed long functions and one complexity hotspot. Split schema validation from hash verification before extending the handoff contract or binding a live broker adapter. 2026-07-26 refreshed after the qexec ruff/ty gate tightening and diff.py helper extraction: long_functions 37->36 and complexity_hotspots 38->37 ratchet down (genuine reductions). large_files stays at 14; renderers/diff.py helper-extraction kept it under the 500-LOC large-file threshold once reformatted, so no budget increase was required."
+      "max_large_classes": 6,
+      "owner_decision": "2026-07-14 dynamic execution policy and evidence-handoff auditing add two reviewed long functions and one complexity hotspot. Split schema validation from hash verification before extending the handoff contract or binding a live broker adapter. 2026-07-26 refreshed after the qexec ruff/ty gate tightening and diff.py helper extraction: long_functions 37->36 and complexity_hotspots 38->37 ratchet down (genuine reductions). large_files stays at 14; renderers/diff.py helper-extraction kept it under the 500-LOC large-file threshold once reformatted, so no budget increase was required. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 12->4, long_functions 36->35, and large_classes 7->6 ratchet down (reconcile_ops_state/recovery_actions_single/_longport_client split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
     }
   ],
   "first_safe_extraction_types": [
@@ -1063,6 +1063,144 @@
       "owner_repo": "market-data-platform",
       "reason": "1194-LOC materialization submodule created by the 2026-07-27 a_share_minute_coverage.py split (2284->shell). Pure physical relocation of the promotion/materialization and partition-audit helpers, not a genuine maintainability reduction; it is the largest single receiver of that debt transfer.",
       "next_action": "split promotion decisioning from partition reconciliation when materialization gains a second output sink"
+    },
+    {
+      "path": "alpha-research/src/alpha_research/_cpcv_eval.py",
+      "owner_repo": "alpha-research",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/alpha_research/_daily_watch20_features_calc.py",
+      "owner_repo": "alpha-research",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "alpha-research/src/alpha_research/_walk_forward_core.py",
+      "owner_repo": "alpha-research",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/scripts/operations/audit_minute_overlap.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/_campaign_run.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/_a_share_mins_partition.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part01.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/tests/test_archive_guan_mobile.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/tests/test_a_share_minute_bj_overlay.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/tests/test_guan_annual_minbar.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/tests/test_paths.py",
+      "owner_repo": "market-data-platform",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/_exposure_style.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/_portfolio_positions_select.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/_position_backtest_engine.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/_longport_client.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/_reconcile_ops_state.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/_recovery_actions_single.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/daily_watch20_fundamental_shadow.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
+      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/_daily_watch20_ablation_api.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "re-export _api split submodule that still aggregates ablation orchestration above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
+      "next_action": "split fold construction and conditional-coverage reporting when ablation work resumes"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "re-export _api split submodule that still aggregates campaign execution above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
+      "next_action": "split retry scheduling and attempt-history validation when campaign work resumes"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_campaign_support_core.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "re-export _core split submodule that still aggregates campaign support above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
+      "next_action": "split plan construction and evidence review when campaign support changes"
     }
   ]
 }
