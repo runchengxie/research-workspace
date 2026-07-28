@@ -487,11 +487,25 @@ def test_quality_debt_budget_blocks_registered_increases() -> None:
     )
 
 
+def _uncovered_large_files(roadmap: dict[str, Any], baseline: dict[str, Any]) -> list[str]:
+    planned = {record["path"] for record in roadmap["records"]}
+    accepted = {record["path"] for record in roadmap["accepted_hotspots"]}
+    missing: list[str] = []
+    for repo in baseline["repos"]:
+        for file_record in repo["large_files"] + repo["large_classes"]:
+            repo_path = file_record["path"]
+            path = (
+                repo_path if repo["repo"] == "research-workspace" else f"{repo['repo']}/{repo_path}"
+            )
+            if path not in planned and path not in accepted:
+                missing.append(path)
+    return missing
+
+
 def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     roadmap = _load_json_doc("docs/maintainability-refactor-roadmap.yml")
     baseline = _load_json_doc(BASELINE_RELATIVE)
     planned = {record["path"] for record in roadmap["records"]}
-    accepted = {record["path"] for record in roadmap["accepted_hotspots"]}
     hotspot_budgets = {record["repo"]: record for record in roadmap["hotspot_budgets"]}
 
     assert roadmap["schema_version"] == "maintainability_refactor_roadmap.v1"
@@ -519,26 +533,12 @@ def test_refactor_roadmap_covers_priority_and_baseline_large_files() -> None:
     for record in roadmap["hotspot_budgets"]:
         assert HOTSPOT_BUDGET_FIELDS <= set(record)
 
-    missing: list[str] = []
     for repo in baseline["repos"]:
         budget = hotspot_budgets[repo["repo"]]
         for field in HOTSPOT_COUNT_FIELDS:
             assert budget[f"max_{field}"] == repo["hotspot_counts"][field]
 
-        for file_record in repo["large_files"]:
-            repo_path = file_record["path"]
-            path = (
-                repo_path if repo["repo"] == "research-workspace" else f"{repo['repo']}/{repo_path}"
-            )
-            if path not in planned and path not in accepted:
-                missing.append(path)
-        for class_record in repo["large_classes"]:
-            repo_path = class_record["path"]
-            path = (
-                repo_path if repo["repo"] == "research-workspace" else f"{repo['repo']}/{repo_path}"
-            )
-            if path not in planned and path not in accepted:
-                missing.append(path)
+    missing = _uncovered_large_files(roadmap, baseline)
 
     assert missing == []
 

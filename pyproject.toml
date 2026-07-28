@@ -31,7 +31,11 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B"]
+select = ["E", "F", "I", "UP", "B", "C901"]
+
+[tool.ruff.lint.mccabe]
+# 圈复杂度超过该值的函数视为错误，推动拆分过复杂的函数
+max-complexity = 10
 
 [tool.ty.src]
 include = [

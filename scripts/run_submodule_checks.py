@@ -164,6 +164,29 @@ def _format_command(command: tuple[str, ...]) -> str:
     return " ".join(command)
 
 
+def _execute_one(item: PlannedCommand, *, timeout: int) -> CheckResult:
+    try:
+        completed = subprocess.run(
+            list(item.command),
+            cwd=item.cwd,
+            check=False,
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+        )
+    except (FileNotFoundError, PermissionError) as exc:
+        return CheckResult("ERROR", item.submodule, item.command, str(exc))
+    except subprocess.TimeoutExpired:
+        return CheckResult("ERROR", item.submodule, item.command, f"timed out after {timeout}s")
+
+    if completed.returncode == 0:
+        return CheckResult("OK", item.submodule, item.command, "passed")
+
+    detail = (completed.stderr or completed.stdout).strip().splitlines()
+    message = detail[-1] if detail else f"exit code {completed.returncode}"
+    return CheckResult("ERROR", item.submodule, item.command, message)
+
+
 def run_planned_commands(
     planned: list[PlannedCommand],
     *,
@@ -174,50 +197,18 @@ def run_planned_commands(
     results: list[CheckResult] = []
     for item in planned:
         if not item.cwd.is_dir():
-            result = CheckResult(
-                "ERROR",
-                item.submodule,
-                item.command,
-                f"missing submodule directory: {item.cwd}",
-            )
-            results.append(result)
-            if fail_fast:
-                break
-            continue
-
-        if dry_run:
-            results.append(CheckResult("DRY-RUN", item.submodule, item.command, str(item.cwd)))
-            continue
-
-        try:
-            completed = subprocess.run(
-                list(item.command),
-                cwd=item.cwd,
-                check=False,
-                text=True,
-                capture_output=True,
-                timeout=timeout,
-            )
-        except (FileNotFoundError, PermissionError) as exc:
-            results.append(CheckResult("ERROR", item.submodule, item.command, str(exc)))
-            if fail_fast:
-                break
-            continue
-        except subprocess.TimeoutExpired:
             results.append(
-                CheckResult("ERROR", item.submodule, item.command, f"timed out after {timeout}s")
+                CheckResult(
+                    "ERROR",
+                    item.submodule,
+                    item.command,
+                    f"missing submodule directory: {item.cwd}",
+                )
             )
-            if fail_fast:
-                break
-            continue
-
-        if completed.returncode == 0:
-            results.append(CheckResult("OK", item.submodule, item.command, "passed"))
-            continue
-
-        detail = (completed.stderr or completed.stdout).strip().splitlines()
-        message = detail[-1] if detail else f"exit code {completed.returncode}"
-        results.append(CheckResult("ERROR", item.submodule, item.command, message))
+        elif dry_run:
+            results.append(CheckResult("DRY-RUN", item.submodule, item.command, str(item.cwd)))
+        else:
+            results.append(_execute_one(item, timeout=timeout))
         if fail_fast:
             break
     return results

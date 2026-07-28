@@ -11,10 +11,11 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 7,
-      "max_long_functions": 12,
-      "max_complexity_hotspots": 14,
-      "max_large_classes": 2
+      "max_large_files": 6,
+      "max_long_functions": 11,
+      "max_complexity_hotspots": 13,
+      "max_large_classes": 2,
+      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy."
     },
     {
       "repo": "market-data-platform",

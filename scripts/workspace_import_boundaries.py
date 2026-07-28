@@ -89,264 +89,39 @@ class SourceLayoutResult:
         return "at_budget"
 
 
-BOUNDARY_RULES: tuple[BoundaryRule, ...] = (
-    BoundaryRule(
-        identifier="research-workspace:contracts-no-direct-framework-imports",
-        description=(
-            "cross-repository contracts must not directly import optional framework runtimes"
-        ),
-        repo=".",
-        source="src/research_contracts",
-        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports", "backtrader"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-pipeline",
-        description="alpha-research should not grow runtime imports back into strategy pipeline",
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("strategy_pipeline.pipeline",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-backtesting",
-        description="alpha-research should not grow runtime imports into portfolio backtesting",
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("portfolio_backtester",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-strategy-core-metrics",
-        description="alpha-research should own research metrics",
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("strategy_pipeline.metrics", "strategy_pipeline.return_metrics"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-strategy-compat",
-        description="alpha-research should own runtime compatibility shims",
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("strategy_pipeline.compat",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-strategy-rebalance",
-        description=(
-            "alpha-research should own research rebalance sampling instead of importing "
-            "strategy-pipeline contract implementation helpers"
-        ),
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("strategy_pipeline.contracts.rebalance",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:alpha-to-strategy-signal-contract",
-        description=(
-            "alpha-research should own canonical signal artifacts instead of importing "
-            "strategy-pipeline contract modules"
-        ),
-        repo="alpha-research",
-        source="src/alpha_research",
-        forbidden=("strategy_pipeline.contracts.signals",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-pipeline",
-        description="portfolio-backtester should not import strategy pipeline runtime",
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("strategy_pipeline.pipeline", "strategy_pipeline.benchmarking"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-alpha",
-        description=(
-            "portfolio-backtester should not grow runtime imports into alpha implementation"
-        ),
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("alpha_research",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-strategy-core-metrics",
-        description=(
-            "portfolio-backtester should own backtest metrics instead of importing "
-            "strategy-pipeline top-level metric modules"
-        ),
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("strategy_pipeline.metrics", "strategy_pipeline.return_metrics"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-strategy-rebalance",
-        description=(
-            "portfolio-backtester should own backtest rebalance sampling instead of importing "
-            "strategy-pipeline contract implementation helpers"
-        ),
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("strategy_pipeline.contracts.rebalance",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-strategy-liquidity-proxy",
-        description=(
-            "portfolio-backtester should own capacity liquidity proxy derivation instead of "
-            "importing strategy-pipeline top-level helpers"
-        ),
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("strategy_pipeline.liquidity_proxy",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:backtesting-to-strategy-contracts",
-        description=(
-            "portfolio-backtester should own backtest pricing and strategy specs instead of "
-            "importing strategy-pipeline contract modules"
-        ),
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester",
-        forbidden=("strategy_pipeline.contracts.backtest", "strategy_pipeline.contracts.strategy"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="market-data-platform:no-legacy-shared-namespace-imports",
-        description="market-data-platform must stay independent from legacy research internals",
-        repo="market-data-platform",
-        source="src",
-        forbidden=("cstree",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="quant-execution-engine:no-legacy-shared-namespace-imports",
-        description="quant-execution-engine consumes targets.json, not research/backtest internals",
-        repo="quant-execution-engine",
-        source="src",
-        forbidden=("cstree",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="strategy-pipeline:no-execution-engine-imports",
-        description="strategy-pipeline exports execution targets without execution internals",
-        repo="strategy-pipeline",
-        source="src/strategy_pipeline",
-        forbidden=("quant_execution_engine",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="strategy-pipeline:contracts-pure-handoff",
-        description="strategy-pipeline orchestration schema modules stay pure before extraction",
-        repo="strategy-pipeline",
-        source="src/strategy_pipeline/contracts",
-        forbidden=(
-            "alpha_research",
-            "portfolio_backtester",
-            "strategy_pipeline.pipeline",
-            "quant_execution_engine",
-        ),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="strategy-pipeline:target-contract-no-direct-framework-imports",
-        description=(
-            "target handoff contracts must not directly import optional framework runtimes"
-        ),
-        repo="strategy-pipeline",
-        source="src/strategy_pipeline/liveops",
-        forbidden=("qlib", "vnpy", "QuantConnect", "AlgorithmImports", "backtrader"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="market-data-platform:published-contract-no-direct-qlib-imports",
-        description="published data contracts must not import Qlib; Qlib belongs in adapters",
-        repo="market-data-platform",
-        source="src/market_data_platform/contract.py",
-        forbidden=("qlib",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:artifact-contract-no-direct-qlib-imports",
-        description="research artifacts must not import Qlib and remain replayable without it",
-        repo="alpha-research",
-        source="src/alpha_research/research_artifacts.py",
-        forbidden=("qlib",),
-        max_allowed=0,
-        required=False,
-    ),
-    BoundaryRule(
-        identifier="alpha-research:signal-contract-no-direct-qlib-imports",
-        description="canonical signal contracts must not import Qlib",
-        repo="alpha-research",
-        source="src/alpha_research/signal_artifact.py",
-        forbidden=("qlib",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="portfolio-backtester:contracts-no-direct-framework-imports",
-        description="backtest exchange contracts must not import framework runtimes",
-        repo="portfolio-backtester",
-        source="src/portfolio_backtester/contracts.py",
-        forbidden=("qlib", "QuantConnect", "AlgorithmImports", "backtrader"),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="quant-execution-engine:domain-no-direct-vnpy-imports",
-        description="qexec domain contracts must not directly import vn.py DTOs",
-        repo="quant-execution-engine",
-        source="src/quant_execution_engine/domain.py",
-        forbidden=("vnpy",),
-        max_allowed=0,
-        required=False,
-    ),
-    BoundaryRule(
-        identifier="quant-execution-engine:legacy-domain-no-direct-vnpy-imports",
-        description="legacy domain compatibility models must not directly import vn.py DTOs",
-        repo="quant-execution-engine",
-        source="src/quant_execution_engine/models.py",
-        forbidden=("vnpy",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="quant-execution-engine:targets-no-direct-vnpy-imports",
-        description="research target contracts must not directly import a transport runtime",
-        repo="quant-execution-engine",
-        source="src/quant_execution_engine/targets.py",
-        forbidden=("vnpy",),
-        max_allowed=0,
-    ),
-    BoundaryRule(
-        identifier="research-workspace:legacy-hotsector-internal-imports",
-        description=(
-            "top-level research-workspace scripts should consume hotsector artifacts instead "
-            "of importing market-intel hot_sector_screener internals; existing dev scripts are "
-            "legacy budget only"
-        ),
-        repo=".",
-        source="scripts",
-        forbidden=("hot_sector_screener",),
-        max_allowed=10,
-    ),
-)
+RULES_PATH = ROOT / "scripts" / "import_boundary_rules.yml"
 
-SOURCE_LAYOUT_RULES: tuple[SourceLayoutRule, ...] = (
-    SourceLayoutRule(
-        identifier="strategy-pipeline:no-local-alpha-backtesting-source",
-        description=(
-            "strategy-pipeline should orchestrate alpha research and portfolio backtesting "
-            "instead of carrying local alpha/backtesting implementation modules"
-        ),
-        repo="strategy-pipeline",
-        forbidden_sources=("src/alpha_research", "src/portfolio_backtester"),
-        max_allowed=0,
-    ),
-)
+
+def load_rules(
+    rules_path: Path = RULES_PATH,
+) -> tuple[tuple[BoundaryRule, ...], tuple[SourceLayoutRule, ...]]:
+    """从治理 YAML 加载跨仓库导入方向规则，避免规则硬编码在脚本内。"""
+    import yaml
+
+    data = yaml.safe_load(rules_path.read_text(encoding="utf-8"))
+    boundary_rules = tuple(
+        BoundaryRule(
+            identifier=r["identifier"],
+            description=r["description"],
+            repo=r["repo"],
+            source=r["source"],
+            forbidden=tuple(r["forbidden"]),
+            max_allowed=int(r["max_allowed"]),
+            required=bool(r.get("required", True)),
+        )
+        for r in data["boundary_rules"]
+    )
+    source_layout_rules = tuple(
+        SourceLayoutRule(
+            identifier=r["identifier"],
+            description=r["description"],
+            repo=r["repo"],
+            forbidden_sources=tuple(r["forbidden_sources"]),
+            max_allowed=int(r["max_allowed"]),
+        )
+        for r in data["source_layout_rules"]
+    )
+    return boundary_rules, source_layout_rules
 
 
 def _module_for_path(src_root: Path, path: Path) -> str:
@@ -516,9 +291,15 @@ def _source_layout_result_to_dict(result: SourceLayoutResult) -> dict[str, Any]:
 
 def build_report(
     root: Path = ROOT,
-    rules: tuple[BoundaryRule, ...] = BOUNDARY_RULES,
-    source_layout_rules: tuple[SourceLayoutRule, ...] = SOURCE_LAYOUT_RULES,
+    rules: tuple[BoundaryRule, ...] | None = None,
+    source_layout_rules: tuple[SourceLayoutRule, ...] | None = None,
 ) -> dict[str, Any]:
+    if rules is None or source_layout_rules is None:
+        loaded_rules, loaded_layout = load_rules()
+        rules = rules if rules is not None else loaded_rules
+        source_layout_rules = (
+            source_layout_rules if source_layout_rules is not None else loaded_layout
+        )
     resolved_root = root.resolve()
     results = tuple(_scan_rule(resolved_root, rule) for rule in rules)
     source_layout_results = tuple(

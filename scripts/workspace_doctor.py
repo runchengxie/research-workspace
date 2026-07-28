@@ -373,9 +373,8 @@ def check_data_platform_root(root: Path | None = None) -> list[Check]:
     return checks
 
 
-def check_top_level_outputs(root: Path) -> list[Check]:
-    checks: list[Check] = []
-    leaked_files: list[str] = []
+def _collect_leaked_env_files(root: Path) -> list[str]:
+    leaked: list[str] = []
     for pattern in FORBIDDEN_TOP_LEVEL_PATTERNS:
         for candidate in root.glob(pattern):
             if candidate.name == workspace_env.TOP_LEVEL_ENV_EXAMPLE:
@@ -384,9 +383,15 @@ def check_top_level_outputs(root: Path) -> list[Check]:
                 issues = workspace_env.env_file_issues(candidate)
                 if not issues:
                     continue
-                leaked_files.append(f"{candidate.name} ({'; '.join(issues)})")
+                leaked.append(f"{candidate.name} ({'; '.join(issues)})")
                 continue
-            leaked_files.append(candidate.name)
+            leaked.append(candidate.name)
+    return leaked
+
+
+def check_top_level_outputs(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    leaked_files = _collect_leaked_env_files(root)
     if leaked_files:
         checks.append(
             Check(

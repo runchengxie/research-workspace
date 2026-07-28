@@ -438,6 +438,57 @@ def _check_script_lifecycle(root: Path, manifest: dict[str, Any]) -> list[Check]
     ]
 
 
+def _budget_field_issues(
+    repo_name: str, counts: dict[str, Any], budget: dict[str, Any]
+) -> list[str]:
+    issues: list[str] = []
+    for field in sorted(HOTSPOT_COUNT_FIELDS):
+        count = counts.get(field)
+        limit = budget.get(f"max_{field}")
+        if not valid_budget_limit(count):
+            issues.append(f"{repo_name}: invalid {field} count")
+        elif not valid_budget_limit(limit):
+            issues.append(f"{repo_name}: invalid max_{field} budget")
+        elif count > limit:
+            issues.append(f"{repo_name}: {field} count {count} exceeds budget {limit}")
+        elif count < limit:
+            issues.append(f"{repo_name}: {field} budget {limit} is loose; lower it to {count}")
+    return issues
+
+
+def _check_hotspot_budgets(roadmap: dict[str, Any], baseline: dict[str, Any]) -> list[str]:
+    budget_records = {
+        str(record.get("repo", "")): record
+        for record in roadmap.get("hotspot_budgets", [])
+        if isinstance(record, dict)
+    }
+    issues: list[str] = []
+    for repo in baseline.get("repos", []):
+        if not isinstance(repo, dict):
+            continue
+        repo_name = str(repo.get("repo", ""))
+        budget = budget_records.get(repo_name)
+        if not isinstance(budget, dict):
+            issues.append(f"{repo_name}: missing hotspot budget")
+            continue
+        missing_fields = sorted(HOTSPOT_BUDGET_FIELDS - set(budget))
+        if missing_fields:
+            issues.append(f"{repo_name}: missing budget fields {', '.join(missing_fields)}")
+            continue
+        counts = repo.get("hotspot_counts", {})
+        if not isinstance(counts, dict):
+            issues.append(f"{repo_name}: missing hotspot counts")
+            continue
+        issues.extend(_budget_field_issues(repo_name, counts, budget))
+    baseline_repos = {
+        str(repo.get("repo", "")) for repo in baseline.get("repos", []) if isinstance(repo, dict)
+    }
+    stale_budget_repos = sorted(set(budget_records) - baseline_repos)
+    for repo_name in stale_budget_repos:
+        issues.append(f"{repo_name}: stale hotspot budget")
+    return issues
+
+
 def _check_refactor_roadmap(roadmap: dict[str, Any], baseline: dict[str, Any]) -> list[Check]:
     planned = {
         str(record.get("path", ""))
@@ -454,47 +505,7 @@ def _check_refactor_roadmap(roadmap: dict[str, Any], baseline: dict[str, Any]) -
         - planned
         - accepted
     )
-    budget_records = {
-        str(record.get("repo", "")): record
-        for record in roadmap.get("hotspot_budgets", [])
-        if isinstance(record, dict)
-    }
-    budget_issues: list[str] = []
-    for repo in baseline.get("repos", []):
-        if not isinstance(repo, dict):
-            continue
-        repo_name = str(repo.get("repo", ""))
-        budget = budget_records.get(repo_name)
-        if not isinstance(budget, dict):
-            budget_issues.append(f"{repo_name}: missing hotspot budget")
-            continue
-        missing_fields = sorted(HOTSPOT_BUDGET_FIELDS - set(budget))
-        if missing_fields:
-            budget_issues.append(f"{repo_name}: missing budget fields {', '.join(missing_fields)}")
-            continue
-        counts = repo.get("hotspot_counts", {})
-        if not isinstance(counts, dict):
-            budget_issues.append(f"{repo_name}: missing hotspot counts")
-            continue
-        for field in sorted(HOTSPOT_COUNT_FIELDS):
-            count = counts.get(field)
-            limit = budget.get(f"max_{field}")
-            if not valid_budget_limit(count):
-                budget_issues.append(f"{repo_name}: invalid {field} count")
-            elif not valid_budget_limit(limit):
-                budget_issues.append(f"{repo_name}: invalid max_{field} budget")
-            elif count > limit:
-                budget_issues.append(f"{repo_name}: {field} count {count} exceeds budget {limit}")
-            elif count < limit:
-                budget_issues.append(
-                    f"{repo_name}: {field} budget {limit} is loose; lower it to {count}"
-                )
-    baseline_repos = {
-        str(repo.get("repo", "")) for repo in baseline.get("repos", []) if isinstance(repo, dict)
-    }
-    stale_budget_repos = sorted(set(budget_records) - baseline_repos)
-    for repo_name in stale_budget_repos:
-        budget_issues.append(f"{repo_name}: stale hotspot budget")
+    budget_issues = _check_hotspot_budgets(roadmap, baseline)
 
     checks: list[Check] = []
     if uncovered:

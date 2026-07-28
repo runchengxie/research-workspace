@@ -11,12 +11,12 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 70,
-      "python_loc": 16464,
+      "python_loc": 16252,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 7,
-        "long_functions": 12,
-        "complexity_hotspots": 14,
+        "large_files": 6,
+        "long_functions": 11,
+        "complexity_hotspots": 13,
         "large_classes": 2
       },
       "large_files": [
@@ -36,13 +36,8 @@
           "hk_related": false
         },
         {
-          "path": "scripts/workspace_import_boundaries.py",
-          "loc": 592,
-          "hk_related": false
-        },
-        {
           "path": "scripts/workspace_doctor.py",
-          "loc": 590,
+          "loc": 595,
           "hk_related": false
         },
         {
@@ -52,7 +47,7 @@
         },
         {
           "path": "scripts/workspace_governance.py",
-          "loc": 545,
+          "loc": 556,
           "hk_related": false
         }
       ],
@@ -122,12 +117,6 @@
           "name": "main",
           "line_count": 95,
           "complexity": 11
-        },
-        {
-          "path": "scripts/workspace_governance.py",
-          "name": "_check_refactor_roadmap",
-          "line_count": 84,
-          "complexity": 19
         }
       ],
       "complexity_hotspots": [
@@ -180,18 +169,6 @@
           "complexity": 21
         },
         {
-          "path": "scripts/workspace_governance.py",
-          "name": "_check_refactor_roadmap",
-          "line_count": 84,
-          "complexity": 19
-        },
-        {
-          "path": "tests/test_maintainability_governance.py",
-          "name": "test_refactor_roadmap_covers_priority_and_baseline_large_files",
-          "line_count": 54,
-          "complexity": 19
-        },
-        {
           "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
           "name": "build_concept_features_for_date",
           "line_count": 71,
@@ -214,6 +191,12 @@
           "name": "plot_yearly_barchart",
           "line_count": 68,
           "complexity": 16
+        },
+        {
+          "path": "scripts/workspace_import_boundaries.py",
+          "name": "build_report",
+          "line_count": 43,
+          "complexity": 15
         }
       ],
       "large_classes": [
@@ -236,7 +219,8 @@
           "F",
           "I",
           "UP",
-          "B"
+          "B",
+          "C901"
         ],
         "ruff_extend_exclude": [
           ".git",
@@ -294,6 +278,7 @@
         "scripts/framework_adapter_execution_evidence.py",
         "scripts/framework_adapter_release_gate.py",
         "scripts/hk_archive_gate.py",
+        "scripts/import_boundary_rules.yml",
         "scripts/install_pre_push_hooks.py",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
