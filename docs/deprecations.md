@@ -11,8 +11,8 @@
 | `rqdata-hk-depth` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-tick` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | `rqdata-hk-assets` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
-| 历史港股 allocation 命令行（CLI） | `strategy-pipeline` | `strategy alloc` plus `strategy export-targets` | removed | CLI and `alloc_hk` modules removed 2026-06-13 |
-| HK historical experiment configs | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | active experiment configs archived 2026-06-13 |
+| 历史港股调仓命令行（CLI） | `strategy-pipeline` | `strategy alloc` 加 `strategy export-targets` | removed | 命令行与 `alloc_hk` 模块已于 2026-06-13 删除 |
+| 港股历史实验配置 | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | 活跃实验配置已于 2026-06-13 归档 |
 | 旧共享 Python 命名空间、CLI 与环境变量 兜底 | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
 
 ## 删除门禁
@@ -22,23 +22,23 @@
 - 下游或仓库内使用审计。
 - 替代入口文档。
 - 回滚路径。
-- 负责仓库中的 focused tests。
-- restore-sensitive 入口需要恢复证据。
+- 负责仓库中的针对性测试。
+- 涉及恢复的敏感入口需要恢复证据。
 
-实际删除必须在负责仓库内做 focused verification，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股数据提供方（provider）生产命令、历史港股 allocation CLI、`alloc_hk` 模块、HK research implementation modules 和活跃 HK experiment configs 移出活跃区。需要复现时从 freeze tag 或恢复专用归档恢复。
+实际删除必须在负责仓库内做针对性核验，并把结果写回本页和 YAML 清单。2026-06-13 的清理已把港股数据提供方生产命令、历史港股调仓命令行、`alloc_hk` 模块、港股研究实现模块和活跃港股实验配置移出活跃区。需要复现时从冻结标签或恢复专用归档恢复。
 
-框架替换产生的兼容门面（facade）还必须满足以下条件：
+框架替换产生的兼容门面还必须满足以下条件：
 
-- 在 [`compatibility-facades.yml`](compatibility-facades.yml) 登记 owner、替代入口和 removal release。
-- native 与替代 backend 的差分 fixture 已通过，行为差异有明确分类。
+- 在 [`compatibility-facades.yml`](compatibility-facades.yml) 登记负责方、替代入口和移除版本。
+- 原生与替代后端的差分夹具已通过，行为差异有明确分类。
 - 第三方框架关闭或卸载后，回滚路径仍可运行。
-- 删除不会把 Qlib、vn.py 或 LEAN 类型提升为跨仓库 契约。
-- 对应 workstream 已在 [`framework-integration-ledger.yml`](framework-integration-ledger.yml) 达到退出条件。
+- 删除不会把 Qlib、vn.py 或 LEAN 类型提升为跨仓库契约。
+- 对应工作流已在 [`framework-integration-ledger.yml`](framework-integration-ledger.yml) 达到退出条件。
 
-早期私有 legacy archive 暂存本身不授权删除。本页的 removed 状态必须同时引用恢复演练、下游消费审计（consumer audit）、source tag、focused verification 和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
+早期私有旧版归档暂存本身不授权删除。本页的 removed 状态必须同时引用恢复演练、下游消费审计、来源标签、针对性核验和删除审计证据。删除评审前后都可运行 `python scripts/hk_archive_gate.py --check --format json`，并保留 [archive/hk/README.md](archive/hk/README.md) 链接到的恢复路径。
 
-## Owner-native 命名空间 compatibility
+## Owner-native 命名空间兼容
 
-旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio 子仓库（distribution）
-不得重新安装共享 命名空间。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
-配置点分路径（dotted path）、日志 命名空间、外部 notebook 与命令行下游消费审计。
+旧兼容面已从 `strategy-pipeline` 删除。alpha 和 portfolio 子仓库（发布侧）
+不得重新安装共享命名空间。删除门禁除通用要求外，还必须覆盖 pickle/joblib 类路径、
+配置点分路径、日志命名空间、外部 notebook 与命令行下游消费审计。

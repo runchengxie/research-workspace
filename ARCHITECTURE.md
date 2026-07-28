@@ -35,7 +35,7 @@ quant-execution-engine
 - `strategy_pipeline.*` 归 `strategy-pipeline`
 
 工作区 2.0 已删除旧共享命名空间、命令行（CLI）别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
-研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有数据提供方（provider）调用、
+研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有数据提供方调用、
 操作员控制、原子发布和执行交接。边界见
 [ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
 
@@ -47,7 +47,7 @@ quant-execution-engine
 - 公开合成数据示例由外部演示仓库维护，不属于本工作区的子模块或发布门禁。
 - 数据供应商适配器、券商适配器、凭证、本地数据和交易审计日志留在对应私有运行环境。
 
-跨仓库协作使用稳定文件或公开 应用程序接口（API）。第三方框架对象不得进入跨仓库契约。
+跨仓库协作使用稳定文件或公开应用程序接口（API）。第三方框架对象不得进入跨仓库契约。
 
 ## 外部框架
 

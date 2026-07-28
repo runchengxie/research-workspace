@@ -1,6 +1,6 @@
 # 量化研发工作区
 
-`research-workspace` 用 Git 子模块锁定一组可以协同工作的量化研发仓库，并维护跨仓库文件约定、版本组合和轻量检查。
+`research-workspace` 用 Git 子模块锁定一组可以协同工作的量化研发仓库，并维护跨仓库文件约定、版本组合和轻量校验。
 
 ```text
 market-data-platform
