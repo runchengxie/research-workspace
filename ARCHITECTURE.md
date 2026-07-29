@@ -33,6 +33,7 @@ quant-execution-engine
 - `portfolio_backtester.*` 归 `portfolio-backtester`
 - `research_apps.*` 归 `research-apps`
 - `strategy_pipeline.*` 归 `strategy-pipeline`
+- `style_factors.*` 归顶层 `src/style_factors`，负责风格因子计算、归因、回测与报告
 
 工作区 2.0 已删除旧共享命名空间、命令行（CLI）别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有数据提供方调用、

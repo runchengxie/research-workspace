@@ -35,6 +35,7 @@ quant-execution-engine
 | `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
+| `src/style_factors/` | 顶层直接维护的风格因子计算、归因、回测与报告薄包 |
 
 四个研究侧 Python 包使用各自的权威命名空间：
 
