@@ -11,11 +11,11 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 5,
-      "max_long_functions": 11,
-      "max_complexity_hotspots": 13,
+      "max_large_files": 2,
+      "max_long_functions": 1,
+      "max_complexity_hotspots": 2,
       "max_large_classes": 2,
-      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the workspace_doctor god-script split into ten per-domain doctor_*_checks modules plus shared doctor_common: large_files 6->5 ratchets down (workspace_doctor.py dropped from 595 LOC to ~30 LOC and left the 500-LOC threshold while the split targets are individually below it); long_functions, complexity_hotspots, and large_classes are unchanged. This is a genuine maintainability gain from the split, so the budget tightens in the same change per hotspot_budget_policy."
+      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the workspace_doctor god-script split into ten per-domain doctor_*_checks modules plus shared doctor_common: large_files 6->5 ratchets down (workspace_doctor.py dropped from 595 LOC to ~30 LOC and left the 500-LOC threshold while the split targets are individually below it); long_functions, complexity_hotspots, and large_classes are unchanged. This is a genuine maintainability gain from the split, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 the maintainability baseline script now excludes docs/archive/ (including docs/archive/adhoc historical one-off scripts), so the active research-workspace counts drop to large_files 5->2, long_functions 11->1, complexity_hotspots 13->2 (large_classes unchanged at 2). The three archived adhoc scripts stay registered in accepted_hotspots for audit but no longer count toward the active budget, so the budget tightens in the same change per hotspot_budget_policy."
     },
     {
       "repo": "market-data-platform",

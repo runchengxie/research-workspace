@@ -15,7 +15,7 @@
 - `研究应用`（research app）：`research-apps` 仓里真正承载策略研究逻辑的单元，分 `DailyWatch20` 与热点板块选股两族（候选池 OOS、F-lite、慢速成交量、旧仓再资格、Numeric v2、低换手、AI 影子、DeepSeek 等）。这是新人最常问的策略所指。
 - `信号`（signal）：`alpha_research.signals` 契约规定的 `signals.parquet` 产物，是带评分的模型输出（含 `raw_pred`、`rank`、`model_version`、`eligible_for_backtest/live` 等字段），由 `alpha-research` 产出。
 - `StrategySpec`：`strategy_pipeline` 里的组合构建规格（`name`、`top_k`、`weighting`、`long_only`、`execution` 等），描述如何把信号变成组合，而非交易想法本身。
-- `卫星`（satellite）：特指由 `market-intel` 维护、以版本化文件接入本工作区的外部项目（`hot-sector-screener`、`ai-stock-picker`、`a-share-factor-core`）。它们提供候选池、信号与选择结果，不是本工作区内部代码。
+- `卫星`（satellite）：特指由 `market-intel` 维护、以版本化文件接入本工作区的外部项目（`hot-sector-screener`、`ai-stock-picker`、`a-share-factor-core`）。它们提供候选池、信号与选择结果，属于接入本工作区的外部项目，不进入内部代码。
 
 ## 策略生命周期（跨仓库链路）
 

@@ -14,27 +14,12 @@
       "python_loc": 16392,
       "hk_related_file_count": 4,
       "hotspot_counts": {
-        "large_files": 5,
-        "long_functions": 11,
-        "complexity_hotspots": 13,
+        "large_files": 2,
+        "long_functions": 1,
+        "complexity_hotspots": 2,
         "large_classes": 2
       },
       "large_files": [
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "loc": 934,
-          "hk_related": false
-        },
-        {
-          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
-          "loc": 696,
-          "hk_related": false
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "loc": 646,
-          "hk_related": false
-        },
         {
           "path": "tests/test_maintainability_governance.py",
           "loc": 590,
@@ -48,139 +33,13 @@
       ],
       "long_functions": [
         {
-          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
-          "name": "walk_forward_backtest",
-          "line_count": 173,
-          "complexity": 29
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "walk_forward_backtest",
-          "line_count": 150,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h1_consecutive_days",
-          "line_count": 127,
-          "complexity": 25
-        },
-        {
           "path": "tests/test_run_submodule_checks.py",
           "name": "test_lint_profiles_include_repo_local_governance_gates",
           "line_count": 115,
           "complexity": 8
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h2_rank_momentum",
-          "line_count": 110,
-          "complexity": 16
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_technical_features",
-          "line_count": 109,
-          "complexity": 22
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "main",
-          "line_count": 106,
-          "complexity": 21
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h3_constituent_features",
-          "line_count": 103,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_concept_features",
-          "line_count": 99,
-          "complexity": 36
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_feature_matrix",
-          "line_count": 97,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
-          "name": "main",
-          "line_count": 95,
-          "complexity": 11
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_concept_features",
-          "line_count": 99,
-          "complexity": 36
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_feature_matrix",
-          "line_count": 97,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "walk_forward_backtest",
-          "line_count": 150,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h3_constituent_features",
-          "line_count": 103,
-          "complexity": 30
-        },
-        {
-          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
-          "name": "walk_forward_backtest",
-          "line_count": 173,
-          "complexity": 29
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h1_consecutive_days",
-          "line_count": 127,
-          "complexity": 25
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "build_technical_features",
-          "line_count": 109,
-          "complexity": 22
-        },
-        {
-          "path": "docs/archive/adhoc/path_b_production.py",
-          "name": "main",
-          "line_count": 106,
-          "complexity": 21
-        },
-        {
-          "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
-          "name": "build_concept_features_for_date",
-          "line_count": 71,
-          "complexity": 17
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h2_rank_momentum",
-          "line_count": 110,
-          "complexity": 16
-        },
-        {
-          "path": "docs/archive/adhoc/path_c_m1_validate.py",
-          "name": "test_h4_kpl_stability",
-          "line_count": 73,
-          "complexity": 16
-        },
         {
           "path": "src/style_factors/charts.py",
           "name": "plot_yearly_barchart",

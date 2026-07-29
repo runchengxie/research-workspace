@@ -83,7 +83,13 @@ def _repo_root(name: str) -> Path:
 def _skip_path(path: Path, *, repo_name: str) -> bool:
     if any(part in EXCLUDED_PARTS for part in path.parts):
         return True
-    return repo_name == "research-workspace" and any(part in SUBMODULE_DIRS for part in path.parts)
+    if repo_name == "research-workspace":
+        if any(part in SUBMODULE_DIRS for part in path.parts):
+            return True
+        # 已归档的历史脚本（含 adhoc 一次性脚本）带证据价值，但不计入活跃债预算
+        if "docs" in path.parts and "archive" in path.parts:
+            return True
+    return False
 
 
 def _python_files(repo: Path, *, repo_name: str) -> list[Path]:
