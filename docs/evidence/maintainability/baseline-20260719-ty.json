@@ -165,8 +165,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 279,
-      "python_loc": 84681,
+      "python_file_count": 282,
+      "python_loc": 85153,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 35,
@@ -643,9 +643,11 @@
           "src/market_data_platform/_tushare_minute_quota_requests.py",
           "src/market_data_platform/artifacts.py",
           "src/market_data_platform/cli.py",
+          "src/market_data_platform/cli_tushare.py",
           "src/market_data_platform/cli_tushare_core.py",
           "src/market_data_platform/cli_tushare_fundamentals.py",
           "src/market_data_platform/cli_tushare_research.py",
+          "src/market_data_platform/cli_tushare_reference.py",
           "src/market_data_platform/contract.py",
           "src/market_data_platform/contract_health.py",
           "src/market_data_platform/current_path_audit.py",
@@ -658,12 +660,15 @@
           "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
           "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
           "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "src/market_data_platform/providers/tushare_a_share_reference.py",
           "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
           "src/market_data_platform/research_views/daily_watch20_minute_source.py",
           "src/market_data_platform/research_views/daily_watch20_policy.py",
           "src/market_data_platform/registry.py",
           "src/market_data_platform/symbols.py",
+          "src/market_data_platform/tushare_cli.py",
           "src/market_data_platform/tushare_cli_fundamentals.py",
+          "src/market_data_platform/tushare_cli_reference.py",
           "src/market_data_platform/tushare_minute_quota.py"
         ],
         "ty_exclude": [
