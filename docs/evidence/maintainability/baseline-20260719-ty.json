@@ -300,24 +300,24 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 278,
-      "python_loc": 83978,
+      "python_file_count": 279,
+      "python_loc": 84681,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 33,
-        "long_functions": 70,
-        "complexity_hotspots": 40,
+        "large_files": 35,
+        "long_functions": 73,
+        "complexity_hotspots": 39,
         "large_classes": 1
       },
       "large_files": [
         {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 1791,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1861,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1686,
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1791,
           "hk_related": false
         },
         {
@@ -346,6 +346,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "loc": 1090,
+          "hk_related": false
+        },
+        {
           "path": "scripts/operations/archive_guan_mobile.py",
           "loc": 994,
           "hk_related": false
@@ -353,11 +358,6 @@
         {
           "path": "tests/test_cli_data_minutes.py",
           "loc": 955,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "loc": 871,
           "hk_related": false
         },
         {
@@ -411,6 +411,16 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
+          "loc": 542,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_tushare_minute_backfill.py",
+          "loc": 540,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
           "loc": 539,
           "hk_related": false
@@ -424,16 +434,6 @@
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part01.py",
           "loc": 522,
           "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_bj_overlay_part01.py",
-          "loc": 520,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
-          "loc": 515,
-          "hk_related": false
         }
       ],
       "long_functions": [
@@ -444,10 +444,10 @@
           "complexity": 12
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_build_part03.py",
-          "name": "_build_fused_minute_dataset",
-          "line_count": 216,
-          "complexity": 35
+          "path": "src/market_data_platform/providers/a_share_minute_fusion_part03.py",
+          "name": "_aggregate_polars_deal_batch",
+          "line_count": 196,
+          "complexity": 3
         },
         {
           "path": "tests/test_cli_data_minutes.py",
@@ -462,10 +462,16 @@
           "complexity": 35
         },
         {
-          "path": "src/market_data_platform/providers/a_share_minute_fusion_part03.py",
-          "name": "_aggregate_polars_deal_batch",
-          "line_count": 182,
-          "complexity": 3
+          "path": "src/market_data_platform/providers/a_share_minute_build_part03.py",
+          "name": "_build_fused_minute_dataset",
+          "line_count": 171,
+          "complexity": 22
+        },
+        {
+          "path": "src/market_data_platform/providers/_coverage_materialize_part03.py",
+          "name": "_audit_partition",
+          "line_count": 169,
+          "complexity": 18
         },
         {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
@@ -484,18 +490,6 @@
           "name": "_validate_bj_overlay_evidence",
           "line_count": 158,
           "complexity": 43
-        },
-        {
-          "path": "src/market_data_platform/providers/_coverage_materialize_part03.py",
-          "name": "_audit_partition",
-          "line_count": 157,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "name": "_mirror_resolve_day",
-          "line_count": 155,
-          "complexity": 17
         },
         {
           "path": "tests/test_a_share_minute_coverage.py",
@@ -576,6 +570,12 @@
           "complexity": 1
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "name": "_mirror_resolve_day",
+          "line_count": 121,
+          "complexity": 12
+        },
+        {
           "path": "src/market_data_platform/current_path_audit.py",
           "name": "_audit_asset",
           "line_count": 120,
@@ -617,12 +617,6 @@
           "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "cutover_minute_current",
           "line_count": 185,
-          "complexity": 35
-        },
-        {
-          "path": "src/market_data_platform/providers/a_share_minute_build_part03.py",
-          "name": "_build_fused_minute_dataset",
-          "line_count": 216,
           "complexity": 35
         },
         {
@@ -680,6 +674,12 @@
           "complexity": 22
         },
         {
+          "path": "src/market_data_platform/providers/a_share_minute_build_part03.py",
+          "name": "_build_fused_minute_dataset",
+          "line_count": 171,
+          "complexity": 22
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
           "name": "bundle_observation_state",
           "line_count": 61,
@@ -718,7 +718,7 @@
         {
           "path": "src/market_data_platform/providers/_coverage_materialize_part03.py",
           "name": "_audit_partition",
-          "line_count": 157,
+          "line_count": 169,
           "complexity": 18
         },
         {
