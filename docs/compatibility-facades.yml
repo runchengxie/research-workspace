@@ -371,6 +371,18 @@
       "focused_tests": ["market-data-platform tests/test_a_share_minute_coverage.py", "market-data-platform import smoke"],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_build.py",
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.providers.a_share_minute_build_part01, a_share_minute_build_part02, a_share_minute_build_part03",
+      "current_consumers": "kept as the public re-export surface for the split a_share_minute_build modules; part02 lazy-imports aggregate_guan_deal_file from this facade as an orchestration seam and tests monkeypatch it",
+      "removal_condition": "remove after two release reviews show no repo-local or downstream imports of a_share_minute_build and replacement docs cover direct submodule imports",
+      "rollback_path": "restore facade module from the previous market-data-platform release tag",
+      "focused_tests": ["market-data-platform tests/test_a_share_minute_build.py", "market-data-platform import smoke"],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     }
   ]
 }
