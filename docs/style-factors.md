@@ -129,3 +129,25 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 - 财务指标来自当前可用 raw fundamentals 链路。正式研究引用时仍应结合 `market-data-platform` 的 PIT fundamentals 质量说明。
 - 因子收益是全市场等权多空代理因子收益，暂未纳入交易成本、涨跌停成交约束、ST 过滤和行业中性化。
 - 2026 年这类未完整年度的 `period_return` 是年初至数据截止日收益，`annual_return` 是按日均收益年化。
+
+## 跨仓边界
+
+`src/style_factors` 是本工作区风格因子计算、回测与归因的**唯一权威实现**
+（`source_of_truth: yes`）。依据 2026-07-29 `research-workspace` 与 `market-intel` 整合评估报告的
+边界划分，风格因子的职责归属如下：
+
+- 因子定义与计算 → `alpha-research`（`style_factors` 当前承载参考实现）
+- 回测与归因 → `portfolio-backtester`（`style_factors` 当前承载参考实现）
+- 运行与产物发布 → `strategy-pipeline`（标准发布脚本产出 `manifest.json` 与 `latest` 指针）
+- 报告渲染与飞书投递 → `market-intel`（仅消费，不重复实现）
+
+产物通过版本化文件交接给下游：
+
+```text
+$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
+```
+
+`market-intel` 侧应只消费上述产物（读取 `style_factors[*]` 由
+`strategy-pipeline/src/strategy_pipeline/pipeline/output_summary_sections.py` 完成），
+**不得维护第二套同源研究算法**（`market-intel/src/a_share_analysis/style/` 为待收口的重复实现，
+见其 `docs/boundary-contract.md`）。跨仓协作只走公开 CLI 与文件契约，不反向 import 本模块运行时内部。
