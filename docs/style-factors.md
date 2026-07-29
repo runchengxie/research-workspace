@@ -73,7 +73,7 @@ uv run python -m src.style_factors \
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python src/style_factors/style_factor_attribution.py \
+  uv run python -m src.style_factors.style_factor_attribution \
   --out-name 20260629
 ```
 

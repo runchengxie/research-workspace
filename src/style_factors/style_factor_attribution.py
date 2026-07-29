@@ -4,8 +4,8 @@
 Now directly imports style_factors (part of research-workspace).
 
 Usage:
-  python src/style_factors/style_factor_attribution.py --out-name 20260629
-  python src/style_factors/style_factor_attribution.py \\
+  python -m src.style_factors.style_factor_attribution --out-name 20260629
+  python -m src.style_factors.style_factor_attribution \\
     --strategy-csv returns.csv --strategy-name strategy --out-name 20260629
 """
 
@@ -14,20 +14,18 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 from datetime import UTC, datetime
-from importlib import import_module
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+from .workflow import run_style_factor_analysis
 
-run_style_factor_analysis = import_module("src.style_factors.workflow").run_style_factor_analysis
-
-DATA_PLATFORM_ROOT = Path(
-    os.environ.get("DATA_PLATFORM_ROOT", "/home/richard/data/market-data-platform")
-)
+DATA_PLATFORM_ROOT_ENV = os.environ.get("DATA_PLATFORM_ROOT")
+if not DATA_PLATFORM_ROOT_ENV:
+    raise SystemExit(
+        "环境变量 DATA_PLATFORM_ROOT 未设置。请先导出数据根目录，"
+        "例如：export DATA_PLATFORM_ROOT=/path/to/market-data-platform"
+    )
+DATA_PLATFORM_ROOT = Path(DATA_PLATFORM_ROOT_ENV)
 OUTPUT_BASE = DATA_PLATFORM_ROOT / "strategy_outputs" / "style-factors"
 
 

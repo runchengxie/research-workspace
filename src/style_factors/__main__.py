@@ -1,11 +1,11 @@
 """Style factor analysis CLI — 9-factor Barra long-short backtest + report.
 
 Usage:
-    DATA_PLATFORM_ROOT=/home/richard/data/market-data-platform \\
-        python -m style_factors --outdir artifacts/style_analysis
+    export DATA_PLATFORM_ROOT=/path/to/market-data-platform
+    python -m src.style_factors --outdir artifacts/style_analysis
 
     # Strategy attribution:
-    python -m style_factors --strategy-csv returns.csv --strategy-name strategy
+    python -m src.style_factors --strategy-csv returns.csv --strategy-name strategy
 """
 
 from __future__ import annotations
@@ -21,7 +21,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--data-root",
-        default=os.environ.get("DATA_PLATFORM_ROOT", "/home/richard/data/market-data-platform"),
+        default=os.environ.get("DATA_PLATFORM_ROOT"),
+        help="数据根目录，缺省时从环境变量 DATA_PLATFORM_ROOT 读取",
     )
     ap.add_argument("--outdir", default="artifacts/style_analysis")
     ap.add_argument("--quick", action="store_true", help="Sample mode: only 2020-2026")
@@ -29,6 +30,11 @@ def main() -> None:
     ap.add_argument("--strategy-name", default="strategy")
     args = ap.parse_args()
 
+    if not args.data_root:
+        raise SystemExit(
+            "数据根未提供。请设置环境变量 DATA_PLATFORM_ROOT，"
+            "或传入 --data-root /path/to/market-data-platform"
+        )
     data_root = Path(args.data_root)
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)

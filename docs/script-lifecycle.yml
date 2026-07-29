@@ -288,6 +288,106 @@
       "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/doctor_common.py",
+      "owner": "research-workspace",
+      "purpose": "Package marker for the per-domain workspace doctor check modules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_git_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Gitmodules structure check for the research-workspace superproject",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_doc_checks.py",
+      "owner": "research-workspace",
+      "purpose": "README submodule coverage check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_submodule_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Submodule initialization and cleanliness checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_hook_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Local git hooks installation checks for superproject and submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_cli_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Public CLI contract checks for workspace-level submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_data_platform_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Data platform root and current-contract checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_env_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level output, secret and shared-code leakage checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_boundary_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level script import boundary checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_hk_archive_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Hong Kong private archive governance checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
       "path": "scripts/workspace_env.py",
       "owner": "research-workspace",
       "purpose": "Allowlisted top-level .env parsing for workspace path settings",
