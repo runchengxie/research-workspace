@@ -185,10 +185,16 @@ def _scan_rule(root: Path, rule: BoundaryRule) -> RuleResult:
     if not source_root.exists() or (not source_root.is_dir() and not source_root.is_file()):
         return RuleResult(rule=rule, findings=(), missing_source=True)
 
-    # A single-file ``source`` (e.g. ``src/foo/contract.py``) is scanned as a
-    # top-level module inside its own directory, so module resolution must be
-    # anchored at the *parent* directory rather than the file itself.
-    scan_root = source_root.parent if source_root.is_file() else source_root
+    # Module resolution is anchored at ``repo_root / "src"`` (every rule's
+    # ``source`` already carries the ``src/`` prefix), which is what makes
+    # ``from ..pipeline.runner import ...`` resolve to the right package. A
+    # single-file ``source`` (e.g. ``src/foo/contract.py``) is scanned as a
+    # top-level module inside its own directory, so its anchor is the file's
+    # parent, not ``src``.
+    if source_root.is_file():
+        resolve_root = source_root.parent
+    else:
+        resolve_root = repo_root / "src"
 
     findings: list[ImportFinding] = []
     for path in _python_files(source_root):
@@ -204,7 +210,7 @@ def _scan_rule(root: Path, rule: BoundaryRule) -> RuleResult:
                 )
             )
             continue
-        for line, module in _iter_imports(scan_root, path, tree):
+        for line, module in _iter_imports(resolve_root, path, tree):
             for forbidden in rule.forbidden:
                 if _matches(module, forbidden):
                     findings.append(

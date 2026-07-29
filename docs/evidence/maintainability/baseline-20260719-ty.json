@@ -10,11 +10,11 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 70,
-      "python_loc": 16252,
-      "hk_related_file_count": 3,
+      "python_file_count": 80,
+      "python_loc": 16392,
+      "hk_related_file_count": 4,
       "hotspot_counts": {
-        "large_files": 6,
+        "large_files": 5,
         "long_functions": 11,
         "complexity_hotspots": 13,
         "large_classes": 2
@@ -33,11 +33,6 @@
         {
           "path": "docs/archive/adhoc/path_c_m1_validate.py",
           "loc": 646,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/workspace_doctor.py",
-          "loc": 595,
           "hk_related": false
         },
         {
@@ -249,6 +244,7 @@
           "scripts/scan_workspace_secrets.py",
           "scripts/maintainability_baseline.py",
           "scripts/workspace_doctor.py",
+          "scripts/doctor_*.py",
           "scripts/workspace_governance.py",
           "scripts/workspace_governance_common.py",
           "scripts/workspace_governance_quality.py",
@@ -274,6 +270,16 @@
       },
       "script_inventory": [
         "scripts/dead_code_advisory.py",
+        "scripts/doctor_boundary_checks.py",
+        "scripts/doctor_cli_checks.py",
+        "scripts/doctor_common.py",
+        "scripts/doctor_data_platform_checks.py",
+        "scripts/doctor_doc_checks.py",
+        "scripts/doctor_env_checks.py",
+        "scripts/doctor_git_checks.py",
+        "scripts/doctor_hk_archive_checks.py",
+        "scripts/doctor_hook_checks.py",
+        "scripts/doctor_submodule_checks.py",
         "scripts/framework_adapter_evidence.py",
         "scripts/framework_adapter_execution_evidence.py",
         "scripts/framework_adapter_release_gate.py",
