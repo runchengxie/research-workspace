@@ -35,11 +35,11 @@
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 7,
+      "max_large_files": 8,
       "max_long_functions": 22,
       "max_complexity_hotspots": 24,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 18->7 ratchets down (exposure_style/portfolio_positions_select/position_backtest_engine split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
+      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 18->7 ratchets down (exposure_style/portfolio_positions_select/position_backtest_engine split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after execution_sim/core.py (2393 LOC) was split into models/capacity/orders/reporting submodules: large_files 7->8 (orders.py is the new 1173-LOC receiver carrying order construction, state machine, and matching loops). This is a debt transfer, not new debt; the original 2393-LOC core.py dropped to an 820-LOC re-export/entry layer, and orders.py is registered in accepted_hotspots. counts may rise only with an explicit owner decision."
     },
     {
       "repo": "research-apps",
@@ -660,6 +660,12 @@
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "new 1173-LOC receiver created by the 2026-07-29 execution_sim/core.py split; carries order construction, state machine, and matching loops. Debt transfer from the original 2393-LOC core.py, not new debt.",
+      "next_action": "split by responsibility (order construction vs state machine vs matching loops) when this file changes for feature work or focused maintainability cleanup"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/exposure.py",
