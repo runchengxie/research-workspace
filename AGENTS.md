@@ -26,6 +26,9 @@
 | `strategy-pipeline` | 研究编排、命令行（CLI）、运行目录和 `targets.json` 导出 |
 | `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
+各子项目已注册的命令行入口（`strategy`、`strategy-pipeline`、`qexec`、`stockq`、`marketdata`）见
+[README 子项目命令行（CLI）](README.md#子项目命令行cli)。
+
 顶层不保存大型数据、研究运行产物、数据提供方缓存、券商凭证或交易审计日志。
 
 ## 常用检查

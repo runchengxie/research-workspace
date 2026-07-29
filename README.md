@@ -50,6 +50,18 @@ quant-execution-engine
 独立研究应用的 owner 边界见
 [ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
 
+## 子项目命令行（CLI）
+
+各子项目通过 `uv run --project <子项目>` 调用，已注册的命令如下：
+
+| 命令 | 所属子项目 | 用途 |
+|------|------------|------|
+| `strategy` | strategy-pipeline | 研究编排：读取数据资产、调用研究与回测、导出 `targets.json` |
+| `strategy-pipeline` | strategy-pipeline | 同上（`strategy` 的等价命令名） |
+| `qexec` | quant-execution-engine | 券商执行与预演：config、preflight、rebalance、orders |
+| `stockq` | quant-execution-engine | 同上（`qexec` 的等价命令名） |
+| `marketdata` | market-data-platform | 市场数据资产的采集、检查、发布与读取 |
+
 ## 快速开始
 
 ```bash

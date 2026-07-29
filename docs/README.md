@@ -38,6 +38,7 @@
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - 策略总览导航索引（术语澄清 + 链接入口）：[strategy-catalog.md](strategy-catalog.md)
 - A 股风格因子：[style-factors.md](style-factors.md)
+- A 股年度市场风格解读（2008-2026）：[style-factor-market-regimes-2008-2026.md](style-factor-market-regimes-2008-2026.md)
 - Owner-native 命名空间迁移记录：[namespace-migration.md](namespace-migration.md)
 - 价值因子长周期轮动分析：[value-regime-18y.md](value-regime-18y.md)
 - AFML 方法落地与跨仓库版本组合：[afml-methodology-rollout.md](afml-methodology-rollout.md)
