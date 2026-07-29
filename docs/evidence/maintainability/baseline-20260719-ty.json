@@ -1231,19 +1231,24 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 172,
-      "python_loc": 36319,
+      "python_file_count": 176,
+      "python_loc": 36650,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 7,
+        "large_files": 8,
         "long_functions": 22,
         "complexity_hotspots": 24,
         "large_classes": 0
       },
       "large_files": [
         {
+          "path": "src/portfolio_backtester/execution_sim/orders.py",
+          "loc": 1173,
+          "hk_related": false
+        },
+        {
           "path": "src/portfolio_backtester/execution_sim/core.py",
-          "loc": 2393,
+          "loc": 820,
           "hk_related": false
         },
         {
@@ -1258,7 +1263,7 @@
         },
         {
           "path": "tests/test_execution_sim.py",
-          "loc": 568,
+          "loc": 631,
           "hk_related": false
         },
         {
@@ -1309,7 +1314,7 @@
           "complexity": 15
         },
         {
-          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "path": "src/portfolio_backtester/execution_sim/orders.py",
           "name": "_execute_buy_orders",
           "line_count": 97,
           "complexity": 16
@@ -1413,7 +1418,7 @@
       ],
       "complexity_hotspots": [
         {
-          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "path": "src/portfolio_backtester/execution_sim/reporting.py",
           "name": "_summarize_adjusted_nav",
           "line_count": 77,
           "complexity": 22
@@ -1503,7 +1508,7 @@
           "complexity": 16
         },
         {
-          "path": "src/portfolio_backtester/execution_sim/core.py",
+          "path": "src/portfolio_backtester/execution_sim/orders.py",
           "name": "_execute_buy_orders",
           "line_count": 97,
           "complexity": 16
