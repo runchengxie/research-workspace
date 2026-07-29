@@ -9,6 +9,16 @@ tmp/
 .ruff_cache/
 .pytest_cache/
 __pycache__/
+*.pyc
+*.so
+build/
+dist/
+*.egg-info/
+.coverage
+.coverage.*
+htmlcov/
+*.parquet
+node_modules/
 artifacts/
 outputs/
 data/
