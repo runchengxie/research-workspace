@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Run A-share 9-factor style analysis and publish results for strategy attribution.
+"""Run A-share style factor analysis and publish results for strategy attribution.
 
-Now directly imports style_factors (part of research-workspace).
+Now directly imports style_factors (part of research-workspace). Supports 15
+factors (incl. PIT SW-L1 industry-neutralized Value). Use --from-artifacts to
+publish an existing full-sample run without recomputation.
 
 Usage:
   python -m src.style_factors.style_factor_attribution --out-name 20260629
   python -m src.style_factors.style_factor_attribution \\
     --strategy-csv returns.csv --strategy-name strategy --out-name 20260629
+  python -m src.style_factors.style_factor_attribution \\
+    --out-name 20260730-full-value --from-artifacts artifacts/style_analysis_2008
 """
 
 from __future__ import annotations
@@ -14,10 +18,12 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
+from types import SimpleNamespace
 
 from src.research_contracts import (
     ArtifactEnvelopeV2,
@@ -139,6 +145,11 @@ def main() -> None:
     ap.add_argument("--strategy-csv", help="Strategy daily return CSV")
     ap.add_argument("--strategy-name", default="strategy")
     ap.add_argument("--quick", action="store_true")
+    ap.add_argument(
+        "--from-artifacts",
+        help="Publish an existing artifacts directory as-is (skip recomputation). "
+        "Use this to publish a known full-sample run without re-running the analysis.",
+    )
     args = ap.parse_args()
 
     data_root_raw = os.environ.get("DATA_PLATFORM_ROOT", "").strip()
@@ -159,13 +170,22 @@ def main() -> None:
     print(f"[style_factors] staging={staging}")
 
     try:
-        artifacts = run_style_factor_analysis(
-            data_root=data_root,
-            outdir=staging,
-            quick=args.quick,
-            strategy_csv=strategy_csv,
-            strategy_name=args.strategy_name,
-        )
+        if args.from_artifacts:
+            src = Path(args.from_artifacts).expanduser().resolve()
+            if not src.is_dir():
+                raise SystemExit(f"--from-artifacts 目录不存在：{src}")
+            for item in src.iterdir():
+                if item.is_file():
+                    shutil.copy2(item, staging / item.name)
+            artifacts = SimpleNamespace(outdir=staging)
+        else:
+            artifacts = run_style_factor_analysis(
+                data_root=data_root,
+                outdir=staging,
+                quick=args.quick,
+                strategy_csv=strategy_csv,
+                strategy_name=args.strategy_name,
+            )
         _write_publish_manifest(
             outdir=artifacts.outdir,
             out_name=args.out_name,
@@ -178,12 +198,10 @@ def main() -> None:
         _publish_latest(output_base, args.out_name)
     except BaseException:
         if staging.exists():
-            import shutil
-
             shutil.rmtree(staging)
         raise
 
-    print(f"\n[OK] 9-factor results → {outdir}/")
+    print(f"\n[OK] style-factors results → {outdir}/")
     for f in sorted(outdir.iterdir()):
         print(f"     {f.name}")
 
