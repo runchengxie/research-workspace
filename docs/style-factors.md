@@ -120,7 +120,11 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 | `style_factor_corr.png` | 因子相关性热力图 |
 | `style_factor_yearly.png` | 逐年因子收益图 |
 | `meta.json` | 运行参数和输出 metadata |
-| `manifest.json` | 仅标准发布脚本生成，记录文件清单和 latest 指针 |
+| `manifest.json` | 标准发布脚本生成，包含 `research.style-factors.v1` schema、共享 artifact envelope、逐文件 SHA-256/大小和 lineage |
+
+标准发布先写入同目录 staging，所有文件与 `manifest.json` 完成后再原子重命名为
+`<out-name>/`，最后原子更新 `latest.txt`。已经存在的版本目录不会被覆盖。消费方必须使用
+`research-contracts` 校验文件清单和 SHA-256 后再渲染，不得直接信任半成品目录。
 
 ## 方法边界
 

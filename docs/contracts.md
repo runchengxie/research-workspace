@@ -40,7 +40,12 @@
 
 ## 跨模块 artifact 契约
 
-机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，清单加载和校验入口在 [`src/research_contracts`](../src/research_contracts/) 薄包中。`src/research_contracts` 由顶层仓库直接追踪，不登记为子模块。后续如果把 契约 实现抽到正式共享包，这份清单就是跨仓库 artifact 契约 的迁移基准。顶层只校验清单和文件交接，不导入子模块运行时内部实现。
+机器可读清单见 [`artifact-contracts.yml`](artifact-contracts.yml)，清单加载和校验入口在
+[`src/research_contracts`](../src/research_contracts/) 薄包中。该目录由顶层仓库直接追踪，
+同时包含独立的 `pyproject.toml`，下游仓库可通过 Git `subdirectory` URL 锁定不可变提交并
+安装为 `research-contracts`。共享包只提供 schema、artifact envelope、lineage、SHA-256 和
+文件清单校验，不携带研究算法或数据访问代码。顶层只校验清单和文件交接，不导入子模块运行时
+内部实现。
 
 ### 可选 artifact envelope v2
 

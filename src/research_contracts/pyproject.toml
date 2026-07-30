@@ -1,0 +1,14 @@
+[project]
+name = "research-contracts"
+version = "0.1.0"
+description = "Versioned artifact contracts shared by the research and market-intel systems"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["research_contracts"]
+package-dir = {research_contracts = "."}
