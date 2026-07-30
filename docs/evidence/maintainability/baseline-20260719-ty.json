@@ -188,7 +188,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 283,
-      "python_loc": 85672,
+      "python_loc": 85689,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 36,
@@ -278,13 +278,13 @@
           "hk_related": false
         },
         {
-          "path": "scripts/operations/audit_minute_overlap.py",
-          "loc": 640,
+          "path": "src/market_data_platform/providers/tushare_a_share_reference.py",
+          "loc": 642,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_reference.py",
-          "loc": 636,
+          "path": "scripts/operations/audit_minute_overlap.py",
+          "loc": 640,
           "hk_related": false
         },
         {
