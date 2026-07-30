@@ -1323,6 +1323,18 @@
       "owner_repo": "strategy-pipeline",
       "reason": "re-export _core split submodule that still aggregates campaign support above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
       "next_action": "split plan construction and evidence review when campaign support changes"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/_mins_mirror.py",
+      "owner_repo": "market-data-platform",
+      "reason": "tushare_a_share_mins.py(1090) 拆为 _mins_fetch/_mins_mirror 后的编排接收者（567 行），债务从原单体转移，非新债；公开 API 与运行时行为不变",
+      "next_action": "若后续加入更多 mirror 编排逻辑，再按日级/分区维度细分"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders_nav.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "orders.py(1173) 拆为 targets/nav/ideal 后的 NAV 状态机接收者（633 行），债务从原单体转移，非新债；core.py 导入契约不变",
+      "next_action": "若 NAV 状态机继续增长，再拆出订单状态聚合与成交回写子模块"
     }
   ]
 }
