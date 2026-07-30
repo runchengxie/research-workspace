@@ -137,7 +137,7 @@ def _winsorize(series: pd.Series) -> pd.Series:
         lo, hi = series.quantile(0.01), series.quantile(0.99)
         return series.clip(lower=lo, upper=hi)
     out = series.copy()
-    for date, idx in series.groupby(level=0).groups.items():
+    for _date, idx in series.groupby(level=0).groups.items():
         sub = series.loc[idx]
         lo, hi = sub.quantile(0.01), sub.quantile(0.99)
         out.loc[idx] = sub.clip(lower=lo, upper=hi)
