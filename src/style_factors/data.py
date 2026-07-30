@@ -92,18 +92,44 @@ def load_data(
     return daily, basics
 
 
+def _fina_indicator_dir(data_root: Path) -> Path | None:
+    """Resolve the fina_indicator parquet directory.
+
+    Backward compatible: try the legacy ``fundamentals_raw/data/fina_indicator``
+    path first; if it has no data, fall back to the top800_union dataset which is
+    the one actually populated on the data platform.
+    """
+    legacy = data_root / "assets/tushare/a_share/fundamentals_raw/data/fina_indicator"
+    if sorted(legacy.glob("*.parquet")):
+        return legacy
+    fallback = (
+        data_root
+        / "assets/tushare/a_share/fundamentals_raw"
+        / "a_share_top800_union_20150227_20260529_fina_indicator"
+        / "data"
+        / "fina_indicator"
+    )
+    if sorted(fallback.glob("*.parquet")):
+        print(
+            "[load] WARNING: legacy fina_indicator path empty — "
+            "falling back to a_share_top800_union fina_indicator"
+        )
+        return fallback
+    return None
+
+
 def load_fina_indicator(
     data_root: Path,
     *,
     end_date: str | pd.Timestamp | None = None,
 ) -> pd.DataFrame:
     """Load fina_indicator quarterly data (roe, roa, growth, leverage)."""
-    fina_dir = data_root / "assets/tushare/a_share/fundamentals_raw/data/fina_indicator"
-    parts = sorted(fina_dir.glob("*.parquet"))
-    if not parts:
+    fina_dir = _fina_indicator_dir(data_root)
+    if fina_dir is None:
         print("[load] fina_indicator: no data found — Growth/Leverage disabled")
         return pd.DataFrame()
 
+    parts = sorted(fina_dir.glob("*.parquet"))
     df = pd.concat(
         [pd.read_parquet(p) for p in parts],
         ignore_index=True,
@@ -141,3 +167,51 @@ def load_fina_indicator(
         f"{fina['end_date'].min().date()} ~ {fina['end_date'].max().date()}"
     )
     return fina
+
+
+def load_cashflow(
+    data_root: Path,
+    *,
+    end_date: str | pd.Timestamp | None = None,
+) -> pd.DataFrame:
+    """Load cashflow quarterly data for cashflow-quality (OCF / net profit).
+
+    Returns a frame with ``symbol, end_date, ann_date, n_cashflow_act,
+    net_profit`` so it can be merged into the fina panel by announcement date.
+    """
+    cf_dir = (
+        data_root
+        / "assets/tushare/a_share/fundamentals_raw"
+        / "a_share_top800_union_20150227_20260529_cashflow"
+        / "data"
+        / "cashflow"
+    )
+    parts = sorted(cf_dir.glob("*.parquet"))
+    if not parts:
+        print("[load] cashflow: no data found — cashflow-quality disabled")
+        return pd.DataFrame()
+
+    df = pd.concat([pd.read_parquet(p) for p in parts], ignore_index=True)
+    df = df.drop_duplicates(["ts_code", "end_date", "ann_date"])
+    df["symbol"] = (
+        df["ts_code"]
+        .str.replace(".SH", "", regex=False)
+        .str.replace(".SZ", "", regex=False)
+        .str.replace(".BJ", "", regex=False)
+    )
+    df["end_date"] = pd.to_datetime(df["end_date"])
+    df["ann_date"] = pd.to_datetime(df["ann_date"], errors="coerce")
+    end = _coerce_date(end_date)
+    if end is not None:
+        df = df[df["ann_date"].isna() | (df["ann_date"] <= end)].copy()
+    df = df.sort_values(["symbol", "end_date", "ann_date"])
+    df = df.drop_duplicates(["symbol", "end_date"], keep="last")
+
+    cols = ["symbol", "end_date", "ann_date", "n_cashflow_act", "net_profit"]
+    cashflow = df[[c for c in cols if c in df.columns]].copy()
+    print(
+        f"[load] cashflow: {len(cashflow)} rows, "
+        f"{cashflow['symbol'].nunique()} stocks, "
+        f"{cashflow['end_date'].min().date()} ~ {cashflow['end_date'].max().date()}"
+    )
+    return cashflow

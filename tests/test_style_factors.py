@@ -55,17 +55,25 @@ def test_compute_factors_without_fundamentals_skips_optional_factors() -> None:
 
     assert "factor_growth_z" not in factors.columns
     assert "factor_leverage_z" not in factors.columns
-    assert {"size", "value", "momentum", "quality", "lowvol"} <= set(
+    # Quality depends on fundamentals; without fina it is skipped.
+    assert "factor_quality_z" not in factors.columns
+    # Earnings yield (value group) is always available from valuation.
+    assert "earnings_yield" in available_factor_names(factors)
+    assert {"size", "value", "momentum", "earnings_yield", "lowvol"} <= set(
         available_factor_names(factors)
     )
 
 
-def test_legacy_quality_key_is_presented_as_earnings_yield_valuation() -> None:
+def test_quality_is_composite_and_earnings_yield_is_value() -> None:
     definitions = "\n".join(_factor_definition_lines())
 
-    assert FACTOR_LABELS["quality"] == "Earnings Yield 盈利估值"
-    assert "估值代理，非盈利质量" in definitions
-    assert "Quality 盈利" not in definitions
+    # Quality is now a composite operating-quality score, not earnings yield.
+    assert FACTOR_LABELS["quality"] == "Quality 复合质量"
+    assert "复合质量" in definitions
+    assert "估值代理，非盈利质量" not in definitions
+    # Earnings yield lives in the value group.
+    assert FACTOR_LABELS["earnings_yield"] == "Earnings Yield 盈利估值"
+    assert "价值组" in definitions or "估值代理" in definitions
 
 
 def test_compute_factors_does_not_turn_negative_valuation_into_top_signal() -> None:

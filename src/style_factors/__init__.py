@@ -1,9 +1,11 @@
-"""A-share style factor analysis — 9-factor Barra CNE5-inspired model.
+"""A-share style factor analysis — 10-factor Barra CNE5-inspired model.
 
-Size, Value, Momentum, Earnings Yield, LowVol, Growth, Leverage, Beta, Liquidity.
+Size, Value, Momentum, Quality (composite), Earnings Yield, LowVol, Growth,
+Leverage, Beta, Liquidity.
 
-The serialized key ``quality`` is retained for compatibility, but its current
-construction is earnings yield (1/PE_TTM), not an operating-quality factor.
+``factor_quality`` is now a composite operating-quality score (ROE, low
+leverage, earnings stability, cashflow quality).  Earnings yield (1/PE_TTM)
+lives in the value group as ``factor_earnings_yield``.
 """
 
 from __future__ import annotations
@@ -42,7 +44,8 @@ FACTOR_LABELS = {
     "size": "Size 大市值",
     "value": "Value 低估值",
     "momentum": "Momentum 动量",
-    "quality": "Earnings Yield 盈利估值",
+    "quality": "Quality 复合质量",
+    "earnings_yield": "Earnings Yield 盈利估值",
     "lowvol": "LowVol 低波动",
     "growth": "Growth 成长",
     "leverage": "Leverage 低杠杆",
@@ -62,6 +65,7 @@ COLORS = [
     "#e056a0",  # leverage
     "#3498db",  # beta
     "#e67e22",  # liquidity
+    "#2ecc71",  # earnings_yield
 ]
 
 FACTOR_COLORS = dict(zip(FACTOR_ORDER, COLORS, strict=True))

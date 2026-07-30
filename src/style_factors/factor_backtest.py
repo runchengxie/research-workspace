@@ -10,6 +10,7 @@ FACTOR_NAMES = [
     "value",
     "momentum",
     "quality",
+    "earnings_yield",
     "lowvol",
     "growth",
     "leverage",

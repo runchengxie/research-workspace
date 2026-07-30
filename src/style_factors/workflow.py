@@ -17,7 +17,7 @@ from .charts import (
     plot_factor_nav,
     plot_yearly_barchart,
 )
-from .data import load_data, load_fina_indicator
+from .data import load_cashflow, load_data, load_fina_indicator
 from .factor_backtest import (
     build_factor_returns,
     compute_factor_correlations,
@@ -115,8 +115,14 @@ def run_style_factor_analysis(
     start_date = "2020-01-01" if quick else None
     daily, basics = load_data(data_root, start_date=start_date)
     fina = load_fina_indicator(data_root)
+    cashflow = load_cashflow(data_root)
 
-    factors = compute_factors(daily, basics, fina if not fina.empty else None)
+    factors = compute_factors(
+        daily,
+        basics,
+        fina if not fina.empty else None,
+        cashflow if not cashflow.empty else None,
+    )
     all_dates = pd.DatetimeIndex(sorted(factors["trade_date"].unique()))
     if all_dates.empty:
         raise ValueError("No factor dates available after filtering")

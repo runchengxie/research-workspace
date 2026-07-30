@@ -10,6 +10,7 @@ FACTOR_COLS = [
     "factor_value",
     "factor_momentum",
     "factor_quality",
+    "factor_earnings_yield",
     "factor_lowvol",
     "factor_growth",
     "factor_leverage",
@@ -18,6 +19,10 @@ FACTOR_COLS = [
 ]
 
 FUNDAMENTAL_COLS = ["roe", "roa", "netprofit_yoy", "or_yoy", "debt_to_assets"]
+
+# Extra fundamental columns pulled from the cashflow table that should be carried
+# into the factor panel for the cashflow-quality sub-indicator.
+QUALITY_EXTRA_COLS = ["n_cashflow_act", "net_profit"]
 
 
 def _base_frame(daily: pd.DataFrame, basics: pd.DataFrame) -> pd.DataFrame:
@@ -33,7 +38,8 @@ def _base_frame(daily: pd.DataFrame, basics: pd.DataFrame) -> pd.DataFrame:
 
 
 def _fundamental_columns(fina: pd.DataFrame) -> list[str]:
-    return [column for column in FUNDAMENTAL_COLS if column in fina.columns]
+    wanted = FUNDAMENTAL_COLS + QUALITY_EXTRA_COLS
+    return [column for column in wanted if column in fina.columns]
 
 
 def _prepare_fundamentals(fina: pd.DataFrame) -> pd.DataFrame:
@@ -108,9 +114,9 @@ def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
     df["factor_value"] = 1.0 / df["pb_clean"]
 
     df["pe_clean"] = df["pe_ttm"].where(df["pe_ttm"] > 0).clip(lower=1, upper=500)
-    # ``factor_quality`` is a compatibility key.  The value is earnings yield,
-    # so reports must describe it as valuation rather than earnings quality.
-    df["factor_quality"] = 1.0 / df["pe_clean"]
+    # Earnings yield (1/PE_TTM) is a valuation signal, not an operating-quality
+    # signal.  It is kept (renamed) in the value group for backward compatibility.
+    df["factor_earnings_yield"] = 1.0 / df["pe_clean"]
 
     df["ret_1d"] = df.groupby("symbol")["close"].pct_change()
     df["factor_momentum"] = df.groupby("symbol")["close"].transform(
@@ -121,6 +127,70 @@ def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
         lambda series: series.rolling(21, min_periods=10).std().shift(1)
     )
     df["factor_lowvol"] = -df["vol20"]
+    return df
+
+
+def _winsorize(series: pd.Series) -> pd.Series:
+    """Cross-sectional 1%/99% winsorization per trade_date."""
+    grouped = series.groupby(level=0) if series.index.nlevels > 1 else None
+    if grouped is None:
+        lo, hi = series.quantile(0.01), series.quantile(0.99)
+        return series.clip(lower=lo, upper=hi)
+    out = series.copy()
+    for date, idx in series.groupby(level=0).groups.items():
+        sub = series.loc[idx]
+        lo, hi = sub.quantile(0.01), sub.quantile(0.99)
+        out.loc[idx] = sub.clip(lower=lo, upper=hi)
+    return out
+
+
+def _add_quality_factor(df: pd.DataFrame, *, has_fina: bool) -> pd.DataFrame:
+    """Composite quality factor from ROE, leverage, earnings stability, OCF quality.
+
+    Each sub-indicator is winsorized (1%, 99%) then z-scored cross-sectionally;
+    the factor is the equal-weighted mean of available sub-indicators.  A stock
+    with a missing sub-indicator gets z=0 for that component.  ROE must be present
+    for a quality score to be assigned.
+    """
+    if not has_fina or "roe" not in df.columns:
+        return df
+
+    components: list[pd.Series] = []
+
+    # 1) ROE (higher is better)
+    roe = df["roe"].astype(float)
+    components.append(_winsorize(roe))
+
+    # 2) Leverage: lower debt_to_assets is better
+    if "debt_to_assets" in df.columns:
+        lev = -df["debt_to_assets"].astype(float)
+        components.append(_winsorize(lev))
+
+    # 3) Earnings stability: lower rolling std of YoY net profit is better
+    if "netprofit_yoy" in df.columns:
+        stab = df.groupby("symbol", sort=False)["netprofit_yoy"].transform(
+            lambda s: s.rolling(8, min_periods=4).std()
+        )
+        components.append(_winsorize(-stab.astype(float)))
+
+    # 4) Cashflow quality: OCF / net profit (higher is better); protect 0/neg denom
+    if {"n_cashflow_act", "net_profit"} <= set(df.columns):
+        np_safe = df["net_profit"].replace(0, np.nan).clip(lower=1e-9)
+        cq = df["n_cashflow_act"].astype(float) / np_safe
+        cq = cq.where(df["net_profit"] > 0)
+        components.append(_winsorize(cq))
+
+    # Cross-sectional z-score of each component, missing -> 0
+    z_parts = []
+    for comp in components:
+        grouped = comp.groupby(df["trade_date"], sort=False)
+        mean = grouped.transform("mean")
+        std = grouped.transform("std").replace(0, np.nan)
+        z = (comp - mean) / std
+        z_parts.append(z.fillna(0.0))
+
+    quality = sum(z_parts) / len(z_parts)
+    df["factor_quality"] = quality
     return df
 
 
@@ -174,7 +244,8 @@ def _add_liquidity_factor(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _standardize_factors(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.dropna(subset=FACTOR_COLS[:5]).copy()
+    core = [column for column in FACTOR_COLS[:5] if column in df.columns]
+    df = df.dropna(subset=core).copy()
     active = [column for column in FACTOR_COLS if column in df.columns]
     for column in active:
         quantiles = df.groupby("trade_date", sort=False)[column].quantile([0.01, 0.99])
@@ -194,16 +265,24 @@ def compute_factors(
     daily: pd.DataFrame,
     basics: pd.DataFrame,
     fina: pd.DataFrame | None = None,
+    cashflow: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Compute style factors per stock per date.
 
-    If fina_indicator data is provided, Growth and Leverage are aligned by
-    announcement date so the factor frame does not look ahead.
+    If fina_indicator data is provided, Growth, Leverage and the composite
+    Quality factor are aligned by announcement date so the factor frame does
+    not look ahead.  ``cashflow`` (OCF / net profit) is merged into ``fina``
+    when supplied to feed the cashflow-quality sub-indicator.
     """
+    if fina is not None and cashflow is not None and not cashflow.empty:
+        merge_on = [c for c in ("symbol", "end_date", "ann_date") if c in cashflow.columns]
+        fina = fina.merge(cashflow, on=merge_on, how="left")
+
     df = _base_frame(daily, basics)
     df, has_fina = _merge_fundamentals(df, fina)
     df = _add_core_factors(df)
     df = _add_fundamental_factors(df, has_fina=has_fina)
+    df = _add_quality_factor(df, has_fina=has_fina)
     df = _add_beta_factor(df)
     df = _add_liquidity_factor(df)
     active = [column for column in FACTOR_COLS if column in df.columns]
