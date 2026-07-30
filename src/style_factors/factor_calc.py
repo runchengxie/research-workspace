@@ -16,7 +16,20 @@ FACTOR_COLS = [
     "factor_leverage",
     "factor_beta",
     "factor_liquidity",
+    # New factors from locally-landed tushare datasets (zero network traffic):
+    "factor_liquidity_flow",  # moneyflow_ths: main-order net inflow
+    "factor_chip_concentration",  # holder_structure: top10 float concentration
+    "factor_institution_holding",  # holder_structure: top10 inst float hold ratio
+    "factor_dividend_yield",  # daily_basic.dv_ttm (value group)
+    "factor_ps_value",  # 1/ps_ttm (value group)
+    "factor_limit_up",  # limit_list_ths: limit-up event flag
 ]
+
+# Factor grouping for sector-neutral demean.  Every factor below is demeaned
+# within its SW L1 industry BEFORE the cross-sectional z-score, so the final
+# signal is industry-neutral (PIT, not static).  Grouping only affects code
+# organization / reporting; neutralization treats each factor independently.
+VALUE_GROUP = {"factor_value", "factor_earnings_yield", "factor_dividend_yield", "factor_ps_value"}
 
 FUNDAMENTAL_COLS = ["roe", "roa", "netprofit_yoy", "or_yoy", "debt_to_assets"]
 
@@ -243,21 +256,196 @@ def _add_liquidity_factor(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _assign_aux_panel(
+    group: pd.DataFrame,
+    aux_by_symbol: dict[str, pd.DataFrame],
+    columns: list[str],
+) -> pd.DataFrame:
+    """Forward-fill an auxiliary stock-day table into one symbol's panel rows.
+
+    Used for moneyflow_ths / holder_structure / limit_list which are keyed by
+    (symbol, trade_date) but may have gaps; we carry the last observed value
+    forward within each stock so the factor is defined on more dates.
+    """
+    if not aux_by_symbol:
+        return group
+    group = group.copy()
+    symbol = group["symbol"].iloc[0]
+    aux = aux_by_symbol.get(symbol)
+    if aux is None or aux.empty:
+        for column in columns:
+            group[column] = np.nan
+        return group
+    aux = aux.sort_values("trade_date")
+    td = group["trade_date"].to_numpy()
+    aux_dates = aux["trade_date"].to_numpy()
+    pos = np.searchsorted(aux_dates, td, side="right") - 1
+    valid = pos >= 0
+    for column in columns:
+        values = np.full(len(group), np.nan)
+        if column in aux.columns:
+            src = aux[column].to_numpy()
+            values[valid] = src[pos[valid]]
+        group[column] = values
+    return group
+
+
+def _merge_aux(
+    df: pd.DataFrame,
+    aux: pd.DataFrame | None,
+    columns: list[str],
+) -> pd.DataFrame:
+    if aux is None or aux.empty:
+        for column in columns:
+            df[column] = np.nan
+        return df
+    aux = aux.copy()
+    aux["trade_date"] = pd.to_datetime(aux["trade_date"])
+    by_symbol = {
+        symbol: g.drop(columns=["symbol"]).sort_values("trade_date")
+        for symbol, g in aux.groupby("symbol", sort=False)
+    }
+    grouped = [
+        _assign_aux_panel(group, by_symbol, columns)
+        for _, group in df.groupby("symbol", sort=False)
+    ]
+    return pd.concat(grouped, ignore_index=True)
+
+
+def _add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
+    """Compute the 6 factors sourced from locally-landed tushare datasets.
+
+    Each sub-indicator is winsorized (1%/99%) cross-sectionally then z-scored,
+    in the same spirit as ``_standardize_factors`` / ``_add_quality_factor``.
+    Missing source data leaves the factor column all-NaN (it is then dropped).
+    """
+    aux = aux or {}
+    moneyflow = aux.get("moneyflow_ths")
+    holder = aux.get("holder_structure")
+    limit = aux.get("limit_list")
+    basics_extra = aux.get("daily_basic_extra")
+
+    # --- moneyflow_ths: large-order net inflow (流动性资金流) ---
+    if moneyflow is not None and not moneyflow.empty:
+        df = _merge_aux(
+            df, moneyflow,
+            ["net_amount", "buy_lg_amount_rate"],
+        )
+        # Prefer large-order net-inflow rate; fall back to absolute net_amount.
+        flow_raw = df["buy_lg_amount_rate"].astype(float) if "buy_lg_amount_rate" in df else df["net_amount"].astype(float)
+        df["factor_liquidity_flow"] = flow_raw
+    else:
+        df["factor_liquidity_flow"] = np.nan
+
+    # --- holder_structure: chip concentration & institution holding ---
+    if holder is not None and not holder.empty:
+        df = _merge_aux(
+            df, holder,
+            ["top10_float_concentration", "top10_inst_float_hold_ratio"],
+        )
+        df["factor_chip_concentration"] = df["top10_float_concentration"].astype(float) if "top10_float_concentration" in df else np.nan
+        df["factor_institution_holding"] = df["top10_inst_float_hold_ratio"].astype(float) if "top10_inst_float_hold_ratio" in df else np.nan
+    else:
+        df["factor_chip_concentration"] = np.nan
+        df["factor_institution_holding"] = np.nan
+
+    # --- daily_basic extras: dividend yield & PS value (value group) ---
+    if basics_extra is not None and not basics_extra.empty:
+        df = _merge_aux(
+            df, basics_extra,
+            ["dv_ttm", "ps_ttm"],
+        )
+        df["factor_dividend_yield"] = df["dv_ttm"].astype(float) if "dv_ttm" in df else np.nan
+        df["factor_ps_value"] = (1.0 / df["ps_ttm"].astype(float).where(df["ps_ttm"] > 0)) if "ps_ttm" in df else np.nan
+    else:
+        df["factor_dividend_yield"] = np.nan
+        df["factor_ps_value"] = np.nan
+
+    # --- limit_list_ths: limit-up event flag ---
+    if limit is not None and not limit.empty:
+        df = _merge_aux(df, limit, ["is_limit_up"])
+        df["factor_limit_up"] = df["is_limit_up"].astype(float) if "is_limit_up" in df else np.nan
+    else:
+        df["factor_limit_up"] = np.nan
+
+    return df
+
+
+def _merge_sw_industry_pit(
+    df: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+) -> pd.DataFrame:
+    """Attach ``industry_l1`` to each (symbol, trade_date) via PIT interval match.
+
+    ``sw_membership`` is the long table from ``load_sw_industry_membership``:
+    ``[symbol, in_date, out_date, industry_l1]``.  A stock on a trade_date gets
+    the L1 industry whose ``in_date <= trade_date <= out_date`` (open end when
+    out_date is NaT).  Stocks/dates with no match get NaN and are neutralized as
+    a single residual group.
+    """
+    df = df.copy()
+    df["industry_l1"] = np.nan
+    if sw_membership is None or sw_membership.empty:
+        return df
+
+    mem = sw_membership.copy()
+    mem["in_date"] = pd.to_datetime(mem["in_date"], errors="coerce")
+    mem["out_date"] = pd.to_datetime(mem["out_date"], errors="coerce")
+
+    # Per symbol, interval-match each trade_date.  Loop over symbols is fine:
+    # membership rows per symbol are few.
+    by_symbol = {
+        sym: g.sort_values("in_date")
+        for sym, g in mem.groupby("symbol", sort=False)
+    }
+    industry = np.full(len(df), np.nan, dtype=object)
+    df_sym = df["symbol"].to_numpy()
+    df_td = df["trade_date"].to_numpy()
+    for i in range(len(df)):
+        g = by_symbol.get(df_sym[i])
+        if g is None or g.empty:
+            continue
+        td = df_td[i]
+        start = g["in_date"].to_numpy()
+        end = g["out_date"].to_numpy()
+        end_mask = np.array([pd.isna(e) or td <= e for e in end])
+        hit = (td >= start) & end_mask
+        if hit.any():
+            industry[i] = g["industry_l1"].to_numpy()[hit][-1]
+    df["industry_l1"] = industry
+    return df
+
+
 def _standardize_factors(df: pd.DataFrame) -> pd.DataFrame:
     core = [column for column in FACTOR_COLS[:5] if column in df.columns]
     df = df.dropna(subset=core).copy()
     active = [column for column in FACTOR_COLS if column in df.columns]
+    has_industry = "industry_l1" in df.columns and df["industry_l1"].notna().any()
+
     for column in active:
+        # 1% / 99% cross-sectional winsorization per trade_date.
         quantiles = df.groupby("trade_date", sort=False)[column].quantile([0.01, 0.99])
         quantiles = quantiles.unstack()
         lower = df["trade_date"].map(quantiles[0.01])
         upper = df["trade_date"].map(quantiles[0.99])
         df[column] = df[column].clip(lower=lower, upper=upper, axis=0)
+
     for column in active:
-        grouped = df.groupby("trade_date", sort=False)[column]
+        if has_industry:
+            # PIT SW-L1 industry-neutralization: demean within industry first.
+            grp = df.groupby(["trade_date", "industry_l1"], sort=False)[column]
+            demeaned = df[column] - grp.transform("mean")
+            df[f"{column}_z"] = demeaned
+        else:
+            df[f"{column}_z"] = df[column].copy()
+
+    # Cross-sectional z-score (across industries) of the demeaned signal.
+    for column in active:
+        zcol = f"{column}_z"
+        grouped = df.groupby("trade_date", sort=False)[zcol]
         mean = grouped.transform("mean")
         std = grouped.transform("std")
-        df[f"{column}_z"] = (df[column] - mean) / std.replace(0, np.nan)
+        df[zcol] = (df[zcol] - mean) / std.replace(0, np.nan)
     return df
 
 
@@ -266,6 +454,9 @@ def compute_factors(
     basics: pd.DataFrame,
     fina: pd.DataFrame | None = None,
     cashflow: pd.DataFrame | None = None,
+    *,
+    aux: dict | None = None,
+    sw_membership: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Compute style factors per stock per date.
 
@@ -273,6 +464,15 @@ def compute_factors(
     Quality factor are aligned by announcement date so the factor frame does
     not look ahead.  ``cashflow`` (OCF / net profit) is merged into ``fina``
     when supplied to feed the cashflow-quality sub-indicator.
+
+    ``aux`` (optional) carries locally-landed tushare datasets keyed by name:
+    ``moneyflow_ths``, ``holder_structure``, ``limit_list``, ``daily_basic_extra``
+    (dv_ttm / ps_ttm).  These add the 6 new factors with zero network traffic.
+
+    ``sw_membership`` (optional) is the PIT SW-L1 membership long table from
+    ``load_sw_industry_membership``.  When present, every factor is demeaned
+    within its L1 industry before the cross-sectional z-score, i.e. the factor
+    panel is SW-L1 industry-neutral (point-in-time, not static).
     """
     if fina is not None and cashflow is not None and not cashflow.empty:
         merge_on = [c for c in ("symbol", "end_date", "ann_date") if c in cashflow.columns]
@@ -285,13 +485,21 @@ def compute_factors(
     df = _add_quality_factor(df, has_fina=has_fina)
     df = _add_beta_factor(df)
     df = _add_liquidity_factor(df)
+    df = _add_new_factors(df, aux=aux)
+    df = _merge_sw_industry_pit(df, sw_membership)
     active = [column for column in FACTOR_COLS if column in df.columns]
-    df = df[["trade_date", "symbol", *active]].copy()
+    df = df[["trade_date", "symbol", "industry_l1", *active]].copy()
     df = _standardize_factors(df)
     active = [column for column in FACTOR_COLS if column in df.columns]
     n_factors = len(active)
+    cov = (
+        df["industry_l1"].notna().mean()
+        if "industry_l1" in df.columns
+        else 0.0
+    )
     print(
         f"[factors] {df['trade_date'].min().date()} ~ {df['trade_date'].max().date()}, "
-        f"{len(df)} rows, {df['symbol'].nunique()} stocks, {n_factors} factors"
+        f"{len(df)} rows, {df['symbol'].nunique()} stocks, {n_factors} factors, "
+        f"industry coverage={cov:.1%}"
     )
     return df

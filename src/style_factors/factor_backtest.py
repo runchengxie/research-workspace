@@ -16,6 +16,13 @@ FACTOR_NAMES = [
     "leverage",
     "beta",
     "liquidity",
+    # New factors from locally-landed tushare datasets (zero network traffic):
+    "liquidity_flow",
+    "chip_concentration",
+    "institution_holding",
+    "dividend_yield",
+    "ps_value",
+    "limit_up",
 ]
 
 

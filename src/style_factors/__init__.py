@@ -51,6 +51,13 @@ FACTOR_LABELS = {
     "leverage": "Leverage 低杠杆",
     "beta": "Beta 低贝塔",
     "liquidity": "Liquidity 低换手",
+    # New factors from locally-landed tushare datasets (zero network traffic):
+    "liquidity_flow": "LiquidityFlow 大单资金流",
+    "chip_concentration": "ChipConcentration 筹码集中度",
+    "institution_holding": "InstitutionHolding 机构持仓",
+    "dividend_yield": "DividendYield 股息率",
+    "ps_value": "PSValue 市销率价值",
+    "limit_up": "LimitUp 涨停事件",
 }
 
 FACTOR_ORDER = list(FACTOR_LABELS)
@@ -66,6 +73,12 @@ COLORS = [
     "#3498db",  # beta
     "#e67e22",  # liquidity
     "#2ecc71",  # earnings_yield
+    "#ff9f43",  # liquidity_flow
+    "#ee5253",  # chip_concentration
+    "#48dbfb",  # institution_holding
+    "#1dd1a1",  # dividend_yield
+    "#f368e0",  # ps_value
+    "#ff6b81",  # limit_up
 ]
 
 FACTOR_COLORS = dict(zip(FACTOR_ORDER, COLORS, strict=True))

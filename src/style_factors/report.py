@@ -24,6 +24,28 @@ def _factor_definition_lines() -> list[str]:
         "| Leverage 低杠杆 | 多-空 | -资产负债率，按公告日对齐 |",
         "| Beta 低贝塔 | 多-空 | -252日滚动市场 beta |",
         "| Liquidity 低换手 | 多-空 | -换手率 |",
+        "| LiquidityFlow 大单资金流 | 多-空 | moneyflow_ths 大单净买占比，截尾+z（本地数据，零网络） |",
+        "| ChipConcentration 筹码集中度 | 多-空 | holder_structure 前十大流通股集中度，截尾+z（本地数据） |",
+        "| InstitutionHolding 机构持仓 | 多-空 | holder_structure 前十大机构流通持股占比，截尾+z（本地数据） |",
+        "| DividendYield 股息率 | 多-空 | daily_basic.dv_ttm 股息率，截尾+z（价值组，本地数据） |",
+        "| PSValue 市销率价值 | 多-空 | 1/ps_ttm 市销率倒数，截尾+z（价值组，本地数据） |",
+        "| LimitUp 涨停事件 | 多-空 | limit_list_ths 涨停标记，事件因子（本地数据） |",
+    ]
+
+
+def _industry_neutralization_note() -> list[str]:
+    return [
+        "",
+        "## 行业中性化（申万 PIT L1）",
+        "",
+        "所有因子在合成 z-score 前，先按**申万一级行业（L1）**在每期截面内做行业内 demean，"
+        "再做跨行业横截面 z-score，因此最终因子为**行业中性**。",
+        "",
+        "- 行业来源：本地已落地的**申万 PIT 行业**（`sw_industry_member` + `sw_industry`），"
+        "按 `in_date <= trade_date <= out_date`（out_date 为空=当前）判定每只股票在每个时点的 L1 行业，**时点准确、无前视**。",
+        "- **非静态映射**：不使用 `stock_basic.industry` 或 ths_member 静态行业做中性化"
+        "（ths_member 仅作为普通行业标签接入，不参与中性化）。",
+        "- 无行业匹配的股票归入残差组，仅在跨行业 z 阶段参与。",
     ]
 
 
@@ -130,6 +152,8 @@ def generate_report(
         "## 因子定义",
         "",
         *_factor_definition_lines(),
+        "",
+        *_industry_neutralization_note(),
         "",
         "每期按因子 z-score 排名，等分为 5 组，等权持有至下一个月末调仓。",
         "展示的是 top quintile long - bottom quintile short 的日收益序列。",

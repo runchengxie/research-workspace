@@ -17,7 +17,15 @@ from .charts import (
     plot_factor_nav,
     plot_yearly_barchart,
 )
-from .data import load_cashflow, load_data, load_fina_indicator
+from .data import (
+    load_cashflow,
+    load_data,
+    load_fina_indicator,
+    load_holder_structure,
+    load_limit_list,
+    load_moneyflow_ths,
+    load_sw_industry_membership,
+)
 from .factor_backtest import (
     build_factor_returns,
     compute_factor_correlations,
@@ -117,11 +125,33 @@ def run_style_factor_analysis(
     fina = load_fina_indicator(data_root)
     cashflow = load_cashflow(data_root)
 
+    # Locally-landed tushare datasets (zero network traffic) for the 6 new
+    # factors + PIT SW-L1 industry neutralization.
+    moneyflow = load_moneyflow_ths(data_root, start_date=start_date)
+    holder = load_holder_structure(data_root, start_date=start_date)
+    limit = load_limit_list(data_root, start_date=start_date)
+    sw_membership = load_sw_industry_membership(data_root)
+
+    # dv_ttm / ps_ttm come from daily_basic (already loaded); surface as aux.
+    basics_extra = basics[["trade_date", "symbol", "dv_ttm", "ps_ttm"]].copy() if {
+        "dv_ttm",
+        "ps_ttm",
+    } <= set(basics.columns) else pd.DataFrame()
+
+    aux = {
+        "moneyflow_ths": moneyflow if not moneyflow.empty else None,
+        "holder_structure": holder if not holder.empty else None,
+        "limit_list": limit if not limit.empty else None,
+        "daily_basic_extra": basics_extra if not basics_extra.empty else None,
+    }
+
     factors = compute_factors(
         daily,
         basics,
         fina if not fina.empty else None,
         cashflow if not cashflow.empty else None,
+        aux=aux,
+        sw_membership=sw_membership if not sw_membership.empty else None,
     )
     all_dates = pd.DatetimeIndex(sorted(factors["trade_date"].unique()))
     if all_dates.empty:
