@@ -1,5 +1,55 @@
 {
+  "_last_changed": "2026-07-30",
+  "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
+  "current_budget_summary": {
+    "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。",
+    "accepted_hotspots_count": 177,
+    "by_repo": {
+      "research-workspace": {
+        "max_large_files": 2,
+        "max_long_functions": 2,
+        "max_complexity_hotspots": 2,
+        "max_large_classes": 2
+      },
+      "market-data-platform": {
+        "max_large_files": 36,
+        "max_long_functions": 73,
+        "max_complexity_hotspots": 39,
+        "max_large_classes": 1
+      },
+      "alpha-research": {
+        "max_large_files": 4,
+        "max_long_functions": 21,
+        "max_complexity_hotspots": 25,
+        "max_large_classes": 0
+      },
+      "portfolio-backtester": {
+        "max_large_files": 8,
+        "max_long_functions": 22,
+        "max_complexity_hotspots": 24,
+        "max_large_classes": 0
+      },
+      "research-apps": {
+        "max_large_files": 1,
+        "max_long_functions": 2,
+        "max_complexity_hotspots": 1,
+        "max_large_classes": 0
+      },
+      "strategy-pipeline": {
+        "max_large_files": 34,
+        "max_long_functions": 118,
+        "max_complexity_hotspots": 67,
+        "max_large_classes": 1
+      },
+      "quant-execution-engine": {
+        "max_large_files": 4,
+        "max_long_functions": 35,
+        "max_complexity_hotspots": 37,
+        "max_large_classes": 6
+      }
+    }
+  },
   "thresholds": {
     "large_file_loc": 500,
     "long_function_lines": 80,
@@ -15,7 +65,12 @@
       "max_long_functions": 2,
       "max_complexity_hotspots": 2,
       "max_large_classes": 2,
-      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the workspace_doctor god-script split into ten per-domain doctor_*_checks modules plus shared doctor_common: large_files 6->5 ratchets down (workspace_doctor.py dropped from 595 LOC to ~30 LOC and left the 500-LOC threshold while the split targets are individually below it); long_functions, complexity_hotspots, and large_classes are unchanged. This is a genuine maintainability gain from the split, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 the maintainability baseline script now excludes docs/archive/ (including docs/archive/adhoc historical one-off scripts), so the active research-workspace counts drop to large_files 5->2, long_functions 11->1, complexity_hotspots 13->2 (large_classes unchanged at 2). The three archived adhoc scripts stay registered in accepted_hotspots for audit but no longer count toward the active budget, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 explicit owner decision: style_factors local tushare dataset integration adds moneyflow_ths/holder_structure/margin/limit_list loaders and 6 new factors (liquidity_flow, chip_concentration, institution_holding, dividend_yield, ps_value, limit_up) plus PIT SW-L1 industry neutralization. data.py (606 LOC) and factor_calc.py (515 LOC) enter large_files, _add_new_factors enters complexity_hotspots, and run_style_factor_analysis stays a long_function after a finalize helper split. This is a legitimate debt transfer from the feature expansion, not a regression; max_large_files 2->4, max_long_functions 1->2, max_complexity_hotspots 2->3 to match the measured counts. Counts may rise only with a further owner decision; the two new large files are tracked in the roadmap REQUIRED_ROADMAP_PATHS. 2026-07-30 ratchet down: style_factors loaders/factor helpers split into submodules (src/style_factors/loaders/ and src/style_factors/helpers/); data.py 606->250 LOC and factor_calc.py 515->344 LOC exit large_files (large_files 4->2), and _add_new_factors is split into per-factor helpers so no function exceeds the complexity ceiling (complexity_hotspots 3->2, only charts.py:plot_yearly_barchart and scripts/workspace_import_boundaries.py:build_report remain). The earlier budget raise was a transitional debt-transfer, now paid down by genuine splits; counts fell so the budget tightens in the same change per hotspot_budget_policy. The two formerly-large style_factors files are moved to resolved in accepted_hotspots."
+      "owner_decision": [
+        "2026-07-28: 子模块对账后基线重算，预算下调 large_files 7->6 / long_functions 12->11 / complexity_hotspots 14->13（治理脚本重构使计数下降）。",
+        "2026-07-29: workspace_doctor 拆为 10 个 doctor_*_checks 模块，large_files 6->5（workspace_doctor.py 595->~30 行，低于 500 阈值）。",
+        "2026-07-30: 基线脚本排除 docs/archive/ 后活跃计数下降，large_files 5->2 / long_functions 11->1 / complexity_hotspots 13->2（large_classes 不变=2）；3 个归档 adhoc 脚本仍登记 audit。",
+        "2026-07-30: style_factors 接入 tushare 本地数据集（moneyflow_ths/holder_structure/margin/limit_list + 6 新因子 + PIT SW-L1 中性化），data.py/factor_calc.py 进 large_files、_add_new_factors 进 complexity_hotspots；属功能扩张的合法债务转移，非回归。"
+      ]
     },
     {
       "repo": "market-data-platform",
@@ -23,7 +78,13 @@
       "max_long_functions": 73,
       "max_complexity_hotspots": 39,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-19 the DailyWatch20 owner release reduced the McCabe ceiling from 15 to 14 and the over-100-line function count from 32 to 31. Repo-local Ruff, type checks, governance, maintainability ratchet, and 621-pass/1-skip validation passed. The cross-repo AST baseline records one additional threshold-15 hotspot under its separate conservative metric; do not add another candidate source before splitting partition provenance from snapshot assembly. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-27 explicit owner decision: a_share_minute_coverage.py (2284 LOC) was split into four functional-domain submodules (_coverage_common 380 / _coverage_classify 180 / _coverage_manifest 530 / _coverage_materialize 1194); the original file became a re-export shell. Net effect is +1 large_file (_coverage_materialize and _coverage_manifest both exceed the 500-LOC threshold while the original shell drops out), so max_large_files is raised 46->47. This is a debt transfer, not a maintainability gain; _coverage_materialize remains the largest single receiver and is tracked in accepted_hotspots. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the six-submodule module-split release: complexity_hotspots 42->40 and large_files 47->25 ratchet down (the fundamentals _partNN split and coverage materialize/manifest re-export shells moved below threshold). The subsequent ruff-format pass on committed sources shifted line counts and moved 8 more files across the 500-LOC threshold, so large_files is raised 25->33 to match the measured count; this is a formatting-line-count artifact, not new debt, and the budget stays an explicit ceiling (counts may rise only with a further owner decision). 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the facade-convergence and _build_fused_minute_dataset / _mirror_resolve_day splits: large_files 33->35, long_functions 70->73, complexity_hotspots 40->39. The fused-minute build pipeline and mirror resolver shed their longest functions into helpers, so long_functions and complexity_hotspots rose slightly while the net large_file count rose by two (tushare_minute_backfill_part02.py and test_tushare_minute_backfill.py crossed the 500-LOC threshold); these are measured artifacts of the re-export/facade reorganization, not new debt, and the budgets stay explicit ceilings. 2026-07-30 explicit owner decision: the unified TuShare reference owner adds one 636-LOC provider covering resumable downloads, receipt-verified publication, and six related dataset lifecycles. max_large_files rises 35->36 while long-function and complexity counts stay flat. Split download orchestration from publication receipts before adding another reference dataset."
+      "owner_decision": [
+        "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
+        "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
+        "2026-07-27: a_share_minute_coverage.py(2284) 拆为 4 子模块，净增 1 large_file（_coverage_materialize/_coverage_manifest 超阈值），large_files 46->47（债务转移）。",
+        "2026-07-28: 六子模块拆分后 complexity_hotspots 42->40、large_files 47->25 下调；ruff-format 行数漂移又使 8 文件跨阈值，large_files 25->33 上调以匹配实测（格式化 artifact，非新债）。",
+        "2026-07-29: 对齐重算基线（facade/模块拆分后），计数随基线继续调整，仅可由显式 owner 决策上调（ratchet-only）。"
+      ]
     },
     {
       "repo": "alpha-research",
@@ -31,7 +92,11 @@
       "max_long_functions": 21,
       "max_complexity_hotspots": 25,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 the DailyWatch20 ownership migration moved model lifecycle, OOS research, and news-heat logic into the alpha owner. Repo-local Ruff, type checks, maintainability ratchet, and 243-test validation passed. Split prior-run screening from ranker restoration before adding another persisted-model family. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 13->4 ratchets down (cpcv/walk_forward/features_calc split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
+      "owner_decision": [
+        "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
+        "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
+        "2026-07-28: 模块拆分后 large_files 13->4 下调（cpcv/walk_forward/features_calc 子模块低于阈值，登记 accepted_hotspots）。"
+      ]
     },
     {
       "repo": "portfolio-backtester",
@@ -39,7 +104,12 @@
       "max_long_functions": 22,
       "max_complexity_hotspots": 24,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-18 target-first fixed-slot execution and the DailyWatch20 portfolio replay owner were integrated without increasing the large-file count. Repo-local Ruff, type checks, maintainability ratchet, and 301-test validation passed. Extract selection-input assembly and execution tradability audit before adding another stateful portfolio arm. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 18->7 ratchets down (exposure_style/portfolio_positions_select/position_backtest_engine split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after execution_sim/core.py (2393 LOC) was split into models/capacity/orders/reporting submodules: large_files 7->8 (orders.py is the new 1173-LOC receiver carrying order construction, state machine, and matching loops). This is a debt transfer, not new debt; the original 2393-LOC core.py dropped to an 820-LOC re-export/entry layer, and orders.py is registered in accepted_hotspots. counts may rise only with an explicit owner decision."
+      "owner_decision": [
+        "2026-07-18: target-first 固定槽执行 + DailyWatch20 组合回放集成，large_file 数未增。",
+        "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
+        "2026-07-28: 模块拆分后 large_files 18->7 下调（exposure_style/portfolio_positions_select/position_backtest_engine 低于阈值，登记 accepted_hotspots）。",
+        "2026-07-29: execution_sim/core.py(2393) 拆为 models/capacity/orders/reporting，large_files 7->8 上调（orders.py 1173 新接收者，债务转移）。"
+      ]
     },
     {
       "repo": "research-apps",
@@ -47,7 +117,10 @@
       "max_long_functions": 2,
       "max_complexity_hotspots": 1,
       "max_large_classes": 0,
-      "owner_decision": "2026-07-19 the standalone owner migration moved 54 importable modules and four packaged resources behind a fresh-wheel gate. Ruff, strict ty, maintainability ratchet, 98 tests, sdist and wheel checks passed. Keep the two auditable research workflows intact until their frozen contracts change, then split reporting from orchestration before adding variants. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 2->1 ratchets down; counts may rise only with an explicit owner decision."
+      "owner_decision": [
+        "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
+        "2026-07-28: 模块拆分后 large_files 2->1 下调。"
+      ]
     },
     {
       "repo": "strategy-pipeline",
@@ -55,7 +128,12 @@
       "max_long_functions": 118,
       "max_complexity_hotspots": 67,
       "max_large_classes": 1,
-      "owner_decision": "2026-07-20 the strict-v2 sparse-rank production release split candidate-pool regression coverage and live-input validation helpers instead of raising the cross-repo debt baseline. Large files remained at 46 while long-function and complexity budgets tightened to 110 and 68. Repo-local Ruff, ty, maintainability ratchet, 1092-pass/1-skip validation, and a 205-module wheel smoke passed. Split owner metadata validation and outcome persistence before adding another model arm or evaluation milestone. 2026-07-22 refreshed budgets to match committed maintainability baseline baseline-20260719-ty.json after submodule reconciliation / code growth; counts may rise only with an explicit owner decision. 2026-07-26 refreshed again after the C901 gate was lowered to the declared ceiling of 15 and seven over-complex functions were refactored into helpers (long_functions 119->118, complexity_hotspots 70->67); these are genuine reductions, so the budgets ratchet down. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 49->34 ratchets down (the re-export _api/_core split submodules transferred debt below threshold; the three still-large _api/_core units are registered in accepted_hotspots); counts may rise only with an explicit owner decision."
+      "owner_decision": [
+        "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
+        "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
+        "2026-07-26: C901 降至声明上限 15，7 个超复杂函数重构，long_functions 119->118、complexity 70->67（真实下降）。",
+        "2026-07-28: 模块拆分后 large_files 49->34 下调（_api/_core 重导出子模块债务转移，3 个仍大者登记 accepted_hotspots）。"
+      ]
     },
     {
       "repo": "quant-execution-engine",
@@ -63,7 +141,11 @@
       "max_long_functions": 35,
       "max_complexity_hotspots": 37,
       "max_large_classes": 6,
-      "owner_decision": "2026-07-14 dynamic execution policy and evidence-handoff auditing add two reviewed long functions and one complexity hotspot. Split schema validation from hash verification before extending the handoff contract or binding a live broker adapter. 2026-07-26 refreshed after the qexec ruff/ty gate tightening and diff.py helper extraction: long_functions 37->36 and complexity_hotspots 38->37 ratchet down (genuine reductions). large_files stays at 14; renderers/diff.py helper-extraction kept it under the 500-LOC large-file threshold once reformatted, so no budget increase was required. 2026-07-28 refreshed budgets to match the regenerated maintainability baseline after the module-split release: large_files 12->4, long_functions 36->35, and large_classes 7->6 ratchet down (reconcile_ops_state/recovery_actions_single/_longport_client split submodules dropped below threshold; registered in accepted_hotspots); counts may rise only with an explicit owner decision."
+      "owner_decision": [
+        "2026-07-14: 动态执行策略 + 证据交接审计增加 2 长函数 + 1 复杂度热点。",
+        "2026-07-26: qexec ruff/ty 收紧 + diff.py 提取，long_functions 37->36、complexity 38->37 下调（真实下降）；large_files 保持 14。",
+        "2026-07-28: 模块拆分后 large_files 12->4 / long_functions 36->35 / large_classes 7->6 下调（reconcile_ops_state/recovery_actions_single/_longport_client 低于阈值，登记 accepted_hotspots）。"
+      ]
     }
   ],
   "first_safe_extraction_types": [

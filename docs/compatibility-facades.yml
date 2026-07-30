@@ -1,4 +1,6 @@
 {
+  "_last_changed": "2026-07-29",
+  "_owner": "research-workspace",
   "schema_version": "compatibility_facades.v2",
   "required_removal_evidence": [
     "repo-local reference scan",
@@ -16,7 +18,10 @@
       "current_consumers": "kept for existing alpha train/eval imports during package split",
       "removal_condition": "remove after two release reviews show no repo-local or downstream imports of alpha_research.train_eval and replacement docs cover direct imports",
       "rollback_path": "restore facade module from the previous alpha-research release tag",
-      "focused_tests": ["alpha-research import smoke", "alpha-research pytest"],
+      "focused_tests": [
+        "alpha-research import smoke",
+        "alpha-research pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -28,7 +33,10 @@
       "current_consumers": "kept for existing backtesting capacity imports during package split",
       "removal_condition": "remove after two release reviews show no imports of portfolio_backtester.capacity and capacity_report docs/tests cover replacement imports",
       "rollback_path": "restore facade module from the previous portfolio-backtester release tag",
-      "focused_tests": ["portfolio-backtester import smoke", "portfolio-backtester pytest"],
+      "focused_tests": [
+        "portfolio-backtester import smoke",
+        "portfolio-backtester pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -40,7 +48,10 @@
       "current_consumers": "kept for existing report imports during package split",
       "removal_condition": "remove after two release reviews show no imports of portfolio_backtester.reports and replacement docs/tests cover direct imports",
       "rollback_path": "restore facade module from the previous portfolio-backtester release tag",
-      "focused_tests": ["portfolio-backtester import smoke", "portfolio-backtester pytest"],
+      "focused_tests": [
+        "portfolio-backtester import smoke",
+        "portfolio-backtester pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -52,7 +63,10 @@
       "current_consumers": "kept for strategy-pipeline callers that imported freshness overlay from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline freshness_overlay imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "focused_tests": [
+        "strategy-pipeline import smoke",
+        "strategy-pipeline pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -64,7 +78,10 @@
       "current_consumers": "kept for strategy-pipeline callers that imported train/eval request helpers from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_request_builder imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "focused_tests": [
+        "strategy-pipeline import smoke",
+        "strategy-pipeline pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -76,7 +93,10 @@
       "current_consumers": "kept for strategy-pipeline callers that imported train/eval result helpers from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_result imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": ["strategy-pipeline import smoke", "strategy-pipeline pytest"],
+      "focused_tests": [
+        "strategy-pipeline import smoke",
+        "strategy-pipeline pytest"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -88,7 +108,10 @@
       "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": ["strategy-pipeline promotion gate tests", "alpha-research promotion gate tests"],
+      "focused_tests": [
+        "strategy-pipeline promotion gate tests",
+        "alpha-research promotion gate tests"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -100,7 +123,10 @@
       "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate_thresholds imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": ["strategy-pipeline promotion gate tests", "alpha-research promotion gate tests"],
+      "focused_tests": [
+        "strategy-pipeline promotion gate tests",
+        "alpha-research promotion gate tests"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -176,7 +202,10 @@
       "current_consumers": "kept for existing market_data_platform.data_providers imports",
       "removal_condition": "remove after two release reviews show no active imports of data_providers and public data provider docs cover replacement APIs",
       "rollback_path": "restore facade module from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform data provider tests", "market-data-platform import smoke"],
+      "focused_tests": [
+        "market-data-platform data provider tests",
+        "market-data-platform import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -188,7 +217,10 @@
       "current_consumers": "kept as the explicit compatibility export surface behind data_providers",
       "removal_condition": "remove after data_providers facade is removed and no repo-local or downstream imports target data_providers_core",
       "rollback_path": "restore facade module from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform data provider tests", "market-data-platform import smoke"],
+      "focused_tests": [
+        "market-data-platform data provider tests",
+        "market-data-platform import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -200,7 +232,10 @@
       "current_consumers": "kept for existing TuShare CLI parser imports and tests",
       "removal_condition": "remove after two release reviews show no direct tushare_cli imports and CLI parser docs/tests cover split modules",
       "rollback_path": "restore facade module from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform TuShare CLI tests", "market-data-platform import smoke"],
+      "focused_tests": [
+        "market-data-platform TuShare CLI tests",
+        "market-data-platform import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -212,7 +247,10 @@
       "current_consumers": "retained as the stable public quota API for minute mirror, backfill, and replacement campaign callers",
       "removal_condition": "do not remove while shared minute quota accounting remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public quota facade and implementation modules from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform minute quota tests", "market-data-platform TuShare minute integration tests"],
+      "focused_tests": [
+        "market-data-platform minute quota tests",
+        "market-data-platform TuShare minute integration tests"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -224,7 +262,10 @@
       "current_consumers": "kept for existing execution lifecycle imports and monkeypatch-compatible tests",
       "removal_condition": "remove after two release reviews show no external imports of quant_execution_engine.execution and execution service docs cover replacements",
       "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine execution foundation tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine execution foundation tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -236,7 +277,10 @@
       "current_consumers": "kept for existing recovery mixin imports",
       "removal_condition": "remove after two release reviews show no imports of execution_service_recovery and recovery action docs/tests cover replacements",
       "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine execution recovery tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine execution recovery tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -248,7 +292,10 @@
       "current_consumers": "retained as the stable public serialization API over split versioned codec implementations",
       "removal_condition": "do not remove while serialization remains a documented public API; any replacement requires a versioned wire migration, downstream consumer audit, and two release reviews",
       "rollback_path": "restore the public re-export facade from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine typed execution domain tests", "quant-execution-engine serialization round-trip tests"],
+      "focused_tests": [
+        "quant-execution-engine typed execution domain tests",
+        "quant-execution-engine serialization round-trip tests"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -260,7 +307,10 @@
       "current_consumers": "kept as the documented external API for downstream execution clients",
       "removal_condition": "do not remove while external facade remains documented; replacement requires downstream migration plan and two release reviews",
       "rollback_path": "restore facade module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine facade tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine facade tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public external API",
       "status": "retained_public_api"
     },
@@ -272,7 +322,10 @@
       "current_consumers": "retained as the stable public LongPort broker facade over split client/helpers/sdk implementation units",
       "removal_condition": "do not remove while LongPort broker remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public broker facade from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine broker tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine broker tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -284,7 +337,10 @@
       "current_consumers": "retained as the stable public execution domain API",
       "removal_condition": "do not remove while the execution domain remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public domain module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine typed execution domain tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine typed execution domain tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -296,7 +352,10 @@
       "current_consumers": "retained as the stable public evidence bundle API",
       "removal_condition": "do not remove while the evidence bundle remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public evidence bundle module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine execution recovery tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine execution recovery tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -308,7 +367,10 @@
       "current_consumers": "retained as the stable public recovery action API",
       "removal_condition": "do not remove while recovery actions remain a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public recovery actions module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine execution recovery tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine execution recovery tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -320,7 +382,10 @@
       "current_consumers": "retained as the stable public state/reconcile API",
       "removal_condition": "do not remove while state/reconcile operations remain a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public state/reconcile module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine execution state reconcile tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine execution state reconcile tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -332,7 +397,10 @@
       "current_consumers": "retained as the stable public rebalancing API",
       "removal_condition": "do not remove while rebalancing remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public rebalancing module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine rebalance tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine rebalance tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -344,7 +412,10 @@
       "current_consumers": "retained as the stable public table renderer facade over split broker/execution/state/market rendering units",
       "removal_condition": "do not remove while the table renderer remains a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public renderer facade from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine renderer tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine renderer tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -356,7 +427,10 @@
       "current_consumers": "retained as the stable public state tools API",
       "removal_condition": "do not remove while state tools remain a documented public API; any replacement requires consumer migration and two release reviews",
       "rollback_path": "restore the public state tools module from the previous quant-execution-engine release tag",
-      "focused_tests": ["quant-execution-engine state tools tests", "quant-execution-engine import smoke"],
+      "focused_tests": [
+        "quant-execution-engine state tools tests",
+        "quant-execution-engine import smoke"
+      ],
       "consumer_audit": "not_applicable while retained as public API",
       "status": "retained_public_api"
     },
@@ -368,7 +442,10 @@
       "current_consumers": "kept for existing coverage/minute imports during the functional-domain split",
       "removal_condition": "remove after two release reviews show no repo-local or downstream imports of a_share_minute_coverage and replacement docs cover direct submodule imports",
       "rollback_path": "restore facade module from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform tests/test_a_share_minute_coverage.py", "market-data-platform import smoke"],
+      "focused_tests": [
+        "market-data-platform tests/test_a_share_minute_coverage.py",
+        "market-data-platform import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     },
@@ -380,7 +457,10 @@
       "current_consumers": "kept as the public re-export surface for the split a_share_minute_build modules; part02 lazy-imports aggregate_guan_deal_file from this facade as an orchestration seam and tests monkeypatch it",
       "removal_condition": "remove after two release reviews show no repo-local or downstream imports of a_share_minute_build and replacement docs cover direct submodule imports",
       "rollback_path": "restore facade module from the previous market-data-platform release tag",
-      "focused_tests": ["market-data-platform tests/test_a_share_minute_build.py", "market-data-platform import smoke"],
+      "focused_tests": [
+        "market-data-platform tests/test_a_share_minute_build.py",
+        "market-data-platform import smoke"
+      ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
     }

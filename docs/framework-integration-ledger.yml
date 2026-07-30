@@ -1,11 +1,23 @@
 {
+  "_last_changed": "2026-07-19",
+  "_owner": "research-workspace",
   "schema_version": "framework_integration_ledger.v1",
   "decision": "docs/adr/0001-framework-integration-boundaries.md",
   "policy": {
     "native_default_until_parity": true,
-    "optional_framework_dependencies": ["qlib", "vnpy"],
-    "planned_optional_framework_dependencies": ["backtrader"],
-    "forbidden_contract_types": ["qlib.*", "vnpy.*", "QuantConnect.*", "backtrader.*"],
+    "optional_framework_dependencies": [
+      "qlib",
+      "vnpy"
+    ],
+    "planned_optional_framework_dependencies": [
+      "backtrader"
+    ],
+    "forbidden_contract_types": [
+      "qlib.*",
+      "vnpy.*",
+      "QuantConnect.*",
+      "backtrader.*"
+    ],
     "submodule_pin_after_downstream_merge": true
   },
   "workstreams": [

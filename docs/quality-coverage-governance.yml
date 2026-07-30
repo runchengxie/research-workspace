@@ -1,4 +1,6 @@
 {
+  "_last_changed": "2026-07-30",
+  "_owner": "research-workspace",
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
     "broad_exclude_register_max": 2,

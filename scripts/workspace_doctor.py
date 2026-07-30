@@ -23,7 +23,7 @@ from doctor_env_checks import check_top_level_outputs
 from doctor_git_checks import check_gitmodules
 from doctor_hk_archive_checks import check_hk_private_archive_governance
 from doctor_hook_checks import check_local_git_hooks
-from doctor_submodule_checks import check_submodule_state
+from doctor_submodule_checks import check_submodule_freshness, check_submodule_state
 from workspace_governance import (
     Check,  # noqa: F401  (used only in type annotations)
     check_maintainability_governance,
@@ -45,6 +45,7 @@ def run_checks(root: Path) -> list[Check]:
     checks.extend(check_gitmodules(root))
     checks.extend(check_readme(root))
     checks.extend(check_submodule_state(root))
+    checks.extend(check_submodule_freshness(root))
     checks.extend(check_local_git_hooks(root))
     checks.extend(check_public_clis(root))
     checks.extend(check_data_platform_root(root))

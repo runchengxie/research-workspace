@@ -1,4 +1,6 @@
 {
+  "_last_changed": "2026-07-14",
+  "_owner": "research-workspace",
   "schema_version": "artifact_contracts.v1",
   "policy": {
     "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
@@ -12,9 +14,31 @@
     "container_key": "artifact_envelope",
     "write_mode": "opt_in",
     "legacy_readers_required": true,
-    "required_fields": ["schema_version", "artifact_id", "artifact_type", "run_id", "created_at", "producer", "configuration_sha256", "content_sha256", "lineage"],
-    "producer_fields": ["repository", "version", "commit", "backend"],
-    "target_handoff_fields": ["valid_from", "expires_at", "portfolio_scope", "account_scope", "policy_reference", "idempotency_scope"]
+    "required_fields": [
+      "schema_version",
+      "artifact_id",
+      "artifact_type",
+      "run_id",
+      "created_at",
+      "producer",
+      "configuration_sha256",
+      "content_sha256",
+      "lineage"
+    ],
+    "producer_fields": [
+      "repository",
+      "version",
+      "commit",
+      "backend"
+    ],
+    "target_handoff_fields": [
+      "valid_from",
+      "expires_at",
+      "portfolio_scope",
+      "account_scope",
+      "policy_reference",
+      "idempotency_scope"
+    ]
   },
   "artifacts": [
     {
@@ -23,15 +47,55 @@
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
-      "external_producers": ["market-intel/hot-sector-screener"],
-      "consumers": ["portfolio-backtester", "strategy-pipeline"],
-      "canonical_files": ["signals.parquet"],
-      "entrypoints": [
-        {"repo": "alpha-research", "module": "alpha_research.signal_artifact", "path": "src/alpha_research/signal_artifact.py", "role": "canonical_implementation"},
-        {"repo": "strategy-pipeline", "module": "strategy_pipeline.contracts.signals", "path": "src/strategy_pipeline/contracts/signals.py", "role": "orchestration_schema_helper"}
+      "external_producers": [
+        "market-intel/hot-sector-screener"
       ],
-      "required_fields": ["signal_date", "symbol", "raw_pred", "signal_eval", "signal_backtest", "signal_direction", "rank", "model_version", "feature_set_id", "eligible_for_backtest", "eligible_for_live"],
-      "optional_fields": ["daily_confirm_score", "trend_score", "volume_score", "risk_score", "ret_5d", "ret_10d", "close_to_20d_high", "amount_ratio_20d", "confidence_score", "confidence_label"],
+      "consumers": [
+        "portfolio-backtester",
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "signals.parquet"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "alpha_research.signal_artifact",
+          "path": "src/alpha_research/signal_artifact.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.contracts.signals",
+          "path": "src/strategy_pipeline/contracts/signals.py",
+          "role": "orchestration_schema_helper"
+        }
+      ],
+      "required_fields": [
+        "signal_date",
+        "symbol",
+        "raw_pred",
+        "signal_eval",
+        "signal_backtest",
+        "signal_direction",
+        "rank",
+        "model_version",
+        "feature_set_id",
+        "eligible_for_backtest",
+        "eligible_for_live"
+      ],
+      "optional_fields": [
+        "daily_confirm_score",
+        "trend_score",
+        "volume_score",
+        "risk_score",
+        "ret_5d",
+        "ret_10d",
+        "close_to_20d_high",
+        "amount_ratio_20d",
+        "confidence_score",
+        "confidence_label"
+      ],
       "notes": "Alpha owns canonical research signal generation and validation; market-intel/hot-sector-screener may produce external alpha_research.signals-compatible daily candidate signals with optional explanation columns. strategy-pipeline keeps only orchestration-facing helpers until this moves into a shared package."
     },
     {
@@ -40,11 +104,32 @@
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
-      "external_producers": ["market-intel/hot-sector-screener"],
-      "consumers": ["portfolio-backtester", "strategy-pipeline"],
-      "canonical_files": ["signals.meta.json"],
-      "entrypoints": [{"repo": "alpha-research", "module": "alpha_research.signal_artifact", "path": "src/alpha_research/signal_artifact.py", "role": "canonical_implementation"}],
-      "required_fields": ["contract", "schema_version", "file", "metadata_file", "rows", "required_columns"],
+      "external_producers": [
+        "market-intel/hot-sector-screener"
+      ],
+      "consumers": [
+        "portfolio-backtester",
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "signals.meta.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "alpha_research.signal_artifact",
+          "path": "src/alpha_research/signal_artifact.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "contract",
+        "schema_version",
+        "file",
+        "metadata_file",
+        "rows",
+        "required_columns"
+      ],
       "notes": "Metadata travels with signals.parquet and records the schema and row-level summary needed by downstream audit. market-intel/hot-sector-screener emits compatible metadata for external daily candidate signals."
     },
     {
@@ -53,11 +138,31 @@
       "schema_version": 1,
       "owner": "portfolio-backtester",
       "producer": "portfolio-backtester",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["positions_by_rebalance.csv"],
-      "entrypoints": [{"repo": "portfolio-backtester", "module": "portfolio_backtester.contracts", "path": "src/portfolio_backtester/contracts.py", "role": "canonical_implementation"}],
-      "required_fields": ["rebalance_date", "symbol", "weight"],
-      "common_fields": ["entry_date", "side", "signal", "rank"],
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "positions_by_rebalance.csv"
+      ],
+      "entrypoints": [
+        {
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.contracts",
+          "path": "src/portfolio_backtester/contracts.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "rebalance_date",
+        "symbol",
+        "weight"
+      ],
+      "common_fields": [
+        "entry_date",
+        "side",
+        "signal",
+        "rank"
+      ],
       "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff."
     },
     {
@@ -66,13 +171,34 @@
       "schema_version": 2,
       "owner": "quant-execution-engine",
       "producer": "strategy-pipeline",
-      "consumers": ["quant-execution-engine"],
-      "canonical_files": ["targets.json", "targets.json.lineage.json"],
-      "entrypoints": [
-        {"repo": "strategy-pipeline", "module": "strategy_pipeline.liveops.export_targets", "path": "src/strategy_pipeline/liveops/export_targets.py", "role": "producer"},
-        {"repo": "quant-execution-engine", "module": "quant_execution_engine.targets", "path": "src/quant_execution_engine/targets.py", "role": "canonical_parser"}
+      "consumers": [
+        "quant-execution-engine"
       ],
-      "required_fields": ["targets", "symbol", "market", "target_weight", "target_quantity"],
+      "canonical_files": [
+        "targets.json",
+        "targets.json.lineage.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.liveops.export_targets",
+          "path": "src/strategy_pipeline/liveops/export_targets.py",
+          "role": "producer"
+        },
+        {
+          "repo": "quant-execution-engine",
+          "module": "quant_execution_engine.targets",
+          "path": "src/quant_execution_engine/targets.py",
+          "role": "canonical_parser"
+        }
+      ],
+      "required_fields": [
+        "targets",
+        "symbol",
+        "market",
+        "target_weight",
+        "target_quantity"
+      ],
       "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine."
     },
     {
@@ -81,10 +207,39 @@
       "schema_version": 1,
       "owner": "strategy-pipeline",
       "producer": "strategy-pipeline",
-      "consumers": ["market-intel"],
-      "canonical_files": ["watchlist_20.csv", "watchlist_20.json"],
-      "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.daily_watch20_publish", "path": "src/strategy_pipeline/daily_watch20_publish.py", "role": "canonical_producer"}],
-      "required_fields": ["signal_date", "source_date", "symbol", "name", "sleeve", "rank", "tracking_weight", "xgb_score", "xgb_percentile", "guard_score", "final_score", "industry", "theme", "model_version", "feature_set_id", "data_as_of"],
+      "consumers": [
+        "market-intel"
+      ],
+      "canonical_files": [
+        "watchlist_20.csv",
+        "watchlist_20.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.daily_watch20_publish",
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "role": "canonical_producer"
+        }
+      ],
+      "required_fields": [
+        "signal_date",
+        "source_date",
+        "symbol",
+        "name",
+        "sleeve",
+        "rank",
+        "tracking_weight",
+        "xgb_score",
+        "xgb_percentile",
+        "guard_score",
+        "final_score",
+        "industry",
+        "theme",
+        "model_version",
+        "feature_set_id",
+        "data_as_of"
+      ],
       "notes": "Internal-only SH/SZ research handoff with four pure-ML A names and sixteen guarded B names. Sleeve, score, rank, and tracking-weight fields are audit data and must not appear in the client renderer, which presents one unordered 20-name watchlist. Same-day minute inputs mean complete post-close partitions, not a realtime feed. This artifact is not an execution target."
     },
     {
@@ -93,10 +248,43 @@
       "schema_version": 1,
       "owner": "strategy-pipeline",
       "producer": "strategy-pipeline",
-      "consumers": ["market-intel"],
-      "canonical_files": ["selection_receipt.json"],
-      "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.daily_watch20_publish", "path": "src/strategy_pipeline/daily_watch20_publish.py", "role": "canonical_producer"}],
-      "required_fields": ["schema_version", "status", "quality_status", "generated_at", "market_scope", "source_date", "signal_date", "model_version", "feature_set_id", "eligible_for_live", "counts", "tracking_weight_sum", "minute_features", "label_policy", "model_lifecycle", "model_feature_policy", "news_heat", "training", "construction", "inputs", "artifacts"],
+      "consumers": [
+        "market-intel"
+      ],
+      "canonical_files": [
+        "selection_receipt.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.daily_watch20_publish",
+          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "role": "canonical_producer"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "status",
+        "quality_status",
+        "generated_at",
+        "market_scope",
+        "source_date",
+        "signal_date",
+        "model_version",
+        "feature_set_id",
+        "eligible_for_live",
+        "counts",
+        "tracking_weight_sum",
+        "minute_features",
+        "label_policy",
+        "model_lifecycle",
+        "model_feature_policy",
+        "news_heat",
+        "training",
+        "construction",
+        "inputs",
+        "artifacts"
+      ],
       "notes": "Fail-closed lineage and quality evidence required before market-intel may render or deliver watchlist_20.csv. eligible_for_live remains false in the MVP."
     },
     {
@@ -105,10 +293,34 @@
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["label_events.parquet"],
-      "entrypoints": [{"repo": "alpha-research", "module": "alpha_research.event_labeling", "path": "src/alpha_research/event_labeling.py", "role": "canonical_implementation"}],
-      "required_fields": ["event_id", "symbol", "signal_date", "label_start", "label_end", "first_touch", "barrier", "target", "side", "realized_return", "label", "meta_label"],
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "label_events.parquet"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "alpha_research.event_labeling",
+          "path": "src/alpha_research/event_labeling.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "event_id",
+        "symbol",
+        "signal_date",
+        "label_start",
+        "label_end",
+        "first_touch",
+        "barrier",
+        "target",
+        "side",
+        "realized_return",
+        "label",
+        "meta_label"
+      ],
       "notes": "One event table owns labeling, purging, embargo, and overlap semantics; downstream modules must not reconstruct approximate label windows."
     },
     {
@@ -117,10 +329,28 @@
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["sample_weights.parquet"],
-      "entrypoints": [{"repo": "alpha-research", "module": "alpha_research.sample_weighting", "path": "src/alpha_research/sample_weighting.py", "role": "canonical_implementation"}],
-      "required_fields": ["event_id", "label_start", "label_end", "average_uniqueness", "time_decay_weight", "sample_weight"],
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "sample_weights.parquet"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "alpha_research.sample_weighting",
+          "path": "src/alpha_research/sample_weighting.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "event_id",
+        "label_start",
+        "label_end",
+        "average_uniqueness",
+        "time_decay_weight",
+        "sample_weight"
+      ],
       "notes": "Mean-one training weights derived from exact event windows; supports uniqueness, time decay, and return-attribution variants."
     },
     {
@@ -129,10 +359,32 @@
       "schema_version": 1,
       "owner": "alpha-research",
       "producer": "alpha-research",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["sample_weights.receipt.json"],
-      "entrypoints": [{"repo": "alpha-research", "module": "alpha_research.sample_weighting", "path": "src/alpha_research/sample_weighting.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "mode", "event_count", "bar_count", "group_count", "average_uniqueness", "effective_sample_size", "weight_concentration_hhi", "events_sha256", "config"],
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "sample_weights.receipt.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "alpha-research",
+          "module": "alpha_research.sample_weighting",
+          "path": "src/alpha_research/sample_weighting.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "mode",
+        "event_count",
+        "bar_count",
+        "group_count",
+        "average_uniqueness",
+        "effective_sample_size",
+        "weight_concentration_hhi",
+        "events_sha256",
+        "config"
+      ],
       "notes": "Reproducibility receipt for grouped sample weights and sequential-bootstrap evidence."
     },
     {
@@ -141,13 +393,34 @@
       "schema_version": 1,
       "owner": "market-data-platform",
       "producer": "market-data-platform",
-      "consumers": ["alpha-research", "strategy-pipeline"],
-      "canonical_files": ["research_features.parquet"],
-      "entrypoints": [
-        {"repo": "market-data-platform", "module": "market_data_platform.research_features", "path": "src/market_data_platform/research_features.py", "role": "canonical_implementation"},
-        {"repo": "market-data-platform", "module": "market_data_platform.cli_research_features", "path": "src/market_data_platform/cli_research_features.py", "role": "artifact_producer"}
+      "consumers": [
+        "alpha-research",
+        "strategy-pipeline"
       ],
-      "required_fields": ["symbol", "trade_date", "parkinson_volatility", "corwin_schultz_spread", "amihud_illiquidity"],
+      "canonical_files": [
+        "research_features.parquet"
+      ],
+      "entrypoints": [
+        {
+          "repo": "market-data-platform",
+          "module": "market_data_platform.research_features",
+          "path": "src/market_data_platform/research_features.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "market-data-platform",
+          "module": "market_data_platform.cli_research_features",
+          "path": "src/market_data_platform/cli_research_features.py",
+          "role": "artifact_producer"
+        }
+      ],
+      "required_fields": [
+        "symbol",
+        "trade_date",
+        "parkinson_volatility",
+        "corwin_schultz_spread",
+        "amihud_illiquidity"
+      ],
       "notes": "Published low-frequency liquidity features; order-flow and book features require licensed intraday source contracts."
     },
     {
@@ -156,13 +429,36 @@
       "schema_version": 1,
       "owner": "portfolio-backtester",
       "producer": "strategy-pipeline",
-      "consumers": ["quant-execution-engine"],
-      "canonical_files": ["sizing_receipt.json"],
-      "entrypoints": [
-        {"repo": "portfolio-backtester", "module": "portfolio_backtester.evidence_receipts", "path": "src/portfolio_backtester/evidence_receipts.py", "role": "canonical_implementation"},
-        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      "consumers": [
+        "quant-execution-engine"
       ],
-      "required_fields": ["schema_version", "method", "config", "target_count", "gross_exposure", "net_exposure", "maximum_weight", "weights_sha256"],
+      "canonical_files": [
+        "sizing_receipt.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.evidence_receipts",
+          "path": "src/portfolio_backtester/evidence_receipts.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.afml_evidence",
+          "path": "src/strategy_pipeline/afml_evidence.py",
+          "role": "artifact_producer"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "method",
+        "config",
+        "target_count",
+        "gross_exposure",
+        "net_exposure",
+        "maximum_weight",
+        "weights_sha256"
+      ],
       "notes": "Describes the final portfolio sizing method and constraints without becoming an execution instruction."
     },
     {
@@ -171,13 +467,40 @@
       "schema_version": 1,
       "owner": "portfolio-backtester",
       "producer": "strategy-pipeline",
-      "consumers": ["strategy-pipeline", "quant-execution-engine"],
-      "canonical_files": ["strategy_risk_report.json"],
-      "entrypoints": [
-        {"repo": "portfolio-backtester", "module": "portfolio_backtester.strategy_risk", "path": "src/portfolio_backtester/strategy_risk.py", "role": "canonical_implementation"},
-        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      "consumers": [
+        "strategy-pipeline",
+        "quant-execution-engine"
       ],
-      "required_fields": ["schema_version", "observations", "periods_per_year", "sharpe", "probabilistic_sharpe", "positive_return_hhi", "negative_return_hhi", "time_concentration_hhi", "hit_ratio", "strategy_failure_probability", "implementation_shortfall"],
+      "canonical_files": [
+        "strategy_risk_report.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.strategy_risk",
+          "path": "src/portfolio_backtester/strategy_risk.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.afml_evidence",
+          "path": "src/strategy_pipeline/afml_evidence.py",
+          "role": "artifact_producer"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "observations",
+        "periods_per_year",
+        "sharpe",
+        "probabilistic_sharpe",
+        "positive_return_hhi",
+        "negative_return_hhi",
+        "time_concentration_hhi",
+        "hit_ratio",
+        "strategy_failure_probability",
+        "implementation_shortfall"
+      ],
       "notes": "Strategy-mechanism risk evidence including PSR, return concentration, hit/miss economics, failure probability, and cost resilience."
     },
     {
@@ -186,13 +509,38 @@
       "schema_version": 1,
       "owner": "portfolio-backtester",
       "producer": "strategy-pipeline",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["hrp_receipt.json", "hrp_weights.csv"],
-      "entrypoints": [
-        {"repo": "portfolio-backtester", "module": "portfolio_backtester.hrp", "path": "src/portfolio_backtester/hrp.py", "role": "canonical_implementation"},
-        {"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "artifact_producer"}
+      "consumers": [
+        "strategy-pipeline"
       ],
-      "required_fields": ["schema_version", "method", "ordered_assets", "config", "gross_weight", "maximum_weight", "minimum_weight", "returns_sha256", "weights_sha256"],
+      "canonical_files": [
+        "hrp_receipt.json",
+        "hrp_weights.csv"
+      ],
+      "entrypoints": [
+        {
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.hrp",
+          "path": "src/portfolio_backtester/hrp.py",
+          "role": "canonical_implementation"
+        },
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.afml_evidence",
+          "path": "src/strategy_pipeline/afml_evidence.py",
+          "role": "artifact_producer"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "method",
+        "ordered_assets",
+        "config",
+        "gross_weight",
+        "maximum_weight",
+        "minimum_weight",
+        "returns_sha256",
+        "weights_sha256"
+      ],
       "notes": "HRP allocation receipt for model or sleeve portfolios; rolling estimates must use returns strictly before rebalance."
     },
     {
@@ -201,10 +549,26 @@
       "schema_version": 1,
       "owner": "strategy-pipeline",
       "producer": "strategy-pipeline",
-      "consumers": ["strategy-pipeline"],
-      "canonical_files": ["afml_evidence_fragment.json"],
-      "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.afml_evidence", "path": "src/strategy_pipeline/afml_evidence.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "run_dir", "evidence", "outputs"],
+      "consumers": [
+        "strategy-pipeline"
+      ],
+      "canonical_files": [
+        "afml_evidence_fragment.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.afml_evidence",
+          "path": "src/strategy_pipeline/afml_evidence.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "run_dir",
+        "evidence",
+        "outputs"
+      ],
       "notes": "Machine-generated protocol fragment containing artifact paths and SHA-256 values for sizing, strategy-risk, and optional HRP evidence."
     },
     {
@@ -213,10 +577,32 @@
       "schema_version": 1,
       "owner": "strategy-pipeline",
       "producer": "strategy-pipeline",
-      "consumers": ["quant-execution-engine"],
-      "canonical_files": ["research_protocol_report.json"],
-      "entrypoints": [{"repo": "strategy-pipeline", "module": "strategy_pipeline.research_protocols", "path": "src/strategy_pipeline/research_protocols.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "level", "status", "required_count", "satisfied_count", "missing", "failed", "manifest_sha256", "policy", "evidence"],
+      "consumers": [
+        "quant-execution-engine"
+      ],
+      "canonical_files": [
+        "research_protocol_report.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.research_protocols",
+          "path": "src/strategy_pipeline/research_protocols.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "level",
+        "status",
+        "required_count",
+        "satisfied_count",
+        "missing",
+        "failed",
+        "manifest_sha256",
+        "policy",
+        "evidence"
+      ],
       "notes": "Graduated exploratory/candidate/release evidence gate with artifact existence and SHA-256 verification. It determines whether a candidate may be handed off but never changes target semantics."
     },
     {
@@ -225,10 +611,27 @@
       "schema_version": 1,
       "owner": "quant-execution-engine",
       "producer": "quant-execution-engine",
-      "consumers": ["quant-execution-engine"],
-      "canonical_files": ["execution_policy_receipt.json"],
-      "entrypoints": [{"repo": "quant-execution-engine", "module": "quant_execution_engine.execution_policy", "path": "src/quant_execution_engine/execution_policy.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "artifact_type", "decision", "target_artifact_sha256", "decision_sha256"],
+      "consumers": [
+        "quant-execution-engine"
+      ],
+      "canonical_files": [
+        "execution_policy_receipt.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "quant-execution-engine",
+          "module": "quant_execution_engine.execution_policy",
+          "path": "src/quant_execution_engine/execution_policy.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "artifact_type",
+        "decision",
+        "target_artifact_sha256",
+        "decision_sha256"
+      ],
       "notes": "Audit receipt for dynamic target, average limit price, lot-size, and participation decisions."
     },
     {
@@ -237,10 +640,27 @@
       "schema_version": 1,
       "owner": "quant-execution-engine",
       "producer": "quant-execution-engine",
-      "consumers": ["human-audit"],
-      "canonical_files": ["handoff_audit_report.json"],
-      "entrypoints": [{"repo": "quant-execution-engine", "module": "quant_execution_engine.handoff_audit", "path": "src/quant_execution_engine/handoff_audit.py", "role": "canonical_implementation"}],
-      "required_fields": ["schema_version", "status", "targets_path", "lineage_path", "checks"],
+      "consumers": [
+        "human-audit"
+      ],
+      "canonical_files": [
+        "handoff_audit_report.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "quant-execution-engine",
+          "module": "quant_execution_engine.handoff_audit",
+          "path": "src/quant_execution_engine/handoff_audit.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "status",
+        "targets_path",
+        "lineage_path",
+        "checks"
+      ],
       "notes": "Validates target schema and optional artifact hashes without reading research performance or altering order plans."
     }
   ]

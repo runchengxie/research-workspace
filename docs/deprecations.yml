@@ -1,4 +1,6 @@
 {
+  "_last_changed": "2026-07-19",
+  "_owner": "research-workspace",
   "schema_version": "deprecation_register.v1",
   "removal_ready_requirements": [
     "consumer_audit",

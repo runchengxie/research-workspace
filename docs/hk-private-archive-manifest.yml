@@ -1,4 +1,6 @@
 {
+  "_last_changed": "2026-07-19",
+  "_owner": "research-workspace",
   "schema_version": "hk_private_archive_manifest.v1",
   "format": "json-yaml-subset",
   "checksum_policy": "sha256",

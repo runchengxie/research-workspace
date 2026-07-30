@@ -1,24 +1,34 @@
+# 上次变更: 2026-07-19 | owner: research-workspace
 schema_version: research_app_ownership_ledger.v2
 decision: docs/adr/0003-research-application-ownership.md
 amendment: docs/adr/0004-standalone-research-apps-repository.md
 status: implementation_validated
 repository_layout_decided: true
 standalone_research_apps_repository_created: true
-
 invariants:
-  - research_apps_must_not_import_strategy_pipeline
-  - legacy_paths_are_identity_preserving_facades_only
-  - third_party_framework_objects_do_not_cross_owner_boundaries
-  - historical_artifacts_and_receipts_remain_readable
-  - atomic_publication_and_execution_handoff_remain_strategy_pipeline_owned
-  - submodule_pins_change_only_after_owner_merges_and_combined_validation
-
+- research_apps_must_not_import_strategy_pipeline
+- legacy_paths_are_identity_preserving_facades_only
+- third_party_framework_objects_do_not_cross_owner_boundaries
+- historical_artifacts_and_receipts_remain_readable
+- atomic_publication_and_execution_handoff_remain_strategy_pipeline_owned
+- submodule_pins_change_only_after_owner_merges_and_combined_validation
 foundational_pull_requests:
-  market_data_platform: {repository: runchengxie/market-data-platform, number: 10, status: merged}
-  alpha_research: {repository: runchengxie/alpha-research, number: 11, status: merged}
-  portfolio_backtester: {repository: runchengxie/portfolio-backtester, number: 13, status: merged}
-  strategy_pipeline: {repository: runchengxie/strategy-pipeline, number: 26, status: merged}
-
+  market_data_platform:
+    repository: runchengxie/market-data-platform
+    number: 10
+    status: merged
+  alpha_research:
+    repository: runchengxie/alpha-research
+    number: 11
+    status: merged
+  portfolio_backtester:
+    repository: runchengxie/portfolio-backtester
+    number: 13
+    status: merged
+  strategy_pipeline:
+    repository: runchengxie/strategy-pipeline
+    number: 26
+    status: merged
 standalone_extraction_stack:
   market_data_platform:
     repository: runchengxie/market-data-platform
@@ -27,11 +37,11 @@ standalone_extraction_stack:
     status: merged
     release: 0.2.0
     owns:
-      - minute_source_catalog
-      - overlay_completeness
-      - cache_partition_fingerprints
-      - input_availability
-      - universe_policy
+    - minute_source_catalog
+    - overlay_completeness
+    - cache_partition_fingerprints
+    - input_availability
+    - universe_policy
   alpha_research:
     repository: runchengxie/alpha-research
     number: 12
@@ -39,9 +49,9 @@ standalone_extraction_stack:
     status: merged
     release: 0.4.0
     owns:
-      - minute_transform_contract
-      - minute_feature_evidence
-      - alpha_policy
+    - minute_transform_contract
+    - minute_feature_evidence
+    - alpha_policy
   portfolio_backtester:
     repository: runchengxie/portfolio-backtester
     number: 14
@@ -49,11 +59,11 @@ standalone_extraction_stack:
     status: merged
     release: 0.4.0
     owns:
-      - staggered_cash_carry_execution
-      - blocked_buy_sell_accounting
-      - fail_closed_terminal_state
-      - public_execution_summary
-      - portfolio_policy
+    - staggered_cash_carry_execution
+    - blocked_buy_sell_accounting
+    - fail_closed_terminal_state
+    - public_execution_summary
+    - portfolio_policy
   research_apps:
     repository: runchengxie/research-apps
     number: 1
@@ -61,12 +71,12 @@ standalone_extraction_stack:
     status: merged
     release: 0.1.0
     owns:
-      - research_policy_composition
-      - minute_cache_bundle
-      - flite_campaign_runner
-      - slow_volume_campaign_runner
-      - deepseek_v4_paired_replay
-      - immutable_campaign_specs
+    - research_policy_composition
+    - minute_cache_bundle
+    - flite_campaign_runner
+    - slow_volume_campaign_runner
+    - deepseek_v4_paired_replay
+    - immutable_campaign_specs
   strategy_pipeline:
     repository: runchengxie/strategy-pipeline
     number: 27
@@ -74,14 +84,13 @@ standalone_extraction_stack:
     status: merged
     release: 2.1.0
     retains:
-      - strategy_cli
-      - external_model_calls
-      - operator_controls
-      - atomic_publication
-      - run_receipts
-      - release_gates
-      - target_handoff
-
+    - strategy_cli
+    - external_model_calls
+    - operator_controls
+    - atomic_publication
+    - run_receipts
+    - release_gates
+    - target_handoff
 highlighted_remaining_work:
   split_minute_materialization_from_alpha_transforms: implemented
   split_live_input_availability_from_release_freshness: implemented
@@ -89,14 +98,12 @@ highlighted_remaining_work:
   split_final_flite_and_slow_volume_runners: implemented
   move_staggered_cash_carry_state_machine_to_portfolio_backtester: implemented
   split_deepseek_v4_replay_from_execution_summary: implemented
-
 compatibility_window:
   strategy_pipeline_source_fallback:
     status: removed
     packaged_in_strategy_pipeline_wheel: false
     lookup_order: standalone_git_pinned_dependency_only
     exit_condition: completed_on_2026_07_19_after_all_public_modules_were_migrated_or_owner_delegated
-
 validation:
   foundational_combined_tests:
     status: passed
@@ -129,20 +136,19 @@ validation:
     quant_execution_engine: actions_disabled
     research_workspace: actions_disabled
   completed_before_ready:
-    - refresh_all_lockfiles
-    - install_all_owner_branches_and_research_apps_together
-    - run_latest_combined_pytest
-    - run_latest_ruff_format_and_type_checks
-    - run_fresh_wheel_resource_smoke
+  - refresh_all_lockfiles
+  - install_all_owner_branches_and_research_apps_together
+  - run_latest_combined_pytest
+  - run_latest_ruff_format_and_type_checks
+  - run_fresh_wheel_resource_smoke
   completed_before_workspace_pin:
-    - merge_owner_pull_requests_in_order
-    - merge_research_apps_pull_request
-    - merge_strategy_pipeline_pull_request
-    - update_workspace_pins
-    - run_workspace_smoke_profile
-    - run_workspace_full_profile
-
+  - merge_owner_pull_requests_in_order
+  - merge_research_apps_pull_request
+  - merge_strategy_pipeline_pull_request
+  - update_workspace_pins
+  - run_workspace_smoke_profile
+  - run_workspace_full_profile
 rollback:
-  - retain_native_owner_packages
-  - restore_an_owner_delegating_public_facade_from_the_previous_release_tag_only_if_needed
-  - never_restore_the_embedded_strategy_pipeline_research_apps_source_tree
+- retain_native_owner_packages
+- restore_an_owner_delegating_public_facade_from_the_previous_release_tag_only_if_needed
+- never_restore_the_embedded_strategy_pipeline_research_apps_source_tree

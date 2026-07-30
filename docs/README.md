@@ -33,6 +33,9 @@
 - Python 命名空间决策：[adr/0002-owner-native-python-namespaces.md](adr/0002-owner-native-python-namespaces.md)
 - 废弃入口：[deprecations.md](deprecations.md)
 - 维护性治理：[maintainability-governance.md](maintainability-governance.md)
+- 治理文件索引：[governance-index.md](governance-index.md)
+- 代码体量复查与拆分建议：[code-size-review.md](code-size-review.md)
+- 子模块巨型文件拆分方案：[submodule-refactor-plan.md](submodule-refactor-plan.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
 - 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
@@ -57,7 +60,7 @@
 - `src/research_contracts` 是顶层普通目录
 - `src/style_factors` 是顶层普通目录，负责风格因子计算、归因、回测与报告
 - A 股 current 契约 是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16，时间点（PIT）财务和历史行业资产已发布
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16（这是 current 契约的数据范围快照日，不是代码版本日期），时间点（PIT）财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
