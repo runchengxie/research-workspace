@@ -133,10 +133,15 @@ def run_style_factor_analysis(
     sw_membership = load_sw_industry_membership(data_root)
 
     # dv_ttm / ps_ttm come from daily_basic (already loaded); surface as aux.
-    basics_extra = basics[["trade_date", "symbol", "dv_ttm", "ps_ttm"]].copy() if {
-        "dv_ttm",
-        "ps_ttm",
-    } <= set(basics.columns) else pd.DataFrame()
+    basics_extra = (
+        basics[["trade_date", "symbol", "dv_ttm", "ps_ttm"]].copy()
+        if {
+            "dv_ttm",
+            "ps_ttm",
+        }
+        <= set(basics.columns)
+        else pd.DataFrame()
+    )
 
     aux = {
         "moneyflow_ths": moneyflow if not moneyflow.empty else None,
@@ -176,6 +181,31 @@ def run_style_factor_analysis(
     if yearly_attribution.empty:
         yearly_attribution = None
 
+    return _finalize_style_analysis(
+        outdir=outdir,
+        results=results,
+        summary=summary,
+        corr=corr,
+        yearly=yearly,
+        attribution=attribution,
+        yearly_attribution=yearly_attribution,
+        data_root=data_root,
+        quick=quick,
+    )
+
+
+def _finalize_style_analysis(
+    *,
+    outdir: Path,
+    results: pd.DataFrame,
+    summary: dict[str, Any],
+    corr: pd.DataFrame,
+    yearly: pd.DataFrame,
+    attribution: dict[str, Any] | None,
+    yearly_attribution: pd.DataFrame | None,
+    data_root: Path,
+    quick: bool,
+) -> StyleFactorArtifacts:
     plot_factor_nav(results, outdir)
     plot_cumulative_comparison(results, outdir)
     plot_correlation_heatmap(results, outdir)

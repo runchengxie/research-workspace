@@ -11,11 +11,11 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 2,
-      "max_long_functions": 1,
-      "max_complexity_hotspots": 2,
+      "max_large_files": 4,
+      "max_long_functions": 2,
+      "max_complexity_hotspots": 3,
       "max_large_classes": 2,
-      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the workspace_doctor god-script split into ten per-domain doctor_*_checks modules plus shared doctor_common: large_files 6->5 ratchets down (workspace_doctor.py dropped from 595 LOC to ~30 LOC and left the 500-LOC threshold while the split targets are individually below it); long_functions, complexity_hotspots, and large_classes are unchanged. This is a genuine maintainability gain from the split, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 the maintainability baseline script now excludes docs/archive/ (including docs/archive/adhoc historical one-off scripts), so the active research-workspace counts drop to large_files 5->2, long_functions 11->1, complexity_hotspots 13->2 (large_classes unchanged at 2). The three archived adhoc scripts stay registered in accepted_hotspots for audit but no longer count toward the active budget, so the budget tightens in the same change per hotspot_budget_policy."
+      "owner_decision": "2026-07-28 refreshed budgets to match the regenerated maintainability baseline after submodule reconciliation: large_files 7->6, long_functions 12->11, complexity_hotspots 14->13. Counts fell with the superproject's own governance script refactors plus the other agent's submodule changes, so budgets are tightened in the same change per hotspot_budget_policy. 2026-07-29 refreshed budgets to match the regenerated maintainability baseline after the workspace_doctor god-script split into ten per-domain doctor_*_checks modules plus shared doctor_common: large_files 6->5 ratchets down (workspace_doctor.py dropped from 595 LOC to ~30 LOC and left the 500-LOC threshold while the split targets are individually below it); long_functions, complexity_hotspots, and large_classes are unchanged. This is a genuine maintainability gain from the split, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 the maintainability baseline script now excludes docs/archive/ (including docs/archive/adhoc historical one-off scripts), so the active research-workspace counts drop to large_files 5->2, long_functions 11->1, complexity_hotspots 13->2 (large_classes unchanged at 2). The three archived adhoc scripts stay registered in accepted_hotspots for audit but no longer count toward the active budget, so the budget tightens in the same change per hotspot_budget_policy. 2026-07-30 explicit owner decision: style_factors local tushare dataset integration adds moneyflow_ths/holder_structure/margin/limit_list loaders and 6 new factors (liquidity_flow, chip_concentration, institution_holding, dividend_yield, ps_value, limit_up) plus PIT SW-L1 industry neutralization. data.py (606 LOC) and factor_calc.py (515 LOC) enter large_files, _add_new_factors enters complexity_hotspots, and run_style_factor_analysis stays a long_function after a finalize helper split. This is a legitimate debt transfer from the feature expansion, not a regression; max_large_files 2->4, max_long_functions 1->2, max_complexity_hotspots 2->3 to match the measured counts. Counts may rise only with a further owner decision; the two new large files are tracked in the roadmap REQUIRED_ROADMAP_PATHS."
     },
     {
       "repo": "market-data-platform",
@@ -198,6 +198,18 @@
       "owner_repo": "research-workspace",
       "reason": "One test class verifies profile expansion, lock discipline, canonical owner gates, and invalid-manifest behavior for all six submodules",
       "next_action": "split profile-contract and parser-failure cases into separate test classes before adding another submodule profile"
+    },
+    {
+      "owner_repo": "research-workspace",
+      "path": "src/style_factors/data.py",
+      "reason": "style_factors local tushare dataset integration adds moneyflow_ths/holder_structure/margin/limit_list loaders and the SW PIT industry membership loader; the extra LOC is localized dataset loaders, a legitimate debt transfer from feature expansion (not a regression).",
+      "next_action": "Split per-loader (moneyflow_ths, holder_structure, margin, limit_list, sw_industry) into separate modules under src/style_factors/loaders/ if the file exceeds the next baseline threshold; tests/test_style_factors.py guards behavior."
+    },
+    {
+      "owner_repo": "research-workspace",
+      "path": "src/style_factors/factor_calc.py",
+      "reason": "style_factors integration adds 6 new factor functions (liquidity_flow, chip_concentration, institution_holding, dividend_yield, ps_value, limit_up) plus PIT SW-L1 industry merge/neutralize helpers; LOC growth is a legitimate debt transfer from feature expansion.",
+      "next_action": "Extract the new factor helpers and the PIT industry merge/neutralize logic into a subpackage (e.g. src/style_factors/factors/, src/style_factors/neutralize/) if the file exceeds the next baseline threshold; tests/test_style_factors.py guards behavior."
     },
     {
       "path": "research-apps/src/research_apps/hotsector/hotsector_deepseek_stability.py",

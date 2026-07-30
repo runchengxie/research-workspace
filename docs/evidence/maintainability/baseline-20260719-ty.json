@@ -11,15 +11,20 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 76,
-      "python_loc": 13848,
+      "python_loc": 14563,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 2,
-        "long_functions": 1,
-        "complexity_hotspots": 2,
+        "large_files": 4,
+        "long_functions": 2,
+        "complexity_hotspots": 3,
         "large_classes": 2
       },
       "large_files": [
+        {
+          "path": "src/style_factors/data.py",
+          "loc": 606,
+          "hk_related": false
+        },
         {
           "path": "tests/test_maintainability_governance.py",
           "loc": 590,
@@ -29,6 +34,11 @@
           "path": "scripts/workspace_governance.py",
           "loc": 556,
           "hk_related": false
+        },
+        {
+          "path": "src/style_factors/factor_calc.py",
+          "loc": 515,
+          "hk_related": false
         }
       ],
       "long_functions": [
@@ -37,6 +47,12 @@
           "name": "test_lint_profiles_include_repo_local_governance_gates",
           "line_count": 115,
           "complexity": 8
+        },
+        {
+          "path": "src/style_factors/workflow.py",
+          "name": "run_style_factor_analysis",
+          "line_count": 82,
+          "complexity": 14
         }
       ],
       "complexity_hotspots": [
@@ -44,6 +60,12 @@
           "path": "src/style_factors/charts.py",
           "name": "plot_yearly_barchart",
           "line_count": 68,
+          "complexity": 16
+        },
+        {
+          "path": "src/style_factors/factor_calc.py",
+          "name": "_add_new_factors",
+          "line_count": 74,
           "complexity": 16
         },
         {

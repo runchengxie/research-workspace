@@ -364,6 +364,40 @@ def load_holder_structure(
     return df
 
 
+def _resolve_l1_industry(member: pd.DataFrame, dict_dir: Path | None) -> pd.DataFrame:
+    """Attach an ``industry_l1`` column to ``member`` using the SW dictionary.
+
+    Resolution order: map ``industry_code`` -> L1 name via ``sw_industry``
+    (level=='L1'); fall back to the raw ``industry_name`` already present on the
+    member row.  Returns a copy with ``industry_l1`` populated.
+    """
+    member = member.copy()
+    if dict_dir is not None:
+        dict_files = sorted(dict_dir.glob("*.parquet")) or sorted(
+            dict_dir.glob("trade_date=*/part.parquet")
+        )
+        if dict_files:
+            industry_dict = pd.concat([pd.read_parquet(p) for p in dict_files], ignore_index=True)
+            l1 = industry_dict[industry_dict.get("level", "") == "L1"]
+            if not l1.empty and {"industry_code", "industry_name"} <= set(l1.columns):
+                l1_map = dict(
+                    zip(
+                        l1["industry_code"].astype(str),
+                        l1["industry_name"].astype(str),
+                        strict=False,
+                    )
+                )
+                member["industry_l1"] = member["industry_code"].astype(str).map(l1_map)
+                if member["industry_l1"].isna().any() and "industry_name" in member.columns:
+                    member["industry_l1"] = member["industry_l1"].fillna(
+                        member["industry_name"].astype(str)
+                    )
+                return member
+    if "industry_name" in member.columns:
+        member["industry_l1"] = member["industry_name"].astype(str)
+    return member
+
+
 def load_sw_industry_membership(data_root: Path) -> pd.DataFrame:
     """Build a PIT (point-in-time) SW industry membership long table.
 
@@ -413,38 +447,7 @@ def load_sw_industry_membership(data_root: Path) -> pd.DataFrame:
         print("[load] sw_industry_member: missing con_code column")
         return pd.DataFrame(columns=["symbol", "in_date", "out_date", "industry_l1"])
 
-    if dict_dir is not None:
-        dict_files = sorted(dict_dir.glob("*.parquet")) or sorted(
-            dict_dir.glob("trade_date=*/part.parquet")
-        )
-        if dict_files:
-            industry_dict = pd.concat(
-                [pd.read_parquet(p) for p in dict_files], ignore_index=True
-            )
-            l1 = industry_dict[industry_dict.get("level", "") == "L1"]
-            if not l1.empty and {"industry_code", "industry_name"} <= set(l1.columns):
-                l1_map = dict(
-                    zip(l1["industry_code"].astype(str), l1["industry_name"].astype(str))
-                )
-                # member.industry_code may already carry the L1 code; map to name.
-                member = member.copy()
-                member["industry_l1"] = (
-                    member["industry_code"].astype(str).map(l1_map)
-                )
-                # Fallback: if industry_name present and l1_map empty, trust name.
-                if member["industry_l1"].isna().any() and "industry_name" in member.columns:
-                    member["industry_l1"] = member["industry_l1"].fillna(
-                        member["industry_name"].astype(str)
-                    )
-            elif "industry_name" in member.columns:
-                member = member.copy()
-                member["industry_l1"] = member["industry_name"].astype(str)
-        elif "industry_name" in member.columns:
-            member = member.copy()
-            member["industry_l1"] = member["industry_name"].astype(str)
-    elif "industry_name" in member.columns:
-        member = member.copy()
-        member["industry_l1"] = member["industry_name"].astype(str)
+    member = _resolve_l1_industry(member, dict_dir)
 
     member["symbol"] = member["con_code"].astype(str)
     member["in_date"] = pd.to_datetime(member["in_date"], errors="coerce")
@@ -532,12 +535,9 @@ def load_margin(
         return pd.DataFrame()
     df = _read_partitioned_parquet(parts, label="margin")
     # Sum across exchanges (SSE + SZSE) into a single market-level row per date.
-    agg = (
-        df.groupby("trade_date", as_index=False)[
-            ["rzye", "rzmre", "rzche", "rqye", "rqmcl", "rzrqye", "rqyl"]
-        ]
-        .sum()
-    )
+    agg = df.groupby("trade_date", as_index=False)[
+        ["rzye", "rzmre", "rzche", "rqye", "rqmcl", "rzrqye", "rqyl"]
+    ].sum()
     agg["rzye_yoy"] = agg["rzye"].astype(float).pct_change()
     agg["rzrqye_yoy"] = agg["rzrqye"].astype(float).pct_change()
     print(
@@ -580,8 +580,14 @@ def load_limit_list(
         return pd.DataFrame()
 
     text_cols = [c for c in ("limit_type", "status", "lu_desc", "tag") if c in df.columns]
-    combined = df[text_cols].fillna("").agg(" ".join, axis=1).str.lower() if text_cols else df["symbol"]
-    is_up = combined.str.contains("涨停") | combined.str.contains("首板") | combined.str.contains("limit_up")
+    combined = (
+        df[text_cols].fillna("").agg(" ".join, axis=1).str.lower() if text_cols else df["symbol"]
+    )
+    is_up = (
+        combined.str.contains("涨停")
+        | combined.str.contains("首板")
+        | combined.str.contains("limit_up")
+    )
     is_down = combined.str.contains("跌停") | combined.str.contains("limit_down")
     out = pd.DataFrame(
         {

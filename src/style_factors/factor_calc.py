@@ -328,11 +328,16 @@ def _add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
     # --- moneyflow_ths: large-order net inflow (流动性资金流) ---
     if moneyflow is not None and not moneyflow.empty:
         df = _merge_aux(
-            df, moneyflow,
+            df,
+            moneyflow,
             ["net_amount", "buy_lg_amount_rate"],
         )
         # Prefer large-order net-inflow rate; fall back to absolute net_amount.
-        flow_raw = df["buy_lg_amount_rate"].astype(float) if "buy_lg_amount_rate" in df else df["net_amount"].astype(float)
+        flow_raw = (
+            df["buy_lg_amount_rate"].astype(float)
+            if "buy_lg_amount_rate" in df
+            else df["net_amount"].astype(float)
+        )
         df["factor_liquidity_flow"] = flow_raw
     else:
         df["factor_liquidity_flow"] = np.nan
@@ -340,11 +345,20 @@ def _add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
     # --- holder_structure: chip concentration & institution holding ---
     if holder is not None and not holder.empty:
         df = _merge_aux(
-            df, holder,
+            df,
+            holder,
             ["top10_float_concentration", "top10_inst_float_hold_ratio"],
         )
-        df["factor_chip_concentration"] = df["top10_float_concentration"].astype(float) if "top10_float_concentration" in df else np.nan
-        df["factor_institution_holding"] = df["top10_inst_float_hold_ratio"].astype(float) if "top10_inst_float_hold_ratio" in df else np.nan
+        df["factor_chip_concentration"] = (
+            df["top10_float_concentration"].astype(float)
+            if "top10_float_concentration" in df
+            else np.nan
+        )
+        df["factor_institution_holding"] = (
+            df["top10_inst_float_hold_ratio"].astype(float)
+            if "top10_inst_float_hold_ratio" in df
+            else np.nan
+        )
     else:
         df["factor_chip_concentration"] = np.nan
         df["factor_institution_holding"] = np.nan
@@ -352,11 +366,14 @@ def _add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
     # --- daily_basic extras: dividend yield & PS value (value group) ---
     if basics_extra is not None and not basics_extra.empty:
         df = _merge_aux(
-            df, basics_extra,
+            df,
+            basics_extra,
             ["dv_ttm", "ps_ttm"],
         )
         df["factor_dividend_yield"] = df["dv_ttm"].astype(float) if "dv_ttm" in df else np.nan
-        df["factor_ps_value"] = (1.0 / df["ps_ttm"].astype(float).where(df["ps_ttm"] > 0)) if "ps_ttm" in df else np.nan
+        df["factor_ps_value"] = (
+            (1.0 / df["ps_ttm"].astype(float).where(df["ps_ttm"] > 0)) if "ps_ttm" in df else np.nan
+        )
     else:
         df["factor_dividend_yield"] = np.nan
         df["factor_ps_value"] = np.nan
@@ -394,10 +411,7 @@ def _merge_sw_industry_pit(
 
     # Per symbol, interval-match each trade_date.  Loop over symbols is fine:
     # membership rows per symbol are few.
-    by_symbol = {
-        sym: g.sort_values("in_date")
-        for sym, g in mem.groupby("symbol", sort=False)
-    }
+    by_symbol = {sym: g.sort_values("in_date") for sym, g in mem.groupby("symbol", sort=False)}
     industry = np.full(len(df), np.nan, dtype=object)
     df_sym = df["symbol"].to_numpy()
     df_td = df["trade_date"].to_numpy()
@@ -492,11 +506,7 @@ def compute_factors(
     df = _standardize_factors(df)
     active = [column for column in FACTOR_COLS if column in df.columns]
     n_factors = len(active)
-    cov = (
-        df["industry_l1"].notna().mean()
-        if "industry_l1" in df.columns
-        else 0.0
-    )
+    cov = df["industry_l1"].notna().mean() if "industry_l1" in df.columns else 0.0
     print(
         f"[factors] {df['trade_date'].min().date()} ~ {df['trade_date'].max().date()}, "
         f"{len(df)} rows, {df['symbol'].nunique()} stocks, {n_factors} factors, "
