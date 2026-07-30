@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 87,
-      "python_loc": 14861,
+      "python_loc": 14859,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 2,
@@ -172,8 +172,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 283,
-      "python_loc": 85689,
+      "python_file_count": 285,
+      "python_loc": 85848,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 36,
@@ -184,7 +184,7 @@
       "large_files": [
         {
           "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1861,
+          "loc": 1862,
           "hk_related": false
         },
         {
@@ -215,11 +215,6 @@
         {
           "path": "tests/test_cutover_a_share_minute.py",
           "loc": 1228,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
-          "loc": 1090,
           "hk_related": false
         },
         {
@@ -285,6 +280,11 @@
         {
           "path": "tests/test_data_providers_cache.py",
           "loc": 570,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/_mins_mirror.py",
+          "loc": 567,
           "hk_related": false
         },
         {
@@ -442,7 +442,7 @@
           "complexity": 1
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_mins.py",
+          "path": "src/market_data_platform/providers/_mins_mirror.py",
           "name": "_mirror_resolve_day",
           "line_count": 121,
           "complexity": 12
@@ -1102,8 +1102,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 176,
-      "python_loc": 36650,
+      "python_file_count": 179,
+      "python_loc": 36731,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1112,11 +1112,6 @@
         "large_classes": 0
       },
       "large_files": [
-        {
-          "path": "src/portfolio_backtester/execution_sim/orders.py",
-          "loc": 1173,
-          "hk_related": false
-        },
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
           "loc": 820,
@@ -1133,8 +1128,13 @@
           "hk_related": false
         },
         {
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
+          "loc": 633,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_execution_sim.py",
-          "loc": 631,
+          "loc": 629,
           "hk_related": false
         },
         {
@@ -1185,7 +1185,7 @@
           "complexity": 15
         },
         {
-          "path": "src/portfolio_backtester/execution_sim/orders.py",
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
           "name": "_execute_buy_orders",
           "line_count": 97,
           "complexity": 16
@@ -1379,7 +1379,7 @@
           "complexity": 16
         },
         {
-          "path": "src/portfolio_backtester/execution_sim/orders.py",
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
           "name": "_execute_buy_orders",
           "line_count": 97,
           "complexity": 16
