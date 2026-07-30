@@ -1102,11 +1102,11 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 179,
-      "python_loc": 36731,
+      "python_file_count": 180,
+      "python_loc": 36752,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 8,
+        "large_files": 7,
         "long_functions": 22,
         "complexity_hotspots": 24,
         "large_classes": 0
@@ -1125,11 +1125,6 @@
         {
           "path": "src/portfolio_backtester/_position_backtest_engine.py",
           "loc": 663,
-          "hk_related": false
-        },
-        {
-          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
-          "loc": 633,
           "hk_related": false
         },
         {
