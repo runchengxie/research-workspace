@@ -1575,8 +1575,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 470,
-      "python_loc": 99298,
+      "python_file_count": 471,
+      "python_loc": 99635,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 34,
@@ -1601,6 +1601,11 @@
           "hk_related": false
         },
         {
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "loc": 794,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_cli_research.py",
           "loc": 793,
           "hk_related": false
@@ -1622,11 +1627,6 @@
         },
         {
           "path": "scripts/research/a_share_next_high_explore.py",
-          "loc": 779,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
           "loc": 779,
           "hk_related": false
         },
