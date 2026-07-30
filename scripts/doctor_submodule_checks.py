@@ -71,7 +71,5 @@ def check_submodule_freshness(root: Path) -> list[Check]:
                 )
             )
         else:
-            checks.append(
-                Check("OK", "submodule-freshness", f"{path} 指针与 origin/main 同步。")
-            )
+            checks.append(Check("OK", "submodule-freshness", f"{path} 指针与 origin/main 同步。"))
     return checks
