@@ -11,10 +11,10 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 87,
-      "python_loc": 14859,
+      "python_loc": 14929,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 2,
+        "large_files": 3,
         "long_functions": 2,
         "complexity_hotspots": 2,
         "large_classes": 2
@@ -28,6 +28,11 @@
         {
           "path": "scripts/workspace_governance.py",
           "loc": 556,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/run_pre_push_checks.py",
+          "loc": 510,
           "hk_related": false
         }
       ],
