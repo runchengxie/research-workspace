@@ -4,13 +4,16 @@
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
     "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。",
-    "accepted_hotspots_count": 176,
+    "accepted_hotspots_count": 174,
     "by_repo": {
       "research-workspace": {
         "max_large_files": 2,
         "max_long_functions": 2,
         "max_complexity_hotspots": 2,
-        "max_large_classes": 2
+        "max_large_classes": 2,
+        "owner_decision": [
+          "2026-07-31: 放宽 pre-push 守卫允许 feat/fix/hotfix/release 前缀分支推送以走 PR 流程；校准 accepted_hotspots_count 为实测未解决条目数（原 176 失真）。"
+        ]
       },
       "market-data-platform": {
         "max_large_files": 36,
