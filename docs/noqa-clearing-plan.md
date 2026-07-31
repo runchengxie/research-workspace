@@ -138,3 +138,22 @@
 1. 对 `market-data-platform` 的 facade 文件，考虑用 ruff 配置（`lint.per-file-ignores` 或 facade 目录级 `F401` 忽略）替代逐行 `# noqa`，让意图更清晰，也避免 RUF100 误伤。
 2. 过时 `# noqa` 的精准清理可用脚本：解析 RUF100 输出，仅当某 `# noqa` 行内所有码均为 non-enabled 时才删整行，混合行只剥离 non-enabled 码。该脚本需在 worktree 内验证不触动 facade 后再提交。
 3. 暂停对 F401 的删除企图，避免破坏对外 API。
+
+## facade F401 迁移实测（2026-07-31，refactor/facade-noqa-config 分支）
+
+按上述建议 1，在 `market-data-platform` worktree 把 28 个 facade 文件的逐行 `# noqa: F401` 迁移为文件顶部 `# ruff: noqa: F401` 声明（纯注释改动，import 与 re-export 内容不变，行为等价）。ruff 检查、format 检查、导入冒烟均通过。
+
+### 卡点：quality_baseline ratchet 拦截
+
+push 触发 mdp 的 `full` profile 门禁，前 3 项（uv lock、ruff check、ruff format）通过，第 4 项 `scripts/dev/quality_debt.py --check-baseline --check-ratchet` 失败：
+
+- 报错：`ty: excluded lines increased (44927 > 44903)`，增加 24 行。
+- 根因：mdp 的 ty 只检查 `pyproject` 里 `ty.src.include` 列表的 34 个文件，其余 176 个文件全部计入 `excluded_lines`（`total_lines - included_lines`）。facade 文件不在 ty include 列表，迁移时给 28 个文件各加 1 行文件级声明（净增约 28 行），这些行全部算进 `excluded_lines`，触发 ratchet 的 excluded-lines 只降不升规则。
+- 性质：这是统计口径副作用，不是真实质量退化（facade 文件本就不被 ty 检查，加 lint 声明不影响类型覆盖）。但 ratchet 机制无法区分良性增加与藏债，一律拦截。
+
+### 结论与待办
+
+- facade F401 迁移本身是正确且安全的重构，但 mdp 的 `quality_baseline.json` ratchet 要求 excluded-lines 只能降，良性增加也需 owner 决策重算基线。
+- 若要推进此 PR，需在 mdp 分支内重算 `quality_baseline.json`（让 44927 成为新基线），同提交写明这是 facade 注释迁移的统计副作用而非质量退化，再走 owner 决策或 waiver。
+- 这同时印证了原盘点判断：mdp 的治理机制对良性重构不够友好，加一行 lint 声明也要动基线。
+- 当前状态：分支 `refactor/facade-noqa-config`（commit `f095a38`）留在外部 worktree `/home/richard/code/mdp-facade-worktree`，未推送成功，待决策。mdp 主目录已恢复 `main`，superproject gitlink 未变。
