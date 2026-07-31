@@ -109,3 +109,32 @@
 | 1 | market-data-platform | F401/PLR0913 | 待开始 | |
 | 2 | strategy-pipeline | F403 | 待开始 | |
 | 3 | alpha-research / quant-execution-engine / portfolio-backtester / research-apps | RUF002/E402/F403/F401 | 待开始 | |
+
+## 执行记录与修正（2026-07-31）
+
+在 `market-data-platform` 子仓库建独立 worktree（`feat/noqa-f401-cleanup`）实测，推翻了原计划关于 F401 的假设。
+
+### 发现 1：幽灵 noqa 真实存在，共 1020 处
+
+用 ruff RUF100 识别：`market-data-platform` 有 1020 处 `# noqa` 压的规则码在当前 `select` 里并未触发违规（如 `PLR0915`、`C901`、`PLR0912` 等），注释纯属多余。这属于初版计划设想的幽灵债务，位置在子模块、判定标准为 select 未触发。
+
+### 发现 2：F401 不是技术债，是 facade re-export
+
+`market-data-platform` 完整 ruff 报 1147 处真实告警，其中 `F401` 1061 处、设计类（PLR0913 等）约 84 处。核对 F401 涉及的 30 个文件，27 个的 docstring 明确声明自己是模块拆分后的 re-export 壳（如 `tushare_a_share.py` 头部写 "thin re-export shell over the split provider submodules"）。这些 `# noqa: F401` 是 facade 文件重新导出拆分符号的标准写法，删除会破坏对外应用程序接口（API）。因此 F401 不应作为债清理。
+
+### 发现 3：RUF100 --fix 会误伤 facade
+
+直接运行 `ruff --fix`（含 RUF100）会删除整行 `# noqa` 中未触发的码，但当 F401 与过时码混在同一行时，会把有效压制的 F401 一并放出，导致 facade 文件门禁变红（实测 `tushare_a_share_flow_features.py` 被 `--unsafe-fixes` 打算删空至 2 行）。因此不能用 ruff 自动修复批量处理，必须保护 facade。
+
+### 修正后的结论
+
+- 可安全清理的只有 RUF100 标记的 1020 处过时 `# noqa`（纯注释删除）。但自动 `--fix` 会误伤 facade，需要更精细的方式：只删整行只有过时码、或行内未触发码可独立剥离且不影响同行有效压制的注释。
+- `F401` 的 1061 处是 facade re-export，保留 `# noqa: F401`，不是债。
+- 设计类 84 处是真实复杂度告警，归 `maintainability-refactor-roadmap.yml` 的设计类拆分，本计划不处理。
+- `strategy-pipeline` 的 `F403` 星号导入同理需逐文件确认是否 facade 再决定。
+
+### 后续建议
+
+1. 对 `market-data-platform` 的 facade 文件，考虑用 ruff 配置（`lint.per-file-ignores` 或 facade 目录级 `F401` 忽略）替代逐行 `# noqa`，让意图更清晰，也避免 RUF100 误伤。
+2. 过时 `# noqa` 的精准清理可用脚本：解析 RUF100 输出，仅当某 `# noqa` 行内所有码均为 non-enabled 时才删整行，混合行只剥离 non-enabled 码。该脚本需在 worktree 内验证不触动 facade 后再提交。
+3. 暂停对 F401 的删除企图，避免破坏对外 API。
