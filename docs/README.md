@@ -73,14 +73,13 @@
 
 ## 当前事实
 
-- 活跃链路包含六个 Git 子模块
-- `market-intel` 是外部卫星仓，通过版本化文件接入，不属于六个子模块，也不参与 `print_version_matrix.py` 的版本锁定
+- `market-intel` 是外部卫星仓，通过版本化文件接入，不参与 `print_version_matrix.py` 的版本锁定
 - `src/research_contracts` 是顶层普通目录
 - `src/style_factors` 是顶层普通目录，负责风格因子计算、归因、回测与报告
 - A 股 current 契约是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16（这是 current 契约的数据范围快照日，不是代码版本日期），时间点（PIT）财务和历史行业资产已发布
+- A 股日频基线覆盖 2015-01-05 至 2026-07-16，该日期是 current 契约的数据范围快照日，时间点（PIT）财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
-- 顶层和子模块 GitHub Actions workflow 当前停用，`research-apps` 的仓库 Actions 权限也禁用
-- 顶层与六个子模块共七个仓库使用共享本地 pre-push 门禁，远端维护 `main` 并接受 `feat/*`、`fix/*`、`hotfix/*`、`release/*` 前缀的功能分支（用于拉取请求流程）
+
+> 子模块组成、GitHub Actions 停用状态与分支策略见根目录 [README.md](../../README.md)。本段只记录跨仓库事实中根 README 未涵盖的部分，避免两处各说各话。
