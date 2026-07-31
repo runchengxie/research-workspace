@@ -17,7 +17,7 @@
 
 ## 二、超长单体文件
 
-ruff C901 在六个子模块 `src/` 下均为 0 处超限（因 max-complexity 阈值宽松 + 物理拆分）。但按行数统计，以下文件超过 700 行，按职责拆分可降低阅读与维护成本：
+ruff C901 在六个子模块 `src/` 下均为 0 处超限（因 max-complexity 阈值宽松 + 物理拆分）。以下文件超过 700 行，但行数长不等于需要拆分。已逐一核查：`execution_sim/core.py` 虽 820 行却无任何类定义，全是模块级函数，且已把具体执行、报告、模型、容量逻辑委托给 `.orders`/`.reporting`/`.models`/`.capacity` 等子模块，自身只做三个 NAV 模拟路径（capacity / adjusted / ideal）的编排。这种「长但平」的编排模块职责单一，硬拆反而增加调用跳转、降低可读性，不建议拆分。strategy-pipeline 四个 780+ 行文件的拆分价值需另行逐文件评估。
 
 | 子模块 | 文件 | 行数 |
 | --- | --- | --- |
@@ -29,7 +29,7 @@ ruff C901 在六个子模块 `src/` 下均为 0 处超限（因 max-complexity �
 | quant-execution-engine | `broker/_longport_client.py` | 725 |
 | market-data-platform | `_campaign_run.py` | 703 |
 
-其中 `execution_sim/core.py`（820 行）与 strategy-pipeline 四个 780+ 行文件优先级最高。
+其中 strategy-pipeline 四个 780+ 行文件的拆分价值最高，需逐文件评估。`execution_sim/core.py`（820 行）经核查为健康的编排模块，不建议拆分。
 
 ## 三、dev 治理脚本跨仓库复制
 
@@ -70,12 +70,12 @@ ruff C901 在六个子模块 `src/` 下均为 0 处超限（因 max-complexity �
 - PEP8 / 格式：各子模块启用 ruff（E/F/I/UP/B/C4/RET/RUF100 等），基线良好。
 - Google Style（docstring）：抽查 facade 与 partition 文件均有规范 docstring，符合度较好。
 - 高内聚低耦合：跨模块依赖方向健康、无环，符合。但 market-data-platform 的物理拆分粒度过细、超长单体文件职责偏重，单看模块内聚有改进空间。
-- SOLID：无严重违反。主要偏离是「合理粒度」原则（文件过碎或过长的两端）。
+- SOLID：无严重违反。`execution_sim/core.py` 虽长但属编排模块，单一职责（SRP）成立。主要偏离是「合理粒度」原则（文件过碎或过长的两端），集中于 market-data-platform 的 `_partNN` 过度拆分。
 
 ## 七、优化优先级建议
 
 1. 【中】抽离共享 `scripts/dev/` 工具（maintainability_metrics / namespace_boundary / run_tests）为单一共享包，消除六加三份独立演化复制。收益高、风险低（纯工具，不影响业务逻辑）。
-2. 【中】拆分 strategy-pipeline 四个 780+ 行文件与 portfolio `execution_sim/core.py`，按职责降低单体尺寸。
+2. 【中】逐文件评估 strategy-pipeline 四个 780+ 行文件的拆分价值，`execution_sim/core.py` 已确认无需拆分。
 3. 【低/大】评估 market-data-platform 的 `_partNN` + facade 重新合并，降低文件数爆炸。需逐模块保障对外契约不变，建议独立 worktree 推进。
 4. 【低】移动 `market-data-platform/scripts/internal/archive/` 的 one-off 脚本出活跃目录。
 
