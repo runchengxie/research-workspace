@@ -169,3 +169,21 @@ push 触发 mdp 的 `full` profile 门禁，前 3 项（uv lock、ruff check、r
 - 收益：源文件行数零净增，ratchet 不再拦截。意图集中且可读。RUF100 不触及配置级忽略，杜绝误删有效抑制。完全符合最初「优解」意图。
 - 注意：`quality_debt.py` 的 debt scan 仍会列出 1061 个 F401（它用 `--select F` 全量计数作债存量报告），但这只是信息性输出，不影响 ratchet 判定。
 - 当前状态：方案 C 已提交为 worktree 分支新 commit `1a4b36d`（分支仍名 `refactor/facade-noqa-config`，待重命名为 `feat/facade-noqa-per-file-ignores` 以符合推送前缀规则）。下一步走 PR：推送、review、merge、删分支与 worktree，再开新 worktree 探索下一轮优化方向。
+
+## 设计类复杂度（PLR0913）试点结论（2026-07-31）
+
+按用户选定方向 A，在 worktree `feat/plr0913-pilot` 探查 `market-data-platform` 的设计类复杂度债。完整配置下被 `# noqa` 压制的设计类告警只有 `PLR0913`（函数参数过多），共 43 处，分布在 26 个文件，集中在 `providers/` 拆分后的 `_partNN` 文件与 `_mins_*`、`_campaign_*` 等。
+
+对最集中的 `_mins_mirror.py`（5 处 PLR0913）做聚合重构试点分析，结论：
+
+- 这 43 处函数均用 keyword-only 参数显式传递上下文（`options`、`sidecar`、`sidecar_identity`、`sidecar_binding`、`progress`、`trade_date` 等），语义正交。
+- 它们是 `tushare_a_share_mins` 单文件拆分为 `_mins_*` 多 submodule 后的遗留：拆分后的函数仍保留原拆分工件的完整上下文签名，属合理的架构复杂度残留，不是代码劣化。
+- 消除 PLR0913 需做 context dataclass 聚合（把 7-8 个上下文参降到 1 个对象）。但不同函数的参数组合各异，无统一 context 可复用，需多个 ad-hoc dataclass。且显式 keyword 传参比塞进对象更自解释（Python 之禅：显式优于隐式）。强行聚合会降低可读性、需连锁改 26 文件 43 处调用方，而运行时行为不变。
+
+判定：43 处 PLR0913 为刻意且合理的设计选择，非真正技术债。处理方式改为「登记 intentional，不重构」：
+
+- 保留 `# noqa: PLR0913` 作为有据可查的刻意抑制，不强行消除。
+- 本计划不将 PLR0913 纳入重构范围（与 roadmap 的 `max_complexity_hotspots` 预算无关，后者数的是 C901 圈复杂度热点，不数 PLR0913 参数数）。
+- 早期「84 处设计类复杂度债」的估计同样来自窄上下文误报，实测仅 43 处 PLR0913。
+
+试点 worktree 已删除，无源码改动。
