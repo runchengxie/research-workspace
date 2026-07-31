@@ -70,7 +70,7 @@ def parse_pushed_refs(payload: str) -> tuple[PushedRef, ...]:
     return tuple(pushed_refs)
 
 
-def _root_gate_commands(root: Path) -> tuple[GateCommand, ...]:
+def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
     root_tests = tuple(
         "uv run --project strategy-pipeline --extra dev --with matplotlib>=3.8 "
         "--with tabulate>=0.9 python -m pytest tests -q".split()
@@ -78,21 +78,49 @@ def _root_gate_commands(root: Path) -> tuple[GateCommand, ...]:
     return (
         GateCommand(
             "root-quality",
-            root,
+            cwd,
             (sys.executable, "scripts/run_quality_checks.py", "--profile", "hard"),
         ),
         GateCommand(
             "workspace-doctor",
-            root,
+            cwd,
             (sys.executable, "scripts/workspace_doctor.py"),
         ),
         GateCommand(
             "contract-smoke",
-            root,
+            cwd,
             (sys.executable, "src/research_contracts/smoke_contracts.py", "--strict"),
         ),
-        GateCommand("root-tests", root, root_tests),
+        GateCommand("root-tests", cwd, root_tests),
     )
+
+
+def _is_same_git_repo(a: Path, b: Path) -> bool:
+    """True if a and b are the same git repository or linked worktrees of it."""
+    a = a.resolve()
+    b = b.resolve()
+    if a == b:
+        return True
+    try:
+        ga = subprocess.run(
+            ("git", "rev-parse", "--git-common-dir"),
+            cwd=a,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        gb = subprocess.run(
+            ("git", "rev-parse", "--git-common-dir"),
+            cwd=b,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except subprocess.CalledProcessError:
+        return False
+    ga_resolved = (a / ga).resolve() if not Path(ga).is_absolute() else Path(ga).resolve()
+    gb_resolved = (b / gb).resolve() if not Path(gb).is_absolute() else Path(gb).resolve()
+    return ga_resolved == gb_resolved
 
 
 def _matching_submodule(
@@ -115,8 +143,9 @@ def plan_gate(
 ) -> GatePlan:
     root = root.resolve()
     repository = repository.resolve()
-    if repository == root:
-        return GatePlan("research-workspace", root, True, _root_gate_commands(root))
+    if repository == root or _is_same_git_repo(repository, root):
+        effective_root = repository if repository != root else root
+        return GatePlan("research-workspace", repository, True, _root_gate_commands(effective_root))
 
     name = _matching_submodule(root, repository, configs)
     if name is None:

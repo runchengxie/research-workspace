@@ -492,3 +492,45 @@ def test_dry_run_does_not_require_clean_repo_or_execute_commands(tmp_path: Path)
 
     assert result == 0
     assert not marker.exists()
+
+
+def test_is_same_git_repo_distinguishes_worktree_from_separate_repo(tmp_path: Path) -> None:
+    repo_a = tmp_path / "repo-a"
+    _init_repo(repo_a)
+    _commit_file(repo_a, content="a\n")
+
+    worktree_b = tmp_path / "worktree-b"
+    subprocess.run(
+        ("git", "worktree", "add", "-q", str(worktree_b), "HEAD"),
+        cwd=repo_a,
+        check=True,
+    )
+
+    repo_c = tmp_path / "repo-c"
+    _init_repo(repo_c)
+    _commit_file(repo_c, content="c\n")
+
+    assert run_pre_push_checks._is_same_git_repo(repo_a, worktree_b) is True
+    assert run_pre_push_checks._is_same_git_repo(repo_a, repo_c) is False
+    assert run_pre_push_checks._is_same_git_repo(repo_a, repo_a) is True
+
+
+def test_plan_gate_treats_superproject_worktree_as_root(
+    monkeypatch: object,
+) -> None:
+    configs = run_submodule_checks.load_manifest(ROOT / "scripts/submodule_checks.json")
+    fake_worktree = ROOT / "some-fake-worktree"
+    monkeypatch.setattr(run_pre_push_checks, "_is_same_git_repo", lambda _a, _b: True)
+
+    plan = run_pre_push_checks.plan_gate(ROOT, fake_worktree, configs)
+
+    assert plan.repository == "research-workspace"
+    assert plan.repository_root == fake_worktree
+    assert plan.check_workspace_consistency is True
+    assert [command.name for command in plan.commands] == [
+        "root-quality",
+        "workspace-doctor",
+        "contract-smoke",
+        "root-tests",
+    ]
+    assert all(command.cwd == fake_worktree for command in plan.commands)
