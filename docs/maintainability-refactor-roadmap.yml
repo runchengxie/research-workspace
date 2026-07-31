@@ -4,7 +4,7 @@
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
     "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。",
-    "accepted_hotspots_count": 178,
+    "accepted_hotspots_count": 179,
     "by_repo": {
       "research-workspace": {
         "max_large_files": 4,
@@ -37,7 +37,7 @@
         "max_large_classes": 0
       },
       "strategy-pipeline": {
-        "max_large_files": 34,
+        "max_large_files": 35,
         "max_long_functions": 118,
         "max_complexity_hotspots": 67,
         "max_large_classes": 1
@@ -127,7 +127,7 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 34,
+      "max_large_files": 35,
       "max_long_functions": 118,
       "max_complexity_hotspots": 67,
       "max_large_classes": 1,
@@ -135,7 +135,8 @@
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-26: C901 降至声明上限 15，7 个超复杂函数重构，long_functions 119->118、complexity 70->67（真实下降）。",
-        "2026-07-28: 模块拆分后 large_files 49->34 下调（_api/_core 重导出子模块债务转移，3 个仍大者登记 accepted_hotspots）。"
+        "2026-07-28: 模块拆分后 large_files 49->34 下调（_api/_core 重导出子模块债务转移，3 个仍大者登记 accepted_hotspots）。",
+        "2026-07-31: 新增红利与成长 ETF 动量研究入口；主脚本 726 行并保持研究专用、无生产执行职责，large_files 34->35，登记 accepted_hotspots，后续新增策略变体前先拆分数据获取与回测编排。"
       ]
     },
     {
@@ -1284,6 +1285,12 @@
       "owner_repo": "quant-execution-engine",
       "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "strategy-pipeline/scripts/research/dividend_growth_momentum.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "红利与成长 ETF 动量的一次性可复现研究入口，集中保留数据获取、PIT 信号、portfolio-backtester 编排与回执发布；报告实现已拆入独立模块，当前不属于生产执行路径。",
+      "next_action": "新增 BIAS 或 walk-forward 变体前，先将数据获取和策略套件编排拆入独立研究模块，入口降到 500 行以下。"
     },
     {
       "path": "strategy-pipeline/scripts/research/daily_watch20_fundamental_shadow.py",
