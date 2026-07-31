@@ -1,6 +1,6 @@
 # 子模块 noqa 清债计划
 
-本计划处理六个子模块里大量 `# noqa` 注释导致的质量门禁失效问题。顶层工作区自身只有 3 处 `# noqa`，门禁有效。子模块底层几乎全靠 `# noqa` 压制告警，新人接手时提示被淹没，不敢改动旧代码。这是阻碍多人协作的主要技术债。
+本计划处理六个子模块里 `# noqa` 注释的分布问题。2026-07-31 复核发现，此前列报的 noqa 总量（如 alpha-research 4244 条）几乎全部来自各子模块的 `.venv` 第三方包，并非项目自有代码。排除 `.venv`/`build`/`artifacts` 后，六个子模块自有代码实际只有约 1100 处 `# noqa`，且 1036 处集中在 `market-data-platform`。顶层工作区自身有 3 处 `# noqa`，门禁有效。子模块自有代码的 noqa 不多，但 `market-data-platform` 的 `F401` 偏多，可借清理顺带发现未使用导入与潜在 dead code。
 
 ## 与现有治理文件的关系
 
@@ -13,102 +13,72 @@
 
 ## 现状数据
 
-各子模块 `# noqa` 总量（按从少到多排列，便于排期）：
+各子模块自有代码 `# noqa` 真实数量（排除 `.venv`/`build`/`artifacts`，`find` + `grep` 实测，2026-07-31）：
 
-| 子模块 | `# noqa` 总量 | 预推送门禁命令来源 |
-| --- | --- | --- |
-| `quant-execution-engine` | 74 | `scripts/submodule_checks.json` 的 `full` profile |
-| `portfolio-backtester` | 1204 | 同左 |
-| `market-data-platform` | 2498 | 同左 |
-| `research-apps` | 3108 | 仓库自有 `scripts/dev/check.py` |
-| `strategy-pipeline` | 3129 | 仓库 `scripts/dev/run_tests.sh` |
-| `alpha-research` | 4244 | `scripts/submodule_checks.json` 的 `full` profile |
+| 子模块 | `# noqa` 真实量 | 主要规则 | 预推送门禁命令来源 |
+| --- | --- | --- | --- |
+| `market-data-platform` | 1036 | `F401`(951)、`PLR0913`(53)、`PLR0915`(10) | `scripts/submodule_checks.json` 的 `full` profile |
+| `strategy-pipeline` | 38 | `F403`(35) | 仓库 `scripts/dev/run_tests.sh` |
+| `alpha-research` | 9 | `RUF002`(5)、`F403`(2) | `scripts/submodule_checks.json` 的 `full` profile |
+| `quant-execution-engine` | 10 | `E402`(6)、`F403`(2) | 同左 |
+| `portfolio-backtester` | 7 | `F403`(3)、`F401`(3) | 同左 |
+| `research-apps` | 0 | 无 | 仓库自有 `scripts/dev/check.py` |
 
-规则类别分布（每个子模块的前几类，`grep` 实测）：
+规则类别分布（仅自有代码，排除 `.venv`）：
 
-- `F401` 未使用导入：每个子模块 1000 条左右（alpha-research 1279、research-apps 1173、strategy-pipeline 1129、market-data-platform 1016、portfolio-backtester 202、quant-execution-engine 16）
-- `E501` 行过长：market-data-platform 91、portfolio-backtester 251、research-apps 465、strategy-pipeline 469
-- `D102`/`D205`/`D107` 缺失文档字符串：alpha-research 177+95+58、market-data-platform 194+96+59、research-apps 177+95+58、strategy-pipeline 196+95+58
-- `F403`/`F405` 星号导入：strategy-pipeline 148、market-data-platform 71、research-apps 64、portfolio-backtester 56、alpha-research 含 71
-- `F821`/`F822` 未定义或仅在测试定义：各子模块 50 到 95 条
-- `S101` 生产代码使用 assert：portfolio-backtester 56、research-apps 57、alpha-research 56
-- `PLR0913` 参数过多：market-data-platform 121、research-apps 43、strategy-pipeline 43、alpha-research 43
+- `F401` 未使用导入：主要来自 `market-data-platform`（951），其余子模块极少。
+- `F403` 星号导入：`strategy-pipeline`（35）、`alpha-research`（2）、`quant-execution-engine`（2）、`portfolio-backtester`（3）。
+- `PLR0913`/`PLR0915` 参数/分支过多：`market-data-platform`（53+10），属设计类告警。
+- `E402` 模块级导入不在文件顶部：`quant-execution-engine`（6，多为测试/脚本引导）。
+- `RUF002` 非 ASCII 名称无备注：`alpha-research`（5）。
 
-## 关键发现：幽灵债务
+## 关键发现：此前列报被 `.venv` 夸大
 
-所有六个子模块的 `pyproject.toml` 都没有在 `select` 里启用 pydocstyle（D 类规则），但统计里却有大量 `D102`/`D205`/`D107` 的 `# noqa`。这些注释是历史残留：曾经启用过 D 类，后来关闭，但 `# noqa` 没有清理。删除这类注释零风险，且不需要改任何代码。
+初版计划用 `grep -rc 'noqa' <子模块>` 统计，把每个子模块 `.venv` 里第三方包（pluggy、pygments、`_pytest`、packaging 等）的大量 `# noqa` 也算进项目代码，得出 alpha-research 4244、research-apps 3108 等数字。排除 `.venv` 后，真实自有代码仅约 1100 处，且 `market-data-platform` 占九成以上。
 
-`quality-governance.md` 已记录顶层预推送门禁会运行各子模块登记的 `full` profile，子模块清理后门禁才能真实发现问题。
+因此原先"子模块底层几乎全靠 `# noqa` 压制门禁、新人不敢改"的判断不成立。子模块自有代码基本没有被 `# noqa` 淹没，门禁在子模块层是有效的。真正的 noqa 集中在 `market-data-platform` 的 `F401`，清债价值在于顺带暴露未使用导入与潜在 dead code，而非恢复门禁能力。
+
+所有子模块 `pyproject.toml` 的 `select` 都没有启用 pydocstyle（D 类），但自有代码里也几乎没有 D 类 `# noqa`（初版看到的 D102/D205/D107 全部来自 `.venv`）。所以本计划不存在"幽灵债务批量删注释"的空间，几乎每条 noqa 都对应真实启用的规则。
 
 ## 清债三原则
 
 1. 分批推进，每批只动一个子模块的一个规则类别，配套运行该子模块测试，避免一次性大改动难以回滚。
-2. 先清幽灵债务（D 类），再清机械可修（`F401`/`E501` 中客观超长的），最后处理需人工判断的（`F403` 星号导入、`F821`/`S101`/`PLR0913`）。
+2. 先机械可修（`F401` 未使用导入），再处理需人工判断的（`F403` 星号导入、`PLR0913` 参数过多、`E402` 导入位置）。
 3. 每批清理后必须让该子模块的预推送 `full` profile 通过，再提交。不要跳过仓库原有门禁。
 
 ## 规则分类与处理方式
 
-### 第一类：幽灵债务（直接删注释，零代码改动）
+### 第一类：机械可修（工具自动修，需复核）
 
-- `D102`/`D205`/`D107` 及任何子模块 `select` 未启用的规则对应的 `# noqa`。
-- 处理：用脚本扫描每个 `# noqa` 的规则码，若码不在该子模块 `select` 内，直接删除该码（多码时只删对应码，保留其余）。
-- 风险：无。处理完 ruff 行为不变。
+- `F401` 未使用导入：ruff 自带 `--fix` 可移除。移除前要确认不是 re-export（有些 `__init__.py` 故意导出供外部 import）。对 `src/*/__init__.py` 的 `F401` 需人工核对再删。集中在 `market-data-platform`（951 条）。
+- `E501` 行过长：优先用 `ruff format` 自动折行。当前自有代码里此类极少，只在 `.venv` 出现，项目代码无需处理。
 
-### 第二类：机械可修（工具自动修，需复核）
+### 第二类：需人工判断（逐文件处理，谨慎解除）
 
-- `F401` 未使用导入：ruff 自带 `--fix` 可移除。移除前要确认不是 re-export（有些 `__init__.py` 故意导出供外部 import）。对 `src/*/__init__.py` 的 `F401` 需人工核对再删。
-- `E501` 行过长：优先用 `ruff format` 自动折行。个别无法折行的长字符串保留 `# noqa: E501` 并补原因。
-- `F811` 重复定义、`F841` 赋值未使用：ruff `--fix` 可处理大部分，但 `F841` 有时是故意占位，需看上下文。
-
-### 第三类：需人工判断（逐文件处理，谨慎解除）
-
-- `F403`/`F405` 星号导入：改为显式导入列表，或保留并登记 `per-file-ignores`（参考 `quant-execution-engine` 的做法，写清原因和移除条件）。
-- `F821`/`F822` 未定义名称：多为动态属性或测试夹具，确认后保留并登记 `per-file-ignores`。
-- `S101` 生产代码 assert：能改为显式校验的就改，不能改的登记 `per-file-ignores`。
-- `PLR0913` 参数过多：属于设计问题，不在清债范围，只处理对应的 `# noqa`，让告警浮现，后续单独做函数拆分。
+- `F403` 星号导入：改为显式导入列表，或保留并登记 `per-file-ignores`（参考 `quant-execution-engine` 的做法，写清原因和移除条件）。集中在 `strategy-pipeline`（35 条）。
+- `PLR0913`/`PLR0915` 参数/分支过多：属于设计问题，不在清债范围，只处理对应的 `# noqa`，让告警浮现，后续单独做函数拆分。集中在 `market-data-platform`（63 条）。
+- `E402` 模块级导入不在文件顶部：多为测试/脚本引导，确认后保留并登记 `per-file-ignores`。集中在 `quant-execution-engine`（6 条）。
+- `RUF002` 非 ASCII 名称无备注：按仓库规范补备注或改名，集中在 `alpha-research`（5 条）。
 
 ## 分批路线
 
-按风险从低到高、收益从高到低排序。
+按工作量从大到小排序，聚焦真正有量的两个子模块。
 
-### 批次 0：幽灵债务清理（全子模块，低风险高收益）
+### 批次 1：market-data-platform（1036 条，主战场）
 
-- 范围：所有子模块里 `select` 未启用的规则码对应的 `# noqa`。
-- 动作：脚本批量删除对应码。
-- 预计削减：D 类约 1500 条以上（四个子模块的 D102+D205+D107 合计）。
-- 验证：`uv run --locked ruff check <子模块>` 结果与清理前一致（告警数不增）。
+- 先清 `F401`（951）：在子模块内运行 `uv run --locked ruff check --fix --select F401 .`，逐文件复核不是 re-export 后再提交。顺带暴露未使用导入与潜在 dead code，单独开清理提交。
+- 再处理 `PLR0913`/`PLR0915`（63）：只解除 `# noqa` 让告警浮现，不在此批做函数拆分，拆分归 roadmap 设计类工作。
+- 验证：`uv run --locked ruff check .` 与 `scripts/dev/check.py` 通过，跑该仓测试套件。
 
-### 批次 1：quant-execution-engine（74 条，练手）
+### 批次 2：strategy-pipeline（38 条）
 
-- 已是全仓最干净，且唯一有 `per-file-ignores` 结构，适合作为模板。
-- 先清 `F401`（16）和 `E402`（6），再处理 `F811`（6）、`E741`（4）等零星项。
-- 目标：该子模块 `# noqa` 归零或仅剩登记在 `per-file-ignores` 的项。
+- `F403`（35）星号导入：逐文件改为显式导入列表，对不便改的登记 `per-file-ignores`。
+- 验证：仓库 `scripts/dev/run_tests.sh full` 通过。
 
-### 批次 2：portfolio-backtester（1204 条）
+### 批次 3：其余小量（alpha-research 9、quant-execution-engine 10、portfolio-backtester 7、research-apps 0）
 
-- 先做批次 0 的幽灵债务。
-- 再清 `E501`（251）和 `F401`（202），这两类占多数且机械可修。
-- `F822`（94）多为动态注册，逐文件登记 `per-file-ignores`。
-
-### 批次 3：market-data-platform（2498 条）
-
-- 幽灵债务清理后，处理 `F401`（1016）和 `PLR0913`（121）。
-- `FBT001`/`FBT002`（f-string 用于日志）按仓库日志规范决定保留或改。
-
-### 批次 4：research-apps（3108 条）
-
-- `select` 范围最宽（含 A/ARG/ASYNC/FA/FIX 等），先核对实际启用规则，再清幽灵债务。
-- `F401`（1173）和 `E501`（465）机械可修。
-
-### 批次 5：strategy-pipeline（3129 条）
-
-- `F401`（1129）和 `E501`（469）为主。
-- `F403`（148）星号导入需逐文件改显式导入。
-
-### 批次 6：alpha-research（4244 条，最大量）
-
-- 放最后，吸收前几批经验。
-- `F401`（1279）机械可修，`F403`/`F405` 需逐文件处理。
+- 合并处理：`RUF002`（alpha 5）补备注、`E402`（qexec 6）登记 `per-file-ignores`、`F403`/`F401` 零星项逐文件处理。
+- 这些子模块量极小，可一次提交清完，不必单独排期。
 
 ## 与预推送门禁衔接
 
@@ -123,7 +93,7 @@
 - 每批用 `git diff --stat` 确认改动文件数可控，单批不超过一个子模块的一个规则类别。
 - 清理后运行该子模块测试套件（命令见各子模块 `scripts/dev/` 或 `submodule_checks.json`）。
 - 若 ruff 行为异常，单文件 `git checkout` 回滚，不整体 revert。
-- 批次 0 完成后跑一次顶层 `python scripts/run_quality_checks.py --profile hard` 确认顶层不受影响。
+- 批次 1 完成后跑一次顶层 `python scripts/run_quality_checks.py --profile hard` 确认顶层不受影响。
 
 ## 不建议做的事
 
@@ -136,10 +106,6 @@
 
 | 批次 | 子模块 | 规则类别 | 状态 | 削减条数 |
 | --- | --- | --- | --- | --- |
-| 0 | 全部 | 幽灵债务（D 类等） | 待开始 | |
-| 1 | quant-execution-engine | 全部 | 待开始 | |
-| 2 | portfolio-backtester | F401/E501/F822 | 待开始 | |
-| 3 | market-data-platform | F401/PLR0913 | 待开始 | |
-| 4 | research-apps | F401/E501 | 待开始 | |
-| 5 | strategy-pipeline | F401/E501/F403 | 待开始 | |
-| 6 | alpha-research | F401/F403 | 待开始 | |
+| 1 | market-data-platform | F401/PLR0913 | 待开始 | |
+| 2 | strategy-pipeline | F403 | 待开始 | |
+| 3 | alpha-research / quant-execution-engine / portfolio-backtester / research-apps | RUF002/E402/F403/F401 | 待开始 | |
