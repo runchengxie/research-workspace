@@ -4,7 +4,7 @@
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
     "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。",
-    "accepted_hotspots_count": 177,
+    "accepted_hotspots_count": 176,
     "by_repo": {
       "research-workspace": {
         "max_large_files": 2,
@@ -301,7 +301,7 @@
     {
       "path": "research-apps/src/research_apps/hotsector/hotsector_deepseek_stability.py",
       "owner_repo": "research-apps",
-      "reason": "The frozen five-arm stability workflow keeps deterministic trial construction, bounded evidence aggregation, and decision reporting in one auditable research contract",
+      "reason": "2026-07-28 已拆出 research-apps/src/research_apps/hotsector/_deepseek_stability_metrics.py(486)；主体由 749 行降至 172 行，低于 500 阈值不再是大文件。原 five-arm 稳定性工作流登记失效，metrics 计算债务转移到 _deepseek_stability_metrics.py（已在 accepted_hotspots 登记）。",
       "next_action": "extract report rendering from trial analysis if the frozen arm set or decision schema changes"
     },
     {
@@ -309,24 +309,6 @@
       "owner_repo": "research-apps",
       "reason": "The research-only candidate comparison keeps calendar gaps, fail-closed pool status, churn scenarios, paired inference, and receipt semantics together for reproducibility",
       "next_action": "split daily calendar construction from result receipt assembly before adding another candidate-pool scenario"
-    },
-    {
-      "path": "alpha-research/src/alpha_research/daily_watch20.py",
-      "owner_repo": "alpha-research",
-      "reason": "DailyWatch20 keeps the ranker contract, point-in-time training policy, model restoration, and scoring lineage in one alpha-owned MVP boundary",
-      "next_action": "extract model lifecycle and attribution helpers if another ranker family or another persisted-model contract is added"
-    },
-    {
-      "path": "alpha-research/src/alpha_research/daily_watch20_features.py",
-      "owner_repo": "alpha-research",
-      "reason": "DailyWatch20 daily, minute, Hermite, and multi-horizon feature definitions remain colocated so their point-in-time alignment and feature-set identity are auditable for the MVP",
-      "next_action": "split feature families behind the existing feature-set contract when another minute transform or stability family is introduced"
-    },
-    {
-      "path": "alpha-research/src/alpha_research/sample_weighting.py",
-      "owner_repo": "alpha-research",
-      "reason": "AFML sample weighting keeps grouped interval uniqueness, return attribution, time decay, sequential bootstrap, and receipt hashing in one independently tested research boundary",
-      "next_action": "split interval attribution and bootstrap sampling from receipt construction before adding another weighting or resampling family"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/daily_watch20.py",
