@@ -740,7 +740,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 156,
-      "python_loc": 31783,
+      "python_loc": 31667,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
@@ -1113,7 +1113,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 180,
-      "python_loc": 36752,
+      "python_loc": 36638,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
@@ -1587,12 +1587,12 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 477,
-      "python_loc": 101432,
+      "python_file_count": 476,
+      "python_loc": 101355,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 35,
-        "long_functions": 118,
+        "large_files": 36,
+        "long_functions": 120,
         "complexity_hotspots": 66,
         "large_classes": 1
       },
@@ -1673,11 +1673,6 @@
           "hk_related": false
         },
         {
-          "path": "scripts/research/dividend_growth_momentum.py",
-          "loc": 725,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 722,
           "hk_related": false
@@ -1685,6 +1680,11 @@
         {
           "path": "tests/test_daily_watch20_fundamental_shadow.py",
           "loc": 718,
+          "hk_related": false
+        },
+        {
+          "path": "scripts/research/dividend_growth_momentum.py",
+          "loc": 715,
           "hk_related": false
         },
         {
@@ -2233,7 +2233,7 @@
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
       "python_file_count": 134,
-      "python_loc": 29109,
+      "python_loc": 29003,
       "hk_related_file_count": 15,
       "hotspot_counts": {
         "large_files": 4,
