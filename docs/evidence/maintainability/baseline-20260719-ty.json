@@ -1587,11 +1587,11 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 471,
-      "python_loc": 99635,
+      "python_file_count": 474,
+      "python_loc": 100779,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 34,
+        "large_files": 35,
         "long_functions": 118,
         "complexity_hotspots": 67,
         "large_classes": 1
@@ -1673,6 +1673,11 @@
           "hk_related": false
         },
         {
+          "path": "scripts/research/dividend_growth_momentum.py",
+          "loc": 726,
+          "hk_related": false
+        },
+        {
           "path": "src/strategy_pipeline/liveops/holdings.py",
           "loc": 722,
           "hk_related": false
@@ -1715,11 +1720,6 @@
         {
           "path": "src/strategy_pipeline/release_tools/release_runs.py",
           "loc": 583,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/_daily_watch20_ablation_api.py",
-          "loc": 576,
           "hk_related": false
         }
       ],
@@ -2216,6 +2216,7 @@
         "scripts/research/daily_watch20_incumbent_challenger.py",
         "scripts/research/daily_watch20_minute_campaign.py",
         "scripts/research/daily_watch20_slow_volume_campaign.py",
+        "scripts/research/dividend_growth_momentum.py",
         "scripts/research/hotsector_ai_shadow.py",
         "scripts/research/hotsector_ai_shadow_observation.py",
         "scripts/research/hotsector_challenger_campaign.py",
