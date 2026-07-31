@@ -39,7 +39,7 @@
       "strategy-pipeline": {
         "max_large_files": 35,
         "max_long_functions": 118,
-        "max_complexity_hotspots": 67,
+        "max_complexity_hotspots": 66,
         "max_large_classes": 1
       },
       "quant-execution-engine": {
@@ -129,14 +129,15 @@
       "repo": "strategy-pipeline",
       "max_large_files": 35,
       "max_long_functions": 118,
-      "max_complexity_hotspots": 67,
+      "max_complexity_hotspots": 66,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-26: C901 降至声明上限 15，7 个超复杂函数重构，long_functions 119->118、complexity 70->67（真实下降）。",
         "2026-07-28: 模块拆分后 large_files 49->34 下调（_api/_core 重导出子模块债务转移，3 个仍大者登记 accepted_hotspots）。",
-        "2026-07-31: 新增红利与成长 ETF 动量研究入口；主脚本 726 行并保持研究专用、无生产执行职责，large_files 34->35，登记 accepted_hotspots，后续新增策略变体前先拆分数据获取与回测编排。"
+        "2026-07-31: 新增红利与成长 ETF 动量研究入口；主脚本 726 行并保持研究专用、无生产执行职责，large_files 34->35，登记 accepted_hotspots，后续新增策略变体前先拆分数据获取与回测编排。",
+        "2026-07-31: 基准审计扩展后将 Markdown 构造从 515 行 reporting 模块拆为 233 行输出模块与 338 行报告模块，两个 80 行热点同步消除；large_files 保持 35、long_functions 保持 118，complexity_hotspots 67->66 并下调预算。"
       ]
     },
     {
