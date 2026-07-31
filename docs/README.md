@@ -82,4 +82,4 @@
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 
-> 子模块组成、GitHub Actions 停用状态与分支策略见根目录 [README.md](../../README.md)。本段只记录跨仓库事实中根 README 未涵盖的部分，避免两处各说各话。
+> 子模块组成、GitHub Actions 停用状态与分支策略见根目录 [README.md](../README.md)。本段只记录跨仓库事实中根 README 未涵盖的部分，避免两处各说各话。
