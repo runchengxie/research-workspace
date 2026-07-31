@@ -403,7 +403,7 @@
         "E402"
       ],
       "owner": "quant-execution-engine",
-      "reason": "The CLI facade re-exports all command handlers and runs the top-level dispatcher; main() stays complex while broker/account command groups are extracted behind focused tests. E402 is required so the facade can define CommandResult before importing handlers.",
+      "reason": "The CLI facade re-exports all command handlers and runs the top-level dispatcher; main() stays complex while broker/account command groups are extracted behind focused tests. E402 is required so the facade can define CommandResult before importing handlers.（分类：临时债；其中 C901 为临时复杂度豁免，E402 为 facade 脚本引导必要项）",
       "next_action": "Split broker and recovery command routing before removing the temporary complexity exception.",
       "review_milestone": "next quant-execution CLI command-family change or 2.0 release review"
     },
@@ -415,7 +415,7 @@
         "C901"
       ],
       "owner": "quant-execution-engine",
-      "reason": "run_config remains a broad broker/account configuration dispatcher while account command groups are extracted behind focused tests.",
+      "reason": "run_config remains a broad broker/account configuration dispatcher while account command groups are extracted behind focused tests.（分类：临时债）",
       "next_action": "Extract account configuration sub-commands before removing the temporary complexity exception.",
       "review_milestone": "next quant-execution CLI command-family change or 2.0 release review"
     },
@@ -427,7 +427,7 @@
         "E402"
       ],
       "owner": "quant-execution-engine",
-      "reason": "E402 is required so the harness can insert the repository root into sys.path before importing the project_tools.smoke_operator package when executed directly as a script.",
+      "reason": "E402 is required so the harness can insert the repository root into sys.path before importing the project_tools.smoke_operator package when executed directly as a script.（分类：永久设计）",
       "next_action": "Keep the sys.path bootstrap minimal; revisit only if the package becomes pip-installable.",
       "review_milestone": "next quant-execution smoke harness change or 2.0 release review"
     },
@@ -439,7 +439,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -451,7 +451,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -463,7 +463,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -475,7 +475,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -487,7 +487,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -499,7 +499,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -511,7 +511,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -523,7 +523,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -535,7 +535,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -547,7 +547,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -559,7 +559,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -571,7 +571,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -583,7 +583,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -595,7 +595,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -607,7 +607,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -619,7 +619,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -631,7 +631,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -643,7 +643,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -655,7 +655,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -667,7 +667,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -679,7 +679,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -691,7 +691,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -703,7 +703,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -715,7 +715,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -727,7 +727,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -739,7 +739,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -751,7 +751,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     },
@@ -763,7 +763,7 @@
         "F401"
       ],
       "owner": "market-data-platform",
-      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.（分类：永久设计）",
       "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
       "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     }

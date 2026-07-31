@@ -54,6 +54,21 @@
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。
 
+## 子模块文档入口
+
+六个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
+
+| 子模块 | 文档入口 | 说明 |
+| --- | --- | --- |
+| `alpha-research` | [../alpha-research/docs/](../alpha-research/docs/) | 研究信号、回测算法与评估方法 |
+| `market-data-platform` | [../market-data-platform/docs/](../market-data-platform/docs/) | 行情数据供给、契约与治理 |
+| `portfolio-backtester` | [../portfolio-backtester/docs/](../portfolio-backtester/docs/) | 组合回测、容量与执行模拟 |
+| `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
+| `research-apps` | [../research-apps/docs/README.md](../research-apps/docs/README.md) | 应用目录、迁移栈与质量门禁 |
+| `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
+
+> 子模块文档以各仓 `docs/` 为准；如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
+
 ## 当前事实
 
 - 活跃链路包含六个 Git 子模块
