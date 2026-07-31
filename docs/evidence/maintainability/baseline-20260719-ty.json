@@ -1587,13 +1587,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 474,
-      "python_loc": 100779,
+      "python_file_count": 477,
+      "python_loc": 101432,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
         "long_functions": 118,
-        "complexity_hotspots": 67,
+        "complexity_hotspots": 66,
         "large_classes": 1
       },
       "large_files": [
@@ -1674,7 +1674,7 @@
         },
         {
           "path": "scripts/research/dividend_growth_momentum.py",
-          "loc": 726,
+          "loc": 725,
           "hk_related": false
         },
         {
