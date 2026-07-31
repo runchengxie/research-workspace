@@ -28,7 +28,7 @@
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
 | `summary.json` | `strategy-pipeline` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
-| `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后 信息系数（IC）和冗余画像摘要 |
+| `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后信息系数（IC）和冗余画像摘要 |
 | `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究 | 全市场 9 因子多空日收益、逐年分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
 | `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `strategy export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `strategy export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
@@ -56,7 +56,7 @@
 - producer commit/version 与 backend provenance。
 - timezone-aware 创建时间。
 - artifact、配置和上游 lineage 的安全哈希算法（SHA-256）。
-- 对执行目标可选的 validity、portfolio/account scope、policy reference 和 幂等 scope。
+- 对执行目标可选的 validity、portfolio/account scope、policy reference 和幂等 scope。
 
 envelope 不包含数据加载、路径解析、模型训练或组合计算 helper。Qlib、vn.py 和 LEAN 对象不得进入 envelope。v2 writer 在各 owner 仓库完成 parity 前保持 opt-in。未携带 envelope 的 v1 metadata 继续由兼容 reader 原样读取。
 
@@ -81,9 +81,9 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
 DailyWatch20（每日观察的 20 只 A 股名单，由 strategy-pipeline 产出给 market-intel）是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、默认
-50%/30%/20% 权重的 1/3/5 日 时间点（PIT）标签和
+50%/30%/20% 权重的 1/3/5 日时间点（PIT）标签和
 feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline` 负责读取已发布数据、
-同日完整性门禁、增量分钟缓存、周期重训/每日打分、滚动 样本外（OOS）消融和原子发布。`market-intel`
+同日完整性门禁、增量分钟缓存、周期重训/每日打分、滚动样本外（OOS）消融和原子发布。`market-intel`
 生产严格时点化热点输入，并分别生成客户统一 20 股展示和内部审计展示。
 MVP 的 `eligible_for_live=false`，不会生成
 `targets.json`，也不得被晨报脚本隐式转换为交易目标。
@@ -193,7 +193,7 @@ python src/research_contracts/smoke_contracts.py
 
 这些脚本只做轻量检查。子项目测试、业务参数验证和真实交易验证仍在对应子项目中完成。
 
-`workspace_doctor.py` 还会检查 `scripts/*.py` 是否直接导入了子模块 Python 包，并阻止顶层 `_shared/*.py` 这类裸共享库回流。顶层脚本应通过公开 命令行（CLI）或文档化文件进行交接。可复用 Python 应用程序接口（API）应进入有明确 owner 的子模块或正式共享 package。
+`workspace_doctor.py` 还会检查 `scripts/*.py` 是否直接导入了子模块 Python 包，并阻止顶层 `_shared/*.py` 这类裸共享库回流。顶层脚本应通过公开命令行（CLI）或文档化文件进行交接。可复用 Python 应用程序接口（API）应进入有明确 owner 的子模块或正式共享 package。
 
 如果需要从顶层发起子项目自己的质量检查，使用委托式入口：
 

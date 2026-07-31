@@ -72,7 +72,7 @@ uv sync --group dev --extra cli
 cd ..
 ```
 
-需要 RQData、TuShare、DuckDB 或券商 软件开发工具包（SDK）时，在对应子仓库安装相应可选依赖。
+需要 RQData、TuShare、DuckDB 或券商软件开发工具包（SDK）时，在对应子仓库安装相应可选依赖。
 
 ## 配置数据根目录
 
@@ -95,7 +95,7 @@ $DATA_PLATFORM_ROOT/
   standardized/
 ```
 
-顶层 `.env` 只保存 `DATA_PLATFORM_ROOT` 一类路径配置。数据服务商 令牌、券商凭证和密码按子仓库规则保存。
+顶层 `.env` 只保存 `DATA_PLATFORM_ROOT` 一类路径配置。数据服务商令牌、券商凭证和密码按子仓库规则保存。
 
 ## 顶层检查
 

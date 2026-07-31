@@ -33,7 +33,7 @@ Qlib 适合数据读取、研究生命周期和差分回测。vn.py 适合执行
 | 组合对称交叉验证（CPCV）、回测过拟合概率（PBO）和晋级证据 | `alpha-research` | 保留平台规则 |
 | A 股确定性回放 | `portfolio-backtester` | Qlib 可做差分基线，LEAN 可做独立场景 |
 | 通用事件回测 | 暂无职责仓扩张计划 | Backtrader 只在证明维护收益后评估 |
-| Gateway、实时事件和基础 订单管理系统（OMS） | `quant-execution-engine` 传输层边界 | vn.py 可作为后续可选传输层 |
+| Gateway、实时事件和基础订单管理系统（OMS） | `quant-execution-engine` 传输层边界 | vn.py 可作为后续可选传输层 |
 | 审批、幂等、日志和对账 | `quant-execution-engine` | 保留平台控制面 |
 | 研究应用组合 | `research-apps` | 只通过职责仓接口间接使用后端 |
 | 编排、回执和目标导出 | `strategy-pipeline` | 不直接加载框架运行时 |

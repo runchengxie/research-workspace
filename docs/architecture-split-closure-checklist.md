@@ -11,7 +11,7 @@
 
 ## 当前边界
 
-- `market-data-platform` 发布数据契约、资产、清单 和 registry。
+- `market-data-platform` 发布数据契约、资产、清单和 registry。
 - `alpha-research` 使用 `alpha_research.*`，输出 `signals.parquet` 和 `signals.meta.json`。
 - `portfolio-backtester` 使用 `portfolio_backtester.*`，输出 `positions_by_rebalance.csv`。
 - `strategy-pipeline` 使用 `strategy_pipeline.*`，负责编排和 `targets.json` 导出。命令行入口为 `strategy`。

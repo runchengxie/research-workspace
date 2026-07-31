@@ -8,7 +8,7 @@
 | `portfolio-backtester` | `portfolio_backtester.*` | n/a |
 | `strategy-pipeline` | `strategy_pipeline.*` | `strategy`, `strategy-pipeline` |
 
-工作区 2.0 已删除旧共享 命名空间、兼容 CLI 和环境变量 兜底。所有活跃调用必须直接使用
+工作区 2.0 已删除旧共享命名空间、兼容 CLI 和环境变量兜底。所有活跃调用必须直接使用
 上表列出的 owner-native package 与 `strategy` / `strategy-pipeline` CLI。
 
 ## 历史 1.x 合并顺序
@@ -26,5 +26,5 @@
 
 仓库本地导入（repo-local import）、CLI、环境变量、日志过滤、配置点分路径（dotted path）和序列化类路径均已迁到
 owner-native 名称。旧产物（artifact）原样保留用于来源（provenance）与离线审计，但 2.0 reader 不承诺接受
-旧 契约 identity。需要复现时使用 1.x release tag 或一次性迁移工具。新的 producer 只写
-owner-native 契约 名称，2.0 主线不保留双入口。
+旧契约 identity。需要复现时使用 1.x release tag 或一次性迁移工具。新的 producer 只写
+owner-native 契约名称，2.0 主线不保留双入口。

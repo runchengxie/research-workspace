@@ -20,14 +20,14 @@
 - `strategy-pipeline` 在 1.x 内集中提供唯一的旧 Python facade 和 CLI alias。工作区 2.0
   已删除该兼容面。
 - `strategy` 与 `strategy-pipeline` 是权威 CLI。`STRATEGY_PIPELINE_*` 是权威环境变量前缀。
-- 旧 Python 命名空间、CLI alias 和 `CSTREE_*` 兜底 在工作区 2.0 删除。
+- 旧 Python 命名空间、CLI alias 和 `CSTREE_*` 兜底在工作区 2.0 删除。
 
 ## 不变量
 
 1. 三个仓库均不得重新引入旧共享 Python package。
 2. strategy 仓库只发布 `strategy` 与 `strategy-pipeline` 两个 console script。
-3. 跨仓库 应用程序接口（API）使用 owner-native package。artifact 契约 不携带第三方 runtime type。
-4. 新代码、adapter、测试、文档和配置不得增加旧 命名空间 依赖。
+3. 跨仓库应用程序接口（API）使用 owner-native package。artifact 契约不携带第三方 runtime type。
+4. 新代码、adapter、测试、文档和配置不得增加旧命名空间依赖。
 5. superproject 在下游提交验证完成后才更新 gitlinks。
 
 ## 后果

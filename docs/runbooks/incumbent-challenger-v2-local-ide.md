@@ -10,9 +10,9 @@
 2. 同分数、同 entry membership、每日重置状态的 stateless control，
 3. 仅增加旧仓状态携带的 stateful challenger。
 
-这份笔记只覆盖必须在本地数据盘和完整工作区中执行的步骤。当前 V1–V4 结果属于 retrospective exploration，不计作新 样本外（OOS），也不授权生产切换。
+这份笔记只覆盖必须在本地数据盘和完整工作区中执行的步骤。当前 V1–V4 结果属于 retrospective exploration，不计作新样本外（OOS），也不授权生产切换。
 
-## 已创建的 拉取请求（PR）
+## 已创建的拉取请求（PR）
 
 ### 1. Portfolio owner
 
@@ -59,7 +59,7 @@
 5. 跑完整 Research Apps 门禁，通过后把 PR #2 标记 Ready 并合并。
 6. Strategy PR #28 可独立验证和合并。
 7. Strategy 的 v2 运行脚本接入最终 alpha、portfolio 和 research-apps main SHA 后，再更新 `pyproject.toml` 与 `uv.lock`。
-8. 最后更新 research-workspace 子模块 指针、workspace 清单 和治理基线。
+8. 最后更新 research-workspace 子模块指针、workspace 清单和治理基线。
 
 ## 本地准备
 
@@ -221,7 +221,7 @@ trade_date,symbol
 - 缺失日期，
 - 原始输入路径和 SHA-256，
 - market-data-platform commit，
-- current 契约 和相关 清单 SHA-256。
+- current 契约和相关清单 SHA-256。
 
 硬门槛：
 

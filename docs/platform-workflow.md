@@ -32,7 +32,7 @@ targets.json
 模拟盘、实盘和运行门禁仍由执行引擎负责。
 
 A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
-`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整 时间点（PIT）、
+`production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整时间点（PIT）、
 长窗口策略证据和真实券商能力必须独立验收。
 
 ## 七段式研究地图
@@ -55,7 +55,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
 | 研究应用 | `research-apps` | 组合数据、alpha 和回测 owner 应用程序接口（API），运行 F-lite、slow-volume 与 DeepSeek V4 研究 runner，不负责最终发布 | `research_apps.*`、普通 frames/report |
-| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责 命令行（CLI）、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
+| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责命令行（CLI）、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界
@@ -120,7 +120,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 runner，`strategy-pipeline` 继续负责数据提供方（provider）调用、操作员控制、原子发布和 target
 交接。A 股主入口是 `strategy run --config default`。
 `default_next` 是同一 A 股 preset 的迁移兼容别名。分钟因子、DailyWatch20、
-错峰（staggered）队列 和热点 AI shadow 目前属于 research-only campaign，不能直接修改
+错峰（staggered）队列和热点 AI shadow 目前属于 research-only campaign，不能直接修改
 线上模型或执行目标。港股只用于历史恢复。
 
 - 特征工程、训练与评估。

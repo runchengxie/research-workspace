@@ -23,7 +23,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 | 因子 | 当前方向 | 主要输入 | 数据来源 |
 | --- | --- | --- | --- |
 | Size 大市值 | 大市值 - 小市值 | `total_mv` | daily |
-| Value 低估值 | 低 市净率（PB） - 高 PB | `pb` | daily_basic |
+| Value 低估值 | 低市净率（PB） - 高 PB | `pb` | daily_basic |
 | Momentum 动量 | 高 21 日动量 - 低 21 日动量 | `close` | daily |
 | Earnings Yield 盈利估值 | 低 PE_TTM - 高 PE_TTM | `pe_ttm` | daily_basic |
 | LowVol 低波动 | 低 20 日波动 - 高 20 日波动 | `close` | daily |
@@ -55,7 +55,7 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 daily / daily_basic: 2008-03-03 ~ 2026-07-29
 ```
 
-这段日期用于复现该次报告，不代表 current 契约 的实时截止日。全量运行默认读取执行时
+这段日期用于复现该次报告，不代表 current 契约的实时截止日。全量运行默认读取执行时
 可用的全部日期。`--quick` 从 `2020-01-01` 开始读取分区，用于调试和快速产出。
 
 新因子覆盖受本地数据落地时间限制：`liquidity_flow`（moneyflow_ths）自 2026-02 起，
@@ -107,7 +107,7 @@ uv run python -m src.style_factors \
   --outdir artifacts/style_analysis_strategy
 ```
 
-归因使用 普通最小二乘（OLS）：
+归因使用普通最小二乘（OLS）：
 
 ```text
 strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * liquidity + residual

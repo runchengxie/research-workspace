@@ -22,9 +22,9 @@ repo-local surface、public safety、consumer audit、replacement path 和 remov
 
 | 分类 | 含义 | 当前处理 |
 | --- | --- | --- |
-| `shared_active` | 多市场 契约、执行或恢复能力仍需要 | 保留并继续跑 focused tests |
+| `shared_active` | 多市场契约、执行或恢复能力仍需要 | 保留并继续跑 focused tests |
 | `frozen_compatibility` | 港股复现或明确跟踪需求仍可能调用 | 保留入口，标记 deprecated，不扩展 A 股主线 |
-| `archived_provenance` | 只用于解释历史研究和 release | 通过归档记录或 清单 追溯 |
+| `archived_provenance` | 只用于解释历史研究和 release | 通过归档记录或清单追溯 |
 | `retire_after_audit` | 已有替代入口，但仍需下游使用审计 | 审计和回滚证据完成后在 follow-up change 删除 |
 
 ## 删除门禁

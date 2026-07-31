@@ -61,7 +61,7 @@ quant-execution-engine
 - candidate/release 协议禁止事件窗口数据剔除（event-window purge）静默退回普通 gap。
 - sizing 使用严格样本外校准结果。组合层拥有权重约束和换手限制。
 - release protocol 决定是否允许研究候选交接，不参与目标权重计算。
-- 交接审计（audit）验证 schema、路径和哈希（hash），不根据夏普比率（Sharpe）、信息系数（IC）、修正夏普比（DSR）或 回测过拟合概率（PBO）修改订单。
+- 交接审计（audit）验证 schema、路径和哈希（hash），不根据夏普比率（Sharpe）、信息系数（IC）、修正夏普比（DSR）或回测过拟合概率（PBO）修改订单。
 - 动态执行策略必须显式启用，并先经过 dry-run 和 paper 证据。
 
 ## 合并顺序
@@ -75,4 +75,4 @@ quant-execution-engine
 5. `quant-execution-engine`
 6. `research-workspace`
 
-工作区 拉取请求（PR）在 owner PR 未合并前会指向其分支提交，因此审查和 smoke 可以使用准确版本组合。owner PR 如发生 rebase 或 squash，合并工作区前需要刷新对应子模块指针。
+工作区拉取请求（PR）在 owner PR 未合并前会指向其分支提交，因此审查和 smoke 可以使用准确版本组合。owner PR 如发生 rebase 或 squash，合并工作区前需要刷新对应子模块指针。

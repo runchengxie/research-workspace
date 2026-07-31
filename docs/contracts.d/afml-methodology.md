@@ -26,4 +26,4 @@
 - `afml_evidence_fragment.json` 只合并路径、状态和 SHA-256，不替代正式 protocol report。
 - `research_protocol_report.json` 只决定候选是否允许交接，不改变 `targets.json`。
 - `execution_policy_receipt.json` 关联目标 artifact hash，但不反向修改研究模型。
-- `handoff_audit_report.json` 验证完整性，不解释 Sharpe、信息系数（IC）、DSR 或 回测过拟合概率（PBO）。
+- `handoff_audit_report.json` 验证完整性，不解释 Sharpe、信息系数（IC）、DSR 或回测过拟合概率（PBO）。

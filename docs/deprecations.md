@@ -13,7 +13,7 @@
 | `rqdata-hk-assets` | `market-data-platform` | `marketdata migration hydrate-hk` + 恢复专用归档 | removed | completed 2026-06-13 |
 | 历史港股调仓命令行（CLI） | `strategy-pipeline` | `strategy alloc` 加 `strategy export-targets` | removed | 命令行与 `alloc_hk` 模块已于 2026-06-13 删除 |
 | 港股历史实验配置 | `strategy-pipeline` | `docs/archive/research/hk/configs/experiments` + 恢复专用归档 | removed | 活跃实验配置已于 2026-06-13 归档 |
-| 旧共享 Python 命名空间、CLI 与环境变量 兜底 | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
+| 旧共享 Python 命名空间、CLI 与环境变量兜底 | `strategy-pipeline` | `strategy_pipeline.*`、`alpha_research.*`、`portfolio_backtester.*`、`strategy` | removed | removed in workspace 2.0 on 2026-07-14 |
 
 ## 删除门禁
 
