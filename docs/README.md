@@ -36,6 +36,7 @@
 - 治理文件索引：[governance-index.md](governance-index.md)
 - 代码体量复查与拆分建议：[code-size-review.md](code-size-review.md)
 - 子模块巨型文件拆分方案：[submodule-refactor-plan.md](submodule-refactor-plan.md)
+- 子模块 noqa 清债计划：[noqa-clearing-plan.md](noqa-clearing-plan.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
 - 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)

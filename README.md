@@ -101,6 +101,8 @@ GitHub Actions 权限均禁用，检查以本地 pre-push 为主。安装方法�
 自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)和
 [质量治理](docs/quality-governance.md)中。
 
+不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
+
 ## 重要边界
 
 - 大型市场数据、研究输出、缓存和交易审计日志放在仓库外。

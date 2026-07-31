@@ -35,7 +35,7 @@
 | `targets.json.lineage.json` | `strategy export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `strategy watchlist20 run` | `market-intel` 晨报 | 内部严格 A4/B16（DailyWatch20 内部两袖：A 袖 4 只、B 袖 16 只）的 20 股研究 artifact。JSON companion 必须与 CSV 的股票、袖、排名和权重一致，执行以 CSV 为准。客户 renderer 统一展示 20 股且不暴露内部袖、分数或权重 |
 | `strategy_outputs/watchlist20/latest/selection_receipt.json` | `strategy watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
-| `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `strategy watchlist20 run` | 严格 source date 的稀疏热点正样本。未出现股票表示未知而非零热度 |
+| `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `strategy watchlist20 run` | 严格 source date 的稀疏热点正样本。股票未出现表示热度未知，不代表零热度 |
 | 订单审计和验证输出 | `quant-execution-engine` | 人工审计 | 执行系统自己的审计证据 |
 
 ## 跨模块 artifact 契约
