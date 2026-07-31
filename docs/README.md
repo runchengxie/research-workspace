@@ -65,4 +65,4 @@
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 - 顶层和子模块 GitHub Actions workflow 当前停用，`research-apps` 的仓库 Actions 权限也禁用
-- 顶层与六个子模块共七个仓库使用共享本地 pre-push 门禁，远端只维护 `main`
+- 顶层与六个子模块共七个仓库使用共享本地 pre-push 门禁，远端维护 `main` 并接受 `feat/*`、`fix/*`、`hotfix/*`、`release/*` 前缀的功能分支（用于拉取请求流程）
