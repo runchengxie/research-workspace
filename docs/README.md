@@ -67,7 +67,7 @@
 | `research-apps` | [../research-apps/docs/README.md](../research-apps/docs/README.md) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
 
-> 子模块文档以各仓 `docs/` 为准；如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
+> 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
 
 ## 当前事实
 
