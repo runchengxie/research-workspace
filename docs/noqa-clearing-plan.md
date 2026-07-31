@@ -157,3 +157,13 @@ push 触发 mdp 的 `full` profile 门禁，前 3 项（uv lock、ruff check、r
 - 若要推进此 PR，需在 mdp 分支内重算 `quality_baseline.json`（让 44927 成为新基线），同提交写明这是 facade 注释迁移的统计副作用而非质量退化，再走 owner 决策或 waiver。
 - 这同时印证了原盘点判断：mdp 的治理机制对良性重构不够友好，加一行 lint 声明也要动基线。
 - 当前状态：分支 `refactor/facade-noqa-config`（commit `f095a38`）留在外部 worktree `/home/richard/code/mdp-facade-worktree`，未推送成功，待决策。mdp 主目录已恢复 `main`，superproject gitlink 未变。
+
+### 升级方案 C：per-file-ignores 绕过 ratchet（已实测通过）
+
+重新评估「优解」后，放弃文件内声明，改用配置级 `per-file-ignores`，在 worktree 内实证：
+
+- 做法：移除 28 个 facade 文件顶部的 `# ruff: noqa: F401`（共删 28 行），改为在 `pyproject.toml` 加 `[tool.ruff.lint.per-file-ignores]` 段，逐文件声明 `["F401"]`。配置写在 `pyproject.toml`，不计入源文件行数。
+- 验证：`ruff check src/` 全过（F401 被 per-file-ignores 压住）。`ruff format --check` 全过。`quality_debt.py --check-baseline --check-ratchet` 退出码 0，`ty: excluded lines` 回到 44903（与基线一致，不再有 44927 的回归）。
+- 收益：源文件行数零净增，ratchet 不再拦截。意图集中且可读。RUF100 不触及配置级忽略，杜绝误删有效抑制。完全符合最初「优解」意图。
+- 注意：`quality_debt.py` 的 debt scan 仍会列出 1061 个 F401（它用 `--select F` 全量计数作债存量报告），但这只是信息性输出，不影响 ratchet 判定。
+- 当前状态：方案 C 已提交为 worktree 分支新 commit `1a4b36d`（分支仍名 `refactor/facade-noqa-config`，待重命名为 `feat/facade-noqa-per-file-ignores` 以符合推送前缀规则）。下一步走 PR：推送、review、merge、删分支与 worktree，再开新 worktree 探索下一轮优化方向。
