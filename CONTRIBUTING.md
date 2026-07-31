@@ -105,7 +105,7 @@
 | 报错 | 含义 | 处理 |
 | --- | --- | --- |
 | `only remote branch refs/heads/main is allowed` | 分支名不是白名单前缀 | 改成分支名以 `feat/`、`fix/`、`hotfix/`、`release/` 开头 |
-| `repository is outside the managed workspace` | 守卫无法识别来源仓库 | 确认在 worktree 或主工作树内推送；当前版本 worktree 已支持，若仍出现检查 cwd 是否在该仓库内 |
+| `repository is outside the managed workspace` | 守卫无法识别来源仓库 | 确认在 worktree 或主工作树内推送。当前版本 worktree 已支持，若仍出现检查 cwd 是否在该仓库内 |
 | `test_owner_native_manifest_matches_gitlinks` 失败 | 子模块 gitlink 与 `owner-native-namespace-release.json` 不一致 | 把 manifest 里对应子模块的 `commit` 更新为实际提交 |
 | `repository-clean: working tree is dirty` | 工作树有未提交改动 | 提交或丢弃改动后再推 |
 | 门禁报基线或 ratchet 预算不符 | 代码增量合法但超阈值 | 用 `scripts/maintainability_baseline.py` 重算基线，并按 owner decision 调整 `maintainability-refactor-roadmap.yml` 预算 |
