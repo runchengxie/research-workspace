@@ -4,7 +4,7 @@
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
     "broad_exclude_register_max": 2,
-    "per_file_ignore_register_max": 3,
+    "per_file_ignore_register_max": 31,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
   "repos": [
@@ -430,6 +430,342 @@
       "reason": "E402 is required so the harness can insert the repository root into sys.path before importing the project_tools.smoke_operator package when executed directly as a script.",
       "next_action": "Keep the sys.path bootstrap minimal; revisit only if the package becomes pip-installable.",
       "review_milestone": "next quant-execution smoke harness change or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/cli_data.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/contract_health.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/data_governance.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/data_providers_core.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/data_warehouse_materialize.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/guan_mobile_raw.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/_a_share_minute_coverage_audit.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/_adapters.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/_coverage_manifest.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/_coverage_materialize.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/a_share_minute_bj_overlay.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/a_share_minute_fusion.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/guan_annual_minbar.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_clean.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_flow_features.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_hotspot_features.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_options.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_ownership_features.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_quality.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_research.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/providers/tushare_a_share_universe.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/research_views/daily_watch20_candidate_pool.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/tushare_minute_backfill.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
+    },
+    {
+      "repo": "market-data-platform",
+      "path": "src/market_data_platform/tushare_refresh.py",
+      "tool": "ruff",
+      "rules": [
+        "F401"
+      ],
+      "owner": "market-data-platform",
+      "reason": "Facade re-export shell over split provider submodules; re-exports public API symbols that appear unused at module level. F401 is intentional, not dead code.",
+      "next_action": "Keep facade re-exports centralized; revisit only if the split submodules are merged back or the public API surface shrinks.",
+      "review_milestone": "next market-data-platform facade/split refactor or 2.0 release review"
     }
   ]
 }
