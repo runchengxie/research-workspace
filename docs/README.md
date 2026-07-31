@@ -31,6 +31,8 @@
 - 外部框架采用评估：[framework-adoption-assessment.md](framework-adoption-assessment.md)
 - 框架集成边界：[adr/0001-framework-integration-boundaries.md](adr/0001-framework-integration-boundaries.md)
 - Python 命名空间决策：[adr/0002-owner-native-python-namespaces.md](adr/0002-owner-native-python-namespaces.md)
+- 研究应用 owner 边界：[adr/0003-research-application-ownership.md](adr/0003-research-application-ownership.md)
+- 架构决策总索引：[adr/README.md](adr/README.md)
 - 废弃入口：[deprecations.md](deprecations.md)
 - 维护性治理：[maintainability-governance.md](maintainability-governance.md)
 - 治理文件索引：[governance-index.md](governance-index.md)
@@ -64,7 +66,7 @@
 | `market-data-platform` | [../market-data-platform/docs/](../market-data-platform/docs/) | 行情数据供给、契约与治理 |
 | `portfolio-backtester` | [../portfolio-backtester/docs/](../portfolio-backtester/docs/) | 组合回测、容量与执行模拟 |
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
-| `research-apps` | [../research-apps/docs/README.md](../research-apps/docs/README.md) | 应用目录、迁移栈与质量门禁 |
+| `research-apps` | [../research-apps/docs/](../research-apps/docs/) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
 
 > 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。

@@ -37,12 +37,12 @@ ruff C901 在六个子模块 `src/` 下均为 0 处超限（因 max-complexity �
 
 | 脚本 | 位置 | 一致性 | 判断 |
 | --- | --- | --- | --- |
-| `maintainability_metrics.py` | portfolio-backtester 与 research-apps 各一份（其余子模块本轮未检出） | 同名异实现：前者用 ast 静态分析加 git ls-files，后者调用 ruff 实际运行并读 baseline ratchet，契约不同 | 不应合并。各自 ratchet 测试锁定了不同契约，抽共享包会破坏两个子模块的质量门禁 |
+| `maintainability_metrics.py` | 六个子模块 `scripts/dev/` 各一份 | 分三族。A 族（alpha-research、portfolio-backtester、strategy-pipeline、quant-execution-engine）函数签名高度一致，属同一契约演化。B 族（market-data-platform）用参数计数加 baseline，独立实现。C 族（research-apps）调用 ruff 加 baseline，独立实现 | A 族四份是真重复，可抽成共享包。B 族与 C 族契约不同，不应合并 |
 | `namespace_boundary.py` | strategy-pipeline / alpha-research / portfolio-backtester 各一份 | 待逐一比对 | 若契约相同再考虑收敛，目前不急于合并 |
 | `run_tests.sh` | 三个子模块各一份 | 待比对 | 疑似复制，合并前先确认调用参数一致 |
 | `export_repo_source.py` | quant-execution-engine / strategy-pipeline 各一份 | 内容近似 | 两份维护者辅助脚本，可合并 |
 
-`maintainability_metrics.py` 此前被记为「六个子模块各一份、独立演化复制」。实际核查当前检出的两份后确认它们是同名异实现，不是真重复。因此原先「抽成共享 dev 工具包」的建议对这份脚本不成立。真正值得收敛的是 `export_repo_source.py` 这类内容近似、契约单一的辅助脚本。
+`maintainability_metrics.py` 此前被记为「六个子模块各一份、独立演化复制」，后又被误判为「全部同名异实现、不应合并」。本轮逐一比对六份后确认是三族并存。A 族四份（alpha-research、portfolio-backtester、strategy-pipeline、quant-execution-engine）函数签名几乎一致，是同一契约的复制，修复一处不会传播到其他三份，属于真重复，值得抽成共享包。B 族（market-data-platform）与 C 族（research-apps）各自用不同算法与 baseline 契约，强行合并会破坏这两个子模块的门禁，应保留独立。真正值得收敛的是 A 族四份复制，以及 `export_repo_source.py` 这类内容近似、契约单一的辅助脚本。
 
 对同名异实现保持各子模块独立，比强行抽象更安全。已有的治理理由已写在 `docs/quality-coverage-governance.yml` 的 `reason` 字段（新增「分类：临时债 / 永久设计」标记），便于新人判断每条忽略的性质。
 

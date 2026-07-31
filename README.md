@@ -96,10 +96,7 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。当前顶层和六个子模块的
-GitHub Actions 权限均禁用，检查以本地 pre-push 为主。安装方法、完整命令和
-自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)和
-[质量治理](docs/quality-governance.md)中。
+`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。当前顶层与六个子模块的 GitHub Actions 权限均已禁用，检查以本地 pre-push 为主。安装方法、完整命令和自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)与[质量治理](docs/quality-governance.md)中。
 
 不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
 
