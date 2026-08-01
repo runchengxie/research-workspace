@@ -106,7 +106,8 @@ def plot_correlation_heatmap(factor_results: dict, outdir: Path) -> None:
     if corr.empty:
         return
 
-    fig, ax = plt.subplots(figsize=(7, 6))
+    size = max(8.0, len(corr) * 0.72)
+    fig, ax = plt.subplots(figsize=(size, size * 0.9))
     im = ax.imshow(corr.values, cmap="RdBu_r", vmin=-1, vmax=1)
 
     labels = [FACTOR_LABELS.get(c, c) for c in corr.columns]
@@ -123,7 +124,7 @@ def plot_correlation_heatmap(factor_results: dict, outdir: Path) -> None:
                 f"{corr.iloc[i, j]:.2f}",
                 ha="center",
                 va="center",
-                fontsize=9,
+                fontsize=max(5.5, 10 - len(corr) * 0.2),
                 fontweight="bold",
                 color="white" if abs(corr.iloc[i, j]) > 0.5 else "#333",
             )
@@ -141,11 +142,13 @@ def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
     if yearly.empty:
         return
 
-    ret_pivot = yearly.pivot(index="year", columns="factor", values="annual_ret")
+    return_column = "period_return" if "period_return" in yearly.columns else "annual_ret"
+    ret_pivot = yearly.pivot(index="year", columns="factor", values=return_column)
     years = sorted(ret_pivot.index)
     x = np.arange(len(years))
-    bar_w = 0.15
     factor_names = [name for name in FACTOR_LABELS if name in ret_pivot.columns]
+    bar_w = 0.8 / max(len(factor_names), 1)
+    offsets = (np.arange(len(factor_names)) - (len(factor_names) - 1) / 2) * bar_w
 
     fig, axes = plt.subplots(2, 1, figsize=(16, 12))
 
@@ -156,18 +159,18 @@ def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
             for y in years
         ]
         ax1.bar(
-            x + i * bar_w,
+            x + offsets[i],
             vals,
             bar_w,
             label=FACTOR_LABELS[name],
             color=FACTOR_COLORS[name],
             alpha=0.85,
         )
-    ax1.set_xticks(x + bar_w * 2)
+    ax1.set_xticks(x)
     ax1.set_xticklabels([str(y) for y in years], fontproperties=CJK, fontsize=8)
     ax1.axhline(0, color="#555", linewidth=0.5)
-    ax1.set_ylabel("年化收益 (%)", fontproperties=CJK)
-    ax1.set_title("逐年风格因子收益", fontproperties=CJK, fontsize=14)
+    ax1.set_ylabel("年度 / 年初至今收益 (%)", fontproperties=CJK)
+    ax1.set_title("逐年风格因子期间收益", fontproperties=CJK, fontsize=14)
     ax1.legend(loc="upper left", prop=CJK, framealpha=0.5, facecolor=BG, edgecolor="#333")
 
     ax2 = axes[1]
@@ -178,8 +181,8 @@ def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
             best_ret.append(0)
             best_label.append("")
             continue
-        best = row.nlargest(1, "annual_ret").iloc[0]
-        best_ret.append(best["annual_ret"])
+        best = row.nlargest(1, return_column).iloc[0]
+        best_ret.append(best[return_column])
         best_label.append(FACTOR_LABELS.get(best["factor"], ""))
     colors_best = ["#ff6b6b" if r < 0 else "#00d4aa" for r in best_ret]
     ax2.bar(x, best_ret, color=colors_best, alpha=0.8)

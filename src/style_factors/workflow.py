@@ -22,7 +22,6 @@ from .data import (
     load_data,
     load_fina_indicator,
     load_holder_structure,
-    load_limit_list,
     load_moneyflow_ths,
     load_sw_industry_membership,
 )
@@ -92,7 +91,14 @@ def _build_metadata(
     factor_results: dict,
     attribution: dict | None,
     yearly_attribution: pd.DataFrame | None,
+    factors: pd.DataFrame,
+    daily: pd.DataFrame,
 ) -> dict[str, Any]:
+    industry_coverage = (
+        float(factors["industry_l1"].notna().mean())
+        if "industry_l1" in factors.columns and not factors.empty
+        else 0.0
+    )
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "data_root": str(data_root),
@@ -101,6 +107,17 @@ def _build_metadata(
         "quick_start_date": "2020-01-01" if quick else None,
         "factor_count": len(factor_results),
         "factors": sorted(factor_results),
+        "data_start": daily["trade_date"].min().date().isoformat(),
+        "data_end": daily["trade_date"].max().date().isoformat(),
+        "industry_signal_demeaning": bool(industry_coverage > 0),
+        "industry_coverage": round(industry_coverage, 6),
+        "rebalance_frequency": "month_end",
+        "quantiles": 5,
+        "holding_accounting": "fixed_shares_between_rebalances",
+        "missing_holding_return": "zero",
+        "annual_ret_method": "daily_mean_compounded_252_days_legacy_field",
+        "geometric_annual_ret_method": "cumulative_return_compounded_252_over_observations",
+        "data_posture": "screen_grade_raw_history_and_legacy_fundamentals",
         "attribution": attribution,
         "yearly_attribution_file": (
             str(outdir / "strategy_attribution_yearly.csv")
@@ -121,20 +138,30 @@ def run_style_factor_analysis(
     outdir.mkdir(parents=True, exist_ok=True)
 
     start_date = "2020-01-01" if quick else None
-    daily, basics = load_data(data_root, start_date=start_date)
+    daily, basics = load_data(
+        data_root,
+        start_date=start_date,
+        basics_rebalance_only=True,
+    )
+    all_dates = pd.DatetimeIndex(sorted(daily["trade_date"].unique()))
+    if all_dates.empty:
+        raise ValueError("No daily dates available after filtering")
+    rebalance_dates = get_rebalance_dates(all_dates)
     fina = load_fina_indicator(data_root)
     cashflow = load_cashflow(data_root)
 
-    # Locally-landed tushare datasets (zero network traffic) for the 6 new
+    # Locally-landed tushare datasets (zero network traffic) for auxiliary
     # factors + PIT SW-L1 industry neutralization.
     moneyflow = load_moneyflow_ths(data_root, start_date=start_date)
     holder = load_holder_structure(data_root, start_date=start_date)
-    limit = load_limit_list(data_root, start_date=start_date)
     sw_membership = load_sw_industry_membership(data_root)
 
     # dv_ttm / ps_ttm come from daily_basic (already loaded); surface as aux.
     basics_extra = (
-        basics[["trade_date", "symbol", "dv_ttm", "ps_ttm"]].copy()
+        basics.loc[
+            basics["trade_date"].isin(rebalance_dates),
+            ["trade_date", "symbol", "dv_ttm", "ps_ttm"],
+        ].copy()
         if {
             "dv_ttm",
             "ps_ttm",
@@ -146,7 +173,6 @@ def run_style_factor_analysis(
     aux = {
         "moneyflow_ths": moneyflow if not moneyflow.empty else None,
         "holder_structure": holder if not holder.empty else None,
-        "limit_list": limit if not limit.empty else None,
         "daily_basic_extra": basics_extra if not basics_extra.empty else None,
     }
 
@@ -157,12 +183,10 @@ def run_style_factor_analysis(
         cashflow if not cashflow.empty else None,
         aux=aux,
         sw_membership=sw_membership if not sw_membership.empty else None,
+        rebalance_dates=rebalance_dates,
     )
-    all_dates = pd.DatetimeIndex(sorted(factors["trade_date"].unique()))
-    if all_dates.empty:
+    if factors.empty:
         raise ValueError("No factor dates available after filtering")
-
-    rebalance_dates = get_rebalance_dates(all_dates)
     print(
         f"[rebalance] {len(rebalance_dates)} dates, "
         f"{rebalance_dates[0].date()} ~ {rebalance_dates[-1].date()}"
@@ -181,6 +205,17 @@ def run_style_factor_analysis(
     if yearly_attribution.empty:
         yearly_attribution = None
 
+    metadata = _build_metadata(
+        data_root=data_root,
+        outdir=outdir,
+        quick=quick,
+        factor_results=results,
+        attribution=attribution,
+        yearly_attribution=yearly_attribution,
+        factors=factors,
+        daily=daily,
+    )
+
     return _finalize_style_analysis(
         outdir=outdir,
         results=results,
@@ -191,34 +226,36 @@ def run_style_factor_analysis(
         yearly_attribution=yearly_attribution,
         data_root=data_root,
         quick=quick,
+        metadata=metadata,
     )
 
 
 def _finalize_style_analysis(
     *,
     outdir: Path,
-    results: pd.DataFrame,
-    summary: dict[str, Any],
+    results: dict,
+    summary: pd.DataFrame,
     corr: pd.DataFrame,
     yearly: pd.DataFrame,
     attribution: dict[str, Any] | None,
     yearly_attribution: pd.DataFrame | None,
     data_root: Path,
     quick: bool,
+    metadata: dict[str, Any],
 ) -> StyleFactorArtifacts:
     plot_factor_nav(results, outdir)
     plot_cumulative_comparison(results, outdir)
     plot_correlation_heatmap(results, outdir)
     plot_yearly_barchart(yearly, outdir)
-    generate_report(summary, corr, results, outdir, attribution, yearly, yearly_attribution)
-
-    metadata = _build_metadata(
-        data_root=data_root,
-        outdir=outdir,
-        quick=quick,
-        factor_results=results,
-        attribution=attribution,
-        yearly_attribution=yearly_attribution,
+    generate_report(
+        summary,
+        corr,
+        results,
+        outdir,
+        attribution,
+        yearly,
+        yearly_attribution,
+        metadata,
     )
     _save_factor_outputs(
         outdir,

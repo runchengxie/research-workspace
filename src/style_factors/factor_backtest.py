@@ -22,7 +22,6 @@ FACTOR_NAMES = [
     "institution_holding",
     "dividend_yield",
     "ps_value",
-    "limit_up",
 ]
 
 
@@ -56,6 +55,33 @@ def _daily_return_matrix(daily: pd.DataFrame) -> pd.DataFrame:
     )
     returns.index = pd.DatetimeIndex(returns.index)
     return returns.sort_index()
+
+
+def _buy_and_hold_leg_returns(
+    period_returns: pd.DataFrame,
+    symbols: list[str],
+) -> pd.Series:
+    """Return an equal-weight leg whose shares are fixed until rebalance.
+
+    Missing marks inside the holding window are treated as zero return so a
+    suspended name keeps its capital weight instead of silently reallocating it
+    to the remaining names.  Delisting terminal returns are still unavailable in
+    the current raw input and remain an explicit research limitation.
+    """
+    if not symbols or period_returns.empty:
+        return pd.Series(dtype=float, index=period_returns.index)
+
+    returns = period_returns.reindex(columns=symbols).fillna(0.0)
+    weights = np.full(len(symbols), 1.0 / len(symbols), dtype=float)
+    portfolio_returns: list[float] = []
+    for row in returns.to_numpy(dtype=float):
+        portfolio_return = float(weights @ row)
+        portfolio_returns.append(portfolio_return)
+        gross_weights = weights * (1.0 + row)
+        gross_total = float(gross_weights.sum())
+        if gross_total > 0:
+            weights = gross_weights / gross_total
+    return pd.Series(portfolio_returns, index=returns.index, dtype=float)
 
 
 def build_factor_returns(
@@ -104,8 +130,8 @@ def build_factor_returns(
             if period_returns.empty:
                 continue
 
-            top_r = period_returns.reindex(columns=top_syms).mean(axis=1)
-            bot_r = period_returns.reindex(columns=bot_syms).mean(axis=1)
+            top_r = _buy_and_hold_leg_returns(period_returns, top_syms)
+            bot_r = _buy_and_hold_leg_returns(period_returns, bot_syms)
             paired = pd.concat({"long": top_r, "short": bot_r}, axis=1).dropna()
             if paired.empty:
                 continue
@@ -145,10 +171,12 @@ def compute_summary(factor_results: dict, trading_days: int = 252) -> pd.DataFra
         ls = res["long_short"].dropna()
         if len(ls) < 20:
             continue
-        dm = ls.mean()
-        annual_ret = (1 + dm) ** trading_days - 1
+        daily_mean = ls.mean()
+        cumulative_ret = (1 + ls).prod() - 1
+        annual_ret = (1 + daily_mean) ** trading_days - 1
+        geometric_annual_ret = (1 + cumulative_ret) ** (trading_days / len(ls)) - 1
         annual_vol = ls.std() * np.sqrt(trading_days)
-        sharpe = dm / ls.std() * np.sqrt(trading_days) if ls.std() > 0 else 0
+        sharpe = daily_mean / ls.std() * np.sqrt(trading_days) if ls.std() > 0 else 0
         hit_rate = (ls > 0).mean()
         n_years = (ls.index.max() - ls.index.min()).days / 365.25
         rows.append(
@@ -156,7 +184,9 @@ def compute_summary(factor_results: dict, trading_days: int = 252) -> pd.DataFra
                 "factor": name,
                 "days": len(ls),
                 "years": round(n_years, 1),
+                "cumulative_ret": round(cumulative_ret * 100, 2),
                 "annual_ret": round(annual_ret * 100, 2),
+                "geometric_annual_ret": round(geometric_annual_ret * 100, 2),
                 "annual_vol": round(annual_vol * 100, 2),
                 "sharpe": round(sharpe, 2),
                 "max_drawdown": round(_max_drawdown(ls) * 100, 2),
@@ -169,7 +199,9 @@ def compute_summary(factor_results: dict, trading_days: int = 252) -> pd.DataFra
                 "factor",
                 "days",
                 "years",
+                "cumulative_ret",
                 "annual_ret",
+                "geometric_annual_ret",
                 "annual_vol",
                 "sharpe",
                 "max_drawdown",
@@ -203,6 +235,12 @@ def compute_yearly_breakdown(factor_results: dict) -> pd.DataFrame:
                     "year": year_end.year,
                     "factor": name,
                     "days": len(group),
+                    "period_start": group.index.min().date().isoformat(),
+                    "period_end": group.index.max().date().isoformat(),
+                    "is_partial_year": bool(
+                        group.index.min().month > 1 or group.index.max().month < 12
+                    ),
+                    "period_return": round(annual_ret * 100, 2),
                     "annual_ret": round(annual_ret * 100, 2),
                     "annual_vol": round(ann_vol * 100, 2),
                     "sharpe": round(sharpe, 2),
@@ -211,6 +249,18 @@ def compute_yearly_breakdown(factor_results: dict) -> pd.DataFrame:
             )
     if not rows:
         return pd.DataFrame(
-            columns=["year", "factor", "days", "annual_ret", "annual_vol", "sharpe", "max_drawdown"]
+            columns=[
+                "year",
+                "factor",
+                "days",
+                "period_start",
+                "period_end",
+                "is_partial_year",
+                "period_return",
+                "annual_ret",
+                "annual_vol",
+                "sharpe",
+                "max_drawdown",
+            ]
         )
     return pd.DataFrame(rows).sort_values(["year", "factor"])

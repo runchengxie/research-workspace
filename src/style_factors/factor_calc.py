@@ -24,31 +24,38 @@ FACTOR_COLS = [
     "factor_institution_holding",  # holder_structure: top10 inst float hold ratio
     "factor_dividend_yield",  # daily_basic.dv_ttm (value group)
     "factor_ps_value",  # 1/ps_ttm (value group)
-    "factor_limit_up",  # limit_list_ths: limit-up event flag
 ]
 
-# Factor grouping for sector-neutral demean.  Every factor below is demeaned
-# within its SW L1 industry BEFORE the cross-sectional z-score, so the final
-# signal is industry-neutral (PIT, not static).  Grouping only affects code
-# organization / reporting; neutralization treats each factor independently.
+# Factor grouping for sector-level signal demeaning. Every factor below is
+# demeaned within its SW L1 industry BEFORE the cross-sectional z-score. This
+# reduces industry mean exposure but does not strictly constrain the final
+# long-short portfolio's industry weights. Grouping only affects code
+# organization / reporting; demeaning treats each factor independently.
 VALUE_GROUP = {"factor_value", "factor_earnings_yield", "factor_dividend_yield", "factor_ps_value"}
 
 FUNDAMENTAL_COLS = ["roe", "roa", "netprofit_yoy", "or_yoy", "debt_to_assets"]
 
 # Extra fundamental columns pulled from the cashflow table that should be carried
 # into the factor panel for the cashflow-quality sub-indicator.
-QUALITY_EXTRA_COLS = ["n_cashflow_act", "net_profit"]
+EARNINGS_STABILITY_COL = "earnings_stability_8q"
+QUALITY_EXTRA_COLS = ["n_cashflow_act", "net_profit", EARNINGS_STABILITY_COL]
 
 
-def _base_frame(daily: pd.DataFrame, basics: pd.DataFrame) -> pd.DataFrame:
+def _price_frame(daily: pd.DataFrame) -> pd.DataFrame:
     daily_cols = ["trade_date", "symbol", "close", "pct_chg", "amount"]
+    df = daily[daily_cols].copy()
+    df = df[df["amount"] > 0].copy()
+    return df.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
+
+
+def _merge_daily_basics(df: pd.DataFrame, basics: pd.DataFrame) -> pd.DataFrame:
     basic_cols = ["trade_date", "symbol", "total_mv", "pb", "pe_ttm", "turnover_rate"]
-    df = daily[daily_cols].merge(
+    df = df.merge(
         basics[basic_cols],
         on=["trade_date", "symbol"],
         how="left",
     )
-    df = df[(df["total_mv"] > 0) & (df["amount"] > 0)].copy()
+    df = df[df["total_mv"] > 0].copy()
     return df.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
 
 
@@ -61,7 +68,14 @@ def _prepare_fundamentals(fina: pd.DataFrame) -> pd.DataFrame:
     aligned = fina.rename(columns={"ann_date": "align_date", "symbol": "_sym"}).copy()
     aligned["align_date"] = pd.to_datetime(aligned["align_date"])
     aligned = aligned.dropna(subset=["align_date"])
-    aligned = aligned.sort_values(["_sym", "align_date"])
+    sort_columns = ["_sym", "align_date"]
+    if "end_date" in aligned.columns:
+        sort_columns.append("end_date")
+    aligned = aligned.sort_values(sort_columns)
+    if "netprofit_yoy" in aligned.columns:
+        aligned[EARNINGS_STABILITY_COL] = aligned.groupby("_sym", sort=False)[
+            "netprofit_yoy"
+        ].transform(lambda series: series.rolling(8, min_periods=4).std())
     aligned = aligned.drop_duplicates(["_sym", "align_date"], keep="last")
     return aligned.set_index("align_date")
 
@@ -95,14 +109,16 @@ def _merge_fundamentals(
     if fina is None or fina.empty:
         return df, False
 
-    columns = _fundamental_columns(fina)
-    if not columns or "ann_date" not in fina.columns or "symbol" not in fina.columns:
+    if "ann_date" not in fina.columns or "symbol" not in fina.columns:
         return df, False
 
     df = df.copy()
     df["_sym"] = df["symbol"].str.replace(r"\.(SZ|SH|BJ)$", "", regex=True)
     df["_idx"] = np.arange(len(df))
     aligned = _prepare_fundamentals(fina)
+    columns = _fundamental_columns(aligned)
+    if not columns:
+        return df.drop(columns=["_idx", "_sym"]), False
     fundamentals_by_symbol = {
         symbol: group.drop(columns=["_sym"])
         for symbol, group in aligned.groupby("_sym", sort=False)
@@ -122,17 +138,7 @@ def _merge_fundamentals(
     return merged, True
 
 
-def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
-    df["factor_size"] = np.log(df["total_mv"] + 1)
-
-    df["pb_clean"] = df["pb"].where(df["pb"] > 0).clip(lower=0.01, upper=100)
-    df["factor_value"] = 1.0 / df["pb_clean"]
-
-    df["pe_clean"] = df["pe_ttm"].where(df["pe_ttm"] > 0).clip(lower=1, upper=500)
-    # Earnings yield (1/PE_TTM) is a valuation signal, not an operating-quality
-    # signal.  It is kept (renamed) in the value group for backward compatibility.
-    df["factor_earnings_yield"] = 1.0 / df["pe_clean"]
-
+def _add_daily_price_factors(df: pd.DataFrame) -> pd.DataFrame:
     df["ret_1d"] = df.groupby("symbol")["close"].pct_change()
     df["factor_momentum"] = df.groupby("symbol")["close"].transform(
         lambda series: series.pct_change(periods=21).shift(1)
@@ -145,18 +151,26 @@ def _add_core_factors(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def _winsorize(series: pd.Series) -> pd.Series:
-    """Cross-sectional 1%/99% winsorization per trade_date."""
-    grouped = series.groupby(level=0) if series.index.nlevels > 1 else None
-    if grouped is None:
-        lo, hi = series.quantile(0.01), series.quantile(0.99)
-        return series.clip(lower=lo, upper=hi)
-    out = series.copy()
-    for _date, idx in series.groupby(level=0).groups.items():
-        sub = series.loc[idx]
-        lo, hi = sub.quantile(0.01), sub.quantile(0.99)
-        out.loc[idx] = sub.clip(lower=lo, upper=hi)
-    return out
+def _add_daily_basic_factors(df: pd.DataFrame) -> pd.DataFrame:
+    df["factor_size"] = np.log(df["total_mv"] + 1)
+
+    df["pb_clean"] = df["pb"].where(df["pb"] > 0).clip(lower=0.01, upper=100)
+    df["factor_value"] = 1.0 / df["pb_clean"]
+
+    df["pe_clean"] = df["pe_ttm"].where(df["pe_ttm"] > 0).clip(lower=1, upper=500)
+    # Earnings yield (1/PE_TTM) is a valuation signal, not an operating-quality
+    # signal.  It is kept (renamed) in the value group for backward compatibility.
+    df["factor_earnings_yield"] = 1.0 / df["pe_clean"]
+
+    return df
+
+
+def _winsorize(series: pd.Series, trade_dates: pd.Series) -> pd.Series:
+    """Cross-sectional 1%/99% winsorization within each trade date."""
+    grouped = series.groupby(trade_dates, sort=False)
+    lower = grouped.transform(lambda values: values.quantile(0.01))
+    upper = grouped.transform(lambda values: values.quantile(0.99))
+    return series.clip(lower=lower, upper=upper, axis=0)
 
 
 def _add_quality_factor(df: pd.DataFrame, *, has_fina: bool) -> pd.DataFrame:
@@ -171,29 +185,28 @@ def _add_quality_factor(df: pd.DataFrame, *, has_fina: bool) -> pd.DataFrame:
         return df
 
     components: list[pd.Series] = []
+    trade_dates = df["trade_date"]
 
     # 1) ROE (higher is better)
     roe = df["roe"].astype(float)
-    components.append(_winsorize(roe))
+    components.append(_winsorize(roe, trade_dates))
 
     # 2) Leverage: lower debt_to_assets is better
     if "debt_to_assets" in df.columns:
         lev = -df["debt_to_assets"].astype(float)
-        components.append(_winsorize(lev))
+        components.append(_winsorize(lev, trade_dates))
 
     # 3) Earnings stability: lower rolling std of YoY net profit is better
-    if "netprofit_yoy" in df.columns:
-        stab = df.groupby("symbol", sort=False)["netprofit_yoy"].transform(
-            lambda s: s.rolling(8, min_periods=4).std()
-        )
-        components.append(_winsorize(-stab.astype(float)))
+    if EARNINGS_STABILITY_COL in df.columns:
+        stability = -df[EARNINGS_STABILITY_COL].astype(float)
+        components.append(_winsorize(stability, trade_dates))
 
     # 4) Cashflow quality: OCF / net profit (higher is better); protect 0/neg denom
     if {"n_cashflow_act", "net_profit"} <= set(df.columns):
         np_safe = df["net_profit"].replace(0, np.nan).clip(lower=1e-9)
         cq = df["n_cashflow_act"].astype(float) / np_safe
         cq = cq.where(df["net_profit"] > 0)
-        components.append(_winsorize(cq))
+        components.append(_winsorize(cq, trade_dates))
 
     # Cross-sectional z-score of each component, missing -> 0
     z_parts = []
@@ -205,7 +218,7 @@ def _add_quality_factor(df: pd.DataFrame, *, has_fina: bool) -> pd.DataFrame:
         z_parts.append(z.fillna(0.0))
 
     quality = sum(z_parts) / len(z_parts)
-    df["factor_quality"] = quality
+    df["factor_quality"] = quality.where(roe.notna())
     return df
 
 
@@ -259,8 +272,7 @@ def _add_liquidity_factor(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _standardize_factors(df: pd.DataFrame) -> pd.DataFrame:
-    core = [column for column in FACTOR_COLS[:5] if column in df.columns]
-    df = df.dropna(subset=core).copy()
+    df = df.copy()
     active = [column for column in FACTOR_COLS if column in df.columns]
     has_industry = "industry_l1" in df.columns and df["industry_l1"].notna().any()
 
@@ -275,7 +287,7 @@ def _standardize_factors(df: pd.DataFrame) -> pd.DataFrame:
     for column in active:
         if has_industry:
             # PIT SW-L1 industry-neutralization: demean within industry first.
-            grp = df.groupby(["trade_date", "industry_l1"], sort=False)[column]
+            grp = df.groupby(["trade_date", "industry_l1"], sort=False, dropna=False)[column]
             demeaned = df[column] - grp.transform("mean")
             df[f"{column}_z"] = demeaned
         else:
@@ -299,6 +311,7 @@ def compute_factors(
     *,
     aux: dict | None = None,
     sw_membership: pd.DataFrame | None = None,
+    rebalance_dates: pd.DatetimeIndex | None = None,
 ) -> pd.DataFrame:
     """Compute style factors per stock per date.
 
@@ -308,25 +321,37 @@ def compute_factors(
     when supplied to feed the cashflow-quality sub-indicator.
 
     ``aux`` (optional) carries locally-landed tushare datasets keyed by name:
-    ``moneyflow_ths``, ``holder_structure``, ``limit_list``, ``daily_basic_extra``
-    (dv_ttm / ps_ttm).  These add the 6 new factors with zero network traffic.
+    ``moneyflow_ths``, ``holder_structure`` and ``daily_basic_extra``
+    (dv_ttm / ps_ttm).  These add five auxiliary factors with zero network traffic.
 
     ``sw_membership`` (optional) is the PIT SW-L1 membership long table from
     ``load_sw_industry_membership``.  When present, every factor is demeaned
     within its L1 industry before the cross-sectional z-score, i.e. the factor
-    panel is SW-L1 industry-neutral (point-in-time, not static).
+    panel has reduced SW-L1 industry mean exposure (point-in-time membership,
+    not a static map). This is signal demeaning, not a portfolio-level industry
+    neutrality constraint.
+
+    ``rebalance_dates`` optionally limits the expensive fundamentals, auxiliary
+    and industry joins to formation dates after daily rolling price factors have
+    been calculated.  The workflow uses this path because portfolio membership
+    changes only at month end.
     """
     if fina is not None and cashflow is not None and not cashflow.empty:
         merge_on = [c for c in ("symbol", "end_date", "ann_date") if c in cashflow.columns]
         fina = fina.merge(cashflow, on=merge_on, how="left")
 
-    df = _base_frame(daily, basics)
+    df = _price_frame(daily)
+    df = _add_daily_price_factors(df)
+    df = _add_beta_factor(df)
+    if rebalance_dates is not None:
+        normalized_dates = pd.DatetimeIndex(rebalance_dates).normalize()
+        df = df[df["trade_date"].isin(normalized_dates)].copy()
+    df = _merge_daily_basics(df, basics)
+    df = _add_daily_basic_factors(df)
+    df = _add_liquidity_factor(df)
     df, has_fina = _merge_fundamentals(df, fina)
-    df = _add_core_factors(df)
     df = _add_fundamental_factors(df, has_fina=has_fina)
     df = _add_quality_factor(df, has_fina=has_fina)
-    df = _add_beta_factor(df)
-    df = _add_liquidity_factor(df)
     df = add_new_factors(df, aux=aux)
     df = merge_sw_industry_pit(df, sw_membership)
     active = [column for column in FACTOR_COLS if column in df.columns]
