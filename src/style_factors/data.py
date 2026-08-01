@@ -48,6 +48,7 @@ def load_data(
     *,
     start_date: str | pd.Timestamp | None = None,
     end_date: str | pd.Timestamp | None = None,
+    basics_rebalance_only: bool = False,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Load daily and daily_basic parquet files into memory."""
     daily_cols = ["trade_date", "symbol", "close", "pct_chg", "amount"]
@@ -70,6 +71,13 @@ def load_data(
     basic_parts = [
         p for p in sorted(basic_dir.glob("trade_date=*")) if _in_window(p, start_date, end_date)
     ]
+    if basics_rebalance_only:
+        dated_parts = [(_partition_date(path), path) for path in daily_parts]
+        dated_parts = [(date, path) for date, path in dated_parts if pd.notna(date)]
+        month_end_dates = {
+            max(group) for _period, group in _group_partition_dates_by_month(dated_parts).items()
+        }
+        basic_parts = [path for path in basic_parts if _partition_date(path) in month_end_dates]
 
     print(f"[load] daily: {len(daily_parts)} partitions, basic: {len(basic_parts)} partitions")
 
@@ -84,6 +92,15 @@ def load_data(
     print(f"[load] daily: {len(daily)} rows, {daily['symbol'].nunique()} stocks")
     print(f"[load] basic: {len(basics)} rows, {basics['symbol'].nunique()} stocks")
     return daily, basics
+
+
+def _group_partition_dates_by_month(
+    dated_parts: list[tuple[pd.Timestamp, Path]],
+) -> dict[pd.Period, list[pd.Timestamp]]:
+    grouped: dict[pd.Period, list[pd.Timestamp]] = {}
+    for date, _path in dated_parts:
+        grouped.setdefault(date.to_period("M"), []).append(date)
+    return grouped
 
 
 def _partition_date(path: Path) -> pd.Timestamp | None:

@@ -8,7 +8,7 @@ here for convenience.
 
 from __future__ import annotations
 
-from ._aux import _assign_aux_panel, _merge_aux
+from ._aux import _merge_aux
 from ._neutralize import merge_sw_industry_pit
 from ._new_factors import add_new_factors
 
@@ -16,5 +16,4 @@ __all__ = [
     "add_new_factors",
     "merge_sw_industry_pit",
     "_merge_aux",
-    "_assign_aux_panel",
 ]

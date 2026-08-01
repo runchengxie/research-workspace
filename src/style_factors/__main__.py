@@ -1,4 +1,4 @@
-"""Style factor analysis CLI — 9-factor Barra long-short backtest + report.
+"""Style-factor proxy analysis CLI — 15 candidate long-short factors + report.
 
 Usage:
     export DATA_PLATFORM_ROOT=/path/to/market-data-platform
@@ -40,7 +40,7 @@ def main() -> None:
     outdir.mkdir(parents=True, exist_ok=True)
 
     print("=" * 60)
-    print("全市场风格因子分析 (9-factor Barra)")
+    print("A 股风格代理因子分析（15 个候选因子）")
     print(f"数据根: {data_root}")
     print(f"输出:   {outdir}")
     print("=" * 60)

@@ -1,20 +1,30 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
 from src.style_factors import FACTOR_LABELS
 from src.style_factors.attribution import run_strategy_attribution, run_yearly_strategy_attribution
+from src.style_factors.data import _group_partition_dates_by_month
 from src.style_factors.factor_backtest import (
+    _buy_and_hold_leg_returns,
     available_factor_names,
     build_factor_returns,
     compute_summary,
+    compute_yearly_breakdown,
     get_rebalance_dates,
 )
-from src.style_factors.factor_calc import compute_factors
-from src.style_factors.report import _factor_definition_lines
+from src.style_factors.factor_calc import (
+    EARNINGS_STABILITY_COL,
+    _prepare_fundamentals,
+    _winsorize,
+    compute_factors,
+)
+from src.style_factors.helpers._aux import _merge_aux
+from src.style_factors.report import _append_yearly_section, _factor_definition_lines
 
 
 def _sample_market_frames(days: int = 90, symbols: int = 60) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -74,17 +84,107 @@ def test_quality_is_composite_and_earnings_yield_is_value() -> None:
     # Earnings yield lives in the value group.
     assert FACTOR_LABELS["earnings_yield"] == "Earnings Yield 盈利估值"
     assert "价值组" in definitions or "估值代理" in definitions
+    assert "LimitUp" not in definitions
 
 
-def test_compute_factors_does_not_turn_negative_valuation_into_top_signal() -> None:
+def test_compute_factors_uses_factor_specific_valuation_eligibility() -> None:
     daily, basics = _sample_market_frames(days=50)
     basics.loc[basics["symbol"] == "000001.SZ", "pb"] = -1.0
     basics.loc[basics["symbol"] == "000002.SZ", "pe_ttm"] = -5.0
 
     factors = compute_factors(daily, basics)
 
-    assert "000001.SZ" not in set(factors["symbol"])
-    assert "000002.SZ" not in set(factors["symbol"])
+    pb_row = factors[factors["symbol"] == "000001.SZ"]
+    pe_row = factors[factors["symbol"] == "000002.SZ"]
+    assert not pb_row.empty and not pe_row.empty
+    assert pb_row["factor_value_z"].isna().all()
+    assert pe_row["factor_earnings_yield_z"].isna().all()
+    assert pb_row["factor_size_z"].notna().any()
+    assert pe_row["factor_momentum_z"].notna().any()
+
+
+def test_prepare_fundamentals_computes_stability_on_report_rows() -> None:
+    rows = []
+    quarter_ends = pd.date_range("2022-03-31", periods=8, freq="QE")
+    for quarter, end_date in enumerate(quarter_ends):
+        rows.append(
+            {
+                "symbol": "000001",
+                "end_date": end_date,
+                "ann_date": end_date + pd.Timedelta(days=30),
+                "roe": 10.0,
+                "netprofit_yoy": float(quarter),
+            }
+        )
+
+    prepared = _prepare_fundamentals(pd.DataFrame(rows))
+
+    assert prepared[EARNINGS_STABILITY_COL].iloc[:3].isna().all()
+    assert prepared[EARNINGS_STABILITY_COL].iloc[3:].notna().all()
+
+
+def test_winsorize_is_cross_sectional_by_trade_date() -> None:
+    dates = pd.Series([pd.Timestamp("2024-01-02")] * 3 + [pd.Timestamp("2024-01-03")] * 3)
+    values = pd.Series([1.0, 2.0, 1000.0, 10.0, 20.0, 30.0])
+
+    winsorized = _winsorize(values, dates)
+
+    assert winsorized.iloc[2] > winsorized.iloc[5]
+    assert winsorized.iloc[2] < 1000.0
+
+
+def test_missing_industry_is_neutralized_as_residual_group() -> None:
+    daily, basics = _sample_market_frames(days=50)
+    membership = pd.DataFrame(
+        {
+            "symbol": ["000001.SZ"],
+            "in_date": [pd.Timestamp("2020-01-01")],
+            "out_date": [pd.NaT],
+            "industry_l1": ["银行"],
+        }
+    )
+
+    factors = compute_factors(daily, basics, sw_membership=membership)
+
+    residual = factors[factors["symbol"] == "000002.SZ"]
+    assert residual["industry_l1"].isna().all()
+    assert residual["factor_size_z"].notna().all()
+
+
+def test_daily_auxiliary_values_are_not_forward_filled() -> None:
+    panel = pd.DataFrame(
+        {
+            "symbol": ["000001.SZ", "000001.SZ"],
+            "trade_date": pd.to_datetime(["2024-01-02", "2024-01-03"]),
+        }
+    )
+    auxiliary = pd.DataFrame(
+        {
+            "symbol": ["000001.SZ"],
+            "trade_date": pd.to_datetime(["2024-01-02"]),
+            "event": [1.0],
+        }
+    )
+
+    merged = _merge_aux(panel, auxiliary, ["event"])
+
+    assert merged.loc[0, "event"] == 1.0
+    assert pd.isna(merged.loc[1, "event"])
+
+
+def test_partition_month_grouping_selects_latest_trade_date() -> None:
+    dated_parts = [
+        (pd.Timestamp("2024-01-30"), Path("trade_date=20240130")),
+        (pd.Timestamp("2024-01-31"), Path("trade_date=20240131")),
+        (pd.Timestamp("2024-02-29"), Path("trade_date=20240229")),
+    ]
+
+    grouped = _group_partition_dates_by_month(dated_parts)
+
+    assert {max(group) for group in grouped.values()} == {
+        pd.Timestamp("2024-01-31"),
+        pd.Timestamp("2024-02-29"),
+    }
 
 
 def test_build_factor_returns_handles_missing_optional_factors() -> None:
@@ -111,6 +211,47 @@ def test_compute_summary_reports_negative_drawdown() -> None:
 
     assert summary.loc[0, "factor"] == "size"
     assert summary.loc[0, "max_drawdown"] < 0
+    assert "geometric_annual_ret" in summary.columns
+
+
+def test_buy_and_hold_leg_does_not_restore_equal_weights_daily() -> None:
+    returns = pd.DataFrame(
+        {"A": [1.0, 0.0], "B": [0.0, 1.0]},
+        index=pd.bdate_range("2024-01-01", periods=2),
+    )
+
+    result = _buy_and_hold_leg_returns(returns, ["A", "B"])
+
+    assert result.iloc[0] == 0.5
+    assert abs(result.iloc[1] - (1 / 3)) < 1e-12
+
+
+def test_yearly_breakdown_marks_partial_years() -> None:
+    dates = pd.bdate_range("2024-03-01", periods=100)
+    returns = pd.Series(0.001, index=dates, name="size")
+
+    yearly = compute_yearly_breakdown({"size": {"long_short": returns}})
+
+    assert bool(yearly.loc[0, "is_partial_year"])
+    assert yearly.loc[0, "period_start"] == "2024-03-01"
+
+
+def test_yearly_report_formats_missing_returns_as_dash() -> None:
+    yearly = pd.DataFrame(
+        {
+            "year": [2024, 2024],
+            "factor": ["size", "value"],
+            "period_return": [1.25, np.nan],
+        }
+    )
+    lines: list[str] = []
+
+    _append_yearly_section(lines, yearly)
+
+    report = "\n".join(lines)
+    assert "+1.2" in report
+    assert "—" in report
+    assert "nan" not in report.lower()
 
 
 def test_strategy_attribution_reports_yearly_betas_and_json_safe_summary() -> None:
@@ -129,6 +270,8 @@ def test_strategy_attribution_reports_yearly_betas_and_json_safe_summary() -> No
     json.dumps(attribution)
     assert attribution["strategy"] == "demo"
     assert abs(attribution["betas"]["size"] - 0.5) < 1e-6
+    assert "geometric_annual_return" in attribution
+    assert attribution["annual_alpha"] > 0
     assert list(yearly["year"]) == [2024, 2025]
     assert abs(yearly.loc[0, "beta_size"] - 0.5) < 1e-6
     assert "contribution_value" in yearly.columns

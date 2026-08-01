@@ -1,4 +1,4 @@
-"""New-factor helpers — the 6 factors sourced from locally-landed tushare datasets.
+"""New-factor helpers sourced from locally-landed tushare datasets.
 
 Each helper merges its auxiliary stock-day table into ``df`` (via ``_merge_aux``)
 and assigns exactly one factor column.  Splitting the original monolithic
@@ -67,18 +67,8 @@ def _add_dividend_ps_value_factor(
     return df
 
 
-def _add_limit_up_factor(df: pd.DataFrame, *, limit: pd.DataFrame | None) -> pd.DataFrame:
-    """Limit-up event flag from limit_list_ths."""
-    if limit is not None and not limit.empty:
-        df = _merge_aux(df, limit, ["is_limit_up"])
-        df["factor_limit_up"] = df["is_limit_up"].astype(float) if "is_limit_up" in df else np.nan
-    else:
-        df["factor_limit_up"] = np.nan
-    return df
-
-
 def add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
-    """Compute the 6 factors sourced from locally-landed tushare datasets.
+    """Compute auxiliary daily and ownership factors from local datasets.
 
     Each sub-indicator is winsorized (1%/99%) cross-sectionally then z-scored,
     in the same spirit as ``_standardize_factors`` / ``_add_quality_factor``.
@@ -87,11 +77,9 @@ def add_new_factors(df: pd.DataFrame, *, aux: dict | None) -> pd.DataFrame:
     aux = aux or {}
     moneyflow = aux.get("moneyflow_ths")
     holder = aux.get("holder_structure")
-    limit = aux.get("limit_list")
     basics_extra = aux.get("daily_basic_extra")
 
     df = _add_liquidity_flow_factor(df, moneyflow=moneyflow)
     df = _add_chip_concentration_factor(df, holder=holder)
     df = _add_dividend_ps_value_factor(df, basics_extra=basics_extra)
-    df = _add_limit_up_factor(df, limit=limit)
     return df

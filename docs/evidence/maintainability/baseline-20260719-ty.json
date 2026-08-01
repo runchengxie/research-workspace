@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 87,
-      "python_loc": 15009,
+      "python_loc": 15505,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -51,7 +51,7 @@
         {
           "path": "src/style_factors/workflow.py",
           "name": "run_style_factor_analysis",
-          "line_count": 82,
+          "line_count": 101,
           "complexity": 14
         }
       ],
@@ -59,8 +59,8 @@
         {
           "path": "src/style_factors/charts.py",
           "name": "plot_yearly_barchart",
-          "line_count": 68,
-          "complexity": 16
+          "line_count": 70,
+          "complexity": 17
         },
         {
           "path": "scripts/workspace_import_boundaries.py",

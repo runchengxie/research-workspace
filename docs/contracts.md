@@ -29,7 +29,7 @@
 | `summary.json` | `strategy-pipeline` | 人工审计、后续导出 | 研究运行摘要 |
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后信息系数（IC）和冗余画像摘要 |
-| `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究 | 全市场 9 因子多空日收益、逐年分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
+| `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究 | 最多 15 个全市场代理因子多空日收益、逐年/年初至今分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
 | `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `strategy export-targets` | 回测持仓和已保存的目标持仓候选 |
 | `targets.json` | `strategy export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
 | `targets.json.lineage.json` | `strategy export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
