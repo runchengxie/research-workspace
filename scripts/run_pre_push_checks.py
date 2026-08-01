@@ -71,9 +71,16 @@ def parse_pushed_refs(payload: str) -> tuple[PushedRef, ...]:
 
 
 def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
+    # root-tests 在仓库根目录运行，使 pytest 能解析 tests/ 下的 `from src.*`
+    # 导入（conftest/rootdir 发现依赖 cwd 在仓库内）。
+    # 注意：不通过 `uv run --with matplotlib --with tabulate` 注入约束，
+    # 因为 uv 会在 cwd 生成 `=0.9`/`=3.8` 临时需求文件污染工作树，
+    # 导致后续 repository-clean 失败；而 tests/ 中没有任何测试导入这两个包，
+    # strategy-pipeline 的 dev extra 已提供 pytest/numpy/pandas。
+    tests_dir = Path(cwd) / "tests"
+    strategy_project = Path(cwd) / "strategy-pipeline"
     root_tests = tuple(
-        "uv run --project strategy-pipeline --extra dev --with matplotlib>=3.8 "
-        "--with tabulate>=0.9 python -m pytest tests -q".split()
+        f"uv run --project {strategy_project} --extra dev python -m pytest {tests_dir} -q".split()
     )
     return (
         GateCommand(
