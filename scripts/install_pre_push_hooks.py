@@ -176,9 +176,11 @@ def install_hooks(
             print(f"[ERROR] {issue}", file=sys.stderr)
         return 1
 
-    expected = str((root / HOOKS_RELATIVE_PATH).resolve())
     for target in targets:
-        command = ("git", "config", "--local", "core.hooksPath", expected)
+        # 使用相对路径指向顶层共享钩子，使 linked worktree 也能解析正确
+        # （绝对路径会把钩子绑定到某个固定工作树，导致 worktree 推送被守卫拦截）
+        relative = os.path.relpath(root / HOOKS_RELATIVE_PATH, target.repository)
+        command = ("git", "config", "--local", "core.hooksPath", str(relative))
         mode = _target_mode(root, target)
         if dry_run:
             print(f"[DRY-RUN] {target.name} [{mode}]: ({target.repository}) {' '.join(command)}")
@@ -188,13 +190,13 @@ def install_hooks(
             "config",
             "--local",
             "core.hooksPath",
-            expected,
+            str(relative),
         )
         if completed.returncode != 0:
             detail = (completed.stderr or completed.stdout).strip()
             print(f"[ERROR] {target.name}: {detail or 'git config failed'}", file=sys.stderr)
             return 1
-        print(f"[OK] {target.name} [{mode}]: core.hooksPath={expected}")
+        print(f"[OK] {target.name} [{mode}]: core.hooksPath={relative}")
     return 0
 
 
