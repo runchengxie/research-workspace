@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 87,
-      "python_loc": 15000,
+      "python_loc": 15009,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -32,7 +32,7 @@
         },
         {
           "path": "scripts/run_pre_push_checks.py",
-          "loc": 539,
+          "loc": 546,
           "hk_related": false
         },
         {
