@@ -5,9 +5,15 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from matplotlib.axes import Axes
 
 from src.style_factors import FACTOR_LABELS
 from src.style_factors.attribution import run_strategy_attribution, run_yearly_strategy_attribution
+from src.style_factors.charts import (
+    _yearly_return_matrix,
+    plot_cumulative_comparison,
+    plot_yearly_barchart,
+)
 from src.style_factors.data import _group_partition_dates_by_month
 from src.style_factors.factor_backtest import (
     _buy_and_hold_leg_returns,
@@ -252,6 +258,54 @@ def test_yearly_report_formats_missing_returns_as_dash() -> None:
     assert "+1.2" in report
     assert "—" in report
     assert "nan" not in report.lower()
+
+
+def test_yearly_return_matrix_uses_stable_factor_order_and_keeps_missing_values() -> None:
+    yearly = pd.DataFrame(
+        {
+            "year": [2024, 2024, 2025],
+            "factor": ["value", "size", "value"],
+            "period_return": [2.5, -1.0, 3.0],
+        }
+    )
+
+    matrix = _yearly_return_matrix(yearly)
+
+    assert list(matrix.index) == ["size", "value"]
+    assert list(matrix.columns) == [2024, 2025]
+    assert matrix.loc["size", 2024] == -1.0
+    assert pd.isna(matrix.loc["size", 2025])
+
+
+def test_comparison_uses_log_nav_scale(monkeypatch, tmp_path: Path) -> None:
+    dates = pd.bdate_range("2024-01-01", periods=40)
+    returns = pd.Series(0.001, index=dates, name="value")
+    observed_scales: list[str] = []
+    original = Axes.set_yscale
+
+    def record_scale(axis, value, *args, **kwargs):
+        observed_scales.append(value)
+        return original(axis, value, *args, **kwargs)
+
+    monkeypatch.setattr("matplotlib.axes.Axes.set_yscale", record_scale)
+    plot_cumulative_comparison({"value": {"long_short": returns}}, tmp_path)
+
+    assert "log" in observed_scales
+    assert (tmp_path / "style_factor_comparison.png").is_file()
+
+
+def test_yearly_heatmap_chart_is_generated(tmp_path: Path) -> None:
+    yearly = pd.DataFrame(
+        {
+            "year": [2024, 2024, 2025],
+            "factor": ["size", "value", "value"],
+            "period_return": [-5.0, 8.0, 3.0],
+        }
+    )
+
+    plot_yearly_barchart(yearly, tmp_path)
+
+    assert (tmp_path / "style_factor_yearly.png").is_file()
 
 
 def test_strategy_attribution_reports_yearly_betas_and_json_safe_summary() -> None:

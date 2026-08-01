@@ -62,7 +62,12 @@ def plot_factor_nav(factor_results: dict, outdir: Path) -> None:
 
 
 def plot_cumulative_comparison(factor_results: dict, outdir: Path) -> None:
-    """Single chart: all factor long-short cumulative returns overlaid."""
+    """Single chart: all factor long-short cumulative returns overlaid.
+
+    A logarithmic NAV axis keeps both large winners and near-zero losers visible
+    on the same chart.  With a linear axis, the long-history liquidity proxy
+    compresses most other factors into an unreadable band around one.
+    """
     fig, ax = plt.subplots(figsize=(16, 7))
 
     plotted = False
@@ -85,10 +90,16 @@ def plot_cumulative_comparison(factor_results: dict, outdir: Path) -> None:
         plt.close(fig)
         return
 
+    ax.set_yscale("log")
     ax.axhline(1, color="#555", linewidth=0.5, linestyle="--")
+    ax.grid(axis="y", which="both", color=LG, linewidth=0.4, alpha=0.35)
     ax.legend(loc="upper left", prop=CJK, framealpha=0.5, facecolor=BG, edgecolor=LG)
-    ax.set_ylabel("净值", fontproperties=CJK)
-    ax.set_title("A 股风格因子 Long-Short 收益对比", fontproperties=CJK, fontsize=13)
+    ax.set_ylabel("净值（对数刻度）", fontproperties=CJK)
+    ax.set_title(
+        "A 股风格因子 Long-Short 收益对比（对数净值）",
+        fontproperties=CJK,
+        fontsize=13,
+    )
     fig.tight_layout()
     fig.savefig(
         outdir / "style_factor_comparison.png",
@@ -137,58 +148,86 @@ def plot_correlation_heatmap(factor_results: dict, outdir: Path) -> None:
     print(f"[chart] correlation → {outdir / 'style_factor_corr.png'}")
 
 
-def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
-    """Stacked bar chart of yearly factor returns + annual best-factor chart."""
+def _yearly_return_matrix(yearly: pd.DataFrame) -> pd.DataFrame:
+    """Return a factor-by-year matrix in the stable report factor order."""
     if yearly.empty:
-        return
-
+        return pd.DataFrame()
     return_column = "period_return" if "period_return" in yearly.columns else "annual_ret"
-    ret_pivot = yearly.pivot(index="year", columns="factor", values=return_column)
-    years = sorted(ret_pivot.index)
+    pivot = yearly.pivot(index="year", columns="factor", values=return_column).sort_index()
+    factor_names = [name for name in FACTOR_LABELS if name in pivot.columns]
+    return pivot.reindex(columns=factor_names).T
+
+
+def _plot_yearly_return_heatmap(
+    ax: plt.Axes,
+    fig: plt.Figure,
+    return_matrix: pd.DataFrame,
+) -> None:
+    """Render the factor-by-year return matrix with missing periods masked."""
+    years = list(return_matrix.columns)
+    factor_names = list(return_matrix.index)
+    values = return_matrix.to_numpy(dtype=float)
+    finite_abs = np.abs(values[np.isfinite(values)])
+    color_limit = max(10.0, float(np.percentile(finite_abs, 95))) if finite_abs.size else 10.0
+    cmap = plt.get_cmap("RdBu_r").with_extremes(bad=BG)
+    image = ax.imshow(
+        np.ma.masked_invalid(values),
+        cmap=cmap,
+        vmin=-color_limit,
+        vmax=color_limit,
+        aspect="auto",
+    )
+    ax.set_xticks(np.arange(len(years)))
+    ax.set_xticklabels([str(year) for year in years], fontproperties=CJK, fontsize=8)
+    ax.set_yticks(np.arange(len(factor_names)))
+    ax.set_yticklabels(
+        [FACTOR_LABELS[name] for name in factor_names],
+        fontproperties=CJK,
+        fontsize=9,
+    )
+    for row_index, row in enumerate(values):
+        for column_index, value in enumerate(row):
+            if not np.isfinite(value):
+                continue
+            ax.text(
+                column_index,
+                row_index,
+                f"{value:+.0f}",
+                ha="center",
+                va="center",
+                fontsize=6.5,
+                color="white" if abs(value) >= color_limit * 0.55 else "#222",
+            )
+    ax.set_title("逐年风格因子期间收益热力图（%）", fontproperties=CJK, fontsize=14)
+    colorbar = fig.colorbar(image, ax=ax, shrink=0.85, pad=0.015)
+    colorbar.set_label("收益（%）", fontproperties=CJK)
+
+
+def _plot_best_yearly_factors(
+    ax: plt.Axes,
+    yearly: pd.DataFrame,
+    years: list[int],
+    return_column: str,
+) -> None:
+    """Render the strongest available factor for each calendar year."""
     x = np.arange(len(years))
-    factor_names = [name for name in FACTOR_LABELS if name in ret_pivot.columns]
-    bar_w = 0.8 / max(len(factor_names), 1)
-    offsets = (np.arange(len(factor_names)) - (len(factor_names) - 1) / 2) * bar_w
-
-    fig, axes = plt.subplots(2, 1, figsize=(16, 12))
-
-    ax1 = axes[0]
-    for i, name in enumerate(factor_names):
-        vals = [
-            ret_pivot.loc[y, name] if name in ret_pivot.columns and y in ret_pivot.index else 0
-            for y in years
-        ]
-        ax1.bar(
-            x + offsets[i],
-            vals,
-            bar_w,
-            label=FACTOR_LABELS[name],
-            color=FACTOR_COLORS[name],
-            alpha=0.85,
-        )
-    ax1.set_xticks(x)
-    ax1.set_xticklabels([str(y) for y in years], fontproperties=CJK, fontsize=8)
-    ax1.axhline(0, color="#555", linewidth=0.5)
-    ax1.set_ylabel("年度 / 年初至今收益 (%)", fontproperties=CJK)
-    ax1.set_title("逐年风格因子期间收益", fontproperties=CJK, fontsize=14)
-    ax1.legend(loc="upper left", prop=CJK, framealpha=0.5, facecolor=BG, edgecolor="#333")
-
-    ax2 = axes[1]
-    best_ret, best_label = [], []
-    for y in years:
-        row = yearly[yearly["year"] == y]
+    best_returns: list[float] = []
+    best_labels: list[str] = []
+    for year in years:
+        row = yearly[yearly["year"] == year]
         if row.empty:
-            best_ret.append(0)
-            best_label.append("")
+            best_returns.append(0.0)
+            best_labels.append("")
             continue
         best = row.nlargest(1, return_column).iloc[0]
-        best_ret.append(best[return_column])
-        best_label.append(FACTOR_LABELS.get(best["factor"], ""))
-    colors_best = ["#ff6b6b" if r < 0 else "#00d4aa" for r in best_ret]
-    ax2.bar(x, best_ret, color=colors_best, alpha=0.8)
-    for i, (factor_label, value) in enumerate(zip(best_label, best_ret, strict=True)):
-        ax2.text(
-            i,
+        best_returns.append(float(best[return_column]))
+        best_labels.append(FACTOR_LABELS.get(best["factor"], ""))
+
+    colors = ["#ff6b6b" if value < 0 else "#00d4aa" for value in best_returns]
+    ax.bar(x, best_returns, color=colors, alpha=0.8)
+    for index, (factor_label, value) in enumerate(zip(best_labels, best_returns, strict=True)):
+        ax.text(
+            index,
             value + (1 if value >= 0 else -3),
             f"{factor_label}\n{value:+.1f}%",
             ha="center",
@@ -197,11 +236,32 @@ def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
             fontsize=8,
             color=FG,
         )
-    ax2.set_xticks(x)
-    ax2.set_xticklabels([str(y) for y in years], fontproperties=CJK, fontsize=8)
-    ax2.axhline(0, color="#555", linewidth=0.5)
-    ax2.set_ylabel("收益 (%)", fontproperties=CJK)
-    ax2.set_title("每年最强因子", fontproperties=CJK, fontsize=14)
+    ax.set_xticks(x)
+    ax.set_xticklabels([str(year) for year in years], fontproperties=CJK, fontsize=8)
+    ax.axhline(0, color="#555", linewidth=0.5)
+    ax.set_ylabel("收益 (%)", fontproperties=CJK)
+    ax.set_title("每年最强因子", fontproperties=CJK, fontsize=14)
+
+
+def plot_yearly_barchart(yearly: pd.DataFrame, outdir: Path) -> None:
+    """Yearly return heatmap plus the strongest factor for each year."""
+    if yearly.empty:
+        return
+
+    return_column = "period_return" if "period_return" in yearly.columns else "annual_ret"
+    return_matrix = _yearly_return_matrix(yearly)
+    if return_matrix.empty:
+        return
+    years = list(return_matrix.columns)
+
+    fig, axes = plt.subplots(
+        2,
+        1,
+        figsize=(18, 13),
+        gridspec_kw={"height_ratios": [2.2, 1]},
+    )
+    _plot_yearly_return_heatmap(axes[0], fig, return_matrix)
+    _plot_best_yearly_factors(axes[1], yearly, years, return_column)
 
     fig.tight_layout()
     fig.savefig(outdir / "style_factor_yearly.png", dpi=150, facecolor=BG, bbox_inches="tight")
