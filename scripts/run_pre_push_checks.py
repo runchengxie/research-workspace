@@ -428,7 +428,10 @@ def _pre_gate_state_is_valid(
     root: Path,
     configs: dict[str, SubmoduleConfig],
 ) -> bool:
-    if _report_issues("hook-installation", check_installation(root, configs)):
+    if _report_issues(
+        "hook-installation",
+        check_installation(root, configs, workspace_root=plan.repository_root),
+    ):
         return False
     print("[OK] hook-installation")
     if clean_issue := repository_clean_issue(plan.repository_root):

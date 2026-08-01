@@ -23,11 +23,24 @@ class HookTarget:
     repository: Path
 
 
-def hook_targets(root: Path, configs: dict[str, SubmoduleConfig]) -> tuple[HookTarget, ...]:
+def hook_targets(
+    root: Path,
+    configs: dict[str, SubmoduleConfig],
+    *,
+    workspace_root: Path | None = None,
+) -> tuple[HookTarget, ...]:
     root = root.resolve()
-    targets = [HookTarget("research-workspace", root)]
+    # Default to the superproject root so `install_pre_push_hooks` behaves
+    # identically to before when invoked directly (e.g. from the main work
+    # tree or from tests). The pre-push gate passes the actual linked-worktree
+    # root explicitly via `workspace_root` so hooksPath resolves correctly there.
+    if workspace_root is None:
+        workspace_root = root
+    workspace_root = workspace_root.resolve()
+    targets = [HookTarget("research-workspace", workspace_root)]
     targets.extend(
-        HookTarget(name, (root / configs[name].path).resolve()) for name in sorted(configs)
+        HookTarget(name, (workspace_root / configs[name].path).resolve())
+        for name in sorted(configs)
     )
     return tuple(targets)
 
@@ -124,11 +137,13 @@ def _configuration_conflict(root: Path, target: HookTarget) -> str | None:
 def check_installation(
     root: Path,
     configs: dict[str, SubmoduleConfig],
+    *,
+    workspace_root: Path | None = None,
 ) -> list[str]:
     root = root.resolve()
     issues = _shared_hook_issues(root)
     expected = (root / HOOKS_RELATIVE_PATH).resolve()
-    for target in hook_targets(root, configs):
+    for target in hook_targets(root, configs, workspace_root=workspace_root):
         repository_issue = _repository_issue(target)
         if repository_issue:
             issues.append(f"{target.name}: {repository_issue}")
@@ -148,6 +163,7 @@ def install_hooks(
     configs: dict[str, SubmoduleConfig],
     *,
     dry_run: bool,
+    workspace_root: Path | None = None,
 ) -> int:
     root = root.resolve()
     hook_issues = _shared_hook_issues(root)
@@ -155,7 +171,7 @@ def install_hooks(
         for issue in hook_issues:
             print(f"[ERROR] {issue}", file=sys.stderr)
         return 1
-    targets = hook_targets(root, configs)
+    targets = hook_targets(root, configs, workspace_root=workspace_root)
     repository_issues = [
         f"{target.name}: {issue}"
         for target in targets

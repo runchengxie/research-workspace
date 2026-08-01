@@ -56,7 +56,7 @@ def _commit_file(path: Path, name: str = "tracked.txt", content: str = "tracked\
 
 
 def _allow_installed_hooks(monkeypatch: object) -> None:
-    monkeypatch.setattr(run_pre_push_checks, "check_installation", lambda _root, _configs: [])
+    monkeypatch.setattr(run_pre_push_checks, "check_installation", lambda *_a, **_k: [])
 
 
 def test_root_gate_runs_root_quality_and_cross_repo_checks_only() -> None:
@@ -372,7 +372,7 @@ def test_missing_hook_installation_blocks_before_quality_commands(
     monkeypatch.setattr(
         run_pre_push_checks,
         "check_installation",
-        lambda _root, _configs: ["hooks are not installed"],
+        lambda *_a, **_k: ["hooks are not installed"],
     )
     plan = run_pre_push_checks.GatePlan(
         "example",
