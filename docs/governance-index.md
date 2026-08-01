@@ -19,6 +19,7 @@
 | `deprecations.yml` | 废弃入口登记与预算，记录待跟进的废弃面 | `scripts/workspace_governance.py` |
 | `maintainability-refactor-roadmap.yml` | 维护性重构路线图与热点预算（棘轮策略）。债务上限下调需在同一提交完成，上调需独立 owner 决策 | `scripts/maintainability_baseline.py`、维护性门禁 |
 | `quality-coverage-governance.yml` | 质量覆盖治理，登记允许的排除项与每文件忽略上限 | 各仓 ruff `per-file-ignores` |
+| `dev-metrics-consolidation-plan.md` | 六份分叉 `maintainability_metrics.py` 合并进 `research-dev-metrics` 远端的方案与风险评估 | 维护性门禁、各仓 pre-push |
 
 ## 脚本与应用生命周期
 

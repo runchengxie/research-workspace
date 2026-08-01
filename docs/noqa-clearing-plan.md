@@ -1,6 +1,10 @@
 # 子模块 noqa 清债计划
 
-本计划处理六个子模块里 `# noqa` 注释的分布问题。2026-07-31 复核发现，此前列报的 noqa 总量（如 alpha-research 4244 条）几乎全部来自各子模块的 `.venv` 第三方包，并非项目自有代码。排除 `.venv`/`build`/`artifacts` 后，六个子模块自有代码实际只有约 1100 处 `# noqa`，且 1036 处集中在 `market-data-platform`。顶层工作区自身有 3 处 `# noqa`，门禁有效。子模块自有代码的 noqa 不多，但 `market-data-platform` 的 `F401` 偏多，可借清理顺带发现未使用导入与潜在 dead code。
+## 当前结论（2026-07-31 复核后）
+
+- `market-data-platform` 的 `F401` 经 worktree 实测后确认是 facade re-export 壳重新导出拆分符号的标准写法（27/30 个文件 docstring 已声明），并非技术债。这部分已通过 `pyproject.toml` 的 28 条 `per-file-ignores` 收口并合并（PR #13），不再作为清债目标。
+- 实测复核：排除 `.venv`/`build`/`artifacts` 后，`market-data-platform` 自有代码当前共 46 处内联 `# noqa`（几乎全是 `PLR0913` 等设计类告警），`src/` 内零内联 `F401`。下表早期统计的「1036 处、F401 占 951」是未收口前的口径，已不反映现状，仅保留作历史记录。
+- 其余子模块自有代码 # noqa 本来极少，门禁在子模块层有效。本计划的实际清债空间很小，重点转为「让设计类告警浮现、后续做函数拆分」。
 
 ## 与现有治理文件的关系
 
@@ -64,10 +68,10 @@
 
 按工作量从大到小排序，聚焦真正有量的两个子模块。
 
-### 批次 1：market-data-platform（1036 条，主战场）
+### 批次 1：market-data-platform（F401 已收口，剩余为设计类告警）
 
-- 先清 `F401`（951）：在子模块内运行 `uv run --locked ruff check --fix --select F401 .`，逐文件复核不是 re-export 后再提交。顺带暴露未使用导入与潜在 dead code，单独开清理提交。
-- 再处理 `PLR0913`/`PLR0915`（63）：只解除 `# noqa` 让告警浮现，不在此批做函数拆分，拆分归 roadmap 设计类工作。
+- `F401`（原 951 条）：已确认为 facade re-export，通过 `pyproject.toml` 的 28 条 `per-file-ignores` 收口并合并（PR #13），不再清理。误删会破坏对外 API。
+- `PLR0913`/`PLR0915`（约 63 条内联）：只解除 `# noqa` 让告警浮现，不在此批做函数拆分，拆分归 roadmap 设计类工作。当前 `src/` 内此类内联仍约 46 处。
 - 验证：`uv run --locked ruff check .` 与 `scripts/dev/check.py` 通过，跑该仓测试套件。
 
 ### 批次 2：strategy-pipeline（38 条）
