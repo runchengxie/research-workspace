@@ -11,12 +11,12 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 87,
-      "python_loc": 15524,
+      "python_loc": 15638,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
         "long_functions": 2,
-        "complexity_hotspots": 2,
+        "complexity_hotspots": 1,
         "large_classes": 2
       },
       "large_files": [
@@ -56,12 +56,6 @@
         }
       ],
       "complexity_hotspots": [
-        {
-          "path": "src/style_factors/charts.py",
-          "name": "plot_yearly_barchart",
-          "line_count": 70,
-          "complexity": 17
-        },
         {
           "path": "scripts/workspace_import_boundaries.py",
           "name": "build_report",
