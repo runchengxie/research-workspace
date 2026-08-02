@@ -177,10 +177,10 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 293,
-      "python_loc": 88288,
+      "python_loc": 88701,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 38,
+        "large_files": 41,
         "long_functions": 75,
         "complexity_hotspots": 40,
         "large_classes": 1
@@ -193,12 +193,12 @@
         },
         {
           "path": "tests/test_tushare_a_share.py",
-          "loc": 1791,
+          "loc": 1794,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share_fundamentals.py",
-          "loc": 1708,
+          "loc": 1709,
           "hk_related": false
         },
         {
@@ -223,17 +223,17 @@
         },
         {
           "path": "scripts/operations/archive_guan_mobile.py",
-          "loc": 994,
+          "loc": 995,
           "hk_related": false
         },
         {
           "path": "tests/test_cli_data_minutes.py",
-          "loc": 955,
+          "loc": 957,
           "hk_related": false
         },
         {
           "path": "tests/test_a_share_minute_build.py",
-          "loc": 858,
+          "loc": 859,
           "hk_related": false
         },
         {
@@ -243,12 +243,12 @@
         },
         {
           "path": "tests/test_guan_annual_minbar.py",
-          "loc": 725,
+          "loc": 754,
           "hk_related": false
         },
         {
           "path": "tests/test_a_share_minute_bj_overlay.py",
-          "loc": 717,
+          "loc": 718,
           "hk_related": false
         },
         {
@@ -258,7 +258,7 @@
         },
         {
           "path": "tests/test_archive_guan_mobile.py",
-          "loc": 674,
+          "loc": 675,
           "hk_related": false
         },
         {
@@ -288,7 +288,7 @@
         },
         {
           "path": "src/market_data_platform/providers/_a_share_mins_partition.py",
-          "loc": 621,
+          "loc": 623,
           "hk_related": false
         },
         {
@@ -297,18 +297,18 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_tushare_a_share_constraints.py",
+          "loc": 594,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_data_providers_cache.py",
-          "loc": 570,
+          "loc": 574,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/_mins_mirror.py",
-          "loc": 567,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
-          "loc": 552,
+          "path": "src/market_data_platform/providers/tushare_a_share_constraints.py",
+          "loc": 571,
           "hk_related": false
         }
       ],
@@ -620,7 +620,7 @@
         {
           "path": "tests/test_tushare_a_share.py",
           "name": "FakeDataClient",
-          "line_count": 345,
+          "line_count": 346,
           "method_count": 17
         }
       ],
@@ -647,46 +647,9 @@
           "reports"
         ],
         "ty_include": [
-          "src/market_data_platform/_tushare_minute_campaign_quota_args.py",
-          "src/market_data_platform/_tushare_minute_quota_config.py",
-          "src/market_data_platform/_tushare_minute_quota_db.py",
-          "src/market_data_platform/_tushare_minute_quota_holds.py",
-          "src/market_data_platform/_tushare_minute_quota_requests.py",
-          "src/market_data_platform/artifacts.py",
-          "src/market_data_platform/cli.py",
-          "src/market_data_platform/cli_tushare.py",
-          "src/market_data_platform/cli_tushare_core.py",
-          "src/market_data_platform/cli_tushare_fundamentals.py",
-          "src/market_data_platform/cli_tushare_research.py",
-          "src/market_data_platform/cli_tushare_reference.py",
-          "src/market_data_platform/contract.py",
-          "src/market_data_platform/contract_health.py",
-          "src/market_data_platform/current_path_audit.py",
-          "src/market_data_platform/data_governance.py",
-          "src/market_data_platform/data_provider_contracts.py",
-          "src/market_data_platform/manifest.py",
-          "src/market_data_platform/paths.py",
-          "src/market_data_platform/published_assets.py",
-          "src/market_data_platform/published_frames.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_part01.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part01.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part02.py",
-          "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
-          "src/market_data_platform/providers/tushare_a_share_reference.py",
-          "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
-          "src/market_data_platform/research_views/daily_watch20_minute_source.py",
-          "src/market_data_platform/research_views/daily_watch20_policy.py",
-          "src/market_data_platform/registry.py",
-          "src/market_data_platform/symbols.py",
-          "src/market_data_platform/tushare_cli.py",
-          "src/market_data_platform/tushare_cli_fundamentals.py",
-          "src/market_data_platform/tushare_cli_reference.py",
-          "src/market_data_platform/tushare_minute_quota.py"
+          "src",
+          "scripts",
+          "tests"
         ],
         "ty_exclude": [
           ".venv",
