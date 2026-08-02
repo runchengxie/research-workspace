@@ -12,6 +12,7 @@ import pandas as pd
 from . import CJK, FACTOR_LABELS, FACTOR_ORDER
 from .report import _markdown_table
 from .robustness_backtest import ConstrainedBacktestArtifacts, RobustnessConfig
+from .robustness_quality import data_quality_frame
 
 
 def _comparison_wide(comparison: pd.DataFrame) -> pd.DataFrame:
@@ -61,79 +62,6 @@ def _scenario_excerpt(scenarios: pd.DataFrame) -> pd.DataFrame:
         "sharpe",
     ]
     return excerpt[columns].sort_values(["factor", "terminal_return", "cost_bps"])
-
-
-def _data_quality_frame(data: dict[str, Any]) -> pd.DataFrame:
-    cross_validation = data["st_cross_validation"]
-    checks = [
-        (
-            "daily_key_duplicates",
-            data["duplicate_daily_keys"],
-            "= 0",
-            data["duplicate_daily_keys"] == 0,
-        ),
-        (
-            "universe_key_duplicates",
-            data["duplicate_universe_keys"],
-            "= 0",
-            data["duplicate_universe_keys"] == 0,
-        ),
-        (
-            "margin_key_duplicates",
-            data["duplicate_margin_keys"],
-            "= 0",
-            data["duplicate_margin_keys"] == 0,
-        ),
-        (
-            "pit_panel_key_duplicates",
-            data["duplicate_pit_panel_keys"],
-            "= 0",
-            data["duplicate_pit_panel_keys"] == 0,
-        ),
-        (
-            "early_daily_basic_join_rate",
-            data["early_daily_basic_join_rate"],
-            ">= 99%",
-            data["early_daily_basic_join_rate"] >= 0.99,
-        ),
-        (
-            "early_adj_factor_join_rate",
-            data["early_adj_factor_join_rate"],
-            "= 100%",
-            data["early_adj_factor_join_rate"] == 1.0,
-        ),
-        (
-            "early_limit_status_join_rate",
-            data["early_limit_status_join_rate"],
-            ">= 99%",
-            data["early_limit_status_join_rate"] >= 0.99,
-        ),
-        (
-            "universe_daily_join_rate",
-            data["universe_daily_join_rate"],
-            ">= 99% (formation-date suspensions retained)",
-            data["universe_daily_join_rate"] >= 0.99,
-        ),
-        (
-            "adjustment_bridge_p99_abs_error_pct",
-            data["adjustment_bridge_p99_abs_error_pct"],
-            "<= 0.10 percentage point",
-            data["adjustment_bridge_p99_abs_error_pct"] <= 0.10,
-        ),
-        (
-            "st_reconstruction_precision",
-            cross_validation["precision"],
-            ">= 99%",
-            cross_validation["precision"] >= 0.99,
-        ),
-        (
-            "st_reconstruction_recall",
-            cross_validation["recall"],
-            ">= 99%",
-            cross_validation["recall"] >= 0.99,
-        ),
-    ]
-    return pd.DataFrame(checks, columns=["check", "observed", "threshold", "passed"])
 
 
 def _plot_comparison(wide: pd.DataFrame, outdir: Path) -> None:
@@ -190,13 +118,13 @@ def _plot_margin_comparison(comparison: pd.DataFrame, outdir: Path) -> None:
     frame.index = [FACTOR_LABELS.get(str(value), str(value)) for value in frame.index]
     frame = frame.rename(
         columns={
-            "constrained_net_matched_2015plus": "constrained/net",
-            "margin_qualification_upper_bound_net": "margin-qualified short proxy",
+            "constrained_net_matched_reported_activity_window": "constrained/net",
+            "reported_borrow_activity_proxy_net": "reported-activity short proxy",
         }
     )
     ax = frame.plot.bar(figsize=(18, 8), width=0.76, color=["#5AD8A6", "#F6BD16"])
     ax.axhline(0, color="#999999", linewidth=0.8)
-    ax.set_title("2015–2026 融券资格上界敏感性", fontproperties=CJK, fontsize=17)
+    ax.set_title("2015–2026 已报告借券活动代理敏感性", fontproperties=CJK, fontsize=17)
     ax.set_ylabel("几何年化收益（%）", fontproperties=CJK)
     ax.set_xlabel("")
     ax.set_xticklabels(frame.index, fontproperties=CJK, rotation=35, ha="right")
@@ -233,8 +161,9 @@ def _metadata_payload(
             "short_cover_block": "missing/suspended or close_at_up_limit",
             "missing_holding_return": "zero_until_mark_or_terminal_event",
             "short_leg": "theoretical bottom-quintile proxy; no borrow inventory or fee data",
-            "margin_sensitivity": (
-                "qualification upper bound only; no inventory, fee, recall or quantity history"
+            "short_activity_sensitivity": (
+                "qualification intersect reported margin_detail/slb_sec_detail activity; "
+                "still no borrow inventory, fee or recall history"
             ),
         },
         "data": data_metadata,
@@ -260,10 +189,18 @@ def _coverage_lines(data: dict[str, Any]) -> list[str]:
         "- 涨跌停：2008–2014 使用已验 hash 的 stk_limit bridge，2015+ 使用"
         " daily_clean 内的 limit flags。",
         f"- 历史 ST：namechange 区间重建后只在形成日展开，共 {data['st_rows']:,} 行；"
-        "属于 reconstructed PIT，不是 revision-safe 历史。",
-        f"- PIT v2：vintage={data['pit_vintage']}，历史形成日仅可称 reconstructed PIT；"
+        "属于 reconstructed PIT，不是 revision-safe 历史；st 变更事件只作旁证，"
+        f"共 {data['provider_st_event_rows']:,} 条。",
+        f"- 显式停牌：suspend_d 共 {data['suspend_event_rows']:,} 条事件，"
+        f"其中 {data['suspend_events_on_price_rows']:,} 条与价格行重合并进入不可交易标记；"
+        f"其余 {data['suspend_events_without_price_rows']:,} 条由缺失价格不可交易逻辑覆盖。",
+        f"- PIT v2：vintage={data['pit_vintage']}，报告期查询从"
+        f" {data['pit_query_start_date']} 起；历史形成日仅可称 reconstructed PIT；"
         f" revision-safe 起点为 {data['revision_safe_from']}。",
         f"- 融券资格：{data['margin_start']} ~ {data['margin_end']}，仅作为做空资格上界。",
+        f"- 已报告借券活动代理：{data['reported_borrow_activity_start']} ~ "
+        f"{data['reported_borrow_activity_end']}，由 margin_secs 资格与"
+        " margin_detail/slb_sec_detail 正活动取交集。",
     ]
 
 
@@ -283,10 +220,10 @@ def _methodology_lines(diagnostic_count: int) -> list[str]:
         "",
         "- 历史 ST 已由 namechange 重建，但仍是 2026 年回填的 reconstructed PIT。",
         "- 退市末端收益是压力代理，不是真实退市整理期、现金清算或场外转让收益。",
-        "- 空头腿仍是理论 bottom-quintile 代理；margin_secs 只能补充资格上界，"
-        "仍不能证明券源、费率、召回和可借数量。",
-        "- PIT v2 已接入 ROE、ROA、杠杆、经营现金流、净利润；Growth 因缺少"
-        " netprofit_yoy/or_yoy 仍沿用 legacy fundamentals。历史财务版本仍非 revision-safe。",
+        "- 空头腿仍是理论 bottom-quintile 代理；margin_detail/slb_sec_detail 只证明"
+        "市场中出现过已报告活动，仍不能证明研究组合当日券源、费率、召回和可借数量。",
+        "- PIT v2 已接入 ROE、ROA、杠杆、经营现金流、净利润及 Growth 所需的"
+        " netprofit_yoy/or_yoy；历史财务版本仍非 revision-safe。",
         "- universe_by_date 当前是形成日快照，不是逐日股票池。",
         "",
         "## 机器可读证据",
@@ -382,12 +319,13 @@ def _gate_and_sensitivity_lines(
         f"结论：{gate_decision['core_factors_passed']}/{len(gate_results)} 个核心因子通过，"
         f"因此动作是 `{gate_decision['official_latest_action']}`。",
         "",
-        "## 融券资格上界敏感性",
+        "## 已报告借券活动代理敏感性",
         "",
-        "2015 年后的 margin_secs 只限制 bottom-quintile 空头候选，不能证明当日有券，"
-        "也不含借券费、召回概率和可借数量；所以空头腿仍标记为理论代理。",
+        "2015 年后的 margin_secs 先限定资格，再要求 formation date 的 margin_detail"
+        " 融券余量/卖出量或 slb_sec_detail 出借数量为正。该口径比单纯资格更严格，"
+        "仍不能证明组合当日可借库存、借券费、召回概率和可借数量。",
         "",
-        "![2015–2026 融券资格上界敏感性](style_factor_margin_qualification_sensitivity.png)",
+        "![2015–2026 已报告借券活动代理敏感性](style_factor_margin_qualification_sensitivity.png)",
         "",
     ]
 
@@ -437,7 +375,7 @@ def write_robustness_artifacts(
         baseline_artifacts=baseline_artifacts,
     )
     metadata["promotion_gate"] = gate_decision
-    data_quality = _data_quality_frame(data_metadata)
+    data_quality = data_quality_frame(data_metadata)
     artifacts.comparison.to_csv(outdir / "factor_robustness_comparison.csv", index=False)
     wide.to_csv(outdir / "factor_robustness_comparison_wide.csv", index=False)
     artifacts.scenarios.to_csv(outdir / "factor_robustness_scenarios.csv", index=False)

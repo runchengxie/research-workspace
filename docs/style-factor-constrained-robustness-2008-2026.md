@@ -13,9 +13,11 @@
 - 2014/2015 复权桥：按 raw close × adj_factor 统一尺度，P99 绝对收益误差 0.0050 个百分点，>0.10 个百分点 1 只。
 - PIT 形成日股票池：2008-02-29 ~ 2026-07-31，223 个形成日，与日行情联结率 99.0444%。
 - 涨跌停：2008–2014 使用已验 hash 的 stk_limit bridge，2015+ 使用 daily_clean 内的 limit flags。
-- 历史 ST：namechange 区间重建后只在形成日展开，共 28,602 行。该数据属于 reconstructed PIT，不是 revision-safe 历史。
-- PIT v2：vintage=20260802，历史形成日仅可称 reconstructed PIT，revision-safe 起点为 20260802。
+- 历史 ST：namechange 区间重建后只在形成日展开，共 28,602 行。它属于 reconstructed PIT，不是 revision-safe 历史。st 变更事件只作旁证，共 3,177 条。
+- 显式停牌：suspend_d 共 507,393 条事件，其中 36,743 条与价格行重合并进入不可交易标记，其余 470,650 条由缺失价格不可交易逻辑覆盖。
+- PIT v2：vintage=20260802，报告期查询从 20080101 起。历史形成日仅可称 reconstructed PIT，revision-safe 起点为 20260802。
 - 融券资格：2015-01-30 ~ 2026-07-31，仅作为做空资格上界。
+- 已报告借券活动代理：2015-01-30 ~ 2026-07-31，由 margin_secs 资格与 margin_detail/slb_sec_detail 正活动取交集。
 
 ## 数据质量门槛
 
@@ -24,6 +26,10 @@
 | daily_key_duplicates | 0.000000 | = 0 | 1.000000 |
 | universe_key_duplicates | 0.000000 | = 0 | 1.000000 |
 | margin_key_duplicates | 0.000000 | = 0 | 1.000000 |
+| reported_borrow_activity_key_duplicates | 0.000000 | = 0 | 1.000000 |
+| reported_borrow_activity_date_coverage | 1.000000 | >= 95% of margin formation dates | 1.000000 |
+| pit_netprofit_yoy_coverage | 0.995964 | >= 50% | 1.000000 |
+| pit_or_yoy_coverage | 0.995824 | >= 50% | 1.000000 |
 | pit_panel_key_duplicates | 0.000000 | = 0 | 1.000000 |
 | early_daily_basic_join_rate | 0.999875 | >= 99% | 1.000000 |
 | early_adj_factor_join_rate | 1.000000 | = 100% | 1.000000 |
@@ -40,11 +46,11 @@
 | Size 大市值 | 4475.00 | -17.98 | -18.66 | -19.13 | -1.15 | -97.95 |
 | Value 低估值 | 4475.00 | 11.15 | 7.60 | 6.83 | -4.32 | -21.48 |
 | Momentum 动量 | 4475.00 | -14.58 | -18.43 | -21.53 | -6.95 | -98.73 |
-| Quality 复合质量 | 3618.00 | 1.24 | 0.23 | -0.65 | -1.89 | -36.01 |
+| Quality 复合质量 | 3641.00 | 1.23 | 0.13 | -0.69 | -1.92 | -33.00 |
 | Earnings Yield 盈利估值 | 4475.00 | 3.72 | 1.09 | 0.29 | -3.43 | -37.75 |
 | LowVol 低波动 | 4475.00 | 8.60 | 5.77 | 2.85 | -5.75 | -44.49 |
-| Growth 成长 | 3462.00 | 7.61 | 3.58 | 2.64 | -4.97 | -26.50 |
-| Leverage 低杠杆 | 3462.00 | 1.19 | 0.27 | -0.25 | -1.44 | -42.04 |
+| Growth 成长 | 3462.00 | 7.61 | 2.51 | 1.59 | -6.02 | -25.55 |
+| Leverage 低杠杆 | 3462.00 | 1.19 | 0.39 | -0.06 | -1.25 | -41.43 |
 | Beta 低贝塔 | 4370.00 | -7.02 | -7.16 | -8.01 | -0.99 | -82.64 |
 | Liquidity 低换手 | 4475.00 | 18.48 | 14.06 | 11.29 | -7.19 | -19.69 |
 | LiquidityFlow 大单资金流 | 96.00 | -1.57 | -0.76 | -4.55 | -2.98 | -3.86 |
@@ -100,17 +106,16 @@
 | quality | 0.81 | 0.00 | 0.00 | 0.00 | 0.00 | direction,drawdown,cost |
 | earnings_yield | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | drawdown,cost |
 | lowvol | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | drawdown,cost |
-| growth | 0.77 | 1.00 | 1.00 | 1.00 | 0.00 | coverage |
+| growth | 0.77 | 1.00 | 1.00 | 0.00 | 0.00 | coverage,cost |
 | leverage | 0.77 | 0.00 | 0.00 | 0.00 | 0.00 | coverage,direction,drawdown,cost |
 | beta | 0.98 | 1.00 | 1.00 | 1.00 | 1.00 | — |
 | liquidity | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | — |
 
 结论：5/10 个核心因子通过，因此动作是 `keep_current_latest`。
 
-## 融券资格上界敏感性
+## 已报告借券活动代理敏感性
 
-2015 年后的 margin_secs 只限制 bottom-quintile 空头候选，不能证明当日有券，也不含借券费、召回概率和可借数量。因此空头腿仍标记为理论代理。
-
+2015 年后的 margin_secs 先限定资格，再要求 formation date 的 margin_detail 融券余量/卖出量或 slb_sec_detail 出借数量为正。该口径比单纯资格更严格，仍不能证明组合当日可借库存、借券费、召回概率和可借数量。
 
 ## 执行逻辑
 
@@ -124,14 +129,14 @@
 
 - 历史 ST 已由 namechange 重建，但仍是 2026 年回填的 reconstructed PIT。
 - 退市末端收益是压力代理，不是真实退市整理期、现金清算或场外转让收益。
-- 空头腿仍是理论 bottom-quintile 代理。margin_secs 只能补充资格上界，仍不能证明券源、费率、召回和可借数量。
-- PIT v2 已接入 ROE、ROA、杠杆、经营现金流、净利润。Growth 因缺少 netprofit_yoy/or_yoy 仍沿用 legacy fundamentals。历史财务版本仍非 revision-safe。
+- 空头腿仍是理论 bottom-quintile 代理。margin_detail/slb_sec_detail 只证明市场中出现过已报告活动，仍不能证明研究组合当日券源、费率、召回和可借数量。
+- PIT v2 已接入 ROE、ROA、杠杆、经营现金流、净利润及 Growth 所需的 netprofit_yoy/or_yoy。历史财务版本仍非 revision-safe。
 - universe_by_date 当前是形成日快照，不是逐日股票池。
 
 ## 机器可读证据
 
 - 版本目录（相对 `DATA_PLATFORM_ROOT`）：
-  `strategy_outputs/style-factors/20260802-full-constrained-validation/`。
+  `strategy_outputs/style-factors/20260802-full-constrained-enriched-validation/`。
 - 三张图：`style_factor_robustness_comparison.png`、
   `style_factor_robustness_drawdown.png`、
   `style_factor_margin_qualification_sensitivity.png`。

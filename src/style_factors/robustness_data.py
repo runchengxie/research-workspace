@@ -8,13 +8,18 @@ from typing import Any
 
 import pandas as pd
 
+from .robustness_constraints import (
+    apply_explicit_suspensions,
+    load_margin_formation_eligibility,
+    load_reported_borrow_activity_eligibility,
+    load_st_event_evidence,
+)
 from .robustness_sources import (
     CONSTRAINTS_VERSION,
     PIT_VINTAGE,
     build_early_daily_clean,
     build_early_universe,
     expand_st_intervals,
-    load_margin_formation_eligibility,
     load_reconstructed_pit_panel,
 )
 
@@ -47,6 +52,7 @@ class RobustnessMarketData:
     universe: pd.DataFrame
     st_history: pd.DataFrame
     margin_eligibility: pd.DataFrame
+    reported_borrow_activity: pd.DataFrame
     pit_fundamentals: pd.DataFrame
     instruments: pd.DataFrame
     metadata: dict[str, Any]
@@ -173,6 +179,7 @@ def _coverage_metadata(
     universe: pd.DataFrame,
     st_history: pd.DataFrame,
     margin_eligibility: pd.DataFrame,
+    reported_borrow_activity: pd.DataFrame,
     pit_fundamentals: pd.DataFrame,
     instruments: pd.DataFrame,
     source_metadata: dict[str, Any],
@@ -218,11 +225,28 @@ def _coverage_metadata(
             if not margin_eligibility.empty
             else None
         ),
+        "reported_borrow_activity_start": (
+            reported_borrow_activity["trade_date"].min().date().isoformat()
+            if not reported_borrow_activity.empty
+            else None
+        ),
+        "reported_borrow_activity_end": (
+            reported_borrow_activity["trade_date"].max().date().isoformat()
+            if not reported_borrow_activity.empty
+            else None
+        ),
+        "reported_borrow_activity_date_coverage": (
+            reported_borrow_activity["trade_date"].nunique()
+            / margin_eligibility["trade_date"].nunique()
+            if not margin_eligibility.empty
+            else 0.0
+        ),
         "pit_panel_rows": len(pit_fundamentals),
         "delisted_instruments": int(instruments["delist_date"].notna().sum()),
         "duplicate_daily_keys": 0,
         "duplicate_universe_keys": 0,
         "duplicate_margin_keys": 0,
+        "duplicate_reported_borrow_activity_keys": 0,
         "duplicate_pit_panel_keys": 0,
         **_adjustment_bridge_metadata(daily_clean),
         **source_metadata,
@@ -300,15 +324,17 @@ def load_robustness_market_data(
     start = pd.to_datetime(start_date or "2008-01-01")
     end = pd.to_datetime(end_date or pd.Timestamp.today().normalize())
     instruments = _load_instruments(data_root)
+    constraints = constraints_dir or data_root / "staging" / CONSTRAINTS_VERSION
     daily_clean, source_metadata = _assemble_daily_clean(
         data_root,
         instruments,
         start=start,
         end=end,
     )
+    daily_clean, suspend_metadata = apply_explicit_suspensions(daily_clean, constraints)
+    source_metadata.update(suspend_metadata)
     universe = _assemble_universe(data_root, daily_clean, start=start, end=end)
 
-    constraints = constraints_dir or data_root / "staging" / CONSTRAINTS_VERSION
     vintage = pit_vintage_dir or (
         data_root / "assets/tushare/a_share/fundamentals_vintages" / f"vintage={PIT_VINTAGE}"
     )
@@ -318,13 +344,25 @@ def load_robustness_market_data(
         constraints,
         formation_dates,
     )
+    reported_borrow_activity, borrow_activity_metadata = load_reported_borrow_activity_eligibility(
+        constraints,
+        formation_dates,
+        margin_eligibility,
+    )
     pit_fundamentals, pit_metadata = load_reconstructed_pit_panel(vintage, universe)
-    source_metadata.update(st_metadata | margin_metadata | pit_metadata)
+    source_metadata.update(
+        st_metadata
+        | load_st_event_evidence(constraints)
+        | margin_metadata
+        | borrow_activity_metadata
+        | pit_metadata
+    )
     metadata = _coverage_metadata(
         daily_clean,
         universe,
         st_history,
         margin_eligibility,
+        reported_borrow_activity,
         pit_fundamentals,
         instruments,
         source_metadata,
@@ -334,6 +372,7 @@ def load_robustness_market_data(
         universe=universe,
         st_history=st_history,
         margin_eligibility=margin_eligibility,
+        reported_borrow_activity=reported_borrow_activity,
         pit_fundamentals=pit_fundamentals,
         instruments=instruments,
         metadata=metadata,

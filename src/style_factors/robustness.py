@@ -106,7 +106,9 @@ def run_robustness_analysis(
         start_date=analysis_start,
         end_date=analysis_end,
     )
-    print("[robustness] simulating constrained gross/net and margin sensitivity", flush=True)
+    print(
+        "[robustness] simulating constrained gross/net and short-activity sensitivity", flush=True
+    )
     artifacts = build_constrained_robustness(
         factors,
         market_data.daily_clean,
@@ -114,7 +116,7 @@ def run_robustness_analysis(
         market_data.st_history,
         market_data.instruments,
         baseline_results,
-        market_data.margin_eligibility,
+        market_data.reported_borrow_activity,
         config=config,
     )
     gate_results, gate_decision = evaluate_promotion_gate(

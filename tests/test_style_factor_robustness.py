@@ -12,6 +12,11 @@ from src.style_factors.robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,
 )
+from src.style_factors.robustness_constraints import (
+    apply_explicit_suspensions,
+    load_reported_borrow_activity_eligibility,
+    load_st_event_evidence,
+)
 from src.style_factors.robustness_data import (
     _normalize_trade_dates,
     _require_unique,
@@ -22,7 +27,10 @@ from src.style_factors.robustness_execution import (
     terminal_event_positions,
 )
 from src.style_factors.robustness_gate import CORE_FACTORS, evaluate_promotion_gate
-from src.style_factors.robustness_sources import expand_st_intervals, sha256_file
+from src.style_factors.robustness_sources import (
+    expand_st_intervals,
+    sha256_file,
+)
 
 
 def test_normalize_trade_dates_accepts_compact_and_iso_values() -> None:
@@ -48,7 +56,7 @@ def test_robustness_loader_rejects_duplicate_market_grain() -> None:
         _require_unique(frame, ["trade_date", "symbol"], label="daily_clean")
 
 
-def test_pit_panel_overlays_non_null_fields_and_retains_legacy_growth_inputs() -> None:
+def test_pit_panel_overlays_non_null_fields_including_growth_inputs() -> None:
     date = pd.Timestamp("2024-01-31")
     legacy = pd.DataFrame(
         {
@@ -65,6 +73,7 @@ def test_pit_panel_overlays_non_null_fields_and_retains_legacy_growth_inputs() -
             "symbol": ["000001.SZ"],
             "roe": [10.0],
             "debt_to_assets": [np.nan],
+            "netprofit_yoy": [18.0],
         }
     )
 
@@ -73,7 +82,7 @@ def test_pit_panel_overlays_non_null_fields_and_retains_legacy_growth_inputs() -
     assert used
     assert result.loc[0, "roe"] == 10.0
     assert result.loc[0, "debt_to_assets"] == 60.0
-    assert result.loc[0, "netprofit_yoy"] == 12.0
+    assert result.loc[0, "netprofit_yoy"] == 18.0
 
 
 def test_reconstructed_st_intervals_expand_only_on_formation_dates(
@@ -107,6 +116,139 @@ def test_reconstructed_st_intervals_expand_only_on_formation_dates(
         {"trade_date": pd.Timestamp("2024-01-31"), "symbol": "000001.SZ"}
     ]
     assert metadata["st_revision_safe"] is False
+
+
+def _write_constraint_source(
+    root: Path,
+    dataset: str,
+    frame: pd.DataFrame,
+    semantics: str,
+) -> None:
+    path = root / f"{dataset}.parquet"
+    frame.to_parquet(path, index=False)
+    (root / f"{dataset}.receipt.json").write_text(
+        json.dumps(
+            {
+                "dataset": dataset,
+                "quality_status": "complete",
+                "sha256": sha256_file(path),
+                "semantics": semantics,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def test_reported_borrow_activity_requires_qualification_and_positive_activity(
+    tmp_path: Path,
+) -> None:
+    _write_constraint_source(
+        tmp_path,
+        "margin_detail",
+        pd.DataFrame(
+            [
+                {"trade_date": "20240131", "ts_code": "A", "rqyl": 10, "rqmcl": 0},
+                {"trade_date": "20240131", "ts_code": "B", "rqyl": 0, "rqmcl": 0},
+                {"trade_date": "20240131", "ts_code": "C", "rqyl": 5, "rqmcl": 0},
+            ]
+        ),
+        "reported activity",
+    )
+    _write_constraint_source(
+        tmp_path,
+        "slb_sec_detail",
+        pd.DataFrame(
+            [
+                {"trade_date": "20240131", "ts_code": "B", "lent_qnt": 20},
+                {"trade_date": "20240131", "ts_code": "D", "lent_qnt": 20},
+            ]
+        ),
+        "reported lending",
+    )
+    qualification = pd.DataFrame(
+        {
+            "trade_date": [pd.Timestamp("2024-01-31")] * 3,
+            "symbol": ["A", "B", "D"],
+        }
+    )
+
+    result, metadata = load_reported_borrow_activity_eligibility(
+        tmp_path,
+        pd.DatetimeIndex(["2024-01-31"]),
+        qualification,
+    )
+
+    assert result["symbol"].tolist() == ["A", "B", "D"]
+    assert metadata["margin_detail_activity_rows"] == 2
+    assert metadata["slb_sec_detail_activity_rows"] == 2
+
+
+def test_explicit_suspensions_overlay_existing_price_rows_and_st_events_are_verified(
+    tmp_path: Path,
+) -> None:
+    _write_constraint_source(
+        tmp_path,
+        "suspend_d",
+        pd.DataFrame(
+            [
+                {"trade_date": "20240131", "ts_code": "A"},
+                {"trade_date": "20240131", "ts_code": "MISSING"},
+            ]
+        ),
+        "explicit suspension",
+    )
+    _write_constraint_source(
+        tmp_path,
+        "st",
+        pd.DataFrame(
+            [
+                {"ts_code": "A", "imp_date": "20240131", "st_type": "ST"},
+                {"ts_code": "B", "imp_date": "20240201", "st_type": "撤销ST"},
+            ]
+        ),
+        "event evidence",
+    )
+    daily = pd.DataFrame(
+        {
+            "trade_date": [pd.Timestamp("2024-01-31"), pd.Timestamp("2024-01-31")],
+            "symbol": ["A", "B"],
+            "is_suspended": [False, False],
+        }
+    )
+
+    result, metadata = apply_explicit_suspensions(daily, tmp_path)
+    st_metadata = load_st_event_evidence(tmp_path)
+
+    assert result.set_index("symbol")["is_suspended"].to_dict() == {"A": True, "B": False}
+    assert metadata["suspend_events_on_price_rows"] == 1
+    assert metadata["suspend_events_without_price_rows"] == 1
+    assert st_metadata["provider_st_event_rows"] == 2
+    assert st_metadata["provider_st_event_types"] == ["ST", "撤销ST"]
+
+
+def test_constraint_source_rejects_incomplete_or_mutated_receipts(tmp_path: Path) -> None:
+    _write_constraint_source(
+        tmp_path,
+        "suspend_d",
+        pd.DataFrame([{"trade_date": "20240131", "ts_code": "A"}]),
+        "explicit suspension",
+    )
+    receipt_path = tmp_path / "suspend_d.receipt.json"
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["quality_status"] = "partial"
+    receipt_path.write_text(json.dumps(receipt), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="quality_status=complete"):
+        apply_explicit_suspensions(
+            pd.DataFrame(
+                {
+                    "trade_date": [pd.Timestamp("2024-01-31")],
+                    "symbol": ["A"],
+                    "is_suspended": [False],
+                }
+            ),
+            tmp_path,
+        )
 
 
 def test_pending_orders_retry_price_limit_blocked_entry_and_exit() -> None:
@@ -270,8 +412,8 @@ def test_constrained_profile_charges_actual_turnover_costs() -> None:
     }
     assert "size" in artifacts.margin_net_results
     assert set(artifacts.margin_comparison["profile"]) == {
-        "constrained_net_matched_2015plus",
-        "margin_qualification_upper_bound_net",
+        "constrained_net_matched_reported_activity_window",
+        "reported_borrow_activity_proxy_net",
     }
 
 
