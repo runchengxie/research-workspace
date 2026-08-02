@@ -176,8 +176,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 285,
-      "python_loc": 85848,
+      "python_file_count": 291,
+      "python_loc": 87274,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 36,
@@ -263,7 +263,7 @@
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_reference.py",
-          "loc": 642,
+          "loc": 643,
           "hk_related": false
         },
         {
