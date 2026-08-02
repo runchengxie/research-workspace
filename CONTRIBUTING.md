@@ -43,7 +43,9 @@
 
 ## 开发流程
 
-两份仓库（`research-workspace` 顶层与 `market-intel`）都已放开 pre-push 守卫，允许推送 `feat/*`、`fix/*`、`hotfix/*`、`release/*` 前缀的功能分支，用以走拉取请求流程。主线 `main` 仍受保护（禁止删除，标签禁止删除）。
+`research-workspace` 顶层已放开 pre-push 守卫，允许推送 `feat/*`、`fix/*`、`hotfix/*`、`release/*` 前缀的功能分支，用以走拉取请求流程。主线 `main` 仍受保护（禁止删除，标签禁止删除）。
+
+`market-intel` 是工作区之外的独立外部仓，不参与本工作区的版本锁定与检查，其 pre-push 守卫流程仅作类比参考，具体以 `market-intel` 自己的仓库约定为准。
 
 ### 关键事实
 
