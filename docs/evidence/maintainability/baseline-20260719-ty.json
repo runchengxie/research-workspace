@@ -176,11 +176,11 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 293,
-      "python_loc": 88701,
+      "python_file_count": 295,
+      "python_loc": 88722,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 41,
+        "large_files": 38,
         "long_functions": 75,
         "complexity_hotspots": 40,
         "large_classes": 1
@@ -297,18 +297,18 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share_constraints.py",
-          "loc": 594,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_data_providers_cache.py",
           "loc": 574,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_constraints.py",
-          "loc": 571,
+          "path": "src/market_data_platform/providers/_mins_mirror.py",
+          "loc": 568,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
+          "loc": 552,
           "hk_related": false
         }
       ],
