@@ -176,13 +176,13 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 291,
-      "python_loc": 87274,
+      "python_file_count": 293,
+      "python_loc": 88288,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 36,
-        "long_functions": 73,
-        "complexity_hotspots": 39,
+        "large_files": 38,
+        "long_functions": 75,
+        "complexity_hotspots": 40,
         "large_classes": 1
       },
       "large_files": [
@@ -198,7 +198,7 @@
         },
         {
           "path": "tests/test_tushare_a_share_fundamentals.py",
-          "loc": 1570,
+          "loc": 1708,
           "hk_related": false
         },
         {
@@ -272,13 +272,28 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
+          "loc": 627,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_tushare_a_share_research_assets.py",
           "loc": 627,
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "loc": 625,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/_a_share_mins_partition.py",
           "loc": 621,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
+          "loc": 617,
           "hk_related": false
         },
         {
@@ -292,23 +307,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
-          "loc": 542,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_tushare_minute_backfill.py",
-          "loc": 540,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
-          "loc": 539,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_tushare_a_share_clean.py",
-          "loc": 530,
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
+          "loc": 552,
           "hk_related": false
         }
       ],
@@ -478,16 +478,16 @@
           "complexity": 43
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "name": "raw_bundle_completeness",
+          "line_count": 98,
+          "complexity": 42
+        },
+        {
           "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "_validate_raw_promotion_evidence",
           "line_count": 135,
           "complexity": 39
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
-          "name": "raw_bundle_completeness",
-          "line_count": 94,
-          "complexity": 38
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -576,8 +576,14 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
           "name": "validate_normalized_fundamentals",
-          "line_count": 106,
+          "line_count": 107,
           "complexity": 20
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+          "name": "asset_integrity_checks",
+          "line_count": 43,
+          "complexity": 19
         },
         {
           "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
@@ -595,12 +601,6 @@
           "path": "src/market_data_platform/providers/_coverage_materialize_part03.py",
           "name": "_audit_partition",
           "line_count": 169,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
-          "name": "build_normalized_fundamentals",
-          "line_count": 95,
           "complexity": 18
         },
         {
@@ -669,7 +669,13 @@
           "src/market_data_platform/published_assets.py",
           "src/market_data_platform/published_frames.py",
           "src/market_data_platform/providers/tushare_a_share_fundamentals.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_part01.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
           "src/market_data_platform/providers/tushare_a_share_fundamentals_pit.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part01.py",
+          "src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part02.py",
           "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
           "src/market_data_platform/providers/tushare_a_share_reference.py",
           "src/market_data_platform/research_views/daily_watch20_live_inputs.py",
@@ -702,6 +708,7 @@
         "scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py",
         "scripts/operations/_tushare_minute_quota_schedule_support.py",
         "scripts/operations/archive_guan_mobile.py",
+        "scripts/operations/archive_tushare_fundamentals_vintage.py",
         "scripts/operations/audit_minute_overlap.py",
         "scripts/operations/cutover_a_share_minute.py",
         "scripts/operations/detach_a_share_minute_v3.py",
@@ -713,6 +720,8 @@
         "scripts/operations/tushare_minute_quota_schedule.py",
         "scripts/operations/tushare_minute_replacement_campaign.py",
         "scripts/systemd/README.md",
+        "scripts/systemd/tushare-fundamentals-vintage-archive.service",
+        "scripts/systemd/tushare-fundamentals-vintage-archive.timer",
         "scripts/systemd/tushare-minute-operational-daily.service",
         "scripts/systemd/tushare-minute-operational-daily.timer",
         "scripts/systemd/tushare-minute-quota-coordinator.service",
