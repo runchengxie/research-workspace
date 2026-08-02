@@ -27,6 +27,7 @@ from src.style_factors.robustness_execution import (
     terminal_event_positions,
 )
 from src.style_factors.robustness_gate import CORE_FACTORS, evaluate_promotion_gate
+from src.style_factors.robustness_report import _interpretation_guardrail_lines
 from src.style_factors.robustness_sources import (
     expand_st_intervals,
     sha256_file,
@@ -42,6 +43,14 @@ def test_normalize_trade_dates_accepts_compact_and_iso_values() -> None:
         pd.Timestamp("2024-01-02"),
         pd.Timestamp("2024-01-03"),
     ]
+
+
+def test_report_guardrails_distinguish_robustness_from_investability() -> None:
+    guardrails = "\n".join(_interpretation_guardrail_lines())
+
+    assert "收益方向可以稳定为负" in guardrails
+    assert "不等于因子可投资" in guardrails
+    assert "真实可借库存" in guardrails
 
 
 def test_robustness_loader_rejects_duplicate_market_grain() -> None:
