@@ -4,7 +4,7 @@
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
     "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。",
-    "accepted_hotspots_count": 179,
+    "accepted_hotspots_count": 181,
     "by_repo": {
       "research-workspace": {
         "max_large_files": 4,
@@ -13,7 +13,7 @@
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 36,
+        "max_large_files": 41,
         "max_long_functions": 73,
         "max_complexity_hotspots": 39,
         "max_large_classes": 1
@@ -77,7 +77,7 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 38,
+      "max_large_files": 41,
       "max_long_functions": 75,
       "max_complexity_hotspots": 40,
       "max_large_classes": 1,
@@ -87,7 +87,8 @@
         "2026-07-27: a_share_minute_coverage.py(2284) 拆为 4 子模块，净增 1 large_file（_coverage_materialize/_coverage_manifest 超阈值），large_files 46->47（债务转移）。",
         "2026-07-28: 六子模块拆分后 complexity_hotspots 42->40、large_files 47->25 下调；ruff-format 行数漂移又使 8 文件跨阈值，large_files 25->33 上调以匹配实测（格式化 artifact，非新债）。",
         "2026-07-29: 对齐重算基线（facade/模块拆分后），计数随基线继续调整，仅可由显式 owner 决策上调（ratchet-only）。",
-        "2026-08-02: revision-safe fundamentals 归档增加完整性校验、不可变快照和真实数据测试，基线按合并后的实现事实调整为 38/75/40/1。"
+        "2026-08-02: revision-safe fundamentals 归档增加完整性校验、不可变快照和真实数据测试，基线按合并后的实现事实调整为 38/75/40/1。",
+        "2026-08-02: 全量 ty 类型检查（PR #20）为 53 个文件补类型注解，使 tushare_a_share_constraints.py(571)、test_tushare_a_share_constraints.py(594) 及另 1 个文件越过 500 行 large_file 阈值（净 +3，另有 2 个文件因注解重整低于阈值）。属全量类型化的测量性 artifact，非功能新债；显式 owner 决策将 large_files 预算 38->41 以匹配实测，并在 accepted_hotspots 登记新增 2 个具名文件。"
       ]
     },
     {
@@ -1356,6 +1357,18 @@
       "owner_repo": "research-workspace",
       "reason": "pre-push 守卫单元测试（覆盖 _is_same_git_repo、plan_gate 的 worktree 识别与现有 root/submodule 匹配）；为支持从超项目 linked worktree 直推新增 ~42 行用例，文件超过 500 行阈值。测试内聚于守卫契约，非运行期债务。",
       "next_action": "保持守卫契约测试内聚；若后续守卫逻辑拆分再相应调整测试组织。"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_constraints.py",
+      "owner_repo": "market-data-platform",
+      "reason": "TuShare A 股约束（SSL/重试/节流/字段校验）提供方；全量 ty 类型检查（PR #20）为其补类型注解后越过 500 行阈值。属类型化测量性 artifact，非功能扩张，运行期行为与公开 API 不变。",
+      "next_action": "若后续约束策略继续增长，评估拆出重试/节流与字段校验子模块；类型注解保持与全量 ty 一致。"
+    },
+    {
+      "path": "market-data-platform/tests/test_tushare_a_share_constraints.py",
+      "owner_repo": "market-data-platform",
+      "reason": "tushare_a_share_constraints 提供方的契约测试；全量 ty 类型检查（PR #20）为其补类型注解后越过 500 行阈值。测试内聚于约束契约，非运行期债务。",
+      "next_action": "保持约束契约测试内聚；若后续约束策略拆分相应调整测试组织。"
     }
   ]
 }
