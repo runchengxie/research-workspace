@@ -77,16 +77,17 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 36,
-      "max_long_functions": 73,
-      "max_complexity_hotspots": 39,
+      "max_large_files": 38,
+      "max_long_functions": 75,
+      "max_complexity_hotspots": 40,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-27: a_share_minute_coverage.py(2284) 拆为 4 子模块，净增 1 large_file（_coverage_materialize/_coverage_manifest 超阈值），large_files 46->47（债务转移）。",
         "2026-07-28: 六子模块拆分后 complexity_hotspots 42->40、large_files 47->25 下调；ruff-format 行数漂移又使 8 文件跨阈值，large_files 25->33 上调以匹配实测（格式化 artifact，非新债）。",
-        "2026-07-29: 对齐重算基线（facade/模块拆分后），计数随基线继续调整，仅可由显式 owner 决策上调（ratchet-only）。"
+        "2026-07-29: 对齐重算基线（facade/模块拆分后），计数随基线继续调整，仅可由显式 owner 决策上调（ratchet-only）。",
+        "2026-08-02: revision-safe fundamentals 归档增加完整性校验、不可变快照和真实数据测试，基线按合并后的实现事实调整为 38/75/40/1。"
       ]
     },
     {
@@ -1225,10 +1226,22 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
+      "owner_repo": "market-data-platform",
+      "reason": "revision-safe normalization and immutable-manifest validation pushed this existing provider shard above the large-file threshold",
+      "next_action": "extract normalized asset validation and manifest sealing when this shard next changes"
+    },
+    {
       "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
       "owner_repo": "market-data-platform",
       "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+      "owner_repo": "market-data-platform",
+      "reason": "content inventories, aggregate hashes, and manifest-seal verification made the shared fundamentals integrity module a large-file hotspot",
+      "next_action": "extract integrity inventory and seal verification into a dedicated module when the archive contract next changes"
     },
     {
       "path": "market-data-platform/tests/test_archive_guan_mobile.py",
