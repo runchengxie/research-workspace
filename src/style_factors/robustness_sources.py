@@ -10,11 +10,21 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
+import yaml
 
 EARLY_END = pd.Timestamp("2014-12-31")
 CONSTRAINTS_VERSION = "tushare_constraints_20260802"
 PIT_VINTAGE = "20260802"
-PIT_FIELDS = ("roe", "roa", "debt_to_assets", "operating_cashflow", "net_profit")
+PIT_FIELDS = (
+    "roe",
+    "roa",
+    "debt_to_assets",
+    "operating_cashflow",
+    "net_profit",
+    "net_profit_yoy",
+    "revenue_yoy",
+    "quarterly_revenue_yoy",
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -220,36 +230,6 @@ def expand_st_intervals(
     }
 
 
-def load_margin_formation_eligibility(
-    constraints_dir: Path,
-    formation_dates: pd.DatetimeIndex,
-) -> tuple[pd.DataFrame, dict[str, Any]]:
-    """Read margin qualification rows in batches and retain formation dates only."""
-    path = constraints_dir / "margin_secs.parquet"
-    receipt_path = constraints_dir / "margin_secs.receipt.json"
-    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
-    actual_hash = sha256_file(path)
-    if actual_hash != receipt["sha256"]:
-        raise ValueError("margin_secs hash does not match its receipt")
-    tokens = set(pd.DatetimeIndex(formation_dates).strftime("%Y%m%d"))
-    pieces: list[pd.DataFrame] = []
-    parquet = pq.ParquetFile(path)
-    for batch in parquet.iter_batches(columns=["trade_date", "ts_code"], batch_size=262_144):
-        piece = batch.to_pandas()
-        piece = piece[piece["trade_date"].isin(tokens)]
-        if not piece.empty:
-            pieces.append(piece)
-    frame = pd.concat(pieces, ignore_index=True).rename(columns={"ts_code": "symbol"})
-    frame = _normalize_dates(frame).drop_duplicates(["trade_date", "symbol"])
-    return frame, {
-        "margin_formation_rows": int(len(frame)),
-        "margin_formation_dates": int(frame["trade_date"].nunique()),
-        "margin_symbols": int(frame["symbol"].nunique()),
-        "margin_sha256": actual_hash,
-        "margin_semantics": receipt["semantics"],
-    }
-
-
 def _update_pit_state(
     state: dict[str, dict[str, tuple[tuple[str, str, str, str], float]]],
     record: dict[str, Any],
@@ -279,33 +259,46 @@ def _pit_formation_frame(
     return pd.DataFrame(rows)
 
 
-def load_reconstructed_pit_panel(
+def _load_pit_events(
     vintage_dir: Path,
-    universe: pd.DataFrame,
-) -> tuple[pd.DataFrame, dict[str, Any]]:
-    """Materialize reconstructed PIT v2 fields at formation dates from sealed events."""
+) -> tuple[pd.DataFrame, str, dict[str, Any], dict[str, Any]]:
     seal = json.loads((vintage_dir / "SEALED.json").read_text(encoding="utf-8"))
     manifest_path = vintage_dir / seal["manifest"]
     if sha256_file(manifest_path) != seal["manifest_sha256"]:
         raise ValueError("PIT vintage top-level manifest hash does not match SEALED.json")
+    vintage_manifest = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
     pit_manifest = (vintage_dir / "pit/manifest.yml").read_text(encoding="utf-8")
     if "tushare.a_share.fundamentals.pit.v2" not in pit_manifest:
         raise ValueError("PIT asset is not schema v2")
+    pit_schema = pq.ParquetDataset(vintage_dir / "pit/data").schema.names
+    available_fields = [field for field in PIT_FIELDS if field in pit_schema]
     event_columns = [
         "symbol",
         "available_date",
         "report_period",
         "disclosure_date",
         "_source_retrieved_at",
-        *PIT_FIELDS,
+        *available_fields,
     ]
     events = pd.read_parquet(vintage_dir / "pit/data", columns=event_columns)
+    for field in PIT_FIELDS:
+        if field not in events:
+            events[field] = np.nan
     for column in ("available_date", "report_period", "disclosure_date"):
         events[column] = events[column].astype("string").fillna("").str.replace("-", "")
     events = events.sort_values(
         ["available_date", "_source_retrieved_at", "symbol", "report_period", "disclosure_date"],
         kind="mergesort",
     ).reset_index(drop=True)
+    return events, str(vintage_manifest["snapshot_date"]), vintage_manifest.get("query") or {}, seal
+
+
+def load_reconstructed_pit_panel(
+    vintage_dir: Path,
+    universe: pd.DataFrame,
+) -> tuple[pd.DataFrame, dict[str, Any]]:
+    """Materialize reconstructed PIT v2 fields at formation dates from sealed events."""
+    events, snapshot_date, query, seal = _load_pit_events(vintage_dir)
     dates = sorted(pd.DatetimeIndex(universe["trade_date"].unique()).normalize())
     symbols_by_date = {
         pd.Timestamp(date): group["symbol"].astype(str).tolist()
@@ -323,9 +316,17 @@ def load_reconstructed_pit_panel(
         symbols = symbols_by_date[pd.Timestamp(date)]
         output.append(_pit_formation_frame(pd.Timestamp(date), symbols, state))
     panel = pd.concat(output, ignore_index=True)
-    panel = panel.rename(columns={"operating_cashflow": "n_cashflow_act"})
+    panel = panel.rename(
+        columns={
+            "operating_cashflow": "n_cashflow_act",
+            "net_profit_yoy": "netprofit_yoy",
+            "revenue_yoy": "or_yoy",
+        }
+    )
     return panel, {
-        "pit_vintage": PIT_VINTAGE,
+        "pit_vintage": snapshot_date,
+        "pit_query_start_date": str(query.get("start_date") or ""),
+        "pit_query_end_date": str(query.get("end_date") or ""),
         "pit_schema": "tushare.a_share.fundamentals.pit.v2",
         "pit_panel_rows": int(len(panel)),
         "pit_event_rows": int(len(events)),
@@ -333,10 +334,19 @@ def load_reconstructed_pit_panel(
         "pit_panel_symbols": int(panel["symbol"].nunique()),
         "pit_field_coverage": {
             column: float(panel[column].notna().mean())
-            for column in ("roe", "roa", "debt_to_assets", "n_cashflow_act", "net_profit")
+            for column in (
+                "roe",
+                "roa",
+                "debt_to_assets",
+                "n_cashflow_act",
+                "net_profit",
+                "netprofit_yoy",
+                "or_yoy",
+                "quarterly_revenue_yoy",
+            )
         },
-        "pit_class": "reconstructed_pit_before_20260802",
-        "revision_safe_from": PIT_VINTAGE,
+        "pit_class": f"reconstructed_pit_before_{snapshot_date}",
+        "revision_safe_from": snapshot_date,
         "historical_revision_safe": False,
         "vintage_manifest_sha256": seal["manifest_sha256"],
     }

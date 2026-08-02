@@ -14,8 +14,8 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 
 逐年市场风格切换的解读示例见
 [A 股年度市场风格解读：2008-2026](style-factor-market-regimes-2008-2026.md)。
-2015 年以后加入股票池、交易约束、成本和退市压力情景的对照见
-[A 股风格因子 2015–2026 约束稳健性附录](style-factor-constrained-robustness-2015-2026.md)。
+完整 2008–2026 股票池、交易约束、成本和退市压力情景的对照见
+[A 股风格因子 2008–2026 全历史约束稳健性附录](style-factor-constrained-robustness-2008-2026.md)。
 
 ## 它是什么
 
@@ -90,12 +90,15 @@ uv run python -m src.style_factors \
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
   uv run python -m src.style_factors.robustness \
   --baseline-artifacts /path/to/full-raw-artifacts \
+  --constraints-dir /path/to/tushare_constraints_20260802 \
+  --pit-vintage-dir /path/to/fundamentals_vintages/vintage=20260802 \
   --outdir /tmp/style-factor-robustness
 ```
 
-该入口读取 `daily_clean`、PIT 形成日股票池、逐日 `stock_st` 和 instruments 退市日期，
-模拟下一交易日收盘起的涨跌停与停牌订单阻塞，按实际成交名义额扣成本，并输出退市末端收益压力情景。
-`stock_st` 早期覆盖、退市真实收益和真实券源仍是显式未解决项。
+该入口读取 `daily_clean`、PIT 形成日股票池、namechange 重建 ST、`suspend_d`、
+instruments 退市日期和 sealed PIT v2，模拟下一交易日收盘起的涨跌停与停牌订单阻塞，
+按实际成交名义额扣成本，并输出退市末端收益压力情景。`margin_detail` / `slb_sec_detail`
+只形成已报告借券活动代理，退市真实收益、真实券源和 revision-safe 历史版本仍是显式未解决项。
 
 发布到共享数据根的标准位置（输出写入 `$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<out-name>/`）：
 
@@ -179,7 +182,7 @@ gross/net 日收益、`robustness_meta.json`、Markdown 附录和对照图。这
 - 财务指标来自当前可用 legacy raw fundamentals 链路，早期数据还会回退到 `a_share_top800_union`。当前长历史运行没有完整消费 `daily_clean`、逐日 PIT 股票池和 revision-safe PIT v2，因此只属于 screen-grade 历史代理，不应标为 decision-grade 或可交易回测。
 - 申万历史成员表按 `in_date <= trade_date <= out_date` 对齐。每个因子先在行业内 demean，再做全截面 z-score。无行业匹配的股票作为残差组处理。该方法降低信号的行业均值暴露，但没有约束多空两腿的行业权重，不能称为严格行业中性。
 - 因子收益是全市场代理多空收益。月内缺失收益按 0 处理以保留停牌股票的资本权重，但仍缺少退市末日收益、交易成本、涨跌停可成交性、ST、新股和做空可实现性约束。
-- 独立 robustness 入口对上述限制做压力测试：使用 180 天上市期、PIT 形成日股票池、已覆盖日期的逐日 ST、涨跌停延迟成交、实际换手成本和退市末端收益情景。该入口仍不能补齐 2015–2021 ST、真实退市清算收益、券源和 revision-safe PIT v2，因此保持 screen-grade。
+- 独立 robustness 入口对上述限制做压力测试：使用 180 天上市期、PIT 形成日股票池、namechange 重建历史 ST、`st` 事件旁证、`suspend_d` 显式停牌、涨跌停延迟成交、实际换手成本、退市末端收益情景和 sealed PIT v2。它仍不能补齐真实退市清算收益、逐日真实券源/费率/召回/可借数量及 2026-08-02 以前 revision-safe 的历史财务版本，因此保持 screen-grade。
 - `period_return` 是实际覆盖期收益。首年、末年或短覆盖因子的年度行会标记 `is_partial_year=true`。主报告使用几何年化。`annual_ret` 旧字段仅为兼容既有消费者。
 - 归因只纳入策略样本期覆盖率至少 80% 的因子，并基于完整交集回归。alpha 来自 OLS 截距，不使用均值必为零的残差。
 

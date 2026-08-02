@@ -367,7 +367,7 @@ def _margin_factor_outputs(
         active_dates=simulation.active_dates,
     )
     diagnostic = diagnostic_row(factor, simulation, formation_diagnostics)
-    diagnostic["profile"] = "margin_qualification_upper_bound"
+    diagnostic["profile"] = "reported_borrow_activity_proxy"
     return result, diagnostic
 
 

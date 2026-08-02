@@ -142,7 +142,7 @@ def _overlay_formation_fundamentals(
     df: pd.DataFrame,
     panel: pd.DataFrame | None,
 ) -> tuple[pd.DataFrame, bool]:
-    """Prefer exact-date PIT v2 fields while retaining legacy-only growth inputs."""
+    """Prefer exact-date PIT v2 fields while retaining unavailable legacy inputs."""
     if panel is None or panel.empty:
         return df, False
     keys = ["trade_date", "symbol"]
@@ -150,7 +150,16 @@ def _overlay_formation_fundamentals(
         raise ValueError("formation_fundamentals has duplicate trade_date/symbol keys")
     fields = [
         column
-        for column in ("roe", "roa", "debt_to_assets", "n_cashflow_act", "net_profit")
+        for column in (
+            "roe",
+            "roa",
+            "debt_to_assets",
+            "n_cashflow_act",
+            "net_profit",
+            "netprofit_yoy",
+            "or_yoy",
+            "quarterly_revenue_yoy",
+        )
         if column in panel.columns
     ]
     if not fields:

@@ -226,7 +226,7 @@
           "scripts",
           "tests"
         ],
-        "promotion_criteria": "full-scope ty (src/scripts/tests) rolled out in market-data-platform PR #20; keep whole-repo ty clean as provider adapters and artifact roots evolve"
+        "promotion_criteria": "keep the full src/scripts/tests type-check gate green"
       }
     },
     {
