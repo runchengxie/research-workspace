@@ -264,6 +264,8 @@ def _overview_lines(
         "",
         _markdown_table(data_quality, index=False, floatfmt=".6f"),
         "",
+        *_interpretation_guardrail_lines(),
+        "",
         "## 核心对照",
         "",
         _markdown_table(table, index=False, floatfmt=".2f"),
@@ -276,6 +278,17 @@ def _overview_lines(
         "",
         "![2008–2026 最大回撤对照](style_factor_robustness_drawdown.png)",
         "",
+    ]
+
+
+def _interpretation_guardrail_lines() -> list[str]:
+    return [
+        "### 门槛解读边界",
+        "",
+        "- `factor_pass` 仅表示覆盖率、方向一致性、相对回撤和成本方向门槛"
+        "全部通过。收益方向可以稳定为负，因此不代表正收益、统计显著或可直接交易。",
+        "- 数据质量门槛通过仅表示本次校验范围内未发现完整性或拼接异常。"
+        "这不等于因子可投资，也不能证明空头腿当日具备真实可借库存、可接受费率和可实施数量。",
     ]
 
 
