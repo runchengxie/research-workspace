@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
 
+from src.style_factors.factor_calc import _overlay_formation_fundamentals
 from src.style_factors.robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,
@@ -13,13 +15,14 @@ from src.style_factors.robustness_backtest import (
 from src.style_factors.robustness_data import (
     _normalize_trade_dates,
     _require_unique,
-    load_robustness_market_data,
 )
 from src.style_factors.robustness_execution import (
     attempt_pending_orders,
     simulate_leg,
     terminal_event_positions,
 )
+from src.style_factors.robustness_gate import CORE_FACTORS, evaluate_promotion_gate
+from src.style_factors.robustness_sources import expand_st_intervals, sha256_file
 
 
 def test_normalize_trade_dates_accepts_compact_and_iso_values() -> None:
@@ -45,59 +48,65 @@ def test_robustness_loader_rejects_duplicate_market_grain() -> None:
         _require_unique(frame, ["trade_date", "symbol"], label="daily_clean")
 
 
-def test_robustness_loader_uses_dated_stock_st_not_daily_clean_latest_flag(
+def test_pit_panel_overlays_non_null_fields_and_retains_legacy_growth_inputs() -> None:
+    date = pd.Timestamp("2024-01-31")
+    legacy = pd.DataFrame(
+        {
+            "trade_date": [date],
+            "symbol": ["000001.SZ"],
+            "roe": [8.0],
+            "debt_to_assets": [60.0],
+            "netprofit_yoy": [12.0],
+        }
+    )
+    panel = pd.DataFrame(
+        {
+            "trade_date": [date],
+            "symbol": ["000001.SZ"],
+            "roe": [10.0],
+            "debt_to_assets": [np.nan],
+        }
+    )
+
+    result, used = _overlay_formation_fundamentals(legacy, panel)
+
+    assert used
+    assert result.loc[0, "roe"] == 10.0
+    assert result.loc[0, "debt_to_assets"] == 60.0
+    assert result.loc[0, "netprofit_yoy"] == 12.0
+
+
+def test_reconstructed_st_intervals_expand_only_on_formation_dates(
     tmp_path: Path,
 ) -> None:
-    clean_dir = tmp_path / ("assets/tushare/a_share/daily/a_share_all_daily_clean_latest/data")
-    clean_dir.mkdir(parents=True)
-    clean = pd.DataFrame(
-        {
-            "trade_date": ["20240102"],
-            "symbol": ["000001.SZ"],
-            "close": [10.0],
-            "pct_chg": [1.0],
-            "amount": [100.0],
-            "total_mv": [1000.0],
-            "pb": [1.0],
-            "pe_ttm": [10.0],
-            "turnover_rate": [1.0],
-            "dv_ttm": [2.0],
-            "ps_ttm": [3.0],
-            "is_limit_up": [False],
-            "is_limit_down": [False],
-            "is_suspended": [False],
-            "listed_days": [500],
-        }
-    )
-    clean.to_parquet(clean_dir / "000001.SZ.parquet", index=False)
-    universe_path = tmp_path / "assets/universe/a_share_all_full_by_date.csv"
-    universe_path.parent.mkdir(parents=True)
-    pd.DataFrame({"trade_date": [20240102], "symbol": ["000001.SZ"], "selected": [1]}).to_csv(
-        universe_path, index=False
-    )
-    st_path = tmp_path / ("assets/tushare/a_share/stock_st/a_share_all_stock_st_latest.parquet")
-    st_path.parent.mkdir(parents=True)
-    pd.DataFrame({"trade_date": ["20240102"], "ts_code": ["000001.SZ"]}).to_parquet(
-        st_path, index=False
-    )
-    instruments_path = tmp_path / (
-        "assets/tushare/a_share/instruments/a_share_all_instruments_latest.parquet"
-    )
-    instruments_path.parent.mkdir(parents=True)
+    interval_path = tmp_path / "st_intervals_reconstructed.parquet"
     pd.DataFrame(
         {
-            "symbol": ["000001.SZ"],
-            "list_status": ["L"],
-            "list_date": ["19910403"],
-            "delist_date": [None],
+            "ts_code": ["000001.SZ"],
+            "interval_start": ["20240102"],
+            "interval_end": ["20240215"],
+            "pit_class": ["reconstructed_pit"],
         }
-    ).to_parquet(instruments_path, index=False)
+    ).to_parquet(interval_path, index=False)
+    receipt = {
+        "intervals_sha256": sha256_file(interval_path),
+        "pit_class": "reconstructed_pit",
+        "revision_safe": False,
+        "cross_validation": {"precision": 1.0, "recall": 1.0},
+    }
+    (tmp_path / "st_history_reconstructed.receipt.json").write_text(
+        json.dumps(receipt), encoding="utf-8"
+    )
 
-    loaded = load_robustness_market_data(tmp_path, start_date="2024-01-01")
+    history, metadata = expand_st_intervals(
+        tmp_path,
+        pd.DatetimeIndex(["2024-01-31", "2024-02-29"]),
+    )
 
-    assert list(loaded.st_history["symbol"]) == ["000001.SZ"]
-    assert loaded.metadata["st_history_complete"] is False
-    assert "is_st" not in loaded.daily_clean.columns
+    assert history.to_dict(orient="records") == [
+        {"trade_date": pd.Timestamp("2024-01-31"), "symbol": "000001.SZ"}
+    ]
+    assert metadata["st_revision_safe"] is False
 
 
 def test_pending_orders_retry_price_limit_blocked_entry_and_exit() -> None:
@@ -241,6 +250,7 @@ def test_constrained_profile_charges_actual_turnover_costs() -> None:
         pd.DataFrame(columns=["trade_date", "symbol"]),
         pd.DataFrame(columns=["symbol", "delist_date"]),
         baseline,
+        margin_eligibility=universe,
         config=RobustnessConfig(
             transaction_cost_bps=10.0,
             cost_scenarios_bps=(0.0, 10.0),
@@ -258,3 +268,48 @@ def test_constrained_profile_charges_actual_turnover_costs() -> None:
         "constrained_gross",
         "constrained_net",
     }
+    assert "size" in artifacts.margin_net_results
+    assert set(artifacts.margin_comparison["profile"]) == {
+        "constrained_net_matched_2015plus",
+        "margin_qualification_upper_bound_net",
+    }
+
+
+def test_promotion_gate_holds_when_one_core_factor_changes_direction() -> None:
+    comparison_rows = []
+    for factor in CORE_FACTORS:
+        for profile, annual, drawdown in (
+            ("raw_gross_matched_window", 5.0, -20.0),
+            ("constrained_gross", 4.0, -22.0),
+            ("constrained_net", -1.0 if factor == "momentum" else 3.0, -25.0),
+        ):
+            comparison_rows.append(
+                {
+                    "factor": factor,
+                    "profile": profile,
+                    "days": 100,
+                    "geometric_annual_ret": annual,
+                    "max_drawdown": drawdown,
+                }
+            )
+    scenarios = pd.DataFrame(
+        [
+            {
+                "factor": factor,
+                "terminal_return": -0.5,
+                "cost_bps": 30.0,
+                "geometric_annual_ret": -2.0 if factor == "momentum" else 2.0,
+            }
+            for factor in CORE_FACTORS
+        ]
+    )
+
+    gate, decision = evaluate_promotion_gate(
+        pd.DataFrame(comparison_rows),
+        scenarios,
+        config=RobustnessConfig(),
+    )
+
+    assert decision["decision"] == "hold"
+    assert decision["core_factors_passed"] == len(CORE_FACTORS) - 1
+    assert gate.loc[gate["factor"].eq("momentum"), "direction_pass"].item() is False

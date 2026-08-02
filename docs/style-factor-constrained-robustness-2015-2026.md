@@ -1,13 +1,15 @@
 # A 股风格因子 2015–2026 约束稳健性附录
 
-> status: active
+> status: superseded
 > owner: workspace
 > last_verified: 2026-08-02
 > source_of_truth: no
-> superseded_by: n/a
+> superseded_by: docs/style-factor-constrained-robustness-2008-2026.md
 
 > 研究状态：screen-grade constrained sensitivity。本文不替换 2008–2026 raw 长历史报告，
 > 也不触发共享数据目录的正式 `latest` 发布。
+> 2026-08-02 起由[全历史约束稳健性附录](style-factor-constrained-robustness-2008-2026.md)
+> 接替。本文仅保留为 P0 历史快照。
 
 ## 研究问题
 
