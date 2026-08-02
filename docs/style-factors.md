@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-01
+> last_verified: 2026-08-02
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -14,6 +14,8 @@ $DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
 
 逐年市场风格切换的解读示例见
 [A 股年度市场风格解读：2008-2026](style-factor-market-regimes-2008-2026.md)。
+2015 年以后加入股票池、交易约束、成本和退市压力情景的对照见
+[A 股风格因子 2015–2026 约束稳健性附录](style-factor-constrained-robustness-2015-2026.md)。
 
 ## 它是什么
 
@@ -82,6 +84,19 @@ uv run python -m src.style_factors \
   --outdir artifacts/style_analysis_quick
 ```
 
+生成独立约束稳健性附录，不更新共享 `latest`：
+
+```bash
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
+  uv run python -m src.style_factors.robustness \
+  --baseline-artifacts /path/to/full-raw-artifacts \
+  --outdir /tmp/style-factor-robustness
+```
+
+该入口读取 `daily_clean`、PIT 形成日股票池、逐日 `stock_st` 和 instruments 退市日期，
+模拟下一交易日收盘起的涨跌停与停牌订单阻塞，按实际成交名义额扣成本，并输出退市末端收益压力情景。
+`stock_st` 早期覆盖、退市真实收益和真实券源仍是显式未解决项。
+
 发布到共享数据根的标准位置（输出写入 `$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<out-name>/`）：
 
 ```bash
@@ -147,6 +162,11 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 | `meta.json` | 运行参数和输出 metadata |
 | `manifest.json` | 标准发布脚本生成，包含 `research.style-factors.v1` schema、共享 artifact envelope、逐文件 SHA-256/大小和 lineage |
 
+约束稳健性入口另行输出 `factor_robustness_comparison.csv`、
+`factor_robustness_scenarios.csv`、`factor_robustness_diagnostics.csv`、每个因子的 constrained
+gross/net 日收益、`robustness_meta.json`、Markdown 附录和对照图。这些文件默认只写调用方指定的
+临时目录，不属于标准发布契约。
+
 标准发布先写入同目录 staging，所有文件与 `manifest.json` 完成后再原子重命名为
 `<out-name>/`，最后原子更新 `latest.txt`。已经存在的版本目录不会被覆盖。消费方必须使用
 `research-contracts` 校验文件清单和 SHA-256 后再渲染，不得直接信任半成品目录。
@@ -159,6 +179,7 @@ strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * li
 - 财务指标来自当前可用 legacy raw fundamentals 链路，早期数据还会回退到 `a_share_top800_union`。当前长历史运行没有完整消费 `daily_clean`、逐日 PIT 股票池和 revision-safe PIT v2，因此只属于 screen-grade 历史代理，不应标为 decision-grade 或可交易回测。
 - 申万历史成员表按 `in_date <= trade_date <= out_date` 对齐。每个因子先在行业内 demean，再做全截面 z-score。无行业匹配的股票作为残差组处理。该方法降低信号的行业均值暴露，但没有约束多空两腿的行业权重，不能称为严格行业中性。
 - 因子收益是全市场代理多空收益。月内缺失收益按 0 处理以保留停牌股票的资本权重，但仍缺少退市末日收益、交易成本、涨跌停可成交性、ST、新股和做空可实现性约束。
+- 独立 robustness 入口对上述限制做压力测试：使用 180 天上市期、PIT 形成日股票池、已覆盖日期的逐日 ST、涨跌停延迟成交、实际换手成本和退市末端收益情景。该入口仍不能补齐 2015–2021 ST、真实退市清算收益、券源和 revision-safe PIT v2，因此保持 screen-grade。
 - `period_return` 是实际覆盖期收益。首年、末年或短覆盖因子的年度行会标记 `is_partial_year=true`。主报告使用几何年化。`annual_ret` 旧字段仅为兼容既有消费者。
 - 归因只纳入策略样本期覆盖率至少 80% 的因子，并基于完整交集回归。alpha 来自 OLS 截距，不使用均值必为零的残差。
 
