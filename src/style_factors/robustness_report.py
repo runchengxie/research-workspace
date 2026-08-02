@@ -63,6 +63,79 @@ def _scenario_excerpt(scenarios: pd.DataFrame) -> pd.DataFrame:
     return excerpt[columns].sort_values(["factor", "terminal_return", "cost_bps"])
 
 
+def _data_quality_frame(data: dict[str, Any]) -> pd.DataFrame:
+    cross_validation = data["st_cross_validation"]
+    checks = [
+        (
+            "daily_key_duplicates",
+            data["duplicate_daily_keys"],
+            "= 0",
+            data["duplicate_daily_keys"] == 0,
+        ),
+        (
+            "universe_key_duplicates",
+            data["duplicate_universe_keys"],
+            "= 0",
+            data["duplicate_universe_keys"] == 0,
+        ),
+        (
+            "margin_key_duplicates",
+            data["duplicate_margin_keys"],
+            "= 0",
+            data["duplicate_margin_keys"] == 0,
+        ),
+        (
+            "pit_panel_key_duplicates",
+            data["duplicate_pit_panel_keys"],
+            "= 0",
+            data["duplicate_pit_panel_keys"] == 0,
+        ),
+        (
+            "early_daily_basic_join_rate",
+            data["early_daily_basic_join_rate"],
+            ">= 99%",
+            data["early_daily_basic_join_rate"] >= 0.99,
+        ),
+        (
+            "early_adj_factor_join_rate",
+            data["early_adj_factor_join_rate"],
+            "= 100%",
+            data["early_adj_factor_join_rate"] == 1.0,
+        ),
+        (
+            "early_limit_status_join_rate",
+            data["early_limit_status_join_rate"],
+            ">= 99%",
+            data["early_limit_status_join_rate"] >= 0.99,
+        ),
+        (
+            "universe_daily_join_rate",
+            data["universe_daily_join_rate"],
+            ">= 99% (formation-date suspensions retained)",
+            data["universe_daily_join_rate"] >= 0.99,
+        ),
+        (
+            "adjustment_bridge_p99_abs_error_pct",
+            data["adjustment_bridge_p99_abs_error_pct"],
+            "<= 0.10 percentage point",
+            data["adjustment_bridge_p99_abs_error_pct"] <= 0.10,
+        ),
+        (
+            "st_reconstruction_precision",
+            cross_validation["precision"],
+            ">= 99%",
+            cross_validation["precision"] >= 0.99,
+        ),
+        (
+            "st_reconstruction_recall",
+            cross_validation["recall"],
+            ">= 99%",
+            cross_validation["recall"] >= 0.99,
+        ),
+    ]
+    return pd.DataFrame(checks, columns=["check", "observed", "threshold", "passed"])
+
+
 def _plot_comparison(wide: pd.DataFrame, outdir: Path) -> None:
     profiles = [
         ("geometric_annual_ret_raw_gross_matched_window", "raw/gross"),
@@ -75,7 +148,7 @@ def _plot_comparison(wide: pd.DataFrame, outdir: Path) -> None:
     )
     ax = chart.plot.bar(figsize=(18, 8), width=0.82)
     ax.axhline(0, color="#999999", linewidth=0.8)
-    ax.set_title("2015–2026 风格因子约束稳健性对照", fontproperties=CJK, fontsize=17)
+    ax.set_title("2008–2026 风格因子约束稳健性对照", fontproperties=CJK, fontsize=17)
     ax.set_ylabel("几何年化收益（%）", fontproperties=CJK)
     ax.set_xlabel("")
     ax.set_xticklabels(chart.index, fontproperties=CJK, rotation=35, ha="right")
@@ -86,6 +159,54 @@ def _plot_comparison(wide: pd.DataFrame, outdir: Path) -> None:
     plt.close()
 
 
+def _plot_drawdown(wide: pd.DataFrame, outdir: Path) -> None:
+    profiles = [
+        ("max_drawdown_raw_gross_matched_window", "raw/gross"),
+        ("max_drawdown_constrained_net", "constrained/net (10 bps)"),
+    ]
+    frame = wide.set_index("factor_label")
+    chart = pd.DataFrame(
+        {label: frame[column] for column, label in profiles if column in frame.columns}
+    )
+    ax = chart.plot.bar(figsize=(18, 8), width=0.76, color=["#5B8FF9", "#E8684A"])
+    ax.axhline(0, color="#999999", linewidth=0.8)
+    ax.set_title("2008–2026 最大回撤对照", fontproperties=CJK, fontsize=17)
+    ax.set_ylabel("最大回撤（%）", fontproperties=CJK)
+    ax.set_xlabel("")
+    ax.set_xticklabels(chart.index, fontproperties=CJK, rotation=35, ha="right")
+    ax.legend(prop=CJK)
+    ax.grid(axis="y", alpha=0.2)
+    plt.tight_layout()
+    plt.savefig(outdir / "style_factor_robustness_drawdown.png", dpi=180)
+    plt.close()
+
+
+def _plot_margin_comparison(comparison: pd.DataFrame, outdir: Path) -> None:
+    if comparison.empty:
+        return
+    frame = comparison.pivot(
+        index="factor", columns="profile", values="geometric_annual_ret"
+    ).reindex([factor for factor in FACTOR_ORDER if factor in set(comparison["factor"])])
+    frame.index = [FACTOR_LABELS.get(str(value), str(value)) for value in frame.index]
+    frame = frame.rename(
+        columns={
+            "constrained_net_matched_2015plus": "constrained/net",
+            "margin_qualification_upper_bound_net": "margin-qualified short proxy",
+        }
+    )
+    ax = frame.plot.bar(figsize=(18, 8), width=0.76, color=["#5AD8A6", "#F6BD16"])
+    ax.axhline(0, color="#999999", linewidth=0.8)
+    ax.set_title("2015–2026 融券资格上界敏感性", fontproperties=CJK, fontsize=17)
+    ax.set_ylabel("几何年化收益（%）", fontproperties=CJK)
+    ax.set_xlabel("")
+    ax.set_xticklabels(frame.index, fontproperties=CJK, rotation=35, ha="right")
+    ax.legend(prop=CJK)
+    ax.grid(axis="y", alpha=0.2)
+    plt.tight_layout()
+    plt.savefig(outdir / "style_factor_margin_qualification_sensitivity.png", dpi=180)
+    plt.close()
+
+
 def _metadata_payload(
     *,
     data_metadata: dict[str, Any],
@@ -93,7 +214,7 @@ def _metadata_payload(
     baseline_artifacts: Path,
 ) -> dict[str, Any]:
     return {
-        "profile": "style_factor_constrained_robustness.v1",
+        "profile": "style_factor_constrained_robustness.v2",
         "research_posture": "screen_grade_constrained_sensitivity",
         "baseline_artifacts": str(baseline_artifacts),
         "min_listed_days": config.min_listed_days,
@@ -111,7 +232,10 @@ def _metadata_payload(
             "short_entry_block": "missing/suspended or close_at_down_limit",
             "short_cover_block": "missing/suspended or close_at_up_limit",
             "missing_holding_return": "zero_until_mark_or_terminal_event",
-            "short_leg": "theoretical_bottom-quintile proxy; no borrow inventory or fee data",
+            "short_leg": "theoretical bottom-quintile proxy; no borrow inventory or fee data",
+            "margin_sensitivity": (
+                "qualification upper bound only; no inventory, fee, recall or quantity history"
+            ),
         },
         "data": data_metadata,
     }
@@ -123,12 +247,23 @@ def _coverage_lines(data: dict[str, Any]) -> list[str]:
         "",
         f"- daily_clean：{data['daily_clean_start']} ~ {data['daily_clean_end']}，"
         f"{data['daily_clean_rows']:,} 行，{data['daily_clean_symbols']:,} 只证券。",
+        "- 2008–2014 联结完整率：daily_basic "
+        f"{data['early_daily_basic_join_rate']:.4%}、adj_factor "
+        f"{data['early_adj_factor_join_rate']:.4%}、limit_status "
+        f"{data['early_limit_status_join_rate']:.4%}。",
+        "- 2014/2015 复权桥：按 raw close × adj_factor 统一尺度，"
+        f"P99 绝对收益误差 {data['adjustment_bridge_p99_abs_error_pct']:.4f} 个百分点，"
+        f">0.10 个百分点 {data['adjustment_bridge_errors_over_0_10_pct']} 只。",
         f"- PIT 形成日股票池：{data['universe_start']} ~ {data['universe_end']}，"
-        f"{data['universe_rebalance_dates']} 个形成日。",
-        "- 涨跌停：使用 daily_clean 内由 limit_status/stk_limit overlay 生成的"
-        " is_limit_up / is_limit_down。",
-        f"- 历史 ST 明细：{data['st_start']} ~ {data['st_end']}。覆盖前日期保持未知，"
-        "不使用 daily_clean 中来自 latest instruments 的非 PIT is_st 回填历史。",
+        f"{data['universe_rebalance_dates']} 个形成日；与日行情联结率 "
+        f"{data['universe_daily_join_rate']:.4%}。",
+        "- 涨跌停：2008–2014 使用已验 hash 的 stk_limit bridge，2015+ 使用"
+        " daily_clean 内的 limit flags。",
+        f"- 历史 ST：namechange 区间重建后只在形成日展开，共 {data['st_rows']:,} 行；"
+        "属于 reconstructed PIT，不是 revision-safe 历史。",
+        f"- PIT v2：vintage={data['pit_vintage']}，历史形成日仅可称 reconstructed PIT；"
+        f" revision-safe 起点为 {data['revision_safe_from']}。",
+        f"- 融券资格：{data['margin_start']} ~ {data['margin_end']}，仅作为做空资格上界。",
     ]
 
 
@@ -146,11 +281,12 @@ def _methodology_lines(diagnostic_count: int) -> list[str]:
         "",
         "## 仍未解除的限制",
         "",
-        "- 2015–2021 缺少可靠逐日 ST 历史，需要分页摄取 namechange 并重建区间。",
+        "- 历史 ST 已由 namechange 重建，但仍是 2026 年回填的 reconstructed PIT。",
         "- 退市末端收益是压力代理，不是真实退市整理期、现金清算或场外转让收益。",
         "- 空头腿仍是理论 bottom-quintile 代理；margin_secs 只能补充资格上界，"
         "仍不能证明券源、费率、召回和可借数量。",
-        "- legacy fundamentals 仍非 revision-safe PIT v2。2026 年回填不能证明历史观测版本。",
+        "- PIT v2 已接入 ROE、ROA、杠杆、经营现金流、净利润；Growth 因缺少"
+        " netprofit_yoy/or_yoy 仍沿用 legacy fundamentals。历史财务版本仍非 revision-safe。",
         "- universe_by_date 当前是形成日快照，不是逐日股票池。",
         "",
         "## 机器可读证据",
@@ -160,26 +296,24 @@ def _methodology_lines(diagnostic_count: int) -> list[str]:
         "- 成本与退市情景：factor_robustness_scenarios.csv。",
         "- 运行口径：robustness_meta.json。",
         "",
-        "只有 raw 与 constrained 在方向、回撤和成本后收益上都稳定，"
-        "且 ST、退市真实收益、借券与 revision-safe PIT v2 的证据补齐后，"
-        "才适合讨论升级正式 latest。",
+        "promotion_gate.csv / promotion_decision.json 给出预先声明门槛的逐因子证据。",
     ]
 
 
-def _render_report(
+def _overview_lines(
     *,
     wide: pd.DataFrame,
-    scenarios: pd.DataFrame,
-    diagnostics: pd.DataFrame,
     metadata: dict[str, Any],
-) -> str:
+    gate_decision: dict[str, Any],
+    data_quality: pd.DataFrame,
+) -> list[str]:
     table = _report_table(wide)
-    scenario_table = _scenario_excerpt(scenarios)
-    lines = [
-        "# A 股风格因子 2015–2026 约束稳健性附录",
+    return [
+        "# A 股风格因子 2008–2026 全历史约束稳健性附录",
         "",
-        "> 状态：screen-grade constrained sensitivity。该附录不替换 2008–2026 "
-        "raw 长历史报告，也不发布为正式 latest。",
+        "> 状态：screen-grade constrained sensitivity。晋级结论："
+        f"{gate_decision['decision']}。"
+        "只有 promotion gate 全部通过才允许更新三份主报告和正式 latest。",
         "",
         "## 研究问题",
         "",
@@ -189,6 +323,10 @@ def _render_report(
         "",
         *_coverage_lines(metadata["data"]),
         "",
+        "## 数据质量门槛",
+        "",
+        _markdown_table(data_quality, index=False, floatfmt=".6f"),
+        "",
         "## 核心对照",
         "",
         _markdown_table(table, index=False, floatfmt=".2f"),
@@ -197,8 +335,21 @@ def _render_report(
         "LiquidityFlow、ChipConcentration 和 InstitutionHolding 覆盖较稀疏，"
         "不能把其日数按连续 11 年理解。",
         "",
-        "![2015–2026 约束稳健性对照](style_factor_robustness_comparison.png)",
+        "![2008–2026 约束稳健性对照](style_factor_robustness_comparison.png)",
         "",
+        "![2008–2026 最大回撤对照](style_factor_robustness_drawdown.png)",
+        "",
+    ]
+
+
+def _gate_and_sensitivity_lines(
+    *,
+    scenarios: pd.DataFrame,
+    gate_results: pd.DataFrame,
+    gate_decision: dict[str, Any],
+) -> list[str]:
+    scenario_table = _scenario_excerpt(scenarios)
+    return [
         "## 成本与退市压力情景",
         "",
         "默认单边成交名义成本为 10 bps，退市末端收益使用 -50% 压力代理；"
@@ -206,8 +357,65 @@ def _render_report(
         "",
         _markdown_table(scenario_table, index=False, floatfmt=".2f"),
         "",
-        *_methodology_lines(len(diagnostics)),
+        "## 正式 latest 晋级门槛",
+        "",
+        "10 个核心因子须全部通过：共同样本覆盖不低于最大样本的 80%，三种主口径"
+        "方向一致，constrained/net 最大回撤相对 raw 恶化不超过 10 个百分点，"
+        "并且方向在 10/30 bps 成本下均不翻转。",
+        "",
+        _markdown_table(
+            gate_results[
+                [
+                    "factor",
+                    "coverage_ratio",
+                    "direction_pass",
+                    "drawdown_pass",
+                    "cost_pass",
+                    "factor_pass",
+                    "failure_reason",
+                ]
+            ],
+            index=False,
+            floatfmt=".2f",
+        ),
+        "",
+        f"结论：{gate_decision['core_factors_passed']}/{len(gate_results)} 个核心因子通过，"
+        f"因此动作是 `{gate_decision['official_latest_action']}`。",
+        "",
+        "## 融券资格上界敏感性",
+        "",
+        "2015 年后的 margin_secs 只限制 bottom-quintile 空头候选，不能证明当日有券，"
+        "也不含借券费、召回概率和可借数量；所以空头腿仍标记为理论代理。",
+        "",
+        "![2015–2026 融券资格上界敏感性](style_factor_margin_qualification_sensitivity.png)",
+        "",
     ]
+
+
+def _render_report(
+    *,
+    wide: pd.DataFrame,
+    scenarios: pd.DataFrame,
+    diagnostics: pd.DataFrame,
+    metadata: dict[str, Any],
+    gate_results: pd.DataFrame,
+    gate_decision: dict[str, Any],
+    data_quality: pd.DataFrame,
+) -> str:
+    lines = _overview_lines(
+        wide=wide,
+        metadata=metadata,
+        gate_decision=gate_decision,
+        data_quality=data_quality,
+    )
+    lines.extend(
+        _gate_and_sensitivity_lines(
+            scenarios=scenarios,
+            gate_results=gate_results,
+            gate_decision=gate_decision,
+        )
+    )
+    lines.extend(_methodology_lines(len(diagnostics)))
     return "\n".join(lines)
 
 
@@ -218,6 +426,8 @@ def write_robustness_artifacts(
     data_metadata: dict[str, Any],
     config: RobustnessConfig,
     baseline_artifacts: Path,
+    gate_results: pd.DataFrame,
+    gate_decision: dict[str, Any],
 ) -> dict[str, Any]:
     outdir.mkdir(parents=True, exist_ok=True)
     wide = _comparison_wide(artifacts.comparison)
@@ -226,10 +436,24 @@ def write_robustness_artifacts(
         config=config,
         baseline_artifacts=baseline_artifacts,
     )
+    metadata["promotion_gate"] = gate_decision
+    data_quality = _data_quality_frame(data_metadata)
     artifacts.comparison.to_csv(outdir / "factor_robustness_comparison.csv", index=False)
     wide.to_csv(outdir / "factor_robustness_comparison_wide.csv", index=False)
     artifacts.scenarios.to_csv(outdir / "factor_robustness_scenarios.csv", index=False)
     artifacts.diagnostics.to_csv(outdir / "factor_robustness_diagnostics.csv", index=False)
+    artifacts.margin_diagnostics.to_csv(
+        outdir / "factor_margin_qualification_diagnostics.csv", index=False
+    )
+    artifacts.margin_comparison.to_csv(
+        outdir / "factor_margin_qualification_comparison.csv", index=False
+    )
+    gate_results.to_csv(outdir / "promotion_gate.csv", index=False)
+    data_quality.to_csv(outdir / "data_quality_checks.csv", index=False)
+    (outdir / "promotion_decision.json").write_text(
+        json.dumps(gate_decision, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     for factor, result in artifacts.gross_results.items():
         result["long_short"].to_csv(
             outdir / f"factor_{factor}_constrained_gross_daily.csv",
@@ -242,16 +466,27 @@ def write_robustness_artifacts(
             index=True,
             header=True,
         )
+    for factor, result in artifacts.margin_net_results.items():
+        result["long_short"].to_csv(
+            outdir / f"factor_{factor}_margin_qualified_net_daily.csv",
+            index=True,
+            header=True,
+        )
     (outdir / "robustness_meta.json").write_text(
         json.dumps(metadata, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
     _plot_comparison(wide, outdir)
+    _plot_drawdown(wide, outdir)
+    _plot_margin_comparison(artifacts.margin_comparison, outdir)
     report = _render_report(
         wide=wide,
         scenarios=artifacts.scenarios,
         diagnostics=artifacts.diagnostics,
         metadata=metadata,
+        gate_results=gate_results,
+        gate_decision=gate_decision,
+        data_quality=data_quality,
     )
     (outdir / "style_factor_robustness_report.md").write_text(report + "\n", encoding="utf-8")
     return metadata

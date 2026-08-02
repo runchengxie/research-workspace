@@ -138,6 +138,37 @@ def _merge_fundamentals(
     return merged, True
 
 
+def _overlay_formation_fundamentals(
+    df: pd.DataFrame,
+    panel: pd.DataFrame | None,
+) -> tuple[pd.DataFrame, bool]:
+    """Prefer exact-date PIT v2 fields while retaining legacy-only growth inputs."""
+    if panel is None or panel.empty:
+        return df, False
+    keys = ["trade_date", "symbol"]
+    if panel.duplicated(keys).any():
+        raise ValueError("formation_fundamentals has duplicate trade_date/symbol keys")
+    fields = [
+        column
+        for column in ("roe", "roa", "debt_to_assets", "n_cashflow_act", "net_profit")
+        if column in panel.columns
+    ]
+    if not fields:
+        return df, False
+    overlay = panel[[*keys, *fields]].rename(
+        columns={column: f"{column}__pit_v2" for column in fields}
+    )
+    out = df.merge(overlay, on=keys, how="left", validate="one_to_one")
+    for column in fields:
+        pit_column = f"{column}__pit_v2"
+        if column in out.columns:
+            out[column] = out[pit_column].combine_first(out[column])
+        else:
+            out[column] = out[pit_column]
+        out = out.drop(columns=pit_column)
+    return out, any(out[column].notna().any() for column in fields)
+
+
 def _add_daily_price_factors(df: pd.DataFrame) -> pd.DataFrame:
     df["ret_1d"] = df.groupby("symbol")["close"].pct_change()
     df["factor_momentum"] = df.groupby("symbol")["close"].transform(
@@ -312,6 +343,7 @@ def compute_factors(
     aux: dict | None = None,
     sw_membership: pd.DataFrame | None = None,
     rebalance_dates: pd.DatetimeIndex | None = None,
+    formation_fundamentals: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Compute style factors per stock per date.
 
@@ -335,6 +367,11 @@ def compute_factors(
     and industry joins to formation dates after daily rolling price factors have
     been calculated.  The workflow uses this path because portfolio membership
     changes only at month end.
+
+    ``formation_fundamentals`` may provide exact formation-date PIT v2 fields.
+    Non-null values override the corresponding legacy fundamentals.  Growth
+    remains on legacy ``netprofit_yoy`` / ``or_yoy`` because those fields are
+    not present in the current PIT v2 contract.
     """
     if fina is not None and cashflow is not None and not cashflow.empty:
         merge_on = [c for c in ("symbol", "end_date", "ann_date") if c in cashflow.columns]
@@ -350,6 +387,8 @@ def compute_factors(
     df = _add_daily_basic_factors(df)
     df = _add_liquidity_factor(df)
     df, has_fina = _merge_fundamentals(df, fina)
+    df, has_pit_panel = _overlay_formation_fundamentals(df, formation_fundamentals)
+    has_fina = has_fina or has_pit_panel
     df = _add_fundamental_factors(df, has_fina=has_fina)
     df = _add_quality_factor(df, has_fina=has_fina)
     df = add_new_factors(df, aux=aux)

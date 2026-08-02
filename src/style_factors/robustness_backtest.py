@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any
 
 import numpy as np
 import pandas as pd
 
-from .factor_backtest import available_factor_names, compute_summary
+from .factor_backtest import available_factor_names
 from .robustness_execution import (
     LegSimulation,
     daily_return_matrix,
@@ -18,25 +17,11 @@ from .robustness_execution import (
     simulate_leg,
     terminal_event_positions,
 )
+from .robustness_margin import margin_comparison_frame
+from .robustness_results import comparison_frame, diagnostic_row, scenario_rows
+from .robustness_types import ConstrainedBacktestArtifacts, RobustnessConfig
 
-
-@dataclass(frozen=True)
-class RobustnessConfig:
-    min_listed_days: int = 180
-    transaction_cost_bps: float = 10.0
-    delist_terminal_return: float = -0.50
-    cost_scenarios_bps: tuple[float, ...] = (0.0, 10.0, 20.0, 30.0)
-    delist_scenarios: tuple[float, ...] = (-0.30, -0.50, -1.00)
-    n_quantiles: int = 5
-
-
-@dataclass(frozen=True)
-class ConstrainedBacktestArtifacts:
-    gross_results: dict[str, dict[str, pd.Series]]
-    net_results: dict[str, dict[str, pd.Series]]
-    comparison: pd.DataFrame
-    scenarios: pd.DataFrame
-    diagnostics: pd.DataFrame
+__all__ = ["ConstrainedBacktestArtifacts", "RobustnessConfig", "build_constrained_robustness"]
 
 
 @dataclass(frozen=True)
@@ -47,28 +32,6 @@ class _FactorSimulation:
     long_leg: LegSimulation
     short_leg: LegSimulation
     target_diagnostics: dict[str, float]
-
-
-def load_baseline_factor_results(
-    artifacts_dir: Path,
-    *,
-    start_date: pd.Timestamp,
-    end_date: pd.Timestamp,
-) -> dict[str, dict[str, pd.Series]]:
-    """Load raw/gross factor returns from a previously generated full run."""
-    results: dict[str, dict[str, pd.Series]] = {}
-    for path in sorted(artifacts_dir.glob("factor_*_daily.csv")):
-        name = path.name.removeprefix("factor_").removesuffix("_daily.csv")
-        frame = pd.read_csv(path, parse_dates=["trade_date"])
-        if name not in frame.columns:
-            continue
-        series = frame.set_index("trade_date")[name].astype(float).sort_index()
-        series = series.loc[(series.index >= start_date) & (series.index <= end_date)]
-        if not series.empty:
-            results[name] = {"long_short": series}
-    if not results:
-        raise ValueError(f"No factor daily CSVs found in baseline artifacts: {artifacts_dir}")
-    return results
 
 
 def _formation_eligibility(
@@ -120,7 +83,8 @@ def _ranked_formation_target(
     *,
     factor_column: str,
     n_quantiles: int,
-) -> tuple[dict[str, float], dict[str, float], int] | None:
+    short_allowed: set[str] | None = None,
+) -> tuple[dict[str, float], dict[str, float], int, int] | None:
     ranked = group.dropna(subset=[factor_column]).sort_values(factor_column).copy()
     if len(ranked) < n_quantiles * 10:
         return None
@@ -134,12 +98,16 @@ def _ranked_formation_target(
         return None
     long_symbols = ranked.loc[ranked["quantile"].eq(n_quantiles - 1), "symbol"].tolist()
     short_symbols = ranked.loc[ranked["quantile"].eq(0), "symbol"].tolist()
+    unrestricted_short_count = len(short_symbols)
+    if short_allowed is not None:
+        short_symbols = [symbol for symbol in short_symbols if symbol in short_allowed]
     if not long_symbols or not short_symbols:
         return None
     return (
         {symbol: 1.0 / len(long_symbols) for symbol in long_symbols},
         {symbol: 1.0 / len(short_symbols) for symbol in short_symbols},
         len(ranked),
+        unrestricted_short_count,
     )
 
 
@@ -168,6 +136,7 @@ def _factor_targets(
     factor_name: str,
     *,
     n_quantiles: int,
+    short_eligibility: dict[pd.Timestamp, set[str]] | None = None,
 ) -> tuple[
     dict[pd.Timestamp, tuple[dict[str, float], dict[str, float]]],
     pd.DatetimeIndex,
@@ -184,97 +153,45 @@ def _factor_targets(
     eligible_counts: list[int] = []
     long_counts: list[int] = []
     short_counts: list[int] = []
+    unrestricted_short_counts: list[int] = []
     for formation_date, group in eligible.groupby("trade_date", sort=True):
+        normalized_formation = pd.Timestamp(formation_date).normalize()
+        short_allowed = None
+        if short_eligibility is not None:
+            short_allowed = short_eligibility.get(normalized_formation)
+            if short_allowed is None:
+                continue
         target = _ranked_formation_target(
             group,
             factor_column=factor_column,
             n_quantiles=n_quantiles,
+            short_allowed=short_allowed,
         )
         if target is None:
             continue
         execution_date = _next_trading_date(pd.Timestamp(formation_date), trading_dates)
         if execution_date is None:
             continue
-        long_target, short_target, eligible_count = target
+        long_target, short_target, eligible_count, unrestricted_short_count = target
         valid_formations.add(pd.Timestamp(formation_date).normalize())
         targets[execution_date] = (long_target, short_target)
         eligible_counts.append(eligible_count)
         long_counts.append(len(long_target))
         short_counts.append(len(short_target))
+        unrestricted_short_counts.append(unrestricted_short_count)
     diagnostics = {
         "rebalance_count": float(len(valid_formations)),
         "mean_eligible": float(np.mean(eligible_counts)) if eligible_counts else 0.0,
         "mean_long_names": float(np.mean(long_counts)) if long_counts else 0.0,
         "mean_short_names": float(np.mean(short_counts)) if short_counts else 0.0,
+        "mean_short_qualification_rate": (
+            float(np.mean(np.asarray(short_counts) / np.asarray(unrestricted_short_counts)))
+            if short_counts
+            else 0.0
+        ),
     }
     active_dates = _active_exposure_dates(formation_dates, valid_formations, trading_dates)
     return targets, active_dates, diagnostics
-
-
-def _comparison_frame(
-    baseline_results: dict[str, dict[str, pd.Series]],
-    gross_results: dict[str, dict[str, pd.Series]],
-    net_results: dict[str, dict[str, pd.Series]],
-) -> pd.DataFrame:
-    rows = []
-    aligned_profiles: dict[str, dict[str, dict[str, pd.Series]]] = {
-        "raw_gross_matched_window": {},
-        "constrained_gross": {},
-        "constrained_net": {},
-    }
-    raw_profile = aligned_profiles["raw_gross_matched_window"]
-    for factor, baseline_result in baseline_results.items():
-        if factor not in gross_results or factor not in net_results:
-            continue
-        baseline = baseline_result["long_short"]
-        gross = gross_results[factor]["long_short"]
-        net = net_results[factor]["long_short"]
-        common = baseline.index.intersection(gross.index).intersection(net.index)
-        if common.empty:
-            continue
-        raw_profile[factor] = {"long_short": baseline.loc[common]}
-        aligned_profiles["constrained_gross"][factor] = {"long_short": gross.loc[common]}
-        aligned_profiles["constrained_net"][factor] = {"long_short": net.loc[common]}
-    for profile, results in aligned_profiles.items():
-        summary = compute_summary(results)
-        summary.insert(1, "profile", profile)
-        rows.append(summary)
-    if not rows:
-        return pd.DataFrame()
-    return pd.concat(rows, ignore_index=True)
-
-
-def _scenario_rows(
-    factor: str,
-    long_leg: LegSimulation,
-    short_leg: LegSimulation,
-    *,
-    terminal_return: float,
-    cost_scenarios: tuple[float, ...],
-    active_dates: pd.DatetimeIndex,
-) -> list[dict[str, Any]]:
-    rows: list[dict[str, Any]] = []
-    for cost_bps in cost_scenarios:
-        result = {
-            factor: profile_results(
-                long_leg,
-                short_leg,
-                cost_bps=cost_bps,
-                active_dates=active_dates,
-            )
-        }
-        summary = compute_summary(result)
-        if summary.empty:
-            continue
-        row = summary.iloc[0].to_dict()
-        row.update(
-            {
-                "terminal_return": terminal_return,
-                "cost_bps": cost_bps,
-            }
-        )
-        rows.append(row)
-    return rows
 
 
 def _simulate_factor(
@@ -285,12 +202,14 @@ def _simulate_factor(
     matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
     terminal_events: dict[pd.Timestamp, np.ndarray],
     config: RobustnessConfig,
+    short_eligibility: dict[pd.Timestamp, set[str]] | None = None,
 ) -> _FactorSimulation | None:
     targets, active_dates, target_diagnostics = _factor_targets(
         eligible,
         trading_dates,
         factor,
         n_quantiles=config.n_quantiles,
+        short_eligibility=short_eligibility,
     )
     if not targets or active_dates.empty:
         return None
@@ -330,7 +249,7 @@ def _all_scenario_rows(
     terminal_events: dict[pd.Timestamp, np.ndarray],
     config: RobustnessConfig,
 ) -> list[dict[str, Any]]:
-    rows = _scenario_rows(
+    rows = scenario_rows(
         factor,
         simulation.long_leg,
         simulation.short_leg,
@@ -358,7 +277,7 @@ def _all_scenario_rows(
             terminal_return=terminal_return,
         )
         rows.extend(
-            _scenario_rows(
+            scenario_rows(
                 factor,
                 long_leg,
                 short_leg,
@@ -370,37 +289,103 @@ def _all_scenario_rows(
     return rows
 
 
-def _diagnostic_row(
-    factor: str,
-    simulation: _FactorSimulation,
-    formation_diagnostics: dict[str, int],
-) -> dict[str, Any]:
+def _margin_eligibility_map(
+    margin_eligibility: pd.DataFrame | None,
+) -> dict[pd.Timestamp, set[str]]:
+    if margin_eligibility is None or margin_eligibility.empty:
+        return {}
     return {
-        "factor": factor,
-        **formation_diagnostics,
-        **simulation.target_diagnostics,
-        "long_traded_notional": float(simulation.long_leg.traded_notional.sum()),
-        "short_traded_notional": float(simulation.short_leg.traded_notional.sum()),
-        "long_blocked_entry_days": simulation.long_leg.blocked_entry_days,
-        "long_blocked_exit_days": simulation.long_leg.blocked_exit_days,
-        "short_blocked_entry_days": simulation.short_leg.blocked_entry_days,
-        "short_blocked_exit_days": simulation.short_leg.blocked_exit_days,
-        "long_terminal_events": simulation.long_leg.terminal_events,
-        "short_terminal_events": simulation.short_leg.terminal_events,
+        pd.Timestamp(date).normalize(): set(group["symbol"].astype(str))
+        for date, group in margin_eligibility.groupby("trade_date", sort=True)
     }
 
 
-def build_constrained_robustness(
+def _standard_factor_outputs(
+    factor: str,
+    simulation: _FactorSimulation,
+    returns: pd.DataFrame,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    terminal_events: dict[pd.Timestamp, np.ndarray],
+    formation_diagnostics: dict[str, int],
+    config: RobustnessConfig,
+) -> tuple[dict[str, pd.Series], dict[str, pd.Series], list[dict[str, Any]], dict[str, Any]]:
+    gross = profile_results(
+        simulation.long_leg,
+        simulation.short_leg,
+        cost_bps=0.0,
+        active_dates=simulation.active_dates,
+    )
+    net = profile_results(
+        simulation.long_leg,
+        simulation.short_leg,
+        cost_bps=config.transaction_cost_bps,
+        active_dates=simulation.active_dates,
+    )
+    scenarios = _all_scenario_rows(
+        factor,
+        simulation,
+        returns,
+        matrices,
+        terminal_events,
+        config,
+    )
+    diagnostic = diagnostic_row(factor, simulation, formation_diagnostics)
+    diagnostic["profile"] = "constrained_full_history"
+    return gross, net, scenarios, diagnostic
+
+
+def _margin_factor_outputs(
+    factor: str,
+    eligible: pd.DataFrame,
+    returns: pd.DataFrame,
+    trading_dates: pd.DatetimeIndex,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    terminal_events: dict[pd.Timestamp, np.ndarray],
+    margin_by_date: dict[pd.Timestamp, set[str]],
+    formation_diagnostics: dict[str, int],
+    config: RobustnessConfig,
+) -> tuple[dict[str, pd.Series], dict[str, Any]] | None:
+    if not margin_by_date:
+        return None
+    margin_start = min(margin_by_date)
+    simulation = _simulate_factor(
+        factor,
+        eligible.loc[eligible["trade_date"] >= margin_start],
+        returns,
+        trading_dates,
+        matrices,
+        terminal_events,
+        config,
+        short_eligibility=margin_by_date,
+    )
+    if simulation is None:
+        return None
+    result = profile_results(
+        simulation.long_leg,
+        simulation.short_leg,
+        cost_bps=config.transaction_cost_bps,
+        active_dates=simulation.active_dates,
+    )
+    diagnostic = diagnostic_row(factor, simulation, formation_diagnostics)
+    diagnostic["profile"] = "margin_qualification_upper_bound"
+    return result, diagnostic
+
+
+def _backtest_context(
     factors: pd.DataFrame,
     daily_clean: pd.DataFrame,
     universe: pd.DataFrame,
     st_history: pd.DataFrame,
     instruments: pd.DataFrame,
-    baseline_results: dict[str, dict[str, pd.Series]],
-    *,
     config: RobustnessConfig,
-) -> ConstrainedBacktestArtifacts:
-    """Run matched-window constrained gross/net profiles and cost/delist scenarios."""
+) -> tuple[
+    pd.DataFrame,
+    dict[str, int],
+    pd.DataFrame,
+    pd.DatetimeIndex,
+    tuple[np.ndarray, np.ndarray, np.ndarray],
+    dict[pd.Timestamp, np.ndarray],
+]:
     returns = daily_return_matrix(daily_clean)
     trading_dates = pd.DatetimeIndex(returns.index).normalize()
     matrices = execution_matrices(daily_clean, returns)
@@ -413,11 +398,38 @@ def build_constrained_robustness(
         st_history,
         min_listed_days=config.min_listed_days,
     )
+    return eligible, formation_diagnostics, returns, trading_dates, matrices, terminal_events
+
+
+def build_constrained_robustness(
+    factors: pd.DataFrame,
+    daily_clean: pd.DataFrame,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    baseline_results: dict[str, dict[str, pd.Series]],
+    margin_eligibility: pd.DataFrame | None = None,
+    *,
+    config: RobustnessConfig,
+) -> ConstrainedBacktestArtifacts:
+    eligible, formation_diagnostics, returns, trading_dates, matrices, terminal_events = (
+        _backtest_context(
+            factors,
+            daily_clean,
+            universe,
+            st_history,
+            instruments,
+            config,
+        )
+    )
 
     gross_results: dict[str, dict[str, pd.Series]] = {}
     net_results: dict[str, dict[str, pd.Series]] = {}
     scenario_rows: list[dict[str, Any]] = []
     diagnostic_rows: list[dict[str, Any]] = []
+    margin_diagnostic_rows: list[dict[str, Any]] = []
+    margin_results: dict[str, dict[str, pd.Series]] = {}
+    margin_by_date = _margin_eligibility_map(margin_eligibility)
     for factor in available_factor_names(eligible):
         simulation = _simulate_factor(
             factor,
@@ -430,34 +442,41 @@ def build_constrained_robustness(
         )
         if simulation is None:
             continue
-        gross_results[factor] = profile_results(
-            simulation.long_leg,
-            simulation.short_leg,
-            cost_bps=0.0,
-            active_dates=simulation.active_dates,
+        gross, net, scenarios, diagnostic = _standard_factor_outputs(
+            factor,
+            simulation,
+            returns,
+            matrices,
+            terminal_events,
+            formation_diagnostics,
+            config,
         )
-        net_results[factor] = profile_results(
-            simulation.long_leg,
-            simulation.short_leg,
-            cost_bps=config.transaction_cost_bps,
-            active_dates=simulation.active_dates,
+        gross_results[factor] = gross
+        net_results[factor] = net
+        scenario_rows.extend(scenarios)
+        diagnostic_rows.append(diagnostic)
+        margin_outputs = _margin_factor_outputs(
+            factor,
+            eligible,
+            returns,
+            trading_dates,
+            matrices,
+            terminal_events,
+            margin_by_date,
+            formation_diagnostics,
+            config,
         )
-        scenario_rows.extend(
-            _all_scenario_rows(
-                factor,
-                simulation,
-                returns,
-                matrices,
-                terminal_events,
-                config,
-            )
-        )
-        diagnostic_rows.append(_diagnostic_row(factor, simulation, formation_diagnostics))
+        if margin_outputs is not None:
+            margin_results[factor], margin_diagnostic = margin_outputs
+            margin_diagnostic_rows.append(margin_diagnostic)
 
     return ConstrainedBacktestArtifacts(
         gross_results=gross_results,
         net_results=net_results,
-        comparison=_comparison_frame(baseline_results, gross_results, net_results),
+        margin_net_results=margin_results,
+        comparison=comparison_frame(baseline_results, gross_results, net_results),
+        margin_comparison=margin_comparison_frame(net_results, margin_results),
         scenarios=pd.DataFrame(scenario_rows),
         diagnostics=pd.DataFrame(diagnostic_rows),
+        margin_diagnostics=pd.DataFrame(margin_diagnostic_rows),
     )

@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 93,
-      "python_loc": 17210,
+      "python_file_count": 99,
+      "python_loc": 18416,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
