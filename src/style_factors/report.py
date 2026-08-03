@@ -47,36 +47,24 @@ def _factor_definition_lines(active_factors: set[str] | None = None) -> list[str
         "|------|------|----------|",
     ]
     definitions = {
-        "size": "| Size 大市值 | 多-空 | ln(总市值)，月度分层 |",
-        "value": "| Value 低估值 | 多-空 | 1/PB，月度分层 |",
-        "momentum": "| Momentum 动量 | 多-空 | 21日收益（跳过T日），月度分层 |",
+        "size": "| 市值因子 | 大市值减小市值 | 总市值的自然对数，月度分层 |",
+        "value": "| 价值因子 | 低市净率减高市净率 | 市净率倒数，月度分层 |",
+        "momentum": "| 21 日动量因子 | 强势减弱势 | 21 日收益，月度分层 |",
         "quality": (
-            "| Quality 复合质量 | 多-空 | 等权复合 ROE、低资产负债率、8期盈利稳定性、"
-            "现金流质量（OCF/净利润），各子指标逐日截面截尾+z 后合成 |"
+            "| 质量因子 | 高质量减低质量 | 等权合成净资产收益率、低资产负债率、"
+            "8 期盈利稳定性和现金流质量 |"
         ),
-        "earnings_yield": (
-            "| Earnings Yield 盈利估值 | 多-空 | 1/PE_TTM，月度分层"
-            "（价值组，估值代理而非盈利质量） |"
-        ),
-        "lowvol": "| LowVol 低波动 | 多-空 | -21个收益观察值波动率，月度分层 |",
-        "growth": "| Growth 成长 | 多-空 | 净利润同比和营收同比，按公告日对齐 |",
-        "leverage": "| Leverage 低杠杆 | 多-空 | -资产负债率，按公告日对齐 |",
-        "beta": "| Beta 低贝塔 | 多-空 | -252日滚动市场 beta（最少126日） |",
-        "liquidity": "| Liquidity 低换手 | 多-空 | -换手率 |",
-        "liquidity_flow": (
-            "| LiquidityFlow 大单资金流 | 多-空 | moneyflow_ths 大单净买占比，"
-            "逐日精确匹配、截尾+z |"
-        ),
-        "chip_concentration": (
-            "| ChipConcentration 筹码集中度 | 多-空 | holder_structure 前十大流通股"
-            "集中度，逐日精确匹配、截尾+z |"
-        ),
-        "institution_holding": (
-            "| InstitutionHolding 机构持仓 | 多-空 | holder_structure 前十大机构流通"
-            "持股占比，逐日精确匹配、截尾+z |"
-        ),
-        "dividend_yield": ("| DividendYield 股息率 | 多-空 | daily_basic.dv_ttm 股息率，截尾+z |"),
-        "ps_value": "| PSValue 市销率价值 | 多-空 | 1/ps_ttm，截尾+z |",
+        "earnings_yield": ("| 盈利收益率因子 | 低市盈率减高市盈率 | 滚动市盈率倒数，月度分层 |"),
+        "lowvol": "| 低波动因子 | 低波动减高波动 | 最近 21 个收益观察值的波动率 |",
+        "growth": "| 成长因子 | 高增长减低增长 | 净利润同比和营业收入同比，按公告日对齐 |",
+        "leverage": "| 低杠杆因子 | 低杠杆减高杠杆 | 资产负债率，按公告日对齐 |",
+        "beta": "| 低贝塔因子 | 低贝塔减高贝塔 | 252 日滚动市场贝塔，最少 126 日 |",
+        "liquidity": "| 低换手因子 | 低换手减高换手 | 换手率 |",
+        "liquidity_flow": ("| 大单资金流因子 | 大单净买入较高减较低 | 大单净买入占比 |"),
+        "chip_concentration": ("| 筹码集中度因子 | 集中度较高减较低 | 前十大流通股东持股占比 |"),
+        "institution_holding": ("| 机构持仓因子 | 机构持仓较高减较低 | 前十大机构流通持股占比 |"),
+        "dividend_yield": "| 股息率因子 | 高股息率减低股息率 | 过去 12 个月股息率 |",
+        "ps_value": "| 市销率价值因子 | 低市销率减高市销率 | 滚动市销率倒数 |",
     }
     selected = active_factors if active_factors is not None else set(FACTOR_LABELS)
     rows.extend(definitions[name] for name in FACTOR_LABELS if name in selected)
@@ -89,18 +77,13 @@ def _industry_neutralization_note(metadata: dict | None) -> list[str]:
     coverage_text = f"，样本匹配率 {coverage:.1%}" if isinstance(coverage, int | float) else ""
     return [
         "",
-        "## 行业信号去均值（申万 PIT L1）",
+        "## 行业信号处理",
         "",
-        "因子在合成 z-score 前，先按申万一级行业在每期截面内做行业内 demean，"
-        "再做跨行业横截面 z-score。该处理降低信号的行业均值暴露，"
-        "不等同于最终多空组合的行业权重被严格约束为零。",
+        "因子先按申万历史一级行业在每期截面内去均值，再进行全市场标准化。"
+        "该处理降低行业之间的平均信号差异，最终多空组合仍可能保留行业权重偏离。",
         "",
-        "- 行业来源：本地已落地的**申万 PIT 行业**（`sw_industry_member` + `sw_industry`），"
-        "按 `in_date <= trade_date <= out_date`（out_date 为空=当前）判定每只股票在每个时点的 "
-        f"L1 行业{coverage_text}。",
-        "- **非静态映射**：不使用 `stock_basic.industry` 或 ths_member 静态行业做中性化"
-        "（ths_member 仅作为普通行业标签接入，不参与中性化）。",
-        "- 无行业匹配的股票作为残差组单独去均值，不会因行业缺失而从所有因子中删除。",
+        f"- 行业成员按历史生效区间匹配{coverage_text}。",
+        "- 缺少行业匹配的股票作为残差组单独处理。",
     ]
 
 
@@ -109,7 +92,9 @@ def _append_yearly_section(lines: list[str], yearly: pd.DataFrame | None) -> Non
         return
     value_column = "period_return" if "period_return" in yearly.columns else "annual_ret"
     ret_pivot = yearly.pivot(index="year", columns="factor", values=value_column)
-    ret_display = ret_pivot.map(lambda value: "—" if pd.isna(value) else f"{value:+.1f}")
+    ret_display = ret_pivot.map(lambda value: "—" if pd.isna(value) else f"{value:+.1f}%")
+    ret_display = ret_display.rename(columns=FACTOR_LABELS)
+    ret_display.index.name = "年份"
     lines.extend(
         [
             "## 逐年收益",
@@ -135,14 +120,14 @@ def _append_attribution_section(
         [
             "## 策略归因",
             "",
-            f"策略: **{attribution['strategy']}**",
+            f"策略：{attribution['strategy']}",
             "",
-            f"- 覆盖: {attribution['days']} 天 ({attribution['years']} 年)",
-            f"- 策略几何年化收益: {attribution['geometric_annual_return']:.2f}%",
-            f"- 因子解释度 (R²): {attribution['r_squared']:.4f}",
-            f"- 回归截距的252日几何年化 alpha: {attribution['annual_alpha']:.2f}%",
+            f"- 覆盖：{attribution['days']} 天（{attribution['years']} 年）",
+            f"- 策略几何年化收益：{attribution['geometric_annual_return']:.2f}%",
+            f"- 因子解释度（R²）：{attribution['r_squared']:.4f}",
+            f"- 回归截距的 252 日几何年化阿尔法：{attribution['annual_alpha']:.2f}%",
             "",
-            "| 因子 | Beta | 贡献 |",
+            "| 因子 | 贝塔 | 贡献 |",
             "|------|------|------|",
         ]
     )
@@ -163,14 +148,27 @@ def _append_attribution_section(
         "r_squared",
         "annual_alpha",
     ]
-    compact = yearly_attribution[compact_columns].copy()
+    compact = (
+        yearly_attribution[compact_columns]
+        .copy()
+        .rename(
+            columns={
+                "year": "年份",
+                "days": "观察日",
+                "period_return": "期间收益（%）",
+                "geometric_annual_return": "几何年化收益（%）",
+                "r_squared": "解释度（R²）",
+                "annual_alpha": "年化阿尔法（%）",
+            }
+        )
+    )
     lines.extend(
         [
             "### 逐年策略归因",
             "",
             _markdown_table(compact, index=False, floatfmt=".2f"),
             "",
-            "完整逐年 beta、因子收益和贡献见 `strategy_attribution_yearly.csv`。",
+            "完整逐年贝塔、因子收益和贡献保存在逐年归因明细中。",
             "",
         ]
     )
@@ -195,8 +193,8 @@ def _append_coverage(lines: list[str], factor_results: dict) -> None:
         ls = factor_results[name]["long_short"].dropna()
         if ls.empty:
             continue
-        coverage = f"{ls.index.min().date()} ~ {ls.index.max().date()}, {len(ls)} 天"
-        lines.append(f"- {FACTOR_LABELS[name]}: {coverage}")
+        coverage = f"{ls.index.min().date()} 至 {ls.index.max().date()}，{len(ls)} 天"
+        lines.append(f"- {FACTOR_LABELS[name]}：{coverage}")
 
 
 def _summary_for_report(summary: pd.DataFrame) -> pd.DataFrame:
@@ -211,13 +209,19 @@ def _summary_for_report(summary: pd.DataFrame) -> pd.DataFrame:
         "max_drawdown",
         "hit_rate",
     ]
-    return summary[[column for column in columns if column in summary.columns]].rename(
+    display = summary[[column for column in columns if column in summary.columns]].copy()
+    display["factor"] = display["factor"].map(FACTOR_LABELS).fillna(display["factor"])
+    return display.rename(
         columns={
-            "cumulative_ret": "cumulative_ret_pct",
-            "geometric_annual_ret": "geometric_annual_ret_pct",
-            "annual_vol": "annual_vol_pct",
-            "max_drawdown": "max_drawdown_pct",
-            "hit_rate": "hit_rate_pct",
+            "factor": "因子",
+            "days": "观察日",
+            "years": "覆盖年数",
+            "cumulative_ret": "累计收益（%）",
+            "geometric_annual_ret": "几何年化收益（%）",
+            "annual_vol": "年化波动率（%）",
+            "sharpe": "夏普比率",
+            "max_drawdown": "最大回撤（%）",
+            "hit_rate": "日胜率（%）",
         }
     )
 
@@ -238,17 +242,17 @@ def generate_report(
     data_end = metadata.get("data_end", "未知")
     generated_at = metadata.get("generated_at", "未知")
     summary_display = _summary_for_report(summary)
+    corr_display = corr.rename(index=FACTOR_LABELS, columns=FACTOR_LABELS)
     lines = [
-        "# A 股风格代理因子研究报告",
+        "# A 股风格因子研究报告",
         "",
         f"- 生成时间：{generated_at}",
-        f"- 日线与估值样本：{data_start} ~ {data_end}",
+        f"- 日行情与估值样本：{data_start} 至 {data_end}",
         f"- 实际输出因子：{len(active_factors)} 个",
-        "- 研究姿态：历史风格筛查，不是可交易回测或严格行业中性风险模型",
+        "- 研究定位：历史风格筛查和策略归因",
         "",
-        "> 2008 年以来的日线与估值段读取 raw daily / daily_basic；财务因子读取 legacy raw "
-        "fundamentals。当前链路未完整消费 daily_clean、逐日 PIT 股票池或 revision-safe PIT v2，"
-        "因此长历史结论属于 screen-grade 代理结果。",
+        "> 长期基准使用基础日行情、日频估值和后续重建的历史财务数据。"
+        "约束复核另行检验股票池、交易限制、成本和退市情景。",
         "",
         "## 因子定义",
         "",
@@ -256,20 +260,19 @@ def generate_report(
         "",
         *_industry_neutralization_note(metadata),
         "",
-        "每期按因子 z-score 排名，等分为 5 组。多空两腿在月末等权建仓，"
-        "固定份额持有至下一个月末；持有期缺失收益按 0 处理。",
-        "展示的是 top quintile long - bottom quintile short 的日收益序列。",
+        "每期按因子标准分排名并分为 5 组。多空两端在月末等权建仓，"
+        "固定份额持有至下一个月末。报告展示得分最高的 20% 组合收益"
+        "减去得分最低的 20% 组合收益。",
         "",
         "## 因子表现总览",
         "",
         _markdown_table(summary_display, index=False),
         "",
-        "主报告使用 252 交易日几何年化；JSON 中保留旧字段 `annual_ret`（日均收益复利年化）"
-        "以兼容既有消费者。",
+        "主报告使用 252 个交易日几何年化。部分年度和短覆盖因子需要结合实际观察区间解读。",
         "",
         "## 因子相关性",
         "",
-        _markdown_table(corr, floatfmt=".2f"),
+        _markdown_table(corr_display, floatfmt=".2f"),
         "",
     ]
 
@@ -279,8 +282,8 @@ def generate_report(
     lines.extend(
         [
             "",
-            "*由 style_factors 自动生成 | 数据来源：market-data-platform daily、daily_basic、"
-            "legacy fundamentals/cashflow、moneyflow_ths、holder_structure 与申万行业成员历史*",
+            "数据来源：A 股日行情、日频估值、财务指标、现金流、资金流、"
+            "持仓结构和申万历史一级行业数据。",
         ]
     )
 

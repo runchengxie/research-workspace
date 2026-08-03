@@ -30,7 +30,12 @@ from src.style_factors.factor_calc import (
     compute_factors,
 )
 from src.style_factors.helpers._aux import _merge_aux
-from src.style_factors.report import _append_yearly_section, _factor_definition_lines
+from src.style_factors.report import (
+    _append_attribution_section,
+    _append_yearly_section,
+    _factor_definition_lines,
+    _summary_for_report,
+)
 
 
 def _sample_market_frames(days: int = 90, symbols: int = 60) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -84,13 +89,37 @@ def test_quality_is_composite_and_earnings_yield_is_value() -> None:
     definitions = "\n".join(_factor_definition_lines())
 
     # Quality is now a composite operating-quality score, not earnings yield.
-    assert FACTOR_LABELS["quality"] == "Quality 复合质量"
-    assert "复合质量" in definitions
+    assert FACTOR_LABELS["quality"] == "质量因子"
+    assert "盈利稳定性" in definitions
     assert "估值代理，非盈利质量" not in definitions
     # Earnings yield lives in the value group.
-    assert FACTOR_LABELS["earnings_yield"] == "Earnings Yield 盈利估值"
-    assert "价值组" in definitions or "估值代理" in definitions
+    assert FACTOR_LABELS["earnings_yield"] == "盈利收益率因子"
+    assert "市盈率倒数" in definitions
     assert "LimitUp" not in definitions
+
+
+def test_report_summary_uses_chinese_factor_names_and_headings() -> None:
+    summary = pd.DataFrame(
+        [
+            {
+                "factor": "value",
+                "days": 252,
+                "years": 1.0,
+                "cumulative_ret": 10.0,
+                "geometric_annual_ret": 10.0,
+                "annual_vol": 8.0,
+                "sharpe": 1.2,
+                "max_drawdown": -5.0,
+                "hit_rate": 51.0,
+            }
+        ]
+    )
+
+    display = _summary_for_report(summary)
+
+    assert display.loc[0, "因子"] == "价值因子"
+    assert "几何年化收益（%）" in display.columns
+    assert "factor" not in display.columns
 
 
 def test_compute_factors_uses_factor_specific_valuation_eligibility() -> None:
@@ -258,6 +287,40 @@ def test_yearly_report_formats_missing_returns_as_dash() -> None:
     assert "+1.2" in report
     assert "—" in report
     assert "nan" not in report.lower()
+    assert "| 年份 | 市值因子 | 价值因子 |" in report
+    assert "| year | size | value |" not in report
+
+
+def test_attribution_report_uses_chinese_yearly_headings() -> None:
+    summary = pd.DataFrame([{"factor": "value", "annual_ret": 10.0}])
+    attribution = {
+        "strategy": "示例策略",
+        "days": 252,
+        "years": 1.0,
+        "geometric_annual_return": 8.0,
+        "r_squared": 0.4,
+        "annual_alpha": 3.0,
+        "betas": {"value": 0.5},
+    }
+    yearly = pd.DataFrame(
+        [
+            {
+                "year": 2024,
+                "days": 252,
+                "period_return": 8.0,
+                "geometric_annual_return": 8.0,
+                "r_squared": 0.4,
+                "annual_alpha": 3.0,
+            }
+        ]
+    )
+    lines: list[str] = []
+
+    _append_attribution_section(lines, summary, attribution, yearly)
+
+    report = "\n".join(lines)
+    assert "| 年份 | 观察日 | 期间收益（%） |" in report
+    assert "| year | days | period_return |" not in report
 
 
 def test_yearly_return_matrix_uses_stable_factor_order_and_keeps_missing_values() -> None:

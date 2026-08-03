@@ -41,7 +41,7 @@ def plot_factor_nav(factor_results: dict, outdir: Path) -> None:
         ax.plot(cum.index, cum, color=FACTOR_COLORS[name], linewidth=1.2)
 
         ann = ((cum.iloc[-1]) ** (252 / len(cum)) - 1) * 100
-        ax.set_title(f"{FACTOR_LABELS[name]}  (年化 {ann:.1f}%)", fontproperties=CJK, fontsize=11)
+        ax.set_title(f"{FACTOR_LABELS[name]}（年化 {ann:.1f}%）", fontproperties=CJK, fontsize=11)
         ax.axhline(1, color="#555", linewidth=0.5, linestyle="--")
         ax.set_ylabel("净值", fontproperties=CJK)
 
@@ -50,7 +50,7 @@ def plot_factor_nav(factor_results: dict, outdir: Path) -> None:
         axes[j].set_visible(False)
 
     fig.suptitle(
-        f"A 股 {n} 因子 Long-Short 净值曲线",
+        f"A 股 {n} 个风格因子多空净值曲线",
         fontproperties=CJK,
         fontsize=14,
         y=0.99,
@@ -82,7 +82,7 @@ def plot_cumulative_comparison(factor_results: dict, outdir: Path) -> None:
             cum,
             color=FACTOR_COLORS[name],
             linewidth=1.4,
-            label=f"{FACTOR_LABELS[name]} ({ann:.1f}%/y)",
+            label=f"{FACTOR_LABELS[name]}（年化 {ann:.1f}%）",
         )
         plotted = True
 
@@ -96,7 +96,7 @@ def plot_cumulative_comparison(factor_results: dict, outdir: Path) -> None:
     ax.legend(loc="upper left", prop=CJK, framealpha=0.5, facecolor=BG, edgecolor=LG)
     ax.set_ylabel("净值（对数刻度）", fontproperties=CJK)
     ax.set_title(
-        "A 股风格因子 Long-Short 收益对比（对数净值）",
+        "A 股风格因子多空收益对比（对数净值）",
         fontproperties=CJK,
         fontsize=13,
     )
@@ -239,7 +239,7 @@ def _plot_best_yearly_factors(
     ax.set_xticks(x)
     ax.set_xticklabels([str(year) for year in years], fontproperties=CJK, fontsize=8)
     ax.axhline(0, color="#555", linewidth=0.5)
-    ax.set_ylabel("收益 (%)", fontproperties=CJK)
+    ax.set_ylabel("收益（%）", fontproperties=CJK)
     ax.set_title("每年最强因子", fontproperties=CJK, fontsize=14)
 
 

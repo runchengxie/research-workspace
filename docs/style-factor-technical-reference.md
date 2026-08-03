@@ -1,0 +1,138 @@
+# A 股风格因子技术说明
+
+> status: active
+> owner: workspace
+> last_verified: 2026-08-03
+> source_of_truth: yes
+> superseded_by: n/a
+
+本页面向项目维护者，记录风格因子模块的运行入口、字段映射、产物契约和跨仓职责。面向研究读者的说明见[A 股风格因子研究方法与功能](style-factors.md)。
+
+## 代码和输出位置
+
+- 计算、回测、归因与报告入口：`src/style_factors/`
+- 标准输出目录：`$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/`
+- 标准发布入口：`src.style_factors.style_factor_attribution`
+- 约束稳健性入口：`src.style_factors.robustness`
+
+## 因子标识
+
+| 内部标识 | 中文名称 |
+| --- | --- |
+| `size` | 市值因子 |
+| `value` | 价值因子 |
+| `momentum` | 21 日动量因子 |
+| `quality` | 质量因子 |
+| `earnings_yield` | 盈利收益率因子 |
+| `lowvol` | 低波动因子 |
+| `growth` | 成长因子 |
+| `leverage` | 低杠杆因子 |
+| `beta` | 低贝塔因子 |
+| `liquidity` | 低换手因子 |
+| `liquidity_flow` | 大单资金流因子 |
+| `chip_concentration` | 筹码集中度因子 |
+| `institution_holding` | 机构持仓因子 |
+| `dividend_yield` | 股息率因子 |
+| `ps_value` | 市销率价值因子 |
+
+## 本地研究运行
+
+完整运行：
+
+```bash
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
+  uv run python -m src.style_factors \
+  --outdir artifacts/style_analysis
+```
+
+快速调试从 2020 年开始读取分区：
+
+```bash
+uv run python -m src.style_factors \
+  --quick \
+  --outdir artifacts/style_analysis_quick
+```
+
+## 约束稳健性运行
+
+约束稳健性入口独立写入调用方指定目录，不会自动更新共享正式版本：
+
+```bash
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
+  uv run python -m src.style_factors.robustness \
+  --baseline-artifacts /path/to/full-raw-artifacts \
+  --constraints-dir /path/to/tushare_constraints_20260802 \
+  --pit-vintage-dir /path/to/fundamentals_vintages/vintage=20260802 \
+  --outdir /tmp/style-factor-robustness
+```
+
+该入口读取 `daily_clean`、形成日股票池、历史特殊处理状态、`suspend_d`、退市日期和封存的时点财务数据。执行模型包含下一交易日收盘调仓、涨跌停与停牌订单阻塞、按实际成交金额扣费，以及退市末端收益压力情景。
+
+`margin_detail` 和 `slb_sec_detail` 用于构造已报告借券活动代理。该代理缺少真实券源、费率、召回和可借数量。
+
+## 策略归因
+
+策略收益文件的第一列为日期索引，第一条数据列为小数口径的日收益：
+
+```csv
+date,return
+2024-01-02,0.0031
+2024-01-03,-0.0018
+```
+
+运行命令：
+
+```bash
+uv run python -m src.style_factors \
+  --strategy-csv returns.csv \
+  --strategy-name strategy \
+  --outdir artifacts/style_analysis_strategy
+```
+
+全样本归因写入 `strategy_attribution.json`，逐年归因写入 `strategy_attribution_yearly.csv`。
+
+## 标准发布
+
+```bash
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
+  uv run python -m src.style_factors.style_factor_attribution \
+  --out-name 20260629
+```
+
+标准发布先在同目录完成暂存文件，校验全部文件后原子重命名为 `<out-name>/`，最后原子更新 `latest.txt`。已有版本目录不会被覆盖。
+
+## 标准产物
+
+| 文件 | 内容 |
+| --- | --- |
+| `factor_summary.json` | 全样本收益、波动、夏普比率、回撤和胜率 |
+| `factor_correlation.json` | 因子多空日收益相关性 |
+| `factor_yearly.csv` | 逐年和年初至今表现 |
+| `factor_<name>_daily.csv` | 单个因子的多空日收益 |
+| `strategy_attribution.json` | 可选的全样本策略归因 |
+| `strategy_attribution_yearly.csv` | 可选的逐年策略归因 |
+| `style_analysis_report.md` | 自动生成的研究报告 |
+| `style_factor_nav.png` | 单因子净值图 |
+| `style_factor_comparison.png` | 多因子净值对比图 |
+| `style_factor_corr.png` | 因子相关性热力图 |
+| `style_factor_yearly.png` | 逐年因子收益图 |
+| `meta.json` | 运行参数和数据范围 |
+| `manifest.json` | 文件清单、校验值和数据沿袭信息 |
+
+约束稳健性入口另行输出收益对照、成本与退市情景、因子诊断、逐因子日收益、晋级判断、运行口径、Markdown 附录和三张对照图。
+
+## 数据字段
+
+长期基准主要使用 `daily`、`daily_basic`、`fina_indicator`、`cashflow`、`moneyflow_ths`、`holder_structure` 和申万行业成员历史。约束复核增加 `daily_clean`、形成日股票池、`namechange`、`st`、`suspend_d`、`stk_limit`、`margin_secs`、`margin_detail` 和 `slb_sec_detail`。
+
+财务指标按 `ann_date` 对齐。非正 `PB` 和 `PE_TTM` 只影响对应估值因子的样本。`period_return` 表示实际覆盖期收益，`is_partial_year` 标记部分年度，主报告使用几何年化收益。
+
+## 跨仓职责
+
+- 因子研究接口归属 `alpha-research`。
+- 回测和归因能力归属 `portfolio-backtester`。
+- 运行编排和标准产物发布归属 `strategy-pipeline`。
+- `src/style_factors` 当前承载顶层参考实现和兼容入口。
+- 下游系统通过版本化文件契约消费结果，避免维护第二套同源研究算法。
+
+跨仓协作使用公开命令行入口和文件契约。消费方应先校验 `manifest.json` 中的文件清单和校验值，再读取研究产物。
