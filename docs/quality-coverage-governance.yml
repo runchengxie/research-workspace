@@ -79,6 +79,7 @@
         "include_targets": [
           "scripts/research/daily_watch20_candidate_oos.py",
           "scripts/research/daily_watch20_fundamental_shadow.py",
+          "scripts/research/daily_watch20_long_horizon_buffer.py",
           "src/strategy_pipeline/__init__.py",
           "src/strategy_pipeline/__main__.py",
           "src/strategy_pipeline/cli/common.py",
@@ -102,6 +103,9 @@
           "src/strategy_pipeline/daily_watch20_fundamental_shadow_publish.py",
           "src/strategy_pipeline/daily_watch20_fundamental_stability.py",
           "src/strategy_pipeline/daily_watch20_live_inputs.py",
+          "src/strategy_pipeline/daily_watch20_long_horizon_buffer.py",
+          "src/strategy_pipeline/daily_watch20_long_horizon_buffer_io.py",
+          "src/strategy_pipeline/daily_watch20_long_horizon_buffer_resources.py",
           "src/strategy_pipeline/daily_watch20_market_shadow.py",
           "src/strategy_pipeline/daily_watch20_market_shadow_publish.py",
           "src/strategy_pipeline/daily_watch20_minute.py",
