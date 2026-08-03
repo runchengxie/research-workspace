@@ -1,209 +1,124 @@
-# A 股风格因子分析
+# A 股风格因子研究方法与功能
 
-> status: active
-> owner: workspace
-> last_verified: 2026-08-02
-> source_of_truth: yes
-> superseded_by: n/a
+> 数据截至：2026 年 7 月 31 日
+> 长期观察起点：2008 年 1 月 2 日
+> 报告定位：市场风格研究、策略归因和稳健性检验的方法说明
 
-本页说明顶层 `src/style_factors` 的用途、运行方式和输出约定。这个模块用于 A 股市场风格复盘和策略收益归因，正式输出目录是：
+本项目从市值、估值、价格行为、财务质量、交易活跃度和持仓结构等角度刻画 A 股市场风格。研究体系目前覆盖 15 个因子，可以生成长期和逐年表现、因子相关性、策略收益归因，以及加入交易约束和成本后的稳健性对照。
 
-```text
-$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
-```
+## 研究框架
 
-逐年市场风格切换的解读示例见
-[A 股年度市场风格解读：2008-2026](style-factor-market-regimes-2008-2026.md)。
-完整 2008–2026 股票池、交易约束、成本和退市压力情景的对照见
-[A 股风格因子 2008–2026 全历史约束稳健性附录](style-factor-constrained-robustness-2008-2026.md)。
+每个因子先在自身有效样本中完成截面处理，再构造多空组合。这样可以减少某一类数据缺失对其他因子的影响。长期基准用于识别历史方向，约束复核用于评估结果对股票池、成交限制、退市情景和交易成本的敏感程度。
 
-## 它是什么
+主要研究功能包括：
 
-`style_factors` 是一个参考 Barra CNE5 思路的全市场风格代理因子分析工具。它从
-`market-data-platform` 发布的 TuShare A 股日线、日频估值和可选财务指标中构造 15 个风格因子：
+- 观察 2008 年以来各类风格的长期收益、波动和回撤。
+- 比较年度风格强弱，识别市场主导风格的切换。
+- 计算因子收益相关性，识别重复的价值、防御和小盘暴露。
+- 使用多因子回归解释策略收益来源。
+- 加入股票池、上市时间、特殊处理状态、停牌、涨跌停、退市情景和交易成本进行稳健性复核。
+- 对融券资格和已报告借券活动进行敏感性分析。
 
-| 因子 | 当前方向 | 主要输入 | 数据来源 |
-| --- | --- | --- | --- |
-| Size 大市值 | 大市值 - 小市值 | `total_mv` | daily_basic |
-| Value 低估值 | 低市净率（PB） - 高 PB | `pb` | daily_basic |
-| Momentum 动量 | 高 21 日动量 - 低 21 日动量 | `close` | daily |
-| Earnings Yield 盈利估值 | 低 PE_TTM - 高 PE_TTM | `pe_ttm` | daily_basic |
-| LowVol 低波动 | 低 21 个收益观察值波动 - 高波动 | `close` | daily |
-| Growth 成长 | 高增长 - 低增长 | `netprofit_yoy`、`or_yoy` | fina_indicator |
-| Leverage 低杠杆 | 低资产负债率 - 高资产负债率 | `debt_to_assets` | fina_indicator |
-| Beta 低贝塔 | 低 252 日 beta - 高 252 日 beta | `pct_chg` | daily |
-| Liquidity 低换手 | 低换手 - 高换手 | `turnover_rate` | daily |
-| Quality 复合质量 | 高 ROE + 低杠杆 + 盈利稳定 + 现金流质量 | `roe`、`debt_to_assets`、最近 8 个报告期 `netprofit_yoy` 的滚动 std、`n_cashflow_act/net_profit` | fina_indicator + cashflow |
-| LiquidityFlow 大单资金流 | 大单净买占比高 - 低 | moneyflow_ths 大单净买 | moneyflow_ths（本地） |
-| ChipConcentration 筹码集中度 | 前十大流通股集中度高 - 低 | holder_structure 前十大流通股占比 | holder_structure（本地） |
-| InstitutionHolding 机构持仓 | 前十大机构流通持股占比高 - 低 | holder_structure 前十大机构持股 | holder_structure（本地） |
-| DividendYield 股息率 | 股息率高 - 低 | daily_basic `dv_ttm` | daily_basic（本地） |
-| PSValue 市销率价值 | 低 PS_TTM - 高 PS_TTM | `ps_ttm` | daily_basic（本地） |
+## 因子定义
 
-日频价格序列先计算滚动动量、波动和 beta。估值、财务、辅助数据与行业历史只在每个月最后一个交易日拼接。每个因子按自己的非缺失样本独立做截面缩尾（1%/99%）、行业内去均值和标准化，不再要求股票同时具备正 PB、正 PE 等其他因子的输入。随后按因子排序分成 5 组，下一交易日起持有。两腿月初等权建仓、月内固定份额自然漂移，到下个月末再平衡。输出最高五分位组合减最低五分位组合的日收益序列。
-
-> 复合质量因子（`quality` / `factor_quality`）已于 2026-07 从 `1/PE_TTM` 估值代理重构为
-> 等权复合：ROE、低资产负债率、盈利稳定性（按最近 8 个已公告报告期计算 `-rolling_std(netprofit_yoy, 8)`）、现金流质量
-> （`n_cashflow_act / net_profit`），各子指标先截尾再横截面 z 后合成。旧版把 `1/PE_TTM` 当作质量
-> 是误称，现已与 `earnings_yield`（盈利估值）拆分为两个独立因子。
-
-这个工具适合做市场风格复盘、候选策略收益归因和研究解释。账户级风险引擎还需要补充协方差风险预测、特异风险建模、组合优化和 PIT 指数成分约束。当前只内置信号层行业去均值，不是组合层严格行业中性（见下方方法边界）。
-
-## 审计基准运行
-
-2026-08-01 的修正后全量复算使用以下输入窗口：
-
-```text
-daily / daily_basic: 2008-01-02 ~ 2026-07-31
-formation dates: 2008-01-31 ~ 2026-07-31（223 个月末）
-factor observations: 735,938 stock-months
-SW L1 membership coverage: 89.6%
-```
-
-这段日期用于本次算法审计，不代表正式发布目录的 current 指针已经切换到该口径。全量运行默认读取执行时可用的全部日期。`--quick` 从 `2020-01-01` 开始读取分区，用于调试和快速产出。
-
-新因子覆盖受本地数据落地时间限制：`liquidity_flow`（moneyflow_ths）自 2026-02 起，
-`chip_concentration` / `institution_holding`（holder_structure）自 2015-03 起。因此其统计结论
-不应与长周期因子直接比较。
-
-## 运行命令
-
-本地临时输出：
-
-```bash
-DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors \
-  --outdir artifacts/style_analysis
-```
-
-快速调试：
-
-```bash
-uv run python -m src.style_factors \
-  --quick \
-  --outdir artifacts/style_analysis_quick
-```
-
-生成独立约束稳健性附录，不更新共享 `latest`：
-
-```bash
-DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.robustness \
-  --baseline-artifacts /path/to/full-raw-artifacts \
-  --constraints-dir /path/to/tushare_constraints_20260802 \
-  --pit-vintage-dir /path/to/fundamentals_vintages/vintage=20260802 \
-  --outdir /tmp/style-factor-robustness
-```
-
-该入口读取 `daily_clean`、PIT 形成日股票池、namechange 重建 ST、`suspend_d`、
-instruments 退市日期和 sealed PIT v2，模拟下一交易日收盘起的涨跌停与停牌订单阻塞，
-按实际成交名义额扣成本，并输出退市末端收益压力情景。`margin_detail` / `slb_sec_detail`
-只形成已报告借券活动代理，退市真实收益、真实券源和 revision-safe 历史版本仍是显式未解决项。
-
-发布到共享数据根的标准位置（输出写入 `$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<out-name>/`）：
-
-```bash
-DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.style_factor_attribution \
-  --out-name 20260629
-```
-
-## 策略归因
-
-如果要解释某条策略日收益，传入一个 CSV。第一列必须是日期索引，第一条数据列必须是日收益，小数口径，例如 `0.01` 表示 `+1%`。
-
-```csv
-date,return
-2024-01-02,0.0031
-2024-01-03,-0.0018
-```
-
-运行：
-
-```bash
-uv run python -m src.style_factors \
-  --strategy-csv returns.csv \
-  --strategy-name strategy \
-  --outdir artifacts/style_analysis_strategy
-```
-
-归因使用普通最小二乘（OLS）：
-
-```text
-strategy_daily_return = intercept + beta_size * size + ... + beta_liquidity * liquidity + residual
-```
-
-全样本结果写入 `strategy_attribution.json`，逐年结果写入 `strategy_attribution_yearly.csv`。年度文件包含每年的 `r_squared`、`annual_alpha`、各风格 `beta_*`、当年因子收益 `factor_return_*` 和贡献估算 `contribution_*`。
-
-## 报告与历史运行
-
-仓库内曾保留 3 个历史运行目录。它们对应 3 次不同参数和代码版本的运行，并非 3 种固定报告模板：
-
-| 目录 | 口径 | 用途 |
+| 因子 | 多空方向 | 主要信息 |
 | --- | --- | --- |
-| `artifacts/style_analysis_2008/` | 2026-07-30 的 15 因子全历史运行 | 旧基准，已被本次审计发现的方法问题影响 |
-| `artifacts/style_analysis_codex_full_20260629/` | 旧 9 因子全历史运行 | legacy 对照，不应与现口径拼接 |
-| `artifacts/style_analysis_codex_quick_20260629/` | 旧 9 因子、2020 年以后 quick 运行 | 调试样本，不能冒充全历史报告 |
+| 市值因子 | 大市值减小市值 | 总市值 |
+| 价值因子 | 低市净率减高市净率 | 市净率 `PB` |
+| 21 日动量因子 | 过去 21 日强势减弱势 | 收盘价收益 |
+| 盈利收益率因子 | 低市盈率减高市盈率 | 滚动市盈率倒数 `1/PE_TTM` |
+| 低波动因子 | 低波动减高波动 | 最近 21 个收益观察值的波动率 |
+| 成长因子 | 高增长减低增长 | 净利润同比和营业收入同比 |
+| 低杠杆因子 | 低资产负债率减高资产负债率 | 资产负债率 |
+| 低贝塔因子 | 低市场贝塔减高市场贝塔 | 最近 252 个交易日的市场敏感度 |
+| 低换手因子 | 低换手减高换手 | 换手率 |
+| 质量因子 | 高质量减低质量 | 净资产收益率、低杠杆、盈利稳定性和现金流质量 |
+| 大单资金流因子 | 大单净买入较高减较低 | 大单净买入占比 |
+| 筹码集中度因子 | 集中度较高减较低 | 前十大流通股东持股占比 |
+| 机构持仓因子 | 机构持仓较高减较低 | 前十大机构流通持股占比 |
+| 股息率因子 | 高股息率减低股息率 | 过去 12 个月股息率 |
+| 市销率价值因子 | 低市销率减高市销率 | 滚动市销率倒数 `1/PS_TTM` |
 
-每次完整运行实际生成 1 份 Markdown 主报告、4 张 PNG 图和 JSON/CSV 明细。解释层另有[年度风格解读](style-factor-market-regimes-2008-2026.md)与[Value 长周期分析](value-regime-18y.md)，两者均不是自动生成物，必须在算法或数据口径变化后人工复核。
+质量因子由四类信息等权合成：盈利能力、低资产负债率、最近 8 个已公告报告期的盈利稳定性，以及经营活动现金流相对净利润的质量。各子指标先缩尾和标准化，再合成为质量得分。
 
-## 输出文件
+## 组合构造
 
-| 文件 | 内容 |
+日频价格序列用于计算动量、波动和市场贝塔。估值、财务、资金流、持仓结构和行业历史在每个月最后一个交易日对齐。
+
+每个因子按以下步骤处理：
+
+1. 保留该因子自身所需数据完整的股票。
+2. 按当期截面的 1% 和 99% 分位缩尾。
+3. 在申万历史一级行业内去均值。
+4. 在全市场截面计算标准分。
+5. 按得分分为五组，从下一交易日开始持有。
+
+多头持有得分最高的 20% 股票，空头代理持有得分最低的 20% 股票。两端在调仓时等权建仓，月内保持固定份额，下一月末再平衡。报告中的因子收益为多头组合收益减去空头代理组合收益。
+
+行业去均值可以降低行业之间的平均信号差异。它没有直接约束多空两端的行业权重，因此最终组合仍可能保留行业暴露。
+
+## 数据覆盖
+
+2026 年 8 月完成的长期复算使用以下样本：
+
+| 项目 | 覆盖情况 |
 | --- | --- |
-| `factor_summary.json` | 全样本累计收益、几何年化收益、兼容旧字段的日均复利年化、波动、夏普、回撤和胜率 |
-| `factor_correlation.json` | 因子多空日收益相关性 |
-| `factor_yearly.csv` | 因子逐年/年初至今收益、起止日期、是否完整年度、波动、夏普和回撤 |
-| `factor_<name>_daily.csv` | 单个因子的多空日收益 |
-| `strategy_attribution.json` | 可选，全样本策略 OLS 归因 |
-| `strategy_attribution_yearly.csv` | 可选，逐年策略 OLS 归因和贡献拆分 |
-| `style_analysis_report.md` | Markdown 报告 |
-| `style_factor_nav.png` | 单因子净值图 |
-| `style_factor_comparison.png` | 多因子净值对比 |
-| `style_factor_corr.png` | 因子相关性热力图 |
-| `style_factor_yearly.png` | 逐年因子收益图 |
-| `meta.json` | 运行参数和输出 metadata |
-| `manifest.json` | 标准发布脚本生成，包含 `research.style-factors.v1` schema、共享 artifact envelope、逐文件 SHA-256/大小和 lineage |
+| 日行情和日频估值 | 2008 年 1 月 2 日至 2026 年 7 月 31 日 |
+| 月末形成日 | 2008 年 1 月 31 日至 2026 年 7 月 31 日，共 223 个 |
+| 股票月观察 | 735,938 个 |
+| 申万历史一级行业匹配率 | 89.6% |
 
-约束稳健性入口另行输出 `factor_robustness_comparison.csv`、
-`factor_robustness_scenarios.csv`、`factor_robustness_diagnostics.csv`、每个因子的 constrained
-gross/net 日收益、`robustness_meta.json`、Markdown 附录和对照图。这些文件默认只写调用方指定的
-临时目录，不属于标准发布契约。
+大单资金流因子从 2026 年 2 月开始覆盖。筹码集中度和机构持仓数据从 2015 年 3 月开始出现，其中有效日期较为稀疏。长期比较时需要同时考虑实际观察日数量。
 
-标准发布先写入同目录 staging，所有文件与 `manifest.json` 完成后再原子重命名为
-`<out-name>/`，最后原子更新 `latest.txt`。已经存在的版本目录不会被覆盖。消费方必须使用
-`research-contracts` 校验文件清单和 SHA-256 后再渲染，不得直接信任半成品目录。
+## 当前约束复核结果
 
-## 方法边界
+完整约束复核覆盖 2008 年至 2026 年，15 项数据质量检查全部通过。10 个核心因子中，市值、价值、动量、低贝塔和低换手通过了覆盖率、方向一致性、相对回撤和成本压力四类门槛。
 
-- 估值类输入中，非正 PB/PE_TTM 会被视为对应因子的缺失值，不会再连带删除 Size、Momentum 等其他因子的股票。
-- Growth 和 Leverage 依赖 `fina_indicator`，按 `ann_date` 对齐，避免使用尚未公告的数据。
-- Quality 的盈利稳定性在财报行上按最近 8 个已公告报告期计算，最少 4 期。缺少 ROE 的股票不生成 Quality 分数。
-- 财务指标来自当前可用 legacy raw fundamentals 链路，早期数据还会回退到 `a_share_top800_union`。当前长历史运行没有完整消费 `daily_clean`、逐日 PIT 股票池和 revision-safe PIT v2，因此只属于 screen-grade 历史代理，不应标为 decision-grade 或可交易回测。
-- 申万历史成员表按 `in_date <= trade_date <= out_date` 对齐。每个因子先在行业内 demean，再做全截面 z-score。无行业匹配的股票作为残差组处理。该方法降低信号的行业均值暴露，但没有约束多空两腿的行业权重，不能称为严格行业中性。
-- 因子收益是全市场代理多空收益。月内缺失收益按 0 处理以保留停牌股票的资本权重，但仍缺少退市末日收益、交易成本、涨跌停可成交性、ST、新股和做空可实现性约束。
-- 独立 robustness 入口对上述限制做压力测试：使用 180 天上市期、PIT 形成日股票池、namechange 重建历史 ST、`st` 事件旁证、`suspend_d` 显式停牌、涨跌停延迟成交、实际换手成本、退市末端收益情景和 sealed PIT v2。它仍不能补齐真实退市清算收益、逐日真实券源/费率/召回/可借数量及 2026-08-02 以前 revision-safe 的历史财务版本，因此保持 screen-grade。
-- `period_return` 是实际覆盖期收益。首年、末年或短覆盖因子的年度行会标记 `is_partial_year=true`。主报告使用几何年化。`annual_ret` 旧字段仅为兼容既有消费者。
-- 归因只纳入策略样本期覆盖率至少 80% 的因子，并基于完整交集回归。alpha 来自 OLS 截距，不使用均值必为零的残差。
+市值、动量和低贝塔因子的稳定方向为负。单项通过只说明结果对约束较稳定。正收益和可交易性需要另行评估。价值和低换手在单边 30 个基点成本情景下仍保持正收益。
 
-## 跨仓边界
+质量、盈利收益率、低波动、成长和低杠杆尚未通过全部门槛。主要原因包括收益方向翻转、回撤恶化、财务样本覆盖不足和成本敏感。
 
-`src/style_factors` 是本工作区风格因子计算、回测与归因的唯一权威实现
-（`source_of_truth: yes`）。依据 2026-07-29 `research-workspace` 与 `market-intel` 整合评估报告的
-边界划分，风格因子的职责归属如下：
+整套核心因子需要全部通过稳健性门槛。目前通过数量为 5 个，整套体系维持研究筛查定位。详细结果见[全历史约束稳健性附录](style-factor-constrained-robustness-2008-2026.md)。
 
-- 因子定义与计算 → `alpha-research`（`style_factors` 当前承载参考实现）
-- 回测与归因 → `portfolio-backtester`（`style_factors` 当前承载参考实现）
-- 运行与产物发布 → `strategy-pipeline`（标准发布脚本产出 `manifest.json` 与 `latest` 指针）
-- 报告渲染与飞书投递 → `market-intel`（仅消费，不重复实现）
+## 报告体系与更新方式
 
-产物通过版本化文件交接给下游：
+项目对外保留三份相互补充的说明：本页介绍研究方法与功能，年度市场风格报告呈现长期和逐年轮动，价值因子报告深入分析单一风格及其市场状态。
+
+每次完整运行还会生成一份当期研究报告、四类图表和结构化数据明细。仓库内的三份说明会在算法、数据范围或结论发生变化后，根据封存运行结果复核更新。
+
+## 策略收益归因
+
+项目可以将策略日收益与同期风格因子收益进行普通最小二乘回归：
 
 ```text
-$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/
+策略日收益 = 截距 + 各风格因子暴露 × 因子日收益 + 残差
 ```
 
-`market-intel` 侧应只消费上述产物（读取 `style_factors[*]` 由
-`strategy-pipeline/src/strategy_pipeline/pipeline/output_summary_sections.py` 完成），
-不得维护第二套同源研究算法（`market-intel/src/a_share_analysis/style/` 为待收口的重复实现，
-见其 `docs/boundary-contract.md`）。跨仓协作只走公开 CLI 与文件契约，不反向 import 本模块运行时内部。
+回归结果包括全样本和逐年的风格贝塔、解释度 `R²`、年化阿尔法和因子贡献估算。归因只纳入策略样本期覆盖率达到 80% 的因子，并使用各因子与策略收益的共同观察日。
+
+多个价值或防御因子高度相关时，单项贝塔可能不稳定。解释时需要结合相关矩阵、覆盖率、条件数和组合的实际持仓特征。
+
+## 数据质量与版本边界
+
+- 文中的样本范围和稳健性结论来自项目于 2026 年 8 月完成的封存复算结果。
+- 长期基准使用基础日行情、日频估值和后续重建的历史财务数据。
+- 约束复核进一步使用清洗后的日行情、形成日股票池、历史特殊处理状态、停牌与涨跌停数据，并加入退市压力情景和交易成本。
+- 2026 年 8 月 2 日以前缺少当时保存的财务版本快照，历史财务数据属于重建时点数据。
+- 退市末端收益采用压力情景，真实退市整理期、现金清算和场外转让结果仍需补充。
+- 融券资格和已报告借券活动只能描述空头可行性的上界，真实券源、费率、召回和可借数量尚未完整覆盖。
+- 数据质量检查反映本次校验范围内的完整性和拼接质量，投资可行性还需结合绝对回撤、统计显著性、容量和交易执行评估。
+
+## 如何使用这些结果
+
+- 市场复盘可重点观察年度风格排序、风格簇和方向变化。
+- 策略归因应优先检查市值、价值、防御和换手暴露，随后分析剩余阿尔法。
+- 因子研究应同时查看长期基准和约束复核，避免只依据未扣成本的历史收益。
+- 组合应用需要结合投资范围、风险预算、行业约束、容量和真实交易条件重新验证。
+
+## 相关报告
+
+- [A 股年度市场风格解读：2008 年至 2026 年](style-factor-market-regimes-2008-2026.md)
+- [价值因子长周期风格轮动分析](value-regime-18y.md)
+- [A 股风格因子全历史约束稳健性附录](style-factor-constrained-robustness-2008-2026.md)
+
+复核日期：2026 年 8 月 3 日。
