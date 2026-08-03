@@ -45,6 +45,7 @@
 - 策略总览导航索引（术语澄清 + 链接入口）：[strategy-catalog.md](strategy-catalog.md)
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](style-factor-market-regimes-2008-2026.md)
+- A 股低换手因子定义与暴露诊断（2008 年至 2026 年）：[low-turnover-factor-diagnostics-2008-2026.md](low-turnover-factor-diagnostics-2008-2026.md)
 - A 股风格因子全历史约束稳健性附录（2008 年至 2026 年）：[style-factor-constrained-robustness-2008-2026.md](style-factor-constrained-robustness-2008-2026.md)
 - A 股风格因子约束稳健性历史快照（2015 年至 2026 年）：[style-factor-constrained-robustness-2015-2026.md](style-factor-constrained-robustness-2015-2026.md)
 - A 股风格因子技术说明：[style-factor-technical-reference.md](style-factor-technical-reference.md)

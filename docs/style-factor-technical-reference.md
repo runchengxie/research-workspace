@@ -14,6 +14,7 @@
 - 标准输出目录：`$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/`
 - 标准发布入口：`src.style_factors.style_factor_attribution`
 - 约束稳健性入口：`src.style_factors.robustness`
+- 低换手定义诊断入口：`src.style_factors.liquidity_diagnostics`
 
 ## 因子标识
 
@@ -70,6 +71,19 @@ DATA_PLATFORM_ROOT=/path/to/market-data-platform \
 
 `margin_detail` 和 `slb_sec_detail` 用于构造已报告借券活动代理。该代理缺少真实券源、费率、召回和可借数量。
 
+## 低换手定义诊断
+
+低换手专题入口比较月末单日换手率、20 日和 60 日平均换手率、20 日和 60 日中位换手率，并同时生成市值和低波动联合中性化结果：
+
+```bash
+DATA_PLATFORM_ROOT=/path/to/market-data-platform \
+  uv run python -m src.style_factors.liquidity_diagnostics \
+  --baseline-artifacts /path/to/current-style-factor-artifacts \
+  --outdir artifacts/liquidity_factor_diagnostics
+```
+
+`--baseline-artifacts` 用于核对月末单日口径与当前标准算法的逐日收益。对账存在差异时，运行会直接失败。滚动窗口默认要求至少 75% 的有效观察，可以通过 `--minimum-coverage` 调整。
+
 ## 策略归因
 
 策略收益文件的第一列为日期索引，第一条数据列为小数口径的日收益：
@@ -121,9 +135,24 @@ DATA_PLATFORM_ROOT=/path/to/market-data-platform \
 
 约束稳健性入口另行输出收益对照、成本与退市情景、因子诊断、逐因子日收益、晋级判断、运行口径、Markdown 附录和三张对照图。
 
+低换手定义诊断另行输出以下产物：
+
+| 文件 | 内容 |
+| --- | --- |
+| `liquidity_diagnostics_summary.csv` | 各定义的多头、多空、相对样本、单调性和风险指标 |
+| `liquidity_diagnostics_quintiles.csv` | 每种定义的五组收益明细 |
+| `liquidity_diagnostics_daily.csv` | 五组、多空和多头相对样本的日收益 |
+| `liquidity_diagnostics_meta.json` | 数据范围、覆盖率、对账结果和运行口径 |
+| `liquidity_factor_diagnostics.md` | 自动生成的中文诊断报告 |
+| `liquidity_signal_nav.png` | 各定义的多空净值图 |
+| `liquidity_quintile_returns.png` | 五组年化收益图 |
+| `liquidity_long_only.png` | 多头、相对样本和多空收益对照图 |
+
 ## 数据字段
 
 长期基准主要使用 `daily`、`daily_basic`、`fina_indicator`、`cashflow`、`moneyflow_ths`、`holder_structure` 和申万行业成员历史。约束复核增加 `daily_clean`、形成日股票池、`namechange`、`st`、`suspend_d`、`stk_limit`、`margin_secs`、`margin_detail` 和 `slb_sec_detail`。
+
+低换手定义诊断逐日读取 `daily_basic` 中的换手率，在每个月末形成 20 日和 60 日平均及中位统计。市值控制使用总市值，低波动控制使用前 21 个收益观察值的波动率。
 
 财务指标按 `ann_date` 对齐。非正 `PB` 和 `PE_TTM` 只影响对应估值因子的样本。`period_return` 表示实际覆盖期收益，`is_partial_year` 标记部分年度，主报告使用几何年化收益。
 

@@ -84,6 +84,151 @@ def _buy_and_hold_leg_returns(
     return pd.Series(portfolio_returns, index=returns.index, dtype=float)
 
 
+def _concat_return_parts(parts: list[pd.Series], *, name: str) -> pd.Series:
+    if not parts:
+        return pd.Series(dtype=float, index=pd.DatetimeIndex([], name="trade_date"), name=name)
+    result = pd.concat(parts).sort_index()
+    result.name = name
+    return result
+
+
+def _formation_quantiles(
+    factors_df: pd.DataFrame,
+    *,
+    trade_date: pd.Timestamp,
+    signal_column: str,
+    n_quantiles: int,
+) -> pd.DataFrame | None:
+    formation = factors_df[factors_df["trade_date"] == trade_date].dropna(subset=[signal_column])
+    if len(formation) < n_quantiles * 10:
+        return None
+    formation = formation.sort_values(signal_column).copy()
+    formation["quantile"] = pd.qcut(
+        formation[signal_column], n_quantiles, labels=False, duplicates="drop"
+    )
+    return formation if formation["quantile"].nunique() == n_quantiles else None
+
+
+def _resolve_requested_quantiles(
+    n_quantiles: int,
+    requested_quantiles: tuple[int, ...] | None,
+) -> tuple[int, ...]:
+    if n_quantiles < 2:
+        raise ValueError("n_quantiles must be at least 2")
+    quantiles = requested_quantiles or tuple(range(1, n_quantiles + 1))
+    if not quantiles or any(value < 1 or value > n_quantiles for value in quantiles):
+        raise ValueError("requested_quantiles must be within the configured quantile range")
+    return quantiles
+
+
+def _build_signal_quantile_result(
+    factors_df: pd.DataFrame,
+    daily_returns: pd.DataFrame,
+    rebalance_dates: list[pd.Timestamp],
+    *,
+    signal_name: str,
+    signal_column: str,
+    n_quantiles: int,
+    quantiles: tuple[int, ...],
+    include_universe: bool,
+) -> dict[str, object]:
+    quantile_parts: dict[int, list[pd.Series]] = {value: [] for value in quantiles}
+    universe_parts: list[pd.Series] = []
+
+    for index, rebalance_date in enumerate(rebalance_dates[:-1]):
+        next_rebalance_date = rebalance_dates[index + 1]
+        rebalance_date = pd.Timestamp(rebalance_date).normalize()
+        next_rebalance_date = pd.Timestamp(next_rebalance_date).normalize()
+        formation = _formation_quantiles(
+            factors_df,
+            trade_date=rebalance_date,
+            signal_column=signal_column,
+            n_quantiles=n_quantiles,
+        )
+        if formation is None:
+            continue
+
+        period_returns = daily_returns.loc[rebalance_date:next_rebalance_date]
+        period_returns = period_returns[period_returns.index > rebalance_date]
+        if period_returns.empty:
+            continue
+
+        for quantile in quantiles:
+            symbols = formation[formation["quantile"] == quantile - 1]["symbol"].tolist()
+            quantile_parts[quantile].append(_buy_and_hold_leg_returns(period_returns, symbols))
+        if include_universe:
+            universe_parts.append(
+                _buy_and_hold_leg_returns(period_returns, formation["symbol"].tolist())
+            )
+
+    quantile_returns = {
+        quantile: _concat_return_parts(parts, name=f"{signal_name}_q{quantile}")
+        for quantile, parts in quantile_parts.items()
+    }
+    low = quantile_returns.get(1, pd.Series(dtype=float))
+    high = quantile_returns.get(n_quantiles, pd.Series(dtype=float))
+    paired = pd.concat({"high": high, "low": low}, axis=1).dropna()
+    long_short = paired["high"] - paired["low"] if not paired.empty else pd.Series(dtype=float)
+    long_short.name = signal_name
+    universe = _concat_return_parts(universe_parts, name=f"{signal_name}_universe")
+    long_excess_pair = pd.concat({"long": high, "universe": universe}, axis=1).dropna()
+    long_excess = (
+        long_excess_pair["long"] - long_excess_pair["universe"]
+        if not long_excess_pair.empty
+        else pd.Series(dtype=float)
+    )
+    long_excess.name = f"{signal_name}_long_excess"
+    return {
+        "quantiles": quantile_returns,
+        "long": high,
+        "short": low,
+        "long_short": long_short,
+        "universe": universe,
+        "long_excess": long_excess,
+    }
+
+
+def build_quantile_portfolio_returns(
+    factors_df: pd.DataFrame,
+    daily: pd.DataFrame,
+    rebalance_dates: pd.DatetimeIndex,
+    signal_columns: dict[str, str],
+    *,
+    n_quantiles: int = 5,
+    requested_quantiles: tuple[int, ...] | None = None,
+    include_universe: bool = True,
+) -> dict[str, dict[str, object]]:
+    """Build fixed-share quantile portfolios for arbitrary formation-date signals.
+
+    Quantile 1 contains the lowest signal scores and ``n_quantiles`` contains
+    the highest.  The function is shared by the standard factor backtest and
+    focused diagnostics that need every quantile and an eligible-universe
+    benchmark.
+    """
+    quantiles = _resolve_requested_quantiles(n_quantiles, requested_quantiles)
+
+    daily_returns = _daily_return_matrix(daily)
+    rd_list = sorted(rebalance_dates)
+
+    results: dict[str, dict[str, object]] = {}
+    for signal_name, signal_column in signal_columns.items():
+        if signal_column not in factors_df.columns:
+            continue
+        print(f"[backtest] {signal_name} ...", flush=True)
+        results[signal_name] = _build_signal_quantile_result(
+            factors_df,
+            daily_returns,
+            rd_list,
+            signal_name=signal_name,
+            signal_column=signal_column,
+            n_quantiles=n_quantiles,
+            quantiles=quantiles,
+            include_universe=include_universe,
+        )
+
+    return results
+
+
 def build_factor_returns(
     factors_df: pd.DataFrame,
     daily: pd.DataFrame,
@@ -92,71 +237,24 @@ def build_factor_returns(
 ) -> dict:
     """For each factor: quintile long-short monthly rebalance."""
     factor_names = available_factor_names(factors_df)
-
-    daily_returns = _daily_return_matrix(daily)
-    rd_list = sorted(rebalance_dates)
-
-    results = {}
-    for fname in factor_names:
-        fcol = f"factor_{fname}_z"
-        print(f"[backtest] {fname} ...", flush=True)
-        long_parts: list[pd.Series] = []
-        short_parts: list[pd.Series] = []
-        ls_parts: list[pd.Series] = []
-
-        for i, rd in enumerate(rd_list):
-            if i == len(rd_list) - 1:
-                break
-            next_rd = rd_list[i + 1]
-
-            rd = pd.Timestamp(rd).normalize()
-            next_rd = pd.Timestamp(next_rd).normalize()
-            rd_data = factors_df[factors_df["trade_date"] == rd].dropna(subset=[fcol])
-            if len(rd_data) < n_quantiles * 10:
-                continue
-
-            rd_data = rd_data.sort_values(fcol)
-            rd_data["quantile"] = pd.qcut(
-                rd_data[fcol], n_quantiles, labels=False, duplicates="drop"
-            )
-            if rd_data["quantile"].nunique() < n_quantiles:
-                continue
-
-            top_syms = rd_data[rd_data["quantile"] == n_quantiles - 1]["symbol"].tolist()
-            bot_syms = rd_data[rd_data["quantile"] == 0]["symbol"].tolist()
-
-            period_returns = daily_returns.loc[rd:next_rd]
-            period_returns = period_returns[period_returns.index > rd]
-            if period_returns.empty:
-                continue
-
-            top_r = _buy_and_hold_leg_returns(period_returns, top_syms)
-            bot_r = _buy_and_hold_leg_returns(period_returns, bot_syms)
-            paired = pd.concat({"long": top_r, "short": bot_r}, axis=1).dropna()
-            if paired.empty:
-                continue
-
-            long_parts.append(paired["long"])
-            short_parts.append(paired["short"])
-            ls_parts.append(paired["long"] - paired["short"])
-
-        if ls_parts:
-            long_series = pd.concat(long_parts).sort_index()
-            short_series = pd.concat(short_parts).sort_index()
-            ls_series = pd.concat(ls_parts).sort_index()
-        else:
-            empty_index = pd.DatetimeIndex([], name="trade_date")
-            long_series = pd.Series(dtype=float, index=empty_index)
-            short_series = pd.Series(dtype=float, index=empty_index)
-            ls_series = pd.Series(dtype=float, index=empty_index)
-        ls_series.name = fname
-        results[fname] = {
-            "long_short": ls_series,
-            "long": long_series,
-            "short": short_series,
+    signal_columns = {name: f"factor_{name}_z" for name in factor_names}
+    detailed = build_quantile_portfolio_returns(
+        factors_df,
+        daily,
+        rebalance_dates,
+        signal_columns,
+        n_quantiles=n_quantiles,
+        requested_quantiles=(1, n_quantiles),
+        include_universe=False,
+    )
+    return {
+        name: {
+            "long_short": result["long_short"],
+            "long": result["long"],
+            "short": result["short"],
         }
-
-    return results
+        for name, result in detailed.items()
+    }
 
 
 def _max_drawdown(returns: pd.Series) -> float:
