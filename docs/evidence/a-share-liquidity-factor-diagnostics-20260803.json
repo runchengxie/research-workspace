@@ -1,0 +1,136 @@
+{
+  "schema_version": "research.liquidity-factor-diagnostics.v1",
+  "generated_at": "2026-08-03T03:23:44.636961+00:00",
+  "data_start": "2008-01-02",
+  "data_end": "2026-07-31",
+  "formation_dates": 223,
+  "formation_observations": 735938,
+  "industry_coverage": 0.8960877139106826,
+  "minimum_observations_20d": 15,
+  "minimum_observations_60d": 45,
+  "baseline_tieout": {
+    "method": "current-main-quick-recomputation",
+    "common_days": 1578,
+    "maximum_absolute_difference": 9.974659986866641e-17,
+    "threshold": 1e-12,
+    "passed": true
+  },
+  "results": [
+    {
+      "variant": "turnover_1d",
+      "long_annual_return_pct": 19.993428,
+      "long_excess_annual_return_pct": 8.289676,
+      "long_short_annual_return_pct": 25.969434,
+      "long_short_sharpe": 2.050209,
+      "long_short_max_drawdown_pct": -17.968698,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.132115,
+      "mean_lowvol_correlation": 0.453235
+    },
+    {
+      "variant": "turnover_mean_20d",
+      "long_annual_return_pct": 13.816963,
+      "long_excess_annual_return_pct": 3.843639,
+      "long_short_annual_return_pct": 15.877052,
+      "long_short_sharpe": 1.262145,
+      "long_short_max_drawdown_pct": -22.602015,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.176973,
+      "mean_lowvol_correlation": 0.560195
+    },
+    {
+      "variant": "turnover_median_20d",
+      "long_annual_return_pct": 13.154128,
+      "long_excess_annual_return_pct": 3.272883,
+      "long_short_annual_return_pct": 13.723373,
+      "long_short_sharpe": 1.124769,
+      "long_short_max_drawdown_pct": -23.949247,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.163910,
+      "mean_lowvol_correlation": 0.536676
+    },
+    {
+      "variant": "turnover_mean_60d",
+      "long_annual_return_pct": 13.914851,
+      "long_excess_annual_return_pct": 3.018840,
+      "long_short_annual_return_pct": 11.764229,
+      "long_short_sharpe": 0.993969,
+      "long_short_max_drawdown_pct": -22.331365,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.208009,
+      "mean_lowvol_correlation": 0.420382
+    },
+    {
+      "variant": "turnover_median_60d",
+      "long_annual_return_pct": 12.696473,
+      "long_excess_annual_return_pct": 1.956673,
+      "long_short_annual_return_pct": 9.470497,
+      "long_short_sharpe": 0.834989,
+      "long_short_max_drawdown_pct": -23.025022,
+      "monotonicity_spearman": 0.9,
+      "mean_size_correlation": 0.186494,
+      "mean_lowvol_correlation": 0.395579
+    },
+    {
+      "variant": "turnover_1d_neutral",
+      "long_annual_return_pct": 15.273831,
+      "long_excess_annual_return_pct": 6.418358,
+      "long_short_annual_return_pct": 21.318550,
+      "long_short_sharpe": 2.845727,
+      "long_short_max_drawdown_pct": -6.103718,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.0,
+      "mean_lowvol_correlation": 0.0
+    },
+    {
+      "variant": "turnover_mean_20d_neutral",
+      "long_annual_return_pct": 13.473452,
+      "long_excess_annual_return_pct": 4.639480,
+      "long_short_annual_return_pct": 15.949230,
+      "long_short_sharpe": 2.179514,
+      "long_short_max_drawdown_pct": -8.185537,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.0,
+      "mean_lowvol_correlation": 0.0
+    },
+    {
+      "variant": "turnover_median_20d_neutral",
+      "long_annual_return_pct": 11.808850,
+      "long_excess_annual_return_pct": 3.114730,
+      "long_short_annual_return_pct": 13.109695,
+      "long_short_sharpe": 1.874972,
+      "long_short_max_drawdown_pct": -8.499669,
+      "monotonicity_spearman": 0.9,
+      "mean_size_correlation": 0.0,
+      "mean_lowvol_correlation": 0.0
+    },
+    {
+      "variant": "turnover_mean_60d_neutral",
+      "long_annual_return_pct": 13.743046,
+      "long_excess_annual_return_pct": 3.906277,
+      "long_short_annual_return_pct": 12.448678,
+      "long_short_sharpe": 1.736929,
+      "long_short_max_drawdown_pct": -9.079185,
+      "monotonicity_spearman": 1.0,
+      "mean_size_correlation": 0.0,
+      "mean_lowvol_correlation": 0.0
+    },
+    {
+      "variant": "turnover_median_60d_neutral",
+      "long_annual_return_pct": 11.898053,
+      "long_excess_annual_return_pct": 2.228486,
+      "long_short_annual_return_pct": 9.574586,
+      "long_short_sharpe": 1.366370,
+      "long_short_max_drawdown_pct": -10.879603,
+      "monotonicity_spearman": 0.9,
+      "mean_size_correlation": 0.0,
+      "mean_lowvol_correlation": 0.0
+    }
+  ],
+  "limitations": [
+    "screen_grade_raw_history",
+    "no_trading_costs_for_alternative_definitions",
+    "no_suspend_limit_or_delisting_constraints_for_alternative_definitions",
+    "short_leg_is_a_theoretical_proxy"
+  ]
+}
