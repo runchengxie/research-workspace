@@ -228,8 +228,7 @@ def _export_code(inputs: PackageInputs, package_root: Path) -> dict[str, dict[st
         pinned_commit = _run(["git", "rev-parse", f"HEAD:{name}"], cwd=inputs.workspace)
         if commit != pinned_commit:
             raise ValueError(
-                f"子模块提交与顶层仓库记录不一致：{name}\n"
-                f"当前：{commit}\n记录：{pinned_commit}"
+                f"子模块提交与顶层仓库记录不一致：{name}\n当前：{commit}\n记录：{pinned_commit}"
             )
         _export_git(repo, code_root / name)
         git_state[name] = {"commit": commit}
