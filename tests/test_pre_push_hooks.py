@@ -399,6 +399,51 @@ def test_missing_hook_installation_blocks_before_quality_commands(
     assert not marker.exists()
 
 
+def test_submodule_gate_checks_hooks_from_managed_workspace_root(
+    tmp_path: Path,
+    monkeypatch: object,
+) -> None:
+    repository = tmp_path / "repo"
+    _init_repo(repository)
+    _commit_file(repository)
+    seen: dict[str, Path] = {}
+
+    def capture_root(
+        root: Path,
+        _configs: object,
+        *,
+        workspace_root: Path,
+    ) -> list[str]:
+        seen["root"] = root
+        seen["workspace_root"] = workspace_root
+        return []
+
+    monkeypatch.setattr(run_pre_push_checks, "check_installation", capture_root)
+    plan = run_pre_push_checks.GatePlan(
+        "example",
+        repository,
+        False,
+        (
+            run_pre_push_checks.GateCommand(
+                "pass",
+                repository,
+                (sys.executable, "-c", "pass"),
+            ),
+        ),
+    )
+
+    result = run_pre_push_checks.run_gate(
+        plan,
+        root=tmp_path,
+        configs={},
+        timeout=10,
+        dry_run=False,
+    )
+
+    assert result == 0
+    assert seen == {"root": tmp_path, "workspace_root": tmp_path}
+
+
 def test_successful_command_that_dirties_repo_is_blocked_by_final_state(
     tmp_path: Path,
     monkeypatch: object,

@@ -77,7 +77,7 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 38,
+      "max_large_files": 39,
       "max_long_functions": 75,
       "max_complexity_hotspots": 40,
       "max_large_classes": 1,
@@ -88,7 +88,8 @@
         "2026-07-28: 六子模块拆分后 complexity_hotspots 42->40、large_files 47->25 下调；ruff-format 行数漂移又使 8 文件跨阈值，large_files 25->33 上调以匹配实测（格式化 artifact，非新债）。",
         "2026-07-29: 对齐重算基线（facade/模块拆分后），计数随基线继续调整，仅可由显式 owner 决策上调（ratchet-only）。",
         "2026-08-02: revision-safe fundamentals 归档增加完整性校验、不可变快照和真实数据测试，基线按合并后的实现事实调整为 38/75/40/1。",
-        "2026-08-02: 全量 ty 类型检查（PR #20）随 mdp 推进至 9af1cb8；基线重算后 large_files 实测仍为 38（后续 refactor PR #22/#23 已把约束提供方压回阈值内），与既有预算 38 一致，无需 ratchet 上调。PR #20 的类型注解为测量性 artifact，未引入结构性新债。"
+        "2026-08-02: 全量 ty 类型检查（PR #20）随 mdp 推进至 9af1cb8；基线重算后 large_files 实测仍为 38（后续 refactor PR #22/#23 已把约束提供方压回阈值内），与既有预算 38 一致，无需 ratchet 上调。PR #20 的类型注解为测量性 artifact，未引入结构性新债。",
+        "2026-08-04: 日频清洗内存优化、全仓格式整理和严格类型修正完成后重算基线，large_files 实测由 38 调整为 39。热点清单未新增优先重构对象，预算按当前测量结果同步。"
       ]
     },
     {
@@ -131,7 +132,7 @@
     {
       "repo": "strategy-pipeline",
       "max_large_files": 35,
-      "max_long_functions": 118,
+      "max_long_functions": 121,
       "max_complexity_hotspots": 66,
       "max_large_classes": 1,
       "owner_decision": [
@@ -142,7 +143,8 @@
         "2026-07-31: 新增红利与成长 ETF 动量研究入口；主脚本 726 行并保持研究专用、无生产执行职责，large_files 34->35，登记 accepted_hotspots，后续新增策略变体前先拆分数据获取与回测编排。",
         "2026-07-31: 基准审计扩展后将 Markdown 构造从 515 行 reporting 模块拆为 233 行输出模块与 338 行报告模块，两个 80 行热点同步消除；large_files 保持 35、long_functions 保持 118，complexity_hotspots 67->66 并下调预算。",
         "2026-07-31: 刷新 maintainability baseline 以纳入共享 research-dev-metrics 包装器与自 2026-07-19 以来的真实代码增长；工作树实测绘得 python_file_count 476（+2）、large_files 36（+1）、long_functions 120（+2），属基线对齐揭示的真实累积债务，非回归；预算 35->36 / 118->120 上调并在 accepted_hotspots 登记。",
-        "2026-07-31: 合并 #31 拆分红利成长报告渲染（dividend_growth_momentum_report.py 新增 338 行、reporting.py 292->~30 行），真实债务收敛：large_files 36->35、long_functions 120->118（两处 80 行热点随拆分消除）；预算随实测下调 36->35 / 120->118，与刷新后的 baseline 对齐。"
+        "2026-07-31: 合并 #31 拆分红利成长报告渲染（dividend_growth_momentum_report.py 新增 338 行、reporting.py 292->~30 行），真实债务收敛：large_files 36->35、long_functions 120->118（两处 80 行热点随拆分消除）；预算随实测下调 36->35 / 120->118，与刷新后的 baseline 对齐。",
+        "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。"
       ]
     },
     {

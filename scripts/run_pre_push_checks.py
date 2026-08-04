@@ -428,9 +428,10 @@ def _pre_gate_state_is_valid(
     root: Path,
     configs: dict[str, SubmoduleConfig],
 ) -> bool:
+    hook_workspace_root = plan.repository_root if plan.check_workspace_consistency else root
     if _report_issues(
         "hook-installation",
-        check_installation(root, configs, workspace_root=plan.repository_root),
+        check_installation(root, configs, workspace_root=hook_workspace_root),
     ):
         return False
     print("[OK] hook-installation")

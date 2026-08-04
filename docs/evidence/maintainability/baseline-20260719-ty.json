@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 106,
-      "python_loc": 20336,
+      "python_file_count": 108,
+      "python_loc": 21014,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -26,18 +26,18 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_pre_push_hooks.py",
+          "loc": 581,
+          "hk_related": false
+        },
+        {
           "path": "scripts/workspace_governance.py",
           "loc": 556,
           "hk_related": false
         },
         {
           "path": "scripts/run_pre_push_checks.py",
-          "loc": 549,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_pre_push_hooks.py",
-          "loc": 536,
+          "loc": 550,
           "hk_related": false
         }
       ],
@@ -158,6 +158,7 @@
         "scripts/install_pre_push_hooks.py",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
+        "scripts/package_d11_h5_repro.py",
         "scripts/print_version_matrix.py",
         "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
@@ -177,10 +178,10 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 295,
-      "python_loc": 88722,
+      "python_loc": 88751,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 38,
+        "large_files": 39,
         "long_functions": 75,
         "complexity_hotspots": 40,
         "large_classes": 1
@@ -188,12 +189,12 @@
       "large_files": [
         {
           "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1862,
+          "loc": 1851,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share.py",
-          "loc": 1794,
+          "loc": 1793,
           "hk_related": false
         },
         {
@@ -510,7 +511,7 @@
         {
           "path": "src/market_data_platform/data_warehouse_catalog.py",
           "name": "_catalog_artifact_from_manifest",
-          "line_count": 87,
+          "line_count": 92,
           "complexity": 27
         },
         {
@@ -1528,19 +1529,19 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 482,
-      "python_loc": 103630,
+      "python_file_count": 487,
+      "python_loc": 104953,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
-        "long_functions": 118,
+        "long_functions": 121,
         "complexity_hotspots": 66,
         "large_classes": 1
       },
       "large_files": [
         {
           "path": "tests/test_daily_watch20_pipeline.py",
-          "loc": 805,
+          "loc": 800,
           "hk_related": false
         },
         {
@@ -1554,12 +1555,12 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
-          "loc": 794,
+          "path": "tests/test_cli_research.py",
+          "loc": 795,
           "hk_related": false
         },
         {
-          "path": "tests/test_cli_research.py",
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
           "loc": 794,
           "hk_related": false
         },
@@ -1574,13 +1575,13 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/pipeline/output_artifacts.py",
+          "path": "scripts/research/a_share_next_high_explore.py",
           "loc": 785,
           "hk_related": false
         },
         {
-          "path": "scripts/research/a_share_next_high_explore.py",
-          "loc": 779,
+          "path": "src/strategy_pipeline/pipeline/output_artifacts.py",
+          "loc": 785,
           "hk_related": false
         },
         {
@@ -1625,7 +1626,7 @@
         },
         {
           "path": "tests/test_daily_watch20_fundamental_shadow.py",
-          "loc": 718,
+          "loc": 720,
           "hk_related": false
         },
         {

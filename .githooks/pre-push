@@ -8,7 +8,6 @@ fi
 
 repo_root="$(git rev-parse --show-toplevel)"
 hook_path="$(python3 -c 'from pathlib import Path; import sys; print(Path(sys.argv[1]).resolve())' "$0")"
-workspace_root="$(dirname -- "$(dirname -- "$hook_path")")"
 git_dir="$(git -C "$repo_root" rev-parse --absolute-git-dir)"
 expected_head="$(git -C "$repo_root" rev-parse --verify 'HEAD^{commit}')"
 clean_git_env=(env)
@@ -17,6 +16,13 @@ while IFS= read -r variable; do
     clean_git_env+=("-u" "$variable")
   fi
 done < <(git -C "$repo_root" rev-parse --local-env-vars)
+
+superproject_root="$("${clean_git_env[@]}" git -C "$repo_root" rev-parse --show-superproject-working-tree)"
+if [[ -n "$superproject_root" ]]; then
+  workspace_root="$superproject_root"
+else
+  workspace_root="$(dirname -- "$(dirname -- "$hook_path")")"
+fi
 
 umask 077
 stdin_cache="$(mktemp "${TMPDIR:-/tmp}/research-workspace-pre-push.XXXXXX")"

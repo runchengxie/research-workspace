@@ -89,6 +89,19 @@
 
 每次完整运行还会生成一份当期研究报告、四类图表和结构化数据明细。仓库内的三份主报告会在算法、数据范围或结论发生变化后，根据封存运行结果复核更新。专题报告在相应诊断口径变化后单独复核。
 
+年度风格图是正式产出之一。完整运行会同时生成 `style_factor_yearly.png`、
+`style_factor_yearly.svg`、绘图矩阵 `style_factor_yearly_matrix.csv` 和元数据回执
+`style_factor_yearly.meta.json`。热力图使用以零为中心的对称色阶，斜线单元格表示无数据，
+未结束年份标记为年初至今。
+
+已有封存结果可以单独重绘，无需重新执行完整因子回测：
+
+```bash
+uv run python -m src.style_factors.yearly_chart \
+  --input artifacts/style_analysis_2008/factor_yearly.csv \
+  --outdir artifacts/style_analysis_2008
+```
+
 ## 策略收益归因
 
 项目可以将策略日收益与同期风格因子收益进行普通最小二乘回归：

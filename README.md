@@ -80,6 +80,15 @@ git submodule update --init --recursive
 
 新机器的完整安装步骤见 [docs/bootstrap.md](docs/bootstrap.md)。
 
+D11-H5 可移植复现包使用以下命令构建，默认写入工作区同级的 `download` 目录：
+
+```bash
+python scripts/package_d11_h5_repro.py --component all
+```
+
+完整包约 3 GB，包含日频数据和冻结研究账本。TuShare 一分钟快照约 14 GB，作为独立可选包。
+解压后的使用方法见[复现包说明](packaging/d11_h5/README.md)。
+
 ## 本地质量门禁
 
 先查看 pre-push 将运行哪些检查：

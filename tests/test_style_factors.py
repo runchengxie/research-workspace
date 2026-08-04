@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 from matplotlib.axes import Axes
 
 from src.style_factors import FACTOR_LABELS
@@ -36,6 +37,7 @@ from src.style_factors.report import (
     _factor_definition_lines,
     _summary_for_report,
 )
+from src.style_factors.yearly_chart import render_yearly_chart
 
 
 def _sample_market_frames(days: int = 90, symbols: int = 60) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -363,12 +365,50 @@ def test_yearly_heatmap_chart_is_generated(tmp_path: Path) -> None:
             "year": [2024, 2024, 2025],
             "factor": ["size", "value", "value"],
             "period_return": [-5.0, 8.0, 3.0],
+            "is_partial_year": [False, False, True],
         }
     )
 
-    plot_yearly_barchart(yearly, tmp_path)
+    artifacts = plot_yearly_barchart(yearly, tmp_path)
 
+    assert artifacts is not None
     assert (tmp_path / "style_factor_yearly.png").is_file()
+    assert (tmp_path / "style_factor_yearly.svg").is_file()
+    matrix = pd.read_csv(tmp_path / "style_factor_yearly_matrix.csv")
+    assert list(matrix["factor"]) == ["size", "value"]
+    metadata = json.loads((tmp_path / "style_factor_yearly.meta.json").read_text())
+    assert metadata["schema_version"] == "research.style-factor-yearly-chart.v1"
+    assert metadata["partial_years"] == [2025]
+    assert metadata["missing_cells"] == 1
+
+
+def test_yearly_chart_can_be_rendered_from_sealed_csv(tmp_path: Path) -> None:
+    input_path = tmp_path / "factor_yearly.csv"
+    pd.DataFrame(
+        {
+            "year": [2025, 2026],
+            "factor": ["value", "value"],
+            "annual_ret": [4.0, 2.0],
+        }
+    ).to_csv(input_path, index=False)
+
+    artifacts = render_yearly_chart(input_path, tmp_path / "rendered")
+
+    assert artifacts.png.is_file()
+    assert artifacts.svg.is_file()
+
+
+def test_yearly_chart_rejects_duplicate_factor_years(tmp_path: Path) -> None:
+    yearly = pd.DataFrame(
+        {
+            "year": [2026, 2026],
+            "factor": ["value", "value"],
+            "period_return": [1.0, 2.0],
+        }
+    )
+
+    with pytest.raises(ValueError, match="重复"):
+        plot_yearly_barchart(yearly, tmp_path)
 
 
 def test_strategy_attribution_reports_yearly_betas_and_json_safe_summary() -> None:

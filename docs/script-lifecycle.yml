@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-07-29",
+  "_last_changed": "2026-08-04",
   "_owner": "research-workspace",
   "schema_version": "script_lifecycle.v1",
   "valid_lifecycles": [
@@ -108,6 +108,16 @@
       "writes_files": "only when --out is provided",
       "external_dependencies": "none",
       "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
+    },
+    {
+      "path": "scripts/package_d11_h5_repro.py",
+      "owner": "research-workspace",
+      "purpose": "Build the portable D11-H5 core archive and optional TuShare minute-data add-on",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "versioned tar.zst archives, manifests, and SHA-256 files under an explicit download directory",
+      "external_dependencies": "clean main checkouts, local published data assets, GNU tar, zstd, and sufficient disk space",
+      "removal_condition": "remove only after D11-H5 reproducibility moves to a versioned successor and two release reviews record no package consumers"
     },
     {
       "path": "scripts/namespace_contracts.py",
