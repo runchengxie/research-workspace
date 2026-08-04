@@ -8,6 +8,7 @@ ARTIFACT_ROOT="$PACKAGE_ROOT/research-artifacts/strategy-pipeline/trailing_weekl
 RUNTIME_ROOT="$PACKAGE_ROOT/.runtime"
 VENV_ROOT="$RUNTIME_ROOT/venv"
 OUTPUT_ROOT="$PACKAGE_ROOT/outputs/d11_h5_shadow"
+PYTHON_BIN="${D11_H5_PYTHON:-python3.12}"
 
 usage() {
   printf '%s\n' \
@@ -17,7 +18,21 @@ usage() {
     '  verify  校验包内全部静态文件' \
     '  setup   创建 Python 环境和可移植数据合同' \
     '  demo    复现 20260803 收盘至 20260804 开盘目标' \
-    '  run     传入 --source-date 和 --signal-date 运行'
+    '  run     传入 --source-date 和 --signal-date 运行' \
+    '' \
+    '可用 D11_H5_PYTHON 指定 Python 3.12 解释器。'
+}
+
+require_runtime_python() {
+  if ! command -v "$PYTHON_BIN" >/dev/null 2>&1; then
+    printf '缺少 Python 3.12。请安装 python3.12，或设置 D11_H5_PYTHON。\n' >&2
+    exit 1
+  fi
+  if ! "$PYTHON_BIN" -c 'import sys; raise SystemExit(sys.version_info[:2] != (3, 12))'; then
+    printf 'D11-H5 复现包要求 Python 3.12，当前解释器为：%s\n' \
+      "$("$PYTHON_BIN" --version 2>&1)" >&2
+    exit 1
+  fi
 }
 
 write_runtime_contract() {
@@ -115,15 +130,25 @@ verify() {
 }
 
 setup_env() {
+  require_runtime_python
   write_runtime_contract
   if [[ -x "$VENV_ROOT/bin/strategy" ]]; then
     return
   fi
   mkdir -p "$RUNTIME_ROOT"
-  python3 -m venv "$VENV_ROOT"
+  "$PYTHON_BIN" -m venv "$VENV_ROOT"
   "$VENV_ROOT/bin/python" -m pip install --upgrade pip
-  "$VENV_ROOT/bin/python" -m pip install -e "$CODE_ROOT/strategy-pipeline"
-  for repo in market-data-platform alpha-research portfolio-backtester research-apps quant-execution-engine; do
+  "$VENV_ROOT/bin/python" -m pip install \
+    'duckdb>=1.2' \
+    'matplotlib>=3.10' \
+    'numpy>=1.23' \
+    'pandas>=2.0' \
+    'pyarrow>=23.0.1' \
+    'pyyaml>=6.0' \
+    'python-dotenv>=1.2.2' \
+    'scikit-learn>=1.2' \
+    'xgboost>=1.7'
+  for repo in market-data-platform alpha-research portfolio-backtester research-apps strategy-pipeline; do
     "$VENV_ROOT/bin/python" -m pip install --no-deps -e "$CODE_ROOT/$repo"
   done
 }
