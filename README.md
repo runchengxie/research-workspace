@@ -80,7 +80,7 @@ git submodule update --init --recursive
 
 新机器的完整安装步骤见 [docs/bootstrap.md](docs/bootstrap.md)。
 
-D11-H5 可移植复现包使用以下命令构建，默认写入 `~/download` 目录：
+D11-H5 可移植复现包使用以下命令构建，默认写入 `~/Downloads` 目录：
 
 ```bash
 python scripts/package_d11_h5_repro.py --component all
