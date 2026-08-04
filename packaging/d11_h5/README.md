@@ -12,6 +12,18 @@
 ./start.sh demo
 ```
 
+收到压缩包时，可先使用与压缩包放在一起的恢复脚本：
+
+```bash
+./restore_d11_h5_repro.sh
+```
+
+如需同时恢复可选分钟数据：
+
+```bash
+./restore_d11_h5_repro.sh --component all
+```
+
 `demo` 会在 `.runtime/venv` 创建隔离环境，并使用 2026 年 8 月 3 日收盘数据生成
 2026 年 8 月 4 日开盘目标。结果写入 `outputs/d11_h5_shadow`。
 如 Python 3.12 的命令名或路径不同，可设置 `D11_H5_PYTHON`。启动脚本只安装

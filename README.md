@@ -88,6 +88,8 @@ python scripts/package_d11_h5_repro.py --component all
 
 完整包约 3 GB，包含日频数据和冻结研究账本。TuShare 一分钟快照约 14 GB，作为独立可选包。
 解压后的使用方法见[复现包说明](packaging/d11_h5/README.md)。
+归档旁的 `restore_d11_h5_repro.sh` 会先校验 SHA-256，再恢复核心包。传入
+`--component all` 可在同一次恢复中合并分钟数据。
 
 ## 本地质量门禁
 

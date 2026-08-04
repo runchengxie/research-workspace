@@ -350,6 +350,14 @@ def _print_plan(inputs: PackageInputs, component: str) -> None:
         print(f"可选分钟包逻辑输入：{_human_bytes(_logical_size(inputs.minute_snapshot)[1])}")
 
 
+def _publish_restore_script(inputs: PackageInputs) -> Path:
+    source = inputs.workspace / "packaging/d11_h5/restore.sh"
+    destination = inputs.download_dir / "restore_d11_h5_repro.sh"
+    shutil.copy2(source, destination)
+    destination.chmod(0o755)
+    return destination
+
+
 def _build_parser() -> argparse.ArgumentParser:
     default_workspace = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description="构建 D11-H5 可移植复现包")
@@ -385,6 +393,7 @@ def main() -> int:
     if args.dry_run:
         return 0
     inputs.download_dir.mkdir(parents=True, exist_ok=True)
+    restore_script = _publish_restore_script(inputs)
     outputs: list[Path] = []
     if args.component in {"core", "all"}:
         with tempfile.TemporaryDirectory(prefix=".d11-h5-core-", dir=inputs.download_dir) as temp:
@@ -396,6 +405,7 @@ def main() -> int:
             outputs.append(_build_minute(inputs, Path(temp), level=args.compression_level))
     for output in outputs:
         print(f"完成：{output}（{_human_bytes(output.stat().st_size)}）")
+    print(f"恢复脚本：{restore_script}")
     return 0
 
 
