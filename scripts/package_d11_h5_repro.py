@@ -369,7 +369,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--download-dir",
         type=Path,
-        default=default_workspace.parent / "download",
+        default=Path.home() / "download",
     )
     parser.add_argument("--package-date", default=datetime.now().strftime("%Y%m%d"))
     parser.add_argument("--component", choices=("core", "minute", "all"), default="all")
