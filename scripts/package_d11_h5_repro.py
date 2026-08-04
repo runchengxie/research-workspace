@@ -122,7 +122,9 @@ def _copy_tree(source: Path, destination: Path, *, ignore_receipt: bool = False)
 
 
 def _export_git(repo: Path, destination: Path) -> None:
-    destination.mkdir(parents=True, exist_ok=False)
+    destination.mkdir(parents=True, exist_ok=True)
+    if any(destination.iterdir()):
+        raise FileExistsError(f"源码导出目录已有内容：{destination}")
     archive = subprocess.Popen(
         ["git", "archive", "--format=tar", "HEAD"],
         cwd=repo,
