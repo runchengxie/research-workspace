@@ -59,9 +59,9 @@ def _git_commit(repo: Path) -> str:
     return _run(["git", "rev-parse", "HEAD"], cwd=repo)
 
 
-def _assert_clean_main(repo: Path) -> None:
+def _assert_clean(repo: Path, *, require_main: bool) -> None:
     branch = _run(["git", "branch", "--show-current"], cwd=repo)
-    if branch != "main":
+    if require_main and branch != "main":
         raise ValueError(f"仓库未处于 main：{repo}（{branch or 'detached'}）")
     status = _run(["git", "status", "--porcelain", "--untracked-files=normal"], cwd=repo)
     if status:
@@ -218,13 +218,21 @@ def _copy_core_assets(inputs: PackageInputs, package_root: Path) -> dict[str, An
 def _export_code(inputs: PackageInputs, package_root: Path) -> dict[str, dict[str, str]]:
     code_root = package_root / "code" / "research-workspace"
     git_state: dict[str, dict[str, str]] = {}
-    for name, repo in (("research-workspace", inputs.workspace),) + tuple(
-        (name, inputs.workspace / name) for name in SUBMODULES
-    ):
-        _assert_clean_main(repo)
-        destination = code_root if name == "research-workspace" else code_root / name
-        _export_git(repo, destination)
-        git_state[name] = {"commit": _git_commit(repo)}
+    _assert_clean(inputs.workspace, require_main=True)
+    _export_git(inputs.workspace, code_root)
+    git_state["research-workspace"] = {"commit": _git_commit(inputs.workspace)}
+    for name in SUBMODULES:
+        repo = inputs.workspace / name
+        _assert_clean(repo, require_main=False)
+        commit = _git_commit(repo)
+        pinned_commit = _run(["git", "rev-parse", f"HEAD:{name}"], cwd=inputs.workspace)
+        if commit != pinned_commit:
+            raise ValueError(
+                f"子模块提交与顶层仓库记录不一致：{name}\n"
+                f"当前：{commit}\n记录：{pinned_commit}"
+            )
+        _export_git(repo, code_root / name)
+        git_state[name] = {"commit": commit}
     return git_state
 
 
