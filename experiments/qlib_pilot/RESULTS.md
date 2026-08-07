@@ -5,9 +5,35 @@
 （与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）、
 `uv run python compare_cs_standardization.py`（标准化方法对比）、
 `uv run python robustness_multi_window.py`（多滚动窗口稳健性）、
-`uv run python compare_a_share_cs_methods.py`（a_share 特征集对比）和
-`uv run python explore_style_factor_robust.py`（风格因子落地探索）后填写。
+`uv run python compare_a_share_cs_methods.py`（a_share 特征集对比）、
+`uv run python explore_style_factor_robust.py`（风格因子落地探索）和
+`uv run python explore_monthly_horizon.py`（月频标签验证）后填写。
 最近一次：2026-08-07。
+
+## 月频标签验证（explore_monthly_horizon.py）
+
+对齐 a_share 生产链路（horizon_days: 20 月频标签），对比 5 日 vs 20 日标签下
+robust 与风格因子的效果。5 个滚动窗口（2021-2024，18 月训练 / 6 月验证）。
+
+| 配置 | 5 日标签 | 20 日标签（月频） |
+| --- | --- | --- |
+| tech_zscore | 0.0572 | 0.0801 |
+| tech_robust | 0.0627 | 0.0864 |
+| ext_zscore | 0.0455 | 0.0746 |
+| ext_robust | 0.0610 | 0.0870 |
+
+### 关键发现
+
+1. 月频标签的 IC 显著更高（0.0864 vs 0.0627），与风格报告"长周期信号更可靠"一致。
+2. robust 在月频下依然成立（tech +0.0064，ext +0.0123）。
+3. 风格因子（低换手/价值）在月频下不再拖累（ext robust 与 tech robust 持平 0.0870 vs 0.0864），
+   5 日标签下的负结果确实是时间尺度不匹配。
+4. 最佳组合 ext_robust 月频 0.0870，说明 robust + 风格因子 + 月频标签三者协同。
+
+### 对策略定制的启示
+
+风格报告的结论（低换手/价值长期有效）应通过"月频标签 + robust 标准化 + 风格因子特征"
+落地，而非 5 日短标签。a_share 生产已是月频（horizon_days: 20），方向正确。
 
 ## 风格因子落地探索（explore_style_factor_robust.py）
 
