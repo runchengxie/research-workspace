@@ -36,6 +36,8 @@ quant-execution-engine
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
 | `src/style_factors/` | 顶层直接维护的风格因子计算、归因、回测与报告薄包 |
+| `strategies/` | 长期跟踪型策略（已验证、值得跟踪、未完全生产化），目录与升格门槛见 [strategies/README.md](strategies/README.md) |
+| `experiments/` | 一次性探索脚本与结论记录，目录与规则见 [experiments/README.md](experiments/README.md) |
 
 四个研究侧 Python 包使用各自的权威命名空间：
 
