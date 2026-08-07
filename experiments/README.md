@@ -7,7 +7,6 @@
 | 目录 | 说明 | 状态 |
 |------|------|------|
 | `next_open_to_high/` | A股次日开盘到日内高点 XGBoost 预测 | 探索完成 |
-| `dividend_growth_momentum/` | 红利 vs 成长 ETF 动量轮动 | 探索完成 |
 | `daily_watch20_fundamental_shadow/` | DailyWatch20 基本面 shadow 验证 | 探索完成 |
 | `slow_volume_verification/` | slow-volume campaign 产出校验与对账 | 一次性验证 |
 | `style_factors/` | 风格因子全历史约束验证、市场状态、价值周期等 | 探索文档 |

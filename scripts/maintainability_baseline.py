@@ -92,6 +92,9 @@ def _skip_path(path: Path, *, repo_name: str) -> bool:
         # 一次性探索实验（experiments/）不带入活跃债预算，仅存档思路和结论
         if "experiments" in path.parts:
             return True
+        # 长期跟踪策略（strategies/）默认不计入活跃债预算，升格 production 时纳入治理
+        if "strategies" in path.parts:
+            return True
     return False
 
 
