@@ -3,9 +3,32 @@
 跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）、
 `uv run python compare_qlib_vs_own.py`（公平对比）、`uv run python compare_qlib_vs_train_eval.py`
 （与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）、
-`uv run python compare_cs_standardization.py`（标准化方法对比）和
-`uv run python robustness_multi_window.py`（多滚动窗口稳健性）后填写。
+`uv run python compare_cs_standardization.py`（标准化方法对比）、
+`uv run python robustness_multi_window.py`（多滚动窗口稳健性）和
+`uv run python compare_a_share_cs_methods.py`（a_share 特征集对比）后填写。
 最近一次：2026-08-07。
+
+## a_share 生产特征集对比（compare_a_share_cs_methods.py）
+
+用 a_share.yml 预设的可计算特征子集（ret_5/20/60、rv_20/60、vol、log_vol、
+volume_sma*_ratio、amount_log），8 个滚动窗口（2022-2024）。
+
+| method | mean_ic | std |
+| --- | --- | --- |
+| none | 0.0309 | 0.0271 |
+| zscore | 0.0437 | 0.0140 |
+| robust | 0.0480 | 0.0131 |
+
+robust-vs-none +0.0171，robust-vs-zscore +0.0043（命中率 50%）。
+
+### 解读
+
+1. robust 仍优于 zscore（+0.0043）且波动更低（0.0131 vs 0.0140）。
+2. 但差距比含 pe_ttm 的实验小很多（+0.0043 vs +0.0216），命中率降到 50%。
+3. 原因：a_share 当前是纯技术面特征（价格/量），分布较规整、极端值少；
+   robust 的主场是含极端值/缺失的因子（如基本面 pe_ttm）。
+4. 结论：把 a_share 默认改成 robust 是安全的（不输 zscore，波动更低），
+   但当前纯技术面特征下收益温和。若以后引入基本面因子，robust 价值会凸显。
 
 ## 多滚动窗口稳健性（robustness_multi_window.py）
 
