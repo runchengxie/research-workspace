@@ -1,6 +1,33 @@
 # qlib_pilot 结果
 
-跑 `uv run python run_pilot.py`（合成数据）和 `uv run python run_real_data.py`（真实数据）后填写。最近一次：2026-08-07。
+跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）和
+`uv run python compare_qlib_vs_own.py`（公平对比）后填写。最近一次：2026-08-07。
+
+## 公平对比结果（compare_qlib_vs_own.py）
+
+同一面板（188 只股票，2023-2024）、同一模型参数（自研 xgb_regressor 默认 300/3/0.05）、
+同一 IC 口径（每日横截面 Spearman IC 均值，125 个验证交易日）。
+
+| arm | mean_ic | mean_rank_ic |
+|-----|---------|--------------|
+| 自研 XGB（原始特征直接训练） | 0.0299 | 0.0299 |
+| 自研 XGB（+ 复刻 qlib 标准化预处理） | 0.0510 | 0.0510 |
+| qlib XGB（完整管线） | **0.0830** | **0.0830** |
+
+### 解读
+
+1. 标准化预处理贡献约 0.021 提升（0.030 -> 0.051），预处理确实重要。
+2. 自研做同款标准化后，qlib 仍高约 0.032（0.051 -> 0.083）。差异来自 qlib 管线细节：
+   label 的 CSZScoreNorm、样本权重、MAD 精确实现、DropnaLabel 时机等。
+3. 注意：此对比用最朴素 XGBRegressor 代表自研，不代表自研生产 train_eval 的完整
+   walk-forward + 样本权重 + 后处理链路的真实水平。若要最终定论，需对比 qlib 与
+   自研生产链路（run_train_eval_stage）在完全相同输入下的 IC。
+
+### 对决策的意义
+
+- qlib 的价值不是"封装训练"，而是其完整预处理管线带来的可量化 IC 提升。
+- 若自研生产链路未包含同等级的标准化/加权处理，qlib 值得认真评估引入；
+  若已包含，则 qlib 的增量有限，需对比生产链路才能定论。
 
 ## 真实数据结果（run_real_data.py）
 
