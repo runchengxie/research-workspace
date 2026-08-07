@@ -15,6 +15,7 @@
 | `strategy_direction/` | 周度 vs 日度策略方向探索 | 探索完成 |
 | `reproducibility/` | D11-H5 打包辅助、stateful-staggered 复现 | 一次性工具 |
 | `qlib_pilot/` | qlib XGBModel 训练/评估可行性验证 | 进行中 |
+| `adhoc/` | 旧探索入口脚本（概念 ML、ETF 回测、hotsector 转换、HK 导出等） | 归档 |
 | `archive/` | 过期/一次性脚本存档 | 归档 |
 
 ## 规则
