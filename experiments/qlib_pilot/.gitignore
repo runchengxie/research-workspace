@@ -7,3 +7,4 @@ qlib_traineval_bucket/
 mlruns/
 __pycache__/
 *.pyc
+qlib_cs_bucket/

@@ -2,8 +2,29 @@
 
 跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）、
 `uv run python compare_qlib_vs_own.py`（公平对比）、`uv run python compare_qlib_vs_train_eval.py`
-（与自研生产训练路径对打）和 `uv run python diff_native_vs_qlib.py`（后端差分）后填写。
+（与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）和
+`uv run python compare_cs_standardization.py`（标准化方法对比）后填写。
 最近一次：2026-08-07。
+
+## 标准化方法对比（compare_cs_standardization.py）
+
+真实 A 股面板（188 只，2023-2024），同模型参数，同 IC 口径（125 验证日）。
+
+| arm | mean_ic | vs raw |
+| --- | --- | --- |
+| native raw | 0.0283 | - |
+| native zscore（均值/方差） | 0.0330 | +0.0048 |
+| native robust（中位数/MAD） | 0.0509 | +0.0226 |
+| qlib robust 管线 | 0.0793 | +0.0510 |
+
+### 解读
+
+1. robust（median/MAD）相对 zscore 大幅提升，对含极端值/偏态因子（如 pe_ttm）更稳。
+2. 原生 robust 追回 qlib 提升的约 44%（0.0226 / 0.0510），无需引入 qlib 依赖。
+3. 剩余差距 0.0284 来自 qlib 管线的 label CSZScoreNorm、clip_outlier 截断、DropnaLabel 时机。
+
+结论：A 方案（自研补 robust 标准化）有效，是性价比最高的路径。`robust` 方法已并入
+alpha-research 的 `apply_cross_sectional_transform`（alpha-research #15）。
 
 ## 后端差分结果（diff_native_vs_qlib.py）
 
