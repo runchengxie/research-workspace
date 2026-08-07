@@ -4,9 +4,35 @@
 `uv run python compare_qlib_vs_own.py`（公平对比）、`uv run python compare_qlib_vs_train_eval.py`
 （与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）、
 `uv run python compare_cs_standardization.py`（标准化方法对比）、
-`uv run python robustness_multi_window.py`（多滚动窗口稳健性）和
-`uv run python compare_a_share_cs_methods.py`（a_share 特征集对比）后填写。
+`uv run python robustness_multi_window.py`（多滚动窗口稳健性）、
+`uv run python compare_a_share_cs_methods.py`（a_share 特征集对比）和
+`uv run python explore_style_factor_robust.py`（风格因子落地探索）后填写。
 最近一次：2026-08-07。
+
+## 风格因子落地探索（explore_style_factor_robust.py）
+
+背景：风格因子报告指出低换手、价值、短期反转是长期有效风格。验证把这类因子
+（换手率 turnover_rate + 估值 pe_ttm/pb + pct_chg）加入短期回归特征集是否提升。
+
+8 滚动窗口（2022-2024），对比 纯技术面 vs 扩展特征集，以及 zscore/robust/rank 三种标准化。
+
+| 配置 | mean_ic | std |
+| --- | --- | --- |
+| tech_zscore | 0.0437 | 0.0140 |
+| tech_robust | 0.0480 | 0.0131 |
+| extended_zscore | 0.0411 | 0.0246 |
+| extended_robust | 0.0435 | 0.0129 |
+| extended_rank | 0.0402 | 0.0273 |
+
+### 结论（负结果，重要）
+
+1. 把风格因子裸加进短期（5 日标签）回归模型，三种标准化下都未提升 IC，
+   反而比纯技术面略低（robust 0.0480 -> 0.0435）。
+2. 原因：风格因子是长周期信号（月/季度），与 5 日收益标签时间尺度不匹配；
+   且风格因子间共线性（报告自证价值/低波动/低换手相关 0.67-0.84）在 XGB 中相互稀释。
+3. 报告的结论成立，但其作用域是风格配置/行业暴露管理，不是短期 alpha 特征。
+4. 落地启示：a_share 维持纯技术面特征集即可；风格因子应作为组合层约束
+   （行业/市值/换手暴露控制）使用，而非塞进短期回归特征。
 
 ## a_share 生产特征集对比（compare_a_share_cs_methods.py）
 
