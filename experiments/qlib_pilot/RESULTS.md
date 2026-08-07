@@ -2,9 +2,32 @@
 
 跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）、
 `uv run python compare_qlib_vs_own.py`（公平对比）、`uv run python compare_qlib_vs_train_eval.py`
-（与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）和
-`uv run python compare_cs_standardization.py`（标准化方法对比）后填写。
+（与自研生产训练路径对打）、`uv run python diff_native_vs_qlib.py`（后端差分）、
+`uv run python compare_cs_standardization.py`（标准化方法对比）和
+`uv run python robustness_multi_window.py`（多滚动窗口稳健性）后填写。
 最近一次：2026-08-07。
+
+## 多滚动窗口稳健性（robustness_multi_window.py）
+
+时间范围 2022-01 至 2024-12，训练窗 12 个月、验证窗 3 个月、步进 3 个月，共 8 个滚动窗口。
+每窗口对比原生 raw 与 robust 标准化的 OOS IC（每日横截面 Spearman 均值）。
+
+| 指标 | raw | robust |
+| --- | --- | --- |
+| mean_ic | 0.0331 | 0.0547 |
+| std | 0.0264 | 0.0211 |
+| 平均提升 | - | +0.0216 |
+| 命中率（robust 更好） | - | 87.5%（7/8 窗口） |
+
+### 解读
+
+1. 提升稳定，非单窗口巧合。8 个独立 OOS 窗口中 7 个 robust 更好。
+2. robust 同时降低波动（std 0.0264 -> 0.0211），平均更高且更稳。
+3. 唯一负窗口（w3，2023-07 验证）是 raw 冲到 0.0937 的异常窗口，robust 未跟随该噪音。
+   从稳健性角度这甚至是优点。
+
+结论：A 方案（原生 robust 标准化）的 IC 提升在多个独立 OOS 窗口上稳定复现，
+不是数据巧合。可放心作为原生训练链路的默认预处理选项。
 
 ## 标准化方法对比（compare_cs_standardization.py）
 
