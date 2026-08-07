@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 108,
-      "python_loc": 21039,
+      "python_loc": 21040,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -706,8 +706,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 156,
-      "python_loc": 31731,
+      "python_file_count": 158,
+      "python_loc": 32059,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
