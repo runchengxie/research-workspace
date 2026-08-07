@@ -1,0 +1,7 @@
+# qlib 官方未发布到 PyPI 正式版，需从 GitHub 安装
+qlib @ git+https://github.com/microsoft/qlib.git@main
+# 注意：xgboost 需显式安装，qlib 依赖解析可能不会自动带上
+xgboost>=2.0
+pandas>=2.0
+numpy>=1.24
+pyyaml

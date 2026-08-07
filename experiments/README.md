@@ -14,6 +14,7 @@
 | `hotsector/` | Hotsector DeepSeek/Numeric 预注册与结果文档 | 实验记录 |
 | `strategy_direction/` | 周度 vs 日度策略方向探索 | 探索完成 |
 | `reproducibility/` | D11-H5 打包辅助、stateful-staggered 复现 | 一次性工具 |
+| `qlib_pilot/` | qlib XGBModel 训练/评估可行性验证 | 进行中 |
 | `archive/` | 过期/一次性脚本存档 | 归档 |
 
 ## 规则
