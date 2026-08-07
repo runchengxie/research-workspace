@@ -47,6 +47,6 @@ AI 选择还要保存准确 Prompt、原始响应、模型标识、代码版本�
 - 未来 OOS shadow 在 T 日收盘后、T+1 开盘前完成 append-only 冻结。错过日期保持缺失。
 - DeepSeek 当前只适合受保护分数带内的 tie-break 或语义风险 veto。
 
-顶层 `scripts/path_b_production.py`、`scripts/concept_etf_ml_backtest.py` 和
-`scripts/path_c_m1_validate.py` 属于旧探索入口，不代表当前接入方式。它们的保留或移除
-由 `docs/script-lifecycle.yml` 和维护性治理记录决定。
+`experiments/adhoc/path_b_production.py`、`experiments/adhoc/concept_etf_ml_backtest.py` 和
+`experiments/adhoc/path_c_m1_validate.py` 属于旧探索入口，不代表当前接入方式。它们保留在
+探索实验区供回查，不进入生产链路。

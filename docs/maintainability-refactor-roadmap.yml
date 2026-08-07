@@ -658,21 +658,21 @@
       "next_action": "split by research asset family when tests change"
     },
     {
-      "path": "docs/archive/adhoc/path_b_production.py",
+      "path": "experiments/adhoc/path_b_production.py",
       "owner_repo": "research-workspace",
-      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 docs/archive/adhoc，不再计入活跃 scripts 基线",
+      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "docs/archive/adhoc/concept_etf_ml_backtest.py",
+      "path": "experiments/adhoc/concept_etf_ml_backtest.py",
       "owner_repo": "research-workspace",
-      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 docs/archive/adhoc，不再计入活跃 scripts 基线",
+      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "docs/archive/adhoc/path_c_m1_validate.py",
+      "path": "experiments/adhoc/path_c_m1_validate.py",
       "owner_repo": "research-workspace",
-      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 docs/archive/adhoc，不再计入活跃 scripts 基线",
+      "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
