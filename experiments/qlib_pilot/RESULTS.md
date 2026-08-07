@@ -1,7 +1,37 @@
 # qlib_pilot 结果
 
-跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）和
-`uv run python compare_qlib_vs_own.py`（公平对比）后填写。最近一次：2026-08-07。
+跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）、
+`uv run python compare_qlib_vs_own.py`（公平对比）和
+`uv run python compare_qlib_vs_train_eval.py`（与自研生产训练路径对打）后填写。
+最近一次：2026-08-07。
+
+## 与自研生产训练路径对打（compare_qlib_vs_train_eval.py）
+
+同一面板（188 只股票，2023-2024）、同一模型参数（自研 xgb_regressor 默认 300/3/0.05）、
+同一 IC 口径（每日横截面 Spearman IC 均值，125 个验证交易日）。
+
+自研 arm 走 `alpha_research.fit_model_and_score_train` 生产训练路径
+（xgb_regressor + date_equal 样本权重 + none 后处理）。
+
+| arm | mean_ic |
+|-----|---------|
+| 自研 train_eval（原始特征） | 0.0353 |
+| 自研 train_eval（+ 复刻 qlib 标准化） | 0.0512 |
+| qlib 完整管线 | **0.0830** |
+
+### 解读
+
+1. 生产训练路径（样本权重 + 后处理）相对裸训练贡献约 +0.005（0.0299 -> 0.0353），影响有限。
+2. 横截面标准化贡献约 +0.016（0.0353 -> 0.0512），预处理确实重要。
+3. 即使自研复刻了标准化近似，qlib 仍高约 +0.032（0.0512 -> 0.0830）。这部分来自 qlib
+   管线未复刻的细节：label 的 CSZScoreNorm、DropnaLabel 时机、精确 MAD/clip_outlier 实现。
+
+### 对决策的意义
+
+qlib 的 IC 优势不只是"封装训练"，而是其完整预处理管线（横截面标准化 + 标签标准化 +
+缺失值处理）带来的可量化提升，其中约 0.032 自研即使复刻近似也难以追平。
+若要采用，最合理的路径是复用 qlib 的 Dataset/Handler 预处理管线，而非只取其模型训练。
+
 
 ## 公平对比结果（compare_qlib_vs_own.py）
 
