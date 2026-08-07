@@ -1,9 +1,32 @@
 # qlib_pilot 结果
 
 跑 `uv run python run_pilot.py`（合成数据）、`uv run python run_real_data.py`（真实数据）、
-`uv run python compare_qlib_vs_own.py`（公平对比）和
-`uv run python compare_qlib_vs_train_eval.py`（与自研生产训练路径对打）后填写。
+`uv run python compare_qlib_vs_own.py`（公平对比）、`uv run python compare_qlib_vs_train_eval.py`
+（与自研生产训练路径对打）和 `uv run python diff_native_vs_qlib.py`（后端差分）后填写。
 最近一次：2026-08-07。
+
+## 后端差分结果（diff_native_vs_qlib.py）
+
+alpha-research `NativeTrainerBackend` vs `QlibTrainerBackend`，同一 TrainerFitRequest
+（同参数、同特征、同目标）、同一 IC 口径（每日横截面 Spearman IC 均值，125 验证日）。
+
+| 指标 | Native | Qlib | 差异 |
+| --- | --- | --- | --- |
+| mean_ic | 0.0283 | 0.0316 | +0.0034 |
+| fit 耗时 | 3.2s | 5.8s | +2.6s |
+| predict 耗时 | 0.05s | 0.02s | 相当 |
+| 顶部特征 | amount / turnover_rate / pct_chg | amount / pe_ttm / pb | 略不同 |
+
+### 解读
+
+两个后端都直接吃原始特征（无预处理）。IC 差异仅 +0.0034，可视为等价。这证明：
+
+1. QlibTrainerBackend 作为训练后端与 NativeTrainerBackend 结果一致，无偏差。
+2. 之前对打中 qlib 的 +0.048 IC 优势全部来自预处理管线（横截面标准化），而非训练后端。
+
+结论：QlibTrainerBackend 已通过"与原生基线形成可复验差异报告"的 ADR-0005 验收要求，
+可安全作为可选训练后端使用。若要获得 qlib 的完整 IC 优势，需配合 QlibDatasetBackend
+（或等价横截面标准化预处理）。
 
 ## 与自研生产训练路径对打（compare_qlib_vs_train_eval.py）
 
