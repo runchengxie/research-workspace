@@ -1,0 +1,6 @@
+.venv/
+data/
+qlib_bucket/
+mlruns/
+__pycache__/
+*.pyc
