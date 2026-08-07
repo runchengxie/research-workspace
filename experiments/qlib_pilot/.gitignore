@@ -1,6 +1,7 @@
 .venv/
 data/
 qlib_bucket/
+qlib_real_bucket/
 mlruns/
 __pycache__/
 *.pyc

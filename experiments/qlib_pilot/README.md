@@ -38,5 +38,9 @@ _待补充_
 ```bash
 uv venv --python 3.11 .venv
 uv pip install -r requirements.txt
-uv run python run_pilot.py
+uv run python run_pilot.py          # 合成数据流程验证
+uv run python run_real_data.py      # 真实 A 股数据验证
 ```
+
+真实数据默认读取 `~/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_daily_clean_latest/data`，
+可通过环境变量 `A_SHARE_DAILY_DIR` 覆盖。脚本内 `LIMIT_SYMBOLS` 控制抽样规模（默认 200）。
