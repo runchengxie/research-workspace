@@ -56,12 +56,13 @@ def test_framework_matrix_matches_current_main_surfaces() -> None:
     matrix = (ROOT / "docs" / "framework-support-matrix.md").read_text(encoding="utf-8")
 
     assert "`market-data-platform` | 已实现，条件化验证" in matrix
-    assert "`alpha-research` | 仅有接口，适配器规划中" in matrix
+    assert "`alpha-research` | 已实现，条件化验证" in matrix
     assert "`portfolio-backtester` | 仅有接口，差分后端规划中 | 设计参考" in matrix
     assert "`quant-execution-engine` | 范围外 | 范围外 | 仅有通用执行接口" in matrix
     assert "Backtrader 仍处于规划阶段" in matrix
     assert (ROOT / "market-data-platform/src/market_data_platform/integrations/qlib.py").is_file()
     assert (ROOT / "alpha-research/src/alpha_research/backends/native.py").is_file()
+    assert (ROOT / "alpha-research/src/alpha_research/backends/qlib.py").is_file()
     assert (ROOT / "portfolio-backtester/src/portfolio_backtester/backends/native.py").is_file()
     vnpy_transport = ROOT / "quant-execution-engine/src/quant_execution_engine/vnpy_transport.py"
     assert not vnpy_transport.exists()

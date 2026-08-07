@@ -23,7 +23,7 @@
 | 仓库 | Qlib | LEAN | vn.py | Backtrader |
 | --- | --- | --- | --- | --- |
 | `market-data-platform` | 已实现，条件化验证 | 范围外 | 范围外 | 范围外 |
-| `alpha-research` | 仅有接口，适配器规划中 | 范围外 | 范围外 | 范围外 |
+| `alpha-research` | 已实现，条件化验证 | 范围外 | 范围外 | 范围外 |
 | `portfolio-backtester` | 仅有接口，差分后端规划中 | 设计参考 | 范围外 | 规划中 |
 | `research-apps` | 范围外 | 范围外 | 范围外 | 范围外 |
 | `strategy-pipeline` | 通过职责仓接口间接使用 | 范围外 | 范围外 | 范围外 |
@@ -46,7 +46,14 @@ Qlib `DataLoader` 适配器已经进入当前 `main`：
 
 当前 `main` 提供 `DatasetBackend`、`TrainerBackend` 和 `ExperimentRecorder` 接口，以及对应的原生实现。源码位于 `src/alpha_research/backends/`，测试位于 `tests/test_research_backends.py`。
 
-当前依赖和源码均未包含 Qlib 适配器。旧堆叠式开发分支中出现过基于已删除 `cstree` 命名空间的候选实现，该实现没有进入当前 `main`。如需恢复，应使用现有归属仓库原生接口重新实现，并重新生成差分证据。
+Qlib 适配器已进入当前 `main`（ADR-0005）：
+
+- 可选依赖位于 `pyproject.toml` 的 `qlib` extra（`pyqlib>=0.9.5`）
+- 适配器位于 `src/alpha_research/backends/qlib.py`，提供 `QlibTrainerBackend` 和 `QlibDatasetBackend`
+- 未安装 `pyqlib` 时原生路径保持可导入、可测试
+- 训练与预处理测试位于 `tests/test_backends_qlib.py`
+
+该适配器只做训练与横截面标准化预处理，不接 Qlib 的 Recorder 或实验管理，也不把 Qlib 对象写入跨仓库产物。判断依据来自 `experiments/qlib_pilot` 的真实 A 股数据对打：完整预处理管线带来的 IC 提升约 0.048。标准 `dev` 门禁没有安装 `pyqlib`，真实运行时测试可能跳过。
 
 ### portfolio-backtester
 
