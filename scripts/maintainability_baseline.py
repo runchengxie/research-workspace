@@ -89,6 +89,9 @@ def _skip_path(path: Path, *, repo_name: str) -> bool:
         # 已归档的历史脚本（含 adhoc 一次性脚本）带证据价值，但不计入活跃债预算
         if "docs" in path.parts and "archive" in path.parts:
             return True
+        # 一次性探索实验（experiments/）不带入活跃债预算，仅存档思路和结论
+        if "experiments" in path.parts:
+            return True
     return False
 
 
