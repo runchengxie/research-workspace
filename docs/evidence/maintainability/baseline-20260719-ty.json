@@ -1530,7 +1530,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 487,
-      "python_loc": 104985,
+      "python_loc": 104986,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
@@ -1600,12 +1600,12 @@
           "hk_related": false
         },
         {
-          "path": "scripts/research/daily_watch20_candidate_oos.py",
-          "loc": 749,
+          "path": "src/strategy_pipeline/pipeline/config.py",
+          "loc": 750,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/pipeline/config.py",
+          "path": "scripts/research/daily_watch20_candidate_oos.py",
           "loc": 749,
           "hk_related": false
         },
