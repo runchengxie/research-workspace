@@ -36,8 +36,9 @@ quant-execution-engine
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
 | `src/style_factors/` | 顶层直接维护的风格因子计算、归因、回测与报告薄包 |
-| `strategies/` | 长期跟踪型策略（已验证、值得跟踪、未完全生产化），目录与升格门槛见 [strategies/README.md](strategies/README.md) |
-| `experiments/` | 一次性探索脚本与结论记录，目录与规则见 [experiments/README.md](experiments/README.md) |
+| `strategy-research/pre_production/` | 长期跟踪型策略（已验证、值得跟踪、未完全生产化），目录与升格门槛见 [strategy-research/pre_production/README.md](strategy-research/pre_production/README.md) |
+| `strategy-research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [strategy-research/experiments/README.md](strategy-research/experiments/README.md) |
+| `strategy-research/packaging/` | 系统级复现打包器脚本（D11-H5），产物不进入仓库 |
 
 四个研究侧 Python 包使用各自的权威命名空间：
 
@@ -89,7 +90,7 @@ python scripts/package_d11_h5_repro.py --component all
 ```
 
 完整包约 3 GB，包含日频数据和冻结研究账本。TuShare 一分钟快照约 14 GB，作为独立可选包。
-解压后的使用方法见[复现包说明](packaging/d11_h5/README.md)。
+解压后的使用方法见[复现包说明](strategy-research/packaging/d11_h5/README.md)。
 归档旁的 `restore_d11_h5_repro.sh` 会先校验 SHA-256，再恢复核心包。传入
 `--component all` 可在同一次恢复中合并分钟数据。
 
