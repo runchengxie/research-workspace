@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 108,
-      "python_loc": 21044,
+      "python_loc": 21108,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -51,7 +51,7 @@
         {
           "path": "src/style_factors/workflow.py",
           "name": "run_style_factor_analysis",
-          "line_count": 101,
+          "line_count": 103,
           "complexity": 14
         }
       ],

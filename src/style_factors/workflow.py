@@ -27,12 +27,13 @@ from .data import (
 )
 from .factor_backtest import (
     build_factor_returns,
+    build_quantile_portfolio_returns,
     compute_factor_correlations,
     compute_summary,
     compute_yearly_breakdown,
     get_rebalance_dates,
 )
-from .factor_calc import compute_factors
+from .factor_calc import VALUE_CLUSTER_COL, compute_factors
 from .report import generate_report
 
 
@@ -216,7 +217,7 @@ def run_style_factor_analysis(
         daily=daily,
     )
 
-    return _finalize_style_analysis(
+    artifacts = _finalize_style_analysis(
         outdir=outdir,
         results=results,
         summary=summary,
@@ -228,6 +229,36 @@ def run_style_factor_analysis(
         quick=quick,
         metadata=metadata,
     )
+    _publish_value_cluster_series(outdir, factors, daily, rebalance_dates)
+    return artifacts
+
+
+def _publish_value_cluster_series(
+    outdir: Path,
+    factors: pd.DataFrame,
+    daily: pd.DataFrame,
+    rebalance_dates: pd.DatetimeIndex,
+) -> None:
+    """Write the score-level value-cluster long-short series as an extra artifact.
+
+    The cluster is the equal-weight mean of the four standardized value-group
+    z-scores; it feeds the weekly Value report's 口径对照 but stays out of the
+    formal 15-factor research set.
+    """
+    if VALUE_CLUSTER_COL not in factors.columns or not factors[VALUE_CLUSTER_COL].notna().any():
+        return
+    cluster = build_quantile_portfolio_returns(
+        factors,
+        daily,
+        rebalance_dates,
+        {"value_cluster": VALUE_CLUSTER_COL},
+        n_quantiles=5,
+        requested_quantiles=(1, 5),
+        include_universe=False,
+    )["value_cluster"]["long_short"]
+    if len(cluster):
+        cluster.to_csv(outdir / "factor_value_cluster_daily.csv", index=True, header=True)
+        print("[workflow] value-cluster composite → factor_value_cluster_daily.csv", flush=True)
 
 
 def _finalize_style_analysis(
