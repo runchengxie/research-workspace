@@ -4,7 +4,7 @@
 > owner: workspace
 > last_verified: 2026-07-19
 > source_of_truth: `framework-adapter-release.yml`
-> current_status: [外部框架支持矩阵](framework-support-matrix.md)
+> current_status: [外部框架支持矩阵](../framework-support-matrix.md)
 
 `framework-adapters-2026-07` 是一批已经终止的历史候选。相关改动后来合入不同的堆叠式开发分支，但候选实现没有共同形成当前职责仓原生 `main` 上可验证的发布组合。当前子模块指针也已正常前进到后续提交。
 
@@ -14,7 +14,7 @@
 
 - `scripts/framework_adapter_release_gate.py` 会校验历史清单结构，并把该批次报告为 `superseded`
 - 严格模式不再阻止正常的工作区检查
-- 当前能力以 [外部框架支持矩阵](framework-support-matrix.md) 为准
+- 当前能力以 [外部框架支持矩阵](../framework-support-matrix.md) 为准
 - 新的适配器发布需要创建新的发布标识、当前职责仓原生候选提交和真实运行时证据
 
 运行历史清单检查：

@@ -7,8 +7,8 @@
 > superseded_by: archive/hk/README.md
 
 本页保留给旧链接和操作速查。当前权威入口是
-[中国香港市场归档](archive/hk/README.md)，真实业务代码的私有归档清单由
-[hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) 管理。
+[中国香港市场归档](hk/README.md)，真实业务代码的私有归档清单由
+[hk-private-archive-manifest.yml](../hk-private-archive-manifest.yml) 管理。
 
 ## 当前边界
 
@@ -44,7 +44,7 @@ exporter 只从清单中 pin 的 Git revision 导出 allowlist 文件并生成�
 
 ## 删除门禁
 
-删除或迁出兼容入口前，先从 [archive/hk/README.md](archive/hk/README.md) 进入当前 gate，
+删除或迁出兼容入口前，先从 [archive/hk/README.md](hk/README.md) 进入当前 gate，
 并确认下列证据齐全：
 
 - 恢复证据。

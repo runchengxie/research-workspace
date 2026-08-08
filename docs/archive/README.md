@@ -13,5 +13,9 @@
 | A 股迁移机器交接和 WSL 恢复记录 | [migration-handoff-20260605.md](migration-handoff-20260605.md) |
 | 中国香港市场数据和研究冷存储记录 | [hk/README.md](hk/README.md) |
 | 主动收益指标职责迁移 | [active-metrics-migration.md](active-metrics-migration.md) |
+| 港股兼容面清单（已取代，由 archive/hk 导航） | [hk-legacy-surface-inventory.md](hk-legacy-surface-inventory.md) |
+| 港股私有 legacy 归档（已取代，由 archive/hk 导航） | [hk-private-archive.md](hk-private-archive.md) |
+| A 股生产就绪度与长窗口扩展（已取代，由 data-transition-playbook 导航） | [a-share-production-readiness.md](a-share-production-readiness.md) |
+| 外部框架适配器候选发布（已取代，由 framework-support-matrix 导航） | [framework-adapter-release.md](framework-adapter-release.md) |
 
 正在进行的工作仍请从上一级 [docs/README.md](../README.md) 开始。

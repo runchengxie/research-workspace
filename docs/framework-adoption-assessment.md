@@ -2,7 +2,7 @@
 
 > status: reference
 > owner: workspace
-> last_verified: 2026-07-19
+> last_verified: 2026-08-08
 > source_of_truth: no
 > decision: [ADR-0001](adr/0001-framework-integration-boundaries.md)
 > current_status: [外部框架支持矩阵](framework-support-matrix.md)
@@ -22,7 +22,7 @@
 
 Qlib 适合数据读取、研究生命周期和差分回测。vn.py 适合执行传输层。LEAN 适合领域模型和独立对照场景。Backtrader 暂时只保留评估入口。
 
-截至 2026-07-19，只有数据平台的 Qlib `DataLoader` 适配器进入当前 `main`。alpha、回测和执行仓库已经有框架中立接口，外部适配器仍需按各职责仓的当前命名空间重新落地。LEAN 与 Backtrader 当前没有可运行集成。
+截至 2026-08-08，Qlib 已进入 `alpha-research` 的训练后端（ADR-0005，`QlibTrainerBackend` / `QlibDatasetBackend`），数据平台保留只读 DataLoader 适配器。真实 A 股数据对打显示：Qlib 训练后端与原生等价，IC 优势主要来自其横截面预处理管线。原生 robust 标准化（中位数/MAD）已复刻该管线核心，在月频标签下稳定提升约 0.02，无需引入 Qlib 依赖即获得大部分收益。LEAN、vn.py 与 Backtrader 当前没有可运行集成，维持评估边界。
 
 ## 采用范围
 
@@ -80,11 +80,14 @@ alpha 层的 CPCV、PBO、数据剔除（purging）、隔离窗口（embargo）�
 ## 后续顺序
 
 1. 为数据平台增加显式 Qlib 验证档位，安装 `qlib` extra 并禁止真实运行时测试静默跳过。
-2. 评估是否按当前 `alpha_research` 命名空间重新实现 Qlib `Dataset`、`Trainer` 和 `Recorder` 适配器。
-3. 补齐 portfolio 原生 A 股规则和容量场景，再决定 Qlib 差分与 LEAN 文件化对照是否值得恢复。
-4. 根据目标券商能力缺口决定是否按当前 qexec 边界恢复 vn.py 影子模式和模拟传输层。
-5. Backtrader 在出现明确用例前保持规划状态。
-6. `strategy-pipeline` 和 `research-apps` 继续只消费职责仓接口。
+2. 已完成：Qlib `TrainerBackend` / `DatasetBackend` 适配器已进入 `alpha-research`（ADR-0005），
+   含未装 `pyqlib` 时的导入与测试路径。
+3. 若需完整启用 Qlib 预处理管线（label 标准化、clip_outlier、DropnaLabel 时机），
+   需在原生侧补齐对应逻辑，或把 Qlib 提升为默认后端并重新生成差分证据。
+4. 补齐 portfolio 原生 A 股规则和容量场景，再决定 Qlib 差分与 LEAN 文件化对照是否值得恢复。
+5. 根据目标券商能力缺口决定是否按当前 qexec 边界恢复 vn.py 影子模式和模拟传输层。
+6. Backtrader 在出现明确用例前保持规划状态。
+7. `strategy-pipeline` 和 `research-apps` 继续只消费职责仓接口。
 
 ## 暂缓事项
 
@@ -94,4 +97,4 @@ alpha 层的 CPCV、PBO、数据剔除（purging）、隔离窗口（embargo）�
 - 在职责清理完成前向编排层增加研究算法或券商行为
 - 在真实运行时差分和恢复测试通过前删除原生路径
 
-当前状态和证据路径见 [外部框架支持矩阵](framework-support-matrix.md)。长期约束见 [ADR-0001](adr/0001-framework-integration-boundaries.md)。历史候选批次见 [外部框架适配器候选发布](framework-adapter-release.md)。
+当前状态和证据路径见 [外部框架支持矩阵](framework-support-matrix.md)。长期约束见 [ADR-0001](adr/0001-framework-integration-boundaries.md)。历史候选批次见 [archive/framework-adapter-release.md](archive/framework-adapter-release.md)。
