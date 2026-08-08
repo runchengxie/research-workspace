@@ -1,0 +1,9 @@
+# A-share full-market signal-weighting experiment.
+# Extends the a_share preset but uses signal-weighted position sizing
+# instead of equal weight, to test whether non-equal weights improve OOS
+# performance on the full market (which was ~flat under equal weight).
+extends: "configs/presets/a_share.yml"
+
+backtest:
+  enabled: true
+  weighting: "signal"
