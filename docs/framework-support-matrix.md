@@ -79,4 +79,4 @@ Qlib 差分后端和 LEAN 文件化场景曾出现在旧候选分支，当前 `m
 - 历史候选分支、格式校验测试和导入边界测试不能单独证明运行时可用。
 - 新适配器需要有可选依赖、无框架导入测试、真实运行时测试、差分证据和回滚说明。
 
-长期边界见 [ADR-0001](adr/0001-framework-integration-boundaries.md)。采用取舍与后续顺序见 [框架采用评估](framework-adoption-assessment.md)。历史候选发布记录见 [外部框架适配器候选发布](framework-adapter-release.md)。
+长期边界见 [ADR-0001](adr/0001-framework-integration-boundaries.md)。采用取舍与后续顺序见 [框架采用评估](framework-adoption-assessment.md)。历史候选发布记录见 [archive/framework-adapter-release.md](archive/framework-adapter-release.md)。

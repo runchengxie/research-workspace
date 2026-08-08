@@ -36,8 +36,8 @@
 
 以下页面保留为兼容入口，权威清单见上表：
 
-- [../../hk-legacy-surface-inventory.md](../../hk-legacy-surface-inventory.md)
-- [../../hk-private-archive.md](../../hk-private-archive.md)
+- [../hk-legacy-surface-inventory.md](../hk-legacy-surface-inventory.md)
+- [../hk-private-archive.md](../hk-private-archive.md)
 
 ## 记录
 

@@ -25,7 +25,7 @@
 | --- | --- |
 | A 股数据资产与就绪度 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 跨仓库文件格式 | [contracts.md](contracts.md) |
-| framework adapter | [framework-adapter-release.md](framework-adapter-release.md) |
+| framework adapter | [archive/framework-adapter-release.md](archive/framework-adapter-release.md) |
 | 港股历史恢复或再次冻结 | [archive/hk/README.md](archive/hk/README.md) |
 | 研究、组合与执行交接 | [platform-workflow.md](platform-workflow.md) |
 | 维护性和质量债务 | [maintainability-governance.md](maintainability-governance.md) 与 [quality-governance.md](quality-governance.md) |

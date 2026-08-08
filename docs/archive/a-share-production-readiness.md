@@ -7,7 +7,7 @@
 > superseded_by: data-transition-playbook.md#a-股就绪度readiness分层
 
 本页保留给旧链接。当前权威入口已经并入
-[数据迁移优先级 playbook](data-transition-playbook.md#a-股就绪度readiness分层)。
+[数据迁移优先级 playbook](../data-transition-playbook.md#a-股就绪度readiness分层)。
 
 ## 当前口径
 
@@ -26,6 +26,6 @@
 ## 证据入口
 
 - 长窗口重跑顺序与产物要求：
-  [`evidence/a-share-long-window-evidence-plan-20260601.json`](evidence/a-share-long-window-evidence-plan-20260601.json)
+  [`evidence/a-share-long-window-evidence-plan-20260601.json`](../evidence/a-share-long-window-evidence-plan-20260601.json)
 - 剩余缺口：
-  [`evidence/a-share-production-limitations-20260601.json`](evidence/a-share-production-limitations-20260601.json)
+  [`evidence/a-share-production-limitations-20260601.json`](../evidence/a-share-production-limitations-20260601.json)

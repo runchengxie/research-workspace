@@ -6,17 +6,17 @@
 > source_of_truth: no
 > superseded_by: archive/hk/README.md
 
-本页保留给旧链接。当前权威入口是 [中国香港市场归档](archive/hk/README.md)。
+本页保留给旧链接。当前权威入口是 [中国香港市场归档](hk/README.md)。
 repo-local surface、public safety、consumer audit、replacement path 和 removal condition
-由 [hk-public-split-manifest.yml](hk-public-split-manifest.yml) 记录。
+由 [hk-public-split-manifest.yml](../hk-public-split-manifest.yml) 记录。
 
 相关机器可读清单：
 
 | 清单 | 用途 |
 | --- | --- |
-| [hk-public-split-manifest.yml](hk-public-split-manifest.yml) | 公开演示路线退役记录、归档、删除门禁和恢复敏感 surface |
-| [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) | 私有暂停维护 legacy archive 暂存和删除门禁 |
-| [deprecations.md](deprecations.md) | deprecated 入口 owner、replacement、milestone 和删除门禁 |
+| [hk-public-split-manifest.yml](../hk-public-split-manifest.yml) | 公开演示路线退役记录、归档、删除门禁和恢复敏感 surface |
+| [hk-private-archive-manifest.yml](../hk-private-archive-manifest.yml) | 私有暂停维护 legacy archive 暂存和删除门禁 |
+| [deprecations.md](../deprecations.md) | deprecated 入口 owner、replacement、milestone 和删除门禁 |
 
 ## 快速分类
 
