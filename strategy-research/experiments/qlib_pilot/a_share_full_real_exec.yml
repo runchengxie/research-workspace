@@ -1,0 +1,21 @@
+# A-share full-market backtest with real capital + realistic execution.
+# Extends a_share preset but:
+# - top_k=30 (diversified, matching typical strategy shape)
+# - execution_sim participation_rate 10%, buy_max_days 10 (VWAP-style
+#   splitting) so small caps can fill at real capital (~1M)
+extends: "configs/presets/a_share.yml"
+
+eval:
+  top_k: 30
+
+backtest:
+  top_k: 30
+  execution_sim:
+    enabled: true
+    participation_rate: 0.10
+    liquidity_cols:
+      - medadv20_amount
+      - amount
+    buy_max_days: 10
+    sell_max_days: "until_next_rebalance"
+    zero_fill_abort_days_buy: 3
