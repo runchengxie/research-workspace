@@ -34,7 +34,7 @@ START = "2024-01-01"
 END = "2024-12-31"
 TOP_NS = [800, 1200, 1500, 2000]
 TOP_K = 30
-PORTFOLIO_NOTIONAL = 10_000_000.0  # 1千万组合
+PORTFOLIO_NOTIONAL = 1_000_000.0  # 100万组合（真实资金量）
 
 
 def load_amount_panel() -> pd.DataFrame:
@@ -67,21 +67,30 @@ def analyze(panel: pd.DataFrame) -> None:
         top_n_daily = daily.apply(lambda row: row.nlargest(n).dropna(), axis=1)
         # 第 TOP_K 名（组合会买入的最差流动性标的）每天的成交额
         kth_liq = top_n_daily.apply(lambda row: row.iloc[min(TOP_K, len(row)) - 1], axis=1)
-        # top n 全部标的的中位成交额
         med_liq = top_n_daily.apply(lambda row: row.median(), axis=1)
         per_name = PORTFOLIO_NOTIONAL / TOP_K
         impact_30th = (per_name / kth_liq).median()
-        # 也看第 TOP_K 名成交额本身
+        kth_med = float(kth_liq.median())
         LOGGER.info(
-            "top%-4d 第%d名中位成交额: %.1f万元, 全组中位成交额: %.1f万元, "
-            "买入第%d名冲击: %.1f%%",
+            "top%-4d 第%d名中位成交额: %.1f万元, 资金%.0f万/只, 冲击: %.1f%%",
             n,
             TOP_K,
-            kth_liq.median() / 1e4,
-            med_liq.median() / 1e4,
-            TOP_K,
+            kth_med / 1e4,
+            per_name / 1e4,
             impact_30th * 100,
         )
+        # 不同执行参数（参与率 x 拆单天数）下的可行性
+        for part, days in [(0.05, 5), (0.10, 5), (0.10, 10)]:
+            capacity = part * kth_med * days
+            feasible = "可成交" if capacity >= per_name else "不可成交"
+            LOGGER.info(
+                "   参与率%d%% x %d天: 可买%.1f万 vs 需%.1f万 -> %s",
+                int(part * 100),
+                days,
+                capacity / 1e4,
+                per_name / 1e4,
+                feasible,
+            )
 
 
 def main() -> None:
