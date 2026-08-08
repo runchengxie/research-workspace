@@ -258,8 +258,9 @@ def _build_core(inputs: PackageInputs, staging: Path, *, level: int, data_as_of:
     git_state = _export_code(inputs, package_root)
     assets = _copy_core_assets(inputs, package_root)
     research_artifacts = _copy_research_artifacts(inputs, package_root)
-    shutil.copy2(inputs.workspace / "packaging/d11_h5/README.md", package_root / "README.md")
-    shutil.copy2(inputs.workspace / "packaging/d11_h5/start.sh", package_root / "start.sh")
+    packaging_dir = inputs.workspace / "strategy-research/packaging/d11_h5"
+    shutil.copy2(packaging_dir / "README.md", package_root / "README.md")
+    shutil.copy2(packaging_dir / "start.sh", package_root / "start.sh")
     (package_root / "start.sh").chmod(0o755)
     manifest = {
         "schema_version": PACKAGE_SCHEMA,
@@ -351,7 +352,7 @@ def _print_plan(inputs: PackageInputs, component: str) -> None:
 
 
 def _publish_restore_script(inputs: PackageInputs) -> Path:
-    source = inputs.workspace / "packaging/d11_h5/restore.sh"
+    source = inputs.workspace / "strategy-research/packaging/d11_h5/restore.sh"
     destination = inputs.download_dir / "restore_d11_h5_repro.sh"
     shutil.copy2(source, destination)
     destination.chmod(0o755)
