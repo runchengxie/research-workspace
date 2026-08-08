@@ -57,3 +57,24 @@ signal 加权把权重集中在预测分数最高的股票上。全市场 OOS �
 - 全市场已证明等权不赚钱，top1200/1800 大概率也不值得（流动性更差的股票放大成本）。
 - signal 加权已验证不改善全市场。sqrt_liquidity 可能在小盘组合里有效，但需先解决
   信号质量问题。
+
+## 真实策略现状（D11-H5 / trailing_weekly，2026-08-08 查证）
+
+从 `strategy-pipeline/artifacts/trailing_weekly_strategy_20260803/challenger_screening.json`：
+
+| arm | 起始 | 累计 | 1个月 | 6个月 | 状态 |
+| --- | --- | --- | --- | --- | --- |
+| BASE_ORIGINAL | 2026-01-06 | +8.05% | **-25.15%** | +2.93% | research_only_non_promotable |
+| CLEAN_CYQ | 2026-01-06 | +11.00% | **-29.29%** | +7.11% | research_only_non_promotable |
+
+### 关键发现
+
+1. 真实策略（D11-H5）1 个月回撤 -25% 到 -29%，非常剧烈。
+2. 两个 arm 都标记 research_only_non_promotable，策略自己认定不可晋升。
+3. 结合全市场回测（OOS IC -0.01）和风格报告，整个策略体系可能建立在
+   过拟合模型上，OOS 信号不稳定。
+
+### 结论
+
+问题不在选股池（top800 vs 全市场），而在模型信号本身质量。真实策略已
+non_promotable。下一步应聚焦改进 OOS 信号，而非继续调 universe 或执行参数。
