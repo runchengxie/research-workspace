@@ -33,6 +33,17 @@ FACTOR_COLS = [
 # organization / reporting; demeaning treats each factor independently.
 VALUE_GROUP = {"factor_value", "factor_earnings_yield", "factor_dividend_yield", "factor_ps_value"}
 
+# Score-level value-cluster composite used by the weekly report: equal-weight
+# mean of the four standardized value-group z-scores. Kept out of FACTOR_COLS so
+# the formal 15-factor research set, correlation matrix and charts stay unchanged.
+VALUE_CLUSTER_COL = "factor_value_cluster_z"
+VALUE_CLUSTER_MEMBERS = (
+    "factor_value",
+    "factor_earnings_yield",
+    "factor_dividend_yield",
+    "factor_ps_value",
+)
+
 FUNDAMENTAL_COLS = ["roe", "roa", "netprofit_yoy", "or_yoy", "debt_to_assets"]
 
 # Extra fundamental columns pulled from the cashflow table that should be carried
@@ -405,6 +416,11 @@ def compute_factors(
     active = [column for column in FACTOR_COLS if column in df.columns]
     df = df[["trade_date", "symbol", "industry_l1", *active]].copy()
     df = _standardize_factors(df)
+    value_members = [
+        f"{column}_z" for column in VALUE_CLUSTER_MEMBERS if f"{column}_z" in df.columns
+    ]
+    if len(value_members) >= 2:
+        df[VALUE_CLUSTER_COL] = df[value_members].mean(axis=1)
     active = [column for column in FACTOR_COLS if column in df.columns]
     n_factors = len(active)
     cov = df["industry_l1"].notna().mean() if "industry_l1" in df.columns else 0.0

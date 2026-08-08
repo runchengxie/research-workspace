@@ -87,6 +87,23 @@ def test_compute_factors_without_fundamentals_skips_optional_factors() -> None:
     )
 
 
+def test_compute_factors_produces_score_level_value_cluster_composite() -> None:
+    daily, basics = _sample_market_frames(days=50)
+
+    factors = compute_factors(daily, basics)
+
+    assert "factor_value_cluster_z" in factors.columns
+    cluster = factors["factor_value_cluster_z"].dropna()
+    assert not cluster.empty
+    # Equal-weight mean of the available value z-scores (value + earnings yield
+    # in the sample frame; dv_ttm / ps_ttm are absent there).
+    sample = factors[factors["factor_value_cluster_z"].notna()].iloc[:20]
+    assert np.allclose(
+        sample["factor_value_cluster_z"].to_numpy(),
+        ((sample["factor_value_z"] + sample["factor_earnings_yield_z"]) / 2).to_numpy(),
+    )
+
+
 def test_quality_is_composite_and_earnings_yield_is_value() -> None:
     definitions = "\n".join(_factor_definition_lines())
 
