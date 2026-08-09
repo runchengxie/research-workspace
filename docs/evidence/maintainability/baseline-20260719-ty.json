@@ -1062,7 +1062,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 181,
-      "python_loc": 36898,
+      "python_loc": 36914,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
@@ -1078,12 +1078,12 @@
         },
         {
           "path": "tests/test_backtest.py",
-          "loc": 766,
+          "loc": 767,
           "hk_related": false
         },
         {
           "path": "src/portfolio_backtester/_position_backtest_engine.py",
-          "loc": 665,
+          "loc": 667,
           "hk_related": false
         },
         {
