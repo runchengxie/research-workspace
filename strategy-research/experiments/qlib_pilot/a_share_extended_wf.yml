@@ -1,0 +1,19 @@
+# A-share with extended data window + longer validation.
+# Extends a_share preset but:
+# - start_date moved back to 2022-01-01 (data source covers 2015+)
+#   so walk-forward has room for a longer validation window
+# - walk_forward test_size 0.4 (~12 months validation over ~4y window)
+extends: "strategy-pipeline/configs/presets/a_share.yml"
+
+data:
+  start_date: "20220101"
+  asset_coverage_start_date: "20220101"
+
+eval:
+  walk_forward:
+    enabled: true
+    n_windows: 3
+    test_size: 0.4
+    step_size: null
+    anchor_end: true
+    backtest_enabled: true
