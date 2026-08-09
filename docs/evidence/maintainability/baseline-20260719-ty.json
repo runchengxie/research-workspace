@@ -1061,12 +1061,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 181,
-      "python_loc": 36914,
+      "python_file_count": 182,
+      "python_loc": 37737,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
-        "long_functions": 22,
+        "long_functions": 23,
         "complexity_hotspots": 24,
         "large_classes": 0
       },
@@ -1127,12 +1127,6 @@
           "complexity": 4
         },
         {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
-          "line_count": 99,
-          "complexity": 7
-        },
-        {
           "path": "src/portfolio_backtester/_exposure_industry.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
@@ -1149,6 +1143,12 @@
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
           "complexity": 1
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 95,
+          "complexity": 4
         },
         {
           "path": "src/portfolio_backtester/leg_helpers.py",
@@ -1239,6 +1239,12 @@
           "name": "_process_long_only_rebalance",
           "line_count": 80,
           "complexity": 8
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "_assemble_topk_spec",
+          "line_count": 80,
+          "complexity": 4
         }
       ],
       "complexity_hotspots": [

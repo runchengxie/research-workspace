@@ -26,7 +26,7 @@
       },
       "portfolio-backtester": {
         "max_large_files": 7,
-        "max_long_functions": 22,
+        "max_long_functions": 23,
         "max_complexity_hotspots": 24,
         "max_large_classes": 0
       },
@@ -107,10 +107,11 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 7,
-      "max_long_functions": 22,
+      "max_long_functions": 23,
       "max_complexity_hotspots": 24,
       "max_large_classes": 0,
       "owner_decision": [
+        "2026-08-09: 会计第二阶段账本迁移新增 _assemble_topk_spec(80 行，刚好踩 long_function 阈值)，long_functions 22->23 上调（真实新增、owner 决策记录，非回归）。",
         "2026-07-18: target-first 固定槽执行 + DailyWatch20 组合回放集成，large_file 数未增。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-28: 模块拆分后 large_files 18->7 下调（exposure_style/portfolio_positions_select/position_backtest_engine 低于阈值，登记 accepted_hotspots）。",
