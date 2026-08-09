@@ -233,14 +233,14 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                     if isinstance(entry, list) and entry[:2] == ["uv", "run"]:
                         self.assertIn("--locked", entry)
 
-    def test_research_apps_full_uses_canonical_gate(self) -> None:
+    def test_strategy_app_full_uses_canonical_gate(self) -> None:
         configs = run_submodule_checks.load_manifest(MANIFEST)
 
         planned = run_submodule_checks.plan_commands(
             ROOT,
             configs,
             profile="full",
-            submodules=["research-apps"],
+            submodules=["strategy-app"],
         )
 
         self.assertEqual(
@@ -338,7 +338,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             "market-data-platform": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "portfolio-backtester": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "quant-execution-engine": [("uv", "run", "--locked", "--group", "dev", "ty", "check")],
-            "research-apps": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "strategy-app": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
         }
         expected_release = {
@@ -357,7 +357,7 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             ],
             "portfolio-backtester": [("scripts/dev/run_tests.sh", "typecheck-release")],
             "quant-execution-engine": [("make", "typecheck")],
-            "research-apps": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "strategy-app": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("scripts/dev/run_tests.sh", "typecheck-release")],
         }
 

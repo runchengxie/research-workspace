@@ -19,7 +19,7 @@ REPOS = {
     "alpha-research",
     "market-data-platform",
     "portfolio-backtester",
-    "research-apps",
+    "strategy-app",
     "strategy-pipeline",
     "quant-execution-engine",
 }
@@ -398,7 +398,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     cross_config = _load_pyproject("strategy-pipeline")
     market_config = _load_pyproject("market-data-platform")
     portfolio_config = _load_pyproject("portfolio-backtester")
-    research_apps_config = _load_pyproject("research-apps")
+    strategy_app_config = _load_pyproject("strategy-app")
     execution_config = _load_pyproject("quant-execution-engine")
 
     for config in (
@@ -406,7 +406,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         cross_config,
         market_config,
         portfolio_config,
-        research_apps_config,
+        strategy_app_config,
         execution_config,
     ):
         assert "basedpyright" not in config["tool"]
@@ -424,7 +424,7 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         "strategy-pipeline",
         "market-data-platform",
         "portfolio-backtester",
-        "research-apps",
+        "strategy-app",
         "quant-execution-engine",
     }
     assert set(repos["alpha-research"]["ty"]["include_targets"]) == set(
@@ -446,11 +446,11 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
         portfolio_config["tool"]["ty"]["src"]["include"]
     )
 
-    assert set(repos["research-apps"]["ruff"]["staged_select"]) == set(
-        research_apps_config["tool"]["ruff"]["lint"]["select"]
+    assert set(repos["strategy-app"]["ruff"]["staged_select"]) == set(
+        strategy_app_config["tool"]["ruff"]["lint"]["select"]
     )
-    assert set(repos["research-apps"]["ty"]["include_targets"]) == set(
-        research_apps_config["tool"]["ty"]["src"]["include"]
+    assert set(repos["strategy-app"]["ty"]["include_targets"]) == set(
+        strategy_app_config["tool"]["ty"]["src"]["include"]
     )
 
     assert set(repos["quant-execution-engine"]["ty"]["include_targets"]) == set(
@@ -570,7 +570,7 @@ def test_collaboration_docs_cover_maintainability_topics() -> None:
     assert "/market-data-platform/" in owners
     assert "/alpha-research/" in owners
     assert "/portfolio-backtester/" in owners
-    assert "/research-apps/" in owners
+    assert "/strategy-app/" in owners
     assert "/strategy-pipeline/" in owners
     assert "/quant-execution-engine/" in owners
     for phrase in (

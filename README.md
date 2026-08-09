@@ -12,8 +12,8 @@ alpha-research
 portfolio-backtester
   构造组合并完成回测、成本和容量分析
         ↓
-research-apps
-  组合 owner API 并运行研究应用
+strategy-app
+  执行策略特有的纯计算与研究应用
         ↓
 strategy-pipeline
   编排研究流程并导出 targets.json
@@ -31,7 +31,7 @@ quant-execution-engine
 | `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
 | `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
-| `research-apps/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 `DailyWatch20` 和热点板块选股两个应用族（各实验方向见 research-apps 仓库的[研究应用目录](research-apps/docs/application-catalog.md)） |
+| `strategy-app/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 `DailyWatch20` 和热点板块选股两个应用族（各实验方向见 strategy-app 仓库的[研究应用目录](strategy-app/docs/application-catalog.md)） |
 | `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
@@ -40,18 +40,20 @@ quant-execution-engine
 | `strategy-research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [strategy-research/experiments/README.md](strategy-research/experiments/README.md) |
 | `strategy-research/packaging/` | 系统级复现打包器脚本（D11-H5），产物不进入仓库 |
 
+策略身份、投资假设、生命周期和证据导航以 [strategy-research/README.md](strategy-research/README.md) 与 [strategy-research/catalog.json](strategy-research/catalog.json) 为准。代码放在哪个仓库不再用来表达策略是否处于生产状态。
+
 四个研究侧 Python 包使用各自的权威命名空间：
 
 - `alpha_research`
 - `portfolio_backtester`
-- `research_apps`
+- `strategy_app`
 - `strategy_pipeline`
 
 工作区 2.0 已删除旧共享命名空间、兼容命令和隐式环境变量回退。权威命令是
 `strategy` 与 `strategy-pipeline`。具体边界见
 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
-独立研究应用的 owner 边界见
-[ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
+策略知识、可执行应用和运行控制面的边界见
+[ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
 ## 子项目命令行（CLI）
 
@@ -127,6 +129,7 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
+- [策略研究与生命周期](strategy-research/README.md)
 - [架构边界](ARCHITECTURE.md)
 - [跨仓库文件约定](docs/contracts.md)
 - [工作区维护](docs/workspace-maintenance.md)

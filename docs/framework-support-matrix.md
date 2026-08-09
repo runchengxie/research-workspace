@@ -25,7 +25,7 @@
 | `market-data-platform` | 已实现，条件化验证 | 范围外 | 范围外 | 范围外 |
 | `alpha-research` | 已实现，条件化验证 | 范围外 | 范围外 | 范围外 |
 | `portfolio-backtester` | 仅有接口，差分后端规划中 | 设计参考 | 范围外 | 规划中 |
-| `research-apps` | 范围外 | 范围外 | 范围外 | 范围外 |
+| `strategy-app` | 范围外 | 范围外 | 范围外 | 范围外 |
 | `strategy-pipeline` | 通过职责仓接口间接使用 | 范围外 | 范围外 | 范围外 |
 | `quant-execution-engine` | 范围外 | 范围外 | 仅有通用执行接口，适配器规划中 | 范围外 |
 
@@ -61,9 +61,9 @@ Qlib 适配器已进入当前 `main`（ADR-0005）：
 
 Qlib 差分后端和 LEAN 文件化场景曾出现在旧候选分支，当前 `main` 没有对应源码、依赖或测试。LEAN 目前只用于职责划分参考。Backtrader 仍处于规划阶段，当前没有适配器、固定样例或运行时门禁。
 
-### research-apps 与 strategy-pipeline
+### strategy-app 与 strategy-pipeline
 
-`research-apps` 组合数据、alpha 和组合回测职责仓接口，不直接安装外部框架。`strategy-pipeline` 负责配置和调用顺序，只能通过职责仓接口间接消费后端结果。两个仓库都不得把第三方框架对象写入公开结果或跨仓库产物。
+`strategy-app` 组合数据、alpha 和组合回测职责仓接口，不直接安装外部框架。`strategy-pipeline` 负责配置和调用顺序，只能通过职责仓接口间接消费后端结果。两个仓库都不得把第三方框架对象写入公开结果或跨仓库产物。
 
 ### quant-execution-engine
 

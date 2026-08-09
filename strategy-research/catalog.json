@@ -1,0 +1,104 @@
+{
+  "schema_version": "strategy_research_catalog.v1",
+  "source_of_truth": "strategy-research",
+  "last_verified": "2026-08-09",
+  "strategies": [
+    {
+      "id": "daily_watch20",
+      "name": "DailyWatch20",
+      "lifecycle": "operational",
+      "production_eligible": true,
+      "human_spec": "strategy-research/strategies/daily_watch20/README.md",
+      "executable_owners": ["strategy-app", "alpha-research", "portfolio-backtester"],
+      "control_plane_owner": "strategy-pipeline",
+      "runtime_entries": ["strategy watchlist20 run", "strategy_app.daily_watch20"],
+      "variants": ["candidate_pool_oos", "flite", "slow_volume", "incumbent_challenger", "fundamental_shadow", "long_horizon_buffer"],
+      "extraction_debt": ["strategy-pipeline still contains strategy calculation, research runners and compatibility facades"]
+    },
+    {
+      "id": "hotsector",
+      "name": "热点板块选股",
+      "lifecycle": "research_shadow",
+      "production_eligible": false,
+      "human_spec": "strategy-research/strategies/hotsector/README.md",
+      "executable_owners": ["strategy-app", "portfolio-backtester"],
+      "control_plane_owner": "strategy-pipeline",
+      "runtime_entries": ["strategy_app.hotsector", "market-intel file artifacts"],
+      "variants": ["numeric", "numeric_v2", "low_turnover", "session_challenger", "ai_shadow", "deepseek_v4"],
+      "extraction_debt": ["strategy-pipeline still contains research analysis, campaign code, duplicate contracts and owner facades"]
+    },
+    {
+      "id": "style_replica_a80_b20",
+      "name": "StyleReplica A80/B20",
+      "lifecycle": "operational_research",
+      "production_eligible": false,
+      "human_spec": "strategy-research/strategies/style_replica/README.md",
+      "executable_owners": ["research-workspace", "alpha-research", "portfolio-backtester"],
+      "control_plane_owner": "strategy-pipeline",
+      "runtime_entries": ["strategy style-replica run", "src/style_factors"],
+      "variants": [],
+      "extraction_debt": ["confirm whether the top-level style_factors thin package should become an owner package"]
+    },
+    {
+      "id": "d11_h5_shadow",
+      "name": "D11-H5 五袖套影子策略",
+      "lifecycle": "shadow",
+      "production_eligible": false,
+      "human_spec": "strategy-research/strategies/d11_h5_shadow/README.md",
+      "executable_owners": ["alpha-research", "portfolio-backtester"],
+      "control_plane_owner": "strategy-pipeline",
+      "runtime_entries": ["strategy d11-h5-shadow", "strategy-research/packaging/d11_h5"],
+      "variants": ["five_sleeve_shadow"],
+      "extraction_debt": ["move remaining model and target-construction computation out of the control plane"]
+    },
+    {
+      "id": "dividend_growth_momentum",
+      "name": "红利与成长 ETF 动量轮动",
+      "lifecycle": "pre_production",
+      "production_eligible": false,
+      "human_spec": "strategy-research/pre_production/dividend_growth_momentum/README.md",
+      "executable_owners": ["research-workspace", "portfolio-backtester"],
+      "control_plane_owner": null,
+      "runtime_entries": ["strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py"],
+      "variants": ["full_rotation", "core_satellite"],
+      "extraction_debt": ["move audit, config and reporting modules from strategy-pipeline to strategy-app before promotion"]
+    },
+    {
+      "id": "next_open_to_high",
+      "name": "A 股次日开盘到最高价",
+      "lifecycle": "exploration",
+      "production_eligible": false,
+      "human_spec": "strategy-research/experiments/next_open_to_high/README.md",
+      "executable_owners": ["research-workspace"],
+      "control_plane_owner": null,
+      "runtime_entries": ["strategy-research/experiments/next_open_to_high"],
+      "variants": ["daily_proxy", "minute_audit", "cost_stress"],
+      "extraction_debt": ["move reusable model code to alpha-research", "move reusable replay code to portfolio-backtester", "delete duplicate strategy-pipeline scripts after redirect"]
+    },
+    {
+      "id": "guan_weekly",
+      "name": "Guan 周度多因子策略",
+      "lifecycle": "external_research",
+      "production_eligible": false,
+      "human_spec": "strategy-research/strategies/guan_weekly/README.md",
+      "executable_owners": ["external:guan-factor-research-framework", "strategy-app", "portfolio-backtester"],
+      "control_plane_owner": null,
+      "runtime_entries": ["strategy_app.weekly_backtest_bridge"],
+      "variants": ["dynamic_multi_factor"],
+      "extraction_debt": ["keep the external repository file-coupled and avoid importing its source through PYTHONPATH"]
+    }
+  ],
+  "non_strategy_surfaces": [
+    "strategy run configurable workflow",
+    "StrategySpec technical contract",
+    "Qlib pilot and method comparisons",
+    "style-factor research inputs",
+    "DailyWatch20 and hotsector challenger variants"
+  ],
+  "inventory_notes": [
+    "strategy-pipeline currently contains substantial DailyWatch20, hotsector, D11-H5 and dividend-growth strategy-specific code",
+    "strategy-research contains canonical experiments plus exact or near-exact copies of several historical strategy-pipeline research scripts and documents",
+    "external guan-factor-research-framework and deep-learning-tick-data-prediction contain strategy research outside this Git submodule graph",
+    "market-intel supplies candidates and selections but is not itself the canonical owner of portfolio strategies"
+  ]
+}

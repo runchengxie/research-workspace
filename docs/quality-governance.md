@@ -10,7 +10,7 @@
 | `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current 契约发布 |
 | `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
 | `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
-| `research-apps` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
+| `strategy-app` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
 | `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | 依赖审计 | 长窗口研究、编排和目标文件导出 |
 | `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | 集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
 
@@ -40,7 +40,8 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 - `alpha-research` 不新增对策略编排和回测内部实现的运行时依赖
 - `portfolio-backtester` 不新增对策略编排和 alpha 内部实现的运行时依赖
 - 数据平台和执行引擎不导入已移除的共享命名空间
-- `strategy-pipeline` 不重新承载 `alpha_research` 或 `portfolio_backtester` 源码
+- `strategy-app` 不导入 `strategy-pipeline`
+- `strategy-pipeline` 不重新承载 `alpha_research`、`portfolio_backtester` 或策略应用源码
 - 第三方框架对象不跨仓库文件契约
 
 顶层委托配置是 `scripts/submodule_checks.json`。所有委托 `lint` 和 `full` 都先验证

@@ -60,7 +60,7 @@ uv sync --extra dev
 cd ../portfolio-backtester
 uv sync --extra dev
 
-cd ../research-apps
+cd ../strategy-app
 uv sync --extra dev
 
 cd ../strategy-pipeline
@@ -127,12 +127,12 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 配置见 [../scripts/submodule_checks.json](../scripts/submodule_checks.json)。
 
 `full` 先验证 lockfile，再运行各仓库当前登记的质量检查。`market-data-platform` 会分批
-启动 pytest 进程，避免完整测试在单个进程中持续累积内存。`research-apps` 使用自己的
+启动 pytest 进程，避免完整测试在单个进程中持续累积内存。`strategy-app` 使用自己的
 `scripts/dev/check.py` 权威门禁。`release_typecheck` 运行各仓库登记的发布类型检查。
 
 ## 自动化状态
 
 当前顶层和六个子模块的 GitHub Actions 仓库权限均禁用。顶层
-`.github/workflows/superproject.yml.disabled`、`research-apps` 的 CI 文件和 Strategy
+`.github/workflows/superproject.yml.disabled`、`strategy-app` 的 CI 文件和 Strategy
 兼容检查都只保存停用模板。`portfolio-backtester` 虽保留 `ci.yml`，权限关闭时也不会
 触发远端检查。新机器验收应以本地 pre-push 和本页命令的实际输出为准。

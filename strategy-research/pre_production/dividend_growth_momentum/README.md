@@ -11,15 +11,17 @@
 
 ## 依赖与运行
 
-脚本消费 `strategy_pipeline.dividend_growth_momentum_*`（audit/config/report/reporting）和
-`portfolio-backtester` 的公共 API，需在 strategy-pipeline 子模块环境下运行：
+脚本当前消费 `strategy_pipeline.dividend_growth_momentum_*`（audit/config/report/reporting）和
+`portfolio-backtester` 的公共 API。前一组模块是已登记的迁移债务，晋级前应迁到 `strategy-app`，pipeline 不继续拥有策略研究计算。
 
 ```bash
 uv run --project strategy-pipeline --extra dev \
   --with matplotlib --with tabulate \
-  python strategies/dividend_growth_momentum/dividend_growth_momentum.py --help
+  python strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py --help
 ```
 
 ## 结论占位
 
 _待补充：最近一次运行的收益、Sharpe、回撤等关键指标，以及验证证据文件路径。_
+
+生命周期和生产资格见 [../../catalog.json](../../catalog.json)。当前为 `pre_production`，禁止从目录位置或 pipeline 模块存在推断为已生产化。

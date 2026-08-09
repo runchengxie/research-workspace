@@ -5,15 +5,15 @@
 
 ## 策略研究分层
 
-`strategy-research/` 收纳全部策略相关工作，按生命周期分三层：
+`strategy-research/` 收纳全部策略身份和人类可读研究记录。生命周期以 [../catalog.json](../catalog.json) 为准，目录只服务组织和导航：
 
 | 层 | 目录 | 定位 | 门槛 |
 | --- | --- | --- | --- |
 | 短期探索 | `strategy-research/experiments/` | 一次性想法与结论记录 | 无门槛，快速试错 |
 | 准生产 | `strategy-research/pre_production/` | 已验证、值得跟踪、未完全生产化 | 验证证据（见下方升格门槛） |
-| 生产 | 子仓库 `strategy-pipeline/` / `research-apps/` | 已上线运行 | 生产治理与发布 gate |
+| 生产或受控运行 | `strategy-research/catalog.json` 中的显式状态 | 已有受控运行或发布路径 | 证据评审与发布 gate |
 
-算法框架（六个子模块 + 顶层 `src/`）与策略研究分离，策略只通过框架公共 API 消费能力。
+代码位置不表达生命周期。策略特有纯计算进入 `strategy-app`，运行和发布控制进入 `strategy-pipeline`，通用能力进入相应职责仓。
 
 ## 目录
 
@@ -25,18 +25,20 @@
 
 一个探索从 `experiments/` 升格到 `pre_production/` 需要同时满足：
 
-1. **有明确结论**：实验 README 记录了可复现的结论（收益、IC、回测结果等）。
-2. **有验证证据**：至少包含独立验证过的结果文件或证据 JSON，且能追溯到实验脚本。
-3. **值得长期跟踪**：策略逻辑可定义、可监控，不是一次性问答。
-4. **消费框架公共 API**：通过六个子模块的公开接口取数、训练、回测，不 import 子模块内部实现。
+1. 有明确结论，实验 README 记录可复现的收益、IC 或回测结论。
+2. 有验证证据，至少包含独立验证的结果文件或证据 JSON，并能追溯到实验脚本。
+3. 值得长期跟踪，策略逻辑可定义、可监控。
+4. 消费框架公共 API，通过职责仓公开接口取数、训练和回测。
+5. 在 `catalog.json` 登记生命周期、生产资格、代码 owner 和已知迁移债务。
 
 ## 从 pre_production 升格到 production 的门槛
 
-策略进入生产链路（`strategy-pipeline` 的 campaign / `targets.json`）走现有治理：
+策略获得生产资格并进入 `targets.json` 交接链路时走现有治理：
 
 - 通过 `strategy-pipeline` 的发布 gate 和证据要求
 - 符合 `docs/framework-support-matrix.md` 的框架边界
 - 由 `docs/script-lifecycle.yml` 和维护性治理记录管理生命周期
+- 更新 `catalog.json` 的评审证据与 `production_eligible`，不以移动代码代替授权
 
 ## 规则
 

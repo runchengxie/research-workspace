@@ -127,11 +127,11 @@
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
     },
-    "research-apps": {
-      "path": "research-apps",
+    "strategy-app": {
+      "path": "strategy-app",
       "profiles": {
         "smoke": [
-          ["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import research_apps"]
+          ["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import strategy_app"]
         ],
         "lint": [
           ["uv", "lock", "--check"],

@@ -1,8 +1,12 @@
 # 架构边界
 
-本工作区通过文件产物连接数据、研究、回测、编排和执行：
+本工作区把策略知识与运行时代码分开，并通过公开 API 与文件产物连接数据、研究、回测、编排和执行：
 
 ```text
+strategy-research
+  维护策略身份、投资假设、生命周期和证据导航
+        |
+        v
 market-data-platform
   发布数据资产
         |
@@ -15,8 +19,8 @@ portfolio-backtester
   构造组合并评估成本、容量和风险
         |
         v
-research-apps
-  组合 owner API 并返回研究 frames 和报告
+strategy-app
+  把策略规格翻译为纯计算，组合 owner API 并返回 frames 和报告
         |
         v
 strategy-pipeline
@@ -31,14 +35,14 @@ quant-execution-engine
 
 - `alpha_research.*` 归 `alpha-research`
 - `portfolio_backtester.*` 归 `portfolio-backtester`
-- `research_apps.*` 归 `research-apps`
+- `strategy_app.*` 归 `strategy-app`
 - `strategy_pipeline.*` 归 `strategy-pipeline`
 - `style_factors.*` 归顶层 `src/style_factors`，负责风格因子计算、归因、回测与报告
 
 工作区 2.0 已删除旧共享命名空间、命令行（CLI）别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
-研究应用由独立 `research-apps` 仓库发行，`strategy-pipeline` 继续拥有数据提供方调用、
-操作员控制、原子发布和执行交接。边界见
-[ADR-0004](docs/adr/0004-standalone-research-apps-repository.md)。
+策略身份和生命周期由 `strategy-research` 维护。可执行应用由独立 `strategy-app` 仓库发行。
+`strategy-pipeline` 只拥有数据提供方调用、操作员控制、运行目录、原子发布和执行交接。
+边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
 ## 代码和数据边界
 
@@ -62,6 +66,7 @@ quant-execution-engine
 
 - [框架集成边界](docs/adr/0001-framework-integration-boundaries.md)
 - [命名空间边界](docs/adr/0002-owner-native-python-namespaces.md)
+- [策略知识与运行时边界](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)
 - [跨仓库文件契约](docs/contracts.md)
 - [废弃入口](docs/deprecations.md)
 - [脚本生命周期](docs/script-lifecycle.yml)

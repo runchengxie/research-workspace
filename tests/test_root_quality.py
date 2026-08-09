@@ -31,7 +31,7 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
         "portfolio-backtester",
         "strategy-pipeline",
         "quant-execution-engine",
-        "research-apps",
+        "strategy-app",
     } <= set(ruff["extend-exclude"])
 
 
@@ -46,7 +46,7 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
         assert "portfolio-backtester" not in item.command
         assert "strategy-pipeline" not in item.command
         assert "quant-execution-engine" not in item.command
-        assert "research-apps" not in item.command
+        assert "strategy-app" not in item.command
 
 
 def test_hard_profile_includes_workspace_import_boundary_gate() -> None:

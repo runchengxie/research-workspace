@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 108,
-      "python_loc": 21108,
+      "python_file_count": 109,
+      "python_loc": 21175,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -95,7 +95,7 @@
           "market-data-platform",
           "portfolio-backtester",
           "quant-execution-engine",
-          "research-apps",
+          "strategy-app",
           "demo"
         ],
         "ty_include": [
@@ -132,7 +132,7 @@
           "market-data-platform",
           "portfolio-backtester",
           "quant-execution-engine",
-          "research-apps",
+          "strategy-app",
           "strategy-pipeline"
         ],
         "mypy_present": false
@@ -1429,10 +1429,10 @@
       ]
     },
     {
-      "repo": "research-apps",
-      "root": "research-apps",
+      "repo": "strategy-app",
+      "root": "strategy-app",
       "python_file_count": 91,
-      "python_loc": 18878,
+      "python_loc": 18898,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 1,
@@ -1442,20 +1442,20 @@
       },
       "large_files": [
         {
-          "path": "src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
+          "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
           "loc": 662,
           "hk_related": false
         }
       ],
       "long_functions": [
         {
-          "path": "src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
+          "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
           "name": "_daily_row",
           "line_count": 97,
           "complexity": 12
         },
         {
-          "path": "src/research_apps/daily_watch20/minute_cache.py",
+          "path": "src/strategy_app/daily_watch20/minute_cache.py",
           "name": "build_daily_watch20_minute_cache_bundle",
           "line_count": 92,
           "complexity": 12
@@ -1463,7 +1463,7 @@
       ],
       "complexity_hotspots": [
         {
-          "path": "src/research_apps/hotsector/_deepseek_stability_metrics.py",
+          "path": "src/strategy_app/hotsector/_deepseek_stability_metrics.py",
           "name": "_design_diagnostics",
           "line_count": 42,
           "complexity": 15

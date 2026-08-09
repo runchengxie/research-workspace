@@ -1,12 +1,22 @@
 # 上次变更: 2026-07-19 | owner: research-workspace
-schema_version: research_app_ownership_ledger.v2
+schema_version: research_app_ownership_ledger.v3
 decision: docs/adr/0003-research-application-ownership.md
-amendment: docs/adr/0004-standalone-research-apps-repository.md
+amendment: docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md
 status: implementation_validated
 repository_layout_decided: true
 standalone_research_apps_repository_created: true
+standalone_strategy_app_repository_active: true
+current_strategy_application:
+  repository: runchengxie/strategy-app
+  distribution: strategy-app
+  package: strategy_app
+  release: 0.2.0
+  rename_pull_request: 7
+  commit: bb36258a9d10087b9d74cf2ac5989dbd80868d12
+  predecessor_repository: runchengxie/research-apps
+  historical_schema_prefix_preserved: research_apps
 invariants:
-- research_apps_must_not_import_strategy_pipeline
+- strategy_app_must_not_import_strategy_pipeline
 - legacy_paths_are_identity_preserving_facades_only
 - third_party_framework_objects_do_not_cross_owner_boundaries
 - historical_artifacts_and_receipts_remain_readable

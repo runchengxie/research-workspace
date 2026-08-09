@@ -26,7 +26,7 @@ extend-exclude = [
   "market-data-platform",
   "portfolio-backtester",
   "quant-execution-engine",
-  "research-apps",
+  "strategy-app",
   "demo",
 ]
 
@@ -72,6 +72,6 @@ exclude = [
   "market-data-platform",
   "portfolio-backtester",
   "quant-execution-engine",
-  "research-apps",
+  "strategy-app",
   "strategy-pipeline",
 ]
