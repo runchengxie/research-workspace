@@ -43,6 +43,7 @@
 | 新机器初始化 | [bootstrap.md](bootstrap.md) | active |
 | 跨仓库工作流 | [platform-workflow.md](platform-workflow.md) | active |
 | 策略身份与生命周期 | [../strategy-research/README.md](../strategy-research/README.md) | active |
+| 策略边界重构路线图 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) | active |
 | 文件约定 | [contracts.md](contracts.md) | reference |
 | A 股迁移和港股恢复顺序 | [data-transition-playbook.md](data-transition-playbook.md) | active |
 | 中国香港市场归档路由 | [archive/hk/README.md](archive/hk/README.md) | active archive entry |

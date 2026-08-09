@@ -38,6 +38,7 @@
 | 查看信号产物合同 | [alpha-research/docs/reference/signal-artifacts.md](../alpha-research/docs/reference/signal-artifacts.md) |
 | 查看组合与回测职责 | [portfolio-backtester/README.md](../portfolio-backtester/README.md) |
 | 查看运行与发布控制面 | [strategy-pipeline/docs/strategy-catalog.md](../strategy-pipeline/docs/strategy-catalog.md) |
+| 查看尚未完成的拆分及实施顺序 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 
 ## 维护规则
 
