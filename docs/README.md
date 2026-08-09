@@ -15,6 +15,7 @@
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
 | 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
+| 查看策略边界重构剩余工作 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
 | 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
@@ -44,6 +45,7 @@
 - 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - 策略总览导航索引：[strategy-catalog.md](strategy-catalog.md)
+- 策略边界重构路线图：[strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md)
 - 策略生命周期权威目录：[../strategy-research/catalog.json](../strategy-research/catalog.json)
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](../strategy-research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)

@@ -53,4 +53,4 @@
 4. 只有外部调用、运行控制和发布接线进入 `strategy-pipeline`。
 5. 生命周期变化必须绑定证据路径、评审结论和 `production_eligible` 变更，不以移动代码代替评审。
 
-旧实验、外部策略和 pipeline 内策略模块的排查结论已经登记在 catalog 的 `inventory_notes` 与各策略 `extraction_debt` 字段中。
+旧实验、外部策略和 pipeline 内策略模块的排查结论已经登记在 catalog 的 `inventory_notes` 与各策略 `extraction_debt` 字段中。尚未完成的代码迁移、优先级和收口标准见 [策略边界重构路线图](../docs/strategy-boundary-refactor-roadmap.md)。
