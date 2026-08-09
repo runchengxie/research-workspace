@@ -352,24 +352,6 @@
       "next_action": "split variant evaluation from run orchestration before adding another model family or promoting any ablation result"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_oos.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "Watch20 out-of-sample helpers keep next-open label eligibility, frozen Top4/Top20 coverage, and fail-closed tradability semantics together for the research contract",
-      "next_action": "split label-panel construction from portfolio outcome policy before adding a cash/carry execution simulator"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_oos.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The research-only candidate comparison keeps complete-calendar status rows, segment-aware churn, missing-return diagnostics, and paired scenario statistics in one reproducible OOS contract",
-      "next_action": "split scenario construction from path and paired-statistics evaluation before adding account-state execution replay"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "Strict v1/v2 THS-hot loaders retain exact-partition reading, snapshot selection, rank evidence, positive-change filtering, and receipt lineage behind one fail-closed pool interface",
-      "next_action": "split parquet provenance loading from v1 snapshot assembly before adding another candidate source"
-    },
-    {
       "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_publication_inputs.py",
       "owner_repo": "strategy-pipeline",
       "reason": "Lock-time publication evidence reconstruction binds current assets, minute lineage, candidate rows, freshness, news heat, and model metadata before the live latest pointer can move",
@@ -1131,12 +1113,6 @@
       "owner_repo": "strategy-pipeline",
       "reason": "活动计划、输入绑定和证据复核共用一套严格失败语义，当前模块低于项目的 800 行硬门槛",
       "next_action": "增加新的活动类型前，将计划构造和证据复核提取为独立模块"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_stability.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "稳定性分析集中保存预注册指标、置信区间和晋级判定，便于复现实验结论并核对冻结产物",
-      "next_action": "新增指标族前，将位置偏差分析和重合度分析拆成独立的纯函数模块"
     },
     {
       "path": "market-data-platform/src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
