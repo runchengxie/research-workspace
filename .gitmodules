@@ -13,6 +13,6 @@
 [submodule "portfolio-backtester"]
 	path = portfolio-backtester
 	url = https://github.com/runchengxie/portfolio-backtester.git
-[submodule "research-apps"]
-	path = research-apps
-	url = https://github.com/runchengxie/research-apps.git
+[submodule "strategy-app"]
+	path = strategy-app
+	url = https://github.com/runchengxie/strategy-app.git

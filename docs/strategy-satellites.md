@@ -6,7 +6,7 @@
 > source_of_truth: no
 > superseded_by: n/a
 
-`research-workspace` 锁定六个核心子模块，其中 `research-apps` 承载工作区内研究应用。
+`research-workspace` 锁定六个核心子模块。`strategy-research` 登记策略身份，`strategy-app` 承载策略特有的可执行研究应用。
 热点候选、AI 重排和共享 A 股因子的外部输入目前由
 独立的 `market-intel` 仓库维护。外部项目通过版本化文件接入，业务实现和运行命令以
 `market-intel` 自身文档为准。
@@ -28,11 +28,14 @@ Guan 与 TuShare 分钟数据由 `market-data-platform` 统一发布。研究代
 hot-sector-screener
   candidate_universe.json + signals.parquet + 血缘
         ↓
-strategy-pipeline
-  历史 challenger 或 append-only AI shadow
+strategy-app
+  历史 challenger 纯计算或 append-only AI shadow 评估
         ↓
 portfolio-backtester / 错峰（staggered）队列执行
   成本、现金、涨跌停、停牌和卖出 carry 审计
+        ↓
+strategy-pipeline
+  外部调用、证据冻结、操作控制和发布
 ```
 
 AI 选择还要保存准确 Prompt、原始响应、模型标识、代码版本、哈希和 `available_at`。
@@ -42,7 +45,7 @@ AI 选择还要保存准确 Prompt、原始响应、模型标识、代码版本�
 
 - `research-workspace` 不通过 `PYTHONPATH` 导入外部项目源码。
 - 候选池、信号和选择结果必须携带观察日期、生成时间、文件哈希和证据限制。
-- `strategy-pipeline` 负责统计验证和组合执行，外部项目负责候选生成和数据提供方（provider）调用。
+- `strategy-app` 负责策略特有评估，`portfolio-backtester` 负责组合执行回放，`strategy-pipeline` 负责外部调用、证据冻结和发布控制。
 - 历史重建保留真实生成时间，并标记为 `post_observation_generation`。
 - 未来 OOS shadow 在 T 日收盘后、T+1 开盘前完成 append-only 冻结。错过日期保持缺失。
 - DeepSeek 当前只适合受保护分数带内的 tie-break 或语义风险 veto。

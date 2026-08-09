@@ -148,7 +148,7 @@ setup_env() {
     'python-dotenv>=1.2.2' \
     'scikit-learn>=1.2' \
     'xgboost>=1.7'
-  for repo in market-data-platform alpha-research portfolio-backtester research-apps strategy-pipeline; do
+  for repo in market-data-platform alpha-research portfolio-backtester strategy-app strategy-pipeline; do
     "$VENV_ROOT/bin/python" -m pip install --no-deps -e "$CODE_ROOT/$repo"
   done
 }

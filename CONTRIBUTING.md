@@ -8,7 +8,9 @@
 - 数据平台改动进入 `market-data-platform`。
 - Alpha、因子和信号研究改动进入 `alpha-research`。
 - 组合构造和研究回测改动进入 `portfolio-backtester`。
-- 策略编排、命令行（CLI） 兼容层和执行目标导出改动进入 `strategy-pipeline`。
+- 策略身份、生命周期、结论和证据导航进入 `strategy-research`。
+- 策略特有纯计算和冻结合同进入 `strategy-app`。
+- 外部调用、运行编排、发布控制和执行目标导出进入 `strategy-pipeline`。
 - 交易执行改动进入 `quant-execution-engine`。
 - 顶层文档和脚本只覆盖跨仓库交接、文件约定、发布、健康检查和治理事项。
 
@@ -100,7 +102,7 @@
 
 ### 子模块的等价流程
 
-六个子模块（alpha-research、market-data-platform、portfolio-backtester、quant-execution-engine、research-apps、strategy-pipeline）各自是独立仓库。改子模块代码时，在子模块自己的 worktree 里走同样的五步，远程用各子模块的 `origin`。子模块进入 `main` 后，回到顶层仓库把 `docs/owner-native-namespace-release.json` 里对应的 `commit` 字段更新到新提交，再提交顶层，以满足 `test_owner_native_manifest_matches_gitlinks` 契约。
+六个子模块（alpha-research、market-data-platform、portfolio-backtester、quant-execution-engine、strategy-app、strategy-pipeline）各自是独立仓库。改子模块代码时，在子模块自己的 worktree 里走同样的五步，远程用各子模块的 `origin`。子模块进入 `main` 后，回到顶层仓库把 `docs/owner-native-namespace-release.json` 里对应的 `commit` 字段更新到新提交，再提交顶层，以满足 `test_owner_native_manifest_matches_gitlinks` 契约。
 
 ### 常见拦截与处理
 

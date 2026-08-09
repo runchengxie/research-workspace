@@ -7,7 +7,8 @@
 截至 2026-07-19，工作区已经锁定并验证到研究结果交给执行引擎生成离线计划这一段：
 
 ```text
-数据维护和盘口加工
+策略身份、投资假设和生命周期
+  -> 数据维护和盘口加工
   -> 发布共享数据资产
   -> alpha 研究、模型评估和信号产物
   -> 组合构造、回测和持仓候选
@@ -35,27 +36,29 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 `production_strategy_evidence` 和 `broker_trading_enabled` 四档。当前只确认第一档。完整时间点（PIT）、
 长窗口策略证据和真实券商能力必须独立验收。
 
-## 七段式研究地图
+## 八段式研究地图
 
 | 阶段 | 所有者 | 稳定对象 / 文件 |
 | --- | --- | --- |
+| 策略知识 | `strategy-research` | `catalog.json`、策略说明、生命周期与证据导航 |
 | 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、清单、registry |
-| 研究数据集 | `alpha-research` / `strategy-pipeline` | `ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
+| 研究数据集 | `market-data-platform` / `alpha-research` | 已发布资产、`ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
 | 模型 | `alpha-research` | `ResearchModel.detail()`、`feature_importance.csv`、`model_detail` summary |
 | 信号 | `alpha-research` | `signals.parquet` |
-| 组合 | `portfolio-backtester` | named `StrategySpec`、`positions_by_rebalance.csv`、`positions_current*.csv` |
-| 研究应用 | `research-apps` | F-lite、slow-volume、DeepSeek V4 runner 的普通 frames/report |
+| 组合 | `portfolio-backtester` | 组合规格、`positions_by_rebalance.csv`、`positions_current*.csv` |
+| 策略应用 | `strategy-app` | 策略特有纯计算、冻结合同与普通 frames/report |
 | 执行交接 | `strategy-pipeline` -> `quant-execution-engine` | `targets.json`、`targets.json.lineage.json`、`qexec rebalance` |
 
 ## 模块分工
 
 | 层级 | 模块 | 职责 | 当前接口 |
 | --- | --- | --- | --- |
+| 策略知识 | `strategy-research` | 维护策略身份、假设、生命周期、评审结论和证据导航 | `strategy-research/catalog.json`、策略 README |
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引，承载中国大陆市场数据入口、A 股资产发布和港股归档恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
-| 研究应用 | `research-apps` | 组合数据、alpha 和回测 owner 应用程序接口（API），运行 F-lite、slow-volume 与 DeepSeek V4 研究 runner，不负责最终发布 | `research_apps.*`、普通 frames/report |
-| 策略编排 | `strategy-pipeline` | 只读消费发布数据，组合 alpha/backtesting 包，负责命令行（CLI）、编排接口、持仓快照和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
+| 策略应用 | `strategy-app` | 把人类可读策略规格翻译为策略特有纯计算，组合 owner API，不负责最终发布 | `strategy_app.*`、普通 frames/report |
+| 运行控制面 | `strategy-pipeline` | 负责命令行（CLI）、外部调用、运行目录、操作控制、原子发布、门禁和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |
 | 交易执行（可选） | `quant-execution-engine` | 读取目标持仓文件，连接券商执行调仓、对账和异常恢复 | `qexec rebalance <targets.json>` |
 
 ## 研究完整性和防过拟合边界
@@ -67,7 +70,8 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 数据防泄漏 | `market-data-platform` | current 契约、清单、PIT universe、PIT fundamentals、历史行业、research validation、current health 和 release evidence | [`market-data-platform/docs/research-integrity.md`](../market-data-platform/docs/research-integrity.md) |
 | Alpha 防过拟合 | `alpha-research` | time-series CV、rolling / walk-forward、final 样本外（OOS）、组合对称交叉验证（CPCV）、数据剔除（purging）/隔离窗口（embargo）、feature evidence、DSR、promotion gate 和候选晋升证据 | [`alpha-research/README.md`](../alpha-research/README.md) |
 | 回测稳健性 | `portfolio-backtester` | turnover/cost、capacity、benchmark ladder、execution simulation、exposure 和报告复核 | [`portfolio-backtester/README.md`](../portfolio-backtester/README.md) |
-| 应用组合边界 | `research-apps` | 只组合 owner API，runner 返回普通 frames/report，不进行最终发布 | [`research-apps/README.md`](../research-apps/README.md) |
+| 策略知识边界 | `strategy-research` | 生命周期与证据导航不成为运行时依赖 | [`strategy-research/README.md`](../strategy-research/README.md) |
+| 应用组合边界 | `strategy-app` | 只承载策略特有计算并组合 owner API，不进行最终发布 | [`strategy-app/README.md`](../strategy-app/README.md) |
 | 执行隔离和审计 | `quant-execution-engine` | 标准 `targets.json` 输入、dry-run / paper / live 分层、风控预检、订单审计、对账和 evidence bundle | [`quant-execution-engine/docs/research-handoff-governance.md`](../quant-execution-engine/docs/research-handoff-governance.md) |
 
 数据平台不读取研究运行指标。研究仓库不生产市场数据资产，也不提交券商订单。
@@ -115,10 +119,9 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ### 2. 读取数据并完成研究
 
-`strategy-pipeline` 从当前数据清单解析已发布数据资产，再通过 `alpha-research`、
-`portfolio-backtester` 和 `research-apps` 完成研究流程。`research-apps` 拥有独立研究
-runner，`strategy-pipeline` 继续负责数据提供方（provider）调用、操作员控制、原子发布和 target
-交接。A 股主入口是 `strategy run --config default`。
+`strategy-research` 先给出策略身份和证据边界。运行时通过 `market-data-platform`、
+`alpha-research`、`portfolio-backtester` 和 `strategy-app` 完成纯计算。`strategy-pipeline`
+负责数据提供方（provider）调用、操作员控制、运行目录、原子发布和 target 交接。A 股主入口是 `strategy run --config default`。
 `default_next` 是同一 A 股 preset 的迁移兼容别名。分钟因子、DailyWatch20、
 错峰（staggered）队列和热点 AI shadow 目前属于 research-only campaign，不能直接修改
 线上模型或执行目标。港股只用于历史恢复。
@@ -181,6 +184,7 @@ USD 估值。A 股基础 dry-run 仍需显式配置 CNY 汇率。
 | A 股迁移候选 | [`strategy-pipeline/docs/playbooks/a-share-baseline.md`](../strategy-pipeline/docs/playbooks/a-share-baseline.md) |
 | 共享中国香港市场数据边界 | [`strategy-pipeline/docs/concepts/shared-hk-data-platform.md`](../strategy-pipeline/docs/concepts/shared-hk-data-platform.md) |
 | 盘口资产处理工作流 | [`market-data-platform/README.md`](../market-data-platform/README.md) |
-| 独立研究应用 | [`research-apps/README.md`](../research-apps/README.md) |
+| 独立研究应用 | [`strategy-app/README.md`](../strategy-app/README.md) |
+| 策略身份与生命周期 | [`strategy-research/README.md`](../strategy-research/README.md) |
 | 可选交易执行系统 | [`quant-execution-engine`](../quant-execution-engine/README.md) |
 | 顶层初始化与检查 | [`bootstrap.md`](bootstrap.md)、[`contracts.md`](contracts.md)、[`release-checklist.md`](release-checklist.md)、[`version-matrix.md`](version-matrix.md) |

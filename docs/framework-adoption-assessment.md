@@ -16,7 +16,7 @@
 - `market-data-platform` 维护数据资产、PIT 语义、版本和来源链路
 - `alpha-research` 维护防泄漏、研究证据、晋级规则和标准信号产物
 - `portfolio-backtester` 维护 A 股可交易性、费用、容量和确定性回放
-- `research-apps` 组合职责仓接口并运行策略专用研究应用
+- `strategy-app` 组合职责仓接口并运行策略专用研究应用
 - `strategy-pipeline` 维护配置、调用顺序、运行回执和目标导出
 - `quant-execution-engine` 维护审批、风控、幂等、持久日志和对账
 
@@ -35,7 +35,7 @@ Qlib 适合数据读取、研究生命周期和差分回测。vn.py 适合执行
 | 通用事件回测 | 暂无职责仓扩张计划 | Backtrader 只在证明维护收益后评估 |
 | Gateway、实时事件和基础订单管理系统（OMS） | `quant-execution-engine` 传输层边界 | vn.py 可作为后续可选传输层 |
 | 审批、幂等、日志和对账 | `quant-execution-engine` | 保留平台控制面 |
-| 研究应用组合 | `research-apps` | 只通过职责仓接口间接使用后端 |
+| 研究应用组合 | `strategy-app` | 只通过职责仓接口间接使用后端 |
 | 编排、回执和目标导出 | `strategy-pipeline` | 不直接加载框架运行时 |
 
 ## 值得保留的领域能力
@@ -87,7 +87,7 @@ alpha 层的 CPCV、PBO、数据剔除（purging）、隔离窗口（embargo）�
 4. 补齐 portfolio 原生 A 股规则和容量场景，再决定 Qlib 差分与 LEAN 文件化对照是否值得恢复。
 5. 根据目标券商能力缺口决定是否按当前 qexec 边界恢复 vn.py 影子模式和模拟传输层。
 6. Backtrader 在出现明确用例前保持规划状态。
-7. `strategy-pipeline` 和 `research-apps` 继续只消费职责仓接口。
+7. `strategy-pipeline` 和 `strategy-app` 继续只消费职责仓接口。
 
 ## 暂缓事项
 

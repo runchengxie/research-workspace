@@ -38,7 +38,7 @@ class WorkspaceDoctorTest(unittest.TestCase):
                 "market-data-platform": "market-data-platform",
                 "portfolio-backtester": "portfolio-backtester",
                 "quant-execution-engine": "quant-execution-engine",
-                "research-apps": "research-apps",
+                "strategy-app": "strategy-app",
             },
             submodules,
         )

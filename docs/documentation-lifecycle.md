@@ -15,7 +15,7 @@
 
 ```text
 > status: active | reference | archived | superseded
-> owner: workspace | market-data-platform | alpha-research | portfolio-backtester | research-apps | strategy-pipeline | quant-execution-engine
+> owner: workspace | strategy-research | market-data-platform | alpha-research | portfolio-backtester | strategy-app | strategy-pipeline | quant-execution-engine
 > last_verified: YYYY-MM-DD
 > source_of_truth: yes | no
 > superseded_by: n/a | <relative path>
@@ -42,6 +42,7 @@
 | --- | --- | --- |
 | 新机器初始化 | [bootstrap.md](bootstrap.md) | active |
 | 跨仓库工作流 | [platform-workflow.md](platform-workflow.md) | active |
+| 策略身份与生命周期 | [../strategy-research/README.md](../strategy-research/README.md) | active |
 | 文件约定 | [contracts.md](contracts.md) | reference |
 | A 股迁移和港股恢复顺序 | [data-transition-playbook.md](data-transition-playbook.md) | active |
 | 中国香港市场归档路由 | [archive/hk/README.md](archive/hk/README.md) | active archive entry |

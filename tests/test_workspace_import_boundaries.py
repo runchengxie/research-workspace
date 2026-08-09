@@ -26,7 +26,7 @@ def _submodules_initialized() -> bool:
             ROOT / "strategy-pipeline/src/strategy_pipeline/__init__.py",
             ROOT / "market-data-platform/src/market_data_platform/__init__.py",
             ROOT / "quant-execution-engine/src/quant_execution_engine/__init__.py",
-            ROOT / "research-apps/src/research_apps/__init__.py",
+            ROOT / "strategy-app/src/strategy_app/__init__.py",
         )
     )
 
@@ -54,6 +54,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "portfolio-backtester:backtesting-to-strategy-contracts",
         "market-data-platform:no-legacy-shared-namespace-imports",
         "quant-execution-engine:no-legacy-shared-namespace-imports",
+        "strategy-app:no-control-plane-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
         "strategy-pipeline:target-contract-no-direct-framework-imports",
@@ -68,6 +69,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
     } == {rule["id"] for rule in report["rules"]}
     assert {
         "strategy-pipeline:no-local-alpha-backtesting-source",
+        "strategy-pipeline:no-local-strategy-app-source",
     } == {rule["id"] for rule in report["source_layout_rules"]}
     assert all(rule["count"] == 0 for rule in report["source_layout_rules"])
 

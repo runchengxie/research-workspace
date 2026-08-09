@@ -14,6 +14,7 @@
 | --- | --- |
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
+| 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
 | 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
@@ -42,7 +43,8 @@
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
 - 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
-- 策略总览导航索引（术语澄清 + 链接入口）：[strategy-catalog.md](strategy-catalog.md)
+- 策略总览导航索引：[strategy-catalog.md](strategy-catalog.md)
+- 策略生命周期权威目录：[../strategy-research/catalog.json](../strategy-research/catalog.json)
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](../strategy-research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
 - A 股低换手因子定义与暴露诊断（2008 年至 2026 年）：[low-turnover-factor-diagnostics-2008-2026.md](../strategy-research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)
@@ -66,7 +68,7 @@
 | `market-data-platform` | [../market-data-platform/docs/](../market-data-platform/docs/) | 行情数据供给、契约与治理 |
 | `portfolio-backtester` | [../portfolio-backtester/docs/](../portfolio-backtester/docs/) | 组合回测、容量与执行模拟 |
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
-| `research-apps` | [../research-apps/docs/](../research-apps/docs/) | 应用目录、迁移栈与质量门禁 |
+| `strategy-app` | [../strategy-app/docs/](../strategy-app/docs/) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
 
 > 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。

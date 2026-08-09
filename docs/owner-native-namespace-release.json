@@ -19,6 +19,13 @@
       "pr": 21,
       "version": "0.4.0"
     },
+    "strategy-app": {
+      "canonical_package": "strategy_app",
+      "commit": "bb36258a9d10087b9d74cf2ac5989dbd80868d12",
+      "legacy_source_tree_allowed": false,
+      "pr": 7,
+      "version": "0.2.0"
+    },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
       "commit": "7e175d5004e88ed25355df0ef146d5c4cf2040c1",

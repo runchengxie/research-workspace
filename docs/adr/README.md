@@ -9,3 +9,4 @@
 | [ADR-0003](0003-research-application-ownership.md) | 研究应用归属与仓库布局解耦 | superseded by ADR-0004 |
 | [ADR-0004](0004-standalone-research-apps-repository.md) | 独立 `research-apps` 仓库与收尾迁移栈 | accepted |
 | [ADR-0005](0005-qlib-alpha-research-backends.md) | Qlib 预处理管线引入 alpha-research 训练后端 | accepted |
+| [ADR-0006](0006-strategy-knowledge-and-runtime-boundaries.md) | 策略知识、可执行应用与运行控制面分离 | accepted |

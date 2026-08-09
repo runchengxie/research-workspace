@@ -122,7 +122,7 @@
       "id": "strategy-pipeline-thinning",
       "owner": "strategy-pipeline",
       "status": "in_progress",
-      "current_state": "owner_ports_and_standalone_research_apps",
+      "current_state": "owner_ports_and_standalone_strategy_app",
       "implementation_prs": [
         "https://github.com/runchengxie/strategy-pipeline/pull/17",
         "https://github.com/runchengxie/strategy-pipeline/pull/19",

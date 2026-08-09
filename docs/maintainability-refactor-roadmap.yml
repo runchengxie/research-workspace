@@ -30,7 +30,7 @@
         "max_complexity_hotspots": 24,
         "max_large_classes": 0
       },
-      "research-apps": {
+      "strategy-app": {
         "max_large_files": 1,
         "max_long_functions": 2,
         "max_complexity_hotspots": 1,
@@ -119,7 +119,7 @@
       ]
     },
     {
-      "repo": "research-apps",
+      "repo": "strategy-app",
       "max_large_files": 1,
       "max_long_functions": 2,
       "max_complexity_hotspots": 1,
@@ -310,14 +310,14 @@
       "resolved_note": "2026-07-30: extracted the 6 new-factor helpers (_add_* per factor) into src/style_factors/helpers/_new_factors.py and the PIT SW-L1 industry merge into src/style_factors/helpers/_neutralize.py (aux merge into _aux.py); factor_calc.py reduced to 344 LOC and no function exceeds the complexity ceiling. Pure physical relocation, compute_factors public API unchanged. research-workspace commit on refactor/style-debt-paydown."
     },
     {
-      "path": "research-apps/src/research_apps/hotsector/hotsector_deepseek_stability.py",
-      "owner_repo": "research-apps",
-      "reason": "2026-07-28 已拆出 research-apps/src/research_apps/hotsector/_deepseek_stability_metrics.py(486)；主体由 749 行降至 172 行，低于 500 阈值不再是大文件。原 five-arm 稳定性工作流登记失效，metrics 计算债务转移到 _deepseek_stability_metrics.py（已在 accepted_hotspots 登记）。",
+      "path": "strategy-app/src/strategy_app/hotsector/hotsector_deepseek_stability.py",
+      "owner_repo": "strategy-app",
+      "reason": "2026-07-28 已拆出 strategy-app/src/strategy_app/hotsector/_deepseek_stability_metrics.py(486)；主体由 749 行降至 172 行，低于 500 阈值不再是大文件。原 five-arm 稳定性工作流登记失效，metrics 计算债务转移到 _deepseek_stability_metrics.py（已在 accepted_hotspots 登记）。",
       "next_action": "extract report rendering from trial analysis if the frozen arm set or decision schema changes"
     },
     {
-      "path": "research-apps/src/research_apps/daily_watch20/daily_watch20_candidate_oos.py",
-      "owner_repo": "research-apps",
+      "path": "strategy-app/src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
+      "owner_repo": "strategy-app",
       "reason": "The research-only candidate comparison keeps calendar gaps, fail-closed pool status, churn scenarios, paired inference, and receipt semantics together for reproducibility",
       "next_action": "split daily calendar construction from result receipt assembly before adding another candidate-pool scenario"
     },

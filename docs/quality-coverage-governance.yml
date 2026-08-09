@@ -128,7 +128,7 @@
       }
     },
     {
-      "repo": "research-apps",
+      "repo": "strategy-app",
       "ruff": {
         "staged_select": [
           "A",

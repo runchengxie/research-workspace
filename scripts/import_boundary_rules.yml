@@ -121,6 +121,14 @@ boundary_rules:
   forbidden:
   - cstree
   max_allowed: 0
+- identifier: strategy-app:no-control-plane-imports
+  description: strategy-app contains strategy-specific pure computation and must not import
+    the strategy-pipeline control plane
+  repo: strategy-app
+  source: src/strategy_app
+  forbidden:
+  - strategy_pipeline
+  max_allowed: 0
 - identifier: strategy-pipeline:no-execution-engine-imports
   description: strategy-pipeline exports execution targets without execution internals
   repo: strategy-pipeline
@@ -222,4 +230,12 @@ source_layout_rules:
   forbidden_sources:
   - src/alpha_research
   - src/portfolio_backtester
+  max_allowed: 0
+- identifier: strategy-pipeline:no-local-strategy-app-source
+  description: strategy-pipeline must not embed either the current or legacy strategy application
+    source package
+  repo: strategy-pipeline
+  forbidden_sources:
+  - src/strategy_app
+  - src/research_apps
   max_allowed: 0

@@ -11,6 +11,7 @@
 - 维护工作区 doctor、质量检查和子仓库委托脚本
 - 维护顶层风格因子计算、归因、回测与报告薄包 `src/style_factors`
 - 记录版本组合、发布检查和归档入口
+- 维护 `strategy-research` 中的策略身份、生命周期和证据导航
 - 说明数据、研究、回测、编排和执行之间的交接方式
 
 子仓库内部实现、依赖、业务参数和完整测试配置留在对应仓库。
@@ -22,8 +23,8 @@
 | `market-data-platform` | 数据资产生产、检查、发布和读取 |
 | `alpha-research` | 特征、模型、研究评估和信号产物 |
 | `portfolio-backtester` | 组合构造、回测、成本、容量、暴露和报告 |
-| `research-apps` | 组合 owner 应用程序接口（API），运行 F-lite、slow-volume 和 DeepSeek V4 研究应用 |
-| `strategy-pipeline` | 研究编排、命令行（CLI）、运行目录和 `targets.json` 导出 |
+| `strategy-app` | 策略特有的纯计算、冻结合同与研究应用，不承担生产发布 |
+| `strategy-pipeline` | 运行编排、外部调用、命令行（CLI）、发布控制和 `targets.json` 导出 |
 | `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
 各子项目已注册的命令行入口（`strategy`、`strategy-pipeline`、`qexec`、`stockq`、`marketdata`）见
@@ -65,6 +66,8 @@ targets.json
 ```
 
 修改跨仓库产物格式时，应同步更新生产方、消费方、顶层契约文档和对应测试。
+
+策略投资假设、生命周期、评审结论和证据入口只在 `strategy-research` 维护。生产状态是目录中的显式元数据，不由代码位于 `strategy-app` 或 `strategy-pipeline` 推断。通用数据、alpha、统计、组合或执行能力不得放入 `strategy-app`。
 
 ## 文档规则
 
