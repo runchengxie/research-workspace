@@ -1,0 +1,37 @@
+# A-share top800 liquidity universe comparison.
+# Same strict evaluation as a_share_combo_verify.yml (top_k=30, extended
+# window 2022-01, long validation test_size 0.4, real execution 10%x10day)
+# but restricted to the top-800-by-amount universe.
+# This is the definitive test of whether liquidity filtering saves the
+# signal that the full-market model lost (combo_verify OOS IC -0.015).
+extends: "strategy-pipeline/configs/presets/a_share.yml"
+
+data:
+  start_date: "20220101"
+  asset_coverage_start_date: "20220101"
+
+research_universe:
+  symbols_file: null
+  by_date_file: "artifacts/assets/universe/top800_by_date.csv"
+
+eval:
+  top_k: 30
+  walk_forward:
+    enabled: true
+    n_windows: 3
+    test_size: 0.4
+    step_size: null
+    anchor_end: true
+    backtest_enabled: true
+
+backtest:
+  top_k: 30
+  execution_sim:
+    enabled: true
+    participation_rate: 0.10
+    liquidity_cols:
+      - medadv20_amount
+      - amount
+    buy_max_days: 10
+    sell_max_days: "until_next_rebalance"
+    zero_fill_abort_days_buy: 3
