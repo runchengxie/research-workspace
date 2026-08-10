@@ -20,6 +20,9 @@ class PlannedCommand:
 
 
 def _ruff_command(*args: str) -> tuple[str, ...]:
+    venv_python = Path(__file__).resolve().parents[1] / ".venv" / "bin" / "python"
+    if venv_python.exists():
+        return (str(venv_python), "-m", "ruff", *args)
     resolved = shutil.which("ruff")
     if resolved:
         return (resolved, *args)
