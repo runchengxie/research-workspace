@@ -173,7 +173,6 @@
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_ranking.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_session_challenger_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_session_challenger_response_contract.py",
         "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution.py",
         "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_records.py",
         "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_reporting.py",
