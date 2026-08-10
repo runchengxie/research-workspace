@@ -178,23 +178,23 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 297,
-      "python_loc": 88813,
+      "python_loc": 89080,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 38,
-        "long_functions": 75,
+        "large_files": 40,
+        "long_functions": 76,
         "complexity_hotspots": 40,
         "large_classes": 1
       },
       "large_files": [
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1851,
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1889,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 1793,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1851,
           "hk_related": false
         },
         {
