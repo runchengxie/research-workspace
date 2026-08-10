@@ -40,6 +40,9 @@ def main() -> None:
     ap.add_argument("--top-k", type=int, default=30)
     ap.add_argument("--cost-bps", type=float, default=10.0,
                     help="One-way transaction cost in bps for realized turnover.")
+    ap.add_argument("--w-size", type=float, default=1.0, help="Weight on small-cap (negative size) z.")
+    ap.add_argument("--w-liquidity", type=float, default=1.0, help="Weight on low-turnover z.")
+    ap.add_argument("--w-growth", type=float, default=1.0, help="Weight on growth z.")
     ap.add_argument("--out", default="/tmp/3factor_result.json")
     args = ap.parse_args()
 
@@ -95,7 +98,11 @@ def main() -> None:
     sel["z_size"] = sel.groupby("trade_date")["factor_size"].transform(zscore)
     sel["z_liquidity"] = sel.groupby("trade_date")["factor_liquidity"].transform(zscore)
     sel["z_growth"] = sel.groupby("trade_date")["factor_growth"].transform(zscore)
-    sel["score"] = -sel["z_size"] + sel["z_liquidity"] + sel["z_growth"]
+    sel["score"] = (
+        -args.w_size * sel["z_size"]
+        + args.w_liquidity * sel["z_liquidity"]
+        + args.w_growth * sel["z_growth"]
+    )
     sel = sel[sel["score"].notna()].copy()
 
     daily_ret = daily[["trade_date", "symbol", "pct_chg"]].copy()
@@ -149,7 +156,7 @@ def main() -> None:
     max_dd = float(((running - peak) / peak).min())
 
     out = {
-        "strategy": "3factor_small_lowturn_growth",
+        "strategy": f"3factor_s{args.w_size:g}_l{args.w_liquidity:g}_g{args.w_growth:g}",
         "period": f"{df['rebalance'].iloc[0]} ~ {df['rebalance'].iloc[-1]}",
         "n_periods": len(df),
         "total_return": float(total),
