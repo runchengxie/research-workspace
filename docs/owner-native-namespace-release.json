@@ -14,9 +14,9 @@
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "3bea3218fd96199fc35a3dfccfdfcea7e3c73188",
+      "commit": "ab681343246694951e722dee8b59322fcad25903",
       "legacy_source_tree_allowed": false,
-      "pr": 27,
+      "pr": 28,
       "version": "0.4.0"
     },
     "strategy-app": {

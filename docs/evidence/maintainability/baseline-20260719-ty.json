@@ -1061,12 +1061,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 184,
-      "python_loc": 39229,
+      "python_file_count": 186,
+      "python_loc": 39753,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 7,
-        "long_functions": 26,
+        "large_files": 8,
+        "long_functions": 28,
         "complexity_hotspots": 26,
         "large_classes": 0
       },
@@ -1094,6 +1094,11 @@
         {
           "path": "src/portfolio_backtester/_portfolio_positions_select.py",
           "loc": 567,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "loc": 545,
           "hk_related": false
         },
         {
@@ -1217,6 +1222,12 @@
           "complexity": 10
         },
         {
+          "path": "src/portfolio_backtester/_capacity_report_grid.py",
+          "name": "build_capacity_report",
+          "line_count": 87,
+          "complexity": 10
+        },
+        {
           "path": "src/portfolio_backtester/execution_sim/config.py",
           "name": "build_execution_sim_config",
           "line_count": 86,
@@ -1241,22 +1252,16 @@
           "complexity": 5
         },
         {
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "name": "_build_report_payload",
+          "line_count": 83,
+          "complexity": 6
+        },
+        {
           "path": "src/portfolio_backtester/portfolio_selection.py",
           "name": "select_holdings",
           "line_count": 82,
           "complexity": 6
-        },
-        {
-          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
-          "name": "_process_long_short_rebalance",
-          "line_count": 81,
-          "complexity": 9
-        },
-        {
-          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
-          "name": "_process_long_only_rebalance",
-          "line_count": 80,
-          "complexity": 8
         }
       ],
       "complexity_hotspots": [

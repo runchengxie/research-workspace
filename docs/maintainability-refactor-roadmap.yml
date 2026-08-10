@@ -108,11 +108,12 @@
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 7,
-      "max_long_functions": 26,
+      "max_large_files": 8,
+      "max_long_functions": 28,
       "max_complexity_hotspots": 26,
       "max_large_classes": 0,
       "owner_decision": [
+        "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
         "2026-08-10: 会计第四阶段 A 股市场规则契约（opt-in）新增 _execute_nav_buy_orders_for_day(93 行，复杂度 20) 与 _execute_nav_sell_orders_for_day(95 行) 两个执行模拟账本路径函数，并新增 tests/test_execution_sim_market_rules.py；long_functions 23->26、complexity_hotspots 25->26 上调（phase-4 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记两个 nav 订单函数）。",
         "2026-08-09: 会计第二阶段账本迁移新增 _assemble_topk_spec(80 行，刚好踩 long_function 阈值)，long_functions 22->23 上调（真实新增、owner 决策记录，非回归）。",
         "2026-07-18: target-first 固定槽执行 + DailyWatch20 组合回放集成，large_file 数未增。",
@@ -775,6 +776,18 @@
       "owner_repo": "portfolio-backtester",
       "reason": "2026-08-10 会计第四阶段 A 股 T+1/跌停/上市状态市场规则契约新增 _execute_nav_sell_orders_for_day(95 行) 卖出台账路径函数；属 phase-4 路线图真实功能扩展，非回归债务。已在 owner_decision 登记 long_functions 上调。",
       "next_action": "phase-4 收尾或后续清理时，将可卖数量快照与状态守卫抽为独立 helper 以降低长函数计数"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/_capacity_report_config.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "2026-08-10 会计第五阶段容量校准新增模块，累计 545 行（含 _build_report_payload 83 行等容量校准纯函数），超 500 阈值成为大文件；属 phase-5 路线图真实功能扩展，非回归债务。已在 owner_decision 登记 large_files 上调。",
+      "next_action": "phase-5 收尾或后续清理时，将校准纯函数（_break_even_capacity/_fill_rate_capacity/_alpha_retention_capacity/_marginal_impact）抽入独立子模块以降低文件行数"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/_capacity_report_grid.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "2026-08-10 会计第五阶段容量报告网格组装新增 build_capacity_report(87 行) 长函数（含行业/流动性集中度集成）；属 phase-5 路线图真实功能扩展，非回归债务。已在 owner_decision 登记 long_functions 上调。",
+      "next_action": "phase-5 收尾或后续清理时，将集中度聚合调用与执行上下文解析抽为独立 helper 以降低长函数计数"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders.py",
