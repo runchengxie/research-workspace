@@ -57,6 +57,7 @@
 - 价值因子长周期风格轮动分析：[value-regime-18y.md](../strategy-research/experiments/style_factors/value-regime-18y.md)
 - AFML 方法落地与跨仓库版本组合：[afml-methodology-rollout.md](afml-methodology-rollout.md)
 - 策略证据门禁与生命周期必检清单：[strategy-evidence-gate.md](strategy-evidence-gate.md)
+- 实验说明书格式与校验：[research-spec.md](research-spec.md)
 - 概念级机器学习探索路线图：[concept-level-ml-exploration.md](../strategy-research/experiments/style_factors/concept-level-ml-exploration.md)
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。

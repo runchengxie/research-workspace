@@ -22,5 +22,7 @@
 
 - 新增实验在 `experiments/` 下建目录，不需走 strategy-pipeline 的 CI 和测试
 - 每个实验目录建议放一个 README.md 记录结论，方便以后查阅
+- 有明确结论的实验建议补一份 `research_spec.json` 实验说明书，格式与校验见
+  [docs/research-spec.md](../../docs/research-spec.md)
 - 实验结果好、决定上生产时，再完整重构到对应子仓库
 - 不要引入跨实验的隐式依赖；可复用工具沉淀到各子仓库的正式包里

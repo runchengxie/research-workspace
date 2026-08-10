@@ -290,6 +290,16 @@
       "removal_condition": "remove only after strategy evidence checks move into the strategy promotion gate and no release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/research_spec_check.py",
+      "owner": "research-workspace",
+      "purpose": "Validate research_spec.v1 experiment manifests under strategy-research/experiments and verify evidence references exist",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none; pure stdlib against research_spec.json files",
+      "removal_condition": "remove only after research spec validation moves into an experiment gate and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "src/research_contracts/smoke_contracts.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo contract smoke commands",
