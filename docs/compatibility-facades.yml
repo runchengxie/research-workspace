@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-10",
+  "_last_changed": "2026-07-29",
   "_owner": "research-workspace",
   "schema_version": "compatibility_facades.v2",
   "required_removal_evidence": [
@@ -10,22 +10,6 @@
     "rollback path"
   ],
   "records": [
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/date_utils.py",
-      "owner_repo": "strategy-pipeline",
-      "kind": "module_facade",
-      "replacement": "alpha_research.date_utils",
-      "current_consumers": "callers redirect to alpha_research.date_utils via thin forwarding facade (R4 slice 2026-08-10); facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
-      "removal_condition": "remove after two release reviews show no pipeline date_utils imports and alpha_research.date_utils docs are linked",
-      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": [
-        "strategy-pipeline import smoke",
-        "strategy-pipeline pytest",
-        "tests/test_date_utils_facade.py"
-      ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.date_utils (R4 通用能力归位); two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
-    },
     {
       "path": "alpha-research/src/alpha_research/train_eval.py",
       "owner_repo": "alpha-research",
@@ -76,102 +60,86 @@
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.freshness_overlay",
-      "current_consumers": "callers redirected 2026-08-10 to alpha_research.freshness_overlay; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "current_consumers": "kept for strategy-pipeline callers that imported freshness overlay from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline freshness_overlay imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.freshness_overlay; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/train_eval_request_builder.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.train_eval_request_builder",
-      "current_consumers": "callers redirected 2026-08-10 to alpha_research.train_eval_request_builder; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "current_consumers": "kept for strategy-pipeline callers that imported train/eval request helpers from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_request_builder imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_request_builder; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/train_eval_result.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.train_eval_result",
-      "current_consumers": "callers redirected 2026-08-10 to alpha_research.train_eval_result; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "current_consumers": "kept for strategy-pipeline callers that imported train/eval result helpers from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_result imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_result; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/promotion_gate.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.promotion_gate",
-      "current_consumers": "callers redirected 2026-08-10 to alpha_research.promotion_gate; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline promotion gate tests",
         "alpha-research promotion gate tests"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/promotion_gate_thresholds.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.promotion_gate_thresholds",
-      "current_consumers": "callers redirected 2026-08-10 to alpha_research.promotion_gate_thresholds; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "current_consumers": "kept for strategy-pipeline research_ops imports during alpha extraction",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate_thresholds imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline promotion gate tests",
         "alpha-research promotion gate tests"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate_thresholds; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
-      "status": "active_compatibility_pending_two_release_reviews"
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     },
     {
       "id": "strategy-owner-delegating-public-facades",
       "paths": [
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_oos.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_candidate_pool_v2.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_data.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_campaign_reporting.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_contract.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_guard_ablation.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_model_lifecycle.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_news_heat.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_oos.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_slow_minute_campaign_reporting.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_source_regimes.py",
         "strategy-pipeline/src/strategy_pipeline/daily_watch20_statistics.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_windows.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_contract.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_analysis.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_ranking.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_reporting.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_stability.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_analysis.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_contract.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_ranking.py",
@@ -193,7 +161,7 @@
         "research-apps pytest",
         "portfolio-backtester staggered cohort tests"
       ],
-      "consumer_audit": "2026-07-26 cross-repo consumer audit (fully-qualified strategy_pipeline.<name> imports) flagged 9 zero-reference facades. On removal, 6 were found to be load-bearing and were restored: (a) imported intra-repo via relative `from .<name>` imports — daily_watch20_flite_base_scores (consumed by daily_watch20_flite_inputs), daily_watch20_slow_minute_campaign_inputs (consumed by daily_watch20_slow_minute_campaign), staggered_cohort_inputs (consumed by daily_watch20_slow_minute_execution); (b) hashed in the frozen canonical provenance manifest hotsector_numeric_v2_provenance.IMPLEMENTATION_SOURCE_FILES — staggered_cohort_execution_records, staggered_cohort_execution_reporting, staggered_cohort_execution_state. Removing those would break the frozen provenance hash contract (byte-identical arms governance). Only 3 true orphans were removed: _hotsector_ai_shadow_v2_validation, daily_watch20_candidate_oos_reporting, hotsector_session_challenger_prompt_contract (zero repo-local imports; the only text match for daily_watch20_candidate_oos_reporting points at research_apps.daily_watch20.*, a different package). 39 wrappers remain referenced by strategy-pipeline production src or ownership tests and require caller redirect to owner APIs before removal.",
+      "consumer_audit": "2026-07-26 cross-repo consumer audit (fully-qualified strategy_pipeline.<name> imports) flagged 9 zero-reference facades. On removal, 6 were found to be load-bearing and were restored: (a) imported intra-repo via relative `from .<name>` imports — daily_watch20_flite_base_scores (consumed by daily_watch20_flite_inputs), daily_watch20_slow_minute_campaign_inputs (consumed by daily_watch20_slow_minute_campaign), staggered_cohort_inputs (consumed by daily_watch20_slow_minute_execution); (b) hashed in the frozen canonical provenance manifest hotsector_numeric_v2_provenance.IMPLEMENTATION_SOURCE_FILES — staggered_cohort_execution_records, staggered_cohort_execution_reporting, staggered_cohort_execution_state. Removing those would break the frozen provenance hash contract (byte-identical arms governance). Only 3 true orphans were removed: _hotsector_ai_shadow_v2_validation, daily_watch20_candidate_oos_reporting, hotsector_session_challenger_prompt_contract (zero repo-local imports; the only text match for daily_watch20_candidate_oos_reporting points at research_apps.daily_watch20.*, a different package). After the R3 strategy-boundary refactor, 31 delegating public facades were removed (callers repointed to owner modules) and daily_watch20_fundamental_shadow was kept but repointed (its .daily_watch20_candidate_pool import now resolves to market_data_platform.research_views.daily_watch20_candidate_pool). 16 wrappers remain: 15 byte-pinned frozen facades plus the repointed daily_watch20_fundamental_shadow.",
       "status": "active_compatibility"
     },
     {

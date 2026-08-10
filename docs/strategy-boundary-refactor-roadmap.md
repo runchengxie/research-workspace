@@ -52,7 +52,7 @@ strategy-pipeline
 | R0 仓库改名 | 已完成 | `research-apps` 改为 `strategy-app`，移除旧 Python 包兼容层 | 新 wheel 只包含 `strategy_app`，历史回执 schema 保持不变 |
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
-| R3 调用方改向 | 调用方改向完成（2026-08-10），进入 two-release-reviews 监控 | 将 pipeline 内调用逐族改为 owner API，并在同一批次删除对应 facade | 31 个无冻结哈希约束的 facade 中，26 个已删文件并清零调用方。剩余 5 个（freshness_overlay、train_eval_request_builder、train_eval_result、promotion_gate、promotion_gate_thresholds）调用方已全改向 alpha_research.*，facade 文件按 two-release-reviews 约束保留至两个发布周期后删除（监控窗口 2026-08-10 起） |
+| R3 调用方改向 | 进行中 | 将 pipeline 内调用逐族改为 owner API，并在同一批次删除对应 facade | 登记的 46 个策略 owner facade 中，31 个无冻结哈希约束者清零（15 个冻结哈希绑定者需先更新 provenance 契约再删），且不新增替代兼容层 |
 | R4 通用能力归位 | 待开始 | 按数据、alpha、组合、执行职责迁移通用代码，策略特有组合进入 `strategy-app` | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 待开始 | 删除重复研究脚本和当前说明，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 待开始 | 收紧 import/source 边界、刷新体量基线、gitlink、版本清单和发布证据 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
@@ -129,4 +129,4 @@ owner 仓补齐公开 API
 
 ## 下次继续的起点
 
-R3 调用方改向已完成（2026-08-10）。剩余 5 个 facade 处于 two-release-reviews 监控期：监控窗口自 2026-08-10 起，需在两次发布评审后确认零 pipeline 本地导入，方可删除 facade 文件本身（见 `docs/compatibility-facades.yml` 对应记录的 `status: active_compatibility_pending_two_release_reviews`）。下一轮恢复从 R4 开始：按"通用能力归位"挑选一个低风险垂直切片，在 `strategy-pipeline` 新 worktree 中迁移通用代码到对应 owner 仓（alpha-research / portfolio-backtester / market-data-platform / quant-execution-engine），保留薄转发 facade 并按 two-release-reviews 约束收口。每次恢复前重新扫描活动旧名称、facade 消费者和远端 `main`，不要沿用本页静态计数代替代码事实。
+下一次从 R3 开始：在 `strategy-pipeline` 的新 worktree 中按垂直切片顺序改向调用方，并同批删除对应 owner facade（先处理无冻结哈希约束的调用方建立删除范式）。每次恢复前先重新扫描活动旧名称、facade 消费者和远端 `main`，不要沿用本页的静态计数代替代码事实。
