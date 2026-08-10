@@ -90,6 +90,8 @@ def main() -> None:
     ap.add_argument("--w-liquidity", type=float, default=1.0)
     ap.add_argument("--w-growth", type=float, default=1.0)
     ap.add_argument("--universe", choices=["full", "top800"], default="full")
+    ap.add_argument("--min-mv", type=float, default=0.0,
+                    help="Minimum total market value in 亿元; filters out micro-caps below this cap.")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
@@ -158,6 +160,15 @@ def main() -> None:
     price = daily[["trade_date", "symbol", "close", "vol", "amount"]].copy()
     scored = scored.merge(price, on=["trade_date", "symbol"], how="left")
     print(f"[merge] {len(scored)} rows, close cov={scored['close'].notna().mean():.1%}, vol cov={scored['vol'].notna().mean():.1%}")
+
+    # Small-cap exposure cap: drop stocks below min market value (亿元).
+    if args.min_mv > 0:
+        mv = basics[["trade_date", "symbol", "total_mv"]].copy()
+        mv["total_mv"] = pd.to_numeric(mv["total_mv"], errors="coerce") / 10000.0  # 万元 -> 亿元
+        scored = scored.merge(mv, on=["trade_date", "symbol"], how="left")
+        before = len(scored)
+        scored = scored[scored["total_mv"] >= args.min_mv]
+        print(f"[min_mv] {args.min_mv}亿: {before} -> {len(scored)} rows (dropped {(before-len(scored))/before:.1%})")
 
     if args.universe == "top800":
         univ = pd.read_csv("/home/richard/data/market-data-platform/assets/universe/top800_2019_by_date.csv")
