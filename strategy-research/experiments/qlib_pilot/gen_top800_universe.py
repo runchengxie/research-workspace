@@ -1,7 +1,7 @@
 import pandas as pd, glob, concurrent.futures
 
 DATA_DIR = '/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_daily_clean_latest/data'
-OUT = '/home/richard/code/research-workspace-combo/strategy-research/experiments/qlib_pilot/universe_top800_by_date.csv'
+OUT = '/home/richard/code/research-workspace-refine/strategy-research/experiments/qlib_pilot/universe_top800_2019.csv'
 TOP_N = 800
 
 files = sorted(glob.glob(f'{DATA_DIR}/*.parquet'))
@@ -9,7 +9,7 @@ print('files:', len(files))
 
 def read_date(f):
     d = pd.read_parquet(f, columns=['trade_date','symbol','amount'])
-    return d[d['trade_date']>='20220101'][d['trade_date']<='20260529']
+    return d[d['trade_date']>='20190101'][d['trade_date']<='20260807']
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=16) as ex:
     parts = list(ex.map(read_date, files))
