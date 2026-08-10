@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-07-29",
+  "_last_changed": "2026-08-10",
   "_owner": "research-workspace",
   "schema_version": "compatibility_facades.v2",
   "required_removal_evidence": [
@@ -10,6 +10,22 @@
     "rollback path"
   ],
   "records": [
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/date_utils.py",
+      "owner_repo": "strategy-pipeline",
+      "kind": "module_facade",
+      "replacement": "alpha_research.date_utils",
+      "current_consumers": "callers redirect to alpha_research.date_utils via thin forwarding facade (R4 slice 2026-08-10); facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
+      "removal_condition": "remove after two release reviews show no pipeline date_utils imports and alpha_research.date_utils docs are linked",
+      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
+      "focused_tests": [
+        "strategy-pipeline import smoke",
+        "strategy-pipeline pytest",
+        "tests/test_date_utils_facade.py"
+      ],
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.date_utils (R4 通用能力归位); two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
+    },
     {
       "path": "alpha-research/src/alpha_research/train_eval.py",
       "owner_repo": "alpha-research",
