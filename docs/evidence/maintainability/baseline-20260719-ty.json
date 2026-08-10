@@ -1062,18 +1062,18 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 182,
-      "python_loc": 37737,
+      "python_loc": 38175,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
         "long_functions": 23,
-        "complexity_hotspots": 24,
+        "complexity_hotspots": 25,
         "large_classes": 0
       },
       "large_files": [
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
-          "loc": 820,
+          "loc": 837,
           "hk_related": false
         },
         {
@@ -1248,6 +1248,12 @@
         }
       ],
       "complexity_hotspots": [
+        {
+          "path": "src/portfolio_backtester/execution_sim/results.py",
+          "name": "_build_cost_breakdown",
+          "line_count": 63,
+          "complexity": 26
+        },
         {
           "path": "src/portfolio_backtester/execution_sim/reporting.py",
           "name": "_summarize_adjusted_nav",
