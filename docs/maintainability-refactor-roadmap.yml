@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-09",
+  "_last_changed": "2026-08-10",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -27,7 +27,7 @@
       "portfolio-backtester": {
         "max_large_files": 7,
         "max_long_functions": 23,
-        "max_complexity_hotspots": 24,
+        "max_complexity_hotspots": 25,
         "max_large_classes": 0
       },
       "strategy-app": {
@@ -108,7 +108,7 @@
       "repo": "portfolio-backtester",
       "max_large_files": 7,
       "max_long_functions": 23,
-      "max_complexity_hotspots": 24,
+      "max_complexity_hotspots": 25,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-09: 会计第二阶段账本迁移新增 _assemble_topk_spec(80 行，刚好踩 long_function 阈值)，long_functions 22->23 上调（真实新增、owner 决策记录，非回归）。",
@@ -116,7 +116,8 @@
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-28: 模块拆分后 large_files 18->7 下调（exposure_style/portfolio_positions_select/position_backtest_engine 低于阈值，登记 accepted_hotspots）。",
         "2026-07-29: execution_sim/core.py(2393) 拆为 models/capacity/orders/reporting，large_files 7->8 上调（orders.py 1173 新接收者，债务转移）。",
-        "2026-07-30: orders_nav.py(633) 进一步拆出订单状态聚合至 orders_nav_states.py(253)，orders_nav.py 降至 401 行低于 500 阈值不再是大文件，large_files 8->7 下调（债务收敛，非回归）。"
+        "2026-07-30: orders_nav.py(633) 进一步拆出订单状态聚合至 orders_nav_states.py(253)，orders_nav.py 降至 401 行低于 500 阈值不再是大文件，large_files 8->7 下调（债务收敛，非回归）。",
+        "2026-08-10: 会计第三阶段账本拆分新增 CostBreakdown 8 子项，引入 1 个复杂度热点，complexity_hotspots 24->25 上调（stage 3 真实新增、owner 决策记录，非回归）。"
       ]
     },
     {
