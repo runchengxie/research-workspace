@@ -1061,8 +1061,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 186,
-      "python_loc": 39753,
+      "python_file_count": 188,
+      "python_loc": 40269,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1092,13 +1092,13 @@
           "hk_related": false
         },
         {
-          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
-          "loc": 567,
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "loc": 597,
           "hk_related": false
         },
         {
-          "path": "src/portfolio_backtester/_capacity_report_config.py",
-          "loc": 545,
+          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
+          "loc": 567,
           "hk_related": false
         },
         {
@@ -1132,6 +1132,12 @@
           "complexity": 4
         },
         {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 99,
+          "complexity": 4
+        },
+        {
           "path": "src/portfolio_backtester/_exposure_industry.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
@@ -1154,12 +1160,6 @@
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
           "complexity": 1
-        },
-        {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
-          "line_count": 95,
-          "complexity": 4
         },
         {
           "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
@@ -1192,6 +1192,12 @@
           "complexity": 15
         },
         {
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "name": "_build_report_payload",
+          "line_count": 93,
+          "complexity": 6
+        },
+        {
           "path": "src/portfolio_backtester/portfolio_selection.py",
           "name": "_build_selection_inputs",
           "line_count": 92,
@@ -1217,13 +1223,13 @@
         },
         {
           "path": "src/portfolio_backtester/_capacity_report_grid.py",
-          "name": "_build_grid_row",
-          "line_count": 87,
+          "name": "build_capacity_report",
+          "line_count": 88,
           "complexity": 10
         },
         {
           "path": "src/portfolio_backtester/_capacity_report_grid.py",
-          "name": "build_capacity_report",
+          "name": "_build_grid_row",
           "line_count": 87,
           "complexity": 10
         },
@@ -1250,12 +1256,6 @@
           "name": "test_construction_grid_reuses_existing_scores",
           "line_count": 84,
           "complexity": 5
-        },
-        {
-          "path": "src/portfolio_backtester/_capacity_report_config.py",
-          "name": "_build_report_payload",
-          "line_count": 83,
-          "complexity": 6
         },
         {
           "path": "src/portfolio_backtester/portfolio_selection.py",
