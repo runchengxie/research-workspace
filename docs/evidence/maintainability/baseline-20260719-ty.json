@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 109,
-      "python_loc": 21175,
+      "python_loc": 21223,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -21,23 +21,23 @@
       },
       "large_files": [
         {
+          "path": "tests/test_pre_push_hooks.py",
+          "loc": 608,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_maintainability_governance.py",
           "loc": 590,
           "hk_related": false
         },
         {
-          "path": "tests/test_pre_push_hooks.py",
-          "loc": 581,
+          "path": "scripts/run_pre_push_checks.py",
+          "loc": 571,
           "hk_related": false
         },
         {
           "path": "scripts/workspace_governance.py",
           "loc": 556,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/run_pre_push_checks.py",
-          "loc": 550,
           "hk_related": false
         }
       ],
@@ -178,23 +178,23 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 295,
-      "python_loc": 88751,
+      "python_loc": 89018,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 39,
-        "long_functions": 75,
+        "large_files": 41,
+        "long_functions": 76,
         "complexity_hotspots": 40,
         "large_classes": 1
       },
       "large_files": [
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1851,
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1889,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 1793,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1851,
           "hk_related": false
         },
         {
@@ -706,8 +706,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 159,
-      "python_loc": 32237,
+      "python_file_count": 161,
+      "python_loc": 32416,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
@@ -1061,19 +1061,19 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 182,
-      "python_loc": 37737,
+      "python_file_count": 188,
+      "python_loc": 40269,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 7,
-        "long_functions": 23,
-        "complexity_hotspots": 24,
+        "large_files": 8,
+        "long_functions": 28,
+        "complexity_hotspots": 26,
         "large_classes": 0
       },
       "large_files": [
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
-          "loc": 820,
+          "loc": 912,
           "hk_related": false
         },
         {
@@ -1089,6 +1089,11 @@
         {
           "path": "tests/test_execution_sim.py",
           "loc": 629,
+          "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "loc": 597,
           "hk_related": false
         },
         {
@@ -1127,6 +1132,12 @@
           "complexity": 4
         },
         {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 99,
+          "complexity": 4
+        },
+        {
           "path": "src/portfolio_backtester/_exposure_industry.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
@@ -1139,16 +1150,22 @@
           "complexity": 16
         },
         {
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
+          "name": "_execute_nav_buy_orders_for_day",
+          "line_count": 96,
+          "complexity": 21
+        },
+        {
           "path": "tests/test_position_backtest.py",
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
           "complexity": 1
         },
         {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
+          "name": "_execute_nav_sell_orders_for_day",
           "line_count": 95,
-          "complexity": 4
+          "complexity": 14
         },
         {
           "path": "src/portfolio_backtester/leg_helpers.py",
@@ -1167,6 +1184,18 @@
           "name": "_record_backtest_outputs",
           "line_count": 94,
           "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/_evaluation_positions.py",
+          "name": "_record_period_execution_sim",
+          "line_count": 94,
+          "complexity": 15
+        },
+        {
+          "path": "src/portfolio_backtester/_capacity_report_config.py",
+          "name": "_build_report_payload",
+          "line_count": 93,
+          "complexity": 6
         },
         {
           "path": "src/portfolio_backtester/portfolio_selection.py",
@@ -1193,6 +1222,24 @@
           "complexity": 1
         },
         {
+          "path": "src/portfolio_backtester/_capacity_report_grid.py",
+          "name": "build_capacity_report",
+          "line_count": 88,
+          "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/_capacity_report_grid.py",
+          "name": "_build_grid_row",
+          "line_count": 87,
+          "complexity": 10
+        },
+        {
+          "path": "src/portfolio_backtester/execution_sim/config.py",
+          "name": "build_execution_sim_config",
+          "line_count": 86,
+          "complexity": 12
+        },
+        {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
           "name": "simulate",
           "line_count": 84,
@@ -1211,47 +1258,23 @@
           "complexity": 5
         },
         {
-          "path": "src/portfolio_backtester/_evaluation_positions.py",
-          "name": "_record_period_execution_sim",
-          "line_count": 83,
-          "complexity": 15
-        },
-        {
           "path": "src/portfolio_backtester/portfolio_selection.py",
           "name": "select_holdings",
           "line_count": 82,
           "complexity": 6
-        },
-        {
-          "path": "src/portfolio_backtester/_capacity_report_grid.py",
-          "name": "_build_grid_row",
-          "line_count": 81,
-          "complexity": 10
-        },
-        {
-          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
-          "name": "_process_long_short_rebalance",
-          "line_count": 81,
-          "complexity": 9
-        },
-        {
-          "path": "src/portfolio_backtester/_portfolio_positions_select.py",
-          "name": "_process_long_only_rebalance",
-          "line_count": 80,
-          "complexity": 8
-        },
-        {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "_assemble_topk_spec",
-          "line_count": 80,
-          "complexity": 4
         }
       ],
       "complexity_hotspots": [
         {
+          "path": "src/portfolio_backtester/execution_sim/results.py",
+          "name": "_build_cost_breakdown",
+          "line_count": 63,
+          "complexity": 26
+        },
+        {
           "path": "src/portfolio_backtester/execution_sim/reporting.py",
           "name": "_summarize_adjusted_nav",
-          "line_count": 77,
+          "line_count": 78,
           "complexity": 22
         },
         {
@@ -1264,6 +1287,12 @@
           "path": "src/portfolio_backtester/_construction_grid_signal.py",
           "name": "_prepare_signal_column",
           "line_count": 102,
+          "complexity": 21
+        },
+        {
+          "path": "src/portfolio_backtester/execution_sim/orders_nav.py",
+          "name": "_execute_nav_buy_orders_for_day",
+          "line_count": 96,
           "complexity": 21
         },
         {
@@ -1359,7 +1388,7 @@
         {
           "path": "src/portfolio_backtester/_evaluation_positions.py",
           "name": "_record_period_execution_sim",
-          "line_count": 83,
+          "line_count": 94,
           "complexity": 15
         },
         {
@@ -1384,12 +1413,6 @@
           "path": "src/portfolio_backtester/freshness_overlay.py",
           "name": "apply_freshness_overlay",
           "line_count": 56,
-          "complexity": 15
-        },
-        {
-          "path": "src/portfolio_backtester/strategy.py",
-          "name": "strategy_from_config",
-          "line_count": 55,
           "complexity": 15
         }
       ],
@@ -1535,8 +1558,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 457,
-      "python_loc": 104697,
+      "python_file_count": 458,
+      "python_loc": 104645,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
