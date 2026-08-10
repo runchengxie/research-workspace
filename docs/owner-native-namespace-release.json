@@ -14,7 +14,7 @@
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "5a300d0a27519a11c45786e663a35ad6fac14427",
+      "commit": "06a3592cea7c6e120d582463f8f5cf20f1163144",
       "legacy_source_tree_allowed": false,
       "pr": 21,
       "version": "0.4.0"
@@ -28,7 +28,7 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "f446c293827413d5972e3307118940eabefd19c1",
+      "commit": "9782318c18883d25677eabefbc5f61b5a8db6a3f",
       "compatibility_package_allowed": false,
       "pr": 41,
       "version": "2.1.0"

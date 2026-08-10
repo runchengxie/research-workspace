@@ -177,24 +177,24 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 297,
-      "python_loc": 88813,
+      "python_file_count": 295,
+      "python_loc": 89018,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 38,
-        "long_functions": 75,
+        "large_files": 41,
+        "long_functions": 76,
         "complexity_hotspots": 40,
         "large_classes": 1
       },
       "large_files": [
         {
-          "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1851,
+          "path": "tests/test_tushare_a_share.py",
+          "loc": 1889,
           "hk_related": false
         },
         {
-          "path": "tests/test_tushare_a_share.py",
-          "loc": 1793,
+          "path": "tests/test_tushare_a_share_mins.py",
+          "loc": 1851,
           "hk_related": false
         },
         {
@@ -288,6 +288,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/_a_share_mins_partition.py",
+          "loc": 623,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
           "loc": 617,
           "hk_related": false
@@ -305,11 +310,6 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
           "loc": 552,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
-          "loc": 542,
           "hk_related": false
         }
       ],
@@ -1062,18 +1062,18 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 182,
-      "python_loc": 37737,
+      "python_loc": 38175,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
         "long_functions": 23,
-        "complexity_hotspots": 24,
+        "complexity_hotspots": 25,
         "large_classes": 0
       },
       "large_files": [
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
-          "loc": 820,
+          "loc": 837,
           "hk_related": false
         },
         {
@@ -1248,6 +1248,12 @@
         }
       ],
       "complexity_hotspots": [
+        {
+          "path": "src/portfolio_backtester/execution_sim/results.py",
+          "name": "_build_cost_breakdown",
+          "line_count": 63,
+          "complexity": 26
+        },
         {
           "path": "src/portfolio_backtester/execution_sim/reporting.py",
           "name": "_summarize_adjusted_nav",
@@ -1535,8 +1541,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 478,
-      "python_loc": 104954,
+      "python_file_count": 473,
+      "python_loc": 104916,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
