@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 108,
-      "python_loc": 21033,
+      "python_file_count": 109,
+      "python_loc": 21175,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -51,7 +51,7 @@
         {
           "path": "src/style_factors/workflow.py",
           "name": "run_style_factor_analysis",
-          "line_count": 101,
+          "line_count": 103,
           "complexity": 14
         }
       ],
@@ -706,8 +706,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 156,
-      "python_loc": 31731,
+      "python_file_count": 159,
+      "python_loc": 32237,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
@@ -1061,29 +1061,29 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 180,
-      "python_loc": 36816,
+      "python_file_count": 182,
+      "python_loc": 38175,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
-        "long_functions": 22,
-        "complexity_hotspots": 24,
+        "long_functions": 23,
+        "complexity_hotspots": 25,
         "large_classes": 0
       },
       "large_files": [
         {
           "path": "src/portfolio_backtester/execution_sim/core.py",
-          "loc": 820,
+          "loc": 837,
           "hk_related": false
         },
         {
           "path": "tests/test_backtest.py",
-          "loc": 766,
+          "loc": 767,
           "hk_related": false
         },
         {
           "path": "src/portfolio_backtester/_position_backtest_engine.py",
-          "loc": 665,
+          "loc": 667,
           "hk_related": false
         },
         {
@@ -1127,12 +1127,6 @@
           "complexity": 4
         },
         {
-          "path": "src/portfolio_backtester/api.py",
-          "name": "backtest_topk",
-          "line_count": 99,
-          "complexity": 7
-        },
-        {
           "path": "src/portfolio_backtester/_exposure_industry.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
@@ -1149,6 +1143,12 @@
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
           "complexity": 1
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "backtest_topk",
+          "line_count": 95,
+          "complexity": 4
         },
         {
           "path": "src/portfolio_backtester/leg_helpers.py",
@@ -1239,9 +1239,21 @@
           "name": "_process_long_only_rebalance",
           "line_count": 80,
           "complexity": 8
+        },
+        {
+          "path": "src/portfolio_backtester/api.py",
+          "name": "_assemble_topk_spec",
+          "line_count": 80,
+          "complexity": 4
         }
       ],
       "complexity_hotspots": [
+        {
+          "path": "src/portfolio_backtester/execution_sim/results.py",
+          "name": "_build_cost_breakdown",
+          "line_count": 63,
+          "complexity": 26
+        },
         {
           "path": "src/portfolio_backtester/execution_sim/reporting.py",
           "name": "_summarize_adjusted_nav",
@@ -1432,7 +1444,7 @@
       "repo": "strategy-app",
       "root": "strategy-app",
       "python_file_count": 91,
-      "python_loc": 18878,
+      "python_loc": 18898,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 1,
@@ -1530,7 +1542,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 487,
-      "python_loc": 104985,
+      "python_loc": 104986,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
@@ -1600,12 +1612,12 @@
           "hk_related": false
         },
         {
-          "path": "scripts/research/daily_watch20_candidate_oos.py",
-          "loc": 749,
+          "path": "src/strategy_pipeline/pipeline/config.py",
+          "loc": 750,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/pipeline/config.py",
+          "path": "scripts/research/daily_watch20_candidate_oos.py",
           "loc": 749,
           "hk_related": false
         },

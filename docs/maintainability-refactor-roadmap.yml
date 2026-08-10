@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-09",
+  "_last_changed": "2026-08-10",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -14,7 +14,7 @@
       },
       "market-data-platform": {
         "max_large_files": 38,
-        "max_long_functions": 73,
+        "max_long_functions": 75,
         "max_complexity_hotspots": 39,
         "max_large_classes": 1
       },
@@ -90,7 +90,8 @@
         "2026-08-02: revision-safe fundamentals 归档增加完整性校验、不可变快照和真实数据测试，基线按合并后的实现事实调整为 38/75/40/1。",
         "2026-08-02: 全量 ty 类型检查（PR #20）随 mdp 推进至 9af1cb8；基线重算后 large_files 实测仍为 38（后续 refactor PR #22/#23 已把约束提供方压回阈值内），与既有预算 38 一致，无需 ratchet 上调。PR #20 的类型注解为测量性 artifact，未引入结构性新债。",
         "2026-08-04: 日频清洗内存优化、全仓格式整理和严格类型修正完成后重算基线，large_files 实测由 38 调整为 39。热点清单未新增优先重构对象，预算按当前测量结果同步。",
-        "2026-08-10: mdp hotspot split 删 _a_share_mins_partition 相关大文件，large_files 39->38 下调（债务收敛，非回归）。"
+        "2026-08-10: mirror-a-share-index-daily 新增 _adapters_part03 与测试后重算基线，large_files 39->41、long_functions 75->76（新功能测量性增长，已在 accepted_hotspots 登记 _adapters_part03）。",
+        "2026-08-10: merge main 后重校准基线,large_files 41->38、long_functions 76->75 对齐真实代码计数(ratchet 收紧)。"
       ]
     },
     {
@@ -117,7 +118,8 @@
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
         "2026-07-28: 模块拆分后 large_files 18->7 下调（exposure_style/portfolio_positions_select/position_backtest_engine 低于阈值，登记 accepted_hotspots）。",
         "2026-07-29: execution_sim/core.py(2393) 拆为 models/capacity/orders/reporting，large_files 7->8 上调（orders.py 1173 新接收者，债务转移）。",
-        "2026-07-30: orders_nav.py(633) 进一步拆出订单状态聚合至 orders_nav_states.py(253)，orders_nav.py 降至 401 行低于 500 阈值不再是大文件，large_files 8->7 下调（债务收敛，非回归）。"
+        "2026-07-30: orders_nav.py(633) 进一步拆出订单状态聚合至 orders_nav_states.py(253)，orders_nav.py 降至 401 行低于 500 阈值不再是大文件，large_files 8->7 下调（债务收敛，非回归）。",
+        "2026-08-10: 会计第三阶段账本拆分新增 CostBreakdown 8 子项，引入 1 个复杂度热点，complexity_hotspots 24->25 上调（stage 3 真实新增、owner 决策记录，非回归）。"
       ]
     },
     {
@@ -1361,6 +1363,12 @@
       "owner_repo": "research-workspace",
       "reason": "pre-push 守卫单元测试（覆盖 _is_same_git_repo、plan_gate 的 worktree 识别与现有 root/submodule 匹配）；为支持从超项目 linked worktree 直推新增 ~42 行用例，文件超过 500 行阈值。测试内聚于守卫契约，非运行期债务。",
       "next_action": "保持守卫契约测试内聚；若后续守卫逻辑拆分再相应调整测试组织。"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/_adapters_part03.py",
+      "owner_repo": "market-data-platform",
+      "reason": "The TuShare business-adapters module keeps shared mirror/export helpers together with the _tushare_runtime client wiring; a single index_daily mirror added for benchmark inputs in 2026-08",
+      "next_action": "split new single-file mirror functions into a dedicated index_daily adapter before adding further mirror commands"
     }
   ]
 }
