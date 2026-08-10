@@ -27,3 +27,4 @@ cache/
 # Local AI-agent state
 .codewhale/
 strategy-research/experiments/qlib_pilot/universe_top800_by_date.csv
+strategy-research/experiments/qlib_pilot/universe_top800_2019.csv
