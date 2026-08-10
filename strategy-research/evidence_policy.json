@@ -1,0 +1,96 @@
+{
+  "schema_version": "strategy_evidence_policy.v1",
+  "source_of_truth": "strategy-research",
+  "last_verified": "2026-08-11",
+  "checks": {
+    "pit": {
+      "name": "时间点数据",
+      "meaning": "股票池、财务报表和行业归属只使用当时已公开的数据，验证无未来函数",
+      "evidence_keys": ["pit_universe", "pit_fundamentals", "pit_industry_membership"]
+    },
+    "walk_forward": {
+      "name": "滚动样本外",
+      "meaning": "按时间顺序切分并重复滚动，训练段与验证段不重叠",
+      "evidence_keys": ["window_count", "metric"]
+    },
+    "benchmark_matrix": {
+      "name": "统一考试表",
+      "meaning": "同一模型在多个股票池、预测周期、市场状态和成本假设下的一组成绩，禁止只报告单个 Sharpe 点估计",
+      "evidence_keys": ["cells", "axes"]
+    },
+    "cost": {
+      "name": "交易成本",
+      "meaning": "在至少两种成本假设下验证换手与收益，成本上升时优势仍能维持",
+      "evidence_keys": ["cost_bps", "turnover"]
+    },
+    "final_oos": {
+      "name": "最终样本外",
+      "meaning": "训练调参全部完成前预留一段不参与任何选择的最终样本外，或记录书面替代说明",
+      "evidence_keys": ["oos_start", "metric"]
+    },
+    "cpcv": {
+      "name": "组合对称交叉验证",
+      "meaning": "对组合构造流程做组合对称交叉验证，防止单一时间切分带来的运气",
+      "evidence_keys": ["n_groups", "test_groups", "metric"]
+    },
+    "regime": {
+      "name": "市场状态",
+      "meaning": "区分牛市、熊市和震荡市报告表现，避免把单一市场状态当成普遍结论",
+      "evidence_keys": ["regimes", "metric"]
+    },
+    "pbo": {
+      "name": "回测过拟合概率",
+      "meaning": "估计多次试验挑出最好结果的概率，量化 data snooping 风险",
+      "evidence_keys": ["n_trials", "value"]
+    },
+    "dsr": {
+      "name": "多重检验调整",
+      "meaning": "用亏损率、方差与试验次数调整显著性，说明超额收益是真实还是运气",
+      "evidence_keys": ["n_trials", "value"]
+    },
+    "capacity": {
+      "name": "容量评估",
+      "meaning": "在多个组合规模与参与率下压测流动性，记录可维持规模的边界",
+      "evidence_keys": ["portfolio_values", "participation_rates"]
+    },
+    "negative_controls": {
+      "name": "阴性对照",
+      "meaning": "用随机信号或空白特征跑同一流程，确认收益不是流程本身造成的假象",
+      "evidence_keys": ["control_type", "metric"]
+    },
+    "execution_deviation": {
+      "name": "实盘偏差",
+      "meaning": "对比 shadow 或实盘成交与回测假设的差异，记录执行滑点和成交率",
+      "evidence_keys": ["deviation_metric"]
+    }
+  },
+  "required_by_lifecycle": {
+    "exploration": [],
+    "pre_production": ["pit", "walk_forward", "benchmark_matrix", "cost"],
+    "shadow": ["pit", "walk_forward", "benchmark_matrix", "cost", "final_oos", "cpcv", "regime"],
+    "research_shadow": ["pit", "walk_forward", "benchmark_matrix", "cost", "final_oos", "cpcv", "regime"],
+    "operational_research": ["pit", "walk_forward", "benchmark_matrix", "cost", "final_oos", "cpcv", "regime"],
+    "operational": [
+      "pit",
+      "walk_forward",
+      "benchmark_matrix",
+      "cost",
+      "final_oos",
+      "cpcv",
+      "regime",
+      "pbo",
+      "dsr",
+      "capacity",
+      "negative_controls",
+      "execution_deviation"
+    ],
+    "external_research": []
+  },
+  "notes": [
+    "pre_production 阶段强制 PIT、滚动样本外、统一考试表和交易成本，防止把单点回测结果当作结论",
+    "shadow、research_shadow 和 operational_research 追加最终样本外、组合对称交叉验证与市场状态",
+    "operational 阶段追加过拟合概率、多重检验、容量、阴性对照与实盘偏差",
+    "exploration 和 external_research 不设强制检查，分别对应快速试错与外部仓库边界",
+    "基准矩阵的 cells 必须覆盖至少两个维度，单一股票池加单一周期的单个 Sharpe 不能通过该检查"
+  ]
+}

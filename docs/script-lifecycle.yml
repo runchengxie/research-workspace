@@ -280,6 +280,16 @@
       "removal_condition": "remove only after public/private boundary checks move to another gate and two release reviews record no direct calls to this script"
     },
     {
+      "path": "scripts/strategy_evidence_gate.py",
+      "owner": "research-workspace",
+      "purpose": "Lifecycle-aware strategy evidence gate that validates per-strategy evidence bundles against evidence_policy.json and enforces the benchmark matrix requirement",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none; pure stdlib against strategy-research/catalog.json and strategy-research/evidence_policy.json",
+      "removal_condition": "remove only after strategy evidence checks move into the strategy promotion gate and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "src/research_contracts/smoke_contracts.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo contract smoke commands",

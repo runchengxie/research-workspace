@@ -52,6 +52,7 @@ include = [
   "scripts/run_submodule_checks.py",
   "scripts/scan_workspace_secrets.py",
   "scripts/maintainability_baseline.py",
+  "scripts/strategy_evidence_gate.py",
   "scripts/workspace_doctor.py",
   "scripts/doctor_*.py",
   "scripts/workspace_governance.py",
