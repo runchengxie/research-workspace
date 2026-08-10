@@ -1,0 +1,43 @@
+{
+  "schema_version": "research_spec.v1",
+  "experiment_id": "qlib_pilot",
+  "title": "Qlib XGBoost 训练与评估可行性验证",
+  "market": "a_share",
+  "status": "complete",
+  "universe": {
+    "description": "A 股 daily_clean 全市场，运行脚本按 LIMIT_SYMBOLS 抽样 200 只",
+    "membership": "a_share_all_daily_clean_latest"
+  },
+  "data": {
+    "source": "platform_assets",
+    "start": "2015-01-05",
+    "end": "2026-07-31",
+    "pit": false
+  },
+  "prediction": {
+    "target": "next_open_return",
+    "horizon": "h5_h20",
+    "task": "ranking"
+  },
+  "model": {
+    "name": "XGBoost XGBModel",
+    "training": "rolling_windows"
+  },
+  "portfolio": {
+    "construction": "n/a"
+  },
+  "cost": {
+    "cost_bps": "n/a"
+  },
+  "benchmark": {
+    "cohorts": "n/a"
+  },
+  "evaluation": {
+    "oos_protocol": ["rolling_ic"],
+    "final_oos_reserved": false
+  },
+  "evidence_refs": [
+    "strategy-research/experiments/qlib_pilot/RESULTS.md",
+    "strategy-research/experiments/qlib_pilot/README.md"
+  ]
+}
