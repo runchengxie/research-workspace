@@ -109,10 +109,11 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 7,
-      "max_long_functions": 23,
-      "max_complexity_hotspots": 25,
+      "max_long_functions": 26,
+      "max_complexity_hotspots": 26,
       "max_large_classes": 0,
       "owner_decision": [
+        "2026-08-10: 会计第四阶段 A 股市场规则契约（opt-in）新增 _execute_nav_buy_orders_for_day(93 行，复杂度 20) 与 _execute_nav_sell_orders_for_day(95 行) 两个执行模拟账本路径函数，并新增 tests/test_execution_sim_market_rules.py；long_functions 23->26、complexity_hotspots 25->26 上调（phase-4 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记两个 nav 订单函数）。",
         "2026-08-09: 会计第二阶段账本迁移新增 _assemble_topk_spec(80 行，刚好踩 long_function 阈值)，long_functions 22->23 上调（真实新增、owner 决策记录，非回归）。",
         "2026-07-18: target-first 固定槽执行 + DailyWatch20 组合回放集成，large_file 数未增。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
@@ -762,6 +763,18 @@
       "owner_repo": "portfolio-backtester",
       "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders_nav.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "2026-08-10 会计第四阶段 A 股整手/涨停市场规则契约新增 _execute_nav_buy_orders_for_day(93 行，复杂度 20) 买入账本路径函数；属 phase-4 路线图真实功能扩展，非回归债务。已在 owner_decision 登记 long_functions/complexity_hotspots 上调。",
+      "next_action": "phase-4 收尾或后续清理时，将整手量化与涨停跳过等纯计算逻辑抽为独立 helper 以降低复杂度热点"
+    },
+    {
+      "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders_nav.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "2026-08-10 会计第四阶段 A 股 T+1/跌停/上市状态市场规则契约新增 _execute_nav_sell_orders_for_day(95 行) 卖出台账路径函数；属 phase-4 路线图真实功能扩展，非回归债务。已在 owner_decision 登记 long_functions 上调。",
+      "next_action": "phase-4 收尾或后续清理时，将可卖数量快照与状态守卫抽为独立 helper 以降低长函数计数"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/execution_sim/orders.py",
