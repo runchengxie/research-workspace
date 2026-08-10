@@ -1,0 +1,25 @@
+# Promotion candidate: top800 universe, strict evaluation with benchmark.
+# Same engine config as baseline but restricted to top-800-by-amount universe.
+extends: "strategy-pipeline/configs/presets/a_share.yml"
+
+data:
+  start_date: "20220101"
+  asset_coverage_start_date: "20220101"
+
+research_universe:
+  symbols_file: null
+  by_date_file: "artifacts/assets/universe/top800_by_date.csv"
+
+backtest:
+  benchmark_symbol: null
+  benchmark_returns_file: "artifacts/assets/benchmark/csi300_daily_return.parquet"
+
+eval:
+  top_k: 30
+  walk_forward:
+    enabled: true
+    n_windows: 3
+    test_size: 0.4
+    step_size: null
+    anchor_end: true
+    backtest_enabled: true
