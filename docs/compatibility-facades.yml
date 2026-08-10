@@ -60,75 +60,75 @@
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.freshness_overlay",
-      "current_consumers": "callers redirected to alpha_research.freshness_overlay; facade retained pending two release reviews",
+      "current_consumers": "callers redirected 2026-08-10 to alpha_research.freshness_overlay; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
       "removal_condition": "remove after two release reviews show no pipeline freshness_overlay imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.freshness_overlay; two release reviews required before facade removal",
-      "status": "active_compatibility"
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.freshness_overlay; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/train_eval_request_builder.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.train_eval_request_builder",
-      "current_consumers": "callers redirected to alpha_research.train_eval_request_builder; facade retained pending two release reviews",
+      "current_consumers": "callers redirected 2026-08-10 to alpha_research.train_eval_request_builder; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_request_builder imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_request_builder; two release reviews required before facade removal",
-      "status": "active_compatibility"
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_request_builder; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/train_eval_result.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.train_eval_result",
-      "current_consumers": "callers redirected to alpha_research.train_eval_result; facade retained pending two release reviews",
+      "current_consumers": "callers redirected 2026-08-10 to alpha_research.train_eval_result; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_result imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
         "strategy-pipeline pytest"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_result; two release reviews required before facade removal",
-      "status": "active_compatibility"
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.train_eval_result; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/promotion_gate.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.promotion_gate",
-      "current_consumers": "callers redirected to alpha_research.promotion_gate; facade retained pending two release reviews",
+      "current_consumers": "callers redirected 2026-08-10 to alpha_research.promotion_gate; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline promotion gate tests",
         "alpha-research promotion gate tests"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate; two release reviews required before facade removal",
-      "status": "active_compatibility"
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/promotion_gate_thresholds.py",
       "owner_repo": "strategy-pipeline",
       "kind": "module_facade",
       "replacement": "alpha_research.promotion_gate_thresholds",
-      "current_consumers": "callers redirected to alpha_research.promotion_gate_thresholds; facade retained pending two release reviews",
+      "current_consumers": "callers redirected 2026-08-10 to alpha_research.promotion_gate_thresholds; facade retained; TWO RELEASE REVIEWS monitoring started 2026-08-10, removal eligible after 2 releases",
       "removal_condition": "remove after two release reviews show no research_ops promotion_gate_thresholds imports and alpha replacement docs/tests cover direct use",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline promotion gate tests",
         "alpha-research promotion gate tests"
       ],
-      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate_thresholds; two release reviews required before facade removal",
-      "status": "active_compatibility"
+      "consumer_audit": "redirected 2026-08-10 to alpha_research.promotion_gate_thresholds; two release reviews monitoring window opened 2026-08-10 (release N then release N+1); facade file deletion deferred until window clears with zero pipeline-local imports",
+      "status": "active_compatibility_pending_two_release_reviews"
     },
     {
       "id": "strategy-owner-delegating-public-facades",
