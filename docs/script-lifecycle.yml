@@ -300,6 +300,16 @@
       "removal_condition": "remove only after research spec validation moves into an experiment gate and no release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/benchmark_matrix_build.py",
+      "owner": "research-workspace",
+      "purpose": "Build the benchmark_matrix.v1 exam table from benchmark_rows.v1 raw results and enforce the at-least-two-axes rule",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --output is provided",
+      "external_dependencies": "none; pure stdlib against benchmark_rows.v1 JSON input",
+      "removal_condition": "remove only after benchmark matrix generation moves into the strategy promotion gate and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "src/research_contracts/smoke_contracts.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo contract smoke commands",

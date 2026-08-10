@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 113,
-      "python_loc": 22115,
+      "python_file_count": 115,
+      "python_loc": 22390,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -114,6 +114,7 @@
           "scripts/maintainability_baseline.py",
           "scripts/strategy_evidence_gate.py",
           "scripts/research_spec_check.py",
+          "scripts/benchmark_matrix_build.py",
           "scripts/workspace_doctor.py",
           "scripts/doctor_*.py",
           "scripts/workspace_governance.py",
@@ -140,6 +141,7 @@
         "mypy_present": false
       },
       "script_inventory": [
+        "scripts/benchmark_matrix_build.py",
         "scripts/check.sh",
         "scripts/dead_code_advisory.py",
         "scripts/doctor_boundary_checks.py",
