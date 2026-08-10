@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 109,
-      "python_loc": 21175,
+      "python_loc": 21223,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -21,23 +21,23 @@
       },
       "large_files": [
         {
+          "path": "tests/test_pre_push_hooks.py",
+          "loc": 608,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_maintainability_governance.py",
           "loc": 590,
           "hk_related": false
         },
         {
-          "path": "tests/test_pre_push_hooks.py",
-          "loc": 581,
+          "path": "scripts/run_pre_push_checks.py",
+          "loc": 571,
           "hk_related": false
         },
         {
           "path": "scripts/workspace_governance.py",
           "loc": 556,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/run_pre_push_checks.py",
-          "loc": 550,
           "hk_related": false
         }
       ],
@@ -1061,8 +1061,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 182,
-      "python_loc": 38175,
+      "python_file_count": 183,
+      "python_loc": 38420,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 7,
