@@ -135,12 +135,33 @@ def _matching_submodule(
     repository: Path,
     configs: dict[str, SubmoduleConfig],
 ) -> str | None:
-    matches = [
-        name for name, config in configs.items() if (root / config.path).resolve() == repository
-    ]
-    if len(matches) > 1:
-        raise ManifestError(f"multiple submodules resolve to {repository}")
-    return matches[0] if matches else None
+    for name, config in configs.items():
+        primary = (root / config.path).resolve()
+        if primary == repository:
+            return name
+        worktrees = _linked_worktree_paths(primary)
+        if repository in worktrees:
+            return name
+    return None
+
+
+def _linked_worktree_paths(primary: Path) -> set[Path]:
+    """Return resolved paths of all linked worktrees of a git repository."""
+    if not (primary / ".git").exists():
+        return set()
+    completed = subprocess.run(
+        ("git", "-C", str(primary), "worktree", "list", "--porcelain"),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if completed.returncode != 0:
+        return set()
+    paths: set[Path] = set()
+    for line in completed.stdout.splitlines():
+        if line.startswith("worktree "):
+            paths.add(Path(line.split(" ", 1)[1]).resolve())
+    return paths
 
 
 def plan_gate(

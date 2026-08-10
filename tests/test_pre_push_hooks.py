@@ -579,3 +579,30 @@ def test_plan_gate_treats_superproject_worktree_as_root(
         "root-tests",
     ]
     assert all(command.cwd == fake_worktree for command in plan.commands)
+
+
+def test_matching_submodule_resolves_linked_worktree_to_submodule(
+    tmp_path: Path,
+) -> None:
+    repo = tmp_path / "repo"
+    _init_repo(repo)
+    _commit_file(repo, content="a\n")
+
+    worktree = tmp_path / "worktree"
+    subprocess.run(
+        ("git", "worktree", "add", "-q", str(worktree), "HEAD"),
+        cwd=repo,
+        check=True,
+    )
+
+    configs = {
+        "demo": run_submodule_checks.SubmoduleConfig(
+            name="demo",
+            path=repo,
+            profiles={"full": []},
+        )
+    }
+
+    assert run_pre_push_checks._matching_submodule(tmp_path, repo, configs) == "demo"
+    assert run_pre_push_checks._matching_submodule(tmp_path, worktree, configs) == "demo"
+    assert run_pre_push_checks._matching_submodule(tmp_path, tmp_path / "other", configs) is None
