@@ -6,6 +6,7 @@
 
 | 目录 | 说明 | 状态 |
 |------|------|------|
+| `macd_double_death_cross/` | 20 个交易日内双 MACD 死叉叠加市值、市盈率、换手与震幅过滤回测 | 探索完成 |
 | `next_open_to_high/` | A股次日开盘到日内高点 XGBoost 预测 | 探索完成 |
 | `daily_watch20_fundamental_shadow/` | DailyWatch20 基本面 shadow 验证 | 探索完成 |
 | `slow_volume_verification/` | slow-volume campaign 产出校验与对账 | 一次性验证 |
