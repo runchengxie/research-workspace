@@ -45,6 +45,9 @@
 - `operational`：具备受控运行与发布路径，是否发布仍由当次门禁决定
 - `external_research`：主要实现在外部仓库，本目录只维护身份与接入边界
 
+每个阶段对应的强制证据清单和校验命令见 [../docs/strategy-evidence-gate.md](../docs/strategy-evidence-gate.md)。
+生命周期变化必须配套证据包，禁止用单点回测数字代替证据清单。
+
 ## 新增与晋级
 
 1. 先在本目录新增人类可读说明和 `catalog.json` 条目。
