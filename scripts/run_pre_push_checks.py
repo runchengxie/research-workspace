@@ -79,20 +79,8 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
     # strategy-pipeline 的 dev extra 已提供 pytest/numpy/pandas。
     tests_dir = Path(cwd) / "tests"
     strategy_project = Path(cwd) / "strategy-pipeline"
-    root_tests = (
-        "uv",
-        "run",
-        "--project",
-        str(strategy_project),
-        "--extra",
-        "dev",
-        "python",
-        "-m",
-        "pytest",
-        str(tests_dir),
-        "-q",
-        "-k",
-        "not maintainability_baseline",
+    root_tests = tuple(
+        f"uv run --project {strategy_project} --extra dev python -m pytest {tests_dir} -q".split()
     )
     return (
         GateCommand(
