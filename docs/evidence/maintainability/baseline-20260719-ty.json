@@ -177,11 +177,11 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 295,
-      "python_loc": 89018,
+      "python_file_count": 297,
+      "python_loc": 89080,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 41,
+        "large_files": 40,
         "long_functions": 76,
         "complexity_hotspots": 40,
         "large_classes": 1
@@ -288,11 +288,6 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/_a_share_mins_partition.py",
-          "loc": 623,
-          "hk_related": false
-        },
-        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
           "loc": 617,
           "hk_related": false
@@ -310,6 +305,11 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
           "loc": 552,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
+          "loc": 542,
           "hk_related": false
         }
       ],

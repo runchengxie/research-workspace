@@ -77,7 +77,7 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 41,
+      "max_large_files": 40,
       "max_long_functions": 76,
       "max_complexity_hotspots": 40,
       "max_large_classes": 1,
@@ -91,7 +91,8 @@
         "2026-08-02: 全量 ty 类型检查（PR #20）随 mdp 推进至 9af1cb8；基线重算后 large_files 实测仍为 38（后续 refactor PR #22/#23 已把约束提供方压回阈值内），与既有预算 38 一致，无需 ratchet 上调。PR #20 的类型注解为测量性 artifact，未引入结构性新债。",
         "2026-08-04: 日频清洗内存优化、全仓格式整理和严格类型修正完成后重算基线，large_files 实测由 38 调整为 39。热点清单未新增优先重构对象，预算按当前测量结果同步。",
         "2026-08-10: mirror-a-share-index-daily 新增 _adapters_part03 与测试后重算基线，large_files 39->41、long_functions 75->76（新功能测量性增长，已在 accepted_hotspots 登记 _adapters_part03）。",
-        "2026-08-10: 同步根仓 baseline-20260719-ty.json（index-daily mirror 合并后真实计数），large_files/long_functions 维持 41/76，complexity_hotspots 39->40 对齐实测（_a_share_mins_partition.py 623 行新增、tushare_minute_backfill_part02.py 542 行移除）。"
+        "2026-08-10: 同步根仓 baseline-20260719-ty.json（index-daily mirror 合并后真实计数），large_files/long_functions 维持 41/76，complexity_hotspots 39->40 对齐实测（_a_share_mins_partition.py 623 行新增、tushare_minute_backfill_part02.py 542 行移除）。",
+        "2026-08-10: gitlink 同步至 dependabot 合并后的 mdp main，基线重算后 large_files 41->40（ratchet 下调，非回归）。"
       ]
     },
     {
