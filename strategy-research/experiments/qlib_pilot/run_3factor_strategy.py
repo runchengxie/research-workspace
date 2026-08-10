@@ -43,6 +43,7 @@ def main() -> None:
     ap.add_argument("--w-size", type=float, default=1.0, help="Weight on small-cap (negative size) z.")
     ap.add_argument("--w-liquidity", type=float, default=1.0, help="Weight on low-turnover z.")
     ap.add_argument("--w-growth", type=float, default=1.0, help="Weight on growth z.")
+    ap.add_argument("--export-holdings", default="", help="CSV path to export monthly holdings.")
     ap.add_argument("--out", default="/tmp/3factor_result.json")
     args = ap.parse_args()
 
@@ -113,12 +114,15 @@ def main() -> None:
     sorted_reb = sorted(rebalance_ts)
     prev_holdings: set[str] = set()
     cost_per_turn = args.cost_bps / 1e4
+    holdings_rows: list[dict] = []
     for i, reb_date in enumerate(sorted_reb):
         day_rows = sel[sel["trade_date"] == reb_date].sort_values("score", ascending=False)
         top = day_rows.head(args.top_k)["symbol"].tolist()
         if not top:
             continue
         top_set = set(top)
+        for sym in top:
+            holdings_rows.append({"rebalance": reb_date.date().isoformat(), "symbol": sym, "rank": top.index(sym) + 1})
         # one-way turnover: sold names + new names, each ~1/top_k of portfolio
         if prev_holdings:
             turnover = len(top_set - prev_holdings) + len(prev_holdings - top_set)
@@ -170,6 +174,10 @@ def main() -> None:
     print(out)
     Path(args.out).write_text(__import__("json").dumps(out, indent=2, ensure_ascii=False))
     df.to_csv(str(Path(args.out).with_suffix(".csv")), index=False)
+    if args.export_holdings:
+        hdf = pd.DataFrame(holdings_rows)
+        hdf.to_csv(args.export_holdings, index=False)
+        print(f"[holdings] {len(hdf)} rows -> {args.export_holdings}")
 
 
 if __name__ == "__main__":
