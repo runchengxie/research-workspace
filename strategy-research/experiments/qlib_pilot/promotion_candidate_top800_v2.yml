@@ -1,0 +1,25 @@
+# Promotion candidate v2: top800 (2019 start), strict evaluation.
+# Extends window to 2019 to increase walk_forward windows and DSR trials.
+extends: "strategy-pipeline/configs/presets/a_share.yml"
+
+data:
+  start_date: "20190101"
+  asset_coverage_start_date: "20190101"
+
+research_universe:
+  symbols_file: null
+  by_date_file: "artifacts/assets/universe/top800_2019_by_date.csv"
+
+backtest:
+  benchmark_symbol: null
+  benchmark_returns_file: "artifacts/assets/benchmark/csi300_daily_return.parquet"
+
+eval:
+  top_k: 30
+  walk_forward:
+    enabled: true
+    n_windows: 5
+    test_size: 0.3
+    step_size: null
+    anchor_end: true
+    backtest_enabled: true
