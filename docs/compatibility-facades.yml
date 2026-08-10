@@ -159,7 +159,6 @@
         "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_frame.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_receipts.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_selection.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_v2_evaluation.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_v2_evaluation_contract.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_analysis.py",
         "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_contract.py",
