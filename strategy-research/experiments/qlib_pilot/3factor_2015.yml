@@ -1,0 +1,72 @@
+# 3-factor strategy, full market 2015-2026 (long window), fixed_score replay mode.
+# Uses precomputed factor scores (no XGB training).
+market: a_share
+
+data:
+  provider: local_artifact
+  source_mode: fixed_scored_artifact
+  scored_file: /tmp/3f_scored_2015.parquet
+  start_date: "20150101"
+  end_date: "20260807"
+  price_col: close
+
+research_universe:
+  mode: static
+  symbols_file: "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_symbols.txt"
+  min_symbols_per_date: 1
+  min_listed_days: 60
+  drop_st: true
+  drop_suspended: true
+
+label:
+  horizon_mode: fixed
+  horizon_days: 20
+  shift_days: 1
+  target_col: future_return
+
+features:
+  list: [score]
+  cross_sectional:
+    method: none
+
+model:
+  type: fixed_score_artifact
+  params:
+    score_col: score
+
+eval:
+  test_size: 0.2
+  n_splits: 5
+  n_quantiles: 5
+  top_k: 30
+  rebalance_frequency: "M"
+  signal_direction_mode: fixed
+  signal_direction: 1
+  transaction_cost_bps: 10
+  sample_on_rebalance_dates: true
+  save_artifacts: true
+  save_scored_artifact: true
+  walk_forward:
+    enabled: true
+    n_windows: 3
+    test_size: 0.3
+    step_size: null
+    anchor_end: true
+    backtest_enabled: true
+
+backtest:
+  enabled: true
+  top_k: 30
+  rebalance_frequency: "M"
+  weighting: equal
+  long_only: true
+  benchmark_returns_file: "artifacts/assets/benchmark/csi300_daily_return.parquet"
+  execution_sim:
+    enabled: true
+    participation_rate: 0.10
+    liquidity_cols:
+      - medadv20_amount
+      - amount
+    buy_max_days: 10
+    sell_max_days: "until_next_rebalance"
+    zero_fill_abort_days_buy: 3
