@@ -171,7 +171,7 @@ def main() -> None:
         print(f"[min_mv] {args.min_mv}亿: {before} -> {len(scored)} rows (dropped {(before-len(scored))/before:.1%})")
 
     if args.universe == "top800":
-        univ = pd.read_csv("/home/richard/data/market-data-platform/assets/universe/top800_2019_by_date.csv")
+        univ = pd.read_csv("/home/richard/data/market-data-platform/assets/universe/top800_2015_by_date.csv")
         univ["trade_date"] = univ["trade_date"].astype(str)
         scored["trade_date"] = pd.to_datetime(scored["trade_date"]).dt.strftime("%Y%m%d")
         scored = scored.merge(univ, on=["trade_date", "symbol"], how="inner")
