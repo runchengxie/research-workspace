@@ -21,16 +21,16 @@
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "84594dd47f3731bd27659cc43cd404cd9dcdd29f",
+      "commit": "519fec3414cfc4a54c57d0cb7de8d6c5c0edac4f",
       "legacy_source_tree_allowed": false,
-      "pr": 8,
+      "pr": 10,
       "version": "0.2.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "cb44043771616f309aef8c705e0070c38201fc36",
+      "commit": "ded1df5186d4de11391a1c1eb74430c5aef44790",
       "compatibility_package_allowed": false,
-      "pr": 41,
+      "pr": 45,
       "version": "2.1.0"
     }
   },
