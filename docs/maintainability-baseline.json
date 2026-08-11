@@ -713,7 +713,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 161,
-      "python_loc": 32416,
+      "python_loc": 32450,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
@@ -739,7 +739,7 @@
         },
         {
           "path": "src/alpha_research/_walk_forward_core.py",
-          "loc": 512,
+          "loc": 510,
           "hk_related": false
         }
       ],
@@ -935,7 +935,7 @@
         {
           "path": "src/alpha_research/factor_diagnostics_config.py",
           "name": "factor_diagnostics_options_from_config",
-          "line_count": 47,
+          "line_count": 61,
           "complexity": 18
         },
         {
@@ -971,7 +971,7 @@
         {
           "path": "src/alpha_research/_factor_diagnostics_rows.py",
           "name": "_correlation_rows",
-          "line_count": 48,
+          "line_count": 50,
           "complexity": 16
         },
         {
