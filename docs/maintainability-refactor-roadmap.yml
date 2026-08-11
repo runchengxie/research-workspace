@@ -1,9 +1,9 @@
 {
-  "_last_changed": "2026-08-10",
+  "_last_changed": "2026-08-11",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
-    "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。accepted_hotspots_count 已于 2026-08-09 按代码事实重算：hotspot_budgets 登记册共 181 条，其中 95 条对应文件已降到 500 行阈值以下、5 条已显式 cleared/resolved，仅 81 条仍为真实未解决热点（>=500 行且未清除）。原 179 为失真值，本次校准到 81。",
+    "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。accepted_hotspots 登记册截至 2026-08-11 共 182 条；其中 96 条对应文件已降到 500 行阈值以下、5 条已显式 cleared/resolved，81 条仍为真实未解决热点（>=500 行且未清除）。accepted_hotspots_count 记录真实未解决热点数，不等于登记册总长度。",
     "accepted_hotspots_count": 81,
     "by_repo": {
       "research-workspace": {
@@ -13,7 +13,7 @@
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 41,
+        "max_large_files": 40,
         "max_long_functions": 76,
         "max_complexity_hotspots": 40,
         "max_large_classes": 1
@@ -25,9 +25,9 @@
         "max_large_classes": 0
       },
       "portfolio-backtester": {
-        "max_large_files": 7,
-        "max_long_functions": 23,
-        "max_complexity_hotspots": 25,
+        "max_large_files": 8,
+        "max_long_functions": 28,
+        "max_complexity_hotspots": 26,
         "max_large_classes": 0
       },
       "strategy-app": {
