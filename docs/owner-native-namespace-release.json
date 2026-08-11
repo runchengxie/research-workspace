@@ -7,9 +7,9 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "9003743ebdcc2c954a6cf3e4852d15a00e40d283",
+      "commit": "c64ccdb1c463259a9aabbe6e3a6228522c83c5bd",
       "legacy_source_tree_allowed": false,
-      "pr": 17,
+      "pr": 18,
       "version": "0.4.0"
     },
     "portfolio-backtester": {
