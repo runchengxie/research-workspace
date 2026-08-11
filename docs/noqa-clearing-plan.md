@@ -1,9 +1,9 @@
 # 子模块 noqa 清债计划
 
-## 当前结论（2026-07-31 复核后）
+## 当前结论（2026-08-11 复核后）
 
 - `market-data-platform` 的 `F401` 经 worktree 实测后确认是 facade re-export 壳重新导出拆分符号的标准写法（27/30 个文件 docstring 已声明），并非技术债。这部分已通过 `pyproject.toml` 的 28 条 `per-file-ignores` 收口并合并（PR #13），不再作为清债目标。
-- 实测复核：排除 `.venv`/`build`/`artifacts` 后，`market-data-platform` 自有代码当前共 46 处内联 `# noqa`（几乎全是 `PLR0913` 等设计类告警），`src/` 内零内联 `F401`。下表早期统计的「1036 处、F401 占 951」是未收口前的口径，已不反映现状，仅保留作历史记录。
+- 实测复核：按各仓库 tracked Python 文件统计，`market-data-platform` 当前共 68 处内联 `# noqa`，其中 52 处为 `PLR0913`，其余主要是组合复杂度与分支类抑制。`src/` 内零内联 `F401`。早期「1036 处、F401 占 951」是未收口前的口径，已不反映现状，仅保留作历史记录。
 - 其余子模块自有代码 # noqa 本来极少，门禁在子模块层有效。本计划的实际清债空间很小，重点转为「让设计类告警浮现、后续做函数拆分」。
 
 ## 与现有治理文件的关系
@@ -17,22 +17,22 @@
 
 ## 现状数据
 
-各子模块自有代码 `# noqa` 真实数量（排除 `.venv`/`build`/`artifacts`，`find` + `grep` 实测，2026-07-31）：
+各子模块自有代码 `# noqa` 真实数量（仅统计 tracked Python 文件，`git grep` 实测，2026-08-11）：
 
 | 子模块 | `# noqa` 真实量 | 主要规则 | 预推送门禁命令来源 |
 | --- | --- | --- | --- |
-| `market-data-platform` | 1036 | `F401`(951)、`PLR0913`(53)、`PLR0915`(10) | `scripts/submodule_checks.json` 的 `full` profile |
-| `strategy-pipeline` | 38 | `F403`(35) | 仓库 `scripts/dev/run_tests.sh` |
-| `alpha-research` | 9 | `RUF002`(5)、`F403`(2) | `scripts/submodule_checks.json` 的 `full` profile |
+| `market-data-platform` | 68 | `PLR0913`(52)，其余主要是 `C901`/`PLR0912`/`PLR0915` 组合 | `scripts/submodule_checks.json` 的 `full` profile |
+| `strategy-pipeline` | 16 | `F403`(15)、`F401`(1) | 仓库 `scripts/dev/run_tests.sh` |
+| `alpha-research` | 5 | `F403`(2)，以及 `F401`/`E402`/`C416` 各 1 | `scripts/submodule_checks.json` 的 `full` profile |
 | `quant-execution-engine` | 10 | `E402`(6)、`F403`(2) | 同左 |
 | `portfolio-backtester` | 7 | `F403`(3)、`F401`(3) | 同左 |
-| `research-apps` | 0 | 无 | 仓库自有 `scripts/dev/check.py` |
+| `strategy-app` | 0 | 无 | 仓库自有 `scripts/dev/check.py` |
 
 规则类别分布（仅自有代码，排除 `.venv`）：
 
-- `F401` 未使用导入：主要来自 `market-data-platform`（951），其余子模块极少。
-- `F403` 星号导入：`strategy-pipeline`（35）、`alpha-research`（2）、`quant-execution-engine`（2）、`portfolio-backtester`（3）。
-- `PLR0913`/`PLR0915` 参数/分支过多：`market-data-platform`（53+10），属设计类告警。
+- `F401` 未使用导入：market-data-platform 的 facade re-export 已通过显式配置收口，当前内联项只在其他仓库零星存在。
+- `F403` 星号导入：`strategy-pipeline`（15）、`alpha-research`（2）、`quant-execution-engine`（2）、`portfolio-backtester`（3）。
+- `PLR0913`/`PLR0915` 参数/分支过多：主要集中在 `market-data-platform`，属设计类告警。
 - `E402` 模块级导入不在文件顶部：`quant-execution-engine`（6，多为测试/脚本引导）。
 - `RUF002` 非 ASCII 名称无备注：`alpha-research`（5）。
 
@@ -71,17 +71,17 @@
 ### 批次 1：market-data-platform（F401 已收口，剩余为设计类告警）
 
 - `F401`（原 951 条）：已确认为 facade re-export，通过 `pyproject.toml` 的 28 条 `per-file-ignores` 收口并合并（PR #13），不再清理。误删会破坏对外 API。
-- `PLR0913`/`PLR0915`（约 63 条内联）：只解除 `# noqa` 让告警浮现，不在此批做函数拆分，拆分归 roadmap 设计类工作。当前 `src/` 内此类内联仍约 46 处。
+- `PLR0913`/`PLR0915` 等设计类抑制当前约 66 条：后续以函数拆分为主，不在未改结构时机械删除有效 `# noqa`。
 - 验证：`uv run --locked ruff check .` 与 `scripts/dev/check.py` 通过，跑该仓测试套件。
 
-### 批次 2：strategy-pipeline（38 条）
+### 批次 2：strategy-pipeline（16 条）
 
-- `F403`（35）星号导入：逐文件改为显式导入列表，对不便改的登记 `per-file-ignores`。
+- `F403`（15）星号导入：逐文件改为显式导入列表，对不便改的登记 `per-file-ignores`。
 - 验证：仓库 `scripts/dev/run_tests.sh full` 通过。
 
-### 批次 3：其余小量（alpha-research 9、quant-execution-engine 10、portfolio-backtester 7、research-apps 0）
+### 批次 3：其余小量（alpha-research 5、quant-execution-engine 10、portfolio-backtester 7、strategy-app 0）
 
-- 合并处理：`RUF002`（alpha 5）补备注、`E402`（qexec 6）登记 `per-file-ignores`、`F403`/`F401` 零星项逐文件处理。
+- 合并处理：alpha 的 2 处 `F403` 与 3 处零星抑制逐项复核，qexec 的 6 处 `E402` 登记明确原因，portfolio 的 `F403`/`F401` 逐文件处理。
 - 这些子模块量极小，可一次提交清完，不必单独排期。
 
 ## 与预推送门禁衔接
@@ -110,9 +110,9 @@
 
 | 批次 | 子模块 | 规则类别 | 状态 | 削减条数 |
 | --- | --- | --- | --- | --- |
-| 1 | market-data-platform | F401/PLR0913 | 待开始 | |
-| 2 | strategy-pipeline | F403 | 待开始 | |
-| 3 | alpha-research / quant-execution-engine / portfolio-backtester / research-apps | RUF002/E402/F403/F401 | 待开始 | |
+| 1 | market-data-platform | F401/PLR0913 | 部分完成 | F401 已收口，现存 68 条设计类或特殊导入抑制待专项拆分 |
+| 2 | strategy-pipeline | F403 | 自然收敛，待专项复核 | tracked Python 文件总量 38→16，其中 F403 35→15 |
+| 3 | alpha-research / quant-execution-engine / portfolio-backtester / strategy-app | E402/F403/F401/C416 | 待专项复核 | 合计 26→22 |
 
 ## 执行记录与修正（2026-07-31）
 
