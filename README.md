@@ -116,6 +116,28 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 
 不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
 
+## 根测试契约
+
+顶层 `tests/` 是跨仓库集成测试项目，其用例同时验证根工作区与六个子模块。根项目本身
+`package = false`，不发布，不构建 wheel。测试环境借用 `strategy-pipeline` 的虚拟环境
+运行（含 `alpha_research`、`strategy_pipeline` 与数据、组合、执行各 owner 包），命令为：
+
+```bash
+uv run --project strategy-pipeline --extra dev python -m pytest tests -q
+```
+
+带覆盖率统计的命令为：
+
+```bash
+uv run --project strategy-pipeline --extra dev \
+  python -m coverage run -m pytest tests -q
+python -m coverage report
+```
+
+覆盖率只统计根工作区 `src/`（`research_contracts` 与 `style_factors`），不统计子模块，
+不设 `fail_under` 阈值。跨仓库集成测试不要求根项目达成固定覆盖率，质量看护以
+`scripts/run_quality_checks.py --profile hard` 与各子模块自带的维护性预算为准。
+
 ## 重要边界
 
 - 大型市场数据、研究输出、缓存和交易审计日志放在仓库外。
