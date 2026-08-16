@@ -10,8 +10,8 @@
 | 热点板块选股 | research_shadow | 否 | [strategies/hotsector/README.md](strategies/hotsector/README.md) | `strategy-app`、`strategy-pipeline`、外部 `market-intel` |
 | StyleReplica A80/B20 | operational_research | 否 | [strategies/style_replica/README.md](strategies/style_replica/README.md) | 顶层 `src/style_factors`、`strategy-pipeline` |
 | D11-H5 五袖套 | shadow | 否 | [strategies/d11_h5_shadow/README.md](strategies/d11_h5_shadow/README.md) | `alpha-research`、`portfolio-backtester`、`strategy-pipeline` |
-| 红利与成长 ETF 动量 | pre_production | 否 | [pre_production/dividend_growth_momentum/README.md](pre_production/dividend_growth_momentum/README.md) | `pre_production`、待迁出 pipeline 的策略模块 |
-| 次日开盘到最高价 | exploration | 否 | [experiments/next_open_to_high/README.md](experiments/next_open_to_high/README.md) | `experiments`、待拆分的 pipeline 研究子系统 |
+| 红利与成长 ETF 动量 | pre_production | 否 | [pre_production/dividend_growth_momentum/README.md](pre_production/dividend_growth_momentum/README.md) | `strategy-app`、`portfolio-backtester` |
+| 次日开盘到最高价 | exploration | 否 | [experiments/next_open_to_high/README.md](experiments/next_open_to_high/README.md) | `experiments` |
 | Guan 周度策略 | external_research | 否 | [strategies/guan_weekly/README.md](strategies/guan_weekly/README.md) | 外部 `guan-factor-research-framework`、`strategy-app` bridge |
 
 完整机器可读字段、代码入口、变体和迁移债务见 [catalog.json](catalog.json)。
@@ -57,3 +57,8 @@
 5. 生命周期变化必须绑定证据路径、评审结论和 `production_eligible` 变更，不以移动代码代替评审。
 
 旧实验、外部策略和 pipeline 内策略模块的排查结论已经登记在 catalog 的 `inventory_notes` 与各策略 `extraction_debt` 字段中。尚未完成的代码迁移、优先级和收口标准见 [策略边界重构路线图](../docs/strategy-boundary-refactor-roadmap.md)。
+
+## 早期档案
+
+港股月频、季频 PIT 研究与 A 股早期探索已经归档，权威索引入口见 [archive/](archive/README.md)。
+原始文件冻结在 `strategy-pipeline/docs/archive/research/`，本目录只维护索引与结论，不复制被哈希绑定的内容。

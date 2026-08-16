@@ -23,6 +23,8 @@
 - 兼容层登记表（`docs/compatibility-facades.yml`）原 `strategy-owner-delegating-public-facades` 组已清零。R3 将 46 个 delegating public wrapper 的调用方改向 owner API 并删除旧壳，`hotsector_numeric_v2_provenance` 升级为 v2 并指向 owner 文件，历史 v1 回执保持冻结。`daily_watch20_fundamental_shadow` 经审计确认为研究实现，登记为 `retained_research_module` 保留。
 - DailyWatch20 的 R4 迁移已完成：影子家族、叶子模块、PIT 特征、minute-campaign、long-horizon、slow-minute、friend-minute、fundamental、flite 与市场影子核心类型全部迁到 owner。红利与成长、D11-H5、热点板块全子批次已迁。次日开盘到最高价已迁 `strategy-research/experiments/next_open_to_high/`。
 - `strategy-research` 与 pipeline 之间的重复研究脚本和研究说明已清理：13 个同名脚本和 9 份冻结研究文档的 pipeline/实验副本已删除，权威位置分别为 `strategy-research/experiments` 与 `strategy-app/docs/research`。
+- `strategy-app` 的类型门禁已恢复全绿：R4 迁移带入的 21 个 `ty` 诊断和 wheel smoke 的 campaign spec 漏登记已修复，完整门禁通过（`scripts/dev/check.py`）。
+- pipeline 仍保留不属于纯控制面的计算：`metrics.py` 的回归误差、命中率、Top-K 正收益率和 bucket IC，`benchmarking.py` 的 benchmark 区间收益，以及 `daily_watch20_candidate_oos.py` 内的特征组装与滚动评分，仍需按 owner 拆分。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
 - 顶层 `src/style_factors` 的行业平衡袖套组合构造已迁入 `portfolio-backtester`（`industry_sleeves`），因子计算与数据加载仍留在工作区。`style_factors` 整体是否进入 alpha 或 portfolio owner 尚未形成最终决策。
 
@@ -53,9 +55,9 @@ strategy-pipeline
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
-| R4 通用能力归位 | 进行中 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，剩余 pipeline 编排壳 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
+| R4 通用能力归位 | 进行中 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，剩余 pipeline 编排壳中的候选池、统计、benchmark 和少量策略计算待下沉 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
-| R6 控制面收口 | 已完成 | import/source 边界已收紧，体量基线、gitlink、版本清单和发布证据已刷新，catalog 迁移债务已清理 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
+| R6 控制面收口 | 进行中 | import/source 边界已收紧，体量基线、gitlink、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16） | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
 
@@ -129,4 +131,4 @@ owner 仓补齐公开 API
 
 ## 下次继续的起点
 
-下一次推进 R4 收尾：检查 pipeline 剩余编排壳是否还有可下沉到 owner 的策略计算。DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。
+下一次推进 R4 收尾：把 pipeline 剩余的策略计算下沉到 owner。重点对象是 `metrics.py`（回归误差、命中率、Top-K 正收益率、bucket IC，目标 `alpha-research`）、`benchmarking.py`（benchmark 区间收益，目标 `portfolio-backtester`），以及 `daily_watch20_candidate_oos.py` 等研究脚本中的特征组装、滚动评分和策略比较（目标 `strategy-app` 或 `alpha-research`）。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。R6 的完成标准见上文，门禁未全绿前不得标为完成。
