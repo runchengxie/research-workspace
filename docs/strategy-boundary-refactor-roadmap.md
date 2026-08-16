@@ -54,7 +54,7 @@ strategy-pipeline
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
 | R4 通用能力归位 | 进行中 | `date_utils` 已委托给 `alpha-research` owner，facade 已删除，内部调用方已全部改向 owner 模块，继续按数据、alpha、组合、执行职责迁移通用代码 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
-| R5 重复内容清理 | 进行中 | 已删除 13 个重复研究脚本和 9 份冻结研究文档副本，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
+| R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 待开始 | 收紧 import/source 边界、刷新体量基线、gitlink、版本清单和发布证据 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
@@ -104,7 +104,7 @@ owner 仓补齐公开 API
 - 跨仓库稳定字段由生产方维护，顶层 `research_contracts` 与 `docs/contracts.md` 维护发现入口和组合校验。
 - 已被回执或 provenance 哈希绑定的内容不改写。需要升级时发布新的版本化 manifest，旧版本进入历史证据。
 
-已完成：13 个 `scripts/research/` 重复脚本和 9 份冻结研究文档副本已删除，对应测试迁入工作区 `tests/` 并指向权威脚本。继续拆分 pipeline 的 `docs/metrics.md`、`docs/reference/outputs/full-reference.md` 和 `docs/concepts/benchmark-protocol.md`。删除重复文件前必须完成引用扫描、替代链接、聚焦测试和回滚说明。
+已完成：13 个 `scripts/research/` 重复脚本和 9 份冻结研究文档副本已删除，对应测试迁入工作区 `tests/` 并指向权威脚本。pipeline 的 `docs/metrics.md`、`docs/reference/outputs/full-reference.md` 和 `docs/concepts/benchmark-protocol.md` 已改为跨仓库索引，指标解读与产物契约分别归 `alpha-research`（预测质量、CPCV、PBO、特征重要度）和 `portfolio-backtester`（回测、成本、暴露、benchmark ladder）。
 
 ## R6：最终收口标准
 
