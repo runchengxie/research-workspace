@@ -717,11 +717,11 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 161,
-      "python_loc": 32459,
+      "python_file_count": 163,
+      "python_loc": 33020,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 4,
+        "large_files": 5,
         "long_functions": 21,
         "complexity_hotspots": 25,
         "large_classes": 0
@@ -735,6 +735,11 @@
         {
           "path": "src/alpha_research/_daily_watch20_features_calc.py",
           "loc": 592,
+          "hk_related": false
+        },
+        {
+          "path": "src/alpha_research/daily_watch20_pit_features.py",
+          "loc": 533,
           "hk_related": false
         },
         {
@@ -1471,8 +1476,8 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 91,
-      "python_loc": 19023,
+      "python_file_count": 109,
+      "python_loc": 23543,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 1,
@@ -1569,8 +1574,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 424,
-      "python_loc": 98545,
+      "python_file_count": 409,
+      "python_loc": 93694,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,
@@ -1700,8 +1705,8 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/commands/tune_runner.py",
-          "loc": 546,
+          "path": "src/strategy_pipeline/daily_watch20_market_shadow_publish.py",
+          "loc": 548,
           "hk_related": false
         }
       ],
