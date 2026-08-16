@@ -27,14 +27,16 @@ import numpy as np
 import pandas as pd
 
 from portfolio_backtester import PositionBacktestConfig, run_position_backtest
-from strategy_pipeline import (
+from strategy_app.research.dividend_growth_momentum import (
     dividend_growth_momentum_audit as audit,
     dividend_growth_momentum_config as research_config,
     dividend_growth_momentum_report as report_builder,
     dividend_growth_momentum_reporting as reporting,
 )
-from strategy_pipeline.dividend_growth_momentum_audit import return_metrics as _return_metrics
-from strategy_pipeline.dividend_growth_momentum_config import (
+from strategy_app.research.dividend_growth_momentum.dividend_growth_momentum_audit import (
+    return_metrics as _return_metrics,
+)
+from strategy_app.research.dividend_growth_momentum.dividend_growth_momentum_config import (
     ALL_STRATEGIES,
     ANNUAL_REPORT_STRATEGIES,
     AUDIT_STRATEGIES,

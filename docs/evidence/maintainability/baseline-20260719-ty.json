@@ -1476,13 +1476,13 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 109,
-      "python_loc": 23543,
+      "python_file_count": 125,
+      "python_loc": 26637,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 1,
-        "long_functions": 2,
-        "complexity_hotspots": 1,
+        "long_functions": 3,
+        "complexity_hotspots": 3,
         "large_classes": 0
       },
       "large_files": [
@@ -1493,6 +1493,12 @@
         }
       ],
       "long_functions": [
+        {
+          "path": "src/strategy_app/daily_watch20/d11_h5_shadow_model.py",
+          "name": "_build_or_load_model_frame",
+          "line_count": 100,
+          "complexity": 10
+        },
         {
           "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
           "name": "_daily_row",
@@ -1507,6 +1513,18 @@
         }
       ],
       "complexity_hotspots": [
+        {
+          "path": "src/strategy_app/hotsector/_hotsector_three_arm_shadow_core.py",
+          "name": "validate_three_arm_day",
+          "line_count": 40,
+          "complexity": 17
+        },
+        {
+          "path": "src/strategy_app/hotsector/_hotsector_three_arm_shadow_core.py",
+          "name": "_validated_owner_metadata",
+          "line_count": 53,
+          "complexity": 16
+        },
         {
           "path": "src/strategy_app/hotsector/_deepseek_stability_metrics.py",
           "name": "_design_diagnostics",
@@ -1574,13 +1592,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 409,
-      "python_loc": 93694,
+      "python_file_count": 398,
+      "python_loc": 90769,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,
-        "long_functions": 115,
-        "complexity_hotspots": 65,
+        "long_functions": 114,
+        "complexity_hotspots": 61,
         "large_classes": 1
       },
       "large_files": [
@@ -1864,12 +1882,6 @@
       ],
       "complexity_hotspots": [
         {
-          "path": "src/strategy_pipeline/_hotsector_three_arm_shadow_core.py",
-          "name": "_validated_owner_metadata",
-          "line_count": 74,
-          "complexity": 28
-        },
-        {
           "path": "scripts/dev/config_lifecycle.py",
           "name": "_validate_catalog",
           "line_count": 58,
@@ -1984,12 +1996,6 @@
           "complexity": 19
         },
         {
-          "path": "src/strategy_pipeline/_hotsector_three_arm_shadow_api.py",
-          "name": "_prepare_outcomes",
-          "line_count": 66,
-          "complexity": 19
-        },
-        {
           "path": "src/strategy_pipeline/liveops/snapshot.py",
           "name": "main",
           "line_count": 108,
@@ -2011,6 +2017,18 @@
           "path": "scripts/dev/namespace_boundary.py",
           "name": "_check_source_files",
           "line_count": 42,
+          "complexity": 18
+        },
+        {
+          "path": "scripts/research/daily_watch20_candidate_oos.py",
+          "name": "_validate_resource_and_cost_args",
+          "line_count": 24,
+          "complexity": 18
+        },
+        {
+          "path": "src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
+          "name": "run_deepseek_campaign_execution",
+          "line_count": 69,
           "complexity": 18
         }
       ],
