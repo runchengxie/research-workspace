@@ -24,7 +24,7 @@
 - DailyWatch20、热点板块、D11-H5、红利与成长 ETF 动量、次日开盘到最高价仍有策略计算或研究编排留在 pipeline。
 - `strategy-research` 与 pipeline 之间的重复研究脚本和研究说明已清理：13 个同名脚本和 9 份冻结研究文档的 pipeline/实验副本已删除，权威位置分别为 `strategy-research/experiments` 与 `strategy-app/docs/research`。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
-- 顶层 `src/style_factors` 是否继续作为工作区薄包，还是进入 alpha 或 portfolio owner，尚未形成最终决策。
+- 顶层 `src/style_factors` 的行业平衡袖套组合构造已迁入 `portfolio-backtester`（`industry_sleeves`），因子计算与数据加载仍留在工作区。`style_factors` 整体是否进入 alpha 或 portfolio owner 尚未形成最终决策。
 
 以上行数是 2026-08-09 的盘点基线，不是目标配额。后续以删除错误归属、重复实现和兼容层为目标，不能通过移动测试或压缩格式制造体量下降。
 
@@ -91,7 +91,7 @@ owner 仓补齐公开 API
 | 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | pipeline 研究子系统和两处重复脚本 |
 | 5 | D11-H5 | 模型与信号进 `alpha-research`，目标构造与袖套回放进 `portfolio-backtester` | pipeline 中的模型、目标计算和 shadow runner 混合 |
 | 6 | 红利与成长 ETF 动量 | 通用回测进 `portfolio-backtester`，策略配置与报告组合进 `strategy-app` | pipeline 的数据获取、审计、配置和报告模块 |
-| 7 | StyleReplica | 形成顶层 `style_factors` 的保留或迁移 ADR | 当前只有待决 owner，没有立即搬迁授权 |
+| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`，形成顶层 `style_factors` 其余部分的保留或迁移 ADR | 因子计算、数据加载与报告仍在 `style_factors`，待最终 owner 决策 |
 
 迁移一个切片时同时迁移测试。pipeline 只保留 runner、provider adapter、操作员门禁、运行目录、原子发布与 `targets.json` 生成测试。
 
