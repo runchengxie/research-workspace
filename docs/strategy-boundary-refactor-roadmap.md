@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-11
+> last_verified: 2026-08-16
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -53,7 +53,7 @@ strategy-pipeline
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 进行中 | 31 个 delegating public facade 已删除，继续处理 15 个冻结哈希绑定者和 1 个已改向但仍保留的公开壳 | 现存 16 个策略 owner facade 在 provenance 升级和消费者审计后清零，且不新增替代兼容层 |
-| R4 通用能力归位 | 进行中 | `date_utils` 已委托给 `alpha-research` owner，继续按数据、alpha、组合、执行职责迁移通用代码 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
+| R4 通用能力归位 | 进行中 | `date_utils` 已委托给 `alpha-research` owner，facade 已删除，内部调用方已全部改向 owner 模块，继续按数据、alpha、组合、执行职责迁移通用代码 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 待开始 | 删除重复研究脚本和当前说明，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 待开始 | 收紧 import/source 边界、刷新体量基线、gitlink、版本清单和发布证据 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
@@ -129,4 +129,4 @@ owner 仓补齐公开 API
 
 ## 下次继续的起点
 
-下一次并行推进 R3 收尾与 R4：先为 15 个冻结 facade 设计版本化 provenance 升级方案，并复核 `daily_watch20_fundamental_shadow` 的外部消费者。同时从已经委托给 alpha owner 的 `date_utils` 切片继续迁移通用能力。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。
+下一次并行推进 R3 收尾与 R4：先为 15 个冻结 facade 设计版本化 provenance 升级方案，并复核 `daily_watch20_fundamental_shadow` 的外部消费者。`date_utils` 切片已闭环（调用方改向 + facade 删除），后续按同一模式继续迁移通用能力。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。

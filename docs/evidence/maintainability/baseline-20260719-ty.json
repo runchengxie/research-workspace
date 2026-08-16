@@ -1564,8 +1564,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 458,
-      "python_loc": 104720,
+      "python_file_count": 456,
+      "python_loc": 104644,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 35,
