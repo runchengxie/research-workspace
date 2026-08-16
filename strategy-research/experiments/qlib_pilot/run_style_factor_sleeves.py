@@ -32,7 +32,7 @@ from style_factors.data import (
     load_sw_industry_membership,
 )
 from style_factors.factor_calc import compute_factors
-from style_factors.sleeves import (
+from portfolio_backtester import (
     SelectionSpec,
     attach_entry_dates,
     build_targets,

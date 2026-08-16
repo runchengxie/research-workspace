@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 122,
-      "python_loc": 23937,
+      "python_file_count": 120,
+      "python_loc": 23572,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -1072,12 +1072,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 188,
-      "python_loc": 40272,
+      "python_file_count": 190,
+      "python_loc": 40672,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
-        "long_functions": 28,
+        "long_functions": 29,
         "complexity_hotspots": 26,
         "large_classes": 0
       },
@@ -1251,6 +1251,12 @@
           "complexity": 12
         },
         {
+          "path": "tests/test_package_smoke.py",
+          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
+          "line_count": 86,
+          "complexity": 1
+        },
+        {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
           "name": "simulate",
           "line_count": 84,
@@ -1267,12 +1273,6 @@
           "name": "test_construction_grid_reuses_existing_scores",
           "line_count": 84,
           "complexity": 5
-        },
-        {
-          "path": "src/portfolio_backtester/portfolio_selection.py",
-          "name": "select_holdings",
-          "line_count": 82,
-          "complexity": 6
         }
       ],
       "complexity_hotspots": [
