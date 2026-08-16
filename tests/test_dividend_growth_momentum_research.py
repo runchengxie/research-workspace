@@ -6,7 +6,9 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from strategy_pipeline import dividend_growth_momentum_audit as audit
+from strategy_app.research.dividend_growth_momentum import (
+    dividend_growth_momentum_audit as audit,
+)
 
 
 def _load_script():

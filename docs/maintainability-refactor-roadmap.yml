@@ -131,19 +131,20 @@
     {
       "repo": "strategy-app",
       "max_large_files": 1,
-      "max_long_functions": 2,
-      "max_complexity_hotspots": 1,
+      "max_long_functions": 3,
+      "max_complexity_hotspots": 3,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
-        "2026-07-28: 模块拆分后 large_files 2->1 下调。"
+        "2026-07-28: 模块拆分后 large_files 2->1 下调。",
+        "2026-08-16: 迁入红利成长、D11-H5、three_arm 计算，long_functions 2->3、complexity_hotspots 1->3。"
       ]
     },
     {
       "repo": "strategy-pipeline",
       "max_large_files": 29,
-      "max_long_functions": 115,
-      "max_complexity_hotspots": 65,
+      "max_long_functions": 114,
+      "max_complexity_hotspots": 61,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -155,7 +156,8 @@
         "2026-07-31: 刷新 maintainability baseline 以纳入共享 research-dev-metrics 包装器与自 2026-07-19 以来的真实代码增长；工作树实测绘得 python_file_count 476（+2）、large_files 36（+1）、long_functions 120（+2），属基线对齐揭示的真实累积债务，非回归；预算 35->36 / 118->120 上调并在 accepted_hotspots 登记。",
         "2026-07-31: 合并 #31 拆分红利成长报告渲染（dividend_growth_momentum_report.py 新增 338 行、reporting.py 292->~30 行），真实债务收敛：large_files 36->35、long_functions 120->118（两处 80 行热点随拆分消除）；预算随实测下调 36->35 / 120->118，与刷新后的 baseline 对齐。",
         "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。",
-        "2026-08-16: R5 去重删除 13 个 scripts/research 副本与 4 个测试，large_files 35->29 / long_functions 121->115 / complexity 66->65，预算随真实删除下调。"
+        "2026-08-16: R5 去重删除 13 个 scripts/research 副本与 4 个测试，large_files 35->29 / long_functions 121->115 / complexity 66->65，预算随真实删除下调。",
+        "2026-08-16: R4 迁移红利成长/D11-H5/three_arm 后计算热点下降，long_functions 115->114、complexity_hotspots 65->61。"
       ]
     },
     {
@@ -1084,10 +1086,10 @@
       "next_action": "实验协议再次变更时，先拆分重试调度、尝试历史校验和账本写入逻辑"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_three_arm_shadow.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The frozen Numeric, bounded-ranking, and risk-veto evaluator keeps owner validation, complete date-by-arm run quality, paired outcomes, and append-only outcome evidence in one fail-closed research boundary for the initial prospective campaign",
-      "next_action": "extract owner metadata validation and content-addressed outcome persistence before adding another arm, horizon family, or promotion rule"
+      "path": "strategy-app/src/strategy_app/hotsector/hotsector_three_arm_shadow.py",
+      "owner_repo": "strategy-app",
+      "reason": "R4 迁移：three-arm 计算迁入 strategy-app，冻结的 owner 校验与配对结果边界保持在一个可审计模块",
+      "next_action": "提取 owner 元数据校验与内容寻址结果持久化后再增加新的 arm、horizon 或晋升规则"
     },
     {
       "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
