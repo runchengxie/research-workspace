@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-07-29",
+  "_last_changed": "2026-08-16",
   "_owner": "research-workspace",
   "schema_version": "compatibility_facades.v2",
   "required_removal_evidence": [
@@ -92,21 +92,6 @@
       "replacement": "alpha_research.train_eval_result",
       "current_consumers": "kept for strategy-pipeline callers that imported train/eval result helpers from pipeline",
       "removal_condition": "remove after two release reviews show no pipeline train_eval_result imports and alpha replacement docs are linked",
-      "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
-      "focused_tests": [
-        "strategy-pipeline import smoke",
-        "strategy-pipeline pytest"
-      ],
-      "consumer_audit": "manual_review_required before removal",
-      "status": "active_compatibility"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/date_utils.py",
-      "owner_repo": "strategy-pipeline",
-      "kind": "module_facade",
-      "replacement": "alpha_research.date_utils",
-      "current_consumers": "kept for strategy-pipeline callers that imported date_utils from pipeline",
-      "removal_condition": "remove after two release reviews show no pipeline date_utils imports and alpha replacement docs are linked",
       "rollback_path": "restore wrapper from the previous strategy-pipeline release tag",
       "focused_tests": [
         "strategy-pipeline import smoke",
