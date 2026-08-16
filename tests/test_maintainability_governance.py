@@ -314,7 +314,8 @@ def test_compatibility_facade_register_covers_detected_facades() -> None:
     ]
     assert groups == []
     assert any(
-        record["path"] == "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py"
+        record["path"]
+        == "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py"
         and record["status"] == "retained_public_api"
         for record in manifest["records"]
     )
