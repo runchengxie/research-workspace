@@ -251,6 +251,39 @@ def test_deprecation_budget_blocks_new_pending_surfaces() -> None:
     )
 
 
+def _synthetic_manifest_with_groups(groups: list[dict[str, Any]]) -> dict[str, Any]:
+    """Build a minimal manifest whose records are only the synthetic groups."""
+    return {
+        "schema_version": "compatibility_facades.v2",
+        "records": list(groups),
+    }
+
+
+def _synthetic_facade_group() -> dict[str, Any]:
+    """Build a migration_compatibility_group from real tracked paths for mutation tests.
+
+    The R3 refactor removed the last migration_compatibility_group from the real
+    register, so group-validation tests inject a synthetic one built from two
+    existing tracked facade paths.
+    """
+    module = _load_workspace_governance_module()
+    tracked = sorted(module._tracked_compatibility_facade_paths(ROOT))
+    assert len(tracked) >= 2
+    return {
+        "id": "synthetic-migration-group",
+        "paths": tracked[:2],
+        "owner_repo": "strategy-pipeline",
+        "kind": "migration_compatibility_group",
+        "replacement": "owner APIs",
+        "current_consumers": "synthetic group for governance validation",
+        "removal_condition": "remove after ADR-0004 extraction",
+        "rollback_path": "restore from release tag",
+        "focused_tests": ["strategy-pipeline pytest"],
+        "consumer_audit": "synthetic",
+        "status": "active_compatibility",
+    }
+
+
 def test_compatibility_facade_register_covers_detected_facades() -> None:
     manifest = _load_json_doc("docs/compatibility-facades.yml")
     module = _load_workspace_governance_module()
@@ -279,21 +312,19 @@ def test_compatibility_facade_register_covers_detected_facades() -> None:
         for record in manifest["records"]
         if record["kind"] == "migration_compatibility_group"
     ]
-    assert len(groups) == 1
-    assert len(groups[0]["paths"]) > 1
-    assert all(path.startswith("strategy-pipeline/") for path in groups[0]["paths"])
-    assert groups[0]["status"] == "active_compatibility"
-    assert "ADR-0004" in groups[0]["removal_condition"]
+    assert groups == []
+    assert any(
+        record["path"] == "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py"
+        and record["status"] == "retained_public_api"
+        for record in manifest["records"]
+    )
 
 
 def test_compatibility_facade_group_missing_path_is_rejected() -> None:
-    manifest = _load_json_doc("docs/compatibility-facades.yml")
     module = _load_workspace_governance_module()
-    mutated = copy.deepcopy(manifest)
-    group = next(
-        record for record in mutated["records"] if record["kind"] == "migration_compatibility_group"
-    )
+    group = _synthetic_facade_group()
     removed = group["paths"].pop()
+    mutated = _synthetic_manifest_with_groups([group])
 
     checks = module._check_compatibility_facades(ROOT, mutated)
 
@@ -307,16 +338,13 @@ def test_compatibility_facade_group_missing_path_is_rejected() -> None:
 
 
 def test_compatibility_facade_group_extra_path_is_rejected() -> None:
-    manifest = _load_json_doc("docs/compatibility-facades.yml")
     module = _load_workspace_governance_module()
-    mutated = copy.deepcopy(manifest)
-    group = next(
-        record for record in mutated["records"] if record["kind"] == "migration_compatibility_group"
-    )
+    group = _synthetic_facade_group()
     extra = "strategy-pipeline/src/strategy_pipeline/__init__.py"
     assert (ROOT / extra).is_file()
     assert extra not in module._tracked_compatibility_facade_paths(ROOT)
     group["paths"].append(extra)
+    mutated = _synthetic_manifest_with_groups([group])
 
     checks = module._check_compatibility_facades(ROOT, mutated)
 
@@ -330,14 +358,8 @@ def test_compatibility_facade_group_extra_path_is_rejected() -> None:
 
 
 def test_compatibility_facade_group_requires_exact_concrete_unique_paths() -> None:
-    manifest = _load_json_doc("docs/compatibility-facades.yml")
     module = _load_workspace_governance_module()
-    group_index = next(
-        index
-        for index, record in enumerate(manifest["records"])
-        if record["kind"] == "migration_compatibility_group"
-    )
-    first_path = manifest["records"][group_index]["paths"][0]
+    first_path = _synthetic_facade_group()["paths"][0]
     invalid_cases = (
         ({"path": first_path}, "exactly one of path or paths"),
         ({"paths": []}, "paths must be a non-empty list"),
@@ -346,8 +368,9 @@ def test_compatibility_facade_group_requires_exact_concrete_unique_paths() -> No
     )
 
     for replacement, expected_message in invalid_cases:
-        mutated = copy.deepcopy(manifest)
-        mutated["records"][group_index].update(replacement)
+        group = _synthetic_facade_group()
+        group.update(replacement)
+        mutated = _synthetic_manifest_with_groups([group])
         checks = module._check_compatibility_facades(ROOT, mutated)
         assert any(
             check.severity == "ERROR"

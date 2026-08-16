@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 120,
-      "python_loc": 23572,
+      "python_loc": 23595,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -26,13 +26,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_pre_push_hooks.py",
-          "loc": 608,
+          "path": "tests/test_maintainability_governance.py",
+          "loc": 613,
           "hk_related": false
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "loc": 590,
+          "path": "tests/test_pre_push_hooks.py",
+          "loc": 608,
           "hk_related": false
         },
         {
@@ -1569,8 +1569,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 439,
-      "python_loc": 98604,
+      "python_file_count": 424,
+      "python_loc": 98545,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,
