@@ -60,14 +60,16 @@ baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个�
 
 ## 依赖与安全
 
-依赖审计和静态安全扫描按仓库运行：
+所有仓库的 `dev` 依赖都包含 `pytest-cov` 和 `pip-audit`。依赖审计和静态安全扫描按仓库运行：
 
 ```bash
-uvx pip-audit
+uv run --group dev pip-audit
 uvx deptry .
 uvx bandit -q -r src -lll
 ```
 
-provider 软件开发工具包（SDK）、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
+使用 `[project.optional-dependencies].dev` 的仓库改用 `uv run --extra dev pip-audit`，使用 `[dependency-groups].dev` 的仓库（顶层工作区和 `quant-execution-engine`）用 `uv run --group dev pip-audit`。各仓库测试文档给出对应的准确命令。
+
+子仓库使用各自包名作为 coverage 的 `source`，例如 `strategy-pipeline` 的 `src/strategy_pipeline`。各仓库 `run_tests.sh` 或测试文档提供 `coverage` 入口。provider 软件开发工具包（SDK）、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
 
 coverage 按高风险模块逐步提高，不设置跨仓库统一阈值。
