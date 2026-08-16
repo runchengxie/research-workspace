@@ -61,7 +61,7 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 4,
+      "max_large_files": 5,
       "max_long_functions": 2,
       "max_complexity_hotspots": 1,
       "max_large_classes": 2,
@@ -72,7 +72,8 @@
         "2026-07-30: style_factors 接入 tushare 本地数据集（moneyflow_ths/holder_structure/margin/limit_list + 6 新因子 + PIT SW-L1 中性化），data.py/factor_calc.py 进 large_files、_add_new_factors 进 complexity_hotspots；属功能扩张的合法债务转移，非回归。",
         "2026-07-31: 放宽 pre-push 守卫允许 feat/fix/hotfix/release 前缀分支推送以走 PR 流程；重新生成 baseline 后 scripts/run_pre_push_checks.py(510) 被正确计入 large_files，research-workspace max_large_files 2->3（ratchet 上调，已在 accepted_hotspots 登记该文件），校准 accepted_hotspots_count 为实测未解决条目数（原 176 失真，实测 175，含本次新增 1 条登记）。",
         "2026-07-31: 为允许从超项目 linked worktree 直推，_is_same_git_repo 识别 worktree 与主工作树同仓库，新增 tests/test_pre_push_hooks.py(536) 进 large_files；research-workspace max_large_files 3->4（ratchet 上调，已在 accepted_hotspots 登记该测试文件），accepted_hotspots_count 校准为 178（含本次新增 1 条登记）。",
-        "2026-08-01: style factor 年度图拆分矩阵构造、热力图和年度优胜因子绘制 helper，在提升长历史图表可读性的同时将 research-workspace complexity_hotspots 2->1，并同步下调预算。"
+        "2026-08-01: style factor 年度图拆分矩阵构造、热力图和年度优胜因子绘制 helper，在提升长历史图表可读性的同时将 research-workspace complexity_hotspots 2->1，并同步下调预算。",
+        "2026-08-16: R5 去重将 4 个研究脚本测试迁入工作区 tests/（test_next_open_to_high_research.py 795 行），large_files 4->5，同步上调预算。"
       ]
     },
     {
@@ -138,9 +139,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 35,
-      "max_long_functions": 121,
-      "max_complexity_hotspots": 66,
+      "max_large_files": 29,
+      "max_long_functions": 115,
+      "max_complexity_hotspots": 65,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -151,7 +152,8 @@
         "2026-07-31: 基准审计扩展后将 Markdown 构造从 515 行 reporting 模块拆为 233 行输出模块与 338 行报告模块，两个 80 行热点同步消除；large_files 保持 35、long_functions 保持 118，complexity_hotspots 67->66 并下调预算。",
         "2026-07-31: 刷新 maintainability baseline 以纳入共享 research-dev-metrics 包装器与自 2026-07-19 以来的真实代码增长；工作树实测绘得 python_file_count 476（+2）、large_files 36（+1）、long_functions 120（+2），属基线对齐揭示的真实累积债务，非回归；预算 35->36 / 118->120 上调并在 accepted_hotspots 登记。",
         "2026-07-31: 合并 #31 拆分红利成长报告渲染（dividend_growth_momentum_report.py 新增 338 行、reporting.py 292->~30 行），真实债务收敛：large_files 36->35、long_functions 120->118（两处 80 行热点随拆分消除）；预算随实测下调 36->35 / 120->118，与刷新后的 baseline 对齐。",
-        "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。"
+        "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。",
+        "2026-08-16: R5 去重删除 13 个 scripts/research 副本与 4 个测试，large_files 35->29 / long_functions 121->115 / complexity 66->65，预算随真实删除下调。"
       ]
     },
     {
@@ -369,18 +371,6 @@
       "owner_repo": "strategy-pipeline",
       "reason": "The fixture-heavy research test covers continuous calendar windows, frozen buckets, conditional labels, source regimes, and strict publication receipts in one end-to-end contract suite",
       "next_action": "split by window, execution, and publication concerns when the ablation contract next changes"
-    },
-    {
-      "path": "strategy-pipeline/scripts/research/a_share_next_open_to_high_minute_audit.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The offline minute audit retains provider-aware session validation, fixed-slot execution, benchmark joins, and evidence summary assembly as one reproducible research entry point after reusable helpers were extracted",
-      "next_action": "split date auditing from summary assembly if the experiment gains another execution policy or is prepared for shadow production"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_next_open_to_high_research.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The research test file exercises daily selection, minute execution, source-session contracts, matched benchmarks, and fail-closed edge cases for one frozen candidate policy",
-      "next_action": "split daily, minute, and benchmark scenarios when the frozen policy is revised"
     },
     {
       "path": "market-data-platform/src/market_data_platform/cli.py",
@@ -1074,18 +1064,6 @@
       "next_action": "extract specialized metric families when this module next changes"
     },
     {
-      "path": "strategy-pipeline/scripts/research/a_share_next_high_explore.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "offline A-share exploration script retains a complete reproducible research workflow",
-      "next_action": "extract data preparation and reporting helpers if this experiment is promoted or extended"
-    },
-    {
-      "path": "strategy-pipeline/scripts/research/a_share_next_open_to_high_backtest.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "offline open-to-high backtest script retains a complete reproducible research workflow",
-      "next_action": "extract scenario construction and reporting helpers if the experiment is extended"
-    },
-    {
       "path": "strategy-pipeline/src/strategy_pipeline/pipeline/external_signals.py",
       "owner_repo": "strategy-pipeline",
       "reason": "external signal ingestion centralizes schema validation, alignment, and diagnostics",
@@ -1314,12 +1292,6 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/scripts/research/dividend_growth_momentum.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "红利与成长 ETF 动量的一次性可复现研究入口，集中保留数据获取、PIT 信号、portfolio-backtester 编排与回执发布；报告实现已拆入独立模块，当前不属于生产执行路径。",
-      "next_action": "新增 BIAS 或 walk-forward 变体前，先将数据获取和策略套件编排拆入独立研究模块，入口降到 500 行以下。"
-    },
-    {
       "path": "strategy-pipeline/scripts/research/daily_watch20_fundamental_shadow.py",
       "owner_repo": "strategy-pipeline",
       "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
@@ -1372,6 +1344,18 @@
       "owner_repo": "market-data-platform",
       "reason": "The TuShare business-adapters module keeps shared mirror/export helpers together with the _tushare_runtime client wiring; a single index_daily mirror added for benchmark inputs in 2026-08",
       "next_action": "split new single-file mirror functions into a dedicated index_daily adapter before adding further mirror commands"
+    },
+    {
+      "path": "tests/test_next_open_to_high_research.py",
+      "owner_repo": "research-workspace",
+      "reason": "R5 去重从 strategy-pipeline 迁入的研究脚本测试（795 行），覆盖 next-open-to-high 回放与分钟审计，迁入后保持单一权威位置",
+      "next_action": "按研究模块拆分断言或复用 fixture 后下调行数"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/_daily_watch20_market_shadow_api.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "R3 facade 拆分后的 _api 实现单元（558 行），基准重算后进入 large_files",
+      "next_action": "按 provider/aggregation 职责继续拆分"
     }
   ]
 }

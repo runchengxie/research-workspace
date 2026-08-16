@@ -22,7 +22,7 @@
 - `strategy-pipeline` 仍有约 104,719 行 Python 物理行，其中 `src` 约 57,953 行、测试约 36,192 行、脚本约 10,574 行。R3 删除 facade 后体量略有下降，但控制面之外的代码仍然很多。
 - 兼容层登记表（`docs/compatibility-facades.yml` 的 `strategy-owner-delegating-public-facades` 组）现存 16 个策略 owner facade。R3 已将 31 个 delegating public facade 的调用方改向 owner API 并删除旧壳。现存项中 15 个被 `hotsector_numeric_v2_provenance.py` 的冻结 SHA256 清单字节钉死，另 1 个 `daily_watch20_fundamental_shadow` 已改向 data owner 但仍保留公开壳。冻结项需先升级 provenance 契约，保留项需完成消费者审计，才能继续删除。
 - DailyWatch20、热点板块、D11-H5、红利与成长 ETF 动量、次日开盘到最高价仍有策略计算或研究编排留在 pipeline。
-- `strategy-research` 与 pipeline 之间仍存在重复研究脚本和研究说明。次日开盘到最高价当前至少有九个同名脚本分布在两处。
+- `strategy-research` 与 pipeline 之间的重复研究脚本和研究说明已清理：13 个同名脚本和 9 份冻结研究文档的 pipeline/实验副本已删除，权威位置分别为 `strategy-research/experiments` 与 `strategy-app/docs/research`。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
 - 顶层 `src/style_factors` 是否继续作为工作区薄包，还是进入 alpha 或 portfolio owner，尚未形成最终决策。
 
@@ -54,7 +54,7 @@ strategy-pipeline
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 进行中 | 31 个 delegating public facade 已删除，继续处理 15 个冻结哈希绑定者和 1 个已改向但仍保留的公开壳 | 现存 16 个策略 owner facade 在 provenance 升级和消费者审计后清零，且不新增替代兼容层 |
 | R4 通用能力归位 | 进行中 | `date_utils` 已委托给 `alpha-research` owner，facade 已删除，内部调用方已全部改向 owner 模块，继续按数据、alpha、组合、执行职责迁移通用代码 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
-| R5 重复内容清理 | 待开始 | 删除重复研究脚本和当前说明，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
+| R5 重复内容清理 | 进行中 | 已删除 13 个重复研究脚本和 9 份冻结研究文档副本，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 待开始 | 收紧 import/source 边界、刷新体量基线、gitlink、版本清单和发布证据 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
@@ -104,7 +104,7 @@ owner 仓补齐公开 API
 - 跨仓库稳定字段由生产方维护，顶层 `research_contracts` 与 `docs/contracts.md` 维护发现入口和组合校验。
 - 已被回执或 provenance 哈希绑定的内容不改写。需要升级时发布新的版本化 manifest，旧版本进入历史证据。
 
-优先拆分 pipeline 的 `docs/metrics.md`、`docs/reference/outputs/full-reference.md` 和 `docs/concepts/benchmark-protocol.md`。删除重复文件前必须完成引用扫描、替代链接、聚焦测试和回滚说明。
+已完成：13 个 `scripts/research/` 重复脚本和 9 份冻结研究文档副本已删除，对应测试迁入工作区 `tests/` 并指向权威脚本。继续拆分 pipeline 的 `docs/metrics.md`、`docs/reference/outputs/full-reference.md` 和 `docs/concepts/benchmark-protocol.md`。删除重复文件前必须完成引用扫描、替代链接、聚焦测试和回滚说明。
 
 ## R6：最终收口标准
 
