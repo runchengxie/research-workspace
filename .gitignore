@@ -24,6 +24,9 @@ outputs/
 data/
 cache/
 
+# 研究实验运行产物（归位到各自 experiments/run_products，不入 Git）
+**/run_products/
+
 # Local AI-agent state
 .codewhale/
 strategy-research/experiments/qlib_pilot/universe_top800_by_date.csv

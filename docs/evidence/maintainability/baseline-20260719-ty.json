@@ -713,7 +713,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 161,
-      "python_loc": 32450,
+      "python_loc": 32459,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 4,
@@ -805,16 +805,16 @@
           "complexity": 10
         },
         {
+          "path": "src/alpha_research/event_labeling.py",
+          "name": "label_triple_barrier",
+          "line_count": 93,
+          "complexity": 11
+        },
+        {
           "path": "src/alpha_research/_feature_evidence_importance.py",
           "name": "factor_ic_report",
           "line_count": 91,
           "complexity": 18
-        },
-        {
-          "path": "src/alpha_research/event_labeling.py",
-          "name": "label_triple_barrier",
-          "line_count": 91,
-          "complexity": 11
         },
         {
           "path": "src/alpha_research/train_eval_stage.py",
@@ -1068,7 +1068,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 188,
-      "python_loc": 40269,
+      "python_loc": 40272,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
