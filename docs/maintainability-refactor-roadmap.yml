@@ -98,14 +98,15 @@
     },
     {
       "repo": "alpha-research",
-      "max_large_files": 4,
+      "max_large_files": 5,
       "max_long_functions": 21,
       "max_complexity_hotspots": 25,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
-        "2026-07-28: 模块拆分后 large_files 13->4 下调（cpcv/walk_forward/features_calc 子模块低于阈值，登记 accepted_hotspots）。"
+        "2026-07-28: 模块拆分后 large_files 13->4 下调（cpcv/walk_forward/features_calc 子模块低于阈值，登记 accepted_hotspots）。",
+        "2026-08-16: 迁入 daily_watch20_pit_features.py（PIT 特征构造），large_files 4->5，预算随真实增长同步。"
       ]
     },
     {
@@ -1357,6 +1358,18 @@
       "owner_repo": "strategy-pipeline",
       "reason": "R3 facade 拆分后的 _api 实现单元（558 行），基准重算后进入 large_files",
       "next_action": "按 provider/aggregation 职责继续拆分"
+    },
+    {
+      "path": "alpha-research/src/alpha_research/daily_watch20_pit_features.py",
+      "owner_repo": "alpha-research",
+      "reason": "R4 DailyWatch20 迁移把 PIT 特征构造从 strategy-pipeline 迁入 alpha-research，含 PIT 契约与特征构建在一个可审计模块中，避免研究 shadow 特征在 pipeline 重复维护",
+      "next_action": "将 PIT 快照校验与特征计算拆分为独立模块后再增加新的 PIT 特征族"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_market_shadow_publish.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "Market shadow 的原子 research-only 发布与代码/输入/环境快照哈希保持在一个可审计模块，属于编排层发布门禁",
+      "next_action": "拆分快照哈希收集与原子发布步骤后再增加新的发布面"
     }
   ]
 }
