@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 120,
-      "python_loc": 23598,
+      "python_loc": 23592,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -27,7 +27,7 @@
         },
         {
           "path": "tests/test_maintainability_governance.py",
-          "loc": 614,
+          "loc": 608,
           "hk_related": false
         },
         {
