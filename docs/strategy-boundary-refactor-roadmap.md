@@ -15,18 +15,18 @@
 - 原 `research-apps` 仓库和 Python 包已经分别改名为 `strategy-app` 与 `strategy_app`。
 - `strategy-research` 已登记七个策略或策略族，并成为策略身份、生命周期和证据导航的权威位置。
 - 根工作区已经采用新的子模块名称，并增加三层边界和回归测试。
+- `strategy-pipeline` 的依赖、导入、锁文件和活动文档已切换至 `strategy-app` 0.2.x 与 `strategy_app` 命名空间（R2 已完成）。
 
 尚未完成：
 
-- `strategy-pipeline` 的依赖、导入、锁文件和活动文档已切换至 `strategy-app` 0.2.x 与 `strategy_app` 命名空间（R2 已完成）。
-- `strategy-pipeline` 仍有约 104,719 行 Python 物理行，其中 `src` 约 57,953 行、测试约 36,192 行、脚本约 10,574 行。R3 删除 facade 后体量略有下降，但控制面之外的代码仍然很多。
+- `strategy-pipeline` 约有 98,603 行 Python 物理行，其中 `src` 约 57,931 行、测试约 35,084 行、脚本约 5,588 行。R3 删除 facade 与 R5 去重后体量下降约 6,116 行，其中 `src` 只下降 22 行，控制面之外的运行时代码职责仍然很多。
 - 兼容层登记表（`docs/compatibility-facades.yml` 的 `strategy-owner-delegating-public-facades` 组）现存 16 个策略 owner facade。R3 已将 31 个 delegating public facade 的调用方改向 owner API 并删除旧壳。现存项中 15 个被 `hotsector_numeric_v2_provenance.py` 的冻结 SHA256 清单字节钉死，另 1 个 `daily_watch20_fundamental_shadow` 已改向 data owner 但仍保留公开壳。冻结项需先升级 provenance 契约，保留项需完成消费者审计，才能继续删除。
 - DailyWatch20、热点板块、D11-H5、红利与成长 ETF 动量、次日开盘到最高价仍有策略计算或研究编排留在 pipeline。
 - `strategy-research` 与 pipeline 之间的重复研究脚本和研究说明已清理：13 个同名脚本和 9 份冻结研究文档的 pipeline/实验副本已删除，权威位置分别为 `strategy-research/experiments` 与 `strategy-app/docs/research`。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
 - 顶层 `src/style_factors` 的行业平衡袖套组合构造已迁入 `portfolio-backtester`（`industry_sleeves`），因子计算与数据加载仍留在工作区。`style_factors` 整体是否进入 alpha 或 portfolio owner 尚未形成最终决策。
 
-以上行数是 2026-08-09 的盘点基线，不是目标配额。后续以删除错误归属、重复实现和兼容层为目标，不能通过移动测试或压缩格式制造体量下降。
+以上行数是 2026-08-16 的盘点基线，不是目标配额。后续以删除错误归属、重复实现和兼容层为目标，不能通过移动测试或压缩格式制造体量下降。
 
 ## 目标状态
 
