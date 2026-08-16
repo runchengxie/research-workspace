@@ -19,8 +19,8 @@
 
 尚未完成：
 
-- `strategy-pipeline` 约有 98,603 行 Python 物理行，其中 `src` 约 57,931 行、测试约 35,084 行、脚本约 5,588 行。R3 删除 facade 与 R5 去重后体量下降约 6,116 行，其中 `src` 只下降 22 行，控制面之外的运行时代码职责仍然很多。
-- 兼容层登记表（`docs/compatibility-facades.yml` 的 `strategy-owner-delegating-public-facades` 组）现存 16 个策略 owner facade。R3 已将 31 个 delegating public facade 的调用方改向 owner API 并删除旧壳。现存项中 15 个被 `hotsector_numeric_v2_provenance.py` 的冻结 SHA256 清单字节钉死，另 1 个 `daily_watch20_fundamental_shadow` 已改向 data owner 但仍保留公开壳。冻结项需先升级 provenance 契约，保留项需完成消费者审计，才能继续删除。
+- `strategy-pipeline` 约有 98,544 行 Python 物理行，其中 `src` 约 57,885 行、测试约 35,068 行、脚本约 5,591 行。R3 删除 facade 与 R5 去重后体量下降约 6,175 行，其中 `src` 只下降约 68 行，控制面之外的运行时代码职责仍然很多。
+- 兼容层登记表（`docs/compatibility-facades.yml`）原 `strategy-owner-delegating-public-facades` 组已清零。R3 将 46 个 delegating public wrapper 的调用方改向 owner API 并删除旧壳，`hotsector_numeric_v2_provenance` 升级为 v2 并指向 owner 文件，历史 v1 回执保持冻结。`daily_watch20_fundamental_shadow` 经审计确认为研究实现，登记为 `retained_research_module` 保留。
 - DailyWatch20、热点板块、D11-H5、红利与成长 ETF 动量、次日开盘到最高价仍有策略计算或研究编排留在 pipeline。
 - `strategy-research` 与 pipeline 之间的重复研究脚本和研究说明已清理：13 个同名脚本和 9 份冻结研究文档的 pipeline/实验副本已删除，权威位置分别为 `strategy-research/experiments` 与 `strategy-app/docs/research`。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
@@ -52,7 +52,7 @@ strategy-pipeline
 | R0 仓库改名 | 已完成 | `research-apps` 改为 `strategy-app`，移除旧 Python 包兼容层 | 新 wheel 只包含 `strategy_app`，历史回执 schema 保持不变 |
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
-| R3 调用方改向 | 进行中 | 31 个 delegating public facade 已删除，继续处理 15 个冻结哈希绑定者和 1 个已改向但仍保留的公开壳 | 现存 16 个策略 owner facade 在 provenance 升级和消费者审计后清零，且不新增替代兼容层 |
+| R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
 | R4 通用能力归位 | 进行中 | `date_utils` 已委托给 `alpha-research` owner，facade 已删除，内部调用方已全部改向 owner 模块，继续按数据、alpha、组合、执行职责迁移通用代码 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 进行中 | 已删除 13 个重复研究脚本和 9 份冻结研究文档副本，保留权威说明、必要的不可变历史证据和跳转 | 每个活动脚本或说明只有一个维护位置，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 待开始 | 收紧 import/source 边界、刷新体量基线、gitlink、版本清单和发布证据 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
@@ -85,13 +85,13 @@ owner 仓补齐公开 API
 
 | 顺序 | 切片 | 目标归属 | 主要遗留 |
 | --- | --- | --- | --- |
-| 1 | 已有 owner facade | `alpha-research`、`market-data-platform`、`portfolio-backtester`、`strategy-app` | 先处理无冻结哈希约束的调用方，建立删除范式 |
+| 1 | 已有 owner wrapper | `alpha-research`、`market-data-platform`、`portfolio-backtester`、`strategy-app` | 已完成：46 个 delegating wrapper 删除，provenance v2 |
 | 2 | DailyWatch20 | `strategy-app` 加现有 data、alpha、portfolio API | 候选池、F-lite、slow-volume、基本面 shadow 的内部调用和 facade |
 | 3 | 热点板块 | `strategy-app` 加 `portfolio-backtester`，外部候选继续文件耦合 | challenger、Numeric v2、低换手、AI shadow、DeepSeek 稳定性模块 |
 | 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | pipeline 研究子系统和两处重复脚本 |
 | 5 | D11-H5 | 模型与信号进 `alpha-research`，目标构造与袖套回放进 `portfolio-backtester` | pipeline 中的模型、目标计算和 shadow runner 混合 |
 | 6 | 红利与成长 ETF 动量 | 通用回测进 `portfolio-backtester`，策略配置与报告组合进 `strategy-app` | pipeline 的数据获取、审计、配置和报告模块 |
-| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`，形成顶层 `style_factors` 其余部分的保留或迁移 ADR | 因子计算、数据加载与报告仍在 `style_factors`，待最终 owner 决策 |
+| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester` | 因子计算、数据加载与报告仍在 `style_factors`，待最终 owner 决策 |
 
 迁移一个切片时同时迁移测试。pipeline 只保留 runner、provider adapter、操作员门禁、运行目录、原子发布与 `targets.json` 生成测试。
 
@@ -129,4 +129,4 @@ owner 仓补齐公开 API
 
 ## 下次继续的起点
 
-下一次并行推进 R3 收尾与 R4：先为 15 个冻结 facade 设计版本化 provenance 升级方案，并复核 `daily_watch20_fundamental_shadow` 的外部消费者。`date_utils` 切片已闭环（调用方改向 + facade 删除），后续按同一模式继续迁移通用能力。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。
+下一次推进 R4 通用能力归位：按切片迁移 DailyWatch20、热点板块、D11-H5、红利与成长 ETF 动量、次日开盘到最高价的策略计算到 owner。`date_utils`、sleeves 与 R3 facade 收尾已闭环（调用方改向 + wrapper 删除 + provenance v2）。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。

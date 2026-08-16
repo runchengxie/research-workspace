@@ -131,38 +131,20 @@
       "status": "active_compatibility"
     },
     {
-      "id": "strategy-owner-delegating-public-facades",
-      "paths": [
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_campaign_reporting.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_flite_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
-        "strategy-pipeline/src/strategy_pipeline/daily_watch20_statistics.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_analysis.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_challenger_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_analysis.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_contract.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_ranking.py",
-        "strategy-pipeline/src/strategy_pipeline/hotsector_numeric_v2_reporting.py",
-        "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution.py",
-        "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_records.py",
-        "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_reporting.py",
-        "strategy-pipeline/src/strategy_pipeline/staggered_cohort_execution_state.py",
-        "strategy-pipeline/src/strategy_pipeline/staggered_cohort_inputs.py"
-      ],
+      "id": "strategy-pipeline-daily-watch20-fundamental-shadow",
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
       "owner_repo": "strategy-pipeline",
-      "kind": "migration_compatibility_group",
-      "replacement": "strategy_app daily-watch and hot-sector owner APIs plus portfolio_backtester staggered-cohort owner APIs",
-      "current_consumers": "historical strategy_pipeline imports retained as thin public wrappers that delegate directly to strategy_app, market_data_platform, alpha_research, or portfolio_backtester owner APIs; no local strategy_app fallback remains",
-      "removal_condition": "remove each exact wrapper only after two release reviews and a consumer audit confirm direct owner imports under the completed ADR-0004 extraction",
-      "rollback_path": "restore the exact compatibility wrappers from the previous strategy-pipeline release tag",
+      "kind": "retained_research_module",
+      "replacement": "market_data_platform.research_views.daily_watch20_candidate_pool and strategy_pipeline.daily_watch20_fundamental_contract",
+      "current_consumers": "daily_watch20_fundamental_shadow_publish.py and research scripts import the PIT quality/growth feature shadow builder and OOS evaluation",
+      "removal_condition": "move the research-only schema-review implementation to a strategy owner and confirm no production import",
+      "rollback_path": "restore module from the previous strategy-pipeline release tag",
       "focused_tests": [
-        "strategy-pipeline import smoke and pytest",
-        "strategy-app pytest",
-        "portfolio-backtester staggered cohort tests"
+        "strategy-pipeline test_daily_watch20_fundamental_shadow.py",
+        "strategy-pipeline test_daily_watch20_fundamental_shadow_publish.py"
       ],
-      "consumer_audit": "2026-07-26 cross-repo consumer audit (fully-qualified strategy_pipeline.<name> imports) flagged 9 zero-reference facades. On removal, 6 were found to be load-bearing and were restored: (a) imported intra-repo via relative `from .<name>` imports — daily_watch20_flite_base_scores (consumed by daily_watch20_flite_inputs), daily_watch20_slow_minute_campaign_inputs (consumed by daily_watch20_slow_minute_campaign), staggered_cohort_inputs (consumed by daily_watch20_slow_minute_execution); (b) hashed in the frozen canonical provenance manifest hotsector_numeric_v2_provenance.IMPLEMENTATION_SOURCE_FILES — staggered_cohort_execution_records, staggered_cohort_execution_reporting, staggered_cohort_execution_state. Removing those would break the frozen provenance hash contract (byte-identical arms governance). Only 3 true orphans were removed: _hotsector_ai_shadow_v2_validation, daily_watch20_candidate_oos_reporting, hotsector_session_challenger_prompt_contract (zero repo-local imports; the only text match for daily_watch20_candidate_oos_reporting points at research_apps.daily_watch20.*, a different package). After the R3 strategy-boundary refactor, 31 delegating public facades were removed (callers repointed to owner modules) and daily_watch20_fundamental_shadow was kept but repointed (its .daily_watch20_candidate_pool import now resolves to market_data_platform.research_views.daily_watch20_candidate_pool). 16 wrappers remain: 15 byte-pinned frozen facades plus the repointed daily_watch20_fundamental_shadow.",
-      "status": "active_compatibility"
+      "consumer_audit": "2026-08-16 R3 audit confirmed this module is a research-only implementation rather than a delegating wrapper; its imports point at owner APIs and it has no replacement facade",
+      "status": "retained_public_api"
     },
     {
       "path": "market-data-platform/src/market_data_platform/data_providers.py",
