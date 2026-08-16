@@ -131,22 +131,6 @@
       "status": "active_compatibility"
     },
     {
-      "id": "strategy-pipeline-daily-watch20-fundamental-shadow",
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py",
-      "owner_repo": "strategy-pipeline",
-      "kind": "retained_research_module",
-      "replacement": "market_data_platform.research_views.daily_watch20_candidate_pool and strategy_pipeline.daily_watch20_fundamental_contract",
-      "current_consumers": "daily_watch20_fundamental_shadow_publish.py and research scripts import the PIT quality/growth feature shadow builder and OOS evaluation",
-      "removal_condition": "move the research-only schema-review implementation to a strategy owner and confirm no production import",
-      "rollback_path": "restore module from the previous strategy-pipeline release tag",
-      "focused_tests": [
-        "strategy-pipeline test_daily_watch20_fundamental_shadow.py",
-        "strategy-pipeline test_daily_watch20_fundamental_shadow_publish.py"
-      ],
-      "consumer_audit": "2026-08-16 R3 audit confirmed this module is a research-only implementation rather than a delegating wrapper; its imports point at owner APIs and it has no replacement facade",
-      "status": "retained_public_api"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/data_providers.py",
       "owner_repo": "market-data-platform",
       "kind": "module_facade",

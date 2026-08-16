@@ -313,12 +313,6 @@ def test_compatibility_facade_register_covers_detected_facades() -> None:
         if record["kind"] == "migration_compatibility_group"
     ]
     assert groups == []
-    assert any(
-        record["path"]
-        == "strategy-pipeline/src/strategy_pipeline/daily_watch20_fundamental_shadow.py"
-        and record["status"] == "retained_public_api"
-        for record in manifest["records"]
-    )
 
 
 def test_compatibility_facade_group_missing_path_is_rejected() -> None:

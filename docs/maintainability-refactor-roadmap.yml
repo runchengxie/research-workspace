@@ -130,21 +130,22 @@
     },
     {
       "repo": "strategy-app",
-      "max_large_files": 1,
-      "max_long_functions": 3,
+      "max_large_files": 2,
+      "max_long_functions": 6,
       "max_complexity_hotspots": 3,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
         "2026-07-28: 模块拆分后 large_files 2->1 下调。",
-        "2026-08-16: 迁入红利成长、D11-H5、three_arm 计算，long_functions 2->3、complexity_hotspots 1->3。"
+        "2026-08-16: 迁入红利成长、D11-H5、three_arm 计算，long_functions 2->3、complexity_hotspots 1->3。",
+        "2026-08-16: 迁入 DailyWatch20 剩余家族（fundamental/flite/market-shadow api），large_files 1->2、long_functions 3->6。"
       ]
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 29,
-      "max_long_functions": 114,
-      "max_complexity_hotspots": 61,
+      "max_large_files": 28,
+      "max_long_functions": 111,
+      "max_complexity_hotspots": 60,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -157,7 +158,8 @@
         "2026-07-31: 合并 #31 拆分红利成长报告渲染（dividend_growth_momentum_report.py 新增 338 行、reporting.py 292->~30 行），真实债务收敛：large_files 36->35、long_functions 120->118（两处 80 行热点随拆分消除）；预算随实测下调 36->35 / 120->118，与刷新后的 baseline 对齐。",
         "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。",
         "2026-08-16: R5 去重删除 13 个 scripts/research 副本与 4 个测试，large_files 35->29 / long_functions 121->115 / complexity 66->65，预算随真实删除下调。",
-        "2026-08-16: R4 迁移红利成长/D11-H5/three_arm 后计算热点下降，long_functions 115->114、complexity_hotspots 65->61。"
+        "2026-08-16: R4 迁移红利成长/D11-H5/three_arm 后计算热点下降，long_functions 115->114、complexity_hotspots 65->61。",
+        "2026-08-16: DailyWatch20 剩余家族迁出后计算热点下降，large_files 29->28、long_functions 114->111、complexity_hotspots 61->60。"
       ]
     },
     {
@@ -1356,8 +1358,8 @@
       "next_action": "按研究模块拆分断言或复用 fixture 后下调行数"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/_daily_watch20_market_shadow_api.py",
-      "owner_repo": "strategy-pipeline",
+      "path": "strategy-app/src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
+      "owner_repo": "strategy-app",
       "reason": "R3 facade 拆分后的 _api 实现单元（558 行），基准重算后进入 large_files",
       "next_action": "按 provider/aggregation 职责继续拆分"
     },
