@@ -7,4 +7,4 @@
 - 当前权威脚本：本目录
 - 已知限制：日内高点目标不可直接解释为可实现收益，分钟成交、涨跌停、停牌、滑点和选择偏差必须单独审计
 
-同名脚本仍在 `strategy-pipeline/scripts/research` 存在重复副本。通用模型与特征代码应迁到 `alpha-research`，通用回放与成本代码应迁到 `portfolio-backtester`。调用方切换后删除 pipeline 副本，不保留兼容 wrapper。
+同名脚本已从 `strategy-pipeline/scripts/research` 删除，本目录是唯一权威位置。通用模型与特征代码应迁到 `alpha-research`，通用回放与成本代码应迁到 `portfolio-backtester`。

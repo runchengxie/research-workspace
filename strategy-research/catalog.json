@@ -1,7 +1,7 @@
 {
   "schema_version": "strategy_research_catalog.v1",
   "source_of_truth": "strategy-research",
-  "last_verified": "2026-08-09",
+  "last_verified": "2026-08-16",
   "strategies": [
     {
       "id": "daily_watch20",
@@ -73,7 +73,7 @@
       "control_plane_owner": null,
       "runtime_entries": ["strategy-research/experiments/next_open_to_high"],
       "variants": ["daily_proxy", "minute_audit", "cost_stress"],
-      "extraction_debt": ["move reusable model code to alpha-research", "move reusable replay code to portfolio-backtester", "delete duplicate strategy-pipeline scripts after redirect"]
+      "extraction_debt": ["move reusable model code to alpha-research", "move reusable replay code to portfolio-backtester"]
     },
     {
       "id": "guan_weekly",
@@ -97,7 +97,7 @@
   ],
   "inventory_notes": [
     "strategy-pipeline currently contains substantial DailyWatch20, hotsector, D11-H5 and dividend-growth strategy-specific code",
-    "strategy-research contains canonical experiments plus exact or near-exact copies of several historical strategy-pipeline research scripts and documents",
+    "strategy-research contains canonical experiments and authoritative copies of historical strategy-pipeline research scripts and documents; duplicate copies removed 2026-08-16",
     "external guan-factor-research-framework and deep-learning-tick-data-prediction contain strategy research outside this Git submodule graph",
     "market-intel supplies candidates and selections but is not itself the canonical owner of portfolio strategies"
   ]
