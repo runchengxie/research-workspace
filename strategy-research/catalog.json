@@ -9,11 +9,25 @@
       "lifecycle": "operational",
       "production_eligible": true,
       "human_spec": "strategy-research/strategies/daily_watch20/README.md",
-      "executable_owners": ["strategy-app", "alpha-research", "portfolio-backtester"],
+      "executable_owners": [
+        "strategy-app",
+        "alpha-research",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": "strategy-pipeline",
-      "runtime_entries": ["strategy watchlist20 run", "strategy_app.daily_watch20"],
-      "variants": ["candidate_pool_oos", "flite", "slow_volume", "incumbent_challenger", "fundamental_shadow", "long_horizon_buffer"],
-      "extraction_debt": ["strategy-pipeline still contains strategy calculation, research runners and compatibility facades"]
+      "runtime_entries": [
+        "strategy watchlist20 run",
+        "strategy_app.daily_watch20"
+      ],
+      "variants": [
+        "candidate_pool_oos",
+        "flite",
+        "slow_volume",
+        "incumbent_challenger",
+        "fundamental_shadow",
+        "long_horizon_buffer"
+      ],
+      "extraction_debt": []
     },
     {
       "id": "hotsector",
@@ -21,11 +35,24 @@
       "lifecycle": "research_shadow",
       "production_eligible": false,
       "human_spec": "strategy-research/strategies/hotsector/README.md",
-      "executable_owners": ["strategy-app", "portfolio-backtester"],
+      "executable_owners": [
+        "strategy-app",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": "strategy-pipeline",
-      "runtime_entries": ["strategy_app.hotsector", "market-intel file artifacts"],
-      "variants": ["numeric", "numeric_v2", "low_turnover", "session_challenger", "ai_shadow", "deepseek_v4"],
-      "extraction_debt": ["strategy-pipeline still contains research analysis, campaign code, duplicate contracts and owner facades"]
+      "runtime_entries": [
+        "strategy_app.hotsector",
+        "market-intel file artifacts"
+      ],
+      "variants": [
+        "numeric",
+        "numeric_v2",
+        "low_turnover",
+        "session_challenger",
+        "ai_shadow",
+        "deepseek_v4"
+      ],
+      "extraction_debt": []
     },
     {
       "id": "style_replica_a80_b20",
@@ -33,11 +60,20 @@
       "lifecycle": "operational_research",
       "production_eligible": false,
       "human_spec": "strategy-research/strategies/style_replica/README.md",
-      "executable_owners": ["research-workspace", "alpha-research", "portfolio-backtester"],
+      "executable_owners": [
+        "research-workspace",
+        "alpha-research",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": "strategy-pipeline",
-      "runtime_entries": ["strategy style-replica run", "src/style_factors"],
+      "runtime_entries": [
+        "strategy style-replica run",
+        "src/style_factors"
+      ],
       "variants": [],
-      "extraction_debt": ["confirm whether the top-level style_factors thin package should become an owner package"]
+      "extraction_debt": [
+        "confirm whether the top-level style_factors thin package should become an owner package"
+      ]
     },
     {
       "id": "d11_h5_shadow",
@@ -45,11 +81,19 @@
       "lifecycle": "shadow",
       "production_eligible": false,
       "human_spec": "strategy-research/strategies/d11_h5_shadow/README.md",
-      "executable_owners": ["alpha-research", "portfolio-backtester"],
+      "executable_owners": [
+        "alpha-research",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": "strategy-pipeline",
-      "runtime_entries": ["strategy d11-h5-shadow", "strategy-research/packaging/d11_h5"],
-      "variants": ["five_sleeve_shadow"],
-      "extraction_debt": ["move remaining model and target-construction computation out of the control plane"]
+      "runtime_entries": [
+        "strategy d11-h5-shadow",
+        "strategy-research/packaging/d11_h5"
+      ],
+      "variants": [
+        "five_sleeve_shadow"
+      ],
+      "extraction_debt": []
     },
     {
       "id": "dividend_growth_momentum",
@@ -57,11 +101,19 @@
       "lifecycle": "pre_production",
       "production_eligible": false,
       "human_spec": "strategy-research/pre_production/dividend_growth_momentum/README.md",
-      "executable_owners": ["research-workspace", "portfolio-backtester"],
+      "executable_owners": [
+        "research-workspace",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": null,
-      "runtime_entries": ["strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py"],
-      "variants": ["full_rotation", "core_satellite"],
-      "extraction_debt": ["move audit, config and reporting modules from strategy-pipeline to strategy-app before promotion"]
+      "runtime_entries": [
+        "strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py"
+      ],
+      "variants": [
+        "full_rotation",
+        "core_satellite"
+      ],
+      "extraction_debt": []
     },
     {
       "id": "next_open_to_high",
@@ -69,11 +121,19 @@
       "lifecycle": "exploration",
       "production_eligible": false,
       "human_spec": "strategy-research/experiments/next_open_to_high/README.md",
-      "executable_owners": ["research-workspace"],
+      "executable_owners": [
+        "research-workspace"
+      ],
       "control_plane_owner": null,
-      "runtime_entries": ["strategy-research/experiments/next_open_to_high"],
-      "variants": ["daily_proxy", "minute_audit", "cost_stress"],
-      "extraction_debt": ["move reusable model code to alpha-research", "move reusable replay code to portfolio-backtester"]
+      "runtime_entries": [
+        "strategy-research/experiments/next_open_to_high"
+      ],
+      "variants": [
+        "daily_proxy",
+        "minute_audit",
+        "cost_stress"
+      ],
+      "extraction_debt": []
     },
     {
       "id": "guan_weekly",
@@ -81,11 +141,21 @@
       "lifecycle": "external_research",
       "production_eligible": false,
       "human_spec": "strategy-research/strategies/guan_weekly/README.md",
-      "executable_owners": ["external:guan-factor-research-framework", "strategy-app", "portfolio-backtester"],
+      "executable_owners": [
+        "external:guan-factor-research-framework",
+        "strategy-app",
+        "portfolio-backtester"
+      ],
       "control_plane_owner": null,
-      "runtime_entries": ["strategy_app.weekly_backtest_bridge"],
-      "variants": ["dynamic_multi_factor"],
-      "extraction_debt": ["keep the external repository file-coupled and avoid importing its source through PYTHONPATH"]
+      "runtime_entries": [
+        "strategy_app.weekly_backtest_bridge"
+      ],
+      "variants": [
+        "dynamic_multi_factor"
+      ],
+      "extraction_debt": [
+        "keep the external repository file-coupled and avoid importing its source through PYTHONPATH"
+      ]
     }
   ],
   "non_strategy_surfaces": [
@@ -96,7 +166,7 @@
     "DailyWatch20 and hotsector challenger variants"
   ],
   "inventory_notes": [
-    "strategy-pipeline currently contains substantial DailyWatch20, hotsector, D11-H5 and dividend-growth strategy-specific code",
+    "strategy-pipeline strategy-specific calculation migrated to owners across R4 (DailyWatch20, hotsector, D11-H5, dividend-growth, next-open-to-high); pipeline retains orchestration, publication and control-plane shells",
     "strategy-research contains canonical experiments and authoritative copies of historical strategy-pipeline research scripts and documents; duplicate copies removed 2026-08-16",
     "external guan-factor-research-framework and deep-learning-tick-data-prediction contain strategy research outside this Git submodule graph",
     "market-intel supplies candidates and selections but is not itself the canonical owner of portfolio strategies"
