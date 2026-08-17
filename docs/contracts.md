@@ -49,8 +49,8 @@
 
 ### 可选 artifact envelope v2
 
-迁移期间，现有 v1 artifact 和 reader 保持有效。producer 可以在 metadata 或 lineage sidecar 中以
-`artifact_envelope` 键选择性写入 `research.artifact-envelope.v2`。该 envelope 只记录跨仓库可复现信息：
+迁移期间，现有 v1 artifact 和 reader 保持有效。producer 在 metadata 或 lineage sidecar 中以
+`artifact_envelope` 键写入 `research.artifact-envelope.v2`。该 envelope 只记录跨仓库可复现信息：
 
 - artifact、run 和 producer 身份。
 - producer commit/version 与 backend provenance。
@@ -58,13 +58,18 @@
 - artifact、配置和上游 lineage 的安全哈希算法（SHA-256）。
 - 对执行目标可选的 validity、portfolio/account scope、policy reference 和幂等 scope。
 
-envelope 不包含数据加载、路径解析、模型训练或组合计算 helper。Qlib、vn.py 和 LEAN 对象不得进入 envelope。v2 writer 在各 owner 仓库完成 parity 前保持 opt-in。未携带 envelope 的 v1 metadata 继续由兼容 reader 原样读取。
+envelope 不包含数据加载、路径解析、模型训练或组合计算 helper。Qlib、vn.py 和 LEAN 对象不得进入 envelope。读取方继续兼容未携带 envelope 的 v1 metadata，由兼容 reader 原样读取。
+
+`src/research_contracts` 已提供 v2 写入辅助层：`attach_artifact_envelope_v2`、`canonical_json_sha256`、`file_sha256` 和 `ProducerIdentity`/`LineageInput` 类型，并有契约测试覆盖写入与校验往返。
+
+生产方采用仍在进行中，各 owner 仓库尚未接入 `research-contracts` 写入 v2 envelope。现有 v1 artifact 和 reader 保持有效，读取方继续兼容未携带 envelope 的 v1 metadata。采用完成后应在对应 `*.meta.json` 或 `targets.json` 中写入 `artifact_envelope` 键，并同步更新本页与 `artifact-contracts.yml`。
 
 | Artifact | 契约 | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
 | `signals.parquet` | `alpha_research.signals` | `alpha-research` | `alpha_research.signal_artifact` | `signal_date`、`symbol`、`raw_pred`、`signal_eval`、`signal_backtest`、`signal_direction`、`rank`、`model_version`、`feature_set_id`、`eligible_for_backtest`、`eligible_for_live` |
 | `signals.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `signal_artifact_summary` | 契约 name、schema version、文件路径、行数、required columns |
 | `positions_by_rebalance.csv` | `portfolio_backtester.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`。常见字段包括 `entry_date`、`side`、`signal`、`rank` |
+| `positions_by_rebalance.meta.json` | `portfolio_backtester.positions_by_rebalance` envelope | `portfolio-backtester` | `portfolio_backtester.contracts` | contract、schema version、文件路径、行数、required columns、`artifact_envelope` |
 | `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
 | `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `strategy export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
 | `signals_style_replica.parquet` | `alpha_research.signals`（style_replica variant） | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
