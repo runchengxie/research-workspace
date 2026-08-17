@@ -64,6 +64,8 @@ quant-execution-engine
 
 ## 治理入口
 
+- [工作区聚合路线图](docs/roadmap.md)
+- [文档归集与去重清单](docs/documentation-consolidation.md)
 - [框架集成边界](docs/adr/0001-framework-integration-boundaries.md)
 - [命名空间边界](docs/adr/0002-owner-native-python-namespaces.md)
 - [策略知识与运行时边界](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)

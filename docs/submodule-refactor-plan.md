@@ -1,5 +1,13 @@
 # 子模块巨型文件拆分方案
 
+> status: reference
+> owner: workspace
+> last_verified: 2026-08-17
+> source_of_truth: no
+> superseded_by: maintainability-governance.md
+
+本页保留当时的拆分设计，其中部分文件已经完成拆分。当前热点、预算和优先级以[维护性治理](maintainability-governance.md)、`maintainability-refactor-roadmap.yml` 和[工作区路线图](roadmap.md)为准。
+
 本页是盘点报告里「子模块巨型文件拆分」的落地设计。当前先给出方案，执行前需各子仓 owner 确认。拆分原则是保持对外契约不变、配套回归测试、同步维护性预算。
 
 ## 现状核实

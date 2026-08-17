@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-07-19
+> last_verified: 2026-08-17
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -14,8 +14,10 @@
 | --- | --- |
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
+| 查看全部已完成事项、剩余项目和优先级 | [roadmap.md](roadmap.md) |
 | 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
-| 查看策略边界重构剩余工作 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
+| 查看策略边界 R0 至 R6 的实施记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
+| 查看说明文档归集和去重顺序 | [documentation-consolidation.md](documentation-consolidation.md) |
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
 | 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
@@ -30,6 +32,8 @@
 
 ## 参考资料
 
+- 工作区路线图：[roadmap.md](roadmap.md)
+- 文档归集与去重清单：[documentation-consolidation.md](documentation-consolidation.md)
 - 外部框架采用评估：[framework-adoption-assessment.md](framework-adoption-assessment.md)
 - 框架集成边界：[adr/0001-framework-integration-boundaries.md](adr/0001-framework-integration-boundaries.md)
 - Python 命名空间决策：[adr/0002-owner-native-python-namespaces.md](adr/0002-owner-native-python-namespaces.md)
@@ -38,14 +42,14 @@
 - 废弃入口：[deprecations.md](deprecations.md)
 - 维护性治理：[maintainability-governance.md](maintainability-governance.md)
 - 治理文件索引：[governance-index.md](governance-index.md)
-- 代码体量复查与拆分建议：[code-size-review.md](code-size-review.md)
-- 子模块巨型文件拆分方案：[submodule-refactor-plan.md](submodule-refactor-plan.md)
-- 子模块 noqa 清债计划：[noqa-clearing-plan.md](noqa-clearing-plan.md)
+- 代码体量历史复查：[code-size-review.md](code-size-review.md)
+- 子模块巨型文件历史方案：[submodule-refactor-plan.md](submodule-refactor-plan.md)
+- 子模块 noqa 历史清债计划：[noqa-clearing-plan.md](noqa-clearing-plan.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
-- 架构边界发布清单：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
+- 架构拆分收口记录：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - 策略总览导航索引：[strategy-catalog.md](strategy-catalog.md)
-- 策略边界重构路线图：[strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md)
+- 策略边界重构完成记录：[strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md)
 - 策略生命周期权威目录：[../strategy-research/catalog.json](../strategy-research/catalog.json)
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](../strategy-research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
@@ -84,8 +88,8 @@
 - `src/research_contracts` 是顶层普通目录
 - `alpha_research.style_factors`（alpha-research）负责风格因子计算内核，`portfolio_backtester.style_factors_backtest`（portfolio-backtester）负责分位回测内核，`strategy-research/style_factors`（可 `python -m style_factors`）负责表现层归因、报告与图表（ADR-0006 拆分后均非顶层目录）
 - A 股 current 契约是 `metadata/current_assets/a_share_current.json`
-- A 股日频基线覆盖 2015-01-05 至 2026-07-16，该日期是 current 契约的数据范围快照日，时间点（PIT）财务和历史行业资产已发布
-- `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐
+- A 股日频、时间点（PIT）财务和历史行业资产已发布，准确覆盖范围以 current 契约为准
+- current 契约中的 `normalized_fundamentals` 仍标记为 `exists: false`，完整 PIT 策略证据仍待补齐
 - `targets.json` 是研究到执行的标准交接文件
 - 港股资产和历史研究输出按恢复专用归档管理
 

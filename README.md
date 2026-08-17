@@ -151,6 +151,7 @@ python -m coverage report
 
 ## 文档入口
 
+- [工作区路线图](docs/roadmap.md)
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
 - [策略研究与生命周期](strategy-research/README.md)
@@ -162,4 +163,5 @@ python -m coverage report
 - [版本矩阵](docs/version-matrix.md)
 - [发布检查清单](docs/release-checklist.md)
 - [文档总入口](docs/README.md)
+- [文档归集与去重清单](docs/documentation-consolidation.md)
 - [术语表](docs/glossary.md)

@@ -1,12 +1,12 @@
 {
-  "_last_changed": "2026-07-14",
+  "_last_changed": "2026-08-17",
   "_owner": "research-workspace",
   "schema_version": "artifact_contracts.v1",
   "policy": {
     "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
     "shared_package_target": "research-contracts",
-    "shared_package_status": "planned",
-    "owner_rule": "The owning module defines the canonical runtime implementation until a formal shared package exists.",
+    "shared_package_status": "local_workspace_package",
+    "owner_rule": "The owning module defines the canonical runtime implementation; the local research-contracts package validates shared envelopes and file handoffs.",
     "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals."
   },
   "artifact_envelope": {

@@ -6,6 +6,9 @@
 
 ## 跨仓库契约与边界
 
+工作区级完成状态和优先级见[工作区路线图](roadmap.md)。各机器账本保存字段级事实，
+文档之间的归集关系见[文档归集与去重清单](documentation-consolidation.md)。
+
 | 文件 | 用途 | 关联检查 |
 | --- | --- | --- |
 | `artifact-contracts.yml` | 跨模块产物契约，定义权威运行时实现的归属规则 | `src/research_contracts/`、契约测试 |
@@ -19,7 +22,6 @@
 | `deprecations.yml` | 废弃入口登记与预算，记录待跟进的废弃面 | `scripts/workspace_governance.py` |
 | `maintainability-refactor-roadmap.yml` | 维护性重构路线图与热点预算（棘轮策略）。债务上限下调需在同一提交完成，上调需独立 owner 决策 | `scripts/maintainability_baseline.py`、维护性门禁 |
 | `quality-coverage-governance.yml` | 质量覆盖治理，登记允许的排除项与每文件忽略上限 | 各仓 ruff `per-file-ignores` |
-| `dev-metrics-consolidation-plan.md` | 六份分叉 `maintainability_metrics.py` 合并进 `research-dev-metrics` 远端的方案与风险评估 | 维护性门禁、各仓 pre-push |
 
 ## 脚本与应用生命周期
 

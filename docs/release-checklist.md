@@ -19,6 +19,16 @@
 - [ ] `python scripts/print_version_matrix.py` 的结果与准备提交的子模块指针一致。
 - [ ] 暂存区不含凭证、`.env`、大型数据、缓存、`artifacts/`、`outputs/` 或本地绝对路径。
 
+## 架构边界门禁
+
+- [ ] 框架状态已同步到 [`framework-integration-ledger.yml`](framework-integration-ledger.yml)。
+- [ ] Qlib、vn.py、LEAN 和 Backtrader 类型没有进入跨仓库公开返回值或产物 schema。
+- [ ] 未安装可选框架时，原生路径仍可导入和运行。
+- [ ] `python scripts/workspace_import_boundaries.py --check` 通过。
+- [ ] `uv run python -m pytest tests/test_workspace_import_boundaries.py -q` 通过。
+- [ ] `cd strategy-pipeline && scripts/dev/run_tests.sh import-boundary` 通过。
+- [ ] 新增边界例外已经记录 owner、原因、移除条件和对应测试。
+
 ## 按改动范围追加检查
 
 | 范围 | 检查入口 |

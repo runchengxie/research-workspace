@@ -1,7 +1,15 @@
 # R3 调用方改向：facade 分批删除计划
 
+> status: reference
+> owner: workspace
+> last_verified: 2026-08-17
+> source_of_truth: no
+> superseded_by: strategy-boundary-refactor-roadmap.md
+
 > 本文档是 ADR-0006 策略边界拆分 R3 阶段的执行蓝图，由 `feat/r3-callgraph-analysis` worktree 产出。
 > 它只做规划与调用图分析，不删除任何代码。后续每一批删除应在独立 worktree 中按本文分批进行。
+
+R3 已经完成。本页只保留当时的调用图和分批依据，当前状态以[策略边界实施记录](strategy-boundary-refactor-roadmap.md)和[工作区路线图](roadmap.md)为准。
 
 ## 背景
 

@@ -18,7 +18,7 @@
 
 ## 当前排查结论
 
-工作区内的策略身份已经集中登记，但可执行代码尚未全部完成归位：
+工作区内的策略身份已经集中登记，R0 至 R6 的可执行代码归位已经完成。当前仍需补齐的是策略证据和接口维护：
 
 - DailyWatch20 与热点板块的策略特有纯计算以 `strategy-app` 为目标 owner。
 - StyleReplica、D11-H5、红利与成长 ETF 动量、次日开盘到最高价也属于策略目录范围，不应因代码在顶层或 pipeline 而漏记。
@@ -38,7 +38,8 @@
 | 查看信号产物合同 | [alpha-research/docs/reference/signal-artifacts.md](../alpha-research/docs/reference/signal-artifacts.md) |
 | 查看组合与回测职责 | [portfolio-backtester/README.md](../portfolio-backtester/README.md) |
 | 查看运行与发布控制面 | [strategy-pipeline/docs/strategy-catalog.md](../strategy-pipeline/docs/strategy-catalog.md) |
-| 查看尚未完成的拆分及实施顺序 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
+| 查看工作区剩余项目和优先级 | [roadmap.md](roadmap.md) |
+| 查看策略边界拆分完成记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 
 ## 维护规则
 
