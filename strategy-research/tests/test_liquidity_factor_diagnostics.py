@@ -131,7 +131,7 @@ def test_joint_neutralization_removes_linear_size_and_lowvol_exposure() -> None:
                 {
                     "trade_date": trade_date,
                     "symbol": f"S{index:03d}",
-                    **{column: turnover for column in BASE_SIGNAL_LABELS},
+                    **dict.fromkeys(BASE_SIGNAL_LABELS, turnover),
                 }
             )
 

@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 
 from portfolio_backtester.style_factors_backtest import compute_summary
+
 from .robustness_execution import LegSimulation, profile_results
 
 

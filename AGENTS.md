@@ -9,7 +9,7 @@
 - 锁定六个子模块的提交版本
 - 维护跨仓库文件约定和 `src/research_contracts`
 - 维护工作区 doctor、质量检查和子仓库委托脚本
-- 维护顶层风格因子计算、归因、回测与报告薄包 `src/style_factors`
+- 维护风格因子计算内核（`alpha_research.style_factors`，alpha-research owner）、分位回测内核（`portfolio_backtester.style_factors_backtest`，portfolio-backtester owner）与表现层（`strategy-research/style_factors`，可 `python -m style_factors`）的交接与说明
 - 记录版本组合、发布检查和归档入口
 - 维护 `strategy-research` 中的策略身份、生命周期和证据导航
 - 说明数据、研究、回测、编排和执行之间的交接方式

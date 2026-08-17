@@ -72,6 +72,8 @@ def test_root_gate_runs_root_quality_and_cross_repo_checks_only() -> None:
         "workspace-doctor",
         "contract-smoke",
         "root-tests",
+        "research-layer-tests",
+        "research-layer-lint",
     ]
     assert all(command.cwd == ROOT for command in plan.commands)
 
@@ -577,6 +579,8 @@ def test_plan_gate_treats_superproject_worktree_as_root(
         "workspace-doctor",
         "contract-smoke",
         "root-tests",
+        "research-layer-tests",
+        "research-layer-lint",
     ]
     assert all(command.cwd == fake_worktree for command in plan.commands)
 

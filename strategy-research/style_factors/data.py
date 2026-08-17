@@ -25,13 +25,13 @@ from .loaders import (
 )
 
 __all__ = [
+    "load_cashflow",
     "load_data",
     "load_fina_indicator",
-    "load_cashflow",
-    "load_moneyflow_ths",
     "load_holder_structure",
     "load_limit_list",
     "load_margin",
+    "load_moneyflow_ths",
     "load_sw_industry_membership",
     "load_ths_member",
 ]
@@ -122,9 +122,7 @@ def _in_window(
     end = _coerce_date(end_date)
     if start is not None and date < start:
         return False
-    if end is not None and date > end:
-        return False
-    return True
+    return not (end is not None and date > end)
 
 
 def _read_daily(parts: list[Path], *, label: str) -> pd.DataFrame:

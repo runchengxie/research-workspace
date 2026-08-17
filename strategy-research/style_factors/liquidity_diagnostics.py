@@ -11,8 +11,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from .data import load_data, load_sw_industry_membership
 from portfolio_backtester.style_factors_backtest import get_rebalance_dates
+
+from .data import load_data, load_sw_industry_membership
 from .liquidity_backtest import (
     build_liquidity_portfolios,
     compare_baseline_returns,

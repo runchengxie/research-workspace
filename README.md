@@ -35,7 +35,9 @@ quant-execution-engine
 | `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
-| `src/style_factors/` | 顶层直接维护的风格因子计算、归因、回测与报告薄包 |
+| `alpha-research/src/alpha_research/style_factors/` | 风格因子计算内核（`alpha_research.style_factors`），ADR-0006 后由 alpha-research owner |
+| `portfolio-backtester/src/portfolio_backtester/style_factors_backtest.py` | 分位数多空回测内核（`portfolio_backtester.style_factors_backtest`），由 portfolio-backtester owner |
+| `strategy-research/style_factors/` | 表现层：风格因子归因、报告、图表、稳健性与发布校验（`python -m style_factors`），由 strategy-research 维护 |
 | `strategy-research/pre_production/` | 长期跟踪型策略（已验证、值得跟踪、未完全生产化），目录与升格门槛见 [strategy-research/pre_production/README.md](strategy-research/pre_production/README.md) |
 | `strategy-research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [strategy-research/experiments/README.md](strategy-research/experiments/README.md) |
 | `strategy-research/packaging/` | 系统级复现打包器脚本（D11-H5），产物不进入仓库 |

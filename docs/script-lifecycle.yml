@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-04",
+  "_last_changed": "2026-08-17",
   "_owner": "research-workspace",
   "schema_version": "script_lifecycle.v1",
   "valid_lifecycles": [
@@ -268,6 +268,16 @@
       "writes_files": "stdout only",
       "external_dependencies": "submodule environments",
       "removal_condition": "remove only after submodule check delegation is replaced by explicit repo-level commands and no CI/release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/run_research_layer_lint.py",
+      "owner": "research-workspace",
+      "purpose": "Lint the migrated style-factor presentation layer (strategy-research/style_factors and tests) with its own ruff profile, which intentionally permits Chinese full-width punctuation",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "python ruff module; runs from inside strategy-research so its pyproject.toml wins over the superproject ruff profile",
+      "removal_condition": "remove only after the research layer lint moves into a unified superproject ruff profile and no pre-push gate or contributor documentation calls this command for two release reviews"
     },
     {
       "path": "scripts/scan_workspace_secrets.py",

@@ -32,7 +32,7 @@
 
 ## 与治理机制的关系
 
-维护性预算棘轮（`maintainability-refactor-roadmap.yml`）已覆盖 `src/style_factors` 等顶层包。子模块内的长文件若进入拆分，应同步在各仓的维护性基线里下调预算，沿用现有的「同一提交下调、独立决策上调」规则。当前子模块长文件未触发顶层门禁，因此不阻塞发布。
+维护性预算棘轮（`maintainability-refactor-roadmap.yml`）已覆盖 `strategy-research/style_factors` 表现层与 `alpha_research.style_factors` 计算内核（ADR-0006 拆分后，原顶层 `src/style_factors` 已删除，职责分别落入 alpha-research 与 strategy-research）。子模块内的长文件若进入拆分，应同步在各仓的维护性基线里下调预算，沿用现有的「同一提交下调、独立决策上调」规则。当前子模块长文件未触发顶层门禁，因此不阻塞发布。
 
 ## 不做的事
 

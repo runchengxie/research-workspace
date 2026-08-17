@@ -161,7 +161,7 @@ def build_early_daily_clean(
         "listed_days",
     ]
     stats = {
-        "early_rows": int(len(out)),
+        "early_rows": len(out),
         "early_symbols": int(out["symbol"].nunique()),
         "early_dates": int(out["trade_date"].nunique()),
         "early_daily_basic_join_rate": float(out["total_mv"].notna().mean()),
@@ -220,8 +220,8 @@ def expand_st_intervals(
         else pd.DataFrame(columns=["trade_date", "symbol"])
     )
     return history, {
-        "st_interval_rows": int(len(intervals)),
-        "st_formation_rows": int(len(history)),
+        "st_interval_rows": len(intervals),
+        "st_formation_rows": len(history),
         "st_symbols": int(history["symbol"].nunique()) if not history.empty else 0,
         "st_pit_class": receipt["pit_class"],
         "st_revision_safe": bool(receipt["revision_safe"]),
@@ -328,8 +328,8 @@ def load_reconstructed_pit_panel(
         "pit_query_start_date": str(query.get("start_date") or ""),
         "pit_query_end_date": str(query.get("end_date") or ""),
         "pit_schema": "tushare.a_share.fundamentals.pit.v2",
-        "pit_panel_rows": int(len(panel)),
-        "pit_event_rows": int(len(events)),
+        "pit_panel_rows": len(panel),
+        "pit_event_rows": len(events),
         "pit_panel_dates": int(panel["trade_date"].nunique()),
         "pit_panel_symbols": int(panel["symbol"].nunique()),
         "pit_field_coverage": {

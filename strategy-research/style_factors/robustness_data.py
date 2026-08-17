@@ -166,7 +166,7 @@ def _adjustment_bridge_metadata(daily_clean: pd.DataFrame) -> dict[str, Any]:
     implied = (paired["tr_close_after"] / paired["tr_close_before"] - 1.0) * 100.0
     error = (implied - paired["pct_chg"]).abs().dropna()
     return {
-        "adjustment_bridge_symbols": int(len(error)),
+        "adjustment_bridge_symbols": len(error),
         "adjustment_bridge_median_abs_error_pct": float(error.median()),
         "adjustment_bridge_p99_abs_error_pct": float(error.quantile(0.99)),
         "adjustment_bridge_max_abs_error_pct": float(error.max()),

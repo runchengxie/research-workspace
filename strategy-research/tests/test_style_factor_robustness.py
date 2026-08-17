@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_research.style_factors import _overlay_formation_fundamentals
+from alpha_research.style_factors.factor_calc import _overlay_formation_fundamentals
 from style_factors.robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,

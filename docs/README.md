@@ -82,7 +82,7 @@
 
 - `market-intel` 是外部卫星仓，通过版本化文件接入，不参与 `print_version_matrix.py` 的版本锁定
 - `src/research_contracts` 是顶层普通目录
-- `src/style_factors` 是顶层普通目录，负责风格因子计算、归因、回测与报告
+- `alpha_research.style_factors`（alpha-research）负责风格因子计算内核，`portfolio_backtester.style_factors_backtest`（portfolio-backtester）负责分位回测内核，`strategy-research/style_factors`（可 `python -m style_factors`）负责表现层归因、报告与图表（ADR-0006 拆分后均非顶层目录）
 - A 股 current 契约是 `metadata/current_assets/a_share_current.json`
 - A 股日频基线覆盖 2015-01-05 至 2026-07-16，该日期是 current 契约的数据范围快照日，时间点（PIT）财务和历史行业资产已发布
 - `normalized_fundamentals` 尚未写入 current 契约，完整 PIT 策略证据仍待补齐

@@ -9,8 +9,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from alpha_research.style_factors.helpers import merge_sw_industry_pit
+
 from .data import _partition_date
-from .helpers import merge_sw_industry_pit
 
 BASE_SIGNAL_LABELS = {
     "turnover_1d": "月末单日换手率",

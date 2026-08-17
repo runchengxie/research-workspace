@@ -45,7 +45,7 @@ def load_margin_formation_eligibility(
     frame = pd.concat(pieces, ignore_index=True).rename(columns={"ts_code": "symbol"})
     frame = _normalize_dates(frame).drop_duplicates(["trade_date", "symbol"])
     return frame, {
-        "margin_formation_rows": int(len(frame)),
+        "margin_formation_rows": len(frame),
         "margin_formation_dates": int(frame["trade_date"].nunique()),
         "margin_symbols": int(frame["symbol"].nunique()),
         "margin_sha256": receipt["sha256"],
@@ -107,11 +107,11 @@ def load_reported_borrow_activity_eligibility(
         qualified, on=["trade_date", "symbol"], how="inner", validate="one_to_one"
     ).sort_values(["trade_date", "symbol"])
     return proxy.reset_index(drop=True), {
-        "reported_borrow_activity_rows": int(len(proxy)),
+        "reported_borrow_activity_rows": len(proxy),
         "reported_borrow_activity_dates": int(proxy["trade_date"].nunique()),
         "reported_borrow_activity_symbols": int(proxy["symbol"].nunique()),
-        "margin_detail_activity_rows": int(len(margin_activity)),
-        "slb_sec_detail_activity_rows": int(len(slb_activity)),
+        "margin_detail_activity_rows": len(margin_activity),
+        "slb_sec_detail_activity_rows": len(slb_activity),
         "margin_detail_sha256": margin_receipt["sha256"],
         "slb_sec_detail_sha256": slb_receipt["sha256"],
         "reported_borrow_activity_semantics": (
@@ -136,7 +136,7 @@ def apply_explicit_suspensions(
     previously_flagged = out["is_suspended"].fillna(False).astype(bool)
     out["is_suspended"] = previously_flagged | matched
     return out, {
-        "suspend_event_rows": int(len(events)),
+        "suspend_event_rows": len(events),
         "suspend_event_symbols": int(events["symbol"].nunique()),
         "suspend_events_on_price_rows": int(matched.sum()),
         "suspend_events_without_price_rows": int(len(events) - matched.sum()),
@@ -152,7 +152,7 @@ def load_st_event_evidence(constraints_dir: Path) -> dict[str, Any]:
     events = pd.read_parquet(path, columns=["ts_code", "imp_date", "st_type"])
     dates = pd.to_datetime(events["imp_date"].astype("string"), format="%Y%m%d", errors="coerce")
     return {
-        "provider_st_event_rows": int(len(events)),
+        "provider_st_event_rows": len(events),
         "provider_st_event_symbols": int(events["ts_code"].nunique()),
         "provider_st_event_start": dates.min().date().isoformat(),
         "provider_st_event_end": dates.max().date().isoformat(),

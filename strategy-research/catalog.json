@@ -68,7 +68,7 @@
       "control_plane_owner": "strategy-pipeline",
       "runtime_entries": [
         "strategy style-replica run",
-        "src/style_factors"
+        "python -m style_factors"
       ],
       "variants": [],
       "extraction_debt": [

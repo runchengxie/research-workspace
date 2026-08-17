@@ -10,9 +10,11 @@
 
 ## 代码和输出位置
 
-- 计算、回测、归因与报告入口：`src/style_factors/`
+- 计算内核入口：`alpha_research.style_factors`（位于 `alpha-research/src/alpha_research/style_factors/`）
+- 分位回测内核入口：`portfolio_backtester.style_factors_backtest`（位于 `portfolio-backtester/src/portfolio_backtester/style_factors_backtest.py`）
+- 表现层入口：`style_factors`（位于 `strategy-research/style_factors/`，可 `python -m style_factors`）
 - 标准输出目录：`$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/`
-- 标准发布入口：`src.style_factors.style_factor_attribution`
+- 标准发布入口：`style_factors.style_factor_attribution`
 - 约束稳健性入口：`src.style_factors.robustness`
 - 低换手定义诊断入口：`src.style_factors.liquidity_diagnostics`
 
@@ -161,7 +163,7 @@ DATA_PLATFORM_ROOT=/path/to/market-data-platform \
 - 因子研究接口归属 `alpha-research`。
 - 回测和归因能力归属 `portfolio-backtester`。
 - 运行编排和标准产物发布归属 `strategy-pipeline`。
-- `src/style_factors` 当前承载顶层参考实现和兼容入口。
+- 因子计算内核（`alpha_research.style_factors`）归属 `alpha-research`，分位回测内核（`portfolio_backtester.style_factors_backtest`）归属 `portfolio-backtester`，表现层（`strategy-research/style_factors`）归属 `strategy-research`（ADR-0006 拆分后无顶层参考实现）。
 - 下游系统通过版本化文件契约消费结果，避免维护第二套同源研究算法。
 
 跨仓协作使用公开命令行入口和文件契约。消费方应先校验 `manifest.json` 中的文件清单和校验值，再读取研究产物。

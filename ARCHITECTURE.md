@@ -37,7 +37,7 @@ quant-execution-engine
 - `portfolio_backtester.*` 归 `portfolio-backtester`
 - `strategy_app.*` 归 `strategy-app`
 - `strategy_pipeline.*` 归 `strategy-pipeline`
-- `style_factors.*` 归顶层 `src/style_factors`，负责风格因子计算、归因、回测与报告
+- `style_factors.*` 计算内核归 `alpha_research.style_factors`（alpha-research），分位回测内核归 `portfolio_backtester.style_factors_backtest`（portfolio-backtester），表现层（`strategy-research/style_factors`，可 `python -m style_factors`）归 strategy-research
 
 工作区 2.0 已删除旧共享命名空间、命令行（CLI）别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 策略身份和生命周期由 `strategy-research` 维护。可执行应用由独立 `strategy-app` 仓库发行。

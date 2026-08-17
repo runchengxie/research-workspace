@@ -58,7 +58,7 @@ def _ols_attribution(
     ann_alpha = ((1 + intercept) ** 252 - 1) * 100
 
     return {
-        "days": int(len(y)),
+        "days": len(y),
         "years": round(float(n_years), 1),
         "r_squared": round(float(r2), 4),
         "period_return": round(float(period_ret), 2),

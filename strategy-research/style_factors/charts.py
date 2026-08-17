@@ -12,8 +12,9 @@ import numpy as np
 import pandas as pd
 from matplotlib.patches import Patch, Rectangle
 
-from . import BG, CJK, FACTOR_COLORS, FACTOR_LABELS, FG, LG
 from portfolio_backtester.style_factors_backtest import compute_factor_correlations
+
+from . import BG, CJK, FACTOR_COLORS, FACTOR_LABELS, FG, LG
 
 YEARLY_CHART_SCHEMA_VERSION = "research.style-factor-yearly-chart.v1"
 

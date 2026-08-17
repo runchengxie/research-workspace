@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 117,
-      "python_loc": 22344,
+      "python_file_count": 115,
+      "python_loc": 22652,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -26,18 +26,18 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "loc": 608,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_pre_push_hooks.py",
-          "loc": 608,
+          "loc": 612,
           "hk_related": false
         },
         {
           "path": "scripts/run_pre_push_checks.py",
-          "loc": 571,
+          "loc": 611,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_maintainability_governance.py",
+          "loc": 608,
           "hk_related": false
         },
         {
@@ -101,7 +101,8 @@
           "portfolio-backtester",
           "quant-execution-engine",
           "strategy-app",
-          "demo"
+          "demo",
+          "strategy-research"
         ],
         "ty_include": [
           "scripts/dead_code_advisory.py",
@@ -172,6 +173,7 @@
         "scripts/research_spec_check.py",
         "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
+        "scripts/run_research_layer_lint.py",
         "scripts/run_submodule_checks.py",
         "scripts/scan_workspace_secrets.py",
         "scripts/strategy_evidence_gate.py",

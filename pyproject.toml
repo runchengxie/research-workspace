@@ -36,6 +36,7 @@ extend-exclude = [
   "quant-execution-engine",
   "strategy-app",
   "demo",
+  "strategy-research",
 ]
 
 [tool.ruff.lint]

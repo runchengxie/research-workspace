@@ -8,7 +8,7 @@
 | --- | --- | --- | --- | --- |
 | DailyWatch20 | operational | 是 | [strategies/daily_watch20/README.md](strategies/daily_watch20/README.md) | `strategy-app`、`strategy-pipeline` |
 | 热点板块选股 | research_shadow | 否 | [strategies/hotsector/README.md](strategies/hotsector/README.md) | `strategy-app`、`strategy-pipeline`、外部 `market-intel` |
-| StyleReplica A80/B20 | operational_research | 否 | [strategies/style_replica/README.md](strategies/style_replica/README.md) | 顶层 `src/style_factors`、`strategy-pipeline` |
+| StyleReplica A80/B20 | operational_research | 否 | [strategies/style_replica/README.md](strategies/style_replica/README.md) | `strategy-research/style_factors`（`python -m style_factors`）、`strategy-pipeline` |
 | D11-H5 五袖套 | shadow | 否 | [strategies/d11_h5_shadow/README.md](strategies/d11_h5_shadow/README.md) | `alpha-research`、`portfolio-backtester`、`strategy-pipeline` |
 | 红利与成长 ETF 动量 | pre_production | 否 | [pre_production/dividend_growth_momentum/README.md](pre_production/dividend_growth_momentum/README.md) | `strategy-app`、`portfolio-backtester` |
 | 次日开盘到最高价 | exploration | 否 | [experiments/next_open_to_high/README.md](experiments/next_open_to_high/README.md) | `experiments` |

@@ -57,7 +57,7 @@ strategy-pipeline
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
 | R4 通用能力归位 | 已完成 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，候选 OOS 职责已下沉 owner（`daily_watch20_candidate_oos.py` 重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征/滚动评分/策略比较分别在 `market-data-platform`、`alpha-research`、`strategy-app`），`style_factors` 切片 7 已收口：因子计算内核迁 `alpha-research.style_factors`（PR①），分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`（PR②），呈现/研究层整包迁 `strategy-research/style_factors`（PR③），根仓 `src/style_factors` 已删除 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
-| R6 控制面收口 | 已完成 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），`style_factors` 切片 7 已收口（PR①/②/③），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68 与 style_factors 迁移的 alpha-research/portfolio-backtester 提交）。六子模块 + 根统一门禁全绿，临时分支已清理 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
+| R6 控制面收口 | 已完成 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），`style_factors` 切片 7 已收口（PR①/②/③），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68 与 style_factors 迁移的 alpha-research/portfolio-backtester 提交）。验收缺口已在本轮修复：研究层 `strategy-research` 已建 `pyproject.toml` 与可运行环境，根 `run_pre_push_checks` 新增 `research-layer-tests`/`research-layer-lint` 门（43 个测试 + ruff 全绿），关键回归测试已补回（compute_factors/winsorize/行业缺失/PIT/逐年报告/图表/归因），重复 `helpers` 已删并改引用 `alpha_research` owner，活动文档 `src/style_factors` 引用已更新为 `alpha_research.style_factors`/`portfolio_backtester.style_factors_backtest`/`strategy-research/style_factors`。三 owner 仓（alpha-research 285、portfolio-backtester 396、strategy-research 43）与根工作区（含研究层）门禁全绿。远端功能分支 `github/feat/r6-gitlink-governance-sync` 与 `strategy-pipeline/origin/fix/r4-benchmark-owner` 按 pre-push guard 审计保留政策保留（guard 禁止删除远端功能分支） | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
 
@@ -119,7 +119,7 @@ owner 仓补齐公开 API
 - 重复研究脚本与当前说明已经清理，冻结历史证据仍可按原哈希验证。
 - pipeline 的 Python 行数、巨型文件、长函数和复杂度预算随真实删除同步下调。
 - 六个子模块和根工作区的 lint、类型、单测、wheel smoke、严格契约冒烟与 workspace doctor 全部通过。
-- 每个 owner PR、pipeline PR 和根 gitlink PR 都已经合并，临时远端分支、本地分支和 worktree 已清理。
+- 每个 owner PR、pipeline PR 和根 gitlink PR 都已经合并。远端功能分支按 pre-push guard 审计保留政策保留（guard 禁止删除远端功能分支），本地 worktree 与临时分支已清理。
 
 ## 约束与非目标
 

@@ -10,6 +10,16 @@ from typing import Any
 
 import pandas as pd
 
+from alpha_research.style_factors import VALUE_CLUSTER_COL, compute_factors
+from portfolio_backtester.style_factors_backtest import (
+    build_factor_returns,
+    build_quantile_portfolio_returns,
+    compute_factor_correlations,
+    compute_summary,
+    compute_yearly_breakdown,
+    get_rebalance_dates,
+)
+
 from .attribution import run_strategy_attribution, run_yearly_strategy_attribution
 from .charts import (
     plot_correlation_heatmap,
@@ -25,15 +35,6 @@ from .data import (
     load_moneyflow_ths,
     load_sw_industry_membership,
 )
-from portfolio_backtester.style_factors_backtest import (
-    build_factor_returns,
-    build_quantile_portfolio_returns,
-    compute_factor_correlations,
-    compute_summary,
-    compute_yearly_breakdown,
-    get_rebalance_dates,
-)
-from alpha_research.style_factors import VALUE_CLUSTER_COL, compute_factors
 from .report import generate_report
 
 
