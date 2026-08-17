@@ -7,9 +7,9 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "9aafbbbf95f7e9542cfbfd239a24d078e03e6492",
+      "commit": "82677efd729d483cdb648813a2c250f56b99e508",
       "legacy_source_tree_allowed": false,
-      "pr": 18,
+      "pr": 24,
       "version": "0.4.0"
     },
     "portfolio-backtester": {
@@ -21,16 +21,16 @@
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "655547733b8b3905c4e6ddf644a7d44e25da0a62",
+      "commit": "87064c2dc281e2cfb9dedb274f5f77dd9bf333b3",
       "legacy_source_tree_allowed": false,
-      "pr": 10,
+      "pr": 29,
       "version": "0.2.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "a4fcb6092b0147ffe7dd421f67698363f65bb783",
+      "commit": "f2b35e7e855e33cf866be6547f62e3f7cbd5eae2",
       "compatibility_package_allowed": false,
-      "pr": 46,
+      "pr": 68,
       "version": "2.1.0"
     }
   },
@@ -49,6 +49,6 @@
     "strategy_owner_import_job": 29307124967,
     "workspace_manifest_and_fixture_job": 29306709607,
     "workspace_source_artifact_integration": "passed-2026-07-14",
-    "final_main_local_validation": "passed-2026-07-20"
+    "final_main_local_validation": "passed-2026-08-17"
   }
 }
