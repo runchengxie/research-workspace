@@ -1077,8 +1077,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 190,
-      "python_loc": 40672,
+      "python_file_count": 192,
+      "python_loc": 41192,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1214,6 +1214,12 @@
           "complexity": 6
         },
         {
+          "path": "tests/test_package_smoke.py",
+          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
+          "line_count": 93,
+          "complexity": 1
+        },
+        {
           "path": "src/portfolio_backtester/portfolio_selection.py",
           "name": "_build_selection_inputs",
           "line_count": 92,
@@ -1254,12 +1260,6 @@
           "name": "build_execution_sim_config",
           "line_count": 86,
           "complexity": 12
-        },
-        {
-          "path": "tests/test_package_smoke.py",
-          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
-          "line_count": 86,
-          "complexity": 1
         },
         {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
