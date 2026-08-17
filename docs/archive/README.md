@@ -17,5 +17,8 @@
 | 港股私有 legacy 归档（已取代，由 archive/hk 导航） | [hk-private-archive.md](hk-private-archive.md) |
 | A 股生产就绪度与长窗口扩展（已取代，由 data-transition-playbook 导航） | [a-share-production-readiness.md](a-share-production-readiness.md) |
 | 外部框架适配器候选发布（已取代，由 framework-support-matrix 导航） | [framework-adapter-release.md](framework-adapter-release.md) |
+| 代码健康审计快照（已取代，由 maintainability-governance 导航） | [code-health-audit.md](code-health-audit.md) |
+| 代码体量复查快照（已取代，由 maintainability-governance 导航） | [code-size-review.md](code-size-review.md) |
+| 子模块巨型文件拆分方案（已取代，由 maintainability-governance 导航） | [submodule-refactor-plan.md](submodule-refactor-plan.md) |
 
 正在进行的工作仍请从上一级 [docs/README.md](../README.md) 开始。
