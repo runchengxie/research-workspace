@@ -42,8 +42,6 @@
 - 废弃入口：[deprecations.md](deprecations.md)
 - 维护性治理：[maintainability-governance.md](maintainability-governance.md)
 - 治理文件索引：[governance-index.md](governance-index.md)
-- 代码体量历史复查：[code-size-review.md](code-size-review.md)
-- 子模块巨型文件历史方案：[submodule-refactor-plan.md](submodule-refactor-plan.md)
 - 子模块 noqa 历史清债计划：[noqa-clearing-plan.md](noqa-clearing-plan.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
 - 架构拆分收口记录：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)

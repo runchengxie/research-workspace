@@ -19,7 +19,7 @@
 本计划与以下文件互补，不重叠：
 
 - `maintainability-refactor-roadmap.yml`：用 ratchet-only 预算管体量热点（大文件、长函数、复杂度）。本计划不管体量，只清 `# noqa` 压制的 lint 告警。
-- `submodule-refactor-plan.md` 与 `code-size-review.md`：管子模块巨型文件拆分，是 roadmap 文件拆分的落地设计。本计划不拆分文件。
+- `archive/submodule-refactor-plan.md` 与 `archive/code-size-review.md`：管子模块巨型文件拆分，是 roadmap 文件拆分的落地设计。本计划不拆分文件。
 
 两者是不同维度。本计划清理后若某文件因移除 dead import 而跌破大文件阈值，按 roadmap 规则在同一次提交下调对应 budget，不在本计划预改 roadmap 数字。
 
@@ -165,12 +165,10 @@ push 触发 mdp 的 `full` profile 门禁，前 3 项（uv lock、ruff check、r
 - 根因：mdp 的 ty 只检查 `pyproject` 里 `ty.src.include` 列表的 34 个文件，其余 176 个文件全部计入 `excluded_lines`（`total_lines - included_lines`）。facade 文件不在 ty include 列表，迁移时给 28 个文件各加 1 行文件级声明（净增约 28 行），这些行全部算进 `excluded_lines`，触发 ratchet 的 excluded-lines 只降不升规则。
 - 性质：这是统计口径副作用，不是真实质量退化（facade 文件本就不被 ty 检查，加 lint 声明不影响类型覆盖）。但 ratchet 机制无法区分良性增加与藏债，一律拦截。
 
-### 结论与待办
+### 结论
 
 - facade F401 迁移本身是正确且安全的重构，但 mdp 的 `quality_baseline.json` ratchet 要求 excluded-lines 只能降，良性增加也需 owner 决策重算基线。
-- 若要推进此 PR，需在 mdp 分支内重算 `quality_baseline.json`（让 44927 成为新基线），同提交写明这是 facade 注释迁移的统计副作用而非质量退化，再走 owner 决策或 waiver。
-- 这同时印证了原盘点判断：mdp 的治理机制对良性重构不够友好，加一行 lint 声明也要动基线。
-- 当前状态：分支 `refactor/facade-noqa-config`（commit `f095a38`）留在外部 worktree `/home/richard/code/mdp-facade-worktree`，未推送成功，待决策。mdp 主目录已恢复 `main`，superproject gitlink 未变。
+- 这印证了原盘点判断：mdp 的治理机制对良性重构不够友好，加一行 lint 声明也要动基线。
 
 ### 升级方案 C：per-file-ignores 绕过 ratchet（已实测通过）
 
@@ -180,7 +178,7 @@ push 触发 mdp 的 `full` profile 门禁，前 3 项（uv lock、ruff check、r
 - 验证：`ruff check src/` 全过（F401 被 per-file-ignores 压住）。`ruff format --check` 全过。`quality_debt.py --check-baseline --check-ratchet` 退出码 0，`ty: excluded lines` 回到 44903（与基线一致，不再有 44927 的回归）。
 - 收益：源文件行数零净增，ratchet 不再拦截。意图集中且可读。RUF100 不触及配置级忽略，杜绝误删有效抑制。完全符合最初「优解」意图。
 - 注意：`quality_debt.py` 的 debt scan 仍会列出 1061 个 F401（它用 `--select F` 全量计数作债存量报告），但这只是信息性输出，不影响 ratchet 判定。
-- 当前状态：方案 C 已提交为 worktree 分支新 commit `1a4b36d`（分支仍名 `refactor/facade-noqa-config`，待重命名为 `feat/facade-noqa-per-file-ignores` 以符合推送前缀规则）。下一步走 PR：推送、review、merge、删分支与 worktree，再开新 worktree 探索下一轮优化方向。
+- 落地：28 条 `per-file-ignores` 已通过 PR #13 合并，F401 不再作为清债目标。
 
 ## 设计类复杂度（PLR0913）试点结论（2026-07-31）
 

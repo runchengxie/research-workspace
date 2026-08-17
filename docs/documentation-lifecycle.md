@@ -53,7 +53,7 @@
 | 发布检查 | [release-checklist.md](release-checklist.md) | active |
 | 工作区维护 | [workspace-maintenance.md](workspace-maintenance.md) | active |
 | 治理清单 | [maintainability-governance.md](maintainability-governance.md), [quality-governance.md](quality-governance.md), [deprecations.md](deprecations.md) | reference |
-| 历史维护性盘点 | [code-health-audit.md](code-health-audit.md), [code-size-review.md](code-size-review.md), [submodule-refactor-plan.md](submodule-refactor-plan.md), [noqa-clearing-plan.md](noqa-clearing-plan.md) | reference |
+| 历史维护性盘点 | [noqa-clearing-plan.md](noqa-clearing-plan.md) | reference |
 
 ## 归档入口
 
@@ -64,6 +64,7 @@
 | A 股迁移机器交接、WSL 恢复和一次性迁移包记录 | [archive/migration-handoff-20260605.md](archive/migration-handoff-20260605.md) |
 | 中国香港市场冷存储、恢复、公开/私有拆分和清理门禁 | [archive/hk/README.md](archive/hk/README.md) |
 | 冻结发布说明、session 交接和历史复核记录 | `archive/hk/records/` |
+| 维护性审计快照与历史拆分方案 | [archive/code-health-audit.md](archive/code-health-audit.md), [archive/code-size-review.md](archive/code-size-review.md), [archive/submodule-refactor-plan.md](archive/submodule-refactor-plan.md) |
 | 证据 JSON | `evidence/`，由对应脚本或清单引用 |
 
 ## 兼容入口

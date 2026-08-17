@@ -30,7 +30,7 @@
 | DOC6 | 策略研究证据 | [strategy-evidence-gate.md](strategy-evidence-gate.md) | AFML rollout、benchmark matrix、research spec、A 股 playbook 和各策略 README 分散说明晋级门槛 | 证据门禁保存强制集合，方法页只解释单项方法，策略 README 链接 evidence bundle | 待处理 |
 | DOC7 | 外部框架状态 | [framework-support-matrix.md](framework-support-matrix.md)、[framework-integration-ledger.yml](framework-integration-ledger.yml) | ARCHITECTURE、adoption assessment、历史 release 文件和子仓 ledger 重复表达当前能力 | support matrix 表达当前能力，机器账本表达进度，评估和历史候选降级为 reference 或 archive | 本轮校正状态，后续继续去重 |
 | DOC8 | 跨仓库产物契约 | [artifact-contracts.yml](artifact-contracts.yml)、[contracts.md](contracts.md) | research-contracts README、pipeline outputs、alpha signal 文档、portfolio contract 文档、qexec targets 文档重复字段 | 根层保存 owner 和交接字段，生产方与消费方只保存本仓校验和操作细节 | 待处理 |
-| DOC9 | 质量与维护债 | [maintainability-governance.md](maintainability-governance.md)、机器账本 | code health、code size、submodule refactor、noqa、R3 和 namespace migration 混合当前事实与历史计划 | 当前预算进入机器账本，完成的专项计划降级为 reference，审计快照进入 archive | 进行中 |
+| DOC9 | 质量与维护债 | [maintainability-governance.md](maintainability-governance.md)、机器账本 | code health、code size、submodule refactor、noqa、R3 和 namespace migration 混合当前事实与历史计划 | 当前预算进入机器账本，完成的专项计划降级为 reference，审计快照进入 archive | 进行中（第二批完成维护性历史计划归集） |
 | DOC10 | 工作区命令与检查 | [workspace-maintenance.md](workspace-maintenance.md) | README、bootstrap、quality governance、release checklist 重复命令 | maintenance 保存完整命令，bootstrap 只保留首次安装，release checklist 只保留发布顺序 | 待处理 |
 | DOC11 | 版本组合 | `print_version_matrix.py`、[version-matrix.md](version-matrix.md) | 文档中的本次提交静态行容易落后于 gitlink | 脚本生成现场状态，文档只保存带证据的已验证组合 | 本轮校正当前组合 |
 | DOC12 | 风格因子说明 | [style-factors.md](style-factors.md)、[style-factor-technical-reference.md](style-factor-technical-reference.md) | 方法页、技术页和 experiments 下多份结果页交叉重复样本与限制 | 方法页面向研究读者，技术页面向维护者，实验页只保存一次封存结果 | 待处理 |
@@ -49,10 +49,10 @@
 
 ### 第二批：维护性历史计划
 
-- `r3-facade-removal-plan.md`：保留为历史执行蓝图，当前状态由策略边界完成记录提供。
-- `noqa-clearing-plan.md`：保留审计结论，删除对已合并分支和外部 worktree 的当前行动指引。
-- `code-health-audit.md`、`code-size-review.md`、`submodule-refactor-plan.md`：移入 archive 或改成短 reference，具体热点由机器账本生成。
-- `governance-index.md`：删除已经不存在的 `dev-metrics-consolidation-plan.md` 条目。
+- `r3-facade-removal-plan.md`：保留为历史执行蓝图，当前状态由策略边界完成记录提供。已完成。
+- `noqa-clearing-plan.md`：保留审计结论，删除对已合并分支和外部 worktree 的当前行动指引。已完成。
+- `code-health-audit.md`、`code-size-review.md`、`submodule-refactor-plan.md`：移入 archive 或改成短 reference，具体热点由机器账本生成。已移入 archive，archive README 已登记导航。
+- `governance-index.md`：删除已经不存在的 `dev-metrics-consolidation-plan.md` 条目。已完成。
 
 ### 第三批：动态事实去重
 

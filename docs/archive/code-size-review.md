@@ -1,12 +1,12 @@
 # 代码体量复查与拆分建议
 
-> status: reference
+> status: archived
 > owner: workspace
 > last_verified: 2026-08-17
 > source_of_truth: no
-> superseded_by: maintainability-governance.md
+> superseded_by: ../maintainability-governance.md
 
-本页是日期化盘点快照，列出的部分文件已经完成拆分。当前热点和重构优先级以[维护性治理](maintainability-governance.md)、`maintainability-refactor-roadmap.yml` 和[工作区路线图](roadmap.md)为准。
+本页是日期化盘点快照，列出的部分文件已经完成拆分。当前热点和重构优先级以[维护性治理](../maintainability-governance.md)、`maintainability-refactor-roadmap.yml` 和[工作区路线图](../roadmap.md)为准。
 
 本页是盘点报告的落地产物，聚焦子模块内长文件的拆分判断。结论先说：活跃库源码（`src/`）整体可控，真正偏长的文件多数属于研究产物或运维脚本，不应作为常规重构目标。
 
