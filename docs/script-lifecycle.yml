@@ -550,6 +550,16 @@
       "removal_condition": "split or remove only after execution smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
     },
     {
+      "path": "quant-execution-engine/project_tools/evidence_offline_chain.py",
+      "owner": "quant-execution-engine",
+      "purpose": "可复现离线执行证据链：local-dry-run 覆盖 targets 解析到预演与审计，mock-sim 增加模拟成交、订单查询与重启恢复，产物写入 QEXEC_OUTPUTS_DIR 隔离目录",
+      "lifecycle": "research",
+      "safe_to_run_locally": true,
+      "writes_files": "QEXEC_OUTPUTS_DIR 指定的运行目录",
+      "external_dependencies": "qexec CLI 与对应后端适配器",
+      "removal_condition": "证据由 successor 命令或自动化门禁替代后移除"
+    },
+    {
       "path": "quant-execution-engine/project_tools/__init__.py",
       "owner": "quant-execution-engine",
       "purpose": "Package marker so project_tools is importable as a package for operator smoke tooling",
