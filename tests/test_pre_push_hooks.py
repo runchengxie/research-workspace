@@ -73,9 +73,16 @@ def test_root_gate_runs_root_quality_and_cross_repo_checks_only() -> None:
         "contract-smoke",
         "root-tests",
         "research-layer-tests",
-        "research-layer-lint",
+        "research-layer-quality",
     ]
-    assert all(command.cwd == ROOT for command in plan.commands)
+    assert all(
+        command.cwd == ROOT for command in plan.commands if command.name != "research-layer-tests"
+    )
+    assert all(
+        command.cwd == ROOT / "strategy-research"
+        for command in plan.commands
+        if command.name == "research-layer-tests"
+    )
 
 
 def test_submodule_gate_expands_only_that_repositories_full_profile() -> None:
@@ -580,9 +587,18 @@ def test_plan_gate_treats_superproject_worktree_as_root(
         "contract-smoke",
         "root-tests",
         "research-layer-tests",
-        "research-layer-lint",
+        "research-layer-quality",
     ]
-    assert all(command.cwd == fake_worktree for command in plan.commands)
+    assert all(
+        command.cwd == fake_worktree
+        for command in plan.commands
+        if command.name != "research-layer-tests"
+    )
+    assert all(
+        command.cwd == fake_worktree / "strategy-research"
+        for command in plan.commands
+        if command.name == "research-layer-tests"
+    )
 
 
 def test_matching_submodule_resolves_linked_worktree_to_submodule(

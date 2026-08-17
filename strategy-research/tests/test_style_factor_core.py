@@ -228,7 +228,7 @@ def test_partition_month_grouping_selects_latest_trade_date() -> None:
         (pd.Timestamp("2024-02-29"), Path("trade_date=20240229")),
     ]
 
-    grouped = _group_partition_dates_by_month(dated_parts)
+    grouped = _group_partition_dates_by_month(dated_parts)  # ty: ignore[invalid-argument-type]
 
     assert {max(group) for group in grouped.values()} == {
         pd.Timestamp("2024-01-31"),

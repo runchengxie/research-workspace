@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TypedDict, cast
 
 import numpy as np
 import pandas as pd
@@ -10,6 +11,18 @@ import pandas as pd
 from portfolio_backtester.style_factors_backtest import build_quantile_portfolio_returns
 
 from .liquidity_signals import liquidity_signal_columns
+
+
+class QuantilePortfolio(TypedDict):
+    quantiles: dict[int, pd.Series]
+    long: pd.Series
+    short: pd.Series
+    long_short: pd.Series
+    long_excess: pd.Series
+    universe: pd.Series
+
+
+LiquidityPortfolios = dict[str, QuantilePortfolio]
 
 
 def _geometric_annual_return(returns: pd.Series, trading_days: int = 252) -> float:
@@ -76,25 +89,29 @@ def build_liquidity_portfolios(
     signal_panel: pd.DataFrame,
     daily: pd.DataFrame,
     formation_dates: pd.DatetimeIndex,
-) -> dict[str, dict[str, object]]:
-    return build_quantile_portfolio_returns(
-        signal_panel,
-        daily,
-        formation_dates,
-        liquidity_signal_columns(),
-        n_quantiles=5,
-        requested_quantiles=(1, 2, 3, 4, 5),
-        include_universe=True,
+) -> LiquidityPortfolios:
+    return cast(
+        LiquidityPortfolios,
+        build_quantile_portfolio_returns(
+            signal_panel,
+            daily,
+            formation_dates,
+            liquidity_signal_columns(),
+            n_quantiles=5,
+            requested_quantiles=(1, 2, 3, 4, 5),
+            include_universe=True,
+        ),
     )
 
 
 def summarize_liquidity_portfolios(
-    portfolios: dict[str, dict[str, object]],
+    portfolios: LiquidityPortfolios,
     signal_diagnostics: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     summary_rows: list[dict[str, object]] = []
     quintile_rows: list[dict[str, object]] = []
-    baseline = portfolios.get("turnover_1d", {}).get("long_short", pd.Series(dtype=float))
+    turnover_1d = portfolios.get("turnover_1d")
+    baseline = turnover_1d["long_short"] if turnover_1d is not None else pd.Series(dtype=float)
 
     diagnostics = signal_diagnostics.set_index("variant")
     for variant, result in portfolios.items():
@@ -149,7 +166,7 @@ def summarize_liquidity_portfolios(
     return pd.DataFrame(summary_rows), pd.DataFrame(quintile_rows)
 
 
-def daily_liquidity_output(portfolios: dict[str, dict[str, object]]) -> pd.DataFrame:
+def daily_liquidity_output(portfolios: LiquidityPortfolios) -> pd.DataFrame:
     series: dict[str, pd.Series] = {}
     for variant, result in portfolios.items():
         for quantile, returns in result["quantiles"].items():
@@ -175,7 +192,7 @@ def compare_baseline_returns(
     if frame.empty:
         raise ValueError(f"baseline liquidity return file is empty: {path}")
     expected = frame.iloc[:, 0]
-    expected.index = pd.DatetimeIndex(expected.index).normalize()
+    expected.index = pd.DatetimeIndex(expected.index).normalize()  # ty: ignore[unresolved-attribute]
     paired = pd.concat({"observed": observed, "expected": expected}, axis=1).dropna()
     if paired.empty:
         raise ValueError("baseline tie-out has no common observations")

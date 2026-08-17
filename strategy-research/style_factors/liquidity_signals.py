@@ -53,7 +53,7 @@ def _aggregate_turnover_window(
 ) -> pd.DataFrame:
     selected = frames[-window:]
     if not selected:
-        return pd.DataFrame(columns=["symbol", "mean", "median", "observations"])
+        return pd.DataFrame(columns=pd.Index(["symbol", "mean", "median", "observations"]))
     combined = pd.concat(selected, ignore_index=True)
     summary = (
         combined.groupby("symbol", sort=False)["turnover_rate"]
@@ -72,7 +72,7 @@ def load_turnover_lookbacks(
     minimum_coverage: float = 0.75,
 ) -> tuple[pd.DataFrame, dict[str, object]]:
     """Read daily-basic partitions once and materialize formation-date lookbacks."""
-    dates = pd.DatetimeIndex(formation_dates).normalize().sort_values().unique()
+    dates = pd.DatetimeIndex(formation_dates).normalize().sort_values().unique()  # ty: ignore[unresolved-attribute]
     if dates.empty:
         raise ValueError("formation_dates is empty")
     if not 0 < minimum_coverage <= 1:
@@ -184,7 +184,7 @@ def build_liquidity_control_panel(
     prices["volatility_21d"] = prices.groupby("symbol", sort=False)["return_1d"].transform(
         lambda series: series.rolling(21, min_periods=10).std().shift(1)
     )
-    dates = pd.DatetimeIndex(formation_dates).normalize()
+    dates = pd.DatetimeIndex(formation_dates).normalize()  # ty: ignore[unresolved-attribute]
     controls = prices[prices["trade_date"].isin(dates)].copy()
     basic_columns = ["trade_date", "symbol", "total_mv"]
     controls = controls.merge(

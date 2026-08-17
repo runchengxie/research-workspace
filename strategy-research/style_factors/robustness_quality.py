@@ -116,4 +116,4 @@ def _historical_checks(data: dict[str, Any]) -> list[tuple[str, Any, str, bool]]
 def data_quality_frame(data: dict[str, Any]) -> pd.DataFrame:
     """Render predeclared source and join checks as machine-readable rows."""
     checks = _key_checks(data) + _coverage_checks(data) + _historical_checks(data)
-    return pd.DataFrame(checks, columns=["check", "observed", "threshold", "passed"])
+    return pd.DataFrame(checks, columns=pd.Index(["check", "observed", "threshold", "passed"]))

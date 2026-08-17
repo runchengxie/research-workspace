@@ -43,7 +43,7 @@ def _formation_eligibility(
     *,
     min_listed_days: int,
 ) -> tuple[pd.DataFrame, dict[str, int]]:
-    formation_dates = pd.DatetimeIndex(universe["trade_date"].unique()).normalize()
+    formation_dates = pd.DatetimeIndex(universe["trade_date"].unique()).normalize()  # ty: ignore[unresolved-attribute]
     formation = daily_clean.loc[
         daily_clean["trade_date"].isin(formation_dates),
         ["trade_date", "symbol", "listed_days", "amount"],
@@ -73,10 +73,10 @@ def _next_trading_date(
     formation_date: pd.Timestamp,
     trading_dates: pd.DatetimeIndex,
 ) -> pd.Timestamp | None:
-    position = int(trading_dates.searchsorted(formation_date, side="right"))
+    position = int(trading_dates.searchsorted(formation_date, side="right"))  # ty: ignore[no-matching-overload]
     if position >= len(trading_dates):
         return None
-    return pd.Timestamp(trading_dates[position]).normalize()
+    return pd.Timestamp(trading_dates[position]).normalize()  # ty: ignore[unresolved-attribute]
 
 
 def _ranked_formation_target(
@@ -123,7 +123,7 @@ def _active_exposure_dates(
             continue
         next_formation = formation_dates[index + 1]
         dates.extend(
-            pd.Timestamp(date).normalize()
+            pd.Timestamp(date).normalize()  # ty: ignore[unresolved-attribute]
             for date in trading_dates[
                 (trading_dates > formation_date) & (trading_dates <= next_formation)
             ]
@@ -145,7 +145,7 @@ def _factor_targets(
 ]:
     factor_column = f"factor_{factor_name}_z"
     targets: dict[pd.Timestamp, tuple[dict[str, float], dict[str, float]]] = {}
-    formation_dates = pd.DatetimeIndex(sorted(eligible["trade_date"].unique())).normalize()
+    formation_dates = pd.DatetimeIndex(sorted(eligible["trade_date"].unique())).normalize()  # ty: ignore[unresolved-attribute]
     for formation_date in formation_dates:
         execution_date = _next_trading_date(formation_date, trading_dates)
         if execution_date is not None:
@@ -156,7 +156,7 @@ def _factor_targets(
     short_counts: list[int] = []
     unrestricted_short_counts: list[int] = []
     for formation_date, group in eligible.groupby("trade_date", sort=True):
-        normalized_formation = pd.Timestamp(formation_date).normalize()
+        normalized_formation = pd.Timestamp(formation_date).normalize()  # ty: ignore[invalid-argument-type, unresolved-attribute]
         short_allowed = None
         if short_eligibility is not None:
             short_allowed = short_eligibility.get(normalized_formation)
@@ -170,11 +170,11 @@ def _factor_targets(
         )
         if target is None:
             continue
-        execution_date = _next_trading_date(pd.Timestamp(formation_date), trading_dates)
+        execution_date = _next_trading_date(pd.Timestamp(formation_date), trading_dates)  # ty: ignore[invalid-argument-type]
         if execution_date is None:
             continue
         long_target, short_target, eligible_count, unrestricted_short_count = target
-        valid_formations.add(pd.Timestamp(formation_date).normalize())
+        valid_formations.add(pd.Timestamp(formation_date).normalize())  # ty: ignore[invalid-argument-type, unresolved-attribute]
         targets[execution_date] = (long_target, short_target)
         eligible_counts.append(eligible_count)
         long_counts.append(len(long_target))
@@ -296,7 +296,7 @@ def _margin_eligibility_map(
     if margin_eligibility is None or margin_eligibility.empty:
         return {}
     return {
-        pd.Timestamp(date).normalize(): set(group["symbol"].astype(str))
+        pd.Timestamp(date).normalize(): set(group["symbol"].astype(str))  # ty: ignore[invalid-argument-type, unresolved-attribute]
         for date, group in margin_eligibility.groupby("trade_date", sort=True)
     }
 
@@ -388,7 +388,7 @@ def _backtest_context(
     dict[pd.Timestamp, np.ndarray],
 ]:
     returns = daily_return_matrix(daily_clean)
-    trading_dates = pd.DatetimeIndex(returns.index).normalize()
+    trading_dates = pd.DatetimeIndex(returns.index).normalize()  # ty: ignore[unresolved-attribute]
     matrices = execution_matrices(daily_clean, returns)
     positions = {str(symbol): index for index, symbol in enumerate(returns.columns)}
     terminal_events = terminal_event_positions(instruments, trading_dates, positions)

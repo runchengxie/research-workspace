@@ -6,7 +6,7 @@ import json
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pandas as pd
 
@@ -248,15 +248,18 @@ def _publish_value_cluster_series(
     """
     if VALUE_CLUSTER_COL not in factors.columns or not factors[VALUE_CLUSTER_COL].notna().any():
         return
-    cluster = build_quantile_portfolio_returns(
-        factors,
-        daily,
-        rebalance_dates,
-        {"value_cluster": VALUE_CLUSTER_COL},
-        n_quantiles=5,
-        requested_quantiles=(1, 5),
-        include_universe=False,
-    )["value_cluster"]["long_short"]
+    cluster = cast(
+        pd.Series,
+        build_quantile_portfolio_returns(
+            factors,
+            daily,
+            rebalance_dates,
+            {"value_cluster": VALUE_CLUSTER_COL},
+            n_quantiles=5,
+            requested_quantiles=(1, 5),
+            include_universe=False,
+        )["value_cluster"]["long_short"],
+    )
     if len(cluster):
         cluster.to_csv(outdir / "factor_value_cluster_daily.csv", index=True, header=True)
         print("[workflow] value-cluster composite → factor_value_cluster_daily.csv", flush=True)

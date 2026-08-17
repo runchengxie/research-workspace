@@ -90,7 +90,7 @@ DividendYield 和 PSValue 仍为正，但相对 raw 都明显衰减。Size 仍�
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.robustness \
+  uv run --project strategy-research python -m style_factors.robustness \
   --baseline-artifacts /path/to/full-raw-artifacts \
   --outdir /tmp/style-factor-robustness \
   --min-listed-days 180 \

@@ -11,7 +11,7 @@ def _factor_return_frame(factor_results: dict) -> pd.DataFrame:
         {name: res["long_short"].dropna() for name, res in factor_results.items()}
     )
     if not factor_df.empty:
-        factor_df.index = factor_df.index.normalize()
+        factor_df.index = factor_df.index.normalize()  # ty: ignore[unresolved-attribute]
     return factor_df
 
 
@@ -25,7 +25,7 @@ def _merge_strategy_and_factors(
 
     sr = strategy_returns.dropna().copy()
     if isinstance(sr.index, pd.DatetimeIndex):
-        sr.index = sr.index.normalize()
+        sr.index = sr.index.normalize()  # ty: ignore[unresolved-attribute]
 
     factor_df = _factor_return_frame(factor_results)
     if factor_df.empty:
@@ -142,7 +142,7 @@ def run_yearly_strategy_attribution(
         return pd.DataFrame()
 
     rows = []
-    for year, group in merged.groupby(merged.index.year):
+    for year, group in merged.groupby(merged.index.year):  # ty: ignore[unresolved-attribute]
         if len(group) < min_days:
             continue
         candidate_columns = [column for column in factor_results if column in group.columns]
@@ -159,7 +159,7 @@ def run_yearly_strategy_attribution(
             strategy_name=strategy_name,
         )
         row = {
-            "year": int(year),
+            "year": int(year),  # ty: ignore[invalid-argument-type]
             "days": attribution["days"],
             "period_return": attribution["period_return"],
             "annual_return": attribution["annual_return"],

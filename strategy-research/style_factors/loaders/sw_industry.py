@@ -84,19 +84,19 @@ def load_sw_industry_membership(data_root: Path) -> pd.DataFrame:
     )
     if member_dir is None:
         print("[load] sw_industry_member: no data found — PIT industry neutralization disabled")
-        return pd.DataFrame(columns=["symbol", "in_date", "out_date", "industry_l1"])
+        return pd.DataFrame(columns=pd.Index(["symbol", "in_date", "out_date", "industry_l1"]))
 
     member_files = sorted(member_dir.glob("*.parquet")) or sorted(
         member_dir.glob("trade_date=*/*.parquet")
     )
     if not member_files:
         print("[load] sw_industry_member: no parquet files")
-        return pd.DataFrame(columns=["symbol", "in_date", "out_date", "industry_l1"])
+        return pd.DataFrame(columns=pd.Index(["symbol", "in_date", "out_date", "industry_l1"]))
     member = pd.concat([pd.read_parquet(p) for p in member_files], ignore_index=True)
 
     if "con_code" not in member.columns:
         print("[load] sw_industry_member: missing con_code column")
-        return pd.DataFrame(columns=["symbol", "in_date", "out_date", "industry_l1"])
+        return pd.DataFrame(columns=pd.Index(["symbol", "in_date", "out_date", "industry_l1"]))
 
     member = _resolve_l1_industry(member, dict_dir)
 

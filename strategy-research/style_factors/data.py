@@ -73,7 +73,7 @@ def load_data(
     ]
     if basics_rebalance_only:
         dated_parts = [(_partition_date(path), path) for path in daily_parts]
-        dated_parts = [(date, path) for date, path in dated_parts if pd.notna(date)]
+        dated_parts = [(date, path) for date, path in dated_parts if date is not None]
         month_end_dates = {
             max(group) for _period, group in _group_partition_dates_by_month(dated_parts).items()
         }

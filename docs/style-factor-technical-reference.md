@@ -15,8 +15,8 @@
 - 表现层入口：`style_factors`（位于 `strategy-research/style_factors/`，可 `python -m style_factors`）
 - 标准输出目录：`$DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/`
 - 标准发布入口：`style_factors.style_factor_attribution`
-- 约束稳健性入口：`src.style_factors.robustness`
-- 低换手定义诊断入口：`src.style_factors.liquidity_diagnostics`
+- 约束稳健性入口：`style_factors.robustness`
+- 低换手定义诊断入口：`style_factors.liquidity_diagnostics`
 
 ## 因子标识
 
@@ -44,14 +44,14 @@
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors \
+  uv run --project strategy-research python -m style_factors \
   --outdir artifacts/style_analysis
 ```
 
 快速调试从 2020 年开始读取分区：
 
 ```bash
-uv run python -m src.style_factors \
+uv run --project strategy-research python -m style_factors \
   --quick \
   --outdir artifacts/style_analysis_quick
 ```
@@ -62,7 +62,7 @@ uv run python -m src.style_factors \
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.robustness \
+  uv run --project strategy-research python -m style_factors.robustness \
   --baseline-artifacts /path/to/full-raw-artifacts \
   --constraints-dir /path/to/tushare_constraints_20260802 \
   --pit-vintage-dir /path/to/fundamentals_vintages/vintage=20260802 \
@@ -79,7 +79,7 @@ DATA_PLATFORM_ROOT=/path/to/market-data-platform \
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.liquidity_diagnostics \
+  uv run --project strategy-research python -m style_factors.liquidity_diagnostics \
   --baseline-artifacts /path/to/current-style-factor-artifacts \
   --outdir artifacts/liquidity_factor_diagnostics
 ```
@@ -99,7 +99,7 @@ date,return
 运行命令：
 
 ```bash
-uv run python -m src.style_factors \
+uv run --project strategy-research python -m style_factors \
   --strategy-csv returns.csv \
   --strategy-name strategy \
   --outdir artifacts/style_analysis_strategy
@@ -111,7 +111,7 @@ uv run python -m src.style_factors \
 
 ```bash
 DATA_PLATFORM_ROOT=/path/to/market-data-platform \
-  uv run python -m src.style_factors.style_factor_attribution \
+  uv run --project strategy-research python -m style_factors.style_factor_attribution \
   --out-name 20260629
 ```
 
