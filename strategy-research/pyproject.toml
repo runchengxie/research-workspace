@@ -60,3 +60,23 @@ max-complexity = 14
 
 [tool.ruff.lint.isort]
 known-first-party = ["style_factors", "alpha_research", "portfolio_backtester"]
+
+[tool.ty.src]
+include = ["style_factors", "tests"]
+exclude = [
+  ".venv",
+  "archive",
+  "artifacts",
+  "build",
+  "dist",
+  "experiments",
+  "outputs",
+]
+
+[tool.coverage.run]
+source = ["style_factors"]
+
+[tool.uv.sources]
+alpha-research = { path = "../alpha-research" }
+portfolio-backtester = { path = "../portfolio-backtester" }
+research-contracts = { path = "../src/research_contracts" }

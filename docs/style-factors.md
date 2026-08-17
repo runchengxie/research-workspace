@@ -97,7 +97,7 @@
 已有封存结果可以单独重绘，无需重新执行完整因子回测：
 
 ```bash
-uv run python -m src.style_factors.yearly_chart \
+uv run --project strategy-research python -m style_factors.yearly_chart \
   --input artifacts/style_analysis_2008/factor_yearly.csv \
   --outdir artifacts/style_analysis_2008
 ```

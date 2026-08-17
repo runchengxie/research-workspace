@@ -124,7 +124,7 @@ def _load_late_universe(
     path = data_root / "assets/universe/a_share_all_full_by_date.csv"
     if not path.is_file():
         raise FileNotFoundError(f"universe_by_date file not found: {path}")
-    frame = pd.read_csv(path, usecols=["trade_date", "symbol", "selected"])
+    frame = pd.read_csv(path, usecols=["trade_date", "symbol", "selected"])  # ty: ignore[no-matching-overload]
     frame = _normalize_trade_dates(frame)
     frame = _filter_date_window(frame, start_date=start_date, end_date=end_date)
     frame = frame[frame["selected"].eq(1)].drop(columns="selected")
@@ -262,7 +262,7 @@ def _assemble_daily_clean(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     late_daily = _load_late_daily_clean(
         data_root,
-        start_date=max(start, pd.Timestamp("2015-01-01")),
+        start_date=max(start, pd.Timestamp("2015-01-01")),  # ty: ignore[invalid-argument-type]
         end_date=end,
     )
     source_metadata: dict[str, Any] = {}
@@ -294,7 +294,7 @@ def _assemble_universe(
 ) -> pd.DataFrame:
     late_universe = _load_late_universe(
         data_root,
-        start_date=max(start, pd.Timestamp("2015-01-01")),
+        start_date=max(start, pd.Timestamp("2015-01-01")),  # ty: ignore[invalid-argument-type]
         end_date=end,
     )
     universe_parts: list[pd.DataFrame] = []
@@ -338,7 +338,7 @@ def load_robustness_market_data(
     vintage = pit_vintage_dir or (
         data_root / "assets/tushare/a_share/fundamentals_vintages" / f"vintage={PIT_VINTAGE}"
     )
-    formation_dates = pd.DatetimeIndex(universe["trade_date"].unique()).normalize()
+    formation_dates = pd.DatetimeIndex(universe["trade_date"].unique()).normalize()  # ty: ignore[unresolved-attribute]
     st_history, st_metadata = expand_st_intervals(constraints, formation_dates)
     margin_eligibility, margin_metadata = load_margin_formation_eligibility(
         constraints,

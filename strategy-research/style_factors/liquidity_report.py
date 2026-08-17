@@ -2,17 +2,20 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
+from typing import Any, cast
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from . import BG, CJK, LG
+from .liquidity_backtest import LiquidityPortfolios
 from .liquidity_signals import liquidity_signal_labels
 
 
-def _fmt_pct(value: object) -> str:
+def _fmt_pct(value: Any) -> str:
     if pd.isna(value):
         return "暂无"
     number = float(value)
@@ -21,7 +24,7 @@ def _fmt_pct(value: object) -> str:
     return f"{number:+.2f}%"
 
 
-def _fmt_number(value: object, digits: int = 2) -> str:
+def _fmt_number(value: Any, digits: int = 2) -> str:
     if pd.isna(value):
         return "暂无"
     number = float(value)
@@ -30,13 +33,13 @@ def _fmt_number(value: object, digits: int = 2) -> str:
     return f"{number:.{digits}f}"
 
 
-def _fmt_ratio_pct(value: object) -> str:
+def _fmt_ratio_pct(value: Any) -> str:
     if pd.isna(value):
         return "暂无"
     return f"{float(value):.2f}%"
 
 
-def _fmt_date(value: object) -> str:
+def _fmt_date(value: Any) -> str:
     date = pd.Timestamp(value)
     return f"{date.year} 年 {date.month} 月 {date.day} 日"
 
@@ -146,7 +149,7 @@ def _markdown_table(frame: pd.DataFrame, percent_columns: set[str]) -> str:
 
 
 def plot_liquidity_signal_nav(
-    portfolios: dict[str, dict[str, object]],
+    portfolios: LiquidityPortfolios,
     outdir: Path,
 ) -> None:
     labels = liquidity_signal_labels()
@@ -255,7 +258,7 @@ def plot_liquidity_long_only(summary: pd.DataFrame, outdir: Path) -> None:
     plt.close(fig)
 
 
-def _tieout_text(metadata: dict[str, object]) -> str:
+def _tieout_text(metadata: Mapping[str, object]) -> str:
     tieout = metadata.get("baseline_tieout", {})
     if not isinstance(tieout, dict) or not tieout.get("performed"):
         return "未提供历史基准产物，本次没有执行逐日收益对账。"
@@ -268,7 +271,7 @@ def _tieout_text(metadata: dict[str, object]) -> str:
 
 def _conclusion_lines(
     summary: pd.DataFrame,
-    metadata: dict[str, object],
+    metadata: Mapping[str, object],
 ) -> list[str]:
     base = summary[~summary["neutralized"]].copy()
     neutral = summary[summary["neutralized"]].copy()
@@ -304,8 +307,8 @@ def _conclusion_lines(
     ]
 
 
-def _method_and_boundary_lines(metadata: dict[str, object]) -> list[str]:
-    minimum_coverage = float(metadata.get("minimum_coverage", 0.75))
+def _method_and_boundary_lines(metadata: Mapping[str, object]) -> list[str]:
+    minimum_coverage = float(cast(Any, metadata.get("minimum_coverage", 0.75)))
     labels = liquidity_signal_labels()
     return [
         "## 计算方法",
@@ -336,7 +339,7 @@ def _method_and_boundary_lines(metadata: dict[str, object]) -> list[str]:
 
 def generate_liquidity_report(
     summary: pd.DataFrame,
-    metadata: dict[str, object],
+    metadata: Mapping[str, object],
     outdir: Path,
 ) -> str:
 

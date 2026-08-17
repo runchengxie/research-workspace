@@ -79,7 +79,7 @@ def _positive_formation_activity(
         if not piece.empty:
             pieces.append(piece)
     if not pieces:
-        return pd.DataFrame(columns=["trade_date", "symbol"])
+        return pd.DataFrame(columns=pd.Index(["trade_date", "symbol"]))
     frame = pd.concat(pieces, ignore_index=True).rename(columns={"ts_code": "symbol"})
     return _normalize_dates(frame).drop_duplicates(["trade_date", "symbol"])
 

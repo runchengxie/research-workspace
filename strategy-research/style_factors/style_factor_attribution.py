@@ -25,7 +25,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
-from src.research_contracts import (
+from research_contracts import (
     ArtifactEnvelopeV2,
     LineageInput,
     ProducerIdentity,

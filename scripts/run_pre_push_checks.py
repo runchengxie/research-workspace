@@ -83,28 +83,22 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
         f"uv run --project {strategy_project} --extra dev python -m pytest {tests_dir} -q".split()
     )
     research_layer = Path(cwd) / "strategy-research"
-    # The research layer depends on the two owner packages (alpha-research,
-    # portfolio-backtester) plus its own strategy-research/style_factors
-    # package. We reuse the strategy-pipeline dev environment (pytest already
-    # present) and inject the owner packages via --with local paths, then put
-    # strategy-research on PYTHONPATH so `import style_factors` resolves.
+    # strategy-research is a directly-tracked ordinary directory with its own
+    # pyproject.toml, uv.lock and local path sources for the owner packages
+    # (alpha-research, portfolio-backtester, research-contracts). Its tests run
+    # inside that project, so no PYTHONPATH or --with injection is needed.
     research_tests = tuple(
         (
-            "env",
-            f"PYTHONPATH={research_layer}",
             "uv",
             "run",
-            f"--project={strategy_project}",
+            "--project",
+            str(research_layer),
             "--extra",
             "dev",
-            "--with",
-            "./alpha-research",
-            "--with",
-            "./portfolio-backtester",
             "python",
             "-m",
             "pytest",
-            str(research_layer / "tests"),
+            "tests",
             "-q",
         )
     )
@@ -125,17 +119,12 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
             (sys.executable, "src/research_contracts/smoke_contracts.py", "--strict"),
         ),
         GateCommand("root-tests", cwd, root_tests),
+        GateCommand("research-layer-tests", research_layer, research_tests),
+        # Lint, format, type-check and smoke the presentation layer inside its
+        # own project. The helper script resolves strategy-research from its own
+        # location, so the gate cwd stays at the repo root.
         GateCommand(
-            "research-layer-tests",
-            cwd,
-            research_tests,
-        ),
-        # Lint the migrated presentation layer with its own ruff profile
-        # (Chinese full-width punctuation is intentionally allowed there). The
-        # helper script resolves strategy-research from its own location and
-        # cds internally, so the gate cwd stays at the repo root.
-        GateCommand(
-            "research-layer-lint",
+            "research-layer-quality",
             cwd,
             (sys.executable, "scripts/run_research_layer_lint.py"),
         ),

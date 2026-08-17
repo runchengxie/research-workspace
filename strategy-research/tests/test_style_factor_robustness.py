@@ -303,7 +303,7 @@ def test_delisting_event_maps_to_first_market_date_on_or_after_delist() -> None:
     events = terminal_event_positions(instruments, trading_dates, {"A": 0})
 
     assert list(events) == [pd.Timestamp("2024-01-08")]
-    assert events[pd.Timestamp("2024-01-08")].tolist() == [0]
+    assert events[pd.Timestamp("2024-01-08")].tolist() == [0]  # ty: ignore[invalid-argument-type]
 
 
 def test_close_execution_starts_exposure_on_following_return_interval() -> None:
@@ -398,8 +398,8 @@ def test_constrained_profile_charges_actual_turnover_costs() -> None:
         factors,
         daily_clean,
         universe,
-        pd.DataFrame(columns=["trade_date", "symbol"]),
-        pd.DataFrame(columns=["symbol", "delist_date"]),
+        pd.DataFrame(columns=pd.Index(["trade_date", "symbol"])),
+        pd.DataFrame(columns=pd.Index(["symbol", "delist_date"])),
         baseline,
         margin_eligibility=universe,
         config=RobustnessConfig(

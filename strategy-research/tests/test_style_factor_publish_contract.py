@@ -2,8 +2,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import cast
 
-from src.research_contracts import read_artifact_envelope, validate_file_receipts
+from research_contracts import (
+    ArtifactEnvelopeV2,
+    read_artifact_envelope,
+    validate_file_receipts,
+)
 
 from style_factors.style_factor_attribution import (
     REQUIRED_STYLE_FILES,
@@ -29,9 +34,11 @@ def test_style_publish_manifest_uses_shared_receipts(tmp_path: Path) -> None:
 
     payload = json.loads((tmp_path / "manifest.json").read_text(encoding="utf-8"))
     assert payload["schema_version"] == STYLE_ARTIFACT_SCHEMA_VERSION
-    assert read_artifact_envelope(payload, allow_legacy=False).artifact_id == (
-        "style-factors:test-run"
+    envelope = cast(
+        ArtifactEnvelopeV2,
+        read_artifact_envelope(payload, allow_legacy=False),
     )
+    assert envelope.artifact_id == ("style-factors:test-run")
     receipts = validate_file_receipts(
         tmp_path,
         payload["file_receipts"],

@@ -65,14 +65,14 @@ def terminal_event_positions(
     """Map each known delisting to its first on-calendar terminal-mark date."""
     events: dict[pd.Timestamp, list[int]] = {}
     for row in instruments.dropna(subset=["delist_date"]).itertuples(index=False):
-        symbol = str(row.symbol)
+        symbol = str(row.symbol)  # ty: ignore[unresolved-attribute]
         if symbol not in symbol_positions:
             continue
-        delist_date = pd.Timestamp(row.delist_date).normalize()
-        position = int(trading_dates.searchsorted(delist_date, side="left"))
+        delist_date = pd.Timestamp(row.delist_date).normalize()  # ty: ignore[unresolved-attribute]
+        position = int(trading_dates.searchsorted(delist_date, side="left"))  # ty: ignore[no-matching-overload]
         if position >= len(trading_dates):
             continue
-        event_date = pd.Timestamp(trading_dates[position]).normalize()
+        event_date = pd.Timestamp(trading_dates[position]).normalize()  # ty: ignore[unresolved-attribute]
         events.setdefault(event_date, []).append(symbol_positions[symbol])
     return {date: np.asarray(positions, dtype=int) for date, positions in events.items()}
 
@@ -140,7 +140,7 @@ def simulate_leg(
     for row_number, (date, row) in enumerate(
         zip(returns.index, returns.to_numpy(dtype=float), strict=True)
     ):
-        normalized_date = pd.Timestamp(date).normalize()
+        normalized_date = pd.Timestamp(date).normalize()  # ty: ignore[unresolved-attribute]
         if normalized_date in targets:
             target = np.zeros(len(symbols), dtype=float)
             for symbol, value in targets[normalized_date].items():

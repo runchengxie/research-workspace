@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 import pandas as pd
 
 from portfolio_backtester.style_factors_backtest import build_quantile_portfolio_returns
 from style_factors.liquidity_backtest import (
+    LiquidityPortfolios,
     compare_baseline_returns,
     summarize_liquidity_portfolios,
 )
@@ -167,11 +169,14 @@ def _synthetic_portfolio_inputs() -> tuple[pd.DataFrame, pd.DataFrame, pd.Dateti
 
 def test_quantile_backtest_and_summary_separate_long_and_spread_returns() -> None:
     signals, daily, formation_dates = _synthetic_portfolio_inputs()
-    portfolios = build_quantile_portfolio_returns(
-        signals,
-        daily,
-        formation_dates,
-        {"turnover_1d": "signal"},
+    portfolios = cast(
+        LiquidityPortfolios,
+        build_quantile_portfolio_returns(
+            signals,
+            daily,
+            formation_dates,
+            {"turnover_1d": "signal"},
+        ),
     )
     signal_diagnostics = pd.DataFrame(
         [
@@ -250,7 +255,7 @@ def test_liquidity_report_and_charts_are_generated(tmp_path: Path) -> None:
     }
 
     report = generate_liquidity_report(summary, metadata, tmp_path)
-    plot_liquidity_signal_nav(portfolios, tmp_path)
+    plot_liquidity_signal_nav(cast(LiquidityPortfolios, portfolios), tmp_path)
     plot_liquidity_quintiles(summary, tmp_path)
     plot_liquidity_long_only(summary, tmp_path)
 

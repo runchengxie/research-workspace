@@ -120,7 +120,7 @@ def build_early_daily_clean(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Build the 2008–2014 clean bridge from immutable raw overlays."""
     start = start_date.strftime("%Y%m%d")
-    end = min(end_date, EARLY_END).strftime("%Y%m%d")
+    end = min(end_date, EARLY_END).strftime("%Y%m%d")  # ty: ignore[unresolved-attribute]
     frames, adj_asset, limit_asset = _load_early_source_frames(
         data_root,
         start=start,
@@ -209,15 +209,15 @@ def expand_st_intervals(
     intervals["interval_start"] = pd.to_datetime(intervals["interval_start"], format="%Y%m%d")
     intervals["interval_end"] = pd.to_datetime(intervals["interval_end"], format="%Y%m%d")
     rows: list[pd.DataFrame] = []
-    dates = pd.DatetimeIndex(formation_dates).normalize()
+    dates = pd.DatetimeIndex(formation_dates).normalize()  # ty: ignore[unresolved-attribute]
     for row in intervals.itertuples(index=False):
-        active = dates[(dates >= row.interval_start) & (dates <= row.interval_end)]
+        active = dates[(dates >= row.interval_start) & (dates <= row.interval_end)]  # ty: ignore[unresolved-attribute]
         if len(active):
-            rows.append(pd.DataFrame({"trade_date": active, "symbol": row.ts_code}))
+            rows.append(pd.DataFrame({"trade_date": active, "symbol": row.ts_code}))  # ty: ignore[unresolved-attribute]
     history = (
         pd.concat(rows, ignore_index=True).drop_duplicates()
         if rows
-        else pd.DataFrame(columns=["trade_date", "symbol"])
+        else pd.DataFrame(columns=pd.Index(["trade_date", "symbol"]))
     )
     return history, {
         "st_interval_rows": len(intervals),
@@ -299,9 +299,9 @@ def load_reconstructed_pit_panel(
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     """Materialize reconstructed PIT v2 fields at formation dates from sealed events."""
     events, snapshot_date, query, seal = _load_pit_events(vintage_dir)
-    dates = sorted(pd.DatetimeIndex(universe["trade_date"].unique()).normalize())
+    dates = sorted(pd.DatetimeIndex(universe["trade_date"].unique()).normalize())  # ty: ignore[unresolved-attribute]
     symbols_by_date = {
-        pd.Timestamp(date): group["symbol"].astype(str).tolist()
+        pd.Timestamp(date): group["symbol"].astype(str).tolist()  # ty: ignore[invalid-argument-type]
         for date, group in universe.groupby("trade_date", sort=True)
     }
     state: dict[str, dict[str, tuple[tuple[str, str, str, str], float]]] = {}
@@ -314,7 +314,7 @@ def load_reconstructed_pit_panel(
             _update_pit_state(state, records[cursor])
             cursor += 1
         symbols = symbols_by_date[pd.Timestamp(date)]
-        output.append(_pit_formation_frame(pd.Timestamp(date), symbols, state))
+        output.append(_pit_formation_frame(pd.Timestamp(date), symbols, state))  # ty: ignore[invalid-argument-type]
     panel = pd.concat(output, ignore_index=True)
     panel = panel.rename(
         columns={

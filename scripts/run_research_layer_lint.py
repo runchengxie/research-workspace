@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Lint the migrated style-factor presentation layer.
+"""Run the strategy-research presentation-layer quality gate.
 
 The ``strategy-research`` directory is a directly-tracked ordinary directory
 (not a submodule). Its ``pyproject.toml`` carries its own ruff profile that
-intentionally permits Chinese full-width punctuation (RUF001/002/003), which
-the superproject ruff profile would otherwise flag across the Chinese docs
-and user-facing strings.
+intentionally permits Chinese full-width punctuation (RUF001/002/003), its own
+``uv.lock``, and local path sources for alpha-research, portfolio-backtester
+and research-contracts. All checks run inside the project environment, so the
+project stays independently runnable without PYTHONPATH injection.
 
-We run ruff from inside ``strategy-research`` so its ``pyproject.toml`` is the
-effective config (ruff stops at the first ``pyproject.toml`` walking up). Only
-the owned ``style_factors/`` package and ``tests/`` are linted; the
-``experiments/`` adhoc scripts remain out of the quality gate.
+The gate covers ruff lint, ruff format, the ty typed surface, and a CLI
+import/help smoke for ``python -m style_factors``.
 """
 
 from __future__ import annotations
@@ -23,32 +22,25 @@ ROOT = Path(__file__).resolve().parents[1]
 RESEARCH_LAYER = ROOT / "strategy-research"
 
 
+def _run(command: list[str], cwd: Path) -> int:
+    return subprocess.run(command, cwd=cwd).returncode
+
+
 def main(argv: list[str] | None = None) -> int:
     if argv is None:
         argv = sys.argv[1:]
-
     target = RESEARCH_LAYER
-    # Use --no-project so uv does not try to resolve strategy-research's own
-    # dependencies (alpha-research / portfolio-backtester are local packages
-    # not on the registry). The ruff profile lives in strategy-research's
-    # pyproject.toml, passed explicitly via --config so Chinese full-width
-    # punctuation (RUF001/002/003) is intentionally allowed there.
-    command = [
-        "uv",
-        "run",
-        "--no-project",
-        "--with",
-        "ruff",
-        "ruff",
-        "check",
-        "--config",
-        str(target / "pyproject.toml"),
-        "style_factors",
-        "tests",
-        *argv,
+    project = ["uv", "run", "--project", str(target), "--extra", "dev"]
+    checks = [
+        [*project, "ruff", "check", "style_factors", "tests", *argv],
+        [*project, "ruff", "format", "--check", "style_factors", "tests"],
+        [*project, "ty", "check", "--error-on-warning"],
+        [*project, "python", "-m", "style_factors", "--help"],
     ]
-    result = subprocess.run(command, cwd=target)
-    return result.returncode
+    for check in checks:
+        if _run(check, cwd=target) != 0:
+            return 1
+    return 0
 
 
 if __name__ == "__main__":

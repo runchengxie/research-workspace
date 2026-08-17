@@ -36,7 +36,7 @@ def _compute_clean_factors(
     factor_daily = clean[["trade_date", "symbol", "tr_close", "pct_chg", "amount"]].rename(
         columns={"tr_close": "close"}
     )
-    rebalance_dates = pd.DatetimeIndex(market_data.universe["trade_date"].unique()).normalize()
+    rebalance_dates = pd.DatetimeIndex(market_data.universe["trade_date"].unique()).normalize()  # ty: ignore[unresolved-attribute]
     data_start = clean["trade_date"].min()
     data_end = clean["trade_date"].max()
     fina = load_fina_indicator(data_root, end_date=data_end)
@@ -104,8 +104,8 @@ def run_robustness_analysis(
     analysis_end = pd.Timestamp(trading_dates[-1])
     baseline_results = load_baseline_factor_results(
         baseline_artifacts,
-        start_date=analysis_start,
-        end_date=analysis_end,
+        start_date=analysis_start,  # ty: ignore[invalid-argument-type]
+        end_date=analysis_end,  # ty: ignore[invalid-argument-type]
     )
     print(
         "[robustness] simulating constrained gross/net and short-activity sensitivity", flush=True
