@@ -42,12 +42,19 @@ def test_strategy_catalog_is_complete_and_human_navigable() -> None:
 
 def test_production_state_is_metadata_not_a_pipeline_code_location() -> None:
     strategies = _catalog()["strategies"]
-    production = [item for item in strategies if item["production_eligible"]]
 
-    assert [item["id"] for item in production] == ["daily_watch20"]
-    assert production[0]["control_plane_owner"] == "strategy-pipeline"
-    assert production[0]["human_spec"].startswith("strategy-research/")
-    assert "strategy-app" in production[0]["executable_owners"]
+    # 生产资格是 catalog 中显式声明的 metadata 字段，不是代码位置。
+    # 截至 2026-08-17，所有策略的生产证据均未达标（capacity/turnover_cost
+    # 为 pending、final OOS 为书面替代、broker operational_approval=false），
+    # 因此没有策略被标记为 production_eligible，包括曾错误标记的 daily_watch20。
+    production = [item for item in strategies if item["production_eligible"]]
+    assert production == []
+
+    daily_watch20 = next(item for item in strategies if item["id"] == "daily_watch20")
+    assert daily_watch20["production_eligible"] is False
+    assert daily_watch20["control_plane_owner"] == "strategy-pipeline"
+    assert daily_watch20["human_spec"].startswith("strategy-research/")
+    assert "strategy-app" in daily_watch20["executable_owners"]
 
 
 def test_strategy_navigation_declares_the_three_layer_boundary() -> None:

@@ -92,9 +92,9 @@
 证据包顶层 `known_gaps` 是一个字符串数组，每条以 `"<检查键>:"` 开头（例如
 `"cost: 长窗口成本压力证据 pending"`）。门禁在 `--strict` 模式下的判定规则：
 
-- **未登记缺口（unregistered_gaps）**：缺失且未出现在 `known_gaps` 的检查，无论策略是否生产级都使 `--strict` 退出码为 1，阻断推送。这防止缺口被静默漏记。
-- **已知缺口豁免（known_gaps_waived）**：缺失项全部出现在 `known_gaps` 中，且策略在 `catalog.json` 的 `production_eligible` 为 `false` 时，门禁不阻断（退出码 0），但在报告中标注「已知缺口豁免」。
-- **生产策略**：`production_eligible` 为 `true` 的策略必须关闭全部必需检查，任何缺失（无论是否登记）都保持硬失败。
+- 未登记缺口（unregistered_gaps）：缺失且未出现在 `known_gaps` 的检查，无论策略是否生产级都使 `--strict` 退出码为 1，阻断推送。这防止缺口被静默漏记。
+- 已知缺口豁免（known_gaps_waived）：缺失项全部出现在 `known_gaps` 中，且策略在 `catalog.json` 的 `production_eligible` 为 `false` 时，门禁不阻断（退出码 0），但在报告中标注「已知缺口豁免」。
+- 生产策略：`production_eligible` 为 `true` 的策略必须关闭全部必需检查，任何缺失（无论是否登记）都保持硬失败。
 
 每个策略的证据包放在 `strategy-research/evidence/<策略id>.json`。截至 2026-08-17，
 已将五个策略的既有 A 股研究证据（`docs/evidence/a-share-*.json`、strategy-app 回执）
@@ -131,8 +131,8 @@ python scripts/strategy_evidence_gate.py --json
 ## 接入范围
 
 证据门禁的 `--strict` 已接入 pre-push 自动门禁（`scripts/run_pre_push_checks.py` 的
-`strategy-evidence-gate` 命令）。它只阻断**未登记**的缺口，因此日常推送不会被已知且
-显式登记的缺口冻结；任何缺失检查若未写入 `known_gaps`，推送会被拦截。
+`strategy-evidence-gate` 命令）。它只阻断未登记的缺口，因此日常推送不会被已知且
+显式登记的缺口冻结。任何缺失检查若未写入 `known_gaps`，推送会被拦截。
 
 ## 与已有治理的关系
 
