@@ -84,6 +84,23 @@
 
 每条检查至少包含 `outcome` 和 `evidence`。`outcome` 为 `pass` 且 `evidence`
 为可追溯的路径时才算通过。`benchmark_matrix` 额外要求 `cells` 覆盖至少两个维度。
+`outcome` 还可以是 `partial`、`pending`、`substitute` 或 `missing`，这些都不算通过，
+必须进入证据包的顶层 `known_gaps` 列表登记，否则严格门禁会判定为未登记缺口并阻断。
+
+## 已知缺口登记与严格门禁
+
+证据包顶层 `known_gaps` 是一个字符串数组，每条以 `"<检查键>:"` 开头（例如
+`"cost: 长窗口成本压力证据 pending"`）。门禁在 `--strict` 模式下的判定规则：
+
+- 未登记缺口（unregistered_gaps）：缺失且未出现在 `known_gaps` 的检查，无论策略是否生产级都使 `--strict` 退出码为 1，阻断推送。这防止缺口被静默漏记。
+- 已知缺口豁免（known_gaps_waived）：缺失项全部出现在 `known_gaps` 中，且策略在 `catalog.json` 的 `production_eligible` 为 `false` 时，门禁不阻断（退出码 0），但在报告中标注「已知缺口豁免」。
+- 生产策略：`production_eligible` 为 `true` 的策略必须关闭全部必需检查，任何缺失（无论是否登记）都保持硬失败。
+
+每个策略的证据包放在 `strategy-research/evidence/<策略id>.json`。截至 2026-08-17，
+已将五个策略的既有 A 股研究证据（`docs/evidence/a-share-*.json`、strategy-app 回执）
+如实组装为证据包，并把 `daily_watch20` 从 `operational` 校正为 `research_shadow`
+（`production_eligible` 改为 `false`），消除其证据门禁结果（`present: []`）与治理声明
+（`operational + production_eligible`）之间的不一致。
 
 ## 使用命令
 
@@ -93,7 +110,7 @@
 python scripts/strategy_evidence_gate.py
 ```
 
-以失败即退出码 1 的方式检查全部策略：
+以失败即退出码 1 的方式检查全部策略（仅阻断未登记缺口）：
 
 ```bash
 python scripts/strategy_evidence_gate.py --strict
@@ -113,8 +130,9 @@ python scripts/strategy_evidence_gate.py --json
 
 ## 接入范围
 
-当前证据门禁作为策略评审与升格时的显式命令运行，尚未接入 pre-push 自动门禁。
-补齐证据包以后，再按路线图把 `--strict` 接入发布检查，避免在证据缺失阶段阻断日常推送。
+证据门禁的 `--strict` 已接入 pre-push 自动门禁（`scripts/run_pre_push_checks.py` 的
+`strategy-evidence-gate` 命令）。它只阻断未登记的缺口，因此日常推送不会被已知且
+显式登记的缺口冻结。任何缺失检查若未写入 `known_gaps`，推送会被拦截。
 
 ## 与已有治理的关系
 

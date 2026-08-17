@@ -71,12 +71,15 @@ def test_root_gate_runs_root_quality_and_cross_repo_checks_only() -> None:
         "root-quality",
         "workspace-doctor",
         "contract-smoke",
+        "strategy-evidence-gate",
         "root-tests",
         "research-layer-tests",
         "research-layer-quality",
     ]
     assert all(
-        command.cwd == ROOT for command in plan.commands if command.name != "research-layer-tests"
+        command.cwd == ROOT
+        for command in plan.commands
+        if command.name not in ("research-layer-tests",)
     )
     assert all(
         command.cwd == ROOT / "strategy-research"
@@ -585,6 +588,7 @@ def test_plan_gate_treats_superproject_worktree_as_root(
         "root-quality",
         "workspace-doctor",
         "contract-smoke",
+        "strategy-evidence-gate",
         "root-tests",
         "research-layer-tests",
         "research-layer-quality",

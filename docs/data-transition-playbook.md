@@ -41,6 +41,28 @@
 口径不同，使用时应读取清单，不要仅凭目录名推断覆盖范围。current 契约尚未发布
 `normalized_fundamentals`，下游也不应假设该中间层可直接读取。
 
+## 数据发布状态与策略生产证据对账
+
+数据资产发布（PIT 财务、历史行业、2015 年以来日线）不等于策略已经晋升到生产级。
+策略生产证据由 `strategy-research/evidence/<策略id>.json` 承载，并经策略证据门禁校验。
+截至 2026-08-17，A 股研究证据（`docs/evidence/a-share-*.json`）的真实状态如下，缺口需在
+证据包 `known_gaps` 中显式登记，不得用数据发布状态替代：
+
+| 证据项 | 真实状态 | 来源 |
+| --- | --- | --- |
+| PIT 财务（时间点） | 已发布但研究侧 `statement_features_enabled=false`，未全量启用 | `a-share-readiness-evidence-20260601.json` |
+| 长窗口日线 | 已发布（至 2026-07-16） | current 契约 |
+| 历史行业 membership | 已发布，但 `historical_backtest_enabled=false` | `a-share-readiness-evidence-20260601.json` |
+| `normalized_fundamentals` | 未发布，`current` 契约 `exists: false` | current 契约 |
+| 容量（capacity） | `pending`，待长窗口 PIT 资产与组合构建固定后生成 | `a-share-capacity-20260601.json` |
+| 换手/成本（turnover/cost） | `pending`，长窗口压力证据缺失 | `a-share-turnover-cost-20260601.json` |
+| 最终样本外（final OOS） | 书面替代（substitute），明确不构成生产级 | `a-share-final-oos-substitute-20260601.json` |
+| 券商实盘（broker trading） | `operational_approval=false`，CN 文件 dry-run 不能证明 | `a-share-readiness-evidence-20260601.json` |
+
+`strategy-pipeline` 的 `strategy capacity-report` 基于日线 pricing panel 与
+`positions_by_rebalance.csv` 生成容量证据。该项与 turnover/cost 报告均仍为 `pending`，
+是 `production_strategy_evidence` 就绪档的剩余阻塞项。
+
 ## A 股就绪度（readiness）分层
 
 顶层只读命令按四档汇报状态：

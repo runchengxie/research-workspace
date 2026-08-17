@@ -118,6 +118,16 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
             cwd,
             (sys.executable, "src/research_contracts/smoke_contracts.py", "--strict"),
         ),
+        # Strategy evidence gate: blocks only on *unregistered* gaps (missing
+        # checks a non-production strategy has not explicitly listed in its
+        # evidence bundle). Registered known gaps are reported but do not block,
+        # so the gate stays honest without freezing everyday pushes. A
+        # production-eligible strategy keeps every required check closed.
+        GateCommand(
+            "strategy-evidence-gate",
+            cwd,
+            (sys.executable, "scripts/strategy_evidence_gate.py", "--strict"),
+        ),
         GateCommand("root-tests", cwd, root_tests),
         GateCommand("research-layer-tests", research_layer, research_tests),
         # Lint, format, type-check and smoke the presentation layer inside its
