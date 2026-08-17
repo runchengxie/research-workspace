@@ -44,9 +44,9 @@
       },
       "quant-execution-engine": {
         "max_large_files": 4,
-        "max_long_functions": 35,
+        "max_long_functions": 37,
         "max_complexity_hotspots": 37,
-        "max_large_classes": 6
+        "max_large_classes": 7
       }
     }
   },
@@ -167,13 +167,14 @@
     {
       "repo": "quant-execution-engine",
       "max_large_files": 4,
-      "max_long_functions": 35,
+      "max_long_functions": 37,
       "max_complexity_hotspots": 37,
-      "max_large_classes": 6,
+      "max_large_classes": 7,
       "owner_decision": [
         "2026-07-14: 动态执行策略 + 证据交接审计增加 2 长函数 + 1 复杂度热点。",
         "2026-07-26: qexec ruff/ty 收紧 + diff.py 提取，long_functions 37->36、complexity 38->37 下调（真实下降）；large_files 保持 14。",
-        "2026-07-28: 模块拆分后 large_files 12->4 / long_functions 36->35 / large_classes 7->6 下调（reconcile_ops_state/recovery_actions_single/_longport_client 低于阈值，登记 accepted_hotspots）。"
+        "2026-07-28: 模块拆分后 large_files 12->4 / long_functions 36->35 / large_classes 7->6 下调（reconcile_ops_state/recovery_actions_single/_longport_client 低于阈值，登记 accepted_hotspots）。",
+        "2026-08-18: X1 离线执行证据链（mock-sim + 证据链工具）新增 save_audit_log 等长函数与 _rebalance_exec 新热点，long_functions 35->37、large_classes 6->7（真实新增、owner PR #14 门禁通过）。"
       ]
     }
   ],
@@ -1376,6 +1377,12 @@
       "owner_repo": "strategy-pipeline",
       "reason": "Market shadow 的原子 research-only 发布与代码/输入/环境快照哈希保持在一个可审计模块，属于编排层发布门禁",
       "next_action": "拆分快照哈希收集与原子发布步骤后再增加新的发布面"
+    },
+    {
+      "path": "quant-execution-engine/src/quant_execution_engine/broker/mock_sim.py",
+      "owner_repo": "quant-execution-engine",
+      "reason": "X1 离线执行证据链新增确定性 mock 券商适配器，模拟提交/成交/查询/撤单/对账并持久化状态，支撑重启恢复证据（359 行大类的真实新增，非回归）",
+      "next_action": "按操作拆分 MockSimBrokerAdapter 的订单状态机与对账逻辑后再收敛到 300 行阈值内"
     }
   ]
 }

@@ -553,7 +553,7 @@
       "path": "quant-execution-engine/project_tools/evidence_offline_chain.py",
       "owner": "quant-execution-engine",
       "purpose": "可复现离线执行证据链：local-dry-run 覆盖 targets 解析到预演与审计，mock-sim 增加模拟成交、订单查询与重启恢复，产物写入 QEXEC_OUTPUTS_DIR 隔离目录",
-      "lifecycle": "research",
+      "lifecycle": "release",
       "safe_to_run_locally": true,
       "writes_files": "QEXEC_OUTPUTS_DIR 指定的运行目录",
       "external_dependencies": "qexec CLI 与对应后端适配器",

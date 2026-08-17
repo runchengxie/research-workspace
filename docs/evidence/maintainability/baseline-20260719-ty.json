@@ -191,7 +191,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 298,
-      "python_loc": 89438,
+      "python_loc": 89443,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 41,
@@ -720,7 +720,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 171,
-      "python_loc": 33886,
+      "python_loc": 33895,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
@@ -1080,7 +1080,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 192,
-      "python_loc": 41193,
+      "python_loc": 41201,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -2137,14 +2137,14 @@
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 134,
-      "python_loc": 29003,
+      "python_file_count": 138,
+      "python_loc": 30113,
       "hk_related_file_count": 15,
       "hotspot_counts": {
         "large_files": 4,
-        "long_functions": 35,
+        "long_functions": 37,
         "complexity_hotspots": 37,
-        "large_classes": 6
+        "large_classes": 7
       },
       "large_files": [
         {
@@ -2278,16 +2278,16 @@
           "complexity": 37
         },
         {
+          "path": "src/quant_execution_engine/_rebalance_exec.py",
+          "name": "save_audit_log",
+          "line_count": 99,
+          "complexity": 13
+        },
+        {
           "path": "src/quant_execution_engine/broker/_longport_client.py",
           "name": "place_order",
           "line_count": 97,
           "complexity": 13
-        },
-        {
-          "path": "src/quant_execution_engine/_rebalance_exec.py",
-          "name": "save_audit_log",
-          "line_count": 95,
-          "complexity": 12
         },
         {
           "path": "src/quant_execution_engine/handoff_audit.py",
@@ -2302,6 +2302,12 @@
           "complexity": 13
         },
         {
+          "path": "project_tools/evidence_offline_chain.py",
+          "name": "main",
+          "line_count": 92,
+          "complexity": 11
+        },
+        {
           "path": "project_tools/smoke_operator/evidence.py",
           "name": "write_evidence",
           "line_count": 92,
@@ -2312,12 +2318,6 @@
           "name": "test_get_order_trace_merges_local_attempts_and_broker_history",
           "line_count": 90,
           "complexity": 5
-        },
-        {
-          "path": "src/quant_execution_engine/renderers/_table_execution.py",
-          "name": "render_order_trace",
-          "line_count": 88,
-          "complexity": 22
         }
       ],
       "complexity_hotspots": [
@@ -2480,6 +2480,12 @@
           "method_count": 23
         },
         {
+          "path": "src/quant_execution_engine/broker/mock_sim.py",
+          "name": "MockSimBrokerAdapter",
+          "line_count": 359,
+          "method_count": 18
+        },
+        {
           "path": "src/quant_execution_engine/execution_service.py",
           "name": "OrderLifecycleService",
           "line_count": 331,
@@ -2538,6 +2544,7 @@
       },
       "script_inventory": [
         "project_tools/__init__.py",
+        "project_tools/evidence_offline_chain.py",
         "project_tools/export_repo_source.py",
         "project_tools/package.sh",
         "project_tools/smoke_operator/__init__.py",
