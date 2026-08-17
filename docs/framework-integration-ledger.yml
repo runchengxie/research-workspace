@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-07-19",
+  "_last_changed": "2026-08-17",
   "_owner": "research-workspace",
   "schema_version": "framework_integration_ledger.v1",
   "decision": "docs/adr/0001-framework-integration-boundaries.md",
@@ -67,13 +67,16 @@
     {
       "id": "qlib-research-backend",
       "owner": "alpha-research",
-      "status": "planned",
-      "current_state": "port_only",
+      "status": "in_progress",
+      "current_state": "implemented_conditional",
       "current_evidence": [
         "alpha-research/src/alpha_research/backends/base.py",
         "alpha-research/src/alpha_research/backends/native.py",
-        "alpha-research/tests/test_research_backends.py"
+        "alpha-research/src/alpha_research/backends/qlib.py",
+        "alpha-research/tests/test_research_backends.py",
+        "alpha-research/tests/test_backends_qlib.py"
       ],
+      "remaining_gap": "the standard dev profile does not install pyqlib, so the real-runtime test can skip and deterministic parity evidence is not yet a release gate",
       "historical_note": "the old cstree Qlib candidate did not enter the current owner-native main branch",
       "implementation_prs": [
         "https://github.com/runchengxie/alpha-research/pull/3",
@@ -121,12 +124,20 @@
     {
       "id": "strategy-pipeline-thinning",
       "owner": "strategy-pipeline",
-      "status": "in_progress",
-      "current_state": "owner_ports_and_standalone_strategy_app",
+      "status": "complete",
+      "current_state": "control_plane_closed",
+      "current_evidence": [
+        "docs/strategy-boundary-refactor-roadmap.md",
+        "strategy-pipeline/tests/test_import_boundaries.py",
+        "strategy-pipeline/docs/strategy-catalog.md"
+      ],
       "implementation_prs": [
         "https://github.com/runchengxie/strategy-pipeline/pull/17",
         "https://github.com/runchengxie/strategy-pipeline/pull/19",
-        "https://github.com/runchengxie/strategy-pipeline/pull/18"
+        "https://github.com/runchengxie/strategy-pipeline/pull/18",
+        "https://github.com/runchengxie/strategy-pipeline/pull/66",
+        "https://github.com/runchengxie/strategy-pipeline/pull/67",
+        "https://github.com/runchengxie/strategy-pipeline/pull/68"
       ],
       "entry_criteria": [
         "data, alpha, portfolio and execution-boundary owner ports exist",

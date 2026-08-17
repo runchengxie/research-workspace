@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-07-19
+> last_verified: 2026-08-17
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -42,8 +42,10 @@
 | --- | --- | --- |
 | 新机器初始化 | [bootstrap.md](bootstrap.md) | active |
 | 跨仓库工作流 | [platform-workflow.md](platform-workflow.md) | active |
+| 工作区路线图 | [roadmap.md](roadmap.md) | active |
+| 文档归集与去重 | [documentation-consolidation.md](documentation-consolidation.md) | active |
 | 策略身份与生命周期 | [../strategy-research/README.md](../strategy-research/README.md) | active |
-| 策略边界重构路线图 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) | active |
+| 策略边界重构完成记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) | reference |
 | 文件约定 | [contracts.md](contracts.md) | reference |
 | A 股迁移和港股恢复顺序 | [data-transition-playbook.md](data-transition-playbook.md) | active |
 | 中国香港市场归档路由 | [archive/hk/README.md](archive/hk/README.md) | active archive entry |
@@ -51,6 +53,7 @@
 | 发布检查 | [release-checklist.md](release-checklist.md) | active |
 | 工作区维护 | [workspace-maintenance.md](workspace-maintenance.md) | active |
 | 治理清单 | [maintainability-governance.md](maintainability-governance.md), [quality-governance.md](quality-governance.md), [deprecations.md](deprecations.md) | reference |
+| 历史维护性盘点 | [code-health-audit.md](code-health-audit.md), [code-size-review.md](code-size-review.md), [submodule-refactor-plan.md](submodule-refactor-plan.md), [noqa-clearing-plan.md](noqa-clearing-plan.md) | reference |
 
 ## 归档入口
 
@@ -72,6 +75,8 @@
 | [archive/hk-legacy-surface-inventory.md](archive/hk-legacy-surface-inventory.md) | [archive/hk/README.md](archive/hk/README.md), [hk-public-split-manifest.yml](hk-public-split-manifest.yml) |
 | [archive/hk-private-archive.md](archive/hk-private-archive.md) | [archive/hk/README.md](archive/hk/README.md), [hk-private-archive-manifest.yml](hk-private-archive-manifest.yml) |
 | [archive/a-share-production-readiness.md](archive/a-share-production-readiness.md) | [data-transition-playbook.md](data-transition-playbook.md#a-股就绪度readiness分层) |
+| [architecture-split-closure-checklist.md](architecture-split-closure-checklist.md) | [release-checklist.md](release-checklist.md) |
+| [r3-facade-removal-plan.md](r3-facade-removal-plan.md) | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 
 ## 路由规则
 

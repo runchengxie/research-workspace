@@ -1,5 +1,13 @@
 # 子模块 noqa 清债计划
 
+> status: reference
+> owner: workspace
+> last_verified: 2026-08-17
+> source_of_truth: no
+> superseded_by: maintainability-governance.md
+
+本页保留 2026-08-11 的专项盘点和执行记录。当前债务数量、预算与行动状态以[维护性治理](maintainability-governance.md)、`maintainability-refactor-roadmap.yml` 和[工作区路线图](roadmap.md)为准。
+
 ## 当前结论（2026-08-11 复核后）
 
 - `market-data-platform` 的 `F401` 经 worktree 实测后确认是 facade re-export 壳重新导出拆分符号的标准写法（27/30 个文件 docstring 已声明），并非技术债。这部分已通过 `pyproject.toml` 的 28 条 `per-file-ignores` 收口并合并（PR #13），不再作为清债目标。

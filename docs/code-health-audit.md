@@ -1,5 +1,13 @@
 # 代码健康审计与优化空间（2026-07-31）
 
+> status: reference
+> owner: workspace
+> last_verified: 2026-08-17
+> source_of_truth: no
+> superseded_by: maintainability-governance.md
+
+本页是日期化审计快照，仓库名称、依赖关系和热点数量可能已经变化。当前状态以[维护性治理](maintainability-governance.md)、机器可读预算和[工作区路线图](roadmap.md)为准。
+
 本文件记录对 research-workspace 超级项目（含六个子模块）的代码健康只读审计结论，作为后续优化决策的基线。审计方法为文件扫描、grep、AST 静态分析与 ruff 统计，未修改任何代码。
 
 ## 总体结论
