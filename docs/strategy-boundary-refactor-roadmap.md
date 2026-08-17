@@ -55,9 +55,9 @@ strategy-pipeline
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
-| R4 通用能力归位 | 进行中 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，剩余 pipeline 编排壳中的候选池（candidate-pool v3 进行中）与 `daily_watch20_candidate_oos.py` 特征组装、滚动评分、策略比较待下沉 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
+| R4 通用能力归位 | 进行中 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，候选 OOS 职责已下沉 owner（`daily_watch20_candidate_oos.py` 重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征/滚动评分/策略比较分别在 `market-data-platform`、`alpha-research`、`strategy-app`），剩余 `style_factors` 因子计算与数据加载最终 owner 归属未定（切片 7） | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
-| R6 控制面收口 | 进行中 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现）。根仓库 gitlink 暂未记录 `alpha-research`/`strategy-pipeline` 最新 origin/main，待候选池 v3 合并后统一刷新形成一致快照 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
+| R6 控制面收口 | 进行中 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68）。剩余 `strategy-app` 未合并分支 `agent/update-daily-watch20-deps-20260817`（#28 类型修复 + 依赖 pin）合并并刷新 gitlink 后，跑六子模块 + 根统一门禁、清理临时分支即收口 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
 
