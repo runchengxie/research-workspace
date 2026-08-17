@@ -15,7 +15,7 @@ from .data import (
     load_moneyflow_ths,
     load_sw_industry_membership,
 )
-from .factor_calc import compute_factors
+from alpha_research.style_factors import compute_factors
 from .robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,

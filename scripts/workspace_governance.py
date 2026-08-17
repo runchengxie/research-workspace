@@ -41,7 +41,7 @@ SCRIPT_LIFECYCLE_EXTRA_PATHS = {
     "src/research_contracts/a_share_readiness_contract.py",
     "src/research_contracts/a_share_readiness_evidence.py",
     "src/research_contracts/smoke_contracts.py",
-    "src/style_factors/style_factor_attribution.py",
+    "strategy-research/style_factors/style_factor_attribution.py",
 }
 DEPRECATION_BUDGET_FIELDS = {"pending_follow_up_max", "policy"}
 DEPRECATION_PENDING_STATUSES = {"blocked_pending_audit", "follow_up_required"}

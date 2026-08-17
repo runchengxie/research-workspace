@@ -8,7 +8,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from .factor_backtest import available_factor_names
+from portfolio_backtester.style_factors_backtest import available_factor_names
 from .robustness_execution import (
     LegSimulation,
     daily_return_matrix,

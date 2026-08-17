@@ -402,7 +402,7 @@ def test_script_lifecycle_routes_alpha_research_scripts_to_alpha_owner() -> None
     manifest = _load_json_doc("docs/script-lifecycle.yml")
     records = {record["path"]: record for record in manifest["records"]}
 
-    removal_condition = records["src/style_factors/style_factor_attribution.py"][
+    removal_condition = records["strategy-research/style_factors/style_factor_attribution.py"][
         "removal_condition"
     ]
     assert "alpha-research" in removal_condition

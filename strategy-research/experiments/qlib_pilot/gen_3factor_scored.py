@@ -17,10 +17,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
-
-from style_factors.factor_calc import compute_factors
+from alpha_research.style_factors import compute_factors
 from style_factors.workflow import (
     load_cashflow,
     load_fina_indicator,

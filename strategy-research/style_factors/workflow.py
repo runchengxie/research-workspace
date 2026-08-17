@@ -25,7 +25,7 @@ from .data import (
     load_moneyflow_ths,
     load_sw_industry_membership,
 )
-from .factor_backtest import (
+from portfolio_backtester.style_factors_backtest import (
     build_factor_returns,
     build_quantile_portfolio_returns,
     compute_factor_correlations,
@@ -33,7 +33,7 @@ from .factor_backtest import (
     compute_yearly_breakdown,
     get_rebalance_dates,
 )
-from .factor_calc import VALUE_CLUSTER_COL, compute_factors
+from alpha_research.style_factors import VALUE_CLUSTER_COL, compute_factors
 from .report import generate_report
 
 

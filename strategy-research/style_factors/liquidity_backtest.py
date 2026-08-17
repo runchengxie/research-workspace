@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .factor_backtest import build_quantile_portfolio_returns
+from portfolio_backtester.style_factors_backtest import build_quantile_portfolio_returns
 from .liquidity_signals import liquidity_signal_columns
 
 

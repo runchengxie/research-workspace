@@ -6,10 +6,10 @@ factors (incl. PIT SW-L1 industry-neutralized Value). Use --from-artifacts to
 publish an existing full-sample run without recomputation.
 
 Usage:
-  python -m src.style_factors.style_factor_attribution --out-name 20260629
-  python -m src.style_factors.style_factor_attribution \\
+  python -m style_factors.style_factor_attribution --out-name 20260629
+  python -m style_factors.style_factor_attribution \\
     --strategy-csv returns.csv --strategy-name strategy --out-name 20260629
-  python -m src.style_factors.style_factor_attribution \\
+  python -m style_factors.style_factor_attribution \\
     --out-name 20260730-full-value --from-artifacts artifacts/style_analysis_2008
 """
 

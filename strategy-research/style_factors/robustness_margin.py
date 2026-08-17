@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from .factor_backtest import compute_summary
+from portfolio_backtester.style_factors_backtest import compute_summary
 
 
 def margin_comparison_frame(

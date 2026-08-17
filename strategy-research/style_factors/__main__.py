@@ -2,10 +2,10 @@
 
 Usage:
     export DATA_PLATFORM_ROOT=/path/to/market-data-platform
-    python -m src.style_factors --outdir artifacts/style_analysis
+    python -m style_factors --outdir artifacts/style_analysis
 
     # Strategy attribution:
-    python -m src.style_factors --strategy-csv returns.csv --strategy-name strategy
+    python -m style_factors --strategy-csv returns.csv --strategy-name strategy
 """
 
 from __future__ import annotations

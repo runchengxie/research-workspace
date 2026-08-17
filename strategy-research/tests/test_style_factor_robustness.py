@@ -7,28 +7,28 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.style_factors.factor_calc import _overlay_formation_fundamentals
-from src.style_factors.robustness_backtest import (
+from alpha_research.style_factors import _overlay_formation_fundamentals
+from style_factors.robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,
 )
-from src.style_factors.robustness_constraints import (
+from style_factors.robustness_constraints import (
     apply_explicit_suspensions,
     load_reported_borrow_activity_eligibility,
     load_st_event_evidence,
 )
-from src.style_factors.robustness_data import (
+from style_factors.robustness_data import (
     _normalize_trade_dates,
     _require_unique,
 )
-from src.style_factors.robustness_execution import (
+from style_factors.robustness_execution import (
     attempt_pending_orders,
     simulate_leg,
     terminal_event_positions,
 )
-from src.style_factors.robustness_gate import CORE_FACTORS, evaluate_promotion_gate
-from src.style_factors.robustness_report import _interpretation_guardrail_lines
-from src.style_factors.robustness_sources import (
+from style_factors.robustness_gate import CORE_FACTORS, evaluate_promotion_gate
+from style_factors.robustness_report import _interpretation_guardrail_lines
+from style_factors.robustness_sources import (
     expand_st_intervals,
     sha256_file,
 )

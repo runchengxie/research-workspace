@@ -20,7 +20,14 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-
+from alpha_research.style_factors import compute_factors
+from portfolio_backtester import (
+    SelectionSpec,
+    attach_entry_dates,
+    build_targets,
+    combine_targets,
+    target_turnover,
+)
 from portfolio_backtester.execution_sim import (
     SELL_UNTIL_NEXT_REBALANCE,
     ExecutionSimConfig,
@@ -31,15 +38,6 @@ from style_factors.data import (
     load_fina_indicator,
     load_sw_industry_membership,
 )
-from style_factors.factor_calc import compute_factors
-from portfolio_backtester import (
-    SelectionSpec,
-    attach_entry_dates,
-    build_targets,
-    combine_targets,
-    target_turnover,
-)
-
 
 RAW_DAILY = "assets/tushare/a_share/daily/a_share_all_daily_latest/data"
 RAW_BASIC = "assets/tushare/a_share/daily_basic/a_share_all_daily_basic_latest/data"

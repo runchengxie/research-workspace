@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from src.research_contracts import read_artifact_envelope, validate_file_receipts
-from src.style_factors.style_factor_attribution import (
+from style_factors.style_factor_attribution import (
     REQUIRED_STYLE_FILES,
     STYLE_ARTIFACT_SCHEMA_VERSION,
     _validate_out_name,

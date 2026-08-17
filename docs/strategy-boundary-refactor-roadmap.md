@@ -26,7 +26,7 @@
 - `strategy-app` 的类型门禁已恢复全绿：R4 迁移带入的 21 个 `ty` 诊断和 wheel smoke 的 campaign spec 漏登记已修复，完整门禁通过（`scripts/dev/check.py`）。
 - pipeline 的候选 OOS 职责已下沉 owner：`daily_watch20_candidate_oos.py` 已重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征组装与候选池在 `market-data-platform`（`DailyWatch20CandidatePool`）与 `alpha-research`，滚动评分在 `alpha_research.daily_watch20_oos.score_rolling_oos`，策略比较/场景评估在 `strategy_app.daily_watch20.daily_watch20_candidate_oos.evaluate_candidate_pool_oos`（含 FULL_MARKET/THS_HOT_EQUAL/THS_HOT_MODEL 场景），通用统计在 `alpha_research.metrics`（`metrics.py` 已在 #66 删除），benchmark 区间收益已在 #67 删除并改向 `portfolio-backtester`。pipeline 不再有 benchmark 与通用统计运行时实现。`final_oos_stage.py` 仅做编排与状态汇总，符合控制面定位。
 - pipeline 的跨仓库 contract 说明、综合指标文档和全量输出参考仍需按 owner 拆分。
-- 顶层 `src/style_factors` 的行业平衡袖套组合构造已迁入 `portfolio-backtester`（`industry_sleeves`），因子计算与数据加载仍留在工作区。`style_factors` 整体是否进入 alpha 或 portfolio owner 尚未形成最终决策。
+- `style_factors` 研究包已完成归属拆分（切片 7）：因子计算内核（`factor_calc` + `helpers`）迁入 `alpha-research.style_factors`，分位数多空回测内核（`factor_backtest`）迁入 `portfolio_backtester.style_factors_backtest`，呈现/研究层（`charts`/`report`/`workflow`/`attribution`/`robustness_*`/`liquidity_*`/`loaders`/`data`）作为研究脚本整体迁入 `strategy-research/style_factors`（随根仓跟踪，非独立子模块）。根仓原 `src/style_factors` 已删除。
 
 以上行数是 2026-08-16 的盘点基线，不是目标配额。后续以删除错误归属、重复实现和兼容层为目标，不能通过移动测试或压缩格式制造体量下降。
 
@@ -55,7 +55,7 @@ strategy-pipeline
 | R1 策略目录 | 已完成 | 建立七个策略族的权威目录、生命周期字段和 ADR-0006 | 人可从 `strategy-research` 找到策略、代码、证据和迁移债务 |
 | R2 pipeline 改名切换 | 已完成 | 更新依赖、Git pin、导入、类型配置、wheel smoke、活动文档和测试名称 | clean clone 只安装 `strategy-app` 0.2.x，活动代码不再导入 `research_apps` |
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
-| R4 通用能力归位 | 进行中 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，候选 OOS 职责已下沉 owner（`daily_watch20_candidate_oos.py` 重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征/滚动评分/策略比较分别在 `market-data-platform`、`alpha-research`、`strategy-app`），剩余 `style_factors` 因子计算与数据加载最终 owner 归属未定（切片 7） | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
+| R4 通用能力归位 | 已完成 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，候选 OOS 职责已下沉 owner（`daily_watch20_candidate_oos.py` 重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征/滚动评分/策略比较分别在 `market-data-platform`、`alpha-research`、`strategy-app`），`style_factors` 切片 7 已收口：因子计算内核迁 `alpha-research.style_factors`（PR①），分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`（PR②），呈现/研究层整包迁 `strategy-research/style_factors`（PR③），根仓 `src/style_factors` 已删除 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
 | R6 控制面收口 | 进行中 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68）。剩余 `strategy-app` 未合并分支 `agent/update-daily-watch20-deps-20260817`（#28 类型修复 + 依赖 pin）合并并刷新 gitlink 后，跑六子模块 + 根统一门禁、清理临时分支即收口 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
@@ -93,7 +93,7 @@ owner 仓补齐公开 API
 | 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | 已完成：脚本已迁 `strategy-research/experiments/next_open_to_high/`，pipeline 无残留 |
 | 5 | D11-H5 | 模型与信号进 `alpha-research`，目标构造与袖套回放进 `portfolio-backtester` | 已推进：contract/model/artifact 迁入 strategy-app，shadow runner 壳留 pipeline |
 | 6 | 红利与成长 ETF 动量 | 通用回测进 `portfolio-backtester`，策略配置与报告组合进 `strategy-app` | 已完成：四模块迁入 strategy-app，研究 runner 改向 |
-| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester` | 因子计算、数据加载与报告仍在 `style_factors`，待最终 owner 决策 |
+| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`；因子计算内核迁 `alpha-research.style_factors`，分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`，呈现/研究层整包迁 `strategy-research/style_factors` | 已完成：根仓 `src/style_factors` 已删除，调用方（qlib_pilot 等）改向子模块内核，R4 切片 7 收口 |
 
 迁移一个切片时同时迁移测试。pipeline 只保留 runner、provider adapter、操作员门禁、运行目录、原子发布与 `targets.json` 生成测试。
 
@@ -131,4 +131,4 @@ owner 仓补齐公开 API
 
 ## 下次继续的起点
 
-下一次推进 R4 收尾：把 pipeline 剩余的策略计算下沉到 owner。已完成项：`metrics.py` 已在 #66 下沉 `alpha-research`，`benchmarking.py` 已在 #67 删除并改向 `portfolio-backtester`，候选 OOS 职责（`daily_watch20_candidate_oos.py` 已重构为 `pipeline/final_oos_stage.py` 编排壳，特征/滚动评分/策略比较已分别在 `market-data-platform`、`alpha-research`、`strategy-app`）已下沉 owner。剩余重点对象只有 `style_factors` 的因子计算与数据加载最终 owner 归属（见切片 7，仍未定）。候选池 v3（另一 agent 进行中）合并后，pipeline 仅保留 `final_oos_stage.py` 编排壳，刷新根仓库 gitlink 到六子模块最终一致快照，跑统一门禁，清理临时分支。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。R6 的完成标准见上文，门禁未全绿前不得标为完成。
+R4 收尾已完成：把 pipeline 剩余的策略计算下沉到 owner。`metrics.py` 已在 #66 下沉 `alpha-research`，`benchmarking.py` 已在 #67 删除并改向 `portfolio-backtester`，候选 OOS 职责（`daily_watch20_candidate_oos.py` 已重构为 `pipeline/final_oos_stage.py` 编排壳，特征/滚动评分/策略比较已分别在 `market-data-platform`、`alpha-research`、`strategy-app`）已下沉 owner，`style_factors` 切片 7 已收口（因子计算内核 → `alpha_research.style_factors`，分位数多空回测内核 → `portfolio_backtester.style_factors_backtest`，呈现/研究层 → `strategy-research/style_factors`，根仓 `src/style_factors` 删除）。pipeline 仅保留 `final_oos_stage.py` 编排壳，根仓库 gitlink 已对齐六子模块 `origin/main`。每次恢复前先重新扫描 facade 消费者、冻结哈希和远端 `main`，不要沿用本页的静态计数代替代码事实。R6 的完成标准见上文，门禁未全绿前不得标为完成。

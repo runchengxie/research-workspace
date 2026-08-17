@@ -130,7 +130,7 @@
       "removal_condition": "remove only after the owner-native namespace migration release gate moves to a versioned successor and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "src/style_factors/style_factor_attribution.py",
+      "path": "strategy-research/style_factors/style_factor_attribution.py",
       "owner": "research-workspace",
       "purpose": "Run A-share 15-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
       "lifecycle": "dev",
