@@ -238,3 +238,87 @@ def test_run_gate_on_real_repository_reports_gaps(capsys: pytest.CaptureFixture[
     assert "daily_watch20" in captured
     assert "结论" in captured
     assert gate._run_gate(["--json"]) == 0
+
+
+def test_known_gap_waiver_blocks_on_unregistered_gap(tmp_path: Path) -> None:
+    """A non-production strategy must register every missing check.
+
+    Registered known gaps do not block ``--strict``; an unregistered missing
+    check does. This guards against gaps being silently dropped from the bundle.
+    """
+    policy = {
+        "schema_version": "strategy_evidence_policy.v1",
+        "checks": {
+            "pit": {"name": "时间点数据", "evidence_keys": ["pit_universe"]},
+            "cost": {"name": "交易成本", "evidence_keys": ["cost_bps"]},
+        },
+        "required_by_lifecycle": {"pre_production": ["pit", "cost"]},
+    }
+    catalog = {
+        "strategies": [
+            {"id": "s", "lifecycle": "pre_production", "production_eligible": False},
+        ]
+    }
+    root = tmp_path
+    (root / "strategy-research").mkdir(parents=True)
+    (root / "strategy-research" / "evidence_policy.json").write_text(
+        json.dumps(policy), encoding="utf-8"
+    )
+    (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir.mkdir(parents=True)
+
+    # Both required checks missing, pit registered as a known gap, cost not.
+    unregistered = {
+        "schema_version": "strategy_evidence_bundle.v1",
+        "strategy_id": "s",
+        "checks": {
+            "pit": {"outcome": "missing", "evidence": None},
+            "cost": {"outcome": "missing", "evidence": None},
+        },
+        "known_gaps": ["pit: 未提供时间点数据证据"],
+    }
+    (bundle_dir / "s.json").write_text(json.dumps(unregistered), encoding="utf-8")
+    assert gate._run_gate(["--root", str(root), "--strict"]) == 1
+
+    # Now cost is also registered: fully waived, strict gate passes.
+    fully_waived = dict(unregistered)
+    fully_waived["known_gaps"] = [
+        "pit: 未提供时间点数据证据",
+        "cost: 未提供交易成本证据",
+    ]
+    (bundle_dir / "s.json").write_text(json.dumps(fully_waived), encoding="utf-8")
+    assert gate._run_gate(["--root", str(root), "--strict"]) == 0
+
+
+def test_production_strategy_cannot_waive_gaps(tmp_path: Path) -> None:
+    """A production-eligible strategy must close every required check."""
+    policy = {
+        "schema_version": "strategy_evidence_policy.v1",
+        "checks": {"pit": {"name": "时间点数据", "evidence_keys": ["pit_universe"]}},
+        "required_by_lifecycle": {"operational": ["pit"]},
+    }
+    catalog = {
+        "strategies": [
+            {"id": "s", "lifecycle": "operational", "production_eligible": True},
+        ]
+    }
+    root = tmp_path
+    (root / "strategy-research").mkdir(parents=True)
+    (root / "strategy-research" / "evidence_policy.json").write_text(
+        json.dumps(policy), encoding="utf-8"
+    )
+    (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir.mkdir(parents=True)
+    bundle = {
+        "schema_version": "strategy_evidence_bundle.v1",
+        "strategy_id": "s",
+        "checks": {"pit": {"outcome": "missing", "evidence": None}},
+        "known_gaps": ["pit: 未提供时间点数据证据"],
+    }
+    (bundle_dir / "s.json").write_text(json.dumps(bundle), encoding="utf-8")
+    result = gate._evaluate(catalog["strategies"][0], policy, bundle, require_lifecycle=None)
+    assert result.production_eligible is True
+    assert result.verdict is False
+    assert gate._run_gate(["--root", str(root), "--strict"]) == 1

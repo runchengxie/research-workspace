@@ -1,0 +1,63 @@
+{
+  "schema_version": "strategy_evidence_bundle.v1",
+  "strategy_id": "hotsector",
+  "as_of": "2026-08-17",
+  "source_policy": "strategy-research/evidence_policy.json",
+  "catalog_lifecycle": "research_shadow",
+  "production_eligible": false,
+  "notes": "热点板块选股的研究证据来自 strategy-app 的多臂回顾回执。回执明确 research_only=true、eligible_for_live=false、strict_point_in_time=false，与 catalog 的 research_shadow + production_eligible=false 一致，无治理不一致。本包如实登记已通过项与已知缺口。",
+  "checks": {
+    "pit": {
+      "outcome": "partial",
+      "evidence": "strategy-app/docs/research/evidence/hotsector-numeric-v2-retrospective-receipt-20260717.json",
+      "pit_universe": false,
+      "pit_fundamentals": false,
+      "pit_industry_membership": false,
+      "detail": "回执 strict_point_in_time=false，未启用 PIT 时间点约束。"
+    },
+    "walk_forward": {
+      "outcome": "pass",
+      "evidence": "strategy-app/docs/research/evidence/hotsector-numeric-v2-retrospective-receipt-20260717.json",
+      "window_count": 1,
+      "metric": "retrospective_replay"
+    },
+    "benchmark_matrix": {
+      "outcome": "pending",
+      "evidence": "strategy-app/docs/research/evidence/hotsector-numeric-v2-retrospective-receipt-20260717.json",
+      "axes": [],
+      "detail": "多臂回顾缺少跨股票池/周期/状态的统一考试表。"
+    },
+    "cost": {
+      "outcome": "pending",
+      "evidence": "strategy-app/docs/research/evidence/hotsector-numeric-v2-retrospective-receipt-20260717.json",
+      "cost_bps": null,
+      "turnover": null
+    },
+    "final_oos": {
+      "outcome": "pending",
+      "evidence": null,
+      "oos_start": null,
+      "metric": null
+    },
+    "cpcv": {
+      "outcome": "pending",
+      "evidence": null,
+      "n_groups": null,
+      "test_groups": null
+    },
+    "regime": {
+      "outcome": "pending",
+      "evidence": null,
+      "regimes": [],
+      "metric": null
+    }
+  },
+  "known_gaps": [
+    "pit: 回执 strict_point_in_time=false，未启用 PIT 时间点约束",
+    "benchmark_matrix: 缺少跨维度统一考试表",
+    "cost: 未记录多成本假设下的换手与收益",
+    "final_oos: 无最终样本外或书面替代",
+    "cpcv: 未做组合对称交叉验证",
+    "regime: 未按市场状态分别报告表现"
+  ]
+}

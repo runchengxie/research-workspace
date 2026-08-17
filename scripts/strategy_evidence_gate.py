@@ -18,7 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -37,6 +37,28 @@ class StrategyResult:
     present: list[str]
     missing: list[str]
     verdict: bool
+    known_gaps_waived: bool = False
+    unregistered_gaps: list[str] = field(default_factory=list)
+    production_eligible: bool = False
+
+
+def _normalize_gap_keys(known_gaps: Any) -> set[str]:
+    """Collect the check keys referenced by a bundle's known_gaps entries.
+
+    Each known_gaps string is expected to start with ``"<check>:`` so that the
+    gate can match it against a missing requirement. Plain strings without a
+    colon are treated as free-form notes and ignored for matching.
+    """
+    if not isinstance(known_gaps, list):
+        return set()
+    keys: set[str] = set()
+    for item in known_gaps:
+        if not isinstance(item, str):
+            continue
+        head = item.split(":", 1)[0].strip()
+        if head:
+            keys.add(head)
+    return keys
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -124,13 +146,27 @@ def _evaluate(
             present.append(key)
         else:
             missing.append(key)
+
+    production_eligible = bool(strategy.get("production_eligible", False))
+    known_gap_keys = _normalize_gap_keys(bundle.get("known_gaps") if bundle else None)
+    waived = [key for key in missing if key in known_gap_keys]
+    unregistered = [key for key in missing if key not in known_gap_keys]
+
+    # A non-production strategy may carry explicitly registered known gaps
+    # without blocking the strict gate; production strategies must close every
+    # required check, so any missing item (registered or not) stays a hard fail.
+    known_gaps_waived = bool(waived) and not unregistered and not production_eligible
+    verdict = not missing if production_eligible else (not unregistered)
     return StrategyResult(
         strategy_id=str(strategy["id"]),
         lifecycle=lifecycle,
         required=required,
         present=present,
         missing=missing,
-        verdict=not missing,
+        verdict=verdict,
+        known_gaps_waived=known_gaps_waived,
+        unregistered_gaps=unregistered,
+        production_eligible=production_eligible,
     )
 
 
@@ -142,10 +178,12 @@ def _render_table(results: list[StrategyResult]) -> str:
             "通过" if result.verdict else "未通过",
             f"{len(result.present)}/{len(result.required)}",
             ",".join(result.missing) if result.missing else "-",
+            "已知缺口豁免" if result.known_gaps_waived else "-",
+            ",".join(result.unregistered_gaps) if result.unregistered_gaps else "-",
         )
         for result in results
     ]
-    headers = ("策略", "生命周期", "结论", "检查", "缺失")
+    headers = ("策略", "生命周期", "结论", "检查", "缺失", "豁免", "未登记缺口")
     widths = [
         max(len(headers[index]), *(len(row[index]) for row in rows))
         for index in range(len(headers))
@@ -169,6 +207,9 @@ def _as_json(results: list[StrategyResult]) -> str:
                 "present": result.present,
                 "missing": result.missing,
                 "verdict": result.verdict,
+                "production_eligible": result.production_eligible,
+                "known_gaps_waived": result.known_gaps_waived,
+                "unregistered_gaps": result.unregistered_gaps,
             }
             for result in results
         ],
@@ -259,7 +300,17 @@ def _run_gate(argv: list[str]) -> int:
     else:
         print(_render_table(results))
 
-    failed = any(not result.verdict for result in results)
+    # The strict gate blocks on:
+    # - any *unregistered* gap (a missing check a non-production strategy has
+    #   not explicitly listed in its evidence bundle), and
+    # - any missing check on a production-eligible strategy (which must keep
+    #   every required check closed, even if the gap is registered).
+    # Registered known gaps on non-production strategies are reported but do not
+    # block, so the gate stays honest without freezing everyday pushes.
+    failed = any(
+        result.unregistered_gaps or (result.production_eligible and result.missing)
+        for result in results
+    )
     if failed and (args.strict or args.strategy_id):
         return 1
     return 0

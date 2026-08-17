@@ -1,0 +1,73 @@
+{
+  "schema_version": "strategy_evidence_bundle.v1",
+  "strategy_id": "daily_watch20",
+  "as_of": "2026-08-17",
+  "source_policy": "strategy-research/evidence_policy.json",
+  "catalog_lifecycle": "research_shadow",
+  "production_eligible": false,
+  "notes": "本证据包如实记录 DailyWatch20 截至 2026-08-17 的真实研究证据状态。底层 A 股研究证据（docs/evidence/a-share-*.json）明确标注 capacity 与 turnover/cost 为 pending、final OOS 为书面替代、券商实盘能力关闭，且 a-share-candidate-signal-audit 判定为 research_only、automatic_promotion_allowed=false。因此 catalog 已将该策略从 operational 校正为 research_shadow，production_eligible 改为 false。任何 outcome 非 pass 的检查都进入 known_gaps，由策略证据门禁在 --strict 下强制登记而不静默漂移。",
+  "checks": {
+    "pit": {
+      "outcome": "partial",
+      "evidence": "docs/evidence/a-share-readiness-evidence-20260601.json",
+      "pit_universe": true,
+      "pit_fundamentals": false,
+      "pit_industry_membership": true,
+      "detail": "research_profile.universe.mode=pit 已启用，但 statement_features_enabled=false；历史行业 membership 启用、historical_backtest_enabled=false。"
+    },
+    "walk_forward": {
+      "outcome": "pass",
+      "evidence": "docs/evidence/a-share-cpcv-20260601.json",
+      "window_count": 15,
+      "metric": "sharpe_median"
+    },
+    "benchmark_matrix": {
+      "outcome": "pass",
+      "evidence": "docs/evidence/a-share-benchmark-ladder-20260601.json",
+      "axes": ["universe", "horizon"],
+      "cells": [
+        {"universe": "a_share_all_equalw", "horizon": "h5", "regime": "mixed", "cost_bps": 0, "sharpe": 1.0},
+        {"universe": "a_share_top800", "horizon": "h20", "regime": "mixed", "cost_bps": 0, "sharpe": 0.9}
+      ]
+    },
+    "cost": {
+      "outcome": "pending",
+      "evidence": "docs/evidence/a-share-turnover-cost-20260601.json",
+      "cost_bps": 30,
+      "turnover": 0.85,
+      "detail": "短窗口换手与成本已记录，长窗口压力证据仍为 pending。"
+    },
+    "final_oos": {
+      "outcome": "substitute",
+      "evidence": "docs/evidence/a-share-final-oos-substitute-20260601.json",
+      "oos_start": null,
+      "metric": null,
+      "detail": "当前仅以 walk-forward 与 CPCV 替代；书面替代明确声明不构成生产级。"
+    },
+    "cpcv": {
+      "outcome": "pass",
+      "evidence": "docs/evidence/a-share-cpcv-20260601.json",
+      "n_groups": 6,
+      "test_groups": 2,
+      "metric": "sharpe_median"
+    },
+    "regime": {
+      "outcome": "pending",
+      "evidence": "docs/evidence/a-share-readiness-evidence-20260601.json",
+      "regimes": [],
+      "metric": null,
+      "detail": "尚未按牛市/熊市/震荡市分别报告表现。"
+    }
+  },
+  "known_gaps": [
+    "cost: 长窗口成本压力证据 pending（a-share-turnover-cost-20260601.json status=pending）",
+    "regime: 未按市场状态分别报告（缺失分状态表现证据）",
+    "final_oos: 以书面替代声明代替真实最终样本外，不构成生产级",
+    "pit: 财务报表 PIT 未启用（statement_features_enabled=false）",
+    "capacity: 容量评估 pending（仅 operational 阶段要求，当前 research_shadow 不强制）",
+    "pbo: 回测过拟合概率未估计（仅 operational 阶段要求）",
+    "dsr: 多重检验调整未做（仅 operational 阶段要求）",
+    "negative_controls: 阴性对照未做（仅 operational 阶段要求）",
+    "execution_deviation: 实盘偏差证据缺失，券商交易 operational_approval=false（仅 operational 阶段要求）"
+  ]
+}

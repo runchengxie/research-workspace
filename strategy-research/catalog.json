@@ -6,8 +6,8 @@
     {
       "id": "daily_watch20",
       "name": "DailyWatch20",
-      "lifecycle": "operational",
-      "production_eligible": true,
+      "lifecycle": "research_shadow",
+      "production_eligible": false,
       "human_spec": "strategy-research/strategies/daily_watch20/README.md",
       "executable_owners": [
         "strategy-app",
