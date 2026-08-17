@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-11",
+  "_last_changed": "2026-08-17",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -13,8 +13,8 @@
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 40,
-        "max_long_functions": 76,
+        "max_large_files": 41,
+        "max_long_functions": 77,
         "max_complexity_hotspots": 40,
         "max_large_classes": 1
       },
@@ -37,9 +37,9 @@
         "max_large_classes": 0
       },
       "strategy-pipeline": {
-        "max_large_files": 35,
-        "max_long_functions": 121,
-        "max_complexity_hotspots": 66,
+        "max_large_files": 29,
+        "max_long_functions": 111,
+        "max_complexity_hotspots": 58,
         "max_large_classes": 1
       },
       "quant-execution-engine": {
@@ -78,8 +78,8 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 40,
-      "max_long_functions": 76,
+      "max_large_files": 41,
+      "max_long_functions": 77,
       "max_complexity_hotspots": 40,
       "max_large_classes": 1,
       "owner_decision": [
@@ -93,7 +93,8 @@
         "2026-08-04: 日频清洗内存优化、全仓格式整理和严格类型修正完成后重算基线，large_files 实测由 38 调整为 39。热点清单未新增优先重构对象，预算按当前测量结果同步。",
         "2026-08-10: mirror-a-share-index-daily 新增 _adapters_part03 与测试后重算基线，large_files 39->41、long_functions 75->76（新功能测量性增长，已在 accepted_hotspots 登记 _adapters_part03）。",
         "2026-08-10: 同步根仓 baseline-20260719-ty.json（index-daily mirror 合并后真实计数），large_files/long_functions 维持 41/76，complexity_hotspots 39->40 对齐实测（_a_share_mins_partition.py 623 行新增、tushare_minute_backfill_part02.py 542 行移除）。",
-        "2026-08-10: gitlink 同步至 dependabot 合并后的 mdp main，基线重算后 large_files 41->40（ratchet 下调，非回归）。"
+        "2026-08-10: gitlink 同步至 dependabot 合并后的 mdp main，基线重算后 large_files 41->40（ratchet 下调，非回归）。",
+        "2026-08-17: strict-v3 增加有界稀疏 rank 证据校验与回归覆盖，large_files 40->41、long_functions 76->77。owner PR #42/#43 的完整门禁和内部 ratchet 均通过。"
       ]
     },
     {
@@ -143,9 +144,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 28,
+      "max_large_files": 29,
       "max_long_functions": 111,
-      "max_complexity_hotspots": 60,
+      "max_complexity_hotspots": 58,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -159,7 +160,8 @@
         "2026-08-04: 全仓格式整理后重算得到 121 个长函数。D11-H5 已拆分为合同、模型框架、编排和发布模块，所有相关文件低于 500 行，未增加大文件预算。长函数预算按当前测量结果由 118 调整为 121。",
         "2026-08-16: R5 去重删除 13 个 scripts/research 副本与 4 个测试，large_files 35->29 / long_functions 121->115 / complexity 66->65，预算随真实删除下调。",
         "2026-08-16: R4 迁移红利成长/D11-H5/three_arm 后计算热点下降，long_functions 115->114、complexity_hotspots 65->61。",
-        "2026-08-16: DailyWatch20 剩余家族迁出后计算热点下降，large_files 29->28、long_functions 114->111、complexity_hotspots 61->60。"
+        "2026-08-16: DailyWatch20 剩余家族迁出后计算热点下降，large_files 29->28、long_functions 114->111、complexity_hotspots 61->60。",
+        "2026-08-17: strict-v3 发布校验与当前 main 对账后，large_files 28->29、complexity_hotspots 60->58，long_functions 保持 111。owner PR #68 完整门禁通过。"
       ]
     },
     {

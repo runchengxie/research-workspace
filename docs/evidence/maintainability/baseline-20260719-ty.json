@@ -188,12 +188,12 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 297,
-      "python_loc": 89080,
+      "python_file_count": 298,
+      "python_loc": 89438,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 40,
-        "long_functions": 76,
+        "large_files": 41,
+        "long_functions": 77,
         "complexity_hotspots": 40,
         "large_classes": 1
       },
@@ -717,8 +717,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 163,
-      "python_loc": 33020,
+      "python_file_count": 164,
+      "python_loc": 33096,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
@@ -1615,13 +1615,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 372,
-      "python_loc": 83556,
+      "python_file_count": 370,
+      "python_loc": 83446,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 28,
+        "large_files": 29,
         "long_functions": 111,
-        "complexity_hotspots": 60,
+        "complexity_hotspots": 58,
         "large_classes": 1
       },
       "large_files": [
@@ -1691,12 +1691,12 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
-          "loc": 648,
+          "path": "src/strategy_pipeline/commands/run_grid.py",
+          "loc": 653,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/commands/run_grid.py",
+          "path": "src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
           "loc": 648,
           "hk_related": false
         },
@@ -1955,7 +1955,7 @@
         {
           "path": "src/strategy_pipeline/_daily_watch20_publication_validation_api.py",
           "name": "validate_strict_candidate_pool_receipt",
-          "line_count": 62,
+          "line_count": 75,
           "complexity": 21
         },
         {
@@ -1971,12 +1971,6 @@
           "complexity": 21
         },
         {
-          "path": "src/strategy_pipeline/benchmarking.py",
-          "name": "build_benchmark_series",
-          "line_count": 70,
-          "complexity": 21
-        },
-        {
           "path": "src/strategy_pipeline/pipeline/research_ops/_summarize_runs_api.py",
           "name": "run",
           "line_count": 47,
@@ -1985,7 +1979,7 @@
         {
           "path": "src/strategy_pipeline/_daily_watch20_freshness_api.py",
           "name": "_delivery_candidate_pool_reasons",
-          "line_count": 61,
+          "line_count": 65,
           "complexity": 20
         },
         {
@@ -2008,8 +2002,8 @@
         },
         {
           "path": "src/strategy_pipeline/_daily_watch20_publication_validation_core.py",
-          "name": "_validate_v2_rank_evidence",
-          "line_count": 35,
+          "name": "_validate_sparse_rank_evidence",
+          "line_count": 36,
           "complexity": 19
         },
         {
@@ -2052,6 +2046,12 @@
           "path": "src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
           "name": "run_deepseek_campaign_execution",
           "line_count": 69,
+          "complexity": 18
+        },
+        {
+          "path": "src/strategy_pipeline/commands/run_grid.py",
+          "name": "_base_grid_context",
+          "line_count": 73,
           "complexity": 18
         }
       ],
