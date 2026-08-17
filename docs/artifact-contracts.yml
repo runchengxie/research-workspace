@@ -1,11 +1,17 @@
 {
-  "_last_changed": "2026-08-17",
+  "_last_changed": "2026-08-18",
   "_owner": "research-workspace",
   "schema_version": "artifact_contracts.v1",
   "policy": {
     "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
     "shared_package_target": "research-contracts",
-    "shared_package_status": "local_workspace_package",
+    "shared_package_status": "workspace_git_subdirectory",
+    "publication": {
+      "source_repo": "research-workspace",
+      "subdirectory": "src/research_contracts",
+      "install_spec": "research-contracts @ git+https://github.com/runchengxie/research-workspace.git@<commit>#subdirectory=src/research_contracts",
+      "consumption_rule": "Producers install research-contracts from the research-workspace git subdirectory pinned to an immutable main commit. No repository may vendor a copy of the envelope schema or hash/lineage validation logic."
+    },
     "owner_rule": "The owning module defines the canonical runtime implementation; the local research-contracts package validates shared envelopes and file handoffs.",
     "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals."
   },
@@ -14,6 +20,14 @@
     "container_key": "artifact_envelope",
     "write_mode": "opt_in",
     "legacy_readers_required": true,
+    "helper_layer": "ready",
+    "adopted_by": [],
+    "adoption_pending": [
+      "signals.parquet",
+      "signals_style_replica.parquet",
+      "positions_by_rebalance.csv",
+      "targets.json"
+    ],
     "required_fields": [
       "schema_version",
       "artifact_id",
@@ -142,7 +156,8 @@
         "strategy-pipeline"
       ],
       "canonical_files": [
-        "positions_by_rebalance.csv"
+        "positions_by_rebalance.csv",
+        "positions_by_rebalance.meta.json"
       ],
       "entrypoints": [
         {
@@ -163,7 +178,7 @@
         "signal",
         "rank"
       ],
-      "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff."
+      "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff. The companion positions_by_rebalance.meta.json is the planned location for the research.artifact-envelope.v2 envelope, not yet written by the producer."
     },
     {
       "artifact": "targets.json",

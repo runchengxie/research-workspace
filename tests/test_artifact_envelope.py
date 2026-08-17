@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -13,7 +13,11 @@ sys.path.insert(0, str(ROOT / "src"))
 from research_contracts import (  # noqa: E402
     ArtifactEnvelopeV2,
     LegacyArtifactMetadata,
+    LineageInput,
+    ProducerIdentity,
     attach_artifact_envelope_v2,
+    canonical_json_sha256,
+    file_sha256,
     read_artifact_envelope,
 )
 
@@ -97,3 +101,117 @@ def test_datetime_objects_are_accepted_only_when_timezone_aware() -> None:
 
     with pytest.raises(ValueError, match="timezone-aware"):
         ArtifactEnvelopeV2.from_mapping(payload)
+
+
+def _demo_envelope(
+    *,
+    content_sha256: str = "b" * 64,
+    configuration_sha256: str = "a" * 64,
+) -> ArtifactEnvelopeV2:
+    return ArtifactEnvelopeV2(
+        schema_version="research.artifact-envelope.v2",
+        artifact_id="signals-demo",
+        artifact_type="signals.parquet",
+        run_id="run-demo",
+        created_at=datetime(2026, 7, 13, 9, 30, tzinfo=timezone(timedelta(hours=8))),
+        producer=ProducerIdentity(
+            repository="alpha-research",
+            version="0.4.0",
+            commit="0123456789abcdef",
+            backend="native",
+        ),
+        configuration_sha256=configuration_sha256,
+        content_sha256=content_sha256,
+        lineage=(LineageInput("research_features.parquet", "c" * 64),),
+    )
+
+
+def test_v2_content_hash_and_config_hash_round_trip_verified() -> None:
+    core = {"contract": "alpha_research.signals metadata", "file": "signals.parquet", "rows": 2}
+    content_hash = canonical_json_sha256(core)
+    config_hash = canonical_json_sha256({"model_version": "ridge:demo"})
+
+    migrated = attach_artifact_envelope_v2(
+        core,
+        _demo_envelope(content_sha256=content_hash, configuration_sha256=config_hash),
+    )
+    result = read_artifact_envelope(migrated)
+
+    assert isinstance(result, ArtifactEnvelopeV2)
+    assert result.content_sha256 == content_hash == canonical_json_sha256(core)
+    assert result.configuration_sha256 == config_hash
+    assert result.content_sha256 != result.configuration_sha256
+
+
+def test_v2_timestamp_round_trips_iso8601_with_utc_offset() -> None:
+    envelope = _demo_envelope()
+
+    payload = envelope.to_mapping()
+    result = ArtifactEnvelopeV2.from_mapping(payload)
+
+    assert result.created_at == envelope.created_at
+    assert result.created_at.tzinfo is not None
+    assert result.created_at.utcoffset() == timedelta(hours=8)
+    assert result.to_mapping()["created_at"] == "2026-07-13T09:30:00+08:00"
+
+
+def test_v2_lineage_and_producer_identity_round_trip() -> None:
+    envelope = _demo_envelope()
+
+    result = ArtifactEnvelopeV2.from_mapping(envelope.to_mapping())
+
+    assert result.lineage == (LineageInput("research_features.parquet", "c" * 64),)
+    assert result.producer.repository == "alpha-research"
+    assert result.producer.version == "0.4.0"
+    assert result.producer.commit == "0123456789abcdef"
+    assert result.producer.backend == "native"
+    assert result.producer.backend_version is None
+
+
+def test_v2_content_hash_matches_written_file(tmp_path) -> None:
+    artifact_path = tmp_path / "signals.parquet"
+    artifact_path.write_bytes(b"demo-parquet-bytes")
+
+    envelope = _demo_envelope(content_sha256=file_sha256(artifact_path))
+    migrated = attach_artifact_envelope_v2({"file": artifact_path.name}, envelope)
+
+    result = read_artifact_envelope(migrated)
+    assert isinstance(result, ArtifactEnvelopeV2)
+    assert result.content_sha256 == file_sha256(artifact_path)
+
+
+def test_v2_rejects_missing_or_invalid_lineage_entries() -> None:
+    payload = _fixture("artifact_envelope_v2.json")["artifact_envelope"]
+    assert isinstance(payload, dict)
+    payload["lineage"] = "not-a-list"
+
+    with pytest.raises(ValueError, match="lineage must be a list"):
+        ArtifactEnvelopeV2.from_mapping(payload)
+
+    payload["lineage"] = [{"artifact_id": "positions-demo", "sha256": "not-a-hash"}]
+    with pytest.raises(ValueError, match="SHA-256"):
+        ArtifactEnvelopeV2.from_mapping(payload)
+
+    payload["lineage"] = [{"artifact_id": "positions-demo"}]
+    with pytest.raises(ValueError, match="sha256"):
+        ArtifactEnvelopeV2.from_mapping(payload)
+
+
+def test_v2_producer_identity_requires_all_fields() -> None:
+    payload = _fixture("artifact_envelope_v2.json")["artifact_envelope"]
+    assert isinstance(payload, dict)
+    producer = dict(payload["producer"])  # type: ignore[arg-type]
+
+    for field in ("repository", "version", "commit", "backend"):
+        broken = dict(producer)
+        broken[field] = " "
+        payload["producer"] = broken
+        with pytest.raises(ValueError, match=field):
+            ArtifactEnvelopeV2.from_mapping(payload)
+
+
+def test_v2_missing_container_raises_when_legacy_disallowed() -> None:
+    payload = _fixture("artifact_envelope_v1.json")
+
+    with pytest.raises(ValueError, match="artifact_envelope is required"):
+        read_artifact_envelope(payload, allow_legacy=False)
