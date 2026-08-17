@@ -57,7 +57,7 @@ strategy-pipeline
 | R3 调用方改向 | 已完成 | 46 个 delegating public wrapper 已删除，调用方改向 owner API，provenance 升级 v2 | 策略 owner wrapper 清零，`daily_watch20_fundamental_shadow` 保留为研究实现，不新增替代兼容层 |
 | R4 通用能力归位 | 已完成 | `date_utils` 已委托 `alpha-research`，DailyWatch20 全家族、红利成长、D11-H5、热点板块全子批次已迁 owner，通用统计（`metrics.py`）已在 #66 下沉 `alpha-research`，benchmark 区间收益已在 #67 下沉 `portfolio-backtester`，候选 OOS 职责已下沉 owner（`daily_watch20_candidate_oos.py` 重构为 `pipeline/final_oos_stage.py` 纯编排壳，特征/滚动评分/策略比较分别在 `market-data-platform`、`alpha-research`、`strategy-app`），`style_factors` 切片 7 已收口：因子计算内核迁 `alpha-research.style_factors`（PR①），分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`（PR②），呈现/研究层整包迁 `strategy-research/style_factors`（PR③），根仓 `src/style_factors` 已删除 | pipeline 不再维护模型、通用统计、组合会计、成本或执行回放 |
 | R5 重复内容清理 | 已完成 | 13 个重复研究脚本、9 份冻结研究文档副本已删除，pipeline 的 `metrics.md`、`full-reference.md`、`benchmark-protocol.md` 已改为 owner 索引 | 每个活动脚本或说明只有一个维护位置，owner 文档为权威，历史哈希与回执仍可验证 |
-| R6 控制面收口 | 进行中 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68）。剩余 `strategy-app` 未合并分支 `agent/update-daily-watch20-deps-20260817`（#28 类型修复 + 依赖 pin）合并并刷新 gitlink 后，跑六子模块 + 根统一门禁、清理临时分支即收口 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
+| R6 控制面收口 | 已完成 | import/source 边界已收紧，体量基线、版本清单和发布证据已刷新，catalog 迁移债务已清理，strategy-app 类型门禁已恢复全绿（2026-08-16），benchmark 抽离已在 #67 合并（pipeline 无 benchmark 运行时实现），`style_factors` 切片 7 已收口（PR①/②/③），根仓库 gitlink 已对齐六子模块 `origin/main`（无漂移，含 #66/#67/#68 与 style_factors 迁移的 alpha-research/portfolio-backtester 提交）。六子模块 + 根统一门禁全绿，临时分支已清理 | pipeline 只剩控制面职责，全工作区严格门禁通过 |
 
 ## R2：先完成 pipeline 改名切换
 
