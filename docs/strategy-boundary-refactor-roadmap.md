@@ -93,7 +93,7 @@ owner 仓补齐公开 API
 | 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | 已完成：脚本已迁 `strategy-research/experiments/next_open_to_high/`，pipeline 无残留 |
 | 5 | D11-H5 | 模型与信号进 `alpha-research`，目标构造与袖套回放进 `portfolio-backtester` | 已推进：contract/model/artifact 迁入 strategy-app，shadow runner 壳留 pipeline |
 | 6 | 红利与成长 ETF 动量 | 通用回测进 `portfolio-backtester`，策略配置与报告组合进 `strategy-app` | 已完成：四模块迁入 strategy-app，研究 runner 改向 |
-| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`；因子计算内核迁 `alpha-research.style_factors`，分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`，呈现/研究层整包迁 `strategy-research/style_factors` | 已完成：根仓 `src/style_factors` 已删除，调用方（qlib_pilot 等）改向子模块内核，R4 切片 7 收口 |
+| 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`。因子计算内核迁 `alpha-research.style_factors`，分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`，呈现/研究层整包迁 `strategy-research/style_factors` | 已完成：根仓 `src/style_factors` 已删除，调用方（qlib_pilot 等）改向子模块内核，R4 切片 7 收口 |
 
 迁移一个切片时同时迁移测试。pipeline 只保留 runner、provider adapter、操作员门禁、运行目录、原子发布与 `targets.json` 生成测试。
 
