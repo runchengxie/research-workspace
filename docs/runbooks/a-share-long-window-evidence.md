@@ -185,6 +185,24 @@ python src/research_contracts/a_share_readiness.py \
   --pretty
 ```
 
+## 证据缺口三态登记表（E2 进度快照）
+
+> 状态口径：本表为缺口登记，不是晋级结论。三态含义：`命令就绪` 表示 runbook 命令与变体配置已落地，
+> `数据就绪` 表示依赖的 current 资产与清单已发布，`计算未跑` 表示实际长窗口回测尚未执行，证据未生成。
+> 任何状态不得标 `passed`，除非对应 `docs/evidence/a-share-*.json` 真实出现该结论（E1 门禁约束）。
+
+| 证据项 | 命令就绪 | 数据就绪 | 计算未跑 | 缺口说明 |
+| --- | --- | --- | --- | --- |
+| benchmark-ladder | 是 | 是 | 是 | 基准阶梯需按变体 `a_share_long_window.yml`（20150101 起）重跑 |
+| feature-evidence | 是 | 是 | 是 | 特征证据需覆盖长窗口样本，当前仅短窗口基线 |
+| cpcv | 是 | 是 | 是 | CPCV 需长窗口折叠重采样，未执行 |
+| promotion-gate | 是 | 是 | 是 | 晋级门禁命令就绪，但前置证据全为 pending 时不触发晋级 |
+| capacity | 是 | 是 | 是 | 容量压力证据 `docs/evidence/a-share-*.json` 仍 `pending`（roadmap E2） |
+| turnover-cost | 是 | 是 | 是 | 成本压力证据 `docs/evidence/a-share-*.json` 仍 `pending`（roadmap E2） |
+| final-oos | 是 | 是 | 是 | 最终样本外 `daily_watch20` 的 `final_oos` 非 pass，属客观事实 |
+
+登记基准日：2026-08-19。三态随实际 run 输出更新，不得在未跑计算时预填 `passed`。
+
 ## 命令核对引用
 
 每条证据命令完成后记录三项内容：
