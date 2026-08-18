@@ -162,11 +162,14 @@ class ArtifactEnvelopeV2:
     content_sha256: str
     lineage: tuple[LineageInput, ...] = ()
     target_handoff: TargetHandoffContext | None = None
+    write_mode: str = "opt_in"
     schema_version: str = ARTIFACT_ENVELOPE_SCHEMA_VERSION
 
     def __post_init__(self) -> None:
         if self.schema_version != ARTIFACT_ENVELOPE_SCHEMA_VERSION:
             raise ValueError(f"unsupported artifact envelope schema {self.schema_version!r}")
+        if self.write_mode != "opt_in":
+            raise ValueError("artifact envelope write_mode must be opt_in")
         _required_text(self.artifact_id, "artifact_id")
         _required_text(self.artifact_type, "artifact_type")
         _required_text(self.run_id, "run_id")
@@ -213,6 +216,7 @@ class ArtifactEnvelopeV2:
             content_sha256=_sha256(payload.get("content_sha256"), "content_sha256"),
             lineage=lineage,
             target_handoff=target_handoff,
+            write_mode=payload.get("write_mode", "opt_in"),
         )
 
     def to_mapping(self) -> dict[str, Any]:
@@ -226,6 +230,7 @@ class ArtifactEnvelopeV2:
             "configuration_sha256": self.configuration_sha256,
             "content_sha256": self.content_sha256,
             "lineage": [item.to_mapping() for item in self.lineage],
+            "write_mode": self.write_mode,
         }
         if self.target_handoff is not None:
             result["target_handoff"] = self.target_handoff.to_mapping()
