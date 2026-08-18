@@ -152,6 +152,7 @@ python -m coverage report
 ## 文档入口
 
 - [工作区路线图](docs/roadmap.md)
+- [研究判断治理](docs/research-decision-governance.md)
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
 - [策略研究与生命周期](strategy-research/README.md)

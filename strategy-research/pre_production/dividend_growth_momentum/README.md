@@ -11,8 +11,8 @@
 
 ## 依赖与运行
 
-脚本当前消费 `strategy_pipeline.dividend_growth_momentum_*`（audit/config/report/reporting）和
-`portfolio-backtester` 的公共 API。前一组模块是已登记的迁移债务，晋级前应迁到 `strategy-app`，pipeline 不继续拥有策略研究计算。
+脚本消费 `strategy_app.research.dividend_growth_momentum`（audit/config/report/reporting）和
+`portfolio-backtester` 的公共 API。策略研究计算已迁到 `strategy-app`。
 
 ```bash
 uv run --project strategy-pipeline --extra dev \
