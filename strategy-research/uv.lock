@@ -21,6 +21,7 @@ dependencies = [
     { name = "pandas-ta" },
     { name = "pyarrow" },
     { name = "pyyaml" },
+    { name = "research-contracts" },
     { name = "research-dev-metrics" },
     { name = "scikit-learn" },
     { name = "xgboost" },
@@ -29,7 +30,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "duckdb", marker = "extra == 'dev'", specifier = ">=1.2" },
-    { name = "market-data-platform", git = "https://github.com/runchengxie/market-data-platform.git?rev=e9c49945b2679e23e38853f2ebd43980fdf0fe77" },
+    { name = "market-data-platform", git = "https://github.com/runchengxie/market-data-platform.git?rev=2e463802e88a3ab760ffb5b4d8b48879a360872c" },
     { name = "numpy", specifier = ">=1.23" },
     { name = "pandas", specifier = ">=2.0" },
     { name = "pandas-ta", specifier = ">=0.3.14b0" },
@@ -39,6 +40,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
     { name = "pyyaml", specifier = ">=6.0" },
+    { name = "research-contracts", git = "https://github.com/runchengxie/research-workspace.git?subdirectory=src%2Fresearch_contracts&rev=f28e97008b7c540730720aac82e63a2944a89b58" },
     { name = "research-dev-metrics", git = "https://github.com/runchengxie/research-dev-metrics.git?rev=e1d6e278b0645a23adb523ada9fa8d4743c2e3bf" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
     { name = "scikit-learn", specifier = ">=1.2" },
@@ -396,7 +398,7 @@ wheels = [
 [[package]]
 name = "market-data-platform"
 version = "0.2.0"
-source = { git = "https://github.com/runchengxie/market-data-platform.git?rev=e9c49945b2679e23e38853f2ebd43980fdf0fe77#e9c49945b2679e23e38853f2ebd43980fdf0fe77" }
+source = { git = "https://github.com/runchengxie/market-data-platform.git?rev=2e463802e88a3ab760ffb5b4d8b48879a360872c#2e463802e88a3ab760ffb5b4d8b48879a360872c" }
 dependencies = [
     { name = "numpy" },
     { name = "pyyaml" },
@@ -695,6 +697,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pyarrow" },
     { name = "pyyaml" },
+    { name = "research-contracts" },
     { name = "research-dev-metrics" },
     { name = "scikit-learn" },
     { name = "xgboost" },
@@ -709,6 +712,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
     { name = "pyyaml", specifier = ">=6.0" },
+    { name = "research-contracts", git = "https://github.com/runchengxie/research-workspace.git?subdirectory=src%2Fresearch_contracts&rev=f28e97008b7c540730720aac82e63a2944a89b58" },
     { name = "research-dev-metrics", git = "https://github.com/runchengxie/research-dev-metrics.git?rev=e1d6e278b0645a23adb523ada9fa8d4743c2e3bf" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
     { name = "scikit-learn", specifier = ">=1.2" },
@@ -871,7 +875,7 @@ wheels = [
 [[package]]
 name = "research-contracts"
 version = "0.1.0"
-source = { directory = "../src/research_contracts" }
+source = { git = "https://github.com/runchengxie/research-workspace.git?subdirectory=src%2Fresearch_contracts&rev=f28e97008b7c540730720aac82e63a2944a89b58#f28e97008b7c540730720aac82e63a2944a89b58" }
 
 [[package]]
 name = "research-dev-metrics"
@@ -1037,7 +1041,7 @@ requires-dist = [
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=9.0.3" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
     { name = "pyyaml", specifier = ">=6.0" },
-    { name = "research-contracts", directory = "../src/research_contracts" },
+    { name = "research-contracts", git = "https://github.com/runchengxie/research-workspace.git?subdirectory=src%2Fresearch_contracts&rev=f28e97008b7c540730720aac82e63a2944a89b58" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
     { name = "tabulate", specifier = ">=0.9" },
     { name = "ty", marker = "extra == 'dev'", specifier = ">=0.0.55" },
