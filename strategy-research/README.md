@@ -6,7 +6,7 @@
 
 | 策略或策略族 | 生命周期 | 可进入生产发布 | 人类可读说明 | 主要运行位置 |
 | --- | --- | --- | --- | --- |
-| DailyWatch20 | operational | 是 | [strategies/daily_watch20/README.md](strategies/daily_watch20/README.md) | `strategy-app`、`strategy-pipeline` |
+| DailyWatch20 | research_shadow | 否 | [strategies/daily_watch20/README.md](strategies/daily_watch20/README.md) | `strategy-app`、`strategy-pipeline` |
 | 热点板块选股 | research_shadow | 否 | [strategies/hotsector/README.md](strategies/hotsector/README.md) | `strategy-app`、`strategy-pipeline`、外部 `market-intel` |
 | StyleReplica A80/B20 | operational_research | 否 | [strategies/style_replica/README.md](strategies/style_replica/README.md) | `strategy-research/style_factors`（`python -m style_factors`）、`strategy-pipeline` |
 | D11-H5 五袖套 | shadow | 否 | [strategies/d11_h5_shadow/README.md](strategies/d11_h5_shadow/README.md) | `alpha-research`、`portfolio-backtester`、`strategy-pipeline` |
