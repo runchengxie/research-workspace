@@ -12,7 +12,7 @@
 
 本页状态口径以机器账本和当前代码/测试为唯一事实来源。下列数字已与 `maintainability-refactor-roadmap.yml`
 （2026-08-17）、`strategy-research/catalog.json`（2026-08-16）、`framework-integration-ledger.yml`
-（2026-08-17）核对：真实未解决热点 **81** 条（登记册 182 条，其中 96 条已降到阈值下、5 条已 cleared），
+（2026-08-17）核对：真实未解决热点 81 条（登记册 182 条，其中 96 条已降到阈值下、5 条已 cleared），
 五个强制证据策略的 `production_eligible` 均为 `false`。
 
 ## 状态口径
@@ -43,7 +43,7 @@
 | F1 | P2 | `in_progress` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | 适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`）；标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，差分证据未成发布门禁 |
 | F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | 当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段 |
 | F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | 当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端 |
-| M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 **81** 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束；大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
+| M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 81 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束；大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
 | R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | `concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入 |
 
 ## P0 验收顺序
@@ -143,8 +143,8 @@ python scripts/strategy_evidence_gate.py --strict
 
 本版相对上一版（`last_verified: 2026-08-17`）的实质性修正，均来自对代码、测试和机器账本的核对：
 
-- **G1 — 证据门禁数字纠错**：上一轮外部口径称"五个策略必需证据均为 `present: []`"，实际 `python scripts/strategy_evidence_gate.py --json` 显示 `daily_watch20` 已有 `[walk_forward, benchmark_matrix, cpcv]`、`hotsector` 已有 `[walk_forward]`。本表改为报告真实 `present` 集合。
-- **G2 — 门禁形同虚设**：`--strict` 虽已接入 pre-push（`run_pre_push_checks.py:129`），但五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，失败条件永不触发。已在 E1 收口标准标注，需恢复门禁约束力。
-- **G3 — 文档残留漂移**：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致。机器账本（`strategy-evidence-gate.md:101-103`）记载的校正未在人类可读文档同步，列入 DOC1 缺口。
-- **G4 — 维护性债务数字纠错**：上一轮外部口径称"179 条未解决、按仓分布 57/46/27/18/15/12/4"，实际机器账本 `maintainability-refactor-roadmap.yml` 记录真实未解决 **81** 条（登记册 182 条，96 条已降到阈值下、5 条已 cleared），按仓预算上限见 M1 项。本表以机器账本为准。
-- **G5 — R6 与 B1 口径分清**：`framework-integration-ledger.yml` 中 `strategy-pipeline-thinning` 已标 `complete`（物理拆分完成），而 roadmap 的 B1（跨仓私有 API 收口）仍 `in_progress`。两者为不同维度，已在 B1 缺口中列出真实残留的私有符号调用（`_finite_positive_ratio`、`alpha_research.daily_watch20` 内部常量）。
+- G1 — 证据门禁数字纠错：上一轮外部口径称"五个策略必需证据均为 `present: []`"，实际 `python scripts/strategy_evidence_gate.py --json` 显示 `daily_watch20` 已有 `[walk_forward, benchmark_matrix, cpcv]`、`hotsector` 已有 `[walk_forward]`。本表改为报告真实 `present` 集合。
+- G2 — 门禁形同虚设：`--strict` 虽已接入 pre-push（`run_pre_push_checks.py:129`），但五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，失败条件永不触发。已在 E1 收口标准标注，需恢复门禁约束力。
+- G3 — 文档残留漂移：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致。机器账本（`strategy-evidence-gate.md:101-103`）记载的校正未在人类可读文档同步，列入 DOC1 缺口。
+- G4 — 维护性债务数字纠错：上一轮外部口径称"179 条未解决、按仓分布 57/46/27/18/15/12/4"，实际机器账本 `maintainability-refactor-roadmap.yml` 记录真实未解决 81 条（登记册 182 条，96 条已降到阈值下、5 条已 cleared），按仓预算上限见 M1 项。本表以机器账本为准。
+- G5 — R6 与 B1 口径分清：`framework-integration-ledger.yml` 中 `strategy-pipeline-thinning` 已标 `complete`（物理拆分完成），而 roadmap 的 B1（跨仓私有 API 收口）仍 `in_progress`。两者为不同维度，已在 B1 缺口中列出真实残留的私有符号调用（`_finite_positive_ratio`、`alpha_research.daily_watch20` 内部常量）。
