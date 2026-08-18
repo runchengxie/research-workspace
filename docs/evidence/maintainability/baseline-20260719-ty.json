@@ -11,12 +11,12 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 115,
-      "python_loc": 23074,
+      "python_loc": 23082,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
         "long_functions": 2,
-        "complexity_hotspots": 1,
+        "complexity_hotspots": 0,
         "large_classes": 2
       },
       "large_files": [
@@ -60,14 +60,7 @@
           "complexity": 14
         }
       ],
-      "complexity_hotspots": [
-        {
-          "path": "scripts/workspace_import_boundaries.py",
-          "name": "build_report",
-          "line_count": 43,
-          "complexity": 15
-        }
-      ],
+      "complexity_hotspots": [],
       "large_classes": [
         {
           "path": "tests/test_workspace_doctor.py",

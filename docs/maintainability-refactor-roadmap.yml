@@ -9,7 +9,7 @@
       "research-workspace": {
         "max_large_files": 4,
         "max_long_functions": 2,
-        "max_complexity_hotspots": 1,
+        "max_complexity_hotspots": 0,
         "max_large_classes": 2
       },
       "market-data-platform": {
@@ -63,7 +63,7 @@
       "repo": "research-workspace",
       "max_large_files": 5,
       "max_long_functions": 2,
-      "max_complexity_hotspots": 1,
+      "max_complexity_hotspots": 0,
       "max_large_classes": 2,
       "owner_decision": [
         "2026-07-28: 子模块对账后基线重算，预算下调 large_files 7->6 / long_functions 12->11 / complexity_hotspots 14->13（治理脚本重构使计数下降）。",
@@ -73,7 +73,8 @@
         "2026-07-31: 放宽 pre-push 守卫允许 feat/fix/hotfix/release 前缀分支推送以走 PR 流程；重新生成 baseline 后 scripts/run_pre_push_checks.py(510) 被正确计入 large_files，research-workspace max_large_files 2->3（ratchet 上调，已在 accepted_hotspots 登记该文件），校准 accepted_hotspots_count 为实测未解决条目数（原 176 失真，实测 175，含本次新增 1 条登记）。",
         "2026-07-31: 为允许从超项目 linked worktree 直推，_is_same_git_repo 识别 worktree 与主工作树同仓库，新增 tests/test_pre_push_hooks.py(536) 进 large_files；research-workspace max_large_files 3->4（ratchet 上调，已在 accepted_hotspots 登记该测试文件），accepted_hotspots_count 校准为 178（含本次新增 1 条登记）。",
         "2026-08-01: style factor 年度图拆分矩阵构造、热力图和年度优胜因子绘制 helper，在提升长历史图表可读性的同时将 research-workspace complexity_hotspots 2->1，并同步下调预算。",
-        "2026-08-16: R5 去重将 4 个研究脚本测试迁入工作区 tests/（test_next_open_to_high_research.py 795 行），large_files 4->5，同步上调预算。"
+        "2026-08-16: R5 去重将 4 个研究脚本测试迁入工作区 tests/（test_next_open_to_high_research.py 795 行），large_files 4->5，同步上调预算。",
+        "2026-08-18: 抽取 _collect_issues 将 build_report 复杂度 15 降至阈值内，research-workspace complexity_hotspots 1->0，同步下调预算至 0（棘轮锁死根层复杂度热点）。"
       ]
     },
     {
