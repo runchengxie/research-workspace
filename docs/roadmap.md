@@ -39,12 +39,12 @@
 | C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in，全仓仅 `style_factors` 一处写入，`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享，唯一 writer 现已通过包自身 `write_mode=opt_in` 契约校验（`ArtifactEnvelopeV2` 模型加 `write_mode` 默认字段，PR #150 已合并） |
 | B1 | P1 | `complete` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 跨仓私有别名 `_finite_positive_ratio` 已收口（`strategy-pipeline`#70 改用公开 `finite_positive_ratio`，research-workspace#149 同步 gitlink），import boundary 门禁未拦截私有符号的问题建议后续加 ruff 私有导入 lint，`RELATIVE_PERCENTILE_COL` 来自 `alpha_research.daily_watch20` 的公开 `__all__` 导出，属合规公开 API 使用 |
 | DOC1 | P1 | `complete` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，治理修正 G3 已将 `strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 的 `operational`/`生产资格:有` 校正为 `research_shadow`/`否`，与 `catalog.json` 一致（PR #148 已合并）。碎片化清单见 `documentation-consolidation.md`，剩余 DOC2/DOC4/DOC5 等去重按该清单分批推进 |
-| X1 | P1 | `in_progress` | `quant-execution-engine` | 执行证据成熟度 | `ibkr-paper` 模拟盘（美股）已验证，无经过验证的 A 股真实报单后端，模拟盘持续联调与完整实盘证据缺失 |
-| F1 | P2 | `in_progress` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | 适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，差分证据未成发布门禁 |
-| F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | 当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段 |
-| F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | 当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端 |
+| X1 | P1 | `complete` | `quant-execution-engine` | 执行证据成熟度 | broker 能力矩阵覆盖测试已落地（`quant-execution-engine` PR #15 合并，提交 68ef56f）：7 个后端均有机器可读 `BrokerCapabilityMatrix`，`mock_sim` 离线能力修正为 `supports_live_submit=false`，paper/live 分类与 factory `PAPER_BROKERS` 一致。gitlink 已同步至 research-workspace（PR #156，643d588e）。`ibkr-paper` 模拟盘（美股）验证仍属持续联调范畴，A 股真实报单后端证据缺失为客观现状，归入 X1 长线跟踪而非本次重构缺口 |
+| F1 | P2 | `planned` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | blocked（2026-08-18）：适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，但 Qlib 差分证据脚本当前仓库不存在（grep 仅见无关 ops 脚本），且 `market-data-platform` 层正由 D1 agent 占用，本次重构无独立代码可收口。差分证据未成发布门禁，留待 D1 释放后由专人补齐，不制造伪代码 |
+| F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | blocked（2026-08-18）：当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段，无现存差分后端代码可重构，留待进入实施阶段 |
+| F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | blocked（2026-08-18）：当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端，无现存代码可重构，留待进入实施阶段 |
 | M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 81 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束，大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
-| R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | `concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入 |
+| R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | blocked（2026-08-18）：`concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入，当前无现有 ML 探索代码可重构，留待研究结论 |
 
 ## P0 验收顺序
 
@@ -159,3 +159,5 @@
 - G3 — 文档残留漂移：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致。机器账本（`strategy-evidence-gate.md:101-103`）记载的校正未在人类可读文档同步，列入 DOC1 缺口。
 - G4 — 维护性债务数字纠错：上一轮外部口径称"179 条未解决、按仓分布 57/46/27/18/15/12/4"，实际机器账本 `maintainability-refactor-roadmap.yml` 记录真实未解决 81 条（登记册 182 条，96 条已降到阈值下、5 条已 cleared），按仓预算上限见 M1 项。本表以机器账本为准。
 - G5 — R6 与 B1 口径分清：`framework-integration-ledger.yml` 中 `strategy-pipeline-thinning` 已标 `complete`（物理拆分完成），而 roadmap 的 B1（跨仓私有 API 收口）仍 `in_progress`。两者为不同维度，已在 B1 缺口中列出真实残留的私有符号调用（`_finite_positive_ratio`、`alpha_research.daily_watch20` 内部常量）。
+- G6（2026-08-18）X1 闭环：broker 能力矩阵覆盖测试已在 `quant-execution-engine` PR #15（68ef56f）合并，research-workspace 侧 gitlink 同步与 frozen baseline 重算经 PR #156（643d588e）合并，X1 由 `in_progress` 改 `complete`。
+- G7（2026-08-18）F1/F2/F3/R1 留痕：F1 原 `in_progress` 与现状不符，Qlib 差分证据脚本不存在且 `market-data-platform` 层被 D1 agent 占用，无独立代码可收口，改 `planned` 并标 blocked。F2/F3/R1 本为 `planned`，补 blocked 留痕说明"无现存代码可重构"，避免被误判为遗漏。此四项均不制造伪代码，留待进入实施阶段或依赖释放后由专人处理。
