@@ -10,21 +10,16 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 118,
-      "python_loc": 23801,
+      "python_file_count": 120,
+      "python_loc": 23833,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 4,
+        "large_files": 3,
         "long_functions": 2,
         "complexity_hotspots": 0,
         "large_classes": 2
       },
       "large_files": [
-        {
-          "path": "tests/test_next_open_to_high_research.py",
-          "loc": 798,
-          "hk_related": false
-        },
         {
           "path": "tests/test_pre_push_hooks.py",
           "loc": 632,
