@@ -29,21 +29,21 @@
 
 ## 当前未完成项目
 
-> 状态口径见上。本表数字已与机器账本核对；`production_eligible` 全部为 `false`，故证据门禁当前对五策略均按"已知缺口豁免"放行（见 E1 治理修正）。
+> 状态口径见上。本表数字已与机器账本核对，`production_eligible` 全部为 `false`，故证据门禁当前对五策略均按"已知缺口豁免"放行（见 E1 治理修正）。
 
 | 编号 | 优先级 | 状态 | 负责方 | 项目 | 当前缺口（已核实） |
 | --- | --- | --- | --- | --- | --- |
-| D1 | P0 | `in_progress` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 在 current 契约 `exists: false`（`docs/data-transition-playbook.md:38`）；`capacity`/`turnover-cost` 长窗口压力证据 `pending` |
-| E1 | P0 | `in_progress` | `strategy-research`、workspace | 策略生命周期证据 | 五个强制证据策略 `production_eligible` 均为 `false`，证据包缺项均已注册为 `known_gaps`；门禁 `--strict` 已接入 pre-push 但因全非生产级而形同虚设（见治理修正 G1/G2） |
-| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合；PIT/历史行业/日线已发布不等同于晋级完成 |
-| C1 | P1 | `in_progress` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地；writer 为 opt-in，全仓仅 `style_factors` 一处写入；`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享；唯一 writer 未写 `write_mode` 字段，违反包自身校验（`docs/framework-integration-ledger.yml:25`） |
+| D1 | P0 | `in_progress` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 在 current 契约 `exists: false`（`docs/data-transition-playbook.md:38`），`capacity`/`turnover-cost` 长窗口压力证据 `pending` |
+| E1 | P0 | `in_progress` | `strategy-research`、workspace | 策略生命周期证据 | 五个强制证据策略 `production_eligible` 均为 `false`，证据包缺项均已注册为 `known_gaps`，门禁 `--strict` 已接入 pre-push 但因全非生产级而形同虚设（见治理修正 G1/G2） |
+| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成 |
+| C1 | P1 | `in_progress` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in，全仓仅 `style_factors` 一处写入，`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享，唯一 writer 未写 `write_mode` 字段，违反包自身校验（`docs/framework-integration-ledger.yml:25`） |
 | B1 | P1 | `in_progress` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | `strategy-pipeline` 仍有跨仓私有符号调用未被 import boundary 门禁拦截：`daily_watch20_ablation_postprocess.py:21` 直接 `import _finite_positive_ratio`（alpha-research 私有别名）、`hotsector_challenger_campaign.py:12` import `alpha_research.daily_watch20` 内部常量 |
-| DOC1 | P1 | `in_progress` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立；残留文档漂移：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致（见治理修正 G3） |
-| X1 | P1 | `in_progress` | `quant-execution-engine` | 执行证据成熟度 | `ibkr-paper` 模拟盘（美股）已验证；无经过验证的 A 股真实报单后端；模拟盘持续联调与完整实盘证据缺失 |
-| F1 | P2 | `in_progress` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | 适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`）；标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，差分证据未成发布门禁 |
+| DOC1 | P1 | `in_progress` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，残留文档漂移：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致（见治理修正 G3） |
+| X1 | P1 | `in_progress` | `quant-execution-engine` | 执行证据成熟度 | `ibkr-paper` 模拟盘（美股）已验证，无经过验证的 A 股真实报单后端，模拟盘持续联调与完整实盘证据缺失 |
+| F1 | P2 | `in_progress` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | 适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，差分证据未成发布门禁 |
 | F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | 当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段 |
 | F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | 当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端 |
-| M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 81 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束；大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
+| M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 81 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束，大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
 | R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | `concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入 |
 
 ## P0 验收顺序
@@ -72,7 +72,7 @@ python scripts/strategy_evidence_gate.py --strict
 
 命令通过，`catalog.json` 的生命周期与证据结论一致。达到该条件后，再把严格检查接入发布门禁。
 
-> **门禁有效性修正（G1/G2）**：`--strict` 已在 `scripts/run_pre_push_checks.py:129` 接入 pre-push，但因五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，`--strict` 的失败条件（`unregistered_gaps` 或 `production_eligible and missing`）当前永不触发，门禁对缺口实际不阻断。在补齐证据前，至少应将"已知缺口豁免"策略也纳入 `--strict` 阻断，或对已晋级策略标 `production_eligible=true` 以恢复门禁约束力。
+> 门禁有效性修正（G1/G2）：`--strict` 已在 `scripts/run_pre_push_checks.py:129` 接入 pre-push，但因五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，`--strict` 的失败条件（`unregistered_gaps` 或 `production_eligible and missing`）当前永不触发，门禁对缺口实际不阻断。在补齐证据前，至少应将"已知缺口豁免"策略也纳入 `--strict` 阻断，或对已晋级策略标 `production_eligible=true` 以恢复门禁约束力。
 
 ### E2：刷新长窗口晋级证据
 
