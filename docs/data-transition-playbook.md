@@ -12,8 +12,8 @@
 
 ## 当前决策
 
-截至 2026-07-16，A 股长窗口日线、时间点（PIT）财务报表和历史行业变更已经写入 current
-契约。港股继续按恢复专用归档管理。
+截至 2026-08-17，A 股长窗口日线、时间点（PIT）财务报表、历史行业变更和 `normalized_fundamentals`
+已经写入 current 契约。港股继续按恢复专用归档管理。
 
 1. 活跃 `DATA_PLATFORM_ROOT` 保留 A 股契约、资产和 registry。
 2. 中国香港市场资产冻结到独立冷存储，活跃根目录只保留 freeze marker。
@@ -35,11 +35,11 @@
 | `daily_clean` | 已发布 | 2015-01-05 至 2026-07-16，11,498,830 行，5,785 只证券 |
 | `pit_fundamentals` | 已发布 | `a_share_top800_union_20150227_20260529_three_statement_pit`，清单查询区间为 1994-02-19 至 2026-06-15，252,643 行，6,292 只证券，隔离 8 行 |
 | `industry_changes` | 已发布 | 申万 2021 三级行业，数据截至 2026-03-04，7,780 行，5,851 只证券 |
-| `normalized_fundamentals` | 未发布 | current 契约中 `exists: false` |
+| `normalized_fundamentals` | 已发布 | 四个 normalized v2 数据集（`income`、`balancesheet`、`cashflow`、`fina_indicator`）合并为不可变快照，latest alias 指向 `a_share_all_normalized_fundamentals_<vintage>` |
 
-`pit_fundamentals` 已经可以由显式 PIT 预设消费。它的快照名称、查询区间和研究股票池
-口径不同，使用时应读取清单，不要仅凭目录名推断覆盖范围。current 契约尚未发布
-`normalized_fundamentals`，下游也不应假设该中间层可直接读取。
+`pit_fundamentals` 和 `normalized_fundamentals` 已经可以由显式 PIT 预设消费。它们的快照名称、
+查询区间和研究股票池口径不同，使用时应读取清单，不要仅凭目录名推断覆盖范围。current 契约中
+`normalized_fundamentals` 资产条目记录合并快照的 manifest 引用、行数与证券覆盖。
 
 ## 数据发布状态与策略生产证据对账
 
@@ -53,7 +53,7 @@
 | PIT 财务（时间点） | 已发布但研究侧 `statement_features_enabled=false`，未全量启用 | `a-share-readiness-evidence-20260601.json` |
 | 长窗口日线 | 已发布（至 2026-07-16） | current 契约 |
 | 历史行业 membership | 已发布，但 `historical_backtest_enabled=false` | `a-share-readiness-evidence-20260601.json` |
-| `normalized_fundamentals` | 未发布，`current` 契约 `exists: false` | current 契约 |
+| `normalized_fundamentals` | 已发布，`current` 契约 `exists: true` | current 契约 |
 | 容量（capacity） | `pending`，待长窗口 PIT 资产与组合构建固定后生成 | `a-share-capacity-20260601.json` |
 | 换手/成本（turnover/cost） | `pending`，长窗口压力证据缺失 | `a-share-turnover-cost-20260601.json` |
 | 最终样本外（final OOS） | 书面替代（substitute），明确不构成生产级 | `a-share-final-oos-substitute-20260601.json` |
@@ -256,6 +256,7 @@ qexec rebalance <targets.json> --broker <paper-broker>
 - `default_next` 与 `default` 保持同一 A 股基线路径。
 - A 股 `targets.json` 通过执行引擎基础 dry-run。
 - `a_share_pit.yml` 使用的 PIT 财务和行业资产与 current 契约、清单和 registry 一致。
-- `normalized_fundamentals` 缺失期间，文档和程序都不把它声明为可消费资产。
+- `normalized_fundamentals` 的 current 契约条目指向已校验的不可变合并快照，latest alias 可解析，
+  组件目录中各 dataset 保留自身 manifest 与校验。
 
 检查失败时，先修契约、质量门禁或研究入口。新增下载范围不能替代这些发布条件。
