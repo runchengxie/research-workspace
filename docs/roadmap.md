@@ -33,7 +33,7 @@
 
 | 编号 | 优先级 | 状态 | 负责方 | 项目 | 当前缺口（已核实） |
 | --- | --- | --- | --- | --- | --- |
-| D1 | P0 | `in_progress` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 在 current 契约 `exists: false`（`docs/data-transition-playbook.md:38`），`capacity`/`turnover-cost` 长窗口压力证据 `pending` |
+| D1 | P0 | `in_progress` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 在 current 契约 `exists: false`（`docs/data-transition-playbook.md:38`），`capacity`/`turnover-cost` 长窗口压力证据 `pending`。2026-08-18 核实：数据根 `/home/richard/data/market-data-platform/` 下无 `normalized_fundamentals` 目录、无 `a_share_all_normalized_fundamentals` 快照，仓库内无 `a_share_current.json` 当前契约条目，故 `normalized_fundamentals` 仍未发布。停摆 agent 的 D1 分支曾单方面把 playbook 标为已发布，经核实属虚假声明，已拒绝接管其发布宣告、仅清理该悬空分支，D1 保持 `in_progress` |
 | E1 | P0 | `complete` | `strategy-research`、workspace | 策略生命周期证据 | 门禁双档已实现（`--strict` 护栏档 + `--strict --zero-gaps` 晋级评审档），`production_eligible` 全 `false` 致原 `--strict` 形同虚设的问题以双档收口，不再误标生产级。五策略真实缺口（含 `daily_watch20` 的 pit/cost/final_oos/regime 非 pass）登记于各自 `known_gaps`，待 E2 长窗口证据补齐后晋级档归零 |
 | E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成。生成 runbook 已落地（`docs/runbooks/a-share-long-window-evidence.md`，2026-08-18 接管停摆 agent 分支补回），记录命令级步骤与分批执行核对表，实际长窗口回测仍需较长计算，证据生成不随 runbook 落地而完成 |
 | C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in，全仓仅 `style_factors` 一处写入，`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享，唯一 writer 现已通过包自身 `write_mode=opt_in` 契约校验（`ArtifactEnvelopeV2` 模型加 `write_mode` 默认字段，PR #150 已合并） |
@@ -161,3 +161,4 @@
 - G5 — R6 与 B1 口径分清：`framework-integration-ledger.yml` 中 `strategy-pipeline-thinning` 已标 `complete`（物理拆分完成），而 roadmap 的 B1（跨仓私有 API 收口）仍 `in_progress`。两者为不同维度，已在 B1 缺口中列出真实残留的私有符号调用（`_finite_positive_ratio`、`alpha_research.daily_watch20` 内部常量）。
 - G6（2026-08-18）X1 闭环：broker 能力矩阵覆盖测试已在 `quant-execution-engine` PR #15（68ef56f）合并，research-workspace 侧 gitlink 同步与 frozen baseline 重算经 PR #156（643d588e）合并，X1 由 `in_progress` 改 `complete`。
 - G7（2026-08-18）F1/F2/F3/R1 留痕：F1 原 `in_progress` 与现状不符，Qlib 差分证据脚本不存在且 `market-data-platform` 层被 D1 agent 占用，无独立代码可收口，改 `planned` 并标 blocked。F2/F3/R1 本为 `planned`，补 blocked 留痕说明"无现存代码可重构"，避免被误判为遗漏。此四项均不制造伪代码，留待进入实施阶段或依赖释放后由专人处理。
+- G8（2026-08-18）D1 核实与悬空分支清理：停摆 agent 的 D1 分支（feat/a-share-normalized-publish）基于旧 main（f28e9700），其唯一提交把 `normalized_fundamentals` 在 playbook 中单边标为已发布，并倒退 qexec gitlink（68ef56f→3dfcb5f）与 E1 代码。经核实数据根无该资产、仓库内无 current 契约条目，发布宣告属虚假，拒绝接管其内容，仅清理该悬空 worktree 与分支。D1 保持 `in_progress`，真实缺口以本表第 36 行核实结论为准。
