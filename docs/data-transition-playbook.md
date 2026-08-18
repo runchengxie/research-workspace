@@ -105,6 +105,8 @@ benchmark 时，不能描述成生产级策略。capacity evidence 由 `strategy
 - [`evidence/a-share-long-window-evidence-plan-20260601.json`](evidence/a-share-long-window-evidence-plan-20260601.json)
 - [`evidence/a-share-production-limitations-20260601.json`](evidence/a-share-production-limitations-20260601.json)
 
+长窗口证据的生成步骤见 [`runbooks/a-share-long-window-evidence.md`](runbooks/a-share-long-window-evidence.md)。
+
 ### A 股 baseline 持仓建议验收
 
 `baseline_reproducible` 可以解释为已能复现一版 A 股 baseline 持仓建议，但只能在完整

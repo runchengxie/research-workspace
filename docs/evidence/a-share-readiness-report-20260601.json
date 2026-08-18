@@ -14,34 +14,34 @@
         "start_date": null,
         "end_date": null,
         "totals": {
-          "rows": 5850,
-          "symbols": 5850,
+          "rows": 5853,
+          "symbols": 5853,
           "files": 1
         }
       },
       "daily_clean": {
         "exists": true,
-        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20240101_20260529_daily_clean/manifest.yml",
+        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20150101_20260817_daily_clean/manifest.yml",
         "manifest_status": "completed",
-        "start_date": "20240102",
-        "end_date": "20260529",
+        "start_date": "20150105",
+        "end_date": "20260817",
         "totals": {
-          "rows": 3128352,
-          "symbols": 5611,
-          "files": 5611
+          "rows": 11620499,
+          "symbols": 5802,
+          "files": 5802
         }
       },
       "universe_by_date": {
         "exists": true,
         "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.manifest.yml",
         "manifest_status": "completed",
-        "start_date": "20240229",
-        "end_date": "20260529",
+        "start_date": "20150227",
+        "end_date": "20260817",
         "totals": {
-          "rows": 151105,
-          "symbols": 5582,
-          "latest_symbols": 5499,
-          "rebalance_dates": 28,
+          "rows": 573424,
+          "symbols": 5780,
+          "latest_symbols": 5520,
+          "rebalance_dates": 139,
           "files": 1
         }
       },
@@ -49,11 +49,11 @@
         "exists": true,
         "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_symbols.manifest.yml",
         "manifest_status": "completed",
-        "start_date": "20240229",
-        "end_date": "20260529",
+        "start_date": "20150227",
+        "end_date": "20260817",
         "totals": {
-          "rows": 5499,
-          "symbols": 5499,
+          "rows": 5520,
+          "symbols": 5520,
           "files": 1
         }
       },
@@ -61,23 +61,51 @@
         "exists": true,
         "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.meta.manifest.yml",
         "manifest_status": "completed",
-        "start_date": "20240229",
-        "end_date": "20260529",
+        "start_date": "20150227",
+        "end_date": "20260817",
         "totals": {
           "rows": 1,
-          "symbols": 5499,
+          "symbols": 5520,
+          "files": 1
+        }
+      },
+      "pit_fundamentals": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/pit_fundamentals/a_share_top800_union_20150227_20260529_three_statement_pit/manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "19940219",
+        "end_date": "20260615",
+        "totals": {
+          "rows": 252643,
+          "symbols": 6292,
+          "files": 128,
+          "quarantined_rows": 8
+        }
+      },
+      "industry_changes": {
+        "exists": true,
+        "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/industry_changes/a_share_all_industry_changes_sw2021_l3_20260708/manifest.yml",
+        "manifest_status": "completed",
+        "start_date": "19840509",
+        "end_date": "20260304",
+        "totals": {
+          "rows": 7780,
+          "symbols": 5851,
           "files": 1
         }
       }
     },
-    "effective_start_date": "20240229",
-    "effective_end_date": "20260529"
+    "effective_start_date": "20150227",
+    "effective_end_date": "20260304"
   },
   "levels": {
     "baseline_reproducible": {
       "name": "baseline_reproducible",
-      "passed": true,
-      "failed_checks": [],
+      "passed": false,
+      "failed_checks": [
+        "research_run_outputs",
+        "targets_lineage"
+      ],
       "checks": [
         {
           "id": "a_share_current_contract",
@@ -86,7 +114,7 @@
           "details": {
             "path": "/home/richard/data/market-data-platform/metadata/current_assets/a_share_current.json",
             "provider": "tushare",
-            "target_date": "20260529",
+            "target_date": "20260817",
             "legacy_cn_alias": null
           }
         },
@@ -101,8 +129,8 @@
             "start_date": null,
             "end_date": null,
             "totals": {
-              "rows": 5850,
-              "symbols": 5850,
+              "rows": 5853,
+              "symbols": 5853,
               "files": 1
             }
           }
@@ -113,14 +141,14 @@
           "message": "daily_clean asset and completed manifest are present",
           "details": {
             "exists": true,
-            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20240101_20260529_daily_clean/manifest.yml",
+            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/daily/a_share_all_20150101_20260817_daily_clean/manifest.yml",
             "manifest_status": "completed",
-            "start_date": "20240102",
-            "end_date": "20260529",
+            "start_date": "20150105",
+            "end_date": "20260817",
             "totals": {
-              "rows": 3128352,
-              "symbols": 5611,
-              "files": 5611
+              "rows": 11620499,
+              "symbols": 5802,
+              "files": 5802
             }
           }
         },
@@ -132,13 +160,13 @@
             "exists": true,
             "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.manifest.yml",
             "manifest_status": "completed",
-            "start_date": "20240229",
-            "end_date": "20260529",
+            "start_date": "20150227",
+            "end_date": "20260817",
             "totals": {
-              "rows": 151105,
-              "symbols": 5582,
-              "latest_symbols": 5499,
-              "rebalance_dates": 28,
+              "rows": 573424,
+              "symbols": 5780,
+              "latest_symbols": 5520,
+              "rebalance_dates": 139,
               "files": 1
             }
           }
@@ -151,11 +179,11 @@
             "exists": true,
             "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_symbols.manifest.yml",
             "manifest_status": "completed",
-            "start_date": "20240229",
-            "end_date": "20260529",
+            "start_date": "20150227",
+            "end_date": "20260817",
             "totals": {
-              "rows": 5499,
-              "symbols": 5499,
+              "rows": 5520,
+              "symbols": 5520,
               "files": 1
             }
           }
@@ -168,11 +196,11 @@
             "exists": true,
             "manifest_path": "/home/richard/data/market-data-platform/assets/universe/a_share_all_full_by_date.meta.manifest.yml",
             "manifest_status": "completed",
-            "start_date": "20240229",
-            "end_date": "20260529",
+            "start_date": "20150227",
+            "end_date": "20260817",
             "totals": {
               "rows": 1,
-              "symbols": 5499,
+              "symbols": 5520,
               "files": 1
             }
           }
@@ -183,7 +211,7 @@
           "message": "registry contains a_share_current_contract",
           "details": {
             "path": "/home/richard/data/market-data-platform/metadata/dataset_registry.csv",
-            "rows": 11
+            "rows": 48
           }
         },
         {
@@ -216,24 +244,16 @@
         },
         {
           "id": "research_run_outputs",
-          "passed": true,
-          "message": "research run outputs are present",
-          "details": {
-            "run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
-            "missing": [],
-            "positions": [
-              "positions_current.csv"
-            ]
-          }
+          "passed": false,
+          "message": "Research run directory is missing: /home/richard/code/research-workspace/strategy-pipeline/artifacts/runs/default_next_20260601_173243_6b2a1c78"
         },
         {
           "id": "targets_lineage",
-          "passed": true,
-          "message": "targets and lineage are present",
+          "passed": false,
+          "message": "targets_file is missing",
           "details": {
-            "targets_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
-            "targets_lineage_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json",
-            "targets": 5
+            "targets_file": "/home/richard/code/research-workspace/strategy-pipeline/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
+            "targets_lineage_file": "/home/richard/code/research-workspace/strategy-pipeline/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json"
           }
         },
         {
@@ -254,14 +274,15 @@
       "name": "complete_pit_research_data",
       "passed": false,
       "failed_checks": [
+        "baseline_reproducible",
         "profile:pit_fundamentals",
         "profile:historical_industry"
       ],
       "checks": [
         {
           "id": "baseline_reproducible",
-          "passed": true,
-          "message": "baseline evidence passed"
+          "passed": false,
+          "message": "baseline evidence is incomplete"
         },
         {
           "id": "research_window",
@@ -269,8 +290,43 @@
           "message": "configured research window is covered by required assets",
           "details": {
             "configured_start_date": "20240229",
-            "effective_start_date": "20240229",
-            "effective_end_date": "20260529"
+            "effective_start_date": "20150227",
+            "effective_end_date": "20260304"
+          }
+        },
+        {
+          "id": "asset:pit_fundamentals",
+          "passed": true,
+          "message": "pit_fundamentals canonical asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/pit_fundamentals/a_share_top800_union_20150227_20260529_three_statement_pit/manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "19940219",
+            "end_date": "20260615",
+            "totals": {
+              "rows": 252643,
+              "symbols": 6292,
+              "files": 128,
+              "quarantined_rows": 8
+            }
+          }
+        },
+        {
+          "id": "asset:industry_changes",
+          "passed": true,
+          "message": "industry_changes canonical asset and completed manifest are present",
+          "details": {
+            "exists": true,
+            "manifest_path": "/home/richard/data/market-data-platform/assets/tushare/a_share/industry_changes/a_share_all_industry_changes_sw2021_l3_20260708/manifest.yml",
+            "manifest_status": "completed",
+            "start_date": "19840509",
+            "end_date": "20260304",
+            "totals": {
+              "rows": 7780,
+              "symbols": 5851,
+              "files": 1
+            }
           }
         },
         {
@@ -412,6 +468,7 @@
       "name": "broker_trading_enabled",
       "passed": false,
       "failed_checks": [
+        "baseline_reproducible",
         "broker:adapter_supported",
         "broker:account_permissions_verified",
         "broker:supervised_smoke_evidence",
@@ -420,8 +477,8 @@
       "checks": [
         {
           "id": "baseline_reproducible",
-          "passed": true,
-          "message": "baseline evidence passed"
+          "passed": false,
+          "message": "baseline evidence is incomplete"
         },
         {
           "id": "broker:adapter_supported",
@@ -541,10 +598,9 @@
     }
   },
   "summary": {
-    "passed_levels": [
-      "baseline_reproducible"
-    ],
+    "passed_levels": [],
     "failed_levels": [
+      "baseline_reproducible",
       "complete_pit_research_data",
       "production_strategy_evidence",
       "broker_trading_enabled"

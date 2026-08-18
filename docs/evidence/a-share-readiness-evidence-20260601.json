@@ -4,9 +4,9 @@
   "created_at": "2026-06-01T18:12:00+08:00",
   "daily_clean_validation_report": "a-share-daily-clean-validation-20260601.json",
   "universe_validation_report": "a-share-universe-validation-20260601.json",
-  "research_run_dir": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/runs/default_next_20260601_173243_6b2a1c78",
-  "targets_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
-  "targets_lineage_file": "/home/richard/code/research-workspace/cross-sectional-trees/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json",
+  "research_run_dir": "../../strategy-pipeline/artifacts/runs/default_next_20260601_173243_6b2a1c78",
+  "targets_file": "../../strategy-pipeline/artifacts/reports/a_share_candidate_20260601_173243/targets.json",
+  "targets_lineage_file": "../../strategy-pipeline/artifacts/reports/a_share_candidate_20260601_173243/targets.json.lineage.json",
   "qexec_dry_run_report": "a-share-qexec-dry-run-20260601.json",
   "benchmark_ladder_report": "a-share-benchmark-ladder-20260601.json",
   "cpcv_report": "a-share-cpcv-20260601.json",
@@ -55,6 +55,8 @@
   "limitations": [
     "The promoted A-share research default is a price/daily-valuation-overlay lane; PIT statement fundamentals are not enabled in this evidence bundle.",
     "Historical industry joins are not enabled in this evidence bundle.",
-    "Broker trading remains disabled; CN file-contract dry-run evidence does not imply real A-share order submission."
+    "Broker trading remains disabled; CN file-contract dry-run evidence does not imply real A-share order submission.",
+    "research_run_dir and targets lineage now point to the R4 owner layout under strategy-pipeline/artifacts; the 2026-06-01 run outputs were not preserved in the current workspace, so baseline_reproducible stays pending until the long-window run regenerates them.",
+    "Long-window (2015 to present) turnover/cost, capacity and final OOS evidence remain pending."
   ]
 }
