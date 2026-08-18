@@ -79,4 +79,4 @@ source = ["style_factors"]
 [tool.uv.sources]
 alpha-research = { path = "../alpha-research" }
 portfolio-backtester = { path = "../portfolio-backtester" }
-research-contracts = { path = "../src/research_contracts" }
+research-contracts = { git = "https://github.com/runchengxie/research-workspace.git", subdirectory = "src/research_contracts", rev = "f28e97008b7c540730720aac82e63a2944a89b58" }

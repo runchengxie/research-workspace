@@ -184,15 +184,20 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 298,
-      "python_loc": 89443,
+      "python_loc": 90028,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 41,
-        "long_functions": 77,
-        "complexity_hotspots": 40,
+        "long_functions": 80,
+        "complexity_hotspots": 42,
         "large_classes": 1
       },
       "large_files": [
+        {
+          "path": "tests/test_tushare_a_share_fundamentals.py",
+          "loc": 1960,
+          "hk_related": false
+        },
         {
           "path": "tests/test_tushare_a_share.py",
           "loc": 1889,
@@ -201,11 +206,6 @@
         {
           "path": "tests/test_tushare_a_share_mins.py",
           "loc": 1851,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_tushare_a_share_fundamentals.py",
-          "loc": 1709,
           "hk_related": false
         },
         {
@@ -236,6 +236,11 @@
         {
           "path": "tests/test_cli_data_minutes.py",
           "loc": 957,
+          "hk_related": false
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
+          "loc": 873,
           "hk_related": false
         },
         {
@@ -291,11 +296,6 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
           "loc": 625,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
-          "loc": 617,
           "hk_related": false
         },
         {
@@ -713,7 +713,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 171,
-      "python_loc": 33895,
+      "python_loc": 34113,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
@@ -1072,8 +1072,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 192,
-      "python_loc": 41201,
+      "python_file_count": 194,
+      "python_loc": 41447,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1167,6 +1167,12 @@
           "complexity": 21
         },
         {
+          "path": "tests/test_package_smoke.py",
+          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
+          "line_count": 96,
+          "complexity": 1
+        },
+        {
           "path": "tests/test_position_backtest.py",
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
@@ -1207,12 +1213,6 @@
           "name": "_build_report_payload",
           "line_count": 93,
           "complexity": 6
-        },
-        {
-          "path": "tests/test_package_smoke.py",
-          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
-          "line_count": 93,
-          "complexity": 1
         },
         {
           "path": "src/portfolio_backtester/portfolio_selection.py",
@@ -1472,7 +1472,7 @@
       "repo": "strategy-app",
       "root": "strategy-app",
       "python_file_count": 157,
-      "python_loc": 34040,
+      "python_loc": 34065,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
