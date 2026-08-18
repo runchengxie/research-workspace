@@ -14,8 +14,8 @@
       },
       "market-data-platform": {
         "max_large_files": 41,
-        "max_long_functions": 77,
-        "max_complexity_hotspots": 40,
+        "max_long_functions": 80,
+        "max_complexity_hotspots": 42,
         "max_large_classes": 1
       },
       "alpha-research": {
@@ -80,8 +80,8 @@
     {
       "repo": "market-data-platform",
       "max_large_files": 41,
-      "max_long_functions": 77,
-      "max_complexity_hotspots": 40,
+      "max_long_functions": 80,
+      "max_complexity_hotspots": 42,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
@@ -95,7 +95,8 @@
         "2026-08-10: mirror-a-share-index-daily 新增 _adapters_part03 与测试后重算基线，large_files 39->41、long_functions 75->76（新功能测量性增长，已在 accepted_hotspots 登记 _adapters_part03）。",
         "2026-08-10: 同步根仓 baseline-20260719-ty.json（index-daily mirror 合并后真实计数），large_files/long_functions 维持 41/76，complexity_hotspots 39->40 对齐实测（_a_share_mins_partition.py 623 行新增、tushare_minute_backfill_part02.py 542 行移除）。",
         "2026-08-10: gitlink 同步至 dependabot 合并后的 mdp main，基线重算后 large_files 41->40（ratchet 下调，非回归）。",
-        "2026-08-17: strict-v3 增加有界稀疏 rank 证据校验与回归覆盖，large_files 40->41、long_functions 76->77。owner PR #42/#43 的完整门禁和内部 ratchet 均通过。"
+        "2026-08-17: strict-v3 增加有界稀疏 rank 证据校验与回归覆盖，large_files 40->41、long_functions 76->77。owner PR #42/#43 的完整门禁和内部 ratchet 均通过。",
+        "2026-08-18: D1 多 dataset 发布工具（mdp #46）与 B1 公开 API（#44）合并后重算基线，long_functions 77->80、complexity_hotspots 40->42（真实新增，owner PR 门禁通过）。"
       ]
     },
     {
