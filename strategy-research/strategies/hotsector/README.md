@@ -7,6 +7,7 @@ Numeric v2、低换手、会话 challenger、AI shadow、DeepSeek 五臂和 V4 �
 - 生命周期：`research_shadow`
 - 生产资格：无
 - 候选和外部选择输入：`market-intel`
+- 产业链关系由 `market-intel` 维护，本仓仅引用其发布的稳定 `entity_id`，不另存或推断产业拓扑
 - 策略特有计算：`strategy_app.hotsector`
 - 组合与执行回放：`portfolio_backtester`
 - 外部调用和证据冻结：`strategy_pipeline`
