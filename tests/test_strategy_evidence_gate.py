@@ -322,3 +322,81 @@ def test_production_strategy_cannot_waive_gaps(tmp_path: Path) -> None:
     assert result.production_eligible is True
     assert result.verdict is False
     assert gate._run_gate(["--root", str(root), "--strict"]) == 1
+
+
+def test_zero_gaps_requires_explicit_flag(tmp_path: Path) -> None:
+    """--zero-gaps 不能单独使用，必须与 --strict 同用。"""
+    policy = {
+        "schema_version": "strategy_evidence_policy.v1",
+        "checks": {"pit": {"name": "时间点数据", "evidence_keys": ["pit_universe"]}},
+        "required_by_lifecycle": {"pre_production": ["pit"]},
+    }
+    catalog = {"strategies": [{"id": "s", "lifecycle": "pre_production"}]}
+    root = tmp_path
+    (root / "strategy-research").mkdir(parents=True)
+    (root / "strategy-research" / "evidence_policy.json").write_text(
+        json.dumps(policy), encoding="utf-8"
+    )
+    (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+    with pytest.raises(SystemExit):
+        gate._run_gate(["--root", str(root), "--zero-gaps"])
+
+
+def test_zero_gaps_blocks_research_strategy_with_known_gaps(tmp_path: Path) -> None:
+    """晋级评审档下，带已知缺口的研究型策略必须失败。"""
+    policy = {
+        "schema_version": "strategy_evidence_policy.v1",
+        "checks": {"pit": {"name": "时间点数据", "evidence_keys": ["pit_universe"]}},
+        "required_by_lifecycle": {"pre_production": ["pit"]},
+    }
+    catalog = {
+        "strategies": [{"id": "s", "lifecycle": "pre_production", "production_eligible": False}]
+    }
+    root = tmp_path
+    (root / "strategy-research").mkdir(parents=True)
+    (root / "strategy-research" / "evidence_policy.json").write_text(
+        json.dumps(policy), encoding="utf-8"
+    )
+    (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir.mkdir(parents=True)
+    bundle = {
+        "schema_version": "strategy_evidence_bundle.v1",
+        "strategy_id": "s",
+        "checks": {"pit": {"outcome": "missing", "evidence": None}},
+        "known_gaps": ["pit: 未提供时间点数据证据"],
+    }
+    (bundle_dir / "s.json").write_text(json.dumps(bundle), encoding="utf-8")
+    # 护栏档放行（已知缺口已登记）
+    assert gate._run_gate(["--root", str(root), "--strict"]) == 0
+    # 晋级档拦截（仍带已知缺口）
+    assert gate._run_gate(["--root", str(root), "--strict", "--zero-gaps"]) == 1
+
+
+def test_zero_gaps_passes_research_strategy_without_gaps(tmp_path: Path) -> None:
+    """晋级评审档下，零已知缺口的研究型策略通过。"""
+    policy = {
+        "schema_version": "strategy_evidence_policy.v1",
+        "checks": {"pit": {"name": "时间点数据", "evidence_keys": ["pit_universe"]}},
+        "required_by_lifecycle": {"pre_production": ["pit"]},
+    }
+    catalog = {
+        "strategies": [{"id": "s", "lifecycle": "pre_production", "production_eligible": False}]
+    }
+    root = tmp_path
+    (root / "strategy-research").mkdir(parents=True)
+    (root / "strategy-research" / "evidence_policy.json").write_text(
+        json.dumps(policy), encoding="utf-8"
+    )
+    (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir.mkdir(parents=True)
+    bundle = {
+        "schema_version": "strategy_evidence_bundle.v1",
+        "strategy_id": "s",
+        "checks": {
+            "pit": {"outcome": "pass", "evidence": "docs/evidence/pit.json", "pit_universe": True}
+        },
+    }
+    (bundle_dir / "s.json").write_text(json.dumps(bundle), encoding="utf-8")
+    assert gate._run_gate(["--root", str(root), "--strict", "--zero-gaps"]) == 0
