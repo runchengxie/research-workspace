@@ -35,11 +35,12 @@
 | `daily_clean` | 已发布 | 2015-01-05 至 2026-07-16，11,498,830 行，5,785 只证券 |
 | `pit_fundamentals` | 已发布 | `a_share_top800_union_20150227_20260529_three_statement_pit`，清单查询区间为 1994-02-19 至 2026-06-15，252,643 行，6,292 只证券，隔离 8 行 |
 | `industry_changes` | 已发布 | 申万 2021 三级行业，数据截至 2026-03-04，7,780 行，5,851 只证券 |
-| `normalized_fundamentals` | 未发布 | current 契约中 `exists: false` |
+| `normalized_fundamentals` | 已发布 | `a_share_all_normalized_fundamentals_20260814`，latest alias 指向该快照，清单查询区间 20150101 至 20260815，911,680 行，7,620 只证券，`schema_version=normalized.v2` |
 
 `pit_fundamentals` 已经可以由显式 PIT 预设消费。它的快照名称、查询区间和研究股票池
-口径不同，使用时应读取清单，不要仅凭目录名推断覆盖范围。current 契约尚未发布
-`normalized_fundamentals`，下游也不应假设该中间层可直接读取。
+口径不同，使用时应读取清单，不要仅凭目录名推断覆盖范围。`normalized_fundamentals`
+已作为合并快照发布，PIT 语义按 `fundamentals_vintages/vintage=20260815` 的 revision-safe
+目录对齐，消费前读取清单核对覆盖范围。
 
 ## 数据发布状态与策略生产证据对账
 
@@ -53,7 +54,7 @@
 | PIT 财务（时间点） | 已发布但研究侧 `statement_features_enabled=false`，未全量启用 | `a-share-readiness-evidence-20260601.json` |
 | 长窗口日线 | 已发布（至 2026-07-16） | current 契约 |
 | 历史行业 membership | 已发布，但 `historical_backtest_enabled=false` | `a-share-readiness-evidence-20260601.json` |
-| `normalized_fundamentals` | 未发布，`current` 契约 `exists: false` | current 契约 |
+| `normalized_fundamentals` | 已发布（`normalized.v2`，911,680 行，7,620 只） | current 契约 |
 | 容量（capacity） | `pending`，待长窗口 PIT 资产与组合构建固定后生成 | `a-share-capacity-20260601.json` |
 | 换手/成本（turnover/cost） | `pending`，长窗口压力证据缺失 | `a-share-turnover-cost-20260601.json` |
 | 最终样本外（final OOS） | 书面替代（substitute），明确不构成生产级 | `a-share-final-oos-substitute-20260601.json` |
@@ -257,6 +258,6 @@ qexec rebalance <targets.json> --broker <paper-broker>
 - `default_next` 与 `default` 保持同一 A 股基线路径。
 - A 股 `targets.json` 通过执行引擎基础 dry-run。
 - `a_share_pit.yml` 使用的 PIT 财务和行业资产与 current 契约、清单和 registry 一致。
-- `normalized_fundamentals` 缺失期间，文档和程序都不把它声明为可消费资产。
+- `normalized_fundamentals` 已发布为可消费资产，消费前按 current 契约和清单核对覆盖范围。
 
 检查失败时，先修契约、质量门禁或研究入口。新增下载范围不能替代这些发布条件。
