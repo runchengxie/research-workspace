@@ -33,13 +33,18 @@ from typing import Any, cast
 ROOT = Path(__file__).resolve().parents[1]
 CASE_ROOT = ROOT / "strategy-research" / "cases"
 CLAIM_ROOT = ROOT / "strategy-research" / "judgment-ledger"
+SOURCE_ROOT = ROOT / "strategy-research" / "sources"
 CLAIM_SCHEMA_VERSION = "claim.v1"
 CASE_SCHEMA_VERSION = "research_case.v1"
+SOURCE_SCHEMA_VERSION = "source.v1"
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 CLAIM_TYPES = {"hypothesis", "fact", "estimate", "inference"}
 CLAIM_STATUSES = {"active", "proposed", "superseded", "rejected"}
 DECISION_STATUSES = {"no_view", "provisional", "accepted", "rejected"}
+SOURCE_CLAIM_TYPES = {"fact", "estimate", "guidance", "opinion", "inference", "forecast"}
+SOURCE_DIRECTNESS = {"primary", "secondary", "tertiary"}
+SOURCE_VERIFIABILITY = {"independently_verified", "single_source", "unverifiable"}
 REVIEW_KINDS = {"logic", "evidence"}
 REVIEW_STATUSES = {"completed", "in_progress", "pending"}
 
@@ -105,6 +110,36 @@ def _objects_list(
             field_value = item.get(field_name)
             if field_name in item and not isinstance(field_value, str):
                 issues.append(f"{name}[{index}].{field_name} 必须是字符串")
+
+
+def _check_source(relative: str, payload: dict[str, Any]) -> list[str]:
+    # DG3 定性来源溯源：可选校验。真实来源数据落在外部 market-intel，本仓仅持有引用校验用的
+    # source 文件（strategy-research/sources/），不强制所有 claim/case 必须填 source。
+    issues: list[str] = []
+    if payload.get("schema_version") != SOURCE_SCHEMA_VERSION:
+        issues.append(f"schema_version 必须是 {SOURCE_SCHEMA_VERSION}")
+    _required_text(payload, "source_id", issues)
+    _required_text(payload, "source_type", issues)
+    _required_text(payload, "publisher", issues)
+    published_at = payload.get("published_at")
+    if isinstance(published_at, str) and DATE_RE.fullmatch(published_at) is None:
+        issues.append("published_at 必须是 YYYY-MM-DD")
+    for field_name in ("effective_at", "observed_at", "ingested_at"):
+        value = payload.get(field_name)
+        if value is not None and isinstance(value, str) and DATE_RE.fullmatch(value) is None:
+            issues.append(f"{field_name} 必须是 YYYY-MM-DD 或 null")
+    source_id = payload.get("source_id")
+    if isinstance(source_id, str) and ID_RE.fullmatch(source_id) is None:
+        issues.append("source_id 必须是 [a-z0-9][a-z0-9._-]*")
+    if payload.get("claim_type") not in SOURCE_CLAIM_TYPES:
+        issues.append(f"claim_type 必须属于 {'、'.join(sorted(SOURCE_CLAIM_TYPES))} 之一")
+    if payload.get("directness") not in SOURCE_DIRECTNESS:
+        issues.append(f"directness 必须属于 {'、'.join(sorted(SOURCE_DIRECTNESS))} 之一")
+    if payload.get("verifiability") not in SOURCE_VERIFIABILITY:
+        issues.append(f"verifiability 必须属于 {'、'.join(sorted(SOURCE_VERIFIABILITY))} 之一")
+    _string_list(payload, "supports", issues)
+    _string_list(payload, "contradicts", issues)
+    return issues
 
 
 def _check_claim(relative: str, payload: dict[str, Any]) -> list[str]:
@@ -256,6 +291,14 @@ def _case_files(root: Path) -> list[Path]:
     return sorted((root / "strategy-research" / "cases").rglob("case.json"))
 
 
+def _source_files(root: Path) -> list[Path]:
+    # DG3 来源文件为可选：仅当 strategy-research/sources/ 目录存在时才校验。
+    sources_dir = root / "strategy-research" / "sources"
+    if not sources_dir.is_dir():
+        return []
+    return sorted(sources_dir.rglob("*.json"))
+
+
 def check_claim(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
     payload = _load_json(path)
     if payload is None:
@@ -270,6 +313,14 @@ def check_case(path: Path, *, root: Path) -> GovernanceCheck:
         return GovernanceCheck(str(path), ["case.json 必须是合法 JSON 对象"])
     relative = path.relative_to(root).as_posix()
     return GovernanceCheck(relative, _check_case(relative, payload, root))
+
+
+def check_source(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
+    payload = _load_json(path)
+    if payload is None:
+        return GovernanceCheck(str(path), ["source.json 必须是合法 JSON 对象"])
+    relative = path.relative_to(root).as_posix()
+    return GovernanceCheck(relative, _check_source(relative, payload))
 
 
 def _render(checks: list[GovernanceCheck], *, as_json: bool) -> str:
@@ -291,6 +342,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--claim", type=Path)
     parser.add_argument("--case", type=Path)
+    parser.add_argument("--source", type=Path)
     parser.add_argument("--json", dest="as_json", action="store_true")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
 
@@ -300,9 +352,12 @@ def main(argv: list[str] | None = None) -> int:
         checks.append(check_claim(args.claim.resolve()))
     elif args.case:
         checks.append(check_case(args.case.resolve(), root=root))
+    elif args.source:
+        checks.append(check_source(args.source.resolve(), root=root))
     else:
         checks.extend(check_claim(path, root=root) for path in _claim_files(root))
         checks.extend(check_case(path, root=root) for path in _case_files(root))
+        checks.extend(check_source(path, root=root) for path in _source_files(root))
     print(_render(checks, as_json=args.as_json))
     return 0 if all(check.ok for check in checks) else 1
 

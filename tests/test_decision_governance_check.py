@@ -252,3 +252,55 @@ def test_dg6_evidence_readiness_dimensions_valid(tmp_path: Path) -> None:
     case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
     check = module.check_case(case_path, root=tmp_path)
     assert check.ok, check.issues
+
+
+def _write_source(root: Path, source_id: str, payload: dict[str, object]) -> Path:
+    target = root / "strategy-research" / "sources" / f"{source_id}.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    return target
+
+
+def _valid_source(source_id: str = "demo.source") -> dict[str, object]:
+    return {
+        "schema_version": "source.v1",
+        "source_id": source_id,
+        "source_type": "research_report",
+        "publisher": "示例机构",
+        "published_at": "2026-01-15",
+        "effective_at": "2026-01-15",
+        "observed_at": None,
+        "ingested_at": "2026-08-18",
+        "content_hash": "sha256:abc123",
+        "claim_type": "fact",
+        "directness": "primary",
+        "verifiability": "independently_verified",
+        "independence": "来源独立于被支撑判断",
+        "temporal_validity": "截至论证时点仍有效",
+        "fact_or_inference": "硬编码事实",
+        "supports": [],
+        "contradicts": [],
+        "entity_refs": ["entity-1"],
+    }
+
+
+def test_dg3_source_schema_valid(tmp_path: Path) -> None:
+    path = _write_source(tmp_path, "demo.source", _valid_source())
+    check = module.check_source(path, root=tmp_path)
+    assert check.ok, check.issues
+
+
+def test_dg3_source_unknown_claim_type_fails(tmp_path: Path) -> None:
+    payload = _valid_source()
+    payload["claim_type"] = "opinionated"
+    path = _write_source(tmp_path, "broken.source", payload)
+    check = module.check_source(path, root=tmp_path)
+    assert not check.ok
+    assert any("claim_type" in issue for issue in check.issues)
+
+
+def test_schema_files_exist_includes_source(tmp_path: Path) -> None:
+    path = ROOT / "strategy-research" / "schemas" / "source.v1.schema.json"
+    assert path.is_file()
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    assert isinstance(payload, dict)
