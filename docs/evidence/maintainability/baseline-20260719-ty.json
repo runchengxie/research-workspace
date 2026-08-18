@@ -2130,8 +2130,8 @@
     {
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
-      "python_file_count": 138,
-      "python_loc": 30113,
+      "python_file_count": 139,
+      "python_loc": 30189,
       "hk_related_file_count": 15,
       "hotspot_counts": {
         "large_files": 4,
@@ -2475,7 +2475,7 @@
         {
           "path": "src/quant_execution_engine/broker/mock_sim.py",
           "name": "MockSimBrokerAdapter",
-          "line_count": 359,
+          "line_count": 360,
           "method_count": 18
         },
         {
