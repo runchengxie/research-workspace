@@ -121,3 +121,18 @@ def test_contract_smoke_includes_manifest_check() -> None:
 
     assert results[0].name == "artifact contract manifest"
     assert results[0].severity == "OK"
+
+
+def test_artifact_envelope_adoption_lists_match_producer_status() -> None:
+    manifest = _load_manifest()
+    envelope = manifest["artifact_envelope"]
+    adopted = set(envelope["adopted_by"])
+    pending = set(envelope["adoption_pending"])
+
+    assert {
+        "signals.parquet",
+        "signals_style_replica.parquet",
+        "positions_by_rebalance.csv",
+    } <= adopted
+    assert "targets.json" in pending
+    assert not adopted.intersection(pending)
