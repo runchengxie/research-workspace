@@ -21,11 +21,12 @@
     "write_mode": "opt_in",
     "legacy_readers_required": true,
     "helper_layer": "ready",
-    "adopted_by": [],
-    "adoption_pending": [
+    "adopted_by": [
       "signals.parquet",
       "signals_style_replica.parquet",
-      "positions_by_rebalance.csv",
+      "positions_by_rebalance.csv"
+    ],
+    "adoption_pending": [
       "targets.json"
     ],
     "required_fields": [
@@ -144,7 +145,7 @@
         "rows",
         "required_columns"
       ],
-      "notes": "Metadata travels with signals.parquet and records the schema and row-level summary needed by downstream audit. market-intel/hot-sector-screener emits compatible metadata for external daily candidate signals."
+      "notes": "Metadata travels with signals.parquet and records the schema and row-level summary needed by downstream audit. write_signal_artifact additionally writes the artifact_envelope key with a research.artifact-envelope.v2 envelope. market-intel/hot-sector-screener emits compatible metadata for external daily candidate signals."
     },
     {
       "artifact": "positions_by_rebalance.csv",
@@ -178,7 +179,7 @@
         "signal",
         "rank"
       ],
-      "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff. The companion positions_by_rebalance.meta.json is the planned location for the research.artifact-envelope.v2 envelope, not yet written by the producer."
+      "notes": "Portfolio-backtester owns portfolio construction output; strategy-pipeline consumes saved positions for export-targets handoff. write_positions_by_rebalance_artifact writes the companion positions_by_rebalance.meta.json carrying a research.artifact-envelope.v2 envelope; the orchestration run writer has not adopted the helper yet."
     },
     {
       "artifact": "targets.json",
