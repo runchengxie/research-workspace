@@ -1,0 +1,51 @@
+{
+  "schema_version": "research_case.v1",
+  "case_id": "daily-watch20-promotion-readiness",
+  "question": "DailyWatch20 当前研究证据是否足以支撑其从 research_shadow 晋级到生产级？",
+  "as_of": "2026-08-18",
+  "research_specs": [
+    "strategy-research/strategies/daily_watch20/README.md"
+  ],
+  "claims": [
+    "daily_watch20.alpha_persistence",
+    "daily_watch20.cost_sensitivity"
+  ],
+  "evidence_bundles": [
+    "strategy-research/evidence/daily_watch20.json",
+    "docs/evidence/a-share-cpcv-20260601.json",
+    "docs/evidence/a-share-benchmark-ladder-20260601.json",
+    "docs/evidence/a-share-turnover-cost-20260601.json",
+    "docs/evidence/a-share-final-oos-substitute-20260601.json"
+  ],
+  "reviews": [
+    {
+      "review_id": "daily-watch20-logic-r1",
+      "kind": "logic",
+      "status": "completed",
+      "file": "reviews/logic.json"
+    },
+    {
+      "review_id": "daily-watch20-evidence-r1",
+      "kind": "evidence",
+      "status": "completed",
+      "file": "reviews/evidence.json"
+    }
+  ],
+  "known_gaps": [
+    "cost: 长窗口成本压力证据 pending（a-share-turnover-cost-20260601.json status=pending）",
+    "regime: 未按市场状态分别报告表现",
+    "final_oos: 以书面替代声明代替真实最终样本外",
+    "pit: 财务报表 PIT 未启用（statement_features_enabled=false）",
+    "capacity: 容量评估 pending"
+  ],
+  "abstentions": [
+    {
+      "dimension": "晋级",
+      "reason": "final_oos、cost、regime 三项证据未达标，缺数据即放弃晋级判断。"
+    }
+  ],
+  "decision": {
+    "status": "no_view",
+    "thesis": "DailyWatch20 在 walk-forward 与 CPCV 上呈现排序能力，但 final_oos 为书面替代、长窗口成本压力与分状态表现证据 pending、财务报表 PIT 未启用。以当前证据不能判定是否满足生产级验收，保持 no_view，晋级留待 E2 长窗口证据补齐后重新评审。"
+  }
+}

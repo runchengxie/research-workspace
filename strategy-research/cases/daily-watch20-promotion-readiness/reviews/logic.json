@@ -1,0 +1,21 @@
+{
+  "schema_version": "research_review.v1",
+  "review_id": "daily-watch20-logic-r1",
+  "kind": "logic",
+  "status": "completed",
+  "case_id": "daily-watch20-promotion-readiness",
+  "as_of": "2026-08-18",
+  "findings": [
+    {
+      "category": "外推超出证据范围",
+      "detail": "alpha_persistence 判断把短窗口 walk-forward 与 CPCV 的排序能力外推到生产级，超出证据覆盖范围。",
+      "severity": "medium"
+    },
+    {
+      "category": "缺口被叙事补上",
+      "detail": "cost_sensitivity 判断以短窗口 30bps 假设推断长窗口成本可覆盖，实际长窗口成本证据 pending。",
+      "severity": "medium"
+    }
+  ],
+  "conclusion": "逻辑线索在短窗口内自洽，但存在把短窗口证据外推到晋级结论的风险。decision.status 取 no_view 与证据范围一致。"
+}

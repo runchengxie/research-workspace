@@ -1,0 +1,31 @@
+{
+  "schema_version": "claim.v1",
+  "claim_id": "style_replica.factor_semantics_owner_split",
+  "statement": "StyleReplica A80/B20 的风格因子语义由 alpha 职责维护、组合语义由 portfolio 职责维护，表现层在 strategy-research 解耦。当前生命周期为 operational_research，但七项强制证据全部缺失。",
+  "claim_type": "fact",
+  "supports": [
+    "evidence://strategy-research/strategies/style_replica/README.md"
+  ],
+  "contradicts": [],
+  "critical_assumptions": [
+    {
+      "assumption_id": "owner_split_stable",
+      "statement": "因子与组合职责拆分的边界稳定，不会因表现层增长而回退到 pipeline。"
+    }
+  ],
+  "invalidation_conditions": [
+    {
+      "observable": "生产资格",
+      "threshold": "不满足 operational_research 的七项强制证据即视为未晋级",
+      "horizon": "每次证据门禁评审"
+    }
+  ],
+  "abstain_conditions": [
+    {
+      "dimension": "证据完备度",
+      "reason": "pit、walk_forward、benchmark_matrix、cost、final_oos、cpcv、regime 七项全部 missing，未形成晋级证据。"
+    }
+  ],
+  "status": "active",
+  "last_reviewed": "2026-08-18"
+}

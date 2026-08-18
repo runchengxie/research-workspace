@@ -1,0 +1,37 @@
+{
+  "schema_version": "claim.v1",
+  "claim_id": "daily_watch20.cost_sensitivity",
+  "statement": "DailyWatch20 在计入交易成本后仍可能保留正收益，但当前只有短窗口成本记录，长窗口成本压力证据仍是 pending，不足以支撑晋级判断。",
+  "claim_type": "estimate",
+  "supports": [
+    "evidence://strategy-research/evidence/daily_watch20.json#cost"
+  ],
+  "contradicts": [
+    "evidence://strategy-research/evidence/daily_watch20.json#cost"
+  ],
+  "critical_assumptions": [
+    {
+      "assumption_id": "cost_bps_estimate",
+      "statement": "短窗口使用的 30bps 成本与真实换手成本量级一致。"
+    },
+    {
+      "assumption_id": "turnover_stable",
+      "statement": "0.85 的换手率在长窗口下不会显著抬升。"
+    }
+  ],
+  "invalidation_conditions": [
+    {
+      "observable": "长窗口成本压力证据中的 net 夏普",
+      "threshold": "≤ 0",
+      "horizon": "长窗口成本报告出具后"
+    }
+  ],
+  "abstain_conditions": [
+    {
+      "dimension": "长窗口成本",
+      "reason": "a-share-turnover-cost-20260601.json status=pending，未形成成本压力证据。"
+    }
+  ],
+  "status": "proposed",
+  "last_reviewed": "2026-08-18"
+}

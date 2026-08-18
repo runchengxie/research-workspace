@@ -1,0 +1,26 @@
+{
+  "schema_version": "research_review.v1",
+  "review_id": "daily-watch20-evidence-r1",
+  "kind": "evidence",
+  "status": "completed",
+  "case_id": "daily-watch20-promotion-readiness",
+  "as_of": "2026-08-18",
+  "findings": [
+    {
+      "category": "测量值被误称事实",
+      "detail": "cost 检查的 30bps 成本与 0.85 换手来自短窗口记录，被当作晋级可用的成本假设。",
+      "severity": "medium"
+    },
+    {
+      "category": "缺失证据",
+      "detail": "final_oos 以书面替代声明代替真实样本外，不能作为生产级证据。",
+      "severity": "high"
+    },
+    {
+      "category": "PIT",
+      "detail": "statement_features_enabled=false，财务报表未做时间点处理，排序证据的时间点有效性存疑。",
+      "severity": "medium"
+    }
+  ],
+  "conclusion": "证据包如实登记了 walk_forward/cpcv 通过与 cost/final_oos/regime/pit 缺口。缺数据维度必须 abstain，不满足晋级条件。"
+}
