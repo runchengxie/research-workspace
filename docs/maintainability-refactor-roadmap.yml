@@ -3,8 +3,8 @@
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
-    "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。accepted_hotspots 登记册截至 2026-08-11 共 182 条；其中 96 条对应文件已降到 500 行阈值以下、5 条已显式 cleared/resolved，81 条仍为真实未解决热点（>=500 行且未清除）。accepted_hotspots_count 记录真实未解决热点数，不等于登记册总长度。",
-    "accepted_hotspots_count": 81,
+    "note": "当前生效预算表（max 值）；counts 仅可由显式 owner 决策上调（ratchet-only）。accepted_hotspots 登记册截至 2026-08-18 共 182 条；其中 97 条对应文件已降到 500 行阈值以下、5 条已显式 cleared/resolved，80 条仍为真实未解决热点（>=500 行且未清除）。accepted_hotspots_count 记录真实未解决热点数，不等于登记册总长度。",
+    "accepted_hotspots_count": 80,
     "by_repo": {
       "research-workspace": {
         "max_large_files": 4,
@@ -19,21 +19,21 @@
         "max_large_classes": 1
       },
       "alpha-research": {
-        "max_large_files": 4,
+        "max_large_files": 5,
         "max_long_functions": 21,
         "max_complexity_hotspots": 25,
         "max_large_classes": 0
       },
       "portfolio-backtester": {
         "max_large_files": 8,
-        "max_long_functions": 28,
+        "max_long_functions": 29,
         "max_complexity_hotspots": 26,
         "max_large_classes": 0
       },
-      "strategy-app": {
-        "max_large_files": 1,
-        "max_long_functions": 2,
-        "max_complexity_hotspots": 1,
+"strategy-app": {
+        "max_large_files": 2,
+        "max_long_functions": 6,
+        "max_complexity_hotspots": 3,
         "max_large_classes": 0
       },
       "strategy-pipeline": {
@@ -61,7 +61,7 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 5,
+      "max_large_files": 4,
       "max_long_functions": 2,
       "max_complexity_hotspots": 0,
       "max_large_classes": 2,
@@ -74,7 +74,8 @@
         "2026-07-31: 为允许从超项目 linked worktree 直推，_is_same_git_repo 识别 worktree 与主工作树同仓库，新增 tests/test_pre_push_hooks.py(536) 进 large_files；research-workspace max_large_files 3->4（ratchet 上调，已在 accepted_hotspots 登记该测试文件），accepted_hotspots_count 校准为 178（含本次新增 1 条登记）。",
         "2026-08-01: style factor 年度图拆分矩阵构造、热力图和年度优胜因子绘制 helper，在提升长历史图表可读性的同时将 research-workspace complexity_hotspots 2->1，并同步下调预算。",
         "2026-08-16: R5 去重将 4 个研究脚本测试迁入工作区 tests/（test_next_open_to_high_research.py 795 行），large_files 4->5，同步上调预算。",
-        "2026-08-18: 抽取 _collect_issues 将 build_report 复杂度 15 降至阈值内，research-workspace complexity_hotspots 1->0，同步下调预算至 0（棘轮锁死根层复杂度热点）。"
+        "2026-08-18: 抽取 _collect_issues 将 build_report 复杂度 15 降至阈值内，research-workspace complexity_hotspots 1->0，同步下调预算至 0（棘轮锁死根层复杂度热点）。",
+        "2026-08-18: workspace_governance.py(556) 抽出 compatibility-facade 校验到 workspace_governance_facades.py(184)，主脚本 556->401 低于 500 阈值，research-workspace large_files 5->4，同步下调预算至 4（真实债务收敛，非回归）。"
       ]
     },
     {
@@ -305,7 +306,9 @@
       "path": "scripts/workspace_governance.py",
       "owner_repo": "research-workspace",
       "reason": "The stdlib-only workspace gate loads and validates the small set of release governance manifests through one deterministic CLI and shared Check model",
-      "next_action": "extract compatibility-facade and maintainability-roadmap validators into modules before adding another manifest family"
+      "next_action": "extract compatibility-facade and maintainability-roadmap validators into modules before adding another manifest family",
+      "resolved": true,
+      "resolved_note": "2026-08-18: compatibility-facade 校验已抽出至 scripts/workspace_governance_facades.py(184)，主脚本降至 401 行低于 500 阈值，research-workspace large_files 5->4。剩余 roadmap/budget 校验留在主脚本。"
     },
     {
       "path": "tests/test_run_submodule_checks.py",

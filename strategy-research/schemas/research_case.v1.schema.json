@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "research_case.v1",
+  "title": "research case v1",
+  "description": "研究案例决策记录。case.json 只做导航，把研究问题、实验、证据、判断、评审与决策串成完整线索。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "question",
+    "as_of",
+    "decision"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "research_case.v1"
+    },
+    "case_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "as_of": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "research_specs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]*$"
+      }
+    },
+    "evidence_bundles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "review_id",
+          "kind",
+          "status"
+        ],
+        "properties": {
+          "review_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
+          },
+          "kind": {
+            "enum": [
+              "logic",
+              "evidence"
+            ]
+          },
+          "status": {
+            "enum": [
+              "completed",
+              "in_progress",
+              "pending"
+            ]
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "abstentions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension",
+          "reason"
+        ],
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "status",
+        "thesis"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "no_view",
+            "provisional",
+            "accepted",
+            "rejected"
+          ]
+        },
+        "thesis": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

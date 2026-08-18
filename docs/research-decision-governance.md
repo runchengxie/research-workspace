@@ -63,6 +63,9 @@
 失效条件正式替代口语化的命门概念。引用路径必须存在，与 `research_spec.v1` 的
 `evidence_refs` 非空要求保持一致。
 
+schema 文件在 `strategy-research/schemas/claim.v1.schema.json`，校验脚本为
+`scripts/decision_governance_check.py`，判断账本目录为 `strategy-research/judgment-ledger/`。
+
 ### DG2 研究案例与决策记录
 
 在 `strategy-research/cases/<案例id>/` 增加 `research_case.v1`，补齐决策线索：
@@ -80,6 +83,9 @@ strategy-research/cases/
 `case.json` 只做导航，字段包括 `question`、`as_of`、`research_specs`、`claims`、
 `evidence_bundles`、`reviews`、`known_gaps`、`abstentions` 与 `decision`。`decision` 状态
 为 `no_view`、`provisional`、`accepted`、`rejected` 之一，并记录 `thesis`。
+
+schema 文件在 `strategy-research/schemas/research_case.v1.schema.json`，校验脚本为
+`scripts/decision_governance_check.py`，案例目录为 `strategy-research/cases/`。
 
 决策线索的完整链条：
 

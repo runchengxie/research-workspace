@@ -10,11 +10,11 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 115,
-      "python_loc": 23097,
+      "python_file_count": 118,
+      "python_loc": 23610,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 5,
+        "large_files": 4,
         "long_functions": 2,
         "complexity_hotspots": 0,
         "large_classes": 2
@@ -38,11 +38,6 @@
         {
           "path": "tests/test_maintainability_governance.py",
           "loc": 608,
-          "hk_related": false
-        },
-        {
-          "path": "scripts/workspace_governance.py",
-          "loc": 556,
           "hk_related": false
         }
       ],
@@ -143,6 +138,7 @@
         "scripts/benchmark_matrix_build.py",
         "scripts/check.sh",
         "scripts/dead_code_advisory.py",
+        "scripts/decision_governance_check.py",
         "scripts/doctor_boundary_checks.py",
         "scripts/doctor_cli_checks.py",
         "scripts/doctor_common.py",
@@ -175,6 +171,7 @@
         "scripts/workspace_env.py",
         "scripts/workspace_governance.py",
         "scripts/workspace_governance_common.py",
+        "scripts/workspace_governance_facades.py",
         "scripts/workspace_governance_quality.py",
         "scripts/workspace_governance_submodules.py",
         "scripts/workspace_import_boundaries.py"
@@ -1610,8 +1607,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 370,
-      "python_loc": 83446,
+      "python_file_count": 371,
+      "python_loc": 83609,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,

@@ -133,6 +133,7 @@ def test_artifact_envelope_adoption_lists_match_producer_status() -> None:
         "signals.parquet",
         "signals_style_replica.parquet",
         "positions_by_rebalance.csv",
+        "targets.json",
     } <= adopted
-    assert "targets.json" in pending
+    assert not pending
     assert not adopted.intersection(pending)

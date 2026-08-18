@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-17",
+  "_last_changed": "2026-08-18",
   "_owner": "research-workspace",
   "schema_version": "script_lifecycle.v1",
   "valid_lifecycles": [
@@ -20,14 +20,354 @@
   },
   "records": [
     {
-      "path": "scripts/framework_adapter_execution_evidence.py",
-      "owner": "research-workspace",
-      "purpose": "Import-only strict validator for the framework-neutral qexec recovery matrix wire contract",
+      "path": "alpha-research/scripts/dev/maintainability_metrics.py",
+      "owner": "alpha-research",
+      "purpose": "Alpha research static maintainability metrics and ratchet check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout",
+      "removal_condition": "remove only after alpha-research maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
+    },
+    {
+      "path": "alpha-research/scripts/dev/namespace_boundary.py",
+      "owner": "alpha-research",
+      "purpose": "Alpha package ownership and forbidden legacy namespace boundary gate",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "alpha-research source checkout",
+      "removal_condition": "remove only after owner-native alpha package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
+    },
+    {
+      "path": "alpha-research/scripts/dev/run_tests.sh",
+      "owner": "alpha-research",
+      "purpose": "Alpha research repo-local test, lint, typecheck, format, and maintainability dispatcher",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
+      "removal_condition": "remove only after alpha-research replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
+    },
+    {
+      "path": "market-data-platform/scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py",
+      "owner": "market-data-platform",
+      "purpose": "Archived one-off TuShare SW2021 industry changes snapshot builder",
+      "lifecycle": "archive",
+      "safe_to_run_locally": false,
+      "writes_files": "DATA_PLATFORM_ROOT/assets/tushare/a_share/industry_changes/ and dataset_registry.csv when run",
+      "external_dependencies": "TUSHARE_TOKEN/TUSHARE_TOKEN_2, network access, DATA_PLATFORM_ROOT",
+      "removal_condition": "remove after market-data-platform archive review confirms no restore evidence needs this historical builder for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/maintainability_metrics.py",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio backtester static maintainability metrics and ratchet check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout",
+      "removal_condition": "remove only after portfolio-backtester maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/namespace_boundary.py",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio package ownership and forbidden legacy namespace boundary gate",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "portfolio-backtester source checkout",
+      "removal_condition": "remove only after owner-native portfolio package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
+    },
+    {
+      "path": "portfolio-backtester/scripts/dev/run_tests.sh",
+      "owner": "portfolio-backtester",
+      "purpose": "Portfolio backtester repo-local test, lint, typecheck, format, and maintainability dispatcher",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
+      "removal_condition": "remove only after portfolio-backtester replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/__init__.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Package marker so project_tools is importable as a package for operator smoke tooling",
       "lifecycle": "release",
       "safe_to_run_locally": true,
       "writes_files": "none",
-      "external_dependencies": "none; mirrors execution_recovery_matrix.v1 without importing qexec or vn.py",
-      "removal_condition": "remove with framework_adapter_evidence.py only after a versioned successor validates the execution recovery contract for two release reviews"
+      "external_dependencies": "none",
+      "removal_condition": "remove only after project_tools is no longer imported as a package, confirmed by no owner-repo references"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/evidence_offline_chain.py",
+      "owner": "quant-execution-engine",
+      "purpose": "可复现离线执行证据链：local-dry-run 覆盖 targets 解析到预演与审计，mock-sim 增加模拟成交、订单查询与重启恢复，产物写入 QEXEC_OUTPUTS_DIR 隔离目录",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "QEXEC_OUTPUTS_DIR 指定的运行目录",
+      "external_dependencies": "qexec CLI 与对应后端适配器",
+      "removal_condition": "证据由 successor 命令或自动化门禁替代后移除"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/export_repo_source.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Source export for execution-engine release evidence",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit export destination",
+      "external_dependencies": "git checkout",
+      "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/package.sh",
+      "owner": "quant-execution-engine",
+      "purpose": "Package execution-engine source for release evidence",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit package output",
+      "external_dependencies": "shell, tar, git",
+      "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/__init__.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Re-export facade for the operator smoke package (public API surface)",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/audit.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Audit-log discovery and summarization for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/evidence.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Evidence JSON writer for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/parser.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Argparse parser and main() entry for the operator smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/state.py",
+      "owner": "quant-execution-engine",
+      "purpose": "State and outcome queries for the operator smoke harness (latest tracked order, outcome classification)",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/steps.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Step execution primitives (env capture/apply, subprocess step runner, broker workflow steps)",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "none",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator/workflow.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Operator smoke workflow orchestration (config/account/quote/rebalance/orders/order/reconcile/exceptions/cancel-all steps)",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Operator execution smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "broker credentials or explicit dry-run setup",
+      "removal_condition": "split or remove only after execution smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_signal_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "Signal handoff smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "local fixtures",
+      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "quant-execution-engine/project_tools/smoke_target_harness.py",
+      "owner": "quant-execution-engine",
+      "purpose": "targets.json smoke harness",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "outputs/evidence when requested",
+      "external_dependencies": "local fixtures",
+      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
+    },
+    {
+      "path": "scripts/benchmark_matrix_build.py",
+      "owner": "research-workspace",
+      "purpose": "Build the benchmark_matrix.v1 exam table from benchmark_rows.v1 raw results and enforce the at-least-two-axes rule",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --output is provided",
+      "external_dependencies": "none; pure stdlib against benchmark_rows.v1 JSON input",
+      "removal_condition": "remove only after benchmark matrix generation moves into the strategy promotion gate and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/check.sh",
+      "owner": "research-workspace",
+      "purpose": "One-shot local gate wrapper that runs the same checks a push would trigger, without requiring the core.hooksPath hook to be installed",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "python, uv, git, and the same tools invoked by run_quality_checks.py / workspace_doctor.py / run_submodule_checks.py",
+      "removal_condition": "remove only after an equivalent no-install check entry point replaces this script and contributor documentation no longer points to it for two release reviews"
+    },
+    {
+      "path": "scripts/dead_code_advisory.py",
+      "owner": "research-workspace",
+      "purpose": "High-confidence dead-code advisory wrapper for superproject-owned Python code",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "vulture or uvx network/tool cache",
+      "removal_condition": "remove only after dead-code advisory scanning moves into a successor quality profile and no docs or maintenance workflow calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/decision_governance_check.py",
+      "owner": "research-workspace",
+      "purpose": "Research decision governance manifest validation (claim.v1 and research_case.v1)",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; read-only validation",
+      "external_dependencies": "none; stdlib-only",
+      "removal_condition": "remove only after decision governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_boundary_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level script import boundary checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_cli_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Public CLI contract checks for workspace-level submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_common.py",
+      "owner": "research-workspace",
+      "purpose": "Package marker for the per-domain workspace doctor check modules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_data_platform_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Data platform root and current-contract checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_doc_checks.py",
+      "owner": "research-workspace",
+      "purpose": "README submodule coverage check",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_env_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level output, secret and shared-code leakage checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_git_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Gitmodules structure check for the research-workspace superproject",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_hk_archive_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Hong Kong private archive governance checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_hook_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Local git hooks installation checks for superproject and submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_submodule_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Submodule initialization and cleanliness checks",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
     },
     {
       "path": "scripts/framework_adapter_evidence.py",
@@ -40,6 +380,16 @@
       "removal_condition": "remove only after framework adapter evidence validation moves to a versioned successor and no release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/framework_adapter_execution_evidence.py",
+      "owner": "research-workspace",
+      "purpose": "Import-only strict validator for the framework-neutral qexec recovery matrix wire contract",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "none; mirrors execution_recovery_matrix.v1 without importing qexec or vn.py",
+      "removal_condition": "remove with framework_adapter_evidence.py only after a versioned successor validates the execution recovery contract for two release reviews"
+    },
+    {
       "path": "scripts/framework_adapter_release_gate.py",
       "owner": "research-workspace",
       "purpose": "Merge-before-pin and release-state enforcement for optional framework adapters",
@@ -48,6 +398,216 @@
       "writes_files": "none",
       "external_dependencies": "git checkout and docs/framework-adapter-release.yml",
       "removal_condition": "remove only after submodule release pin governance moves to a versioned successor and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/hk_archive_gate.py",
+      "owner": "research-workspace",
+      "purpose": "Read-only HK private archive evidence and removal gate",
+      "lifecycle": "archive",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --out is provided",
+      "external_dependencies": "git checkout with initialized submodules",
+      "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
+    },
+    {
+      "path": "scripts/install_pre_push_hooks.py",
+      "owner": "research-workspace",
+      "purpose": "Install and inspect the shared local Git hook dispatcher across the superproject and managed submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "repo-local core.hooksPath values in Git configuration when installation is requested",
+      "external_dependencies": "git checkout with initialized submodules and tracked .githooks dispatchers",
+      "removal_condition": "remove only after local cross-repo push gates move to an equivalent managed hook installer and contributor documentation no longer calls this command for two release reviews"
+    },
+    {
+      "path": "scripts/maintainability_baseline.py",
+      "owner": "research-workspace",
+      "purpose": "Cross-repo maintainability baseline generation",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "only when --out is provided",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
+    },
+    {
+      "path": "scripts/namespace_contracts.py",
+      "owner": "research-workspace",
+      "purpose": "Owner-native Python namespace release-manifest and submodule pin validation",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "git checkout with initialized alpha-research, portfolio-backtester, and strategy-pipeline submodules",
+      "removal_condition": "remove only after the owner-native namespace migration release gate moves to a versioned successor and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/package_d11_h5_repro.py",
+      "owner": "research-workspace",
+      "purpose": "Build the portable D11-H5 core archive and optional TuShare minute-data add-on",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "versioned tar.zst archives, manifests, and SHA-256 files under an explicit download directory",
+      "external_dependencies": "clean main checkouts, local published data assets, GNU tar, zstd, and sufficient disk space",
+      "removal_condition": "remove only after D11-H5 reproducibility moves to a versioned successor and two release reviews record no package consumers"
+    },
+    {
+      "path": "scripts/print_version_matrix.py",
+      "owner": "research-workspace",
+      "purpose": "Workspace and submodule version matrix rendering",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git checkout with initialized submodules",
+      "removal_condition": "remove only after submodule version locking no longer appears in release/doctor checks for two release reviews"
+    },
+    {
+      "path": "scripts/research_spec_check.py",
+      "owner": "research-workspace",
+      "purpose": "Validate research_spec.v1 experiment manifests under strategy-research/experiments and verify evidence references exist",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none; pure stdlib against research_spec.json files",
+      "removal_condition": "remove only after research spec validation moves into an experiment gate and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/run_pre_push_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Run the complete quality gate owned by the repository currently being pushed",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only, except outputs created by delegated repository-native quality commands",
+      "external_dependencies": "git checkout with initialized submodules and tools declared by the selected root or submodule full profile",
+      "removal_condition": "remove only after per-repository local push enforcement moves to an equivalent fail-closed dispatcher and no installed hook or contributor documentation calls this command for two release reviews"
+    },
+    {
+      "path": "scripts/run_quality_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level quality profile dispatcher",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "selected profile tools",
+      "removal_condition": "remove only after top-level quality profiles are replaced or retired and no CI/release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/run_research_layer_lint.py",
+      "owner": "research-workspace",
+      "purpose": "Lint the migrated style-factor presentation layer (strategy-research/style_factors and tests) with its own ruff profile, which intentionally permits Chinese full-width punctuation",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "python ruff module; runs from inside strategy-research so its pyproject.toml wins over the superproject ruff profile",
+      "removal_condition": "remove only after the research layer lint moves into a unified superproject ruff profile and no pre-push gate or contributor documentation calls this command for two release reviews"
+    },
+    {
+      "path": "scripts/run_submodule_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Delegate smoke/full checks to submodules",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "submodule environments",
+      "removal_condition": "remove only after submodule check delegation is replaced by explicit repo-level commands and no CI/release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/scan_workspace_secrets.py",
+      "owner": "research-workspace",
+      "purpose": "Top-level secret and private path scan",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after public/private boundary checks move to another gate and two release reviews record no direct calls to this script"
+    },
+    {
+      "path": "scripts/strategy_evidence_gate.py",
+      "owner": "research-workspace",
+      "purpose": "Lifecycle-aware strategy evidence gate that validates per-strategy evidence bundles against evidence_policy.json and enforces the benchmark matrix requirement",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none; pure stdlib against strategy-research/catalog.json and strategy-research/evidence_policy.json",
+      "removal_condition": "remove only after strategy evidence checks move into the strategy promotion gate and no release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_doctor.py",
+      "owner": "research-workspace",
+      "purpose": "Workspace health and boundary checks",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "git and optional DATA_PLATFORM_ROOT",
+      "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_env.py",
+      "owner": "research-workspace",
+      "purpose": "Allowlisted top-level .env parsing for workspace path settings",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after workspace doctor no longer reads top-level .env path settings"
+    },
+    {
+      "path": "scripts/workspace_governance.py",
+      "owner": "research-workspace",
+      "purpose": "Maintainability governance register validation used by workspace doctor",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_common.py",
+      "owner": "research-workspace",
+      "purpose": "Shared Check type for workspace governance modules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace governance modules",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_facades.py",
+      "owner": "research-workspace",
+      "purpose": "Compatibility facade register drift validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "none",
+      "removal_condition": "remove only after compatibility facade governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_quality.py",
+      "owner": "research-workspace",
+      "purpose": "Ruff and ty exclude-register drift validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "submodule pyproject.toml files",
+      "removal_condition": "remove only after quality coverage governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_governance_submodules.py",
+      "owner": "research-workspace",
+      "purpose": "Submodule delegated-check governance validation used by workspace governance",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_governance.py",
+      "external_dependencies": "scripts/submodule_checks.json",
+      "removal_condition": "remove only after delegated submodule governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_import_boundaries.py",
+      "owner": "research-workspace",
+      "purpose": "Cross-repo import direction and source layout budget gate for the stage 3.5/4 repo split",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "initialized workspace submodules",
+      "removal_condition": "remove only after repo split import direction budgets move into repo-local CI gates and no workspace quality profile calls this script for two release reviews"
     },
     {
       "path": "src/research_contracts/a_share_readiness.py",
@@ -90,236 +650,6 @@
       "removal_condition": "remove only after A-share readiness evidence is no longer checked by workspace doctor/CI for two release reviews and the owning checklist records the successor evidence path"
     },
     {
-      "path": "scripts/hk_archive_gate.py",
-      "owner": "research-workspace",
-      "purpose": "Read-only HK private archive evidence and removal gate",
-      "lifecycle": "archive",
-      "safe_to_run_locally": true,
-      "writes_files": "only when --out is provided",
-      "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "remove only after all related compatibility deprecation records are no longer pending/manual_review_required and no archive gate is required for two release reviews"
-    },
-    {
-      "path": "scripts/maintainability_baseline.py",
-      "owner": "research-workspace",
-      "purpose": "Cross-repo maintainability baseline generation",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "only when --out is provided",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after maintainability baseline generation is replaced, tests stop importing the generator, and two release reviews record zero active use"
-    },
-    {
-      "path": "scripts/package_d11_h5_repro.py",
-      "owner": "research-workspace",
-      "purpose": "Build the portable D11-H5 core archive and optional TuShare minute-data add-on",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "versioned tar.zst archives, manifests, and SHA-256 files under an explicit download directory",
-      "external_dependencies": "clean main checkouts, local published data assets, GNU tar, zstd, and sufficient disk space",
-      "removal_condition": "remove only after D11-H5 reproducibility moves to a versioned successor and two release reviews record no package consumers"
-    },
-    {
-      "path": "scripts/namespace_contracts.py",
-      "owner": "research-workspace",
-      "purpose": "Owner-native Python namespace release-manifest and submodule pin validation",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "git checkout with initialized alpha-research, portfolio-backtester, and strategy-pipeline submodules",
-      "removal_condition": "remove only after the owner-native namespace migration release gate moves to a versioned successor and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "strategy-research/style_factors/style_factor_attribution.py",
-      "owner": "research-workspace",
-      "purpose": "Run A-share 15-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/",
-      "external_dependencies": "DATA_PLATFORM_ROOT, local style_factors package, pandas/numpy/matplotlib/pyarrow",
-      "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
-    },
-    {
-      "path": "alpha-research/scripts/dev/maintainability_metrics.py",
-      "owner": "alpha-research",
-      "purpose": "Alpha research static maintainability metrics and ratchet check",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "git checkout",
-      "removal_condition": "remove only after alpha-research maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
-    },
-    {
-      "path": "alpha-research/scripts/dev/namespace_boundary.py",
-      "owner": "alpha-research",
-      "purpose": "Alpha package ownership and forbidden legacy namespace boundary gate",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "alpha-research source checkout",
-      "removal_condition": "remove only after owner-native alpha package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
-    },
-    {
-      "path": "alpha-research/scripts/dev/run_tests.sh",
-      "owner": "alpha-research",
-      "purpose": "Alpha research repo-local test, lint, typecheck, format, and maintainability dispatcher",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
-      "removal_condition": "remove only after alpha-research replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
-    },
-    {
-      "path": "portfolio-backtester/scripts/dev/maintainability_metrics.py",
-      "owner": "portfolio-backtester",
-      "purpose": "Portfolio backtester static maintainability metrics and ratchet check",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "git checkout",
-      "removal_condition": "remove only after portfolio-backtester maintainability ratchet moves to a successor command and no delegated or repo-local check calls this script for two release reviews"
-    },
-    {
-      "path": "portfolio-backtester/scripts/dev/namespace_boundary.py",
-      "owner": "portfolio-backtester",
-      "purpose": "Portfolio package ownership and forbidden legacy namespace boundary gate",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "portfolio-backtester source checkout",
-      "removal_condition": "remove only after owner-native portfolio package boundaries move to a versioned successor and no repo-local or delegated quality check calls this script for two release reviews"
-    },
-    {
-      "path": "portfolio-backtester/scripts/dev/run_tests.sh",
-      "owner": "portfolio-backtester",
-      "purpose": "Portfolio backtester repo-local test, lint, typecheck, format, and maintainability dispatcher",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "selected repo-local tools and optional uv-managed dev dependencies",
-      "removal_condition": "remove only after portfolio-backtester replaces the repo-local quality dispatcher and no docs, delegated checks, or contributors call it for two release reviews"
-    },
-    {
-      "path": "scripts/print_version_matrix.py",
-      "owner": "research-workspace",
-      "purpose": "Workspace and submodule version matrix rendering",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "git checkout with initialized submodules",
-      "removal_condition": "remove only after submodule version locking no longer appears in release/doctor checks for two release reviews"
-    },
-    {
-      "path": "scripts/install_pre_push_hooks.py",
-      "owner": "research-workspace",
-      "purpose": "Install and inspect the shared local Git hook dispatcher across the superproject and managed submodules",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "repo-local core.hooksPath values in Git configuration when installation is requested",
-      "external_dependencies": "git checkout with initialized submodules and tracked .githooks dispatchers",
-      "removal_condition": "remove only after local cross-repo push gates move to an equivalent managed hook installer and contributor documentation no longer calls this command for two release reviews"
-    },
-    {
-      "path": "scripts/run_quality_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Top-level quality profile dispatcher",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "selected profile tools",
-      "removal_condition": "remove only after top-level quality profiles are replaced or retired and no CI/release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/dead_code_advisory.py",
-      "owner": "research-workspace",
-      "purpose": "High-confidence dead-code advisory wrapper for superproject-owned Python code",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "vulture or uvx network/tool cache",
-      "removal_condition": "remove only after dead-code advisory scanning moves into a successor quality profile and no docs or maintenance workflow calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_import_boundaries.py",
-      "owner": "research-workspace",
-      "purpose": "Cross-repo import direction and source layout budget gate for the stage 3.5/4 repo split",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "initialized workspace submodules",
-      "removal_condition": "remove only after repo split import direction budgets move into repo-local CI gates and no workspace quality profile calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/run_pre_push_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Run the complete quality gate owned by the repository currently being pushed",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only, except outputs created by delegated repository-native quality commands",
-      "external_dependencies": "git checkout with initialized submodules and tools declared by the selected root or submodule full profile",
-      "removal_condition": "remove only after per-repository local push enforcement moves to an equivalent fail-closed dispatcher and no installed hook or contributor documentation calls this command for two release reviews"
-    },
-    {
-      "path": "scripts/run_submodule_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Delegate smoke/full checks to submodules",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "submodule environments",
-      "removal_condition": "remove only after submodule check delegation is replaced by explicit repo-level commands and no CI/release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/run_research_layer_lint.py",
-      "owner": "research-workspace",
-      "purpose": "Lint the migrated style-factor presentation layer (strategy-research/style_factors and tests) with its own ruff profile, which intentionally permits Chinese full-width punctuation",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "python ruff module; runs from inside strategy-research so its pyproject.toml wins over the superproject ruff profile",
-      "removal_condition": "remove only after the research layer lint moves into a unified superproject ruff profile and no pre-push gate or contributor documentation calls this command for two release reviews"
-    },
-    {
-      "path": "scripts/scan_workspace_secrets.py",
-      "owner": "research-workspace",
-      "purpose": "Top-level secret and private path scan",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after public/private boundary checks move to another gate and two release reviews record no direct calls to this script"
-    },
-    {
-      "path": "scripts/strategy_evidence_gate.py",
-      "owner": "research-workspace",
-      "purpose": "Lifecycle-aware strategy evidence gate that validates per-strategy evidence bundles against evidence_policy.json and enforces the benchmark matrix requirement",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "none; pure stdlib against strategy-research/catalog.json and strategy-research/evidence_policy.json",
-      "removal_condition": "remove only after strategy evidence checks move into the strategy promotion gate and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/research_spec_check.py",
-      "owner": "research-workspace",
-      "purpose": "Validate research_spec.v1 experiment manifests under strategy-research/experiments and verify evidence references exist",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "none; pure stdlib against research_spec.json files",
-      "removal_condition": "remove only after research spec validation moves into an experiment gate and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/benchmark_matrix_build.py",
-      "owner": "research-workspace",
-      "purpose": "Build the benchmark_matrix.v1 exam table from benchmark_rows.v1 raw results and enforce the at-least-two-axes rule",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "only when --output is provided",
-      "external_dependencies": "none; pure stdlib against benchmark_rows.v1 JSON input",
-      "removal_condition": "remove only after benchmark matrix generation moves into the strategy promotion gate and no release checklist calls this script for two release reviews"
-    },
-    {
       "path": "src/research_contracts/smoke_contracts.py",
       "owner": "research-workspace",
       "purpose": "Cross-repo contract smoke commands",
@@ -328,176 +658,6 @@
       "writes_files": "stdout only",
       "external_dependencies": "submodule CLIs and optional DATA_PLATFORM_ROOT",
       "removal_condition": "remove only after cross-repo handoff smoke coverage moves to repo-local gates and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_doctor.py",
-      "owner": "research-workspace",
-      "purpose": "Workspace health and boundary checks",
-      "lifecycle": "ci",
-      "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "git and optional DATA_PLATFORM_ROOT",
-      "removal_condition": "remove only after workspace health checks move to a successor command and no CI/release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_common.py",
-      "owner": "research-workspace",
-      "purpose": "Package marker for the per-domain workspace doctor check modules",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_git_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Gitmodules structure check for the research-workspace superproject",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_doc_checks.py",
-      "owner": "research-workspace",
-      "purpose": "README submodule coverage check",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_submodule_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Submodule initialization and cleanliness checks",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_hook_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Local git hooks installation checks for superproject and submodules",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_cli_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Public CLI contract checks for workspace-level submodules",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_data_platform_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Data platform root and current-contract checks",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_env_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Top-level output, secret and shared-code leakage checks",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_boundary_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Top-level script import boundary checks",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/doctor_hk_archive_checks.py",
-      "owner": "research-workspace",
-      "purpose": "Hong Kong private archive governance checks",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_env.py",
-      "owner": "research-workspace",
-      "purpose": "Allowlisted top-level .env parsing for workspace path settings",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after workspace doctor no longer reads top-level .env path settings"
-    },
-    {
-      "path": "scripts/workspace_governance.py",
-      "owner": "research-workspace",
-      "purpose": "Maintainability governance register validation used by workspace doctor",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_doctor.py",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_governance_common.py",
-      "owner": "research-workspace",
-      "purpose": "Shared Check type for workspace governance modules",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace governance modules",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after maintainability governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_governance_submodules.py",
-      "owner": "research-workspace",
-      "purpose": "Submodule delegated-check governance validation used by workspace governance",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_governance.py",
-      "external_dependencies": "scripts/submodule_checks.json",
-      "removal_condition": "remove only after delegated submodule governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "scripts/workspace_governance_quality.py",
-      "owner": "research-workspace",
-      "purpose": "Ruff and ty exclude-register drift validation used by workspace governance",
-      "lifecycle": "dev",
-      "safe_to_run_locally": true,
-      "writes_files": "none; imported by workspace_governance.py",
-      "external_dependencies": "submodule pyproject.toml files",
-      "removal_condition": "remove only after quality coverage governance moves to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
-    },
-    {
-      "path": "strategy-pipeline/scripts/internal/freeze_hk_research_outputs.py",
-      "owner": "strategy-pipeline",
-      "purpose": "HK research output cold-storage freeze",
-      "lifecycle": "release",
-      "safe_to_run_locally": false,
-      "writes_files": "cold-storage package and manifest paths",
-      "external_dependencies": "research output archive paths and release packaging tools",
-      "removal_condition": "move to archive only after research freeze evidence is no longer refreshed, archive manifest coverage remains available, and no release checklist calls this script for two release reviews"
     },
     {
       "path": "strategy-pipeline/scripts/internal/export_repo_source.py",
@@ -510,6 +670,16 @@
       "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
     },
     {
+      "path": "strategy-pipeline/scripts/internal/freeze_hk_research_outputs.py",
+      "owner": "strategy-pipeline",
+      "purpose": "HK research output cold-storage freeze",
+      "lifecycle": "release",
+      "safe_to_run_locally": false,
+      "writes_files": "cold-storage package and manifest paths",
+      "external_dependencies": "research output archive paths and release packaging tools",
+      "removal_condition": "move to archive only after research freeze evidence is no longer refreshed, archive manifest coverage remains available, and no release checklist calls this script for two release reviews"
+    },
+    {
       "path": "strategy-pipeline/scripts/internal/package_repo.sh",
       "owner": "strategy-pipeline",
       "purpose": "Package repository source for release",
@@ -520,164 +690,14 @@
       "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "quant-execution-engine/project_tools/export_repo_source.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Source export for execution-engine release evidence",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "explicit export destination",
-      "external_dependencies": "git checkout",
-      "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/package.sh",
-      "owner": "quant-execution-engine",
-      "purpose": "Package execution-engine source for release evidence",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "explicit package output",
-      "external_dependencies": "shell, tar, git",
-      "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator_harness.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Operator execution smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": false,
-      "writes_files": "outputs/evidence when requested",
-      "external_dependencies": "broker credentials or explicit dry-run setup",
-      "removal_condition": "split or remove only after execution smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/evidence_offline_chain.py",
-      "owner": "quant-execution-engine",
-      "purpose": "可复现离线执行证据链：local-dry-run 覆盖 targets 解析到预演与审计，mock-sim 增加模拟成交、订单查询与重启恢复，产物写入 QEXEC_OUTPUTS_DIR 隔离目录",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "QEXEC_OUTPUTS_DIR 指定的运行目录",
-      "external_dependencies": "qexec CLI 与对应后端适配器",
-      "removal_condition": "证据由 successor 命令或自动化门禁替代后移除"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/__init__.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Package marker so project_tools is importable as a package for operator smoke tooling",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "remove only after project_tools is no longer imported as a package, confirmed by no owner-repo references"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/__init__.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Re-export facade for the operator smoke package (public API surface)",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/parser.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Argparse parser and main() entry for the operator smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/workflow.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Operator smoke workflow orchestration (config/account/quote/rebalance/orders/order/reconcile/exceptions/cancel-all steps)",
-      "lifecycle": "release",
-      "safe_to_run_locally": false,
-      "writes_files": "outputs/evidence when requested",
-      "external_dependencies": "broker credentials or explicit dry-run setup",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/steps.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Step execution primitives (env capture/apply, subprocess step runner, broker workflow steps)",
-      "lifecycle": "release",
-      "safe_to_run_locally": false,
-      "writes_files": "none",
-      "external_dependencies": "broker credentials or explicit dry-run setup",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/state.py",
-      "owner": "quant-execution-engine",
-      "purpose": "State and outcome queries for the operator smoke harness (latest tracked order, outcome classification)",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/audit.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Audit-log discovery and summarization for the operator smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "none",
-      "external_dependencies": "none",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_operator/evidence.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Evidence JSON writer for the operator smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "outputs/evidence when requested",
-      "external_dependencies": "none",
-      "removal_condition": "split or remove only after execution smoke harness modules are consolidated and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_signal_harness.py",
-      "owner": "quant-execution-engine",
-      "purpose": "Signal handoff smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "outputs/evidence when requested",
-      "external_dependencies": "local fixtures",
-      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "quant-execution-engine/project_tools/smoke_target_harness.py",
-      "owner": "quant-execution-engine",
-      "purpose": "targets.json smoke harness",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "outputs/evidence when requested",
-      "external_dependencies": "local fixtures",
-      "removal_condition": "split or remove only after smoke harness modules are refactored, replacement commands are documented, and no release checklist calls this wrapper for two release reviews"
-    },
-    {
-      "path": "market-data-platform/scripts/internal/archive/build_a_share_tushare_sw2021_industry_changes_20260603.py",
-      "owner": "market-data-platform",
-      "purpose": "Archived one-off TuShare SW2021 industry changes snapshot builder",
-      "lifecycle": "archive",
-      "safe_to_run_locally": false,
-      "writes_files": "DATA_PLATFORM_ROOT/assets/tushare/a_share/industry_changes/ and dataset_registry.csv when run",
-      "external_dependencies": "TUSHARE_TOKEN/TUSHARE_TOKEN_2, network access, DATA_PLATFORM_ROOT",
-      "removal_condition": "remove after market-data-platform archive review confirms no restore evidence needs this historical builder for two release reviews"
-    },
-    {
-      "path": "scripts/check.sh",
+      "path": "strategy-research/style_factors/style_factor_attribution.py",
       "owner": "research-workspace",
-      "purpose": "One-shot local gate wrapper that runs the same checks a push would trigger, without requiring the core.hooksPath hook to be installed",
+      "purpose": "Run A-share 15-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",
       "lifecycle": "dev",
       "safe_to_run_locally": true,
-      "writes_files": "stdout only",
-      "external_dependencies": "python, uv, git, and the same tools invoked by run_quality_checks.py / workspace_doctor.py / run_submodule_checks.py",
-      "removal_condition": "remove only after an equivalent no-install check entry point replaces this script and contributor documentation no longer points to it for two release reviews"
+      "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/",
+      "external_dependencies": "DATA_PLATFORM_ROOT, local style_factors package, pandas/numpy/matplotlib/pyarrow",
+      "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
     }
   ]
 }
