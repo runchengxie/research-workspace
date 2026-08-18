@@ -28,9 +28,9 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "2630b302ca0e29e6ed3cde8b50e02f855472823d",
+      "commit": "c4fac0a86c5af86319fd78b299d135c1e64c5db0",
       "compatibility_package_allowed": false,
-      "pr": 68,
+      "pr": 70,
       "version": "2.1.0"
     }
   },
