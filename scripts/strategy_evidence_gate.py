@@ -282,6 +282,12 @@ def _run_gate(argv: list[str]) -> int:
     parser.add_argument("--strategy", dest="strategy_id")
     parser.add_argument("--require", dest="require_lifecycle")
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument(
+        "--zero-gaps",
+        dest="zero_gaps",
+        action="store_true",
+        help="晋级评审档：与 --strict 同用，要求研究型策略 known_gaps 为空、任何 missing 都失败",
+    )
     parser.add_argument("--json", dest="as_json", action="store_true")
     args = parser.parse_args(argv)
 
@@ -300,20 +306,46 @@ def _run_gate(argv: list[str]) -> int:
     else:
         print(_render_table(results))
 
-    # The strict gate blocks on:
+    # The strict gate (--strict) blocks on:
     # - any *unregistered* gap (a missing check a non-production strategy has
     #   not explicitly listed in its evidence bundle), and
     # - any missing check on a production-eligible strategy (which must keep
     #   every required check closed, even if the gap is registered).
     # Registered known gaps on non-production strategies are reported but do not
     # block, so the gate stays honest without freezing everyday pushes.
-    failed = any(
-        result.unregistered_gaps or (result.production_eligible and result.missing)
-        for result in results
-    )
-    if failed and (args.strict or args.strategy_id):
+    #
+    # The zero-gaps review tier (--strict --zero-gaps) is the promotion gate: it
+    # additionally fails on *any* registered known gap (a non-production strategy
+    # still carrying known_gaps) and on any remaining missing check, forcing a
+    # strategy to close every required check before it is allowed to claim
+    # promotion. Everyday pushes keep using --strict only, so research strategies
+    # may carry explicitly registered gaps without freezing the pipeline.
+    if args.zero_gaps and not args.strict:
+        raise SystemExit("--zero-gaps 必须与 --strict 同用")
+    blocked = _blocked_strategy_ids(results, zero_gaps=args.zero_gaps)
+    if blocked and (args.strict or args.strategy_id):
+        if args.zero_gaps:
+            ids = ", ".join(blocked)
+            print(f"晋级评审未通过（--zero-gaps）：{ids} 仍带已知缺口或缺失检查")
         return 1
     return 0
+
+
+def _blocked_strategy_ids(results: list[StrategyResult], *, zero_gaps: bool) -> list[str]:
+    """策略 IDs that fail the gate under the active tier.
+
+    The guard tier (``--strict`` only) blocks on unregistered gaps and on any
+    missing check of a production-eligible strategy. The promotion tier
+    (``--zero-gaps``) additionally blocks research strategies that still carry
+    registered known gaps or any remaining missing check.
+    """
+    blocked: list[str] = []
+    for result in results:
+        hard = bool(result.unregistered_gaps or (result.production_eligible and result.missing))
+        soft = bool(result.known_gaps_waived or result.missing)
+        if hard or (zero_gaps and soft):
+            blocked.append(result.strategy_id)
+    return blocked
 
 
 def main(argv: list[str] | None = None) -> int:

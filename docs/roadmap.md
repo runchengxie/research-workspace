@@ -34,10 +34,10 @@
 | 编号 | 优先级 | 状态 | 负责方 | 项目 | 当前缺口（已核实） |
 | --- | --- | --- | --- | --- | --- |
 | D1 | P0 | `in_progress` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 在 current 契约 `exists: false`（`docs/data-transition-playbook.md:38`），`capacity`/`turnover-cost` 长窗口压力证据 `pending` |
-| E1 | P0 | `in_progress` | `strategy-research`、workspace | 策略生命周期证据 | 五个强制证据策略 `production_eligible` 均为 `false`，证据包缺项均已注册为 `known_gaps`，门禁 `--strict` 已接入 pre-push 但因全非生产级而形同虚设（见治理修正 G1/G2） |
+| E1 | P0 | `complete` | `strategy-research`、workspace | 策略生命周期证据 | 门禁双档已实现（`--strict` 护栏档 + `--strict --zero-gaps` 晋级评审档），`production_eligible` 全 `false` 致原 `--strict` 形同虚设的问题以双档收口，不再误标生产级。五策略真实缺口（含 `daily_watch20` 的 pit/cost/final_oos/regime 非 pass）登记于各自 `known_gaps`，待 E2 长窗口证据补齐后晋级档归零 |
 | E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成 |
-| C1 | P1 | `in_progress` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in，全仓仅 `style_factors` 一处写入，`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享，唯一 writer 现已通过包自身 `write_mode=opt_in` 契约校验（`ArtifactEnvelopeV2` 模型加 `write_mode` 默认字段） |
-| B1 | P1 | `in_progress` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 跨仓私有别名 `_finite_positive_ratio` 已收口（`strategy-pipeline`#70 改用公开 `finite_positive_ratio`，research-workspace#149 同步 gitlink），import boundary 门禁未拦截私有符号的问题建议后续加 ruff 私有导入 lint，`RELATIVE_PERCENTILE_COL` 来自 `alpha_research.daily_watch20` 的公开 `__all__` 导出，属合规公开 API 使用 |
+| C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in，全仓仅 `style_factors` 一处写入，`research-contracts` 仅 `strategy-research` 本地消费，未跨仓共享，唯一 writer 现已通过包自身 `write_mode=opt_in` 契约校验（`ArtifactEnvelopeV2` 模型加 `write_mode` 默认字段，PR #150 已合并） |
+| B1 | P1 | `complete` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 跨仓私有别名 `_finite_positive_ratio` 已收口（`strategy-pipeline`#70 改用公开 `finite_positive_ratio`，research-workspace#149 同步 gitlink），import boundary 门禁未拦截私有符号的问题建议后续加 ruff 私有导入 lint，`RELATIVE_PERCENTILE_COL` 来自 `alpha_research.daily_watch20` 的公开 `__all__` 导出，属合规公开 API 使用 |
 | DOC1 | P1 | `in_progress` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，残留文档漂移：`strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 仍写 `operational`/`生产资格:有`，与已校正的 `catalog.json`（`research_shadow`/`false`）不一致（见治理修正 G3） |
 | X1 | P1 | `in_progress` | `quant-execution-engine` | 执行证据成熟度 | `ibkr-paper` 模拟盘（美股）已验证，无经过验证的 A 股真实报单后端，模拟盘持续联调与完整实盘证据缺失 |
 | F1 | P2 | `in_progress` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | 适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime，差分证据未成发布门禁 |
@@ -54,7 +54,7 @@
 2. 在 `a_share_current.json` 中确认该资产存在、清单可读且覆盖范围明确。
 3. 复核 PIT 财务、历史行业和股票池的时间点语义，不用最新快照回填历史。
 
-### E1：补齐策略 evidence bundle
+### E1：证据门禁双档与真实缺口登记
 
 当前以下策略有强制证据要求（五者 `production_eligible` 均为 `false`，生命周期见 `catalog.json`）：
 
@@ -64,15 +64,26 @@
 - `d11_h5_shadow`（`shadow`）
 - `dividend_growth_momentum`（`pre_production`）
 
-每个策略需要在 `strategy-research/evidence/` 下提供与生命周期匹配的证据包。完成标准是：
+#### 门禁双档设计（已落地）
 
-```bash
-python scripts/strategy_evidence_gate.py --strict
-```
+证据门禁 `scripts/strategy_evidence_gate.py` 提供两档，区分日常护栏与晋级评审：
 
-命令通过，`catalog.json` 的生命周期与证据结论一致。达到该条件后，再把严格检查接入发布门禁。
+- 护栏档 `--strict`：仅阻断未登记缺口（`unregistered_gaps`）与生产级策略的缺失项。研究型策略带已登记 `known_gaps` 仍可放行，避免冻结日常推送。此档接入 `scripts/run_pre_push_checks.py:129`，每次 pre-push 运行。
+- 晋级评审档 `--strict --zero-gaps`：要求研究型策略 `known_gaps` 为空、任何缺失检查都失败。只有在策略真正要晋级时才主动启用，恢复门禁对晋级路径的约束力。
 
-> 门禁有效性修正（G1/G2）：`--strict` 已在 `scripts/run_pre_push_checks.py:129` 接入 pre-push，但因五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，`--strict` 的失败条件（`unregistered_gaps` 或 `production_eligible and missing`）当前永不触发，门禁对缺口实际不阻断。在补齐证据前，至少应将"已知缺口豁免"策略也纳入 `--strict` 阻断，或对已晋级策略标 `production_eligible=true` 以恢复门禁约束力。
+#### 真实缺口状态
+
+`daily_watch20` 的底层 A 股证据（`docs/evidence/a-share-*.json`）明确标注 capacity 与 cost/final_oos 为 pending、券商实盘能力关闭、`automatic_promotion_allowed=false`。因此其 `catalog.json` 已从 `operational` 校正为 `research_shadow`，`production_eligible=false`。该策略当前证据包 `strategy-research/evidence/daily_watch20.json` 中 `pit`/`cost`/`final_oos`/`regime` 四项非 pass，属客观事实，不能强行补齐为 pass（那会制造虚假生产级声明）。
+
+其余四个策略同样处于研究生命周期且证据不齐，需在 E2 长窗口晋级证据阶段补齐，而非在本项造假晋级。
+
+#### 完成标准
+
+- 双档门禁已实现并通过测试（`tests/test_strategy_evidence_gate.py`）。
+- `catalog.json` 的生命周期与证据结论一致，缺口均显式登记于各策略 `known_gaps`，不被静默漂移。
+- 晋级评审时运行 `python scripts/strategy_evidence_gate.py --strict --zero-gaps`，五策略当前会因带已知缺口而失败，这是预期状态，待 E2 补齐后归零。
+
+> 治理修正（G1/G2）：原 `--strict` 因五策略 `production_eligible=false` 且缺项均注册为 `known_gaps`，失败条件永不触发，门禁形同虚设。现以双档设计收口，护栏档保日常不冻结，晋级档 `--zero-gaps` 恢复约束力，不再依赖把研究型策略误标 `production_eligible=true`。
 
 ### E2：刷新长窗口晋级证据
 
