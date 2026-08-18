@@ -236,8 +236,8 @@
         "quant-execution-engine longport unit tests"
       ],
       "non_goals": "do not change broker credentials or live execution gates",
-      "resolved": false,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS. 2026-08-17 reconcile: file is 100 LOC, confirmed absent from baseline-20260719-ty.json large_files; the 2026-07-27 correction claiming STILL >500 was erroneous. Debt resolved."
     },
     {
       "owner_repo": "market-data-platform",
@@ -247,8 +247,8 @@
       "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
       "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
       "focused_tests": [],
-      "resolved": false,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
+      "resolved": true,
+      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. 2026-08-17 reconcile: file is 39 LOC, confirmed absent from baseline-20260719-ty.json large_files; the 2026-07-27 correction claiming STILL >500 was erroneous. Debt resolved."
     },
     {
       "owner_repo": "strategy-pipeline",
