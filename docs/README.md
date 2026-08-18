@@ -60,6 +60,7 @@
 - AFML 方法落地与跨仓库版本组合：[afml-methodology-rollout.md](afml-methodology-rollout.md)
 - 策略证据门禁与生命周期必检清单：[strategy-evidence-gate.md](strategy-evidence-gate.md)
 - 实验说明书格式与校验：[research-spec.md](research-spec.md)
+- 研究判断治理与决策线索：[research-decision-governance.md](research-decision-governance.md)
 - 统一考试表格式与生成：[benchmark-matrix.md](benchmark-matrix.md)
 - 概念级机器学习探索路线图：[concept-level-ml-exploration.md](../strategy-research/experiments/style_factors/concept-level-ml-exploration.md)
 

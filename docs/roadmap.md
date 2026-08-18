@@ -45,6 +45,13 @@
 | F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | blocked（2026-08-18）：当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端，无现存代码可重构，留待进入实施阶段 |
 | M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 81 条（登记册 182 条：96 条已降到阈值下、5 条已 cleared），受棘轮预算约束，大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 4 / 顶层 4 / strategy-app 1 |
 | R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | blocked（2026-08-18）：`concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入，当前无现有 ML 探索代码可重构，留待研究结论 |
+| DG1 | P0 | `planned` | `strategy-research`、workspace | 判断账本 schema | 把策略投资判断提升为机器可检查对象：`claim_id`、`statement`、`supports`、`contradicts`、`critical_assumptions`、`invalidation_conditions`、`abstain_conditions`、`status`、`last_reviewed`。设计细节见 [research-decision-governance.md](research-decision-governance.md) |
+| DG2 | P0 | `planned` | `strategy-research`、workspace | 研究案例与决策记录 | 补齐决策线索：`strategy-research/cases/<案例id>/` 下 `case.json`、`decision.md` 与 `reviews/logic.json`、`reviews/evidence.json`。`decision.status` 取值 `no_view`、`provisional`、`accepted`、`rejected` |
+| DG3 | P0 | `planned` | `market-intel`、`strategy-research` | 定性来源溯源 | 外部研究素材增加来源 schema，四个时间点（published、effective、observed、ingested）分开记录，来源可信度按直接性、可验证性、独立性、时间有效性多维拆分，不采用单一来源等级 |
+| DG4 | P1 | `planned` | `strategy-research`、workspace | 缺数据即放弃判断 | `no_view` 与 `abstain` 成为决策记录一等状态，报告生成器遵守"可用证据到支持结论、缺失证据到 no_view"，禁止证据缺失时填补叙事 |
+| DG5 | P1 | `planned` | `strategy-research`、workspace | 逻辑与证据双评审 | 每个案例拆独立逻辑评审与证据评审，机器可读输出，交集与分歧交由人类裁决。独立性要求见设计文档，禁止同模型相似输出冒充独立证据 |
+| DG6 | P2 | `planned` | `strategy-research`、workspace | 证据完备度卡片 | 拆分 `evidence_readiness` 与 `investment_conviction`，不合成单一置信度总分，先按维度展示证据覆盖、来源可靠性、稳健性、未解决矛盾和时效性 |
+| DG7 | P2 | `planned` | `market-intel` | 产业链显式关系 | 为热点类研究维护实体关系层，放在外部 `market-intel`，`research-workspace` 只引用稳定实体标识，不把关系图塞入本仓 |
 
 ## P0 验收顺序
 
@@ -89,6 +96,17 @@
 
 按当前 A 股资产重新生成 benchmark matrix、walk-forward、CPCV、最终样本外、成本压力和容量报告。
 证据必须引用当前数据清单、代码提交和配置哈希。短窗口基线不能替代长窗口晋级证据。
+
+### DG1 至 DG3：研究判断层采用顺序
+
+判断治理的采用顺序为 DG1、DG2、DG3，设计细节见 [research-decision-governance.md](research-decision-governance.md)。
+
+1. DG1 先落地判断账本 schema，让 claim 成为机器可检查对象，引用路径必须存在。
+2. DG2 再引入研究案例与决策记录，补齐决策线索到生命周期。
+3. DG3 随后为外部素材引入来源溯源，四个时间点分开记录。
+4. DG4 至 DG6 在判断账本稳定后推进，DG7 由外部 `market-intel` 承接。
+
+每项落地必须配套 schema 校验脚本和测试，不改变现有证据门禁的强制证据集合。
 
 ## P1 收口标准
 
@@ -142,6 +160,7 @@
 | A 股数据与研究 | [data-transition-playbook.md](data-transition-playbook.md) | current asset 和长窗口研究入口 |
 | 会计与执行模拟 | [accounting_execution_roadmap.md](../portfolio-backtester/docs/accounting_execution_roadmap.md) | 统一账本和后续精度增强项 |
 | 概念级机器学习 | [concept-level-ml-exploration.md](../strategy-research/experiments/style_factors/concept-level-ml-exploration.md) | 低优先级研究探索 |
+| 研究判断治理 | [research-decision-governance.md](research-decision-governance.md) | 判断账本、决策记录、来源溯源的采用顺序 |
 | 文档归集 | [documentation-consolidation.md](documentation-consolidation.md) | 碎片化说明、权威入口和去重顺序 |
 
 ## 更新规则
@@ -165,3 +184,4 @@
 - G7（2026-08-18）F1/F2/F3/R1 留痕：F1 原 `in_progress` 与现状不符，改 `planned` 并标 blocked，留待进入实施阶段补齐差分门禁。F2/F3/R1 本为 `planned`，补 blocked 留痕说明"无现存代码可重构"，避免被误判为遗漏。此四项均不制造伪代码，留待进入实施阶段或依赖释放后由专人处理。
 - G8（2026-08-18）D1 核实与悬空分支清理：停摆 agent 的 D1 分支（feat/a-share-normalized-publish）基于旧 main（f28e9700），其唯一提交把 `normalized_fundamentals` 在 playbook 中单边标为已发布，并倒退 qexec gitlink（68ef56f→3dfcb5f）与 E1 代码。当时核实数据根无该资产、仓库内无 current 契约条目，发布宣告暂记虚假，拒绝接管其内容，仅清理该悬空 worktree 与分支。更正（2026-08-18 当日稍后）：mdp 侧实际发布已通过 PR #46 完成，数据根 `/home/richard/data/market-data-platform/assets/tushare/a_share/normalized_fundamentals/` 存在 `a_share_all_normalized_fundamentals_20260814` 与 latest alias，current 契约 `exists: true`。D1 现为 `complete`，以第 36 行核实结论为准。
 - G9（2026-08-18）F1 差分证据事实纠错：上一轮称"Qlib 差分证据脚本当前仓库不存在（grep 仅见无关 ops 脚本）"，实际 `strategy-research/experiments/qlib_pilot/diff_native_vs_qlib.py` 存在，是 ADR-0005 的 Native 与 Qlib 后端差分验证脚本。F1 未推进的真实原因是差分未接入发布门禁，而非脚本缺失。本表第 43 行已改为按现状表述，F1 仍 `planned` 并标 blocked。
+- G10（2026-08-18）研究判断治理立项：新增 DG1 至 DG7，补齐从实验到判断的决策线索。现有体系已覆盖实验与证据的工程治理，判断层尚缺机器可检查对象，本立项不改证据门禁，只增 schema 与校验脚本。
