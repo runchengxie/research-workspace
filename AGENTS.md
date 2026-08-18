@@ -16,6 +16,10 @@
 
 子仓库内部实现、依赖、业务参数和完整测试配置留在对应仓库。
 
+`strategy-research` 是顶层仓库的 tracked 目录，不是子模块。它有独立的
+`pyproject.toml` 与 `tests/`，pre-push 会额外运行其 `research-layer-tests` 与
+`research-layer-quality` 门禁（见 `scripts/run_pre_push_checks.py`）。
+
 ## 仓库边界
 
 | 仓库 | 主要职责 |
@@ -96,9 +100,42 @@ targets.json
 
 ## Git 工作流
 
-远端常驻分支只有 `main`，功能分支（`feat/*`、`fix/*`、`hotfix/*`、`release/*`）仅用于拉取请求流程、临时存在。先在对应子仓库完成检查、提交并推送 `main`，再更新顶层
-gitlink 和版本记录。需要并行开发时使用独立 clone，避免多个 worktree 共享并改写
-同一组钩子配置。
+本工作区可能由多个 agent 并行开发。每个改动都必须使用独立 worktree 与功能分支，
+避免多个 agent 在同一检出目录竞争同一组文件。
+
+远端常驻分支只有 `main`。功能分支（`feat/*`、`fix/*`、`hotfix/*`、`release/*`）
+只用于拉取请求流程、临时存在。每个改动遵循以下顺序：
+
+1. 从 `origin/main` 新建 worktree 与功能分支：
+
+   ```bash
+   git fetch origin
+   git worktree add <path> -b feat/<主题> origin/main
+   ```
+
+2. 在独立 worktree 内完成改动，运行与改动范围匹配的检查。
+3. 提交并推送功能分支：
+
+   ```bash
+   git push -u origin feat/<主题>
+   ```
+
+4. 用 `gh pr create` 开拉取请求，合并到 `main`。
+5. 合并完成后删除功能分支并移除 worktree：
+
+   ```bash
+   git push origin --delete feat/<主题>
+   git branch -d feat/<主题>
+   git worktree remove <path>
+   ```
+
+跨仓库改动遵循先子模块后顶层的顺序：先在对应子仓库完成检查、提交、推送并合并
+`main`，再回到顶层更新 gitlink 和版本记录，最后把顶层改动按同一 worktree + PR
+流程合并。
+
+同一仓库的多个 worktree 共享主工作树的 `core.hooksPath` 配置。不要在独立 worktree
+内重装或改写 hook。新的并行任务必须新建 worktree，不要直接在主检出目录的
+`main` 上提交改动。
 
 提交前检查暂存区，避免加入以下内容：
 

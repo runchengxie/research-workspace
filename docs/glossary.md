@@ -91,8 +91,6 @@
 | event window | 事件窗口 |
 | uniqueness weighting | 唯一性加权 |
 | sequential bootstrap | 序贯自助法 |
-| Layer 1 | GitHub Actions 兜底层 |
-| Layer 2 | 本机刷新层 |
 | distribution | 子仓库 |
 
 ## 保留英文（专有名词，不翻译）
@@ -108,7 +106,7 @@
 
 | 名称 | 是什么 | 说明 |
 |------|--------|------|
-| hotsector | 热点板块研究（strategy-app 下的研究包），也指 hot-sector-screener 子模块 | 英文是中文（热点板块）的拼接缩写 |
+| hotsector | 热点板块研究（strategy-app 下的研究包），也指外部 market-intel 卫星仓内的 hot-sector-screener 组件 | 英文是中文（热点板块）的拼接缩写 |
 | Hermes | 消息投递层（基于 Feishu/lark 的推送框架），负责把报告发到飞书 | 专有名词，保留英文 |
 | Hermite | 稳定性守卫（因子之上的因子变换），用作 B 袖 guard | 容易与飞书投递层 Hermes 混淆，两者是不同概念 |
 | DailyWatch、DailyWatch20 | 本工作区通过 strategy-pipeline 产出并发布给 market-intel 的 20 只 A 股每日观察名单 | DailyWatch 意为每日观察，20 表示 20 只 |

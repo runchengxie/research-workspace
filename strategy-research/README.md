@@ -47,6 +47,7 @@
 
 每个阶段对应的强制证据清单和校验命令见 [../docs/strategy-evidence-gate.md](../docs/strategy-evidence-gate.md)。
 生命周期变化必须配套证据包，禁止用单点回测数字代替证据清单。
+研究判断与决策记录（判断账本、案例、评审与来源溯源）见 [../docs/research-decision-governance.md](../docs/research-decision-governance.md)。
 
 ## 新增与晋级
 

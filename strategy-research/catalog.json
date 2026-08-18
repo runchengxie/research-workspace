@@ -102,12 +102,13 @@
       "production_eligible": false,
       "human_spec": "strategy-research/pre_production/dividend_growth_momentum/README.md",
       "executable_owners": [
-        "research-workspace",
+        "strategy-app",
         "portfolio-backtester"
       ],
       "control_plane_owner": null,
       "runtime_entries": [
-        "strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py"
+        "strategy-research/pre_production/dividend_growth_momentum/dividend_growth_momentum.py",
+        "strategy_app.research.dividend_growth_momentum"
       ],
       "variants": [
         "full_rotation",

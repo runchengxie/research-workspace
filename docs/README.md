@@ -86,10 +86,8 @@
 - `market-intel` 是外部卫星仓，通过版本化文件接入，不参与 `print_version_matrix.py` 的版本锁定
 - `src/research_contracts` 是顶层普通目录
 - `alpha_research.style_factors`（alpha-research）负责风格因子计算内核，`portfolio_backtester.style_factors_backtest`（portfolio-backtester）负责分位回测内核，`strategy-research/style_factors`（可 `python -m style_factors`）负责表现层归因、报告与图表（ADR-0006 拆分后均非顶层目录）
-- A 股 current 契约是 `metadata/current_assets/a_share_current.json`
-- A 股日频、时间点（PIT）财务和历史行业资产已发布，准确覆盖范围以 current 契约为准
-- current 契约中的 `normalized_fundamentals` 仍标记为 `exists: false`，完整 PIT 策略证据仍待补齐
-- `targets.json` 是研究到执行的标准交接文件
+- A 股日频、时间点（PIT）财务和历史行业资产已发布。`normalized_fundamentals` 与 `pit_fundamentals` 均为 v2 且 `exists: true`。准确覆盖范围以 `$DATA_PLATFORM_ROOT/metadata/current_assets/a_share_current.json` 为准
+- 长窗口 capacity、turnover-cost 与最终样本外证据仍未补齐，见 [roadmap E2](roadmap.md)
 - 港股资产和历史研究输出按恢复专用归档管理
 
 > 子模块组成、GitHub Actions 停用状态与分支策略见根目录 [README.md](../README.md)。本段只记录跨仓库事实中根 README 未涵盖的部分，避免两处各说各话。
