@@ -117,6 +117,7 @@
         "status",
         "thesis"
       ],
+      "description": "决策记录。DG6 要求把证据完备度（evidence_readiness 各维度）与投资信念（investment_conviction）分开表达，禁止合成单一置信度总分（如 overall_confidence / composite_score）。",
       "properties": {
         "status": {
           "enum": [
@@ -129,6 +130,36 @@
         "thesis": {
           "type": "string",
           "minLength": 1
+        },
+        "evidence_readiness": {
+          "type": "array",
+          "description": "DG6 证据完备度卡片：按维度分别记录证据覆盖、来源可靠性、稳健性、未解决矛盾与时效性，不合成总分。",
+          "items": {
+            "type": "object",
+            "required": [
+              "dimension",
+              "status"
+            ],
+            "properties": {
+              "dimension": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "type": "string",
+                "minLength": 1
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "investment_conviction": {
+          "type": "string",
+          "minLength": 1,
+          "description": "DG6 投资信念：主观、不可量化、不计入 evidence_readiness 总分，仅作决策者的判断附注。"
         }
       },
       "additionalProperties": false
