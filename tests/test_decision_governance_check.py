@@ -200,3 +200,55 @@ def test_cli_json_output(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> 
     output = json.loads(capsys.readouterr().out)
     assert output["schema_version"] == "decision_governance_check.v1"
     assert output["manifests"][0]["ok"] is True
+
+
+def test_dg4_no_view_requires_abstentions(tmp_path: Path) -> None:
+    payload = _valid_case()
+    payload["decision"] = {"status": "no_view", "thesis": "证据不足放弃判断"}
+    payload["abstentions"] = []
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert not check.ok
+    assert any("no_view" in issue for issue in check.issues)
+
+
+def test_dg4_known_gaps_blocks_accepted(tmp_path: Path) -> None:
+    payload = _valid_case()
+    payload["known_gaps"] = ["capacity 证据缺失"]
+    payload["decision"] = {"status": "accepted", "thesis": "错误地在缺口下接受"}
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert not check.ok
+    assert any("known_gaps" in issue for issue in check.issues)
+
+
+def test_dg5_requires_both_review_kinds(tmp_path: Path) -> None:
+    payload = _valid_case()
+    payload["reviews"] = [
+        {
+            "review_id": "logic-1",
+            "kind": "logic",
+            "status": "completed",
+            "file": "reviews/logic.json",
+        }
+    ]
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert not check.ok
+    assert any("DG5" in issue for issue in check.issues)
+
+
+def test_dg6_evidence_readiness_dimensions_valid(tmp_path: Path) -> None:
+    payload = _valid_case()
+    payload["decision"] = {
+        "status": "provisional",
+        "thesis": "演示结论",
+        "evidence_readiness": [
+            {"dimension": "证据覆盖", "status": "partial", "note": "长窗口未跑"},
+            {"dimension": "来源可靠性", "status": "ok"},
+        ],
+        "investment_conviction": "中等，主观判断",
+    }
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert check.ok, check.issues

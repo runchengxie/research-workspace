@@ -10,8 +10,10 @@ DG1 判断账本使用 ``claim.v1``，每个 claim 是机器可检查的判断�
 - 判断账本目录下每个 ``*.json`` 文件符合 ``claim.v1`` 字段与取值约束。
 - 每个案例目录的 ``case.json`` 符合 ``research_case.v1``，且引用的 claims、
   research_specs、reviews 文件真实存在。
-- 禁止证据缺失时用综合来看等叙事填补结论，DG4 语义保留为对决策记录 review 的提示，
-  不强制所有 case 的 decision.status 非 no_view。
+- 禁止证据缺失时用综合来看等叙事填补结论（DG4）：no_view 必须有 abstentions，known_gaps
+  非空时 decision.status 不得为 accepted。
+- DG5：每个 case 的 reviews 必须同时含 logic 与 evidence 两种 kind（双评审）。
+- DG6：decision 可拆分 evidence_readiness 维度数组与 investment_conviction 附注，不合成单一总分。
 
 Exit codes:
 - 0: 所有找到的 manifest 均有效
@@ -26,7 +28,7 @@ import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 ROOT = Path(__file__).resolve().parents[1]
 CASE_ROOT = ROOT / "strategy-research" / "cases"
@@ -100,7 +102,8 @@ def _objects_list(
         if missing:
             issues.append(f"{name}[{index}] 缺少字段：{','.join(missing)}")
         for field_name in required_fields:
-            if field_name in item and not isinstance(item[field_name], str):
+            field_value = item.get(field_name)
+            if field_name in item and not isinstance(field_value, str):
                 issues.append(f"{name}[{index}].{field_name} 必须是字符串")
 
 
@@ -171,21 +174,50 @@ def _check_case(relative: str, payload: dict[str, Any], root: Path) -> list[str]
     _string_list(payload, "evidence_bundles", issues)
     _string_list(payload, "known_gaps", issues)
     _objects_list(payload, "abstentions", ("dimension", "reason"), issues)
-    reviews = payload.get("reviews")
-    if reviews is not None:
-        if not isinstance(reviews, list):
-            issues.append("reviews 必须是列表")
-        else:
-            for index, item in enumerate(reviews):
-                if not isinstance(item, dict):
-                    issues.append(f"reviews[{index}] 必须是对象")
-                    continue
-                if item.get("kind") not in REVIEW_KINDS:
-                    issues.append(f"reviews[{index}].kind 必须属于 {sorted(REVIEW_KINDS)}")
-                if item.get("status") not in REVIEW_STATUSES:
-                    issues.append(f"reviews[{index}].status 必须属于 {sorted(REVIEW_STATUSES)}")
+    _check_dg4(payload, issues)
+    _check_dg5_reviews(payload, issues)
     _resolve_case_refs(payload, relative, root, issues)
     return issues
+
+
+def _check_dg4(payload: dict[str, Any], issues: list[str]) -> None:
+    # DG4：缺数据即放弃判断——no_view 必须给出 abstentions；已知缺口下不得直接 accepted。
+    raw_decision: object = payload.get("decision")
+    decision: dict[str, Any] = (
+        cast("dict[str, Any]", raw_decision) if isinstance(raw_decision, dict) else {}
+    )
+    decision_status: object = decision.get("status")
+    if decision_status == "no_view" and not payload.get("abstentions"):
+        issues.append("DG4：decision.status 为 no_view 时必须填写 abstentions（维度与原因）")
+    if payload.get("known_gaps") and decision_status == "accepted":
+        issues.append(
+            "DG4：known_gaps 非空时 decision.status 不得为 accepted（禁止在已知缺口下给出接受结论）"
+        )
+
+
+def _check_dg5_reviews(payload: dict[str, Any], issues: list[str]) -> None:
+    # DG5：逻辑与证据双评审——reviews 必须同时含 logic 与 evidence 两种 kind。
+    reviews = payload.get("reviews")
+    if reviews is None:
+        return
+    if not isinstance(reviews, list):
+        issues.append("reviews 必须是列表")
+        return
+    seen_kinds: set[str] = set()
+    for index, item in enumerate(reviews):
+        if not isinstance(item, dict):
+            issues.append(f"reviews[{index}] 必须是对象")
+            continue
+        kind: object = item.get("kind")
+        if kind not in REVIEW_KINDS:
+            issues.append(f"reviews[{index}].kind 必须属于 {sorted(REVIEW_KINDS)}")
+        if item.get("status") not in REVIEW_STATUSES:
+            issues.append(f"reviews[{index}].status 必须属于 {sorted(REVIEW_STATUSES)}")
+        if kind in REVIEW_KINDS:
+            seen_kinds.add(cast(str, kind))
+    missing = sorted(REVIEW_KINDS - seen_kinds)
+    if missing:
+        issues.append(f"DG5：reviews 必须同时包含 kind={missing} 的评审")
 
 
 def _resolve_case_refs(
