@@ -299,22 +299,10 @@ def _source_layout_result_to_dict(result: SourceLayoutResult) -> dict[str, Any]:
     }
 
 
-def build_report(
-    root: Path = ROOT,
-    rules: tuple[BoundaryRule, ...] | None = None,
-    source_layout_rules: tuple[SourceLayoutRule, ...] | None = None,
-) -> dict[str, Any]:
-    if rules is None or source_layout_rules is None:
-        loaded_rules, loaded_layout = load_rules()
-        rules = rules if rules is not None else loaded_rules
-        source_layout_rules = (
-            source_layout_rules if source_layout_rules is not None else loaded_layout
-        )
-    resolved_root = root.resolve()
-    results = tuple(_scan_rule(resolved_root, rule) for rule in rules)
-    source_layout_results = tuple(
-        _scan_source_layout_rule(resolved_root, rule) for rule in source_layout_rules
-    )
+def _collect_issues(
+    results: tuple[RuleResult, ...],
+    source_layout_results: tuple[SourceLayoutResult, ...],
+) -> list[str]:
     issues: list[str] = []
     for result in results:
         if result.missing_source and result.rule.required:
@@ -333,6 +321,26 @@ def build_report(
                 f"{result.rule.identifier}: {result.count} source files exceed budget "
                 f"{result.rule.max_allowed}"
             )
+    return issues
+
+
+def build_report(
+    root: Path = ROOT,
+    rules: tuple[BoundaryRule, ...] | None = None,
+    source_layout_rules: tuple[SourceLayoutRule, ...] | None = None,
+) -> dict[str, Any]:
+    if rules is None or source_layout_rules is None:
+        loaded_rules, loaded_layout = load_rules()
+        rules = rules if rules is not None else loaded_rules
+        source_layout_rules = (
+            source_layout_rules if source_layout_rules is not None else loaded_layout
+        )
+    resolved_root = root.resolve()
+    results = tuple(_scan_rule(resolved_root, rule) for rule in rules)
+    source_layout_results = tuple(
+        _scan_source_layout_rule(resolved_root, rule) for rule in source_layout_rules
+    )
+    issues = _collect_issues(results, source_layout_results)
     return {
         "schema_version": "workspace_import_boundaries.v2",
         "root": str(root.resolve()),
