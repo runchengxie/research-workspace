@@ -7,7 +7,7 @@
     "accepted_hotspots_count": 80,
     "by_repo": {
       "research-workspace": {
-        "max_large_files": 4,
+        "max_large_files": 3,
         "max_long_functions": 2,
         "max_complexity_hotspots": 0,
         "max_large_classes": 2
@@ -61,7 +61,7 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 4,
+      "max_large_files": 3,
       "max_long_functions": 2,
       "max_complexity_hotspots": 0,
       "max_large_classes": 2,
@@ -75,7 +75,8 @@
         "2026-08-01: style factor 年度图拆分矩阵构造、热力图和年度优胜因子绘制 helper，在提升长历史图表可读性的同时将 research-workspace complexity_hotspots 2->1，并同步下调预算。",
         "2026-08-16: R5 去重将 4 个研究脚本测试迁入工作区 tests/（test_next_open_to_high_research.py 795 行），large_files 4->5，同步上调预算。",
         "2026-08-18: 抽取 _collect_issues 将 build_report 复杂度 15 降至阈值内，research-workspace complexity_hotspots 1->0，同步下调预算至 0（棘轮锁死根层复杂度热点）。",
-        "2026-08-18: workspace_governance.py(556) 抽出 compatibility-facade 校验到 workspace_governance_facades.py(184)，主脚本 556->401 低于 500 阈值，research-workspace large_files 5->4，同步下调预算至 4（真实债务收敛，非回归）。"
+        "2026-08-18: workspace_governance.py(556) 抽出 compatibility-facade 校验到 workspace_governance_facades.py(184)，主脚本 556->401 低于 500 阈值，research-workspace large_files 5->4，同步下调预算至 4（真实债务收敛，非回归）。",
+        "2026-08-19: M1 将 test_next_open_to_high_research.py(738) 拆为 _next_open_shared.py 抽辅助函数加 part2 两文件均低于 500 行，research-workspace large_files 4->3，同步下调预算至 3（真实债务收敛，非回归）。"
       ]
     },
     {
