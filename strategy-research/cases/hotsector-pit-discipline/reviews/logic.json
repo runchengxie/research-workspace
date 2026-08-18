@@ -1,0 +1,21 @@
+{
+  "schema_version": "research_review.v1",
+  "review_id": "hotsector-logic-r1",
+  "kind": "logic",
+  "status": "completed",
+  "case_id": "hotsector-pit-discipline",
+  "as_of": "2026-08-18",
+  "findings": [
+    {
+      "category": "相关性当因果",
+      "detail": "把非 PIT 回顾回执的排序结果当作候选范围的价值证明，未区分排序与真实 alpha。",
+      "severity": "medium"
+    },
+    {
+      "category": "缺口被叙事补上",
+      "detail": "benchmark_matrix、cost、final_oos、cpcv、regime 全部 pending，任何晋级结论都会用缺口叙事填补。",
+      "severity": "high"
+    }
+  ],
+  "conclusion": "逻辑上不存在支撑晋级的证据链，no_view 是唯一一致结论。"
+}

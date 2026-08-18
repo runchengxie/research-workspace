@@ -66,6 +66,11 @@
 schema 文件在 `strategy-research/schemas/claim.v1.schema.json`，校验脚本为
 `scripts/decision_governance_check.py`，判断账本目录为 `strategy-research/judgment-ledger/`。
 
+判断账本已填入六个真实 claim，覆盖五个策略（`daily_watch20`×2、`hotsector`、
+`style_replica`、`d11_h5`、`dividend_growth_momentum`），均以
+`strategy-research/evidence/*.json` 与策略 README 为依据。缺证据维度如实登记
+`abstain_conditions`，不伪造 pass。校验入口：`python scripts/decision_governance_check.py`。
+
 ### DG2 研究案例与决策记录
 
 在 `strategy-research/cases/<案例id>/` 增加 `research_case.v1`，补齐决策线索：
@@ -86,6 +91,10 @@ strategy-research/cases/
 
 schema 文件在 `strategy-research/schemas/research_case.v1.schema.json`，校验脚本为
 `scripts/decision_governance_check.py`，案例目录为 `strategy-research/cases/`。
+
+案例目录已填入三个真实案例：`daily-watch20-promotion-readiness`、
+`hotsector-pit-discipline`、`style-replica-evidence-gap`。各案例按真实证据登记
+`decision.status` 与 `abstentions`，当前均取 `no_view`，待 E2 长窗口证据补齐后再评审。
 
 决策线索的完整链条：
 

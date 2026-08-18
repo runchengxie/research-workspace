@@ -45,8 +45,8 @@
 | F3 | P2 | `planned` | `quant-execution-engine` | vn.py 执行传输 | blocked（2026-08-18）：当前只有框架中立 `BrokerAdapter` 边界，无 vn.py extra、适配器或注册后端，无现存代码可重构，留待进入实施阶段 |
 | M1 | P2 | `continuous` | 各仓 owner | 维护性预算收敛 | 机器账本真实未解决热点 80 条（登记册 182 条：97 条已降到阈值下、5 条已 cleared），受棘轮预算约束，大文件预算上限：data 41 / pipeline 29 / 组合回测 8 / 执行引擎 4 / alpha 5 / 顶层 4 / strategy-app 2。2026-08-18 顶层 `workspace_governance.py` 抽出 `workspace_governance_facades.py`，顶层大文件 5→4 下调 |
 | R1 | P3 | `planned` | `strategy-research` | 概念级机器学习 Path C | blocked（2026-08-18）：`concept-level-ml-exploration.md` 标"待探索·低优先级"，M1–M6 无完成记录，先验证 H1/H2 再决定是否投入，当前无现有 ML 探索代码可重构，留待研究结论 |
-| DG1 | P0 | `in_progress` | `strategy-research`、workspace | 判断账本 schema | 把策略投资判断提升为机器可检查对象：`claim_id`、`statement`、`supports`、`contradicts`、`critical_assumptions`、`invalidation_conditions`、`abstain_conditions`、`status`、`last_reviewed`。设计细节见 [research-decision-governance.md](research-decision-governance.md)。schema 已落地（`strategy-research/schemas/claim.v1.schema.json`）并配套校验脚本 `scripts/decision_governance_check.py` 与测试 `tests/test_decision_governance_check.py`，判断账本目录 `strategy-research/judgment-ledger/` 尚待填入真实 claim |
-| DG2 | P0 | `in_progress` | `strategy-research`、workspace | 研究案例与决策记录 | 补齐决策线索：`strategy-research/cases/<案例id>/` 下 `case.json`、`decision.md` 与 `reviews/logic.json`、`reviews/evidence.json`。`decision.status` 取值 `no_view`、`provisional`、`accepted`、`rejected`。schema 已落地（`strategy-research/schemas/research_case.v1.schema.json`），同一校验脚本与测试覆盖案例引用路径与目录一致性，`strategy-research/cases/` 尚待填入真实案例 |
+| DG1 | P0 | `complete` | `strategy-research`、workspace | 判断账本 schema | 把策略投资判断提升为机器可检查对象：`claim_id`、`statement`、`supports`、`contradicts`、`critical_assumptions`、`invalidation_conditions`、`abstain_conditions`、`status`、`last_reviewed`。设计细节见 [research-decision-governance.md](research-decision-governance.md)。schema 已落地（`strategy-research/schemas/claim.v1.schema.json`）并配套校验脚本 `scripts/decision_governance_check.py` 与测试 `tests/test_decision_governance_check.py`。判断账本目录 `strategy-research/judgment-ledger/` 已填入六个真实 claim（覆盖五个策略），`python scripts/decision_governance_check.py` 全部通过。DG1 采用条件（schema+校验+测试+真实内容）满足 |
+| DG2 | P0 | `complete` | `strategy-research`、workspace | 研究案例与决策记录 | 补齐决策线索：`strategy-research/cases/<案例id>/` 下 `case.json`、`decision.md` 与 `reviews/logic.json`、`reviews/evidence.json`。`decision.status` 取值 `no_view`、`provisional`、`accepted`、`rejected`。schema 已落地（`strategy-research/schemas/research_case.v1.schema.json`），同一校验脚本与测试覆盖案例引用路径与目录一致性。`strategy-research/cases/` 已填入三个真实案例（daily-watch20-promotion-readiness、hotsector-pit-discipline、style-replica-evidence-gap），均按真实证据登记 `no_view` 与 abstain，`python scripts/decision_governance_check.py` 全部通过。DG2 采用条件满足 |
 | DG3 | P0 | `planned` | `market-intel`、`strategy-research` | 定性来源溯源 | 外部研究素材增加来源 schema，四个时间点（published、effective、observed、ingested）分开记录，来源可信度按直接性、可验证性、独立性、时间有效性多维拆分，不采用单一来源等级 |
 | DG4 | P1 | `planned` | `strategy-research`、workspace | 缺数据即放弃判断 | `no_view` 与 `abstain` 成为决策记录一等状态，报告生成器遵守"可用证据到支持结论、缺失证据到 no_view"，禁止证据缺失时填补叙事 |
 | DG5 | P1 | `planned` | `strategy-research`、workspace | 逻辑与证据双评审 | 每个案例拆独立逻辑评审与证据评审，机器可读输出，交集与分歧交由人类裁决。独立性要求见设计文档，禁止同模型相似输出冒充独立证据 |
@@ -101,8 +101,8 @@
 
 判断治理的采用顺序为 DG1、DG2、DG3，设计细节见 [research-decision-governance.md](research-decision-governance.md)。
 
-1. DG1 先落地判断账本 schema，让 claim 成为机器可检查对象，引用路径必须存在。当前 schema 与校验脚本已落地，见上表 DG1。
-2. DG2 再引入研究案例与决策记录，补齐决策线索到生命周期。当前 schema 与校验脚本已落地，见上表 DG2。
+1. DG1 先落地判断账本 schema，让 claim 成为机器可检查对象，引用路径必须存在。当前 schema 与校验脚本已落地，判断账本已填入六个真实 claim，见上表 DG1。
+2. DG2 再引入研究案例与决策记录，补齐决策线索到生命周期。当前 schema 与校验脚本已落地，cases 已填入三个真实案例，见上表 DG2。
 3. DG3 随后为外部素材引入来源溯源，四个时间点分开记录。
 4. DG4 至 DG6 在判断账本稳定后推进，DG7 由外部 `market-intel` 承接。
 
@@ -197,3 +197,4 @@ positions source、as-of 与 pruning 参数，lineage 覆盖 run 目录中的 su
 - G10（2026-08-18）研究判断治理立项：新增 DG1 至 DG7，补齐从实验到判断的决策线索。现有体系已覆盖实验与证据的工程治理，判断层尚缺机器可检查对象，本立项不改证据门禁，只增 schema 与校验脚本。
 - G11（2026-08-18）C1 闭环：`strategy-pipeline` targets 写入方已在 `export_targets.py` 采用 Artifact Envelope v2，`targets.json.lineage.json` sidecar 写入 `artifact_envelope` 键，配置/内容/上游文件哈希与 producer 身份经契约测试验证。`docs/artifact-contracts.yml` 采用清单把 `targets.json` 从 `adoption_pending` 移到 `adopted_by`，顶层 `tests/test_artifact_contract_manifest.py` 同步断言。C1 由 `in_progress` 改 `complete`。
 - G12（2026-08-18）DG1/DG2 schema 落地：`claim.v1` 与 `research_case.v1` 的 JSON schema 落入 `strategy-research/schemas/`，配套 stdlib-only 校验脚本 `scripts/decision_governance_check.py` 与测试 `tests/test_decision_governance_check.py`。校验覆盖字段枚举、嵌套对象必填、引用路径存在性与 case 目录一致性。判断账本与案例目录尚待填入真实内容，DG1/DG2 由 `planned` 改 `in_progress`。
+- G13（2026-08-18）DG1/DG2 填入真实内容：判断账本 `strategy-research/judgment-ledger/` 填入六个真实 claim（覆盖五个策略：daily_watch20×2、hotsector、style_replica、d11_h5、dividend_growth_momentum），均以 `strategy-research/evidence/*.json` 与策略 README 为依据，缺证据维度如实登记 `abstain_conditions`。cases 填入三个真实案例（daily-watch20-promotion-readiness、hotsector-pit-discipline、style-replica-evidence-gap），`decision.status` 均按真实证据取 `no_view`，不伪造 pass。`python scripts/decision_governance_check.py` 九项全部通过。DG1/DG2 由 `in_progress` 改 `complete`。

@@ -1,0 +1,49 @@
+{
+  "schema_version": "claim.v1",
+  "claim_id": "daily_watch20.alpha_persistence",
+  "statement": "DailyWatch20 的候选池排名对下个交易日的相对收益存在可复现的排序能力，短窗口 walk-forward 与 CPCV 都给出正的夏普中位数。",
+  "claim_type": "inference",
+  "supports": [
+    "evidence://strategy-research/evidence/daily_watch20.json#walk_forward",
+    "evidence://strategy-research/evidence/daily_watch20.json#cpcv",
+    "evidence://docs/evidence/a-share-benchmark-ladder-20260601.json",
+    "evidence://docs/evidence/a-share-cpcv-20260601.json"
+  ],
+  "contradicts": [
+    "evidence://strategy-research/evidence/daily_watch20.json#final_oos"
+  ],
+  "critical_assumptions": [
+    {
+      "assumption_id": "candidate_pool_pit",
+      "statement": "候选池以严格时间点语义构造，排除未来函数。"
+    },
+    {
+      "assumption_id": "horizon_representative",
+      "statement": "walk-forward 的 h5 与 h20 窗口能代表实际持有周期。"
+    }
+  ],
+  "invalidation_conditions": [
+    {
+      "observable": "真实最终样本外夏普",
+      "threshold": "≤ 0",
+      "horizon": "首个完整样本外区间后"
+    },
+    {
+      "observable": "cost 计入后的夏普衰减",
+      "threshold": "相对无成本夏普衰减超过 50%",
+      "horizon": "长窗口成本压力证据出具后"
+    }
+  ],
+  "abstain_conditions": [
+    {
+      "dimension": "regime 稳定性",
+      "reason": "尚未按牛市、熊市、震荡市分别报告表现，无法判断 alpha 是否跨市场状态稳健。"
+    },
+    {
+      "dimension": "财务 PIT",
+      "reason": "statement_features_enabled=false，财务报表未做 PIT 处理，排序能力的稳定性存疑。"
+    }
+  ],
+  "status": "proposed",
+  "last_reviewed": "2026-08-18"
+}
