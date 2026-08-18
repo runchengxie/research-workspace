@@ -17,6 +17,7 @@
 | 查看全部已完成事项、剩余项目和优先级 | [roadmap.md](roadmap.md) |
 | 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
 | 查看策略边界 R0 至 R6 的实施记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
+| 查看子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) |
 | 查看说明文档归集和去重顺序 | [documentation-consolidation.md](documentation-consolidation.md) |
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
 | 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |

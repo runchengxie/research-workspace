@@ -161,6 +161,7 @@ positions source、as-of 与 pruning 参数，lineage 覆盖 run 目录中的 su
 | 领域 | 详细入口 | 在本页中的作用 |
 | --- | --- | --- |
 | 策略边界拆分 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) | R0 至 R6 的实施记录和验收标准 |
+| 子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) | 边界盘点发现的可落地重构项 SA-1 至 SA-11 |
 | 外部框架 | [framework-integration-ledger.yml](framework-integration-ledger.yml) | 各适配器的机器可读状态和退出条件 |
 | 跨仓库产物 | [artifact-contracts.yml](artifact-contracts.yml) | artifact owner、producer、consumer 和 envelope 字段 |
 | 维护性 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) | 大文件、长函数、复杂度热点和预算棘轮 |
