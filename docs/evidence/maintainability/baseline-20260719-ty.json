@@ -1623,13 +1623,13 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_cli_research.py",
-          "loc": 795,
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "loc": 796,
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
-          "loc": 794,
+          "path": "tests/test_cli_research.py",
+          "loc": 795,
           "hk_related": false
         },
         {
