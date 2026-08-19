@@ -41,8 +41,8 @@ from alpha_research.style_factors import compute_factors
 from portfolio_backtester.style_factors_backtest import build_quantile_portfolio_returns
 from style_factors.data import (
     load_fina_indicator,
-    load_moneyflow_ths,
     load_holder_structure,
+    load_moneyflow_ths,
     load_sw_industry_membership,
 )
 
@@ -92,8 +92,7 @@ def return_stats(returns: pd.Series) -> dict[str, float]:
 
 def yearly_returns(returns: pd.Series) -> pd.Series:
     returns = returns.dropna()
-    yearly = (1 + returns).groupby(returns.index.year).prod() - 1
-    return yearly
+    return (1 + returns).groupby(returns.index.year).prod() - 1
 
 
 # ------------------------------------------------------- phase 1 factor panel
@@ -254,8 +253,7 @@ def load_pit_top800(data_root: Path, trade_dates: pd.DatetimeIndex) -> pd.DataFr
 
 
 def apply_universe(panel: pd.DataFrame, universe: pd.DataFrame) -> pd.DataFrame:
-    merged = panel.merge(universe, on=["trade_date", "symbol"], how="inner")
-    return merged
+    return panel.merge(universe, on=["trade_date", "symbol"], how="inner")
 
 
 # -------------------------------------------------- frictionless Q1-Q5 curves
@@ -322,7 +320,7 @@ def load_pricing(data_root: Path, symbols: set[str], start, end, *, workers: int
                 part = future.result()
                 if not part.empty:
                     parts.append(part)
-        result = pd.concat([p for p in parts], ignore_index=True) if parts else pd.DataFrame()
+        result = pd.concat(list(parts), ignore_index=True) if parts else pd.DataFrame()
         return result.loc[result["symbol"].isin(symbols)].drop_duplicates(
             ["trade_date", "symbol"], keep="last"
         ).sort_values(["trade_date", "symbol"]).reset_index(drop=True)

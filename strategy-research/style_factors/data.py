@@ -165,11 +165,10 @@ def _vintage_normalized_dir(data_root: Path, dataset: str) -> Path | None:
     candidates = sorted(data_root.glob(pattern))
     if not candidates:
         return None
-    best = max(
+    return max(
         (path.parent for path in candidates),
         key=lambda p: p.parents[2].name,  # .../vintage=YYYYMMDD/normalized/<dataset>/data
     )
-    return best
 
 
 def _fina_indicator_dir(data_root: Path) -> Path | None:
