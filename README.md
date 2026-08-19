@@ -44,7 +44,7 @@ quant-execution-engine
 
 策略身份、投资假设、生命周期和证据导航以 [strategy-research/README.md](strategy-research/README.md) 与 [strategy-research/catalog.json](strategy-research/catalog.json) 为准。代码放在哪个仓库不再用来表达策略是否处于生产状态。
 
-仓库结构说明：上表中 `market-data-platform/`、`alpha-research/`、`portfolio-backtester/`、`strategy-app/`、`strategy-pipeline/`、`quant-execution-engine/` 六个目录是 git submodule，其版本由 `.gitmodules` 与各子仓库的 gitlink 锁定。`strategy-research/` 不是 submodule，而是本 superproject 内的普通顶层目录，其所有文件由本仓库直接版本化（不通过 gitlink 锁定子仓库 commit）。因此 `strategy-research` 的改动随本仓库主线提交，不存在跨仓库版本漂移风险；若未来需要把它独立成仓库，应先抽取历史再 `git submodule add`，当前按"顶层目录"治理即可。详见边界清单 SA-14。
+仓库结构说明：上表中 `market-data-platform/`、`alpha-research/`、`portfolio-backtester/`、`strategy-app/`、`strategy-pipeline/`、`quant-execution-engine/` 六个目录是 git submodule，其版本由 `.gitmodules` 与各子仓库的 gitlink 锁定。`strategy-research/` 并非 submodule，它实际是本 superproject 内的普通顶层目录，其所有文件由本仓库直接版本化（不通过 gitlink 锁定子仓库 commit）。因此 `strategy-research` 的改动随本仓库主线提交，不存在跨仓库版本漂移风险，若未来需要把它独立成仓库，应先抽取历史再 `git submodule add`，当前按"顶层目录"治理即可。详见边界清单 SA-14。
 
 四个研究侧 Python 包使用各自的权威命名空间：
 

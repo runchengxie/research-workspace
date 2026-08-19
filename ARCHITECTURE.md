@@ -44,7 +44,7 @@ quant-execution-engine
 `strategy-pipeline` 只拥有数据提供方调用、操作员控制、运行目录、原子发布和执行交接。
 边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
-仓库结构说明：`strategy-research` 不是 git submodule，而是本 superproject 内的普通顶层目录，其文件由本仓库直接版本化，不通过 gitlink 锁定子仓库 commit。六个 submodule（market-data-platform、alpha-research、portfolio-backtester、strategy-app、strategy-pipeline、quant-execution-engine）的版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
+仓库结构说明：`strategy-research` 并非 git submodule，它实际是本 superproject 内的普通顶层目录，其文件由本仓库直接版本化，不通过 gitlink 锁定子仓库 commit。六个 submodule（market-data-platform、alpha-research、portfolio-backtester、strategy-app、strategy-pipeline、quant-execution-engine）的版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
 
 ## 代码和数据边界
 
