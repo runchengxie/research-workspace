@@ -181,17 +181,17 @@ long_only_style_analysis.md。
 4. **D11-H5 修复**：加风格约束压回撤，并评估三因子信号是否更适合。
 5. **市场探索**：纯理解类已跑完（星期五/连涨/最差日）；策略相关类（追涨/高股息/
    市盈率/金叉）在评估稳定后做。
-6. **qlib 方法**：样本过滤、集成、PIT 对齐可作为改进参考（已记录 qlib_methods_borrow.md）。
+6. **qlib 方法**：样本过滤、集成、PIT 对齐可作为改进参考（已记录 qlib-methods-borrow.md）。
 
 ## 关联文档
 
-- 全市场回测：full_market_backtest.md
-- 流动性分析：liquidity_universe_analysis.md
-- 回撤根因：d11_h5_drawdown_analysis.md
-- qlib 借鉴：qlib_methods_borrow.md
-- 市场直觉：market_intuition_explorations.md
-- 晋升评审：top800_promotion_review.md、top800_promotion_review_v2.md
-- 因子归因：top800_style_attribution.md
-- 三因子策略：3factor_vs_top800.md、3factor_deep_dive.md
+- 全市场回测：full-market-backtest.md
+- 流动性分析：liquidity-universe-analysis.md
+- 回撤根因：d11-h5-drawdown-analysis.md
+- qlib 借鉴：qlib-methods-borrow.md
+- 市场直觉：market-intuition-explorations.md
+- 晋升评审：top800-promotion-review.md、top800-promotion-review-v2.md
+- 因子归因：top800-style-attribution.md
+- 三因子策略：three-factor-vs-top800.md、three-factor-deep-dive.md
 - 三因子 long-only 落地：long_only_style_analysis.md
 - 各实验脚本：explore_*.py / compare_*.py / run_3factor_strategy.py
