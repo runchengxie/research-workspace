@@ -156,23 +156,35 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 ### SA-12：消除 strategy-pipeline → strategy_app 的反向依赖（高价值，原 SA-1 范围扩大）
 
 - 规模：grep `from strategy_app import` / `import strategy_app` 在 `strategy-pipeline/src/strategy_pipeline/`
-  命中 23 个文件，典型证据：
-  - `strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_v4_month_backtest_api.py:13-42` 大量 import
-    `strategy_app.daily_watch20.*` 与 `strategy_app.hotsector.*`。
-  - `strategy-pipeline/src/strategy_pipeline/daily_watch20_minute_campaign.py:5,14,17` import
-    `strategy_app.daily_watch20.*`。
-  - `strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_observation.py:15-27` import
-    `strategy_app.hotsector.*`。
-- 问题：原 SA-1 只点名 `daily_watch20_ablation_api.py` / `daily_watch20_ablation_core.py` 两个文件，实际顶层
-  还有 39 个 `daily_watch20_*` / `hotsector_*` 模块（报告生成 `_explanations` / `_ablation_reporting` /
-  `_publication_*`、策略政策 `policy_primitives.py` / `policy_validation_model.py` / `policy_canonical.py`、
-  端到端 `daily_watch20_pipeline.py`、影子观察 `_market_shadow*` / `_ai_shadow*` 等），其中属"策略计算/报告/
-  政策"的应下沉。
+  命中 31 个文件（2026-08-19 复核，原记 23 为低估）。`strategy-app` 侧经核验 无任何文件 import
+  `strategy_pipeline`，依赖方向单向在 app 侧正确，违规只存在于 pipeline 侧。
+- 反向依赖按性质分级（所有被引符号在 `strategy_app` 已是公开 API，消除工作的本质是搬编排层而非补 API）：
+  - A 类（轻量常量/类型/配置，约 10 个文件）：仅 import `strategy_app` 的契约常量或策略 Policy 类，
+    如 `_hotsector_deepseek_v4_month_execution_api.py`（CAMPAIGN_ID、HARD_CALL_CAP）、
+    `daily_watch20_application_policy.py`（DailyWatch20ResearchPolicy）、`daily_watch20_minute.py`、
+    `daily_watch20_ablation_publish.py` 等。可经 pipeline 配置层注入，不需动 app。
+  - B 类（调用公开计算 API，多数）：如 `daily_watch20_ablation.py`、`hotsector_ai_shadow_observation.py`、
+    `daily_watch20_minute_campaign.py`，已用公开函数（guard_ablation、oos、build_ablation_decision、
+    hotsector_ai_shadow_*），仅需把"调用入口/打包"下沉为 app 的 facade，pipeline 改为薄壳。
+  - C 类（整段编排/报告/publish，最重，约 4 个文件）：`hotsector_deepseek_v4_month_backtest.py`、
+    `hotsector_challenger_campaign.py`、`daily_watch20_slow_minute_campaign.py`、`daily_watch20_market_shadow.py`，
+    多子模块编排加 publish，须将 pipeline 编排逻辑迁移至 `strategy_app` 顶层入口，pipeline 仅留调度。
+- 典型证据（B/C 类）：
+  - `_hotsector_deepseek_v4_month_backtest_api.py` import `deepseek_v4.run_deepseek_v4_paired_replay`、
+    `hotsector_challenger_ranking.build_hotsector_challenger_rankings`、`publish_hotsector_challenger` 等公开符号。
+  - `daily_watch20_minute_campaign.py` import `MinuteAlphaCampaignConfig`、`evaluate_minute_alpha_campaign`、
+    `publish_minute_alpha_campaign` 等公开符号。
+- 勘误（2026-08-19）：原 SA-1 点名的 `daily_watch20_ablation_api.py` / `daily_watch20_ablation_core.py` 仍属
+  反向依赖，保留，但原描述称"顶层 39 个策略模块含 `policy_primitives.py` / `policy_validation_model.py` /
+  `policy_canonical.py` 与 `daily_watch20_pipeline.py`"不准确，pipeline 内不存在这些 policy_* 文件，
+  唯一 policy 引用是来自 app 的公开类 `DailyWatch20ResearchPolicy`，`daily_watch20_pipeline.py` 本身
+  不 import strategy_app（仅依赖 alpha_research），不属反向依赖。反向依赖以本段 31 文件清单为准。
 - 边界原则：`strategy-app` 禁止 import `strategy_pipeline`，依赖方向必须保持 `strategy_app → strategy_pipeline`
   单向。pipeline 只保留编排壳（`pipeline/`、`commands/`、`liveops/`、`contracts/`、`release_tools/`、
   `data_interface.py`、`dataset.py`），真正属于它的内容。
 - 归属：策略计算/报告/政策部分进 `strategy_app.daily_watch20.*` 与 `strategy_app.hotsector.*`。
 - 完成标准：pipeline 顶层不再有反向 import `strategy_app` 的策略实现文件，调用方改走 `strategy_app` 公开 API。
+  建议按 A → B → C 分级推进，每级独立 PR，先消 A/B 类轻量违规、再搬 C 类整段编排。
 - 注意：`return_metrics.py`（`from portfolio_backtester.metrics import ...`）与 `sharpe_stats.py`
   （`from portfolio_backtester.sharpe_inference import ...`）是合理的薄 re-export，属编排层对回测统计的引用，
   不视为越界，保留。
