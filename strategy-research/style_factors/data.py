@@ -149,13 +149,41 @@ def _symbol_from_ts_code(series: pd.Series) -> pd.Series:
     )
 
 
+def _vintage_normalized_dir(data_root: Path, dataset: str) -> Path | None:
+    """Resolve the newest normalized fundamentals vintage for a dataset.
+
+    One-off long-history studies archive full-history fundamentals under
+    ``experiments/*/assets/tushare/a_share/fundamentals_vintages/vintage=*/normalized/``.
+    The newest vintage is preferred over the legacy raw / top800_union paths so
+    those studies can run against the same public loaders.  Returns None when no
+    vintage data is present.
+    """
+    pattern = (
+        "experiments/*/assets/tushare/a_share/fundamentals_vintages/"
+        f"vintage=*/normalized/{dataset}/data/part.parquet"
+    )
+    candidates = sorted(data_root.glob(pattern))
+    if not candidates:
+        return None
+    best = max(
+        (path.parent for path in candidates),
+        key=lambda p: p.parents[2].name,  # .../vintage=YYYYMMDD/normalized/<dataset>/data
+    )
+    return best
+
+
 def _fina_indicator_dir(data_root: Path) -> Path | None:
     """Resolve the fina_indicator parquet directory.
 
-    Backward compatible: try the legacy ``fundamentals_raw/data/fina_indicator``
-    path first; if it has no data, fall back to the top800_union dataset which is
-    the one actually populated on the data platform.
+    Prefer the newest normalized fundamentals vintage (covers 2008+ for the
+    full-history style study).  Backward compatible: fall back to the legacy
+    ``fundamentals_raw/data/fina_indicator`` path, then the top800_union dataset
+    which is the one actually populated on the data platform.
     """
+    vintage = _vintage_normalized_dir(data_root, "fina_indicator")
+    if vintage is not None:
+        print("[load] fina_indicator: using normalized fundamentals vintage")
+        return vintage
     legacy = data_root / "assets/tushare/a_share/fundamentals_raw/data/fina_indicator"
     if sorted(legacy.glob("*.parquet")):
         return legacy
@@ -228,13 +256,17 @@ def load_cashflow(
     Returns a frame with ``symbol, end_date, ann_date, n_cashflow_act,
     net_profit`` so it can be merged into the fina panel by announcement date.
     """
-    cf_dir = (
-        data_root
-        / "assets/tushare/a_share/fundamentals_raw"
-        / "a_share_top800_union_20150227_20260529_cashflow"
-        / "data"
-        / "cashflow"
-    )
+    vintage = _vintage_normalized_dir(data_root, "cashflow")
+    if vintage is not None:
+        cf_dir = vintage
+    else:
+        cf_dir = (
+            data_root
+            / "assets/tushare/a_share/fundamentals_raw"
+            / "a_share_top800_union_20150227_20260529_cashflow"
+            / "data"
+            / "cashflow"
+        )
     parts = sorted(cf_dir.glob("*.parquet"))
     if not parts:
         print("[load] cashflow: no data found — cashflow-quality disabled")
