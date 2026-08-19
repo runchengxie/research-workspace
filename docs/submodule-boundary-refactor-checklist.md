@@ -30,13 +30,13 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
   `strategy-app` 组装。
 - `strategy-pipeline` 仍残留少量本该归属其他仓的实现（研究消融计算、契约、成本换手、原始数据直读）。
 - 存在多组跨仓重复代码与孤儿文件。
-- **（2026-08-19 新增）依赖方向出现局部倒置**：`strategy-pipeline` 有 **23 个文件**
+- （2026-08-19 新增）依赖方向出现局部倒置：`strategy-pipeline` 有 23 个文件
   直接 `from strategy_app import ...`，把 `strategy-app` 的策略计算又包了一层"发布/报告/ablation/policy"
-  外壳；反向地 `strategy-app` 侧经核验 **没有任何文件 import `strategy_pipeline`**（符合边界）。这违反了
+  外壳；反向地 `strategy-app` 侧经核验 没有任何文件 import `strategy_pipeline`（符合边界）。这违反了
   `strategy-app/README.md` 的"strategy_app 禁止导入 strategy_pipeline，通用能力一旦可被两个策略复用应上移"
   以及 `strategy-pipeline` 的"编排层不持有策略 thesis/研究算法"边界。详见文末 SA-12。
-- **（2026-08-19 新增）`strategy-pipeline` 顶层策略模块规模远多于此前记录**：除 SA-1 列的两个 ablation 文件外，
-  顶层还有 **39 个** `daily_watch20_*` / `hotsector_*` 模块（报告/政策/端到端 pipeline/影子观察等），
+- （2026-08-19 新增）`strategy-pipeline` 顶层策略模块规模远多于此前记录：除 SA-1 列的两个 ablation 文件外，
+  顶层还有 39 个 `daily_watch20_*` / `hotsector_*` 模块（报告/政策/端到端 pipeline/影子观察等），
   与 `strategy-app` 顶层的 42 个对称。这说明"编排层 vs 应用层"的物理拆分尚未真正落地，SA-1 的范围需扩大。
 
 ## 重构项清单
@@ -156,7 +156,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 ### SA-12：消除 strategy-pipeline → strategy_app 的反向依赖（高价值，原 SA-1 范围扩大）
 
 - 规模：grep `from strategy_app import` / `import strategy_app` 在 `strategy-pipeline/src/strategy_pipeline/`
-  命中 **23 个文件**，典型证据：
+  命中 23 个文件，典型证据：
   - `strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_v4_month_backtest_api.py:13-42` 大量 import
     `strategy_app.daily_watch20.*` 与 `strategy_app.hotsector.*`。
   - `strategy-pipeline/src/strategy_pipeline/daily_watch20_minute_campaign.py:5,14,17` import
@@ -164,7 +164,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
   - `strategy-pipeline/src/strategy_pipeline/hotsector_ai_shadow_observation.py:15-27` import
     `strategy_app.hotsector.*`。
 - 问题：原 SA-1 只点名 `daily_watch20_ablation_api.py` / `daily_watch20_ablation_core.py` 两个文件，实际顶层
-  还有 **39 个** `daily_watch20_*` / `hotsector_*` 模块（报告生成 `_explanations` / `_ablation_reporting` /
+  还有 39 个 `daily_watch20_*` / `hotsector_*` 模块（报告生成 `_explanations` / `_ablation_reporting` /
   `_publication_*`、策略政策 `policy_primitives.py` / `policy_validation_model.py` / `policy_canonical.py`、
   端到端 `daily_watch20_pipeline.py`、影子观察 `_market_shadow*` / `_ai_shadow*` 等），其中属"策略计算/报告/
   政策"的应下沉。
@@ -179,7 +179,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 
 ### SA-13：统一 `sha256_file` / `file_sha256` 跨仓重复实现（低风险，可先做）
 
-- 现状：同一文件哈希工具函数在全仓至少 **10 处**各自定义（签名一致 `def sha256_file(path) -> str`
+- 现状：同一文件哈希工具函数在全仓至少 10 处各自定义（签名一致 `def sha256_file(path) -> str`
   或 `file_sha256`）：
   1. `src/research_contracts/file_receipts.py:13`（`file_sha256`，正确雏形，被 alpha/portfolio 部分文件使用）
   2. `portfolio-backtester/src/portfolio_backtester/evidence_receipts.py:22`（`sha256_file`）
@@ -227,9 +227,9 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 
 原顺序（SA-10 → SA-9 → SA-3/SA-4 → SA-1/SA-2 → SA-5~SA-8 → SA-11）仍成立，本次新增项插入如下：
 
-1. **先做低风险**：SA-10、SA-9、**SA-13**（清理 stale 配置、孤儿文件、`sha256_file` 复制）。
-2. **pipeline 归位**：SA-3、SA-4、（**SA-12 范围扩大后的策略模块下沉**）。
-3. **契约/会计归位**：SA-2、SA-1（并入 SA-12）。
-4. **策略知识归位（跨仓高风险）**：SA-5 至 SA-8、SA-15（模板化重切）。
-5. **登记治理**：**SA-14**（`.gitmodules` 或显式标注）。
-6. **CLI 边界**：SA-11，作为判断项单独决策。
+1. 先做低风险：SA-10、SA-9、SA-13（清理 stale 配置、孤儿文件、`sha256_file` 复制）。
+2. pipeline 归位：SA-3、SA-4、（SA-12 范围扩大后的策略模块下沉）。
+3. 契约/会计归位：SA-2、SA-1（并入 SA-12）。
+4. 策略知识归位（跨仓高风险）：SA-5 至 SA-8、SA-15（模板化重切）。
+5. 登记治理：SA-14（`.gitmodules` 或显式标注）。
+6. CLI 边界：SA-11，作为判断项单独决策。
