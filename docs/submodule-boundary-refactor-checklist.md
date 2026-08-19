@@ -32,7 +32,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 - 存在多组跨仓重复代码与孤儿文件。
 - （2026-08-19 新增）依赖方向出现局部倒置：`strategy-pipeline` 有 23 个文件
   直接 `from strategy_app import ...`，把 `strategy-app` 的策略计算又包了一层"发布/报告/ablation/policy"
-  外壳；反向地 `strategy-app` 侧经核验 没有任何文件 import `strategy_pipeline`（符合边界）。这违反了
+  外壳，反向地 `strategy-app` 侧经核验 没有任何文件 import `strategy_pipeline`（符合边界）。这违反了
   `strategy-app/README.md` 的"strategy_app 禁止导入 strategy_pipeline，通用能力一旦可被两个策略复用应上移"
   以及 `strategy-pipeline` 的"编排层不持有策略 thesis/研究算法"边界。详见文末 SA-12。
 - （2026-08-19 新增）`strategy-pipeline` 顶层策略模块规模远多于此前记录：除 SA-1 列的两个 ablation 文件外，
@@ -206,8 +206,8 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
   strategy-app / strategy-pipeline / quant-execution-engine），但工作区同时存在 `strategy-research` 目录，
   其 `pyproject.toml` 包名 `strategy-research-style-factors`，依赖 `alpha-research` / `portfolio-backtester` /
   `research-contracts`，是事实上的第 7 个协作仓库，却游离于 superproject 的 submodule 锁定与版本组合治理之外。
-- 风险：版本漂移——`strategy-research` 的 commit 不被 gitlink 锁定，顶层 `git submodule status` 不覆盖它。
-- 建议：要么 `git submodule add` 纳入 `.gitmodules` 统一管理；要么在 `README.md` / `ARCHITECTURE.md` 显式声明其为
+- 风险：版本漂移，`strategy-research` 的 commit 不被 gitlink 锁定，顶层 `git submodule status` 不覆盖它。
+- 建议：要么 `git submodule add` 纳入 `.gitmodules` 统一管理，要么在 `README.md` / `ARCHITECTURE.md` 显式声明其为
   "非锁定的独立表现层仓库"并说明版本来源，消除登记与实际结构的不一致。
 
 ### SA-15：以 `style_factors` 三层分治为模板，重切 DailyWatch20 / hotsector 的"内核 / 表现层"
@@ -215,7 +215,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 - 现状：DailyWatch20 相关文件在 5 仓对称分布（`strategy-pipeline` 40、`strategy-app` 42、`alpha-research` 13、
   `portfolio-backtester` 5、`market-data-platform` 9 候选池），按"仓库"切而非按"职责"切，导致同一策略的候选池 /
   特征 / 排名 / 政策 / ablation / 发布 / 报告被横向切碎。
-- 正面范例（应记录并复用）：`style_factors` 已是正确的三层分治，不是重复代码——
+- 正面范例（应记录并复用）：`style_factors` 已是正确的三层分治，不是重复代码，
   - 计算内核：`alpha_research.style_factors`（`compute_factors`、`merge_sw_industry_pit` 等，ADR-0006 归属）。
   - 分位回测内核：`portfolio_backtester.style_factors_backtest`。
   - 表现层：`strategy-research/style_factors`（`robustness.py:11`、`liquidity_signals.py:12` 等均

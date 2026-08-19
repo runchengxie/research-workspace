@@ -39,7 +39,7 @@
 | C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in。生产方已全部采用：`alpha-research` signals 写入方（`signal_artifact.py`/`StyleReplicaSignalGenerator.write`，alpha-research PR #26）、`portfolio-backtester` positions 写入方（`positions_artifact.py`，PR #36）、`strategy-pipeline` targets 写入方（`export_targets.py`，在 `targets.json.lineage.json` sidecar 写 `artifact_envelope` v2，配置/内容/上游文件哈希与 producer 身份由契约测试验证）均已写入 `artifact_envelope` 键并经契约测试。`research-contracts` 作为 git 子目录由各生产方按不可变 commit 安装 |
 | B1 | P1 | `complete` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 核心跨仓私有符号已收口：`alpha-research` 发布 `prepare_feature_dataset`（PR #25）、`portfolio-backtester` 发布 `evaluate_walk_forward_backtest`（#35）与 `portfolio_daily_rows`、`market-data-platform` 发布 `sql_literal`/`duckdb`（#44）、`strategy-app` 发布 guard_ablation 全家公开名与 `build_or_load_model_frame`/`merge_frozen_model_frame`/`factor_frame_for_d_sample`（#30/#31/#32）、`strategy-pipeline` 调用方全部改向公开名并升级交叉依赖 pin（#70/#71）。外围研究影子符号（`d11_h5_shadow_artifact`/`contract`、`daily_watch20_market_shadow`、`period_evaluation`/`period_outputs` 的 import-as 私有名）仍留待后续收口，import boundary 门禁未拦截私有符号的问题建议后续加 ruff 私有导入 lint |
 | DOC1 | P1 | `complete` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，治理修正 G3 已将 `strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 的 `operational`/`生产资格:有` 校正为 `research_shadow`/`否`，与 `catalog.json` 一致（PR #148 已合并）。碎片化清单见 `documentation-consolidation.md`，剩余 DOC2/DOC4/DOC5 等去重按该清单分批推进 |
-| B2 | P1 | `in_progress` | `strategy-pipeline`、`strategy-app`、`market-data-platform`、`research-contracts` owner | 子模块边界重构（收口策略层与共享工具） | 边界盘点见 [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md)（SA-1 至 SA-15）。关键缺口（2026-08-19 核实）：(1) `strategy-pipeline` 顶层有 39 个 `daily_watch20_*` / `hotsector_*` 策略模块，且 23 个文件反向 import `strategy_app`（依赖方向倒置，原 SA-1 范围需扩大为 SA-12）；(2) `sha256_file` / `file_sha256` 在全仓至少 10 处各自复制（SA-13）；(3) `strategy-research` 是事实第 7 仓却未登记进 `.gitmodules`，版本漂移风险（SA-14）；(4) DailyWatch20 代码在 5 仓对称分布，编排层与应用层边界未真正落地（SA-15，参照 `style_factors` 三层分治正面范例）。低风险的重复代码与 stale 配置清理（SA-9/SA-10/SA-13）可先做；pipeline 策略模块下沉（SA-12）与候选池归位（SA-7）属高价值跨仓改动，需与 owner 协同。B2 不重新开启已完成的 R0-R6 物理拆分，只收口"编排层不持有策略 thesis、依赖方向单向、共享工具不复制"三条原则 |
+| B2 | P1 | `in_progress` | `strategy-pipeline`、`strategy-app`、`market-data-platform`、`research-contracts` owner | 子模块边界重构（收口策略层与共享工具） | 边界盘点见 [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md)（SA-1 至 SA-15）。关键缺口（2026-08-19 核实）：(1) `strategy-pipeline` 顶层有 39 个 `daily_watch20_*` / `hotsector_*` 策略模块，且 23 个文件反向 import `strategy_app`（依赖方向倒置，原 SA-1 范围需扩大为 SA-12），(2) `sha256_file` / `file_sha256` 在全仓至少 10 处各自复制（SA-13），(3) `strategy-research` 是事实第 7 仓却未登记进 `.gitmodules`，版本漂移风险（SA-14），(4) DailyWatch20 代码在 5 仓对称分布，编排层与应用层边界未真正落地（SA-15，参照 `style_factors` 三层分治正面范例）。低风险的重复代码与 stale 配置清理（SA-9/SA-10/SA-13）可先做，pipeline 策略模块下沉（SA-12）与候选池归位（SA-7）属高价值跨仓改动，需与 owner 协同。B2 不重新开启已完成的 R0-R6 物理拆分，只收口"编排层不持有策略 thesis、依赖方向单向、共享工具不复制"三条原则 |
 | X1 | P1 | `complete` | `quant-execution-engine` | 执行证据成熟度 | broker 能力矩阵覆盖测试已落地（`quant-execution-engine` PR #15 合并，提交 68ef56f）：7 个后端均有机器可读 `BrokerCapabilityMatrix`，`mock_sim` 离线能力修正为 `supports_live_submit=false`，paper/live 分类与 factory `PAPER_BROKERS` 一致。gitlink 已同步至 research-workspace（PR #156，643d588e）。`ibkr-paper` 模拟盘（美股）验证仍属持续联调范畴，A 股真实报单后端证据缺失为客观现状，归入 X1 长线跟踪而非本次重构缺口 |
 | F1 | P2 | `planned` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | blocked（2026-08-18）：适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime。差分脚本 `strategy-research/experiments/qlib_pilot/diff_native_vs_qlib.py`（ADR-0005 验收证据，Native 与 Qlib 后端对比）已存在，但未接入发布门禁，真实 runtime 差分证据未成发布门槛，留待进入实施阶段补齐 |
 | F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | blocked（2026-08-18）：当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段，无现存差分后端代码可重构，留待进入实施阶段 |
@@ -139,16 +139,16 @@ positions source、as-of 与 pruning 参数，lineage 覆盖 run 目录中的 su
 本项收口三条原则，不重新开启已完成的 R0 至 R6 物理拆分：
 
 - 原则一：编排层不持有策略 thesis。`strategy-pipeline` 顶层只保留编排、CLI、运行目录、`targets.json`
-  导出、`liveops`、`contracts`、`release_tools`、`data_interface.py`、`dataset.py`；策略计算、报告、政策
+  导出、`liveops`、`contracts`、`release_tools`、`data_interface.py`、`dataset.py`，策略计算、报告、政策
   下沉到 `strategy-app`（SA-12，原 SA-1 范围扩大）。`return_metrics.py` / `sharpe_stats.py` 的薄 re-export
   属合理引用，保留。
 - 原则二：依赖方向单向。`strategy_app` 禁止 import `strategy_pipeline`，当前 `strategy-pipeline` 有 23 个
   文件反向 import `strategy_app`，需在 B2 完成时消除，恢复 `strategy_app → strategy_pipeline` 单向。
 - 原则三：共享工具不复制。`sha256_file` / `file_sha256` 等纯工具收口到共享实现（扩展 `research_contracts`
-  或新建共享 submodule），消除全仓 10 处复制（SA-13）；`canonicalize_symbol_columns` 两套实现合并（SA-8/SA-9）。
+  或新建共享 submodule），消除全仓 10 处复制（SA-13），`canonicalize_symbol_columns` 两套实现合并（SA-8/SA-9）。
 
-候选池/选股范围从 `market-data-platform.research_views` 下沉到 `strategy-app`（SA-7）；`strategy-research`
-登记进 `.gitmodules` 或显式标注为非锁定仓（SA-14）；以 `style_factors` 三层分治为模板重切 DailyWatch20 /
+候选池/选股范围从 `market-data-platform.research_views` 下沉到 `strategy-app`（SA-7），`strategy-research`
+登记进 `.gitmodules` 或显式标注为非锁定仓（SA-14），以 `style_factors` 三层分治为模板重切 DailyWatch20 /
 hotsector 的"内核/表现层"（SA-15）。执行顺序按 checklist 的"低风险清理 → pipeline 归位 → 契约/会计归位 →
 策略知识归位 → 登记治理 → CLI 边界"推进。
 
