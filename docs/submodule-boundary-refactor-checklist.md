@@ -224,16 +224,40 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
 
 ### SA-15：以 `style_factors` 三层分治为模板，重切 DailyWatch20 / hotsector 的"内核 / 表现层"
 
-- 现状：DailyWatch20 相关文件在 5 仓对称分布（`strategy-pipeline` 40、`strategy-app` 42、`alpha-research` 13、
-  `portfolio-backtester` 5、`market-data-platform` 9 候选池），按"仓库"切而非按"职责"切，导致同一策略的候选池 /
-  特征 / 排名 / 政策 / ablation / 发布 / 报告被横向切碎。
-- 正面范例（应记录并复用）：`style_factors` 已是正确的三层分治，不是重复代码，
-  - 计算内核：`alpha_research.style_factors`（`compute_factors`、`merge_sw_industry_pit` 等，ADR-0006 归属）。
+- 正面范例（模板，已核实）：`style_factors` 是正确的三层分治，非重复代码，
+  - 计算内核：`alpha_research.style_factors`（`compute_factors`、`merge_sw_industry_pit`，ADR-0006 归属）。
   - 分位回测内核：`portfolio_backtester.style_factors_backtest`。
-  - 表现层：`strategy-research/style_factors`（`robustness.py:11`、`liquidity_signals.py:12` 等均
+  - 表现层：`strategy-research/style_factors`（`robustness.py`、`liquidity_signals.py` 等均
     `from alpha_research.style_factors import ...` 复用内核，不自写因子计算）。
-- 建议：明确每策略的"内核（特征/排名/组合）→ 应用（策略特有计算/报告）→ 编排（pipeline 串联出口）"三层归属，
-  参照 `style_factors` 的成功模式，避免把策略政策（`daily_watch20_policy*.py` 实现）留在编排仓顶层。
+- 已核实边界（2026-08-20 代码核查，非推测）：
+  - DailyWatch20 计算内核已归位：特征与排名在 `alpha-research`
+    （`daily_watch20.py` / `_daily_watch20_ranker.py` / `daily_watch20_features*.py` / `_daily_watch20_label.py`
+    / `daily_watch20_pit_features.py` / `daily_watch20_news_heat.py`），watchlist 装配在 `portfolio-backtester`
+    （`_daily_watch20_select.py` / `_daily_watch20_config.py` / `daily_watch20.py`）。结构符合模板。
+  - `strategy-pipeline` 无越界持有计算内核：其 `*_pipeline` / `*_publish` / `*_campaign` / `*_freshness` 多为
+    re-export 或编排外壳，被误标的 `*_core.py`（如 `_daily_watch20_ablation_core.py`、
+    `_hotsector_deepseek_v4_month_backtest_core.py`）实为编排聚合层，直接 `from alpha_research... import`
+    调用内核或仅定义配置 dataclass，自身不含因子/排名数值逻辑。
+  - 数据层集中正确：候选池 / 分钟源 / universe 策略在 `market-data-platform/research_views/`，
+    `strategy-app/daily_watch20_candidate_pool.py` 仅为桥接 re-export。
+  - 唯一结构洞：hotsector 计算内核未归位。hotsector 的特征（`deepseek_v4.py` / `hotsector_ai_shadow_frame.py`
+    / `_deepseek_stability_metrics.py`）、排名（`hotsector_challenger_ranking.py` / `hotsector_numeric_v2_ranking.py`
+    / `hotsector_holdings_overlay_selection.py` / `hotsector_session_challenger.py`）、分析
+    （`*_analysis.py` / `_hotsector_three_arm_shadow_core.py`）全部留在 `strategy-app/hotsector/`，
+    而 `alpha-research` 完全没有 hotsector 计算层。这与 `style_factors` 模板（计算内核在 alpha_research）相悖。
+- hotsector 重切真实候选清单与风险（代码级重切待单独立项，非本次机械搬运）：
+  - 候选内核：`strategy-app/hotsector/hotsector_challenger_ranking.py`、
+    `hotsector_numeric_v2_ranking.py`、`hotsector_holdings_overlay_selection.py`、
+    `hotsector_session_challenger.py`、`hotsector_ai_shadow_frame.py`、`deepseek_v4.py`、
+    `_deepseek_stability_metrics.py`、`_hotsector_three_arm_shadow_core.py` 及其 `*_analysis.py`。
+  - 阻断点（高风险）：上述模块与同仓 `*_contract.py`（评分权重 / 护栏 / PIT 血缘校验常量）强耦合，AI shadow /
+    deepseek 模块与策略层深度交互。整体下沉会撕裂 contract 耦合、跨仓搬移 PIT 校验，需逐模块立项，
+    每个模块独立开 worktree / PR 序列，并跑对应仓回归（strategy-app `tests/test_*hotsector*`、
+    strategy-pipeline `tests/test_*hotsector*`）。
+  - 不建议动作：不要一次性把 hotsector 计算全量搬到 alpha_research，先选一个低耦合模块（如
+    `hotsector_challenger_ranking.py` + 配套 contract）做试点，验证 dependency-direction 与回归后再扩展。
+- 结论：SA-15 原则与边界已落地（本清单即为边界事实），DailyWatch20 侧无需重切，hotsector 侧代码重切为独立大任务，
+  见上方候选清单，逐个立项推进。避免把策略政策（`daily_watch20_policy*.py` 身份类 re-export）误判为越界。
 
 ## 执行顺序复核（2026-08-19 更新）
 
