@@ -1603,7 +1603,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 371,
-      "python_loc": 83609,
+      "python_loc": 83602,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,
@@ -1614,7 +1614,7 @@
       "large_files": [
         {
           "path": "tests/test_daily_watch20_pipeline.py",
-          "loc": 797,
+          "loc": 798,
           "hk_related": false
         },
         {
@@ -1624,7 +1624,7 @@
         },
         {
           "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
-          "loc": 796,
+          "loc": 795,
           "hk_related": false
         },
         {
