@@ -16,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from .loaders import (
+    load_fund_portfolio_features,
     load_holder_structure,
     load_limit_list,
     load_margin,
@@ -28,6 +29,7 @@ __all__ = [
     "load_cashflow",
     "load_data",
     "load_fina_indicator",
+    "load_fund_portfolio_features",
     "load_holder_structure",
     "load_limit_list",
     "load_margin",

@@ -65,6 +65,14 @@ def _factor_definition_lines(active_factors: set[str] | None = None) -> list[str
         "institution_holding": ("| 机构持仓因子 | 机构持仓较高减较低 | 前十大机构流通持股占比 |"),
         "dividend_yield": "| 股息率因子 | 高股息率减低股息率 | 过去 12 个月股息率 |",
         "ps_value": "| 市销率价值因子 | 低市销率减高市销率 | 滚动市销率倒数 |",
+        "fund_breadth": (
+            "| 公募持有广度因子 | 持有基金数较多减较少 | "
+            "披露期末持有该股票的公募基金数量（fund_portfolio 反向聚合）|"
+        ),
+        "fund_breadth_change": (
+            "| 公募持有广度变化因子 | 基金数增加减减少 | "
+            "持有该股票的公募基金数量环比变化，捕捉机构共识形成/瓦解 |"
+        ),
     }
     selected = active_factors if active_factors is not None else set(FACTOR_LABELS)
     rows.extend(definitions[name] for name in FACTOR_LABELS if name in selected)

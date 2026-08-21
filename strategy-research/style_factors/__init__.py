@@ -57,6 +57,9 @@ FACTOR_LABELS = {
     "institution_holding": "机构持仓因子",
     "dividend_yield": "股息率因子",
     "ps_value": "市销率价值因子",
+    # Public-fund ownership breadth from fund_portfolio_features:
+    "fund_breadth": "公募持有广度",
+    "fund_breadth_change": "公募持有广度变化",
 }
 
 FACTOR_ORDER = list(FACTOR_LABELS)
@@ -77,6 +80,8 @@ COLORS = [
     "#48dbfb",  # institution_holding
     "#1dd1a1",  # dividend_yield
     "#f368e0",  # ps_value
+    "#feca57",  # fund_breadth
+    "#54a0ff",  # fund_breadth_change
 ]
 
 FACTOR_COLORS = dict(zip(FACTOR_ORDER, COLORS, strict=True))

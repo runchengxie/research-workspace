@@ -31,6 +31,7 @@ from .data import (
     load_cashflow,
     load_data,
     load_fina_indicator,
+    load_fund_portfolio_features,
     load_holder_structure,
     load_moneyflow_ths,
     load_sw_industry_membership,
@@ -156,6 +157,7 @@ def run_style_factor_analysis(
     # factors + PIT SW-L1 industry neutralization.
     moneyflow = load_moneyflow_ths(data_root, start_date=start_date)
     holder = load_holder_structure(data_root, start_date=start_date)
+    fund = load_fund_portfolio_features(data_root, start_date=start_date)
     sw_membership = load_sw_industry_membership(data_root)
 
     # dv_ttm / ps_ttm come from daily_basic (already loaded); surface as aux.
@@ -176,6 +178,7 @@ def run_style_factor_analysis(
         "moneyflow_ths": moneyflow if not moneyflow.empty else None,
         "holder_structure": holder if not holder.empty else None,
         "daily_basic_extra": basics_extra if not basics_extra.empty else None,
+        "fund_portfolio_features": fund if not fund.empty else None,
     }
 
     factors = compute_factors(
