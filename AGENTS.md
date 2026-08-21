@@ -103,35 +103,40 @@ targets.json
 本工作区可能由多个 agent 并行开发。每个改动都必须使用独立 worktree 与功能分支，
 避免多个 agent 在同一检出目录竞争同一组文件。
 
-远端常驻分支只有 `main`。功能分支（`feat/*`、`fix/*`、`hotfix/*`、`release/*`）
-只用于拉取请求流程、临时存在。每个改动遵循以下顺序：
+远端命名：本顶层 superproject 的远端名为 `github`（不是 `origin`），推送与拉取用
+`git push -u github ...` / `git fetch github`。六个子模块的远端名为 `origin`，请按
+各自 `AGENTS.md` 的示例操作，不要混用。
 
-1. 从 `origin/main` 新建 worktree 与功能分支：
+`main` 是受保护常驻分支，改动一律走 worktree + PR 流程，不直接在主检出目录提交。
+功能分支（`feat/*`、`fix/*`、`hotfix/*`、`release/*`）只用于拉取请求流程、临时存在。
+每个改动遵循以下顺序：
+
+1. 从 `github/main` 新建 worktree 与功能分支：
 
    ```bash
-   git fetch origin
-   git worktree add <path> -b feat/<主题> origin/main
+   git fetch github
+   git worktree add <path> -b feat/<主题> github/main
    ```
 
 2. 在独立 worktree 内完成改动，运行与改动范围匹配的检查。
 3. 提交并推送功能分支：
 
    ```bash
-   git push -u origin feat/<主题>
+   git push -u github feat/<主题>
    ```
 
 4. 用 `gh pr create` 开拉取请求，合并到 `main`。
 5. 合并完成后删除功能分支并移除 worktree：
 
    ```bash
-   git push origin --delete feat/<主题>
+   git push github --delete feat/<主题>
    git branch -d feat/<主题>
    git worktree remove <path>
    ```
 
-跨仓库改动遵循先子模块后顶层的顺序：先在对应子仓库完成检查、提交、推送并合并
-`main`，再回到顶层更新 gitlink 和版本记录，最后把顶层改动按同一 worktree + PR
-流程合并。
+跨仓库改动遵循先子模块后顶层的顺序：先在对应子仓库（远端 `origin`）完成检查、提交、
+推送并合并 `main`，再回到顶层（远端 `github`）更新 gitlink 和版本记录，最后把顶层
+改动按同一 worktree + PR 流程合并。
 
 同一仓库的多个 worktree 共享主工作树的 `core.hooksPath` 配置。不要在独立 worktree
 内重装或改写 hook。新的并行任务必须新建 worktree，不要直接在主检出目录的
