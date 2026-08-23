@@ -35,6 +35,7 @@ from .data import (
     load_moneyflow_ths,
     load_sw_industry_membership,
 )
+from .loaders import load_fund_portfolio_features
 from .report import generate_report
 
 
@@ -156,6 +157,12 @@ def run_style_factor_analysis(
     # factors + PIT SW-L1 industry neutralization.
     moneyflow = load_moneyflow_ths(data_root, start_date=start_date)
     holder = load_holder_structure(data_root, start_date=start_date)
+    fund_portfolio = load_fund_portfolio_features(
+        data_root,
+        formation_panel=basics[["trade_date", "symbol"]],
+        start_date=start_date,
+        end_date=all_dates[-1],
+    )
     sw_membership = load_sw_industry_membership(data_root)
 
     # dv_ttm / ps_ttm come from daily_basic (already loaded); surface as aux.
@@ -175,6 +182,7 @@ def run_style_factor_analysis(
     aux = {
         "moneyflow_ths": moneyflow if not moneyflow.empty else None,
         "holder_structure": holder if not holder.empty else None,
+        "fund_portfolio_features": fund_portfolio if not fund_portfolio.empty else None,
         "daily_basic_extra": basics_extra if not basics_extra.empty else None,
     }
 
@@ -244,7 +252,7 @@ def _publish_value_cluster_series(
 
     The cluster is the equal-weight mean of the four standardized value-group
     z-scores; it feeds the weekly Value report's 口径对照 but stays out of the
-    formal 15-factor research set.
+    formal 19-factor research set.
     """
     if VALUE_CLUSTER_COL not in factors.columns or not factors[VALUE_CLUSTER_COL].notna().any():
         return
