@@ -34,3 +34,24 @@ ownership_rules:
     max_unowned_definitions: 1
     target_max_unowned_definitions: 0
     target_pr: strategy-app#36
+
+  - identifier: strategy-app:deepseek-v4-app-shell
+    description: DeepSeek V4 app module may own campaign and evidence composition but not reusable ranking-trial helpers
+    repo: strategy-app
+    source: src/strategy_app/hotsector/deepseek_v4.py
+    allowed_definitions:
+      - _load_spec
+      - DeepSeekV4ReplayBundle
+      - campaign_spec_record
+      - _ranking_policy
+      - analyze_deepseek_v4_phase1
+      - build_intention_to_deploy_scores
+      - _validated_execution_summaries
+      - _paired_execution_daily
+      - _paired_inference
+      - _primary_blocks
+      - _execution_gates
+      - run_deepseek_v4_paired_replay
+    max_unowned_definitions: 5
+    target_max_unowned_definitions: 0
+    target_pr: strategy-app#37
