@@ -41,13 +41,19 @@ def test_every_hotsector_module_has_an_explicit_state_and_valid_owners() -> None
             assert set(split).issubset(OWNERS)
 
 
-def test_strong_cluster_contract_keeps_lineage_core_in_app() -> None:
+def test_strong_cluster_contract_keeps_lineage_and_existing_typed_contract_in_app() -> None:
     modules = _manifest()["modules"]
-    three_arm = modules["hotsector_three_arm_shadow_core"]
+    three_arm_contract = modules["hotsector_three_arm_shadow_contract"]
+    three_arm_core = modules["hotsector_three_arm_shadow_core"]
+    legacy_stability = modules["deepseek_stability_metrics"]
     session = modules["hotsector_session_challenger"]
 
-    assert three_arm["kernel_owner"] == "strategy-app"
-    assert three_arm["state"] == "retain_in_app"
+    assert three_arm_contract["kernel_owner"] == "strategy-app"
+    assert three_arm_contract["state"] == "typed_contract_already_exists"
+    assert three_arm_core["kernel_owner"] == "strategy-app"
+    assert three_arm_core["state"] == "retain_in_app"
+    assert "strategy-app" in legacy_stability["split"]
+    assert legacy_stability["state"] == "retain_app_until_typed_trial_boundary"
     assert "strategy-app" in session["split"]
     assert session["state"] == "retain_app_until_reusable_kernel_exists"
 
