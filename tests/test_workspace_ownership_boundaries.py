@@ -33,6 +33,8 @@ def test_current_workspace_ownership_budgets_hold() -> None:
     assert rules["strategy-app:numeric-v2-adapter-only"]["target_max_unowned_definitions"] == 0
     assert rules["strategy-app:holdings-overlay-app-shell"]["count"] <= 1
     assert rules["strategy-app:holdings-overlay-app-shell"]["target_max_unowned_definitions"] == 0
+    assert rules["strategy-app:deepseek-v4-app-shell"]["count"] <= 5
+    assert rules["strategy-app:deepseek-v4-app-shell"]["target_max_unowned_definitions"] == 0
 
 
 def test_unowned_top_level_definition_breaks_zero_budget(tmp_path: Path) -> None:
