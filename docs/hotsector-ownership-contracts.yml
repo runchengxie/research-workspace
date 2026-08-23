@@ -21,7 +21,7 @@ owner_roles:
       - frozen campaign specifications and resource digests
       - provider/session adapters
       - artifact identity and lineage validation
-      - fail-closed fallback and promotion policy
+      - fail-closed promotion and product policy
       - product-facing replay and reporting composition
   strategy-pipeline:
     owns:
@@ -64,22 +64,36 @@ modules:
     split:
       strategy-app:
         - frozen campaign spec and digest
-        - model/trial identity validation
-        - fail-closed Numeric fallback semantics
-        - evidence report composition
+        - model/provider trial acquisition and campaign identity
+        - promotion/evidence policy
+        - execution gate and evidence report composition
       alpha-research:
+        - ranking-contract validity under explicit caller policy
         - presentation-stability overlap statistics
+        - deterministic Numeric fallback score materialization
         - reusable paired ranking analysis
-        - research inference independent of campaign resources
       portfolio-backtester:
         - execution summary and portfolio accounting through existing public APIs
-    state: contract_frozen_move_kernel_next
+    state: split_prs_open
+    prs:
+      - alpha-research#33
+      - strategy-app#37
 
   deepseek_stability_metrics:
     source: strategy-app/src/strategy_app/hotsector/_deepseek_stability_metrics.py
-    kernel_owner: alpha-research
-    app_residual: campaign-specific evidence/report adapter
-    state: contract_frozen_move_kernel_next
+    split:
+      strategy-app:
+        - frozen experiment constants and report schema
+        - typed _EvaluatedTrial boundary and trial validation
+        - experiment-specific gate thresholds and evidence packaging
+      alpha-research:
+        - only future statistics that can accept manifest-agnostic typed inputs
+    state: retain_app_until_typed_trial_boundary
+    rationale: >-
+      The current helper directly imports strategy-app experiment constants,
+      _EvaluatedTrial and output-score semantics. Moving it wholesale would create an
+      alpha package coupled to strategy_app internals. Extract only after a public,
+      manifest-agnostic trial-statistics input contract exists.
 
   hotsector_session_challenger:
     source: strategy-app/src/strategy_app/hotsector/hotsector_session_challenger.py
@@ -95,6 +109,15 @@ modules:
     rationale: >-
       Current module is dominated by session replay, artifact/report and promotion-denial
       semantics. Moving it wholesale would create a false alpha ownership boundary.
+
+  hotsector_three_arm_shadow_contract:
+    source: strategy-app/src/strategy_app/hotsector/hotsector_three_arm_shadow_contract.py
+    kernel_owner: strategy-app
+    state: typed_contract_already_exists
+    rationale: >-
+      The frozen contract already provides content-addressed campaign identity,
+      ThreeArmReadiness and 20/60/120 typed viewing gates. A second contract layer would
+      duplicate the existing authority instead of improving the boundary.
 
   hotsector_three_arm_shadow_core:
     source: strategy-app/src/strategy_app/hotsector/_hotsector_three_arm_shadow_core.py
@@ -115,7 +138,7 @@ modules:
         - turnover, exposure or execution accounting when generic
       strategy-app:
         - campaign decision policy and evidence packaging
-    state: inspect_and_extract_after_contract_freeze
+    state: inspect_and_extract_only_manifest_agnostic_kernels
 
 migration_rules:
   - id: contract-before-code
@@ -134,7 +157,8 @@ migration_rules:
 closure_criteria:
   - Numeric v2 ranking mathematics has one owner implementation in alpha-research
   - holdings fixed-slot construction has one owner implementation in portfolio-backtester
-  - DeepSeek reusable stability/ranking statistics no longer live in strategy-app
-  - three-arm contract/lineage validation remains explicitly owned by strategy-app
+  - DeepSeek V4 reusable stability/ranking statistics no longer live in strategy-app
+  - legacy DeepSeek stability metrics are retained in app until a manifest-agnostic typed trial boundary exists
+  - three-arm typed campaign contract and contract/lineage validation remain explicitly owned by strategy-app
   - session challenger is not moved unless a manifest-agnostic reusable kernel is identified
   - workspace boundary/ownership checks prevent migrated kernels from growing back in strategy-app
