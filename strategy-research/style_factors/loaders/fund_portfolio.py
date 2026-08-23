@@ -1,4 +1,4 @@
-"""PIT public-fund ownership state materialized to style-factor formation dates."""
+"""PIT public-fund top-10 ownership state materialized to factor formation dates."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ import pandas as pd
 from ._common import _filter_partition_paths, _latest_data_dir, _read_partitioned_parquet
 
 STATE_COLUMNS = [
-    "fund_count_holding_stock",
-    "fund_stk_float_ratio_sum",
+    "fund_top10_count_holding_stock",
+    "fund_top10_stk_float_ratio_sum",
 ]
 META_COLUMNS = [
     "report_period",
@@ -22,26 +22,26 @@ def materialize_fund_portfolio_state(
     events: pd.DataFrame,
     formation_panel: pd.DataFrame,
 ) -> pd.DataFrame:
-    """Carry the latest PIT fund state to each stock formation date.
+    """Carry the latest PIT public-fund top-10 state to each formation date.
 
-    ``fund_portfolio_features`` is an event-state asset: a row is emitted when
-    newly disclosed fund portfolios change the currently known aggregate state
-    of a stock.  Style-factor formation happens at month end, so an exact-date
-    join would discard almost all observations.  This function performs a
-    backward as-of join by symbol and then computes changes between formation
-    dates, never between asynchronous disclosure events.
+    ``fund_top10_portfolio_features`` is an event-state asset: a row is emitted
+    when newly disclosed fund top-10 portfolios change the currently known
+    aggregate state of a stock. Style-factor formation happens at month end, so
+    an exact-date join would discard almost all observations. This function
+    performs a backward as-of join by symbol and then computes changes between
+    formation dates, never between asynchronous disclosure events.
 
-    Stocks with no prior fund event are treated as zero ownership after the
-    feature asset starts.  This keeps never-held names in the cross-section
+    Stocks with no prior top-10 fund event are treated as zero ownership after
+    the feature asset starts. This keeps never-held names in the cross-section
     instead of silently restricting the factor universe to stocks already held
-    by public funds.
+    as public-fund top-10 positions.
     """
     if events.empty or formation_panel.empty:
         return pd.DataFrame()
     required = {"trade_date", "symbol", *STATE_COLUMNS}
     missing = required - set(events.columns)
     if missing:
-        raise ValueError(f"fund_portfolio_features missing columns: {sorted(missing)}")
+        raise ValueError(f"fund_top10_portfolio_features missing columns: {sorted(missing)}")
     target_required = {"trade_date", "symbol"}
     target_missing = target_required - set(formation_panel.columns)
     if target_missing:
@@ -82,12 +82,12 @@ def materialize_fund_portfolio_state(
         merged.loc[eligible & merged[column].isna(), column] = 0.0
 
     merged = merged.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
-    merged["fund_count_holding_stock_change"] = merged.groupby("symbol", sort=False)[
-        "fund_count_holding_stock"
-    ].diff()
-    merged["fund_stk_float_ratio_sum_change"] = merged.groupby("symbol", sort=False)[
-        "fund_stk_float_ratio_sum"
-    ].diff()
+    merged["fund_top10_count_holding_stock_change"] = merged.groupby(
+        "symbol", sort=False
+    )["fund_top10_count_holding_stock"].diff()
+    merged["fund_top10_stk_float_ratio_sum_change"] = merged.groupby(
+        "symbol", sort=False
+    )["fund_top10_stk_float_ratio_sum"].diff()
     merged["fund_state_age_days"] = (
         merged["trade_date"] - merged["fund_available_date"]
     ).dt.days
@@ -101,10 +101,11 @@ def load_fund_portfolio_features(
     start_date: str | pd.Timestamp | None = None,
     end_date: str | pd.Timestamp | None = None,
 ) -> pd.DataFrame:
-    """Load public-fund PIT ownership features, optionally at formation dates."""
-    data_dir = _latest_data_dir(data_root, "fund_portfolio_features")
+    """Load public-fund top-10 PIT ownership features, optionally at formation dates."""
+    dataset = "fund_top10_portfolio_features"
+    data_dir = _latest_data_dir(data_root, dataset)
     if data_dir is None:
-        print("[load] fund_portfolio_features: no data found")
+        print(f"[load] {dataset}: no data found")
         return pd.DataFrame()
 
     parts = sorted(data_dir.glob("trade_date=*"))
@@ -118,7 +119,7 @@ def load_fund_portfolio_features(
     if not parts:
         return pd.DataFrame()
 
-    events = _read_partitioned_parquet(parts, label="fund_portfolio_features")
+    events = _read_partitioned_parquet(parts, label=dataset)
     keep = [
         column
         for column in ["trade_date", "symbol", *STATE_COLUMNS, *META_COLUMNS]
@@ -139,7 +140,7 @@ def load_fund_portfolio_features(
     if output.empty:
         return output
     print(
-        f"[load] fund_portfolio_features: {len(output)} rows, "
+        f"[load] {dataset}: {len(output)} rows, "
         f"{output['symbol'].nunique()} stocks, "
         f"{output['trade_date'].min().date()} ~ {output['trade_date'].max().date()}"
     )
