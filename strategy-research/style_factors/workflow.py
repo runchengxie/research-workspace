@@ -182,7 +182,7 @@ def run_style_factor_analysis(
     aux = {
         "moneyflow_ths": moneyflow if not moneyflow.empty else None,
         "holder_structure": holder if not holder.empty else None,
-        "fund_portfolio_features": fund_portfolio if not fund_portfolio.empty else None,
+        "fund_top10_portfolio_features": fund_portfolio if not fund_portfolio.empty else None,
         "daily_basic_extra": basics_extra if not basics_extra.empty else None,
     }
 
