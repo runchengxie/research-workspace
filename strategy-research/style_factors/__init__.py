@@ -1,7 +1,8 @@
-"""A-share style-factor proxy analysis with 15 candidate factors.
+"""A-share style-factor proxy analysis with 19 candidate factors.
 
 Size, Value, Momentum, Quality (composite), Earnings Yield, LowVol, Growth,
-Leverage, Beta, Liquidity.
+Leverage, Beta, Liquidity, plus auxiliary flow, ownership and valuation
+signals from locally-landed TuShare feature assets.
 
 ``factor_quality`` is now a composite operating-quality score (ROE, low
 leverage, earnings stability, cashflow quality).  Earnings yield (1/PE_TTM)
@@ -55,6 +56,10 @@ FACTOR_LABELS = {
     "liquidity_flow": "大单资金流因子",
     "chip_concentration": "筹码集中度因子",
     "institution_holding": "机构持仓因子",
+    "fund_breadth": "公募持股广度因子",
+    "fund_breadth_change": "公募持股广度变化因子",
+    "fund_ownership": "公募持仓比例因子",
+    "fund_ownership_change": "公募持仓比例变化因子",
     "dividend_yield": "股息率因子",
     "ps_value": "市销率价值因子",
 }
@@ -75,6 +80,10 @@ COLORS = [
     "#ff9f43",  # liquidity_flow
     "#ee5253",  # chip_concentration
     "#48dbfb",  # institution_holding
+    "#10ac84",  # fund_breadth
+    "#5f27cd",  # fund_breadth_change
+    "#54a0ff",  # fund_ownership
+    "#ff9ff3",  # fund_ownership_change
     "#1dd1a1",  # dividend_yield
     "#f368e0",  # ps_value
 ]
