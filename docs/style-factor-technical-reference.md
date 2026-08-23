@@ -35,10 +35,10 @@
 | `liquidity_flow` | 大单资金流因子 |
 | `chip_concentration` | 筹码集中度因子 |
 | `institution_holding` | 机构持仓因子 |
-| `fund_breadth` | 公募持股广度因子 |
-| `fund_breadth_change` | 公募持股广度变化因子 |
-| `fund_ownership` | 公募持仓比例因子 |
-| `fund_ownership_change` | 公募持仓比例变化因子 |
+| `fund_breadth` | 公募前十大重仓广度因子 |
+| `fund_breadth_change` | 公募前十大重仓广度变化因子 |
+| `fund_ownership` | 公募前十大重仓比例因子 |
+| `fund_ownership_change` | 公募前十大重仓比例变化因子 |
 | `dividend_yield` | 股息率因子 |
 | `ps_value` | 市销率价值因子 |
 
@@ -156,11 +156,13 @@ DATA_PLATFORM_ROOT=/path/to/market-data-platform \
 
 ## 数据字段
 
-长期基准主要使用 `daily`、`daily_basic`、`fina_indicator`、`cashflow`、`moneyflow_ths`、`holder_structure`、`fund_portfolio_features` 和申万行业成员历史。约束复核增加 `daily_clean`、形成日股票池、`namechange`、`st`、`suspend_d`、`stk_limit`、`margin_secs`、`margin_detail` 和 `slb_sec_detail`。
+长期基准主要使用 `daily`、`daily_basic`、`fina_indicator`、`cashflow`、`moneyflow_ths`、`holder_structure`、`fund_top10_portfolio_features` 和申万行业成员历史。约束复核增加 `daily_clean`、形成日股票池、`namechange`、`st`、`suspend_d`、`stk_limit`、`margin_secs`、`margin_detail` 和 `slb_sec_detail`。
 
-`fund_portfolio_features` 来自数据平台已经 PIT 化的公募基金持仓状态资产。数据平台先按基金披露日映射到可用交易日，并在基金下一次披露时替换该基金的旧持仓状态；研究层再用向后 as-of 方式把最后一次已知状态映射到月末形成日。形成日以前没有任何公募事件、但已进入该资产历史覆盖期的股票按 0 持仓保留，避免把研究样本偷偷收缩成“已经被公募持有的股票”。
+`fund_top10_portfolio_features` 来自数据平台对 `fund_portfolio` 的一致披露口径派生资产。平台先把每只基金每次披露统一截取为按持仓市值排名最大的前 10 只股票，再按基金披露日映射到可用交易日，并在基金下一次披露时替换该基金的旧 top-10 状态。这样季度、中期和年度报告使用同一可观察范围，避免把“本期没进入披露范围”误判成“已经卖出”。
 
-公募持仓变化信号在相邻月末形成日之间计算。数据平台原始特征资产中的 `*_qoq_change` 是异步披露事件之间的差分，不直接作为标准年度风格因子的季度变化定义。当前四个候选信号分别使用公募基金持有数量、该数量的形成日变化、各基金 `stk_float_ratio` 合计，以及该合计的形成日变化。它们仍属于研究候选，需经过覆盖率、增量 IC、市值/流动性暴露、分组单调性和成本检验后再决定是否晋级生产策略。
+研究层再用向后 as-of 方式把最后一次已知 top-10 状态映射到月末形成日。形成日以前没有任何 top-10 公募事件、但已进入该资产历史覆盖期的股票按 0 持仓保留，避免把研究样本偷偷收缩成“已经被公募列入前十大重仓的股票”。公募重仓变化信号在相邻月末形成日之间计算，不直接使用异步披露事件之间的差分。
+
+当前四个候选信号分别使用：把股票列入前十大重仓的公募基金数量、该数量的形成日变化、各基金前十大重仓中 `stk_float_ratio` 的股票级合计，以及该合计的形成日变化。它们衡量公募重仓广度和拥挤度，不能解释成完整公募股东人数或完整公募持股比例。它们仍属于研究候选，需经过覆盖率、增量 IC、市值/流动性暴露、分组单调性和成本检验后再决定是否晋级生产策略。
 
 低换手定义诊断逐日读取 `daily_basic` 中的换手率，在每个月末形成 20 日和 60 日平均及中位统计。市值控制使用总市值，低波动控制使用前 21 个收益观察值的波动率。
 
