@@ -1,0 +1,140 @@
+schema_version: hotsector_ownership_contracts.v1
+status: active
+purpose: >-
+  Freeze B2 ownership before moving strongly coupled Hotsector modules. The manifest
+  separates reusable research/portfolio kernels from campaign identity, lineage,
+  reporting, provider/session and promotion policy that must remain in strategy-app.
+
+owner_roles:
+  alpha-research:
+    owns:
+      - reusable feature computation
+      - deterministic scoring and ranking mathematics
+      - research-only statistical analysis that is independent of campaign identity
+  portfolio-backtester:
+    owns:
+      - portfolio construction
+      - target weights and cash allocation
+      - turnover and execution accounting
+  strategy-app:
+    owns:
+      - frozen campaign specifications and resource digests
+      - provider/session adapters
+      - artifact identity and lineage validation
+      - fail-closed fallback and promotion policy
+      - product-facing replay and reporting composition
+  strategy-pipeline:
+    owns:
+      - scheduling and workflow orchestration
+      - promotion workflow execution
+      - release/evidence plumbing
+
+modules:
+  hotsector_challenger_ranking:
+    source: strategy-app/src/strategy_app/hotsector/hotsector_challenger_ranking.py
+    kernel_owner: alpha-research
+    app_residual: thin adapter only
+    state: kernel_already_extracted
+
+  hotsector_numeric_v2_ranking:
+    source: strategy-app/src/strategy_app/hotsector/hotsector_numeric_v2_ranking.py
+    kernel_owner: alpha-research
+    app_residual: frozen campaign policy to alpha ranking-policy adapter
+    state: adapter_pr_open
+    pr: strategy-app#35
+
+  hotsector_holdings_overlay_selection:
+    source: strategy-app/src/strategy_app/hotsector/hotsector_holdings_overlay_selection.py
+    split:
+      strategy-app:
+        - owner/candidate artifact identity validation
+        - Numeric v2 ranking invocation
+        - campaign-specific overlay policy
+      portfolio-backtester:
+        - fixed-slot retain/add/exit construction
+        - equal-weight target and cash weight
+        - name turnover and L1 accounting
+    state: split_prs_open
+    prs:
+      - portfolio-backtester#39
+      - strategy-app#36
+
+  deepseek_v4:
+    source: strategy-app/src/strategy_app/hotsector/deepseek_v4.py
+    split:
+      strategy-app:
+        - frozen campaign spec and digest
+        - model/trial identity validation
+        - fail-closed Numeric fallback semantics
+        - evidence report composition
+      alpha-research:
+        - presentation-stability overlap statistics
+        - reusable paired ranking analysis
+        - research inference independent of campaign resources
+      portfolio-backtester:
+        - execution summary and portfolio accounting through existing public APIs
+    state: contract_frozen_move_kernel_next
+
+  deepseek_stability_metrics:
+    source: strategy-app/src/strategy_app/hotsector/_deepseek_stability_metrics.py
+    kernel_owner: alpha-research
+    app_residual: campaign-specific evidence/report adapter
+    state: contract_frozen_move_kernel_next
+
+  hotsector_session_challenger:
+    source: strategy-app/src/strategy_app/hotsector/hotsector_session_challenger.py
+    split:
+      strategy-app:
+        - session manifest and product/session identity
+        - replay input validation
+        - reporting and explicit no-promotion decision
+        - execution composition through owner APIs
+      alpha-research:
+        - only future research mathematics that can be made manifest-agnostic
+    state: retain_app_until_reusable_kernel_exists
+    rationale: >-
+      Current module is dominated by session replay, artifact/report and promotion-denial
+      semantics. Moving it wholesale would create a false alpha ownership boundary.
+
+  hotsector_three_arm_shadow_core:
+    source: strategy-app/src/strategy_app/hotsector/_hotsector_three_arm_shadow_core.py
+    kernel_owner: strategy-app
+    app_residual: full contract/lineage validation core
+    state: retain_in_app
+    rationale: >-
+      The core validates campaign identity, owner receipts, hashes, fallbacks and terminal
+      arm consistency. Those are strategy-app contract responsibilities, not reusable alpha
+      or portfolio mathematics.
+
+  hotsector_three_arm_shadow_analysis:
+    source_glob: strategy-app/src/strategy_app/hotsector/*three_arm*analysis*.py
+    split:
+      alpha-research:
+        - model/selection research statistics independent of campaign artifacts
+      portfolio-backtester:
+        - turnover, exposure or execution accounting when generic
+      strategy-app:
+        - campaign decision policy and evidence packaging
+    state: inspect_and_extract_after_contract_freeze
+
+migration_rules:
+  - id: contract-before-code
+    requirement: strong-coupling modules must have their ownership split recorded here before code moves
+  - id: no-app-backedge
+    requirement: alpha-research and portfolio-backtester must never import strategy_app
+  - id: explicit-kernel-inputs
+    requirement: extracted kernels receive policy/data as explicit inputs and must not read strategy-app campaign resources
+  - id: preserve-app-api
+    requirement: first migration PR keeps existing strategy-app public call signatures through a thin adapter where practical
+  - id: owner-tests-first
+    requirement: owner repository gets kernel unit tests before the strategy-app duplicate implementation is removed
+  - id: gitlink-last
+    requirement: merge owner/app PRs first, then update research-workspace gitlinks and B2 roadmap evidence
+
+closure_criteria:
+  - Numeric v2 ranking mathematics has one owner implementation in alpha-research
+  - holdings fixed-slot construction has one owner implementation in portfolio-backtester
+  - DeepSeek reusable stability/ranking statistics no longer live in strategy-app
+  - three-arm contract/lineage validation remains explicitly owned by strategy-app
+  - session challenger is not moved unless a manifest-agnostic reusable kernel is identified
+  - workspace boundary/ownership checks prevent migrated kernels from growing back in strategy-app
