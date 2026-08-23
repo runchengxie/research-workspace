@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-19
+> last_verified: 2026-08-23
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -35,11 +35,11 @@
 | --- | --- | --- | --- | --- | --- |
 | D1 | P0 | `complete` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 已发布（mdp PR #46 多 dataset 发布工具 + 真实发布，2026-08-18）：current 契约 `exists: true`、`is_symlink: true`，latest alias 解析到 `a_share_all_normalized_fundamentals_20260814`，`as_of=20260817`，manifest `schema_version=normalized.v2`，覆盖 20150101–20260815，911,680 行，7,620 只证券，合并快照经 `validate_normalized_fundamentals` 校验 `status passed`。`pit_fundamentals` 同步升级到 v2 PIT（911,669 行）。`capacity`/`turnover-cost` 长窗口压力证据仍 `pending`，属 E2 范围 |
 | E1 | P0 | `complete` | `strategy-research`、workspace | 策略生命周期证据 | 门禁双档已实现（`--strict` 护栏档 + `--strict --zero-gaps` 晋级评审档），`production_eligible` 全 `false` 致原 `--strict` 形同虚设的问题以双档收口，不再误标生产级。五策略真实缺口（含 `daily_watch20` 的 pit/cost/final_oos/regime 非 pass）登记于各自 `known_gaps`，待 E2 长窗口证据补齐后晋级档归零 |
-| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成。生成 runbook 已落地（`docs/runbooks/a-share-long-window-evidence.md`，2026-08-18 接管停摆 agent 分支补回），记录命令级步骤与分批执行核对表。2026-08-18 补齐 runbook 要求的长窗口变体配置 `configs/experiments/variants/a_share_long_window.yml`（继承 `a_share.yml`，覆盖 `data.start_date/end_date/asset_coverage_start_date` 为 20150101 起），`resolve_pipeline_config` 与仓库路径引用测试通过。实际长窗口回测仍需较长计算，证据生成不随 runbook 与配置落地而完成 |
+| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成。生成 runbook 与 `configs/experiments/variants/a_share_long_window.yml` 已落地。2026-08-23 新增 strategy-pipeline PR #74，拟把指数/PIT Top800 benchmark 日收益构建与 turnover-cost evidence 生成从手工步骤改为可重复工具；该 PR 尚未合并，且真实 2015→latest 长窗口计算仍未执行，因此 E2 保持 `in_progress` |
 | C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in。生产方已全部采用：`alpha-research` signals 写入方（`signal_artifact.py`/`StyleReplicaSignalGenerator.write`，alpha-research PR #26）、`portfolio-backtester` positions 写入方（`positions_artifact.py`，PR #36）、`strategy-pipeline` targets 写入方（`export_targets.py`，在 `targets.json.lineage.json` sidecar 写 `artifact_envelope` v2，配置/内容/上游文件哈希与 producer 身份由契约测试验证）均已写入 `artifact_envelope` 键并经契约测试。`research-contracts` 作为 git 子目录由各生产方按不可变 commit 安装 |
 | B1 | P1 | `complete` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 核心跨仓私有符号已收口：`alpha-research` 发布 `prepare_feature_dataset`（PR #25）、`portfolio-backtester` 发布 `evaluate_walk_forward_backtest`（#35）与 `portfolio_daily_rows`、`market-data-platform` 发布 `sql_literal`/`duckdb`（#44）、`strategy-app` 发布 guard_ablation 全家公开名与 `build_or_load_model_frame`/`merge_frozen_model_frame`/`factor_frame_for_d_sample`（#30/#31/#32）、`strategy-pipeline` 调用方全部改向公开名并升级交叉依赖 pin（#70/#71）。外围研究影子符号（`d11_h5_shadow_artifact`/`contract`、`daily_watch20_market_shadow`、`period_evaluation`/`period_outputs` 的 import-as 私有名）仍留待后续收口，import boundary 门禁未拦截私有符号的问题建议后续加 ruff 私有导入 lint |
 | DOC1 | P1 | `complete` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，治理修正 G3 已将 `strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 的 `operational`/`生产资格:有` 校正为 `research_shadow`/`否`，与 `catalog.json` 一致（PR #148 已合并）。碎片化清单见 `documentation-consolidation.md`，剩余 DOC2/DOC4/DOC5 等去重按该清单分批推进 |
-| B2 | P1 | `in_progress` | `strategy-pipeline`、`strategy-app`、`market-data-platform`、`research-contracts` owner | 子模块边界重构（收口策略层与共享工具） | 边界盘点见 [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md)（SA-1 至 SA-15）。关键缺口（2026-08-19 核实）：(1) `strategy-pipeline` 顶层有 39 个 `daily_watch20_*` / `hotsector_*` 策略模块，且 31 个文件反向 import `strategy_app`（依赖方向倒置，SA-12 已按 A/B/C 分级，原 SA-1 仅 2 文件），(2) `sha256_file` / `file_sha256` 在全仓至少 10 处各自复制（SA-13，其中 strategy-pipeline 内 1 处可单仓收口），(3) `strategy-research` 经核实是 superproject 内顶层目录而非 submodule，已在 README/ARCHITECTURE 显式标注，消除"第 7 仓游离"偏差（SA-14 已落地标注），(4) DailyWatch20 代码在 5 仓对称分布，编排层与应用层边界未真正落地（SA-15，参照 `style_factors` 三层分治正面范例）。低风险的重复代码与 stale 配置清理（SA-9/SA-10/SA-13）可先做，pipeline 策略模块下沉（SA-12，按 A→B→C 分级）与候选池归位（SA-7）属高价值跨仓改动，需与 owner 协同。B2 不重新开启已完成的 R0-R6 物理拆分，只收口"编排层不持有策略 thesis、依赖方向单向、共享工具不复制"三条原则 |
+| B2 | P1 | `in_progress` | `strategy-pipeline`、`strategy-app`、`market-data-platform`、`research-contracts` owner | 子模块边界重构（收口策略层与共享工具） | 2026-08-23 复核后纠正原 SA-12：`strategy-app` 的权威规则与 `strategy-app:no-control-plane-imports` 门禁均禁止 `strategy_app → strategy_pipeline`，因此 `strategy-pipeline → strategy_app` 通过公开 API 做编排是允许方向，不应按 import 数量机械消除。B2 当前真实缺口改为：(1) pipeline 只能持有编排/发布控制，不能复制策略计算内核；(2) SA-13 的 pipeline 内 SHA256 重复已由 strategy-pipeline PR #73/c97deb2 收口，其他仓剩余重复需重新按定义级审计，旧“10 处”数字不再作为当前事实；(3) SA-14 已完成，`strategy-research` 明确是 superproject tracked 目录而非 submodule；(4) SA-15 的 hotsector challenger ranking/contract 试点已由 alpha-research PR #29 与 strategy-app PR #34 归位，但 `deepseek_v4`、numeric-v2、holdings overlay、session challenger、three-arm 等计算内核仍在 `strategy-app/hotsector`，需按低耦合模块继续迁入 owner 层。B2 保持 `in_progress`，但不再以合法的 pipeline→app 公开 API 调用数量作为完成指标 |
 | X1 | P1 | `complete` | `quant-execution-engine` | 执行证据成熟度 | broker 能力矩阵覆盖测试已落地（`quant-execution-engine` PR #15 合并，提交 68ef56f）：7 个后端均有机器可读 `BrokerCapabilityMatrix`，`mock_sim` 离线能力修正为 `supports_live_submit=false`，paper/live 分类与 factory `PAPER_BROKERS` 一致。gitlink 已同步至 research-workspace（PR #156，643d588e）。`ibkr-paper` 模拟盘（美股）验证仍属持续联调范畴，A 股真实报单后端证据缺失为客观现状，归入 X1 长线跟踪而非本次重构缺口 |
 | F1 | P2 | `planned` | `market-data-platform`、`alpha-research` | Qlib 条件化适配 | blocked（2026-08-18）：适配器已实现（`market-data-platform/.../integrations/qlib.py`、`alpha-research/.../backends/qlib.py`），标准 dev 门禁 `@skipif(not QLIB_AVAILABLE)` 跳过真实 runtime。差分脚本 `strategy-research/experiments/qlib_pilot/diff_native_vs_qlib.py`（ADR-0005 验收证据，Native 与 Qlib 后端对比）已存在，但未接入发布门禁，真实 runtime 差分证据未成发布门槛，留待进入实施阶段补齐 |
 | F2 | P2 | `planned` | `portfolio-backtester` | 回测差分后端 | blocked（2026-08-18）：当前只有原生 `NativePositionReplayBackend`，Qlib 差分与 Backtrader 采用仍处于规划阶段，无现存差分后端代码可重构，留待进入实施阶段 |
@@ -135,22 +135,23 @@ positions source、as-of 与 pruning 参数，lineage 覆盖 run 目录中的 su
 
 ### B2：子模块边界重构（收口策略层与共享工具）
 
-边界盘点与可落地重构项见 [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md)。
-本项收口三条原则，不重新开启已完成的 R0 至 R6 物理拆分：
+边界盘点与历史候选重构项见 [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md)。
+本项以当前 AGENTS、import boundary 门禁和代码事实为准：
 
-- 原则一：编排层不持有策略 thesis。`strategy-pipeline` 顶层只保留编排、CLI、运行目录、`targets.json`
-  导出、`liveops`、`contracts`、`release_tools`、`data_interface.py`、`dataset.py`，策略计算、报告、政策
-  下沉到 `strategy-app`（SA-12，原 SA-1 范围扩大）。`return_metrics.py` / `sharpe_stats.py` 的薄 re-export
-  属合理引用，保留。
-- 原则二：依赖方向单向。`strategy_app` 禁止 import `strategy_pipeline`，当前 `strategy-pipeline` 有 23 个
-  文件反向 import `strategy_app`，需在 B2 完成时消除，恢复 `strategy_app → strategy_pipeline` 单向。
-- 原则三：共享工具不复制。`sha256_file` / `file_sha256` 等纯工具收口到共享实现（扩展 `research_contracts`
-  或新建共享 submodule），消除全仓 10 处复制（SA-13），`canonicalize_symbol_columns` 两套实现合并（SA-8/SA-9）。
-
-候选池/选股范围从 `market-data-platform.research_views` 下沉到 `strategy-app`（SA-7），`strategy-research`
-登记进 `.gitmodules` 或显式标注为非锁定仓（SA-14），以 `style_factors` 三层分治为模板重切 DailyWatch20 /
-hotsector 的"内核/表现层"（SA-15）。执行顺序按 checklist 的"低风险清理 → pipeline 归位 → 契约/会计归位 →
-策略知识归位 → 登记治理 → CLI 边界"推进。
+- 原则一：控制平面可以调用应用层公开 API。`strategy-pipeline` 负责 CLI、编排、外部调用、生产发布和
+  `targets.json` 交接，因此允许 `strategy_pipeline → strategy_app` 的公开 API 调用。完成指标是 pipeline
+  不复制策略计算内核，而不是把合法 import 计数归零。
+- 原则二：应用层不得反向依赖控制平面。`strategy-app/AGENTS.md` 与
+  `scripts/import_boundary_rules.yml` 的 `strategy-app:no-control-plane-imports` 均要求
+  `strategy_app` 不导入 `strategy_pipeline`。当前门禁预算为 0，继续作为依赖方向事实来源。
+- 原则三：共享工具不复制。SA-13 在 `strategy-pipeline` 内已改用
+  `research_contracts.file_receipts.file_sha256`；其他仓的同类函数需重新按“函数定义”而非搜索命中数审计，
+  再决定 owner 和迁移批次。
+- SA-7 原“把候选池从数据层迁入 strategy-app”的建议撤销。2026-08-20 复核确认 PIT candidate/universe
+  数据资产集中在 `market-data-platform/research_views` 符合数据 owner 边界，策略层只保留配置或桥接。
+- SA-14 已完成：`strategy-research` 明确是 superproject tracked 目录，不加入 `.gitmodules`。
+- SA-15 继续推进 hotsector 计算内核归位。challenger ranking/contract 试点已经完成，下一批优先迁移低耦合的
+  ranking/selection/metrics；`deepseek_v4` 与 three-arm 等强 contract 耦合模块后置。
 
 ### X1：补齐执行成熟度证据
 
@@ -181,7 +182,7 @@ hotsector 的"内核/表现层"（SA-15）。执行顺序按 checklist 的"低�
 | 领域 | 详细入口 | 在本页中的作用 |
 | --- | --- | --- |
 | 策略边界拆分 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) | R0 至 R6 的实施记录和验收标准 |
-| 子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) | 边界盘点发现的可落地重构项 SA-1 至 SA-15（2026-08-19 补充 SA-12 反向依赖、SA-13 工具复制、SA-14 第 7 仓登记、SA-15 分层模板） |
+| 子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) | SA-1 至 SA-15 的历史盘点；SA-12 依赖方向与 SA-7/13/14/15 当前结论以本页 2026-08-23 复核为准 |
 | 外部框架 | [framework-integration-ledger.yml](framework-integration-ledger.yml) | 各适配器的机器可读状态和退出条件 |
 | 跨仓库产物 | [artifact-contracts.yml](artifact-contracts.yml) | artifact owner、producer、consumer 和 envelope 字段 |
 | 维护性 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) | 大文件、长函数、复杂度热点和预算棘轮 |
@@ -219,4 +220,6 @@ hotsector 的"内核/表现层"（SA-15）。执行顺序按 checklist 的"低�
 - G11（2026-08-18）C1 闭环：`strategy-pipeline` targets 写入方已在 `export_targets.py` 采用 Artifact Envelope v2，`targets.json.lineage.json` sidecar 写入 `artifact_envelope` 键，配置/内容/上游文件哈希与 producer 身份经契约测试验证。`docs/artifact-contracts.yml` 采用清单把 `targets.json` 从 `adoption_pending` 移到 `adopted_by`，顶层 `tests/test_artifact_contract_manifest.py` 同步断言。C1 由 `in_progress` 改 `complete`。
 - G12（2026-08-18）DG1/DG2 schema 落地：`claim.v1` 与 `research_case.v1` 的 JSON schema 落入 `strategy-research/schemas/`，配套 stdlib-only 校验脚本 `scripts/decision_governance_check.py` 与测试 `tests/test_decision_governance_check.py`。校验覆盖字段枚举、嵌套对象必填、引用路径存在性与 case 目录一致性。判断账本与案例目录尚待填入真实内容，DG1/DG2 由 `planned` 改 `in_progress`。
 - G13（2026-08-18）DG1/DG2 填入真实内容：判断账本 `strategy-research/judgment-ledger/` 填入六个真实 claim（覆盖五个策略：daily_watch20×2、hotsector、style_replica、d11_h5、dividend_growth_momentum），均以 `strategy-research/evidence/*.json` 与策略 README 为依据，缺证据维度如实登记 `abstain_conditions`。cases 填入三个真实案例（daily-watch20-promotion-readiness、hotsector-pit-discipline、style-replica-evidence-gap），`decision.status` 均按真实证据取 `no_view`，不伪造 pass。`python scripts/decision_governance_check.py` 九项全部通过。DG1/DG2 由 `in_progress` 改 `complete`。
-- G14（2026-08-19）边界重构正式立项：新增 P1 项 B2（子模块边界重构），把跨仓边界优化从 checklist 提升到工作区主账本。`submodule-boundary-refactor-checklist.md` 二次盘点新增 SA-12（消除 `strategy-pipeline → strategy_app` 的 23 处反向依赖，原 SA-1 两个 ablation 文件扩大为顶层 39 个策略模块）、SA-13（`sha256_file` / `file_sha256` 全仓 10 处复制）、SA-14（`strategy-research` 为事实第 7 仓但未登记进 `.gitmodules` 的版本漂移风险）、SA-15（以 `style_factors` 三层分治为正面模板重切 DailyWatch20 / hotsector 分层）。顶部核对数字口径统一为"真实未解决热点 80 条（登记册 182，97 条降到阈值下、5 条 cleared）"，与 M1 项一致（原 81 为笔误）。B2 不重新开启已完成的 R0-R6 物理拆分，只收口"编排层不持有策略 thesis、依赖方向单向、共享工具不复制"三条原则。
+- G14（2026-08-19）边界重构正式立项：新增 P1 项 B2（子模块边界重构），把跨仓边界优化从 checklist 提升到工作区主账本。`submodule-boundary-refactor-checklist.md` 二次盘点新增 SA-12（当时误把 `strategy-pipeline → strategy_app` 公开 API 调用定义为反向依赖）、SA-13（`sha256_file` / `file_sha256` 重复）、SA-14（`strategy-research` 登记问题）、SA-15（三层分治）。B2 不重新开启已完成的 R0-R6 物理拆分。
+- G15（2026-08-23）B2 方向纠错：对照 `strategy-app/AGENTS.md` 与 `scripts/import_boundary_rules.yml` 后确认，禁止方向是 `strategy_app → strategy_pipeline`；pipeline 作为控制平面调用 app 公开 API 属正常编排。SA-12 不再以 31 个合法 import 的清零为目标。SA-7 的数据层候选池归属同时撤销误判，SA-14 记为完成。
+- G16（2026-08-23）B2 进度同步：strategy-pipeline c97deb2 已收口其跨仓 SHA256 调用；hotsector challenger ranking/contract 已经 alpha-research PR #29 与 strategy-app PR #34 试点归位。SA-13 其余重复需重新定义级审计，SA-15 继续按低耦合模块逐步迁移，避免一次性搬迁 deepseek/three-arm 强耦合代码。
