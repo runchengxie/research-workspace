@@ -1,0 +1,101 @@
+schema_version: strategy_research.niu_men_line.v1
+strategy_id: niu_men_line
+name: 牛门线
+lifecycle: exploration
+production_eligible: false
+research_only: true
+spec_version: v0
+
+source:
+  repository: niu-men-line-strategy
+  documents:
+    - docs/original-transcript.md
+    - docs/organized-strategy.md
+  source_status: human_transcript_and_formula_notes
+
+indicator:
+  high_window: 20
+  atr_window: 14
+  atr_method: simple_moving_average_true_range
+  lower_atr_multiplier: 0.5
+  upper_atr_multiplier: 1.0
+  moving_average_window: 10
+  prior_high_excludes_current_bar: true
+
+cost_lines:
+  stock:
+    windows: [20, 60]
+    numerator: AMOUNT
+    denominator: V
+    divisor: 100
+    unit_status: requires_data_source_check
+  index:
+    windows: [20, 60]
+    numerator: C_times_V
+    denominator: V
+    divisor: 1
+
+event_definition:
+  id: first_body_touch_nml_v1
+  warmup_sessions: 21
+  touch_rule: nml_inside_candle_body
+  body_low: min(open, close)
+  body_high: max(open, close)
+  event_start: first_valid_indicator_observation
+  one_event_per_symbol: true
+  entry_timing: next_session_open
+  drop_event_without_next_open: true
+  forward_horizons: [1, 3, 5, 10, 20]
+
+regime:
+  status: unresolved
+  candidate_inputs:
+    - index_trend
+    - industry_trend
+    - prior_runup
+    - atr_percentile
+    - volume_regime
+    - distance_to_cbx20
+    - distance_to_cbx60
+
+exit_variants:
+  - id: fixed_horizon_5d
+    type: fixed_horizon
+    horizon: 5
+    status: preregistered_candidate
+  - id: qrl_risk_reduction
+    type: close_at_or_above_qrl
+    fallback_horizon: 20
+    status: preregistered_candidate
+  - id: atr_stop_1x
+    type: entry_price_minus_signal_atr
+    atr_multiple: 1.0
+    fallback_horizon: 20
+    status: preregistered_candidate
+  - id: ma10_exit
+    type: first_close_below_ma10
+    fallback_horizon: 20
+    status: preregistered_candidate
+  - id: cbx20_above_cbx60_filter
+    type: entry_filter
+    condition: cbx20_greater_than_or_equal_to_cbx60
+    status: preregistered_candidate
+
+position:
+  max_chase_position: 0.15
+  sizing_status: event_study_only
+  add_on_rule: unresolved
+
+research_questions:
+  - nml_touch_has_conditional_predictive_power
+  - effect_depends_on_momentum_or_bull_regime
+  - incremental_value_of_human_overlay
+
+promotion:
+  automatic_promotion_allowed: false
+  requires:
+    - deterministic_indicator_parity
+    - event_study_receipt
+    - cost_and_slippage_sensitivity
+    - regime_breakdown
+    - out_of_sample_validation
