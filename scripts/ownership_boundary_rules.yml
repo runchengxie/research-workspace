@@ -1,0 +1,57 @@
+schema_version: workspace_ownership_boundaries.v1
+ownership_rules:
+  - identifier: strategy-app:numeric-v2-adapter-only
+    description: Numeric v2 app module may keep campaign-policy adaptation but not reusable ranking internals
+    repo: strategy-app
+    source: src/strategy_app/hotsector/hotsector_numeric_v2_ranking.py
+    allowed_definitions:
+      - _ranking_policy
+      - score_numeric_v2_components
+      - build_hotsector_numeric_v2_rankings
+      - visible_field_control_ranking
+      - bounded_visible_control_picks
+      - risk_veto_visible_control_symbol
+    max_unowned_definitions: 7
+    target_max_unowned_definitions: 0
+    target_pr: strategy-app#35
+
+  - identifier: strategy-app:holdings-overlay-app-shell
+    description: Holdings overlay app module may validate identity and rank candidates but must not own portfolio construction
+    repo: strategy-app
+    source: src/strategy_app/hotsector/hotsector_holdings_overlay_selection.py
+    allowed_definitions:
+      - HoldingsOverlaySelectionError
+      - HoldingsOverlayTarget
+      - _positive_int
+      - _sha256
+      - _canonical_sha256
+      - _assert_owner_fields
+      - _validate_candidate_identity
+      - _validate_owner_summary
+      - _rows_frame
+      - _rank_eligible_union
+      - build_holdings_overlay_target
+    max_unowned_definitions: 1
+    target_max_unowned_definitions: 0
+    target_pr: strategy-app#36
+
+  - identifier: strategy-app:deepseek-v4-app-shell
+    description: DeepSeek V4 app module may own campaign and evidence composition but not reusable ranking-trial helpers
+    repo: strategy-app
+    source: src/strategy_app/hotsector/deepseek_v4.py
+    allowed_definitions:
+      - _load_spec
+      - DeepSeekV4ReplayBundle
+      - campaign_spec_record
+      - _ranking_policy
+      - analyze_deepseek_v4_phase1
+      - build_intention_to_deploy_scores
+      - _validated_execution_summaries
+      - _paired_execution_daily
+      - _paired_inference
+      - _primary_blocks
+      - _execution_gates
+      - run_deepseek_v4_paired_replay
+    max_unowned_definitions: 5
+    target_max_unowned_definitions: 0
+    target_pr: strategy-app#37

@@ -48,22 +48,24 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
         assert "strategy-app" not in item.command
 
 
-def test_hard_profile_includes_workspace_import_boundary_gate() -> None:
+def test_hard_profile_includes_workspace_architecture_gates() -> None:
     commands = run_quality_checks.plan_commands("hard")
 
     names = [item.name for item in commands]
 
     assert "ty-check" in names
     assert "workspace-import-boundaries" in names
+    assert "workspace-ownership-boundaries" in names
 
 
-def test_ci_smoke_profile_skips_workspace_import_boundary_gate() -> None:
+def test_ci_smoke_profile_skips_workspace_architecture_gates() -> None:
     commands = run_quality_checks.plan_commands("ci-smoke")
 
     names = [item.name for item in commands]
 
     assert names == ["ruff-check", "ruff-format", "ty-check", "secret-scan"]
     assert "workspace-import-boundaries" not in names
+    assert "workspace-ownership-boundaries" not in names
 
 
 def test_dead_code_profile_runs_advisory_wrapper() -> None:

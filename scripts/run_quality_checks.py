@@ -59,7 +59,15 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                     str(ROOT / "scripts" / "workspace_import_boundaries.py"),
                     "--check",
                 ),
-            )
+            ),
+            PlannedCommand(
+                "workspace-ownership-boundaries",
+                (
+                    sys.executable,
+                    str(ROOT / "scripts" / "workspace_ownership_boundaries.py"),
+                    "--check",
+                ),
+            ),
         ],
         "dead-code": [
             PlannedCommand(
