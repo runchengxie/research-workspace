@@ -82,15 +82,13 @@ def materialize_fund_portfolio_state(
         merged.loc[eligible & merged[column].isna(), column] = 0.0
 
     merged = merged.sort_values(["symbol", "trade_date"]).reset_index(drop=True)
-    merged["fund_top10_count_holding_stock_change"] = merged.groupby(
-        "symbol", sort=False
-    )["fund_top10_count_holding_stock"].diff()
-    merged["fund_top10_stk_float_ratio_sum_change"] = merged.groupby(
-        "symbol", sort=False
-    )["fund_top10_stk_float_ratio_sum"].diff()
-    merged["fund_state_age_days"] = (
-        merged["trade_date"] - merged["fund_available_date"]
-    ).dt.days
+    merged["fund_top10_count_holding_stock_change"] = merged.groupby("symbol", sort=False)[
+        "fund_top10_count_holding_stock"
+    ].diff()
+    merged["fund_top10_stk_float_ratio_sum_change"] = merged.groupby("symbol", sort=False)[
+        "fund_top10_stk_float_ratio_sum"
+    ].diff()
+    merged["fund_state_age_days"] = (merged["trade_date"] - merged["fund_available_date"]).dt.days
     return merged.sort_values(["trade_date", "symbol"]).reset_index(drop=True)
 
 
