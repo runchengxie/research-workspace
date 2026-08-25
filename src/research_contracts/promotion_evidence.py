@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -12,6 +12,7 @@ from .promotion_evidence_common import append_unique, mapping, read_json, safe_r
 from .promotion_evidence_lineage import profile_for_strategy, validate_lineage
 
 _SCHEMA_VERSION = "strategy_promotion_evidence.v2"
+SourceLoader = Callable[[str], tuple[dict[str, Any] | None, list[str]]]
 
 
 @dataclass(frozen=True)
@@ -99,8 +100,7 @@ def _validate_lifecycle_sources(
     *,
     required_checks: list[str],
     bundle_checks: Mapping[str, Any],
-    sources: Mapping[str, Any],
-    load_source: Any,
+    load_source: SourceLoader,
 ) -> tuple[list[str], dict[str, list[str]]]:
     validated: list[str] = []
     invalid: dict[str, list[str]] = {}
@@ -121,7 +121,7 @@ def _validate_profile_sources(
     *,
     profile: Mapping[str, Any],
     validated: list[str],
-    load_source: Any,
+    load_source: SourceLoader,
 ) -> list[str]:
     failures: list[str] = []
     raw_checks = profile.get("required_profile_checks")
@@ -172,7 +172,6 @@ def validate_strategy_promotion(
     validated, invalid = _validate_lifecycle_sources(
         required_checks=required_checks,
         bundle_checks=bundle_checks,
-        sources=sources,
         load_source=load_source,
     )
     profile_failures = _validate_profile_sources(
