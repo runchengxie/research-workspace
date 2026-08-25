@@ -7,28 +7,28 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "42d63da5773fbde8902b515e2f0ec5eab3225c63",
+      "commit": "eff9669f011c21fec9c20fc72052d52c9e2f53ac",
       "legacy_source_tree_allowed": false,
       "pr": 29,
       "version": "0.4.0"
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "e439be0fb074989aa36afd8f19da36f948607da5",
+      "commit": "efc08cd83a78cd821426104becd5ff158d5de882",
       "legacy_source_tree_allowed": false,
       "pr": 35,
       "version": "0.4.0"
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "88334d78ffec626801b05e1cac6b7a82378f9867",
+      "commit": "fce7f23de481268dbeacebd3fcb7903b828d4672",
       "legacy_source_tree_allowed": false,
       "pr": 34,
       "version": "0.2.0"
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "c97deb27ef5078b76cd478335c0cf36e8fcf9e2d",
+      "commit": "572684a3a9a96f61b3c9739aa466e0cc10be7a44",
       "compatibility_package_allowed": false,
       "pr": 73,
       "version": "2.1.0"

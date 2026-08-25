@@ -153,7 +153,7 @@ $DATA_PLATFORM_ROOT/
 
 ```text
 signals.parquet
-  -> named StrategySpec
+  -> portfolio_backtester.contracts.StrategySpec
   -> positions_by_rebalance.csv / strategy-pipeline 已保存持仓
   -> strategy export-targets
   -> targets.json
