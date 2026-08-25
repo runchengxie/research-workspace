@@ -164,9 +164,6 @@ def _evaluate(
     waived = [key for key in missing if key in known_gap_keys]
     unregistered = [key for key in missing if key not in known_gap_keys]
 
-    # A non-production strategy may carry explicitly registered known gaps
-    # without blocking the strict gate; production strategies must close every
-    # required check, so any missing item (registered or not) stays a hard fail.
     known_gaps_waived = bool(waived) and not unregistered and not production_eligible
     verdict = not missing if production_eligible else (not unregistered)
     return StrategyResult(
@@ -185,7 +182,8 @@ def _evaluate(
 def _promotion_cells(result: StrategyResult) -> tuple[str, str]:
     if result.promotion_profile is None:
         return "-", "-"
-    source_count = f"{len(result.validated_promotion_checks)}/{len(result.present)}"
+    lifecycle_sources = set(result.validated_promotion_checks) & set(result.present)
+    source_count = f"{len(lifecycle_sources)}/{len(result.present)}"
     profile_state = "通过" if not result.profile_failures else "未通过"
     return source_count, profile_state
 
@@ -305,6 +303,8 @@ def _review_results(
 
 def _profiles(args: argparse.Namespace) -> dict[str, Any]:
     path = args.promotion_profiles or args.root / DEFAULT_PROMOTION_PROFILES
+    if args.promotion_profiles is not None and not path.is_file():
+        raise ValueError(f"晋级 profile 文件不存在：{path}")
     return _load_json(path) if path.is_file() else {}
 
 
