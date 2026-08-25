@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 131,
-      "python_loc": 25625,
+      "python_loc": 25626,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 3,
@@ -1483,12 +1483,12 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 168,
-      "python_loc": 34964,
+      "python_file_count": 164,
+      "python_loc": 34367,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 3,
-        "long_functions": 7,
+        "long_functions": 6,
         "complexity_hotspots": 3,
         "large_classes": 0
       },
@@ -1533,12 +1533,6 @@
           "name": "build_daily_watch20_minute_cache_bundle",
           "line_count": 92,
           "complexity": 12
-        },
-        {
-          "path": "src/strategy_app/niu_men_line/event_study.py",
-          "name": "run_event_study",
-          "line_count": 87,
-          "complexity": 13
         },
         {
           "path": "src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
