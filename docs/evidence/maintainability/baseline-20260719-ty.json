@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 126,
-      "python_loc": 24554,
+      "python_file_count": 131,
+      "python_loc": 25625,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 3,
@@ -120,7 +120,11 @@
           "scripts/workspace_import_boundaries.py",
           "src/research_contracts/__init__.py",
           "src/research_contracts/artifact_envelope.py",
-          "src/research_contracts/artifact_contracts.py"
+          "src/research_contracts/artifact_contracts.py",
+          "src/research_contracts/promotion_evidence.py",
+          "src/research_contracts/promotion_evidence_checks.py",
+          "src/research_contracts/promotion_evidence_common.py",
+          "src/research_contracts/promotion_evidence_lineage.py"
         ],
         "ty_exclude": [
           ".venv",
