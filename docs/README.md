@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-17
+> last_verified: 2026-08-25
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -53,6 +53,7 @@
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](../strategy-research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
 - A 股低换手因子定义与暴露诊断（2008 年至 2026 年）：[low-turnover-factor-diagnostics-2008-2026.md](../strategy-research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)
+- 公募基金持仓因子研究总览（截至 2026-08-25）：[fund-portfolio-factors-overview-20260825.md](../strategy-research/experiments/style_factors/fund-portfolio-factors-overview-20260825.md)
 - A 股风格因子全历史约束稳健性附录（2008 年至 2026 年）：[style-factor-constrained-robustness-2008-2026.md](../strategy-research/experiments/style_factors/style-factor-constrained-robustness-2008-2026.md)
 - A 股风格因子约束稳健性历史快照（2015 年至 2026 年）：[style-factor-constrained-robustness-2015-2026.md](../strategy-research/experiments/style_factors/style-factor-constrained-robustness-2015-2026.md)
 - A 股风格因子技术说明：[style-factor-technical-reference.md](style-factor-technical-reference.md)
