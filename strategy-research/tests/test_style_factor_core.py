@@ -8,13 +8,7 @@ import pandas as pd
 import pytest
 from matplotlib.axes import Axes
 
-from alpha_research.style_factors.factor_calc import (
-    EARNINGS_STABILITY_COL,
-    _prepare_fundamentals,
-    _winsorize,
-    compute_factors,
-)
-from alpha_research.style_factors.helpers._aux import _merge_aux
+from alpha_research.style_factors.factor_calc import compute_factors
 from portfolio_backtester.style_factors_backtest import (
     available_factor_names,
 )
@@ -152,36 +146,6 @@ def test_compute_factors_uses_factor_specific_valuation_eligibility() -> None:
     assert pe_row["factor_momentum_z"].notna().any()
 
 
-def test_prepare_fundamentals_computes_stability_on_report_rows() -> None:
-    rows = []
-    quarter_ends = pd.date_range("2022-03-31", periods=8, freq="QE")
-    for quarter, end_date in enumerate(quarter_ends):
-        rows.append(
-            {
-                "symbol": "000001",
-                "end_date": end_date,
-                "ann_date": end_date + pd.Timedelta(days=30),
-                "roe": 10.0,
-                "netprofit_yoy": float(quarter),
-            }
-        )
-
-    prepared = _prepare_fundamentals(pd.DataFrame(rows))
-
-    assert prepared[EARNINGS_STABILITY_COL].iloc[:3].isna().all()
-    assert prepared[EARNINGS_STABILITY_COL].iloc[3:].notna().all()
-
-
-def test_winsorize_is_cross_sectional_by_trade_date() -> None:
-    dates = pd.Series([pd.Timestamp("2024-01-02")] * 3 + [pd.Timestamp("2024-01-03")] * 3)
-    values = pd.Series([1.0, 2.0, 1000.0, 10.0, 20.0, 30.0])
-
-    winsorized = _winsorize(values, dates)
-
-    assert winsorized.iloc[2] > winsorized.iloc[5]
-    assert winsorized.iloc[2] < 1000.0
-
-
 def test_missing_industry_is_neutralized_as_residual_group() -> None:
     daily, basics = _sample_market_frames(days=50)
     membership = pd.DataFrame(
@@ -198,27 +162,6 @@ def test_missing_industry_is_neutralized_as_residual_group() -> None:
     residual = factors[factors["symbol"] == "000002.SZ"]
     assert residual["industry_l1"].isna().all()
     assert residual["factor_size_z"].notna().all()
-
-
-def test_daily_auxiliary_values_are_not_forward_filled() -> None:
-    panel = pd.DataFrame(
-        {
-            "symbol": ["000001.SZ", "000001.SZ"],
-            "trade_date": pd.to_datetime(["2024-01-02", "2024-01-03"]),
-        }
-    )
-    auxiliary = pd.DataFrame(
-        {
-            "symbol": ["000001.SZ"],
-            "trade_date": pd.to_datetime(["2024-01-02"]),
-            "event": [1.0],
-        }
-    )
-
-    merged = _merge_aux(panel, auxiliary, ["event"])
-
-    assert merged.loc[0, "event"] == 1.0
-    assert pd.isna(merged.loc[1, "event"])
 
 
 def test_partition_month_grouping_selects_latest_trade_date() -> None:

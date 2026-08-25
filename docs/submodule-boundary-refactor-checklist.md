@@ -1,15 +1,15 @@
 # 子模块边界重构清单
 
-> status: active
+> status: historical
 > owner: workspace
-> last_verified: 2026-08-18
+> last_verified: 2026-08-25
 > source_of_truth: no
 > superseded_by: roadmap.md
 
-本页记录一次对六个子模块与 `strategy-research` 目录的边界盘点结果，以及据此整理的可落地重构项。
-优先级与工作区完成状态仍以[工作区路线图](roadmap.md)为准，本页只保存边界问题的具体文件路径和归属判断，
-不重复维护完成状态。边界规则见 [ADR-0006](adr/0006-strategy-knowledge-and-runtime-boundaries.md) 与
-[../ARCHITECTURE.md](../ARCHITECTURE.md)。
+本页保存 2026-08-18 至 2026-08-20 的历史边界盘点与候选重构项。部分判断随后已被当前代码和门禁纠正，
+尤其是 SA-7、SA-12、SA-14 与 SA-15。当前优先级、完成状态和依赖方向统一以
+[工作区路线图](roadmap.md)、[ADR-0006](adr/0006-strategy-knowledge-and-runtime-boundaries.md) 与
+[ADR-0007](adr/0007-style-replica-ownership.md) 为准。本页不得作为新改动的验收事实来源。
 
 盘点基线：market-data-platform `65e4740`、alpha-research `79cbfd6`、portfolio-backtester `e439be0`、
 strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1f07cf1`（2026-08-18）。

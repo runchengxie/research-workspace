@@ -1,4 +1,4 @@
-schema_version: workspace_import_boundaries.v2
+schema_version: workspace_import_boundaries.v3
 boundary_rules:
 - identifier: research-workspace:contracts-no-direct-framework-imports
   description: cross-repository contracts must not directly import optional framework
@@ -165,15 +165,6 @@ boundary_rules:
   forbidden:
   - qlib
   max_allowed: 0
-- identifier: alpha-research:artifact-contract-no-direct-qlib-imports
-  description: research artifacts must not import Qlib and remain replayable without
-    it
-  repo: alpha-research
-  source: src/alpha_research/research_artifacts.py
-  forbidden:
-  - qlib
-  max_allowed: 0
-  required: false
 - identifier: alpha-research:signal-contract-no-direct-qlib-imports
   description: canonical signal contracts must not import Qlib
   repo: alpha-research
@@ -238,4 +229,41 @@ source_layout_rules:
   forbidden_sources:
   - src/strategy_app
   - src/research_apps
+  max_allowed: 0
+private_import_rules:
+- identifier: strategy-app:no-cross-repo-private-imports
+  description: strategy-app must consume owner repositories through public APIs only
+  repo: strategy-app
+  source: src/strategy_app
+  external_roots:
+  - alpha_research
+  - market_data_platform
+  - portfolio_backtester
+  - research_contracts
+  - strategy_pipeline
+  - quant_execution_engine
+  max_allowed: 0
+- identifier: strategy-pipeline:no-cross-repo-private-imports
+  description: strategy-pipeline orchestration must consume owner repositories through public APIs only
+  repo: strategy-pipeline
+  source: src/strategy_pipeline
+  external_roots:
+  - alpha_research
+  - market_data_platform
+  - portfolio_backtester
+  - research_contracts
+  - strategy_app
+  - quant_execution_engine
+  max_allowed: 0
+- identifier: strategy-research:no-owner-private-test-imports
+  description: strategy-research integration tests must exercise owner repositories through public APIs
+  repo: strategy-research
+  source: tests
+  external_roots:
+  - alpha_research
+  - portfolio_backtester
+  - market_data_platform
+  - research_contracts
+  - strategy_app
+  - strategy_pipeline
   max_allowed: 0
