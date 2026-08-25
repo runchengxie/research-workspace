@@ -13,7 +13,6 @@ EXPECTED_STRATEGIES = {
     "dividend_growth_momentum",
     "next_open_to_high",
     "guan_weekly",
-    "niu_men_line",
 }
 
 
@@ -30,6 +29,8 @@ def test_strategy_catalog_is_complete_and_human_navigable() -> None:
     strategies = catalog["strategies"]
     assert isinstance(strategies, list)
     assert {item["id"] for item in strategies} == EXPECTED_STRATEGIES
+    assert not list((ROOT / "strategy-research/strategies/niu_men_line").iterdir())
+    assert not list((ROOT / "strategy-research/experiments/niu_men_line").iterdir())
 
     for item in strategies:
         human_spec = item["human_spec"]
