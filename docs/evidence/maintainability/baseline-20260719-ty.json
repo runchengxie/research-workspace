@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 131,
-      "python_loc": 25626,
+      "python_loc": 25630,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 3,
@@ -1628,7 +1628,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 374,
-      "python_loc": 83790,
+      "python_loc": 83871,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 28,
@@ -1637,6 +1637,11 @@
         "large_classes": 1
       },
       "large_files": [
+        {
+          "path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
+          "loc": 806,
+          "hk_related": false
+        },
         {
           "path": "tests/test_daily_watch20_pipeline.py",
           "loc": 798,
@@ -1658,13 +1663,8 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
-          "loc": 792,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/pipeline/output_artifacts.py",
-          "loc": 785,
+          "loc": 791,
           "hk_related": false
         },
         {

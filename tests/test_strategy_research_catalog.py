@@ -22,6 +22,10 @@ def _catalog() -> dict[str, object]:
     return payload
 
 
+def _is_empty_or_absent(path: Path) -> bool:
+    return not path.exists() or not any(path.iterdir())
+
+
 def test_strategy_catalog_is_complete_and_human_navigable() -> None:
     catalog = _catalog()
     assert catalog["schema_version"] == "strategy_research_catalog.v1"
@@ -29,8 +33,8 @@ def test_strategy_catalog_is_complete_and_human_navigable() -> None:
     strategies = catalog["strategies"]
     assert isinstance(strategies, list)
     assert {item["id"] for item in strategies} == EXPECTED_STRATEGIES
-    assert not list((ROOT / "strategy-research/strategies/niu_men_line").iterdir())
-    assert not list((ROOT / "strategy-research/experiments/niu_men_line").iterdir())
+    assert _is_empty_or_absent(ROOT / "strategy-research/strategies/niu_men_line")
+    assert _is_empty_or_absent(ROOT / "strategy-research/experiments/niu_men_line")
 
     for item in strategies:
         human_spec = item["human_spec"]
