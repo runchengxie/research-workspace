@@ -1,12 +1,14 @@
 # A 股长窗口晋级证据生成 runbook
 
 生成日期：2026-08-18
+最近核对：2026-08-25
 
 ## 目标
 
 把 A 股研究证据从 2026-06-01 短窗口基线升级为 2015 至最新的长窗口晋级证据，覆盖就绪度报告的
-`production_strategy_evidence` 档。本 runbook 只记录命令级步骤。实际回测需要较长计算时间，
-可以按年份或证据项分批执行，每批结果单独留存。
+`production_strategy_evidence` 档，并为策略晋级门禁生成可校验的 canonical promotion receipt。
+实际回测可以按证据项分批执行，但最终晋级 receipt 必须绑定同一冻结评审所采用的数据清单、代码提交、
+配置文件和持久化源证据。
 
 证据项与就绪度检查的对应关系见 `docs/evidence/a-share-readiness-evidence-20260601.json` 和
 [`docs/data-transition-playbook.md`](../data-transition-playbook.md)。
@@ -17,6 +19,7 @@
 - `DATA_PLATFORM_ROOT` 指向平台根目录。
 - 六个子模块已检出，`strategy` 命令可用。
 - 每条命令完成后记录数据清单、代码提交和配置哈希，核对表见文末。
+- canonical receipt 只引用可持续复核的源文件。只存在于已删除 worktree、临时目录或日志文本中的数字不能作为晋级源。
 
 ## 数据物化
 
@@ -25,37 +28,48 @@
 `default` 预设使用 `data.source_mode: platform_assets`，流水线直接从 `$DATA_PLATFORM_ROOT`
 读取资产，不需要把数据复制进 `strategy-pipeline/artifacts/assets/`。形如 `artifacts/assets/...`
 的相对路径由 `market_data_platform.artifacts.resolve_data_input_path` 映射到平台根目录。
-current 契约中 2015 至最新的 `daily_clean` 约 1160 万行，`universe_by_date` 覆盖 139 个调仓日。
+实际资产路径和覆盖日期以 `$DATA_PLATFORM_ROOT/metadata/current_assets/a_share_current.json` 为准。
 
 ### benchmark 收益文件
 
 `strategy backtest benchmark-ladder` 与回测的 benchmark 对比需要
 `strategy-pipeline/artifacts/benchmarks/` 下的日收益 CSV，每份为 `trade_date, benchmark_return`
-两列，格式与 `strategy-pipeline` 的 `tests/test_pipeline_e2e_benchmarks.py` 一致。来源为平台
-`assets/tushare/a_share/index_daily/` 资产和 top800 等权股票池。当前仓库没有现成生成命令，
-需要先构建，文件名与 `configs/experiments/sweeps/a_share__research_protocol_benchmark_ladder.yml`
-的 `returns_file` 一致：
+两列。`strategy_pipeline.e2_evidence` 已提供指数收益与 PIT 等权股票池收益生成入口，不再手工拼接 CSV。
 
-```text
-artifacts/benchmarks/a_share_csi300_000300_SH_daily_returns_20150101_20260529.csv
-artifacts/benchmarks/a_share_csi500_000905_SH_daily_returns_20150227_20260529.csv
-artifacts/benchmarks/a_share_csi800_000906_SH_daily_returns_20150227_20260529.csv
-artifacts/benchmarks/a_share_csi1000_000852_SH_daily_returns_20150227_20260529.csv
-artifacts/benchmarks/a_share_top800_liquid_pit_equalw_daily_returns_20150227_20260529.csv
+指数收益示例：
+
+```bash
+cd strategy-pipeline
+python -m strategy_pipeline.e2_evidence index-returns \
+  --input "$DATA_PLATFORM_ROOT/<index_daily_asset>" \
+  --symbol 000300.SH \
+  --start-date 20150101 \
+  --end-date <latest-trade-date> \
+  --output artifacts/benchmarks/a_share_csi300_daily_returns.csv
 ```
 
-构建步骤：
+对 `000905.SH`、`000906.SH`、`000852.SH` 重复运行，并把输出路径写入
+`configs/experiments/sweeps/a_share__research_protocol_benchmark_ladder.yml`。
 
-1. 从 `assets/tushare/a_share/index_daily/` 各时期资产读取 `000300.SH`、`000905.SH`、
-   `000906.SH`、`000852.SH` 的日收益并拼接。
-2. top800 等权收益从 `assets/universe/top800_by_date.csv` 与 `daily_clean` 计算。
-3. 写入 `strategy-pipeline/artifacts/benchmarks/`。
+PIT Top800 等权收益示例：
+
+```bash
+python -m strategy_pipeline.e2_evidence top800-equal-weight \
+  --universe "$DATA_PLATFORM_ROOT/<top800_by_date_asset>" \
+  --daily "$DATA_PLATFORM_ROOT/<daily_clean_asset>" \
+  --membership-lag-days 1 \
+  --start-date 20150227 \
+  --end-date <latest-trade-date> \
+  --output artifacts/benchmarks/a_share_top800_pit_equalw_daily_returns.csv
+```
+
+`--membership-lag-days 1` 用来避免按当日流动性选入股票后又计入同日收益的前视偏差。具体资产路径不得从
+历史示例硬编码，运行前从 current 契约解析。
 
 ## 长窗口候选 run
 
-`configs/presets/a_share.yml` 的 `data.start_date` 当前为 `20240229`。长窗口需要在
-`strategy-pipeline` 新建变体配置，例如 `configs/experiments/variants/a_share_long_window.yml`，
-继承 `a_share.yml` 并覆盖：
+当前长窗口变体位于 `strategy-pipeline/configs/experiments/variants/a_share_long_window.yml`，历史冻结版本也可
+带日期后缀保存。晋级评审使用的配置必须明确：
 
 ```yaml
 data:
@@ -71,15 +85,14 @@ cd strategy-pipeline
 strategy run --config configs/experiments/variants/a_share_long_window.yml
 ```
 
-run 目录为 `artifacts/runs/<run_name>_<时间戳>_<配置哈希>/`，后缀哈希即本次配置哈希。目录内含
-`summary.json`、`config.used.yml`、`inputs.lock.json`、`dataset.parquet`、
-`eval_scored.parquet`、`backtest_net.csv`、`backtest_periods.csv`、
-`positions_by_rebalance.csv`、`positions_current.csv`。
+run 目录为 `artifacts/runs/<run_name>_<时间戳>_<配置哈希>/`。至少核对 `summary.json`、
+`config.used.yml`、`inputs.lock.json`、`dataset.parquet`、`eval_scored.parquet`、
+`backtest_net.csv`、`backtest_periods.csv`、`positions_by_rebalance.csv` 与 `positions_current.csv`。
 
 ## 证据命令
 
-按顺序执行，把 `<run_dir>`、`<tag>` 等占位符替换为真实值。命令与配置均来自
-`strategy-pipeline` 的 `docs/cli.md` 和 `configs/experiments/sweeps/`。
+按顺序执行，把 `<run_dir>`、`<tag>` 等占位符替换为真实值。命令与配置来自
+`strategy-pipeline` 的 `docs/cli.md`、`configs/experiments/sweeps/` 与 E2 evidence 模块。
 
 ### benchmark-ladder
 
@@ -89,7 +102,7 @@ strategy backtest benchmark-ladder \
 ```
 
 配置要求 `strategy_returns_file` 指向 `<run_dir>/backtest_net.csv`，每个 benchmark 显式声明
-`market: a_share`。输出写往 `artifacts/reports/a_share_benchmark_ladder.json` 与同名 CSV。
+`market: a_share`。晋级用报告必须持久化到可版本控制或可发布复核的位置，不能只保留临时 run 输出。
 
 ### feature-evidence
 
@@ -110,12 +123,12 @@ strategy alpha cpcv \
   --test-groups 2
 ```
 
-输出目录默认 `artifacts/reports/cpcv_<config_stem>/`，其中 `cpcv_summary.json` 会被
-promotion-gate 引用。
+输出目录默认 `artifacts/reports/cpcv_<config_stem>/`。晋级 receipt 中的 `cpcv` check 只在最终持久化的
+CPCV 报告通过且字段满足 canonical 契约时置为 `passed`。
 
 ### promotion-gate
 
-先补 exposure-screen 与 pbo 报告，再运行 promotion-gate：
+先补 exposure-screen 与 pbo 报告，再运行研究层 promotion-gate：
 
 ```bash
 strategy backtest exposure-screen \
@@ -130,8 +143,9 @@ strategy promotion-gate \
   --config configs/experiments/sweeps/a_share__research_protocol_promotion_gate.yml
 ```
 
-promotion-gate 配置的 `baseline_run`、`candidate_run`、`cpcv.*`、`dsr.*` 都是占位符，运行前
-替换为真实 run 目录和报告路径。
+此处的 pipeline promotion-gate 是研究计算的一部分。顶层
+`python scripts/strategy_evidence_gate.py --strict --zero-gaps` 负责最终 lifecycle 与 canonical source 复核，
+两者不能互相替代。
 
 ### capacity-report
 
@@ -142,22 +156,78 @@ strategy backtest capacity \
   --portfolio-value 500000,1000000,2000000,5000000,10000000,50000000,100000000 \
   --participation-rate 0.01,0.03,0.05,0.10 \
   --liquidity-col medadv20_amount --liquidity-col amount \
-  --output-json docs/evidence/a-share-capacity-<YYYYMMDD>.json
+  --output-json <持久化 capacity 报告路径>
 ```
 
-`medadv20_amount` 由流水线在运行期计算。`--run-dir` 默认读取 `positions_by_rebalance.csv`，
-`--pricing-file` 需要含 `trade_date`、`symbol`、价格与 liquidity 列的面板。
+A 股 Tushare `amount` 与订单名义金额的单位必须一致。2026-08-24 的早期 capacity 诊断曾因 1000 倍单位
+错误被 supersede，晋级时只能引用单位修正后的结果。当前 `a_share_long_window` promotion profile 把
+`capacity` 作为独立 profile check，即使策略当前生命周期分母不包含 capacity，也必须有 canonical
+`passed` 证据才能通过零缺口晋级评审。
 
 ### turnover-cost
 
-没有独立 CLI。从 run 的 `backtest_periods.csv`、`summary.json` 和 cpcv 输出取平均换手与成本
-拖累，写成 `docs/evidence/a-share-turnover-cost-<YYYYMMDD>.json`，结构沿用
-`a-share-turnover-cost-20260601.json`，长窗口压力证据完成后把 `status` 置为 passed。
+`strategy_pipeline.e2_evidence` 已提供独立 CLI：
 
-### final OOS 或书面替代
+```bash
+python -m strategy_pipeline.e2_evidence turnover-cost \
+  --summary artifacts/runs/<run_dir>/summary.json \
+  --output <持久化 turnover-cost 报告路径> \
+  --long-window-stress-completed
+```
 
-`eval.final_oos` 默认关闭。需要保留独立最终 OOS 切片，或记录书面替代说明到
-`docs/evidence/a-share-final-oos-substitute-<YYYYMMDD>.json`。书面替代不能描述为真实样本外。
+在包含 strategy-pipeline PR #86 的版本中，`--cpcv-evidence <cpcv_summary.json>` 为可选诊断输入。
+CPCV 状态不再决定 cost check 是否通过，避免 `cost` 与 `cpcv` 两个独立晋级维度互相绑架。cost 的
+canonical check 仍需至少两个不同 `cost_bps` 场景及其净表现指标，单一成本点不能晋级。
+
+### final OOS
+
+晋级需要真实冻结的最终样本外切片。canonical `final_oos` check 至少记录 `oos_start`、评估指标、
+`frozen_before_evaluation: true` 与 `retuned_after_freeze: false`。
+
+书面替代、diagnostic 或 2026-08-24 的 Final OOS 摘要本身不能自动升级为 canonical `passed`。只有在原始
+配置、代码提交、current 数据契约和持久化源报告都能按哈希重新核验时，才可进入 canonical receipt。
+
+## 生成 canonical promotion receipt
+
+strategy-pipeline PR #86 提供 `strategy_pipeline.e2_promotion_receipt` writer。该 writer 只把研究人员已经
+明确给出的评审状态与 checks 固化为哈希化 receipt，不会自行把 diagnostic 推断成 `passed`。
+
+先准备一个临时 spec JSON，明确：
+
+- `strategy_id`、`profile_id=a_share_long_window`、`review_id`、`generated_at` 与顶层 `status`。
+- `research_window.configured_start_date=20150101` 与实际 `end_date`。
+- `lineage.repositories` 中实际依赖的 owner 子模块 40 位 commit SHA。
+- workspace-relative 配置路径。
+- data-platform-relative current contract 与 manifest 路径。
+- 可持续复核的 `source_artifacts` 路径。
+- 本次真实形成的 `checks`。尚未完成的项目保持 `pending` 或不写入，禁止预填 `passed`。
+
+生成 receipt：
+
+```bash
+cd strategy-pipeline
+python -m strategy_pipeline.e2_promotion_receipt \
+  --spec artifacts/reports/<tag>/promotion-receipt-spec.json \
+  --workspace-root .. \
+  --data-platform-root "$DATA_PLATFORM_ROOT" \
+  --output ../strategy-research/evidence/promotion/<strategy_id>/<review_id>.json
+```
+
+随后在 `strategy-research/evidence/<strategy_id>.json` 顶层增加 `promotion_evidence` 映射。每个已经形成
+canonical source 的 lifecycle check 以及 profile check 指向对应 receipt，例如：
+
+```json
+{
+  "promotion_evidence": {
+    "pit": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json",
+    "cost": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json",
+    "capacity": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json"
+  }
+}
+```
+
+多个 check 可以引用同一个冻结 review receipt。legacy `evidence` 字段继续作为研究导航，不能替代
+`promotion_evidence`。
 
 ## 刷新就绪度证据
 
@@ -165,7 +235,7 @@ strategy backtest capacity \
 
 1. 新建 `docs/evidence/a-share-readiness-evidence-<YYYYMMDD>.json`，把 `research_run_dir`、
    `targets_file`、`targets_lineage_file` 指向新 run 目录，`research_profile.configured_start_date`
-   更新为 `20150101` 或 `20150227`。
+   更新为 `20150101`。
 2. 用 `strategy export-targets` 生成交接文件：
 
 ```bash
@@ -185,41 +255,56 @@ python src/research_contracts/a_share_readiness.py \
   --pretty
 ```
 
+4. 运行策略晋级评审：
+
+```bash
+DATA_PLATFORM_ROOT="$DATA_PLATFORM_ROOT" \
+  python scripts/strategy_evidence_gate.py --strict --zero-gaps
+```
+
+日常 pre-push 继续使用 `--strict`，不会因为尚未生成 canonical receipt 或本机没有数据平台根目录而冻结。
+`--strict --zero-gaps` 会读取 receipt 本体，复算 config、current contract、manifest 和 source artifact 的
+SHA256，并核对 receipt 中声明的子模块提交与 superproject 当前 gitlink。
+
 ## 证据缺口三态登记表（E2 进度快照）
 
-> 状态口径：本表为缺口登记，不是晋级结论。三态含义：`命令就绪` 表示 runbook 命令与变体配置已落地，
-> `数据就绪` 表示依赖的 current 资产与清单已发布，`计算未跑` 表示实际长窗口回测尚未执行，证据未生成。
-> 任何状态不得标 `passed`，除非对应 `docs/evidence/a-share-*.json` 真实出现该结论（E1 门禁约束）。
+> 状态口径：本表为缺口登记，不代表晋级结论。`命令就绪` 表示生成入口已存在，`数据就绪` 表示依赖的
+> current 资产已发布，`计算未完成` 表示真实长窗口计算或 canonical 固化仍缺失。任何项目都不能仅凭
+> 文档摘要或历史短窗口结果标成 `passed`。
 
-| 证据项 | 命令就绪 | 数据就绪 | 计算未跑 | 缺口说明 |
+| 证据项 | 命令就绪 | 数据就绪 | 计算未完成 | 缺口说明 |
 | --- | --- | --- | --- | --- |
-| benchmark-ladder | 是 | 是 | 是 | 基准阶梯需按变体 `a_share_long_window.yml`（20150101 起）重跑 |
-| feature-evidence | 是 | 是 | 是 | 特征证据需覆盖长窗口样本，当前仅短窗口基线 |
-| cpcv | 是 | 是 | 是 | CPCV 需长窗口折叠重采样，未执行 |
-| promotion-gate | 是 | 是 | 是 | 晋级门禁命令就绪，但前置证据全为 pending 时不触发晋级 |
-| capacity | 是 | 是 | 是 | 容量压力证据 `docs/evidence/a-share-*.json` 仍 `pending`（roadmap E2） |
-| turnover-cost | 是 | 是 | 是 | 成本压力证据 `docs/evidence/a-share-*.json` 仍 `pending`（roadmap E2） |
-| final-oos | 是 | 是 | 是 | 最终样本外 `daily_watch20` 的 `final_oos` 非 pass，属客观事实 |
+| benchmark-ladder | 是 | 是 | 是 | 需按 2015 至 latest 的冻结配置重跑并持久化报告 |
+| feature-evidence | 是 | 是 | 是 | 当前晋级所需长窗口消融证据仍需生成 |
+| cpcv | 是 | 是 | 是 | 需冻结选择后运行并持久化 CPCV 报告 |
+| promotion-gate | 是 | 是 | 是 | 前置证据未齐时不得生成通过结论 |
+| capacity | 是 | 是 | 是 | 已有修正 diagnostic，canonical promotion check 仍未形成 |
+| turnover-cost | 是 | 是 | 是 | CLI 已工具化，仍需真实多成本压力场景与 canonical receipt |
+| final-oos | 是 | 是 | 是 | 已有 frozen diagnostic，仍需可核验的 canonical source lineage |
+| canonical-receipt | PR #86 | 是 | 是 | writer 待 owner PR 合并并同步 gitlink；五策略当前均无 canonical receipt |
 
-登记基准日：2026-08-19。三态随实际 run 输出更新，不得在未跑计算时预填 `passed`。
+登记基准日：2026-08-25。表中状态随实际 run 与 merged owner 版本更新，不得在计算未完成时预填
+`passed`。
 
 ## 命令核对引用
 
-每条证据命令完成后记录三项内容：
+每条证据命令完成后记录：
 
-- 数据清单：`inputs.lock.json`、current 契约与平台 manifest 的状态和覆盖区间。
-- 代码提交：`strategy-pipeline`、`portfolio-backtester`、`alpha-research` 当前 git 提交。
-- 配置哈希：run 目录名后缀，或 `config.used.yml` 内容。
+- 数据清单：`inputs.lock.json`、current 契约与平台 manifest 的状态、覆盖区间和 SHA256。
+- 代码提交：实际参与研究的 `strategy-pipeline`、`portfolio-backtester`、`alpha-research` 等 owner commit。
+- 配置哈希：冻结配置文件的完整 SHA256，不能只依赖 run 目录短哈希。
+- 源证据：用于形成 canonical check 的持久化 JSON 或发布资产及其 SHA256。
 
 ## 资源估算
 
-当前机器为 4 核、31GB 内存、约 464GB 可用磁盘。平台资产已就绪，磁盘新增主要是 run 输出，
-估算在数十 GB 内。内存瓶颈在把 2015 至今约 1160 万行 `daily_clean` 与特征面板载入内存，
-估算峰值 8 至 15GB，本机 31GB 可以容纳，但 4 核 CPU 会让完整 11 年 XGB 回测耗时较长。
-完整长窗口回测建议在内存 64GB 以上、16 核以上的机器执行，或先按年份分片验证再合并证据。
+完整 2015 至最新的计算仍属于重任务。是否分片执行取决于当前机器资源，但分片结果最终必须回到同一冻结
+评审语义中，不能把不同代码、配置或数据版本的局部结果拼成一个 `passed` receipt。
 
 ## 验收
 
 - 就绪度报告 `production_strategy_evidence` 档所有检查通过。
-- `docs/evidence/a-share-*.json` 的 turnover-cost、capacity、final-oos 状态全部为 passed。
-- 证据文件引用的路径在 R4 owner 布局下真实存在。
+- 策略生命周期要求的 PIT、walk-forward、benchmark、cost、final OOS、CPCV、regime 等实际必需项通过。
+- `a_share_long_window` profile 的 capacity 与 2015 历史覆盖通过。
+- 每个晋级 check 有 `strategy_promotion_evidence.v2` canonical source，并能复算所有声明哈希。
+- `python scripts/strategy_evidence_gate.py --strict --zero-gaps` 对目标策略通过。
+- diagnostic、substitute、superseded 和缺失原始源产物的历史摘要均不能充当 canonical `passed`。
