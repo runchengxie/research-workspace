@@ -4,11 +4,18 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from .promotion_evidence_checks import check_errors
-from .promotion_evidence_common import append_unique, mapping, read_json, safe_relative
+from .promotion_evidence_common import (
+    append_unique,
+    date_token,
+    mapping,
+    read_json,
+    safe_relative,
+)
 from .promotion_evidence_lineage import profile_for_strategy, validate_lineage
 
 _SCHEMA_VERSION = "strategy_promotion_evidence.v2"
@@ -36,6 +43,18 @@ def _receipt_path(root: Path, value: object) -> tuple[Path | None, str | None]:
     return path, relative
 
 
+def _timestamp_valid(value: object) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    normalized = f"{text[:-1]}+00:00" if text.endswith("Z") else text
+    try:
+        parsed = datetime.fromisoformat(normalized)
+    except ValueError:
+        return False
+    return parsed.tzinfo is not None
+
+
 def _identity_errors(
     receipt: Mapping[str, Any],
     *,
@@ -43,7 +62,16 @@ def _identity_errors(
     profile_id: str,
 ) -> list[str]:
     errors: list[str] = []
-    if receipt.get("schema_version") != _SCHEMA_VERSION:
+    window = mapping(receipt.get("research_window"))
+    schema_valid = (
+        receipt.get("schema_version") == _SCHEMA_VERSION
+        and bool(str(receipt.get("review_id") or "").strip())
+        and _timestamp_valid(receipt.get("generated_at"))
+        and date_token(window.get("configured_start_date")) is not None
+        and date_token(window.get("end_date")) is not None
+        and isinstance(receipt.get("limitations"), list)
+    )
+    if not schema_valid:
         errors.append("schema_mismatch")
     if receipt.get("strategy_id") != strategy_id:
         errors.append("strategy_mismatch")
