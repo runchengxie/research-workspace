@@ -1,0 +1,26 @@
+{
+  "schema_version": "strategy_promotion_profiles.v1",
+  "strategy_profiles": {
+    "daily_watch20": "a_share_long_window",
+    "hotsector": "a_share_long_window",
+    "style_replica_a80_b20": "a_share_long_window",
+    "d11_h5_shadow": "a_share_long_window",
+    "dividend_growth_momentum": "a_share_long_window"
+  },
+  "profiles": {
+    "a_share_long_window": {
+      "configured_start_date": "20150101",
+      "current_contract_path": "metadata/current_assets/a_share_current.json",
+      "required_current_assets": [
+        "instruments",
+        "daily_clean",
+        "universe_by_date",
+        "pit_fundamentals",
+        "industry_changes"
+      ],
+      "required_profile_checks": [
+        "capacity"
+      ]
+    }
+  }
+}
