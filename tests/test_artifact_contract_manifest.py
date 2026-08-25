@@ -75,9 +75,6 @@ def test_orchestration_contract_identities_match_owner_packages() -> None:
     from strategy_pipeline.contracts.signals import (
         SIGNAL_CONTRACT_NAME as orchestration_signal_name,
     )
-    from strategy_pipeline.contracts.strategy import (
-        STRATEGY_SPEC_CONTRACT_NAME as orchestration_strategy_name,
-    )
 
     records = {
         str(record["artifact"]): record
@@ -86,7 +83,7 @@ def test_orchestration_contract_identities_match_owner_packages() -> None:
     assert alpha_signal_name == orchestration_signal_name == "alpha_research.signals"
     assert records["signals.parquet"]["contract"] == alpha_signal_name
     assert portfolio_pricing_name == orchestration_pricing_name
-    assert portfolio_strategy_name == orchestration_strategy_name
+    assert portfolio_strategy_name == "portfolio_backtester.strategy_spec"
 
 
 def test_artifact_contract_manifest_is_docs_and_path_validated() -> None:

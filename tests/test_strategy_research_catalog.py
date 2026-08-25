@@ -13,6 +13,7 @@ EXPECTED_STRATEGIES = {
     "dividend_growth_momentum",
     "next_open_to_high",
     "guan_weekly",
+    "niu_men_line",
 }
 
 
