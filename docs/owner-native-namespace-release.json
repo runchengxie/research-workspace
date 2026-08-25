@@ -21,7 +21,7 @@
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "b5227cc98a65de32259e5a1831acaec7047189e1",
+      "commit": "dfea6d55b9339a8dc3815f55cd28806a2de35963",
       "legacy_source_tree_allowed": false,
       "pr": 34,
       "version": "0.2.0"
