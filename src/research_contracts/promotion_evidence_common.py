@@ -2,13 +2,14 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import math
 import re
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
+
+from .file_receipts import file_sha256
 
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -49,28 +50,17 @@ def safe_relative(root: Path, value: object) -> tuple[Path | None, str | None]:
     return resolved, relative.as_posix()
 
 
-def sha256_file(path: Path) -> str | None:
-    if not path.is_file():
-        return None
-    digest = hashlib.sha256()
-    try:
-        with path.open("rb") as handle:
-            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-                digest.update(chunk)
-    except OSError:
-        return None
-    return digest.hexdigest()
-
-
 def hash_matches(entry: object, *, root: Path) -> bool:
     payload = mapping(entry)
     path, _relative = safe_relative(root, payload.get("path"))
     expected = str(payload.get("sha256") or "").strip()
-    return bool(
-        path is not None
-        and SHA256.fullmatch(expected)
-        and sha256_file(path) == expected
-    )
+    actual = None
+    if path is not None and path.is_file():
+        try:
+            actual = file_sha256(path)
+        except OSError:
+            actual = None
+    return bool(path is not None and SHA256.fullmatch(expected) and actual == expected)
 
 
 def append_unique(target: list[str], value: str) -> None:

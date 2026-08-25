@@ -47,15 +47,9 @@ def _profiles() -> dict[str, Any]:
     }
 
 
-def _fixture(tmp_path: Path) -> tuple[Path, Path, dict[str, Any], dict[str, Any]]:
-    root = tmp_path / "workspace"
-    data_root = tmp_path / "data-platform"
-    config = root / "strategy-pipeline/configs/a_share_long_window.yml"
-    source = root / "strategy-pipeline/docs/evidence/final.json"
-    config.parent.mkdir(parents=True, exist_ok=True)
-    config.write_text("data:\n  start_date: '20150101'\n", encoding="utf-8")
-    _write_json(source, {"status": "passed"})
-
+def _write_assets(
+    data_root: Path,
+) -> tuple[dict[str, Any], list[dict[str, Any]], Path]:
     assets: dict[str, Any] = {}
     manifest_entries: list[dict[str, Any]] = []
     for asset_key in ("daily_clean", "pit_fundamentals"):
@@ -88,7 +82,16 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, dict[str, Any], dict[str, Any]
 
     contract_path = data_root / "metadata/current_assets/a_share_current.json"
     _write_json(contract_path, {"contract": {"market": "a_share"}, "assets": assets})
+    return assets, manifest_entries, contract_path
 
+
+def _write_receipt(
+    root: Path,
+    config: Path,
+    contract_path: Path,
+    manifest_entries: list[dict[str, Any]],
+    source: Path,
+) -> dict[str, Any]:
     receipt_path = root / "strategy-research/evidence/promotion/s/review.json"
     receipt: dict[str, Any] = {
         "schema_version": "strategy_promotion_evidence.v2",
@@ -139,6 +142,19 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, dict[str, Any], dict[str, Any]
         "limitations": [],
     }
     _write_json(receipt_path, receipt)
+    return receipt
+
+
+def _fixture(tmp_path: Path) -> tuple[Path, Path, dict[str, Any], dict[str, Any]]:
+    root = tmp_path / "workspace"
+    data_root = tmp_path / "data-platform"
+    config = root / "strategy-pipeline/configs/a_share_long_window.yml"
+    source = root / "strategy-pipeline/docs/evidence/final.json"
+    config.parent.mkdir(parents=True, exist_ok=True)
+    config.write_text("data:\n  start_date: '20150101'\n", encoding="utf-8")
+    _write_json(source, {"status": "passed"})
+    _assets, manifest_entries, contract_path = _write_assets(data_root)
+    receipt = _write_receipt(root, config, contract_path, manifest_entries, source)
     bundle: dict[str, Any] = {
         "checks": {
             "pit": {

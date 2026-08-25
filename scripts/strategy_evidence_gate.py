@@ -394,8 +394,7 @@ def _run_gate(argv: list[str]) -> int:
         if args.zero_gaps:
             ids = ", ".join(blocked)
             print(
-                "晋级评审未通过（--zero-gaps）："
-                f"{ids} 仍带缺口、缺失检查或无效 canonical 晋级证据"
+                f"晋级评审未通过（--zero-gaps）：{ids} 仍带缺口、缺失检查或无效 canonical 晋级证据"
             )
         return 1
     return 0

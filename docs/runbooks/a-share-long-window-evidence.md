@@ -281,7 +281,7 @@ SHA256，并核对 receipt 中声明的子模块提交与 superproject 当前 gi
 | capacity | 是 | 是 | 是 | 已有修正 diagnostic，canonical promotion check 仍未形成 |
 | turnover-cost | 是 | 是 | 是 | CLI 已工具化，仍需真实多成本压力场景与 canonical receipt |
 | final-oos | 是 | 是 | 是 | 已有 frozen diagnostic，仍需可核验的 canonical source lineage |
-| canonical-receipt | PR #86 | 是 | 是 | writer 待 owner PR 合并并同步 gitlink；五策略当前均无 canonical receipt |
+| canonical-receipt | 已合并 #86 | 是 | 是 | writer 已同步到顶层 gitlink，五策略当前均无 canonical receipt |
 
 登记基准日：2026-08-25。表中状态随实际 run 与 merged owner 版本更新，不得在计算未完成时预填
 `passed`。
@@ -297,7 +297,7 @@ SHA256，并核对 receipt 中声明的子模块提交与 superproject 当前 gi
 
 ## 资源估算
 
-完整 2015 至最新的计算仍属于重任务。是否分片执行取决于当前机器资源，但分片结果最终必须回到同一冻结
+完整 2015 至最新的计算仍属于重任务。是否分片执行取决于当前机器资源，分片结果最终必须回到同一冻结
 评审语义中，不能把不同代码、配置或数据版本的局部结果拼成一个 `passed` receipt。
 
 ## 验收
