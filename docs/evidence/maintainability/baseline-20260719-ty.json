@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 126,
-      "python_loc": 24559,
+      "python_loc": 24556,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 3,
@@ -713,13 +713,13 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 186,
-      "python_loc": 36179,
+      "python_file_count": 188,
+      "python_loc": 36374,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
         "long_functions": 21,
-        "complexity_hotspots": 25,
+        "complexity_hotspots": 26,
         "large_classes": 1
       },
       "large_files": [
@@ -1017,15 +1017,15 @@
           "complexity": 15
         },
         {
-          "path": "src/alpha_research/overfitting_diagnostics.py",
-          "name": "uniqueness_report",
-          "line_count": 78,
+          "path": "src/alpha_research/hotsector_session_challenger_scores.py",
+          "name": "build_session_challenger_scores",
+          "line_count": 62,
           "complexity": 15
         },
         {
-          "path": "src/alpha_research/style_replica/portfolio.py",
-          "name": "_select_b_leg_for_date",
-          "line_count": 42,
+          "path": "src/alpha_research/overfitting_diagnostics.py",
+          "name": "uniqueness_report",
+          "line_count": 78,
           "complexity": 15
         }
       ],
@@ -1080,13 +1080,13 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 199,
-      "python_loc": 41963,
+      "python_file_count": 201,
+      "python_loc": 42132,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
         "long_functions": 30,
-        "complexity_hotspots": 26,
+        "complexity_hotspots": 27,
         "large_classes": 0
       },
       "large_files": [
@@ -1429,9 +1429,9 @@
           "complexity": 15
         },
         {
-          "path": "src/portfolio_backtester/freshness_overlay.py",
-          "name": "apply_freshness_overlay",
-          "line_count": 56,
+          "path": "src/portfolio_backtester/execution_comparison.py",
+          "name": "compare_paired_execution_metrics",
+          "line_count": 76,
           "complexity": 15
         }
       ],
@@ -1480,7 +1480,7 @@
       "repo": "strategy-app",
       "root": "strategy-app",
       "python_file_count": 168,
-      "python_loc": 35010,
+      "python_loc": 34964,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 3,

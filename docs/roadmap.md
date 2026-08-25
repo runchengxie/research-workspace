@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-23
+> last_verified: 2026-08-25
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -231,3 +231,4 @@ import direction、source layout 与跨仓 private API 门禁均已通过。`wor
 - G20（2026-08-25）owner-native gitlink 账本纠偏：`tests/test_namespace_contracts.py` 发现 `docs/owner-native-namespace-release.json` 仍记录 strategy-pipeline `cc163ce`，而当前 superproject gitlink 已为 `aa0c783`，账本已同步到实际 gitlink，顶层 namespace/ownership/import/hash 治理测试 13 项恢复全绿。
 - G21（2026-08-25）M1 baseline 刷新：按当前 main/gitlink 与本轮边界收口后的真实源码重新生成 maintainability baseline。先将新增 private-import 扫描器压回 500 行阈值内，再同步实测 hotspot budget。当前大文件预算为 data 41 / pipeline 28 / portfolio 8 / qexec 4 / alpha 5 / workspace 3 / strategy-app 3。部分 long-function 与 class 计数上调属于旧 baseline 漂移被重新测量，不代表本轮新增对应实现。
 - G22（2026-08-25）B1/B2 提交链闭环：market-data-platform #53（3936ab4）、alpha-research #36/#37（最终 7a82581）、portfolio-backtester #44（990e17f）、strategy-app #42/#43（最终 cbcb9a9）与 strategy-pipeline #85（95faa15）均已合并。pipeline `full` 门禁在固定 Git pins 下通过 1147 tests + 1 skip、ty、config lifecycle、import boundary、split smoke 与 isolated wheel smoke，superproject gitlinks 同步到这些 merge commit。B1 保持 `complete`，B2 仍因 StyleReplica portfolio 迁移债务与剩余跨发布边界 hash 定义保持 `in_progress`。
+- G23（2026-08-25）SA-15 session-challenger 收口：alpha-research #38（`b4a34fb`）、portfolio-backtester #45（`6789b18`）与 strategy-app #44（`22aeca7`）均已合并，顶层 alpha、portfolio、strategy-app 三个 gitlink 已同步到对应 `origin/main`。同步同时刷新 owner-native namespace manifest、维护性 baseline，并修正 pipeline 删除重复 pricing contract 后仍引用旧符号的顶层契约测试。doctor 为 0 error / 2 个预算内 quality warning，hard quality 与六仓 smoke 全部通过。B2 仍保留 DeepSeek stability、StyleReplica portfolio 等迁移债务，E2 长窗口证据仍未完成。

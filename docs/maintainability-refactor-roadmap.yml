@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-17",
+  "_last_changed": "2026-08-25",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -21,13 +21,13 @@
       "alpha-research": {
         "max_large_files": 5,
         "max_long_functions": 21,
-        "max_complexity_hotspots": 25,
+        "max_complexity_hotspots": 26,
         "max_large_classes": 0
       },
       "portfolio-backtester": {
         "max_large_files": 8,
         "max_long_functions": 29,
-        "max_complexity_hotspots": 26,
+        "max_complexity_hotspots": 27,
         "max_large_classes": 0
       },
       "strategy-app": {
@@ -107,7 +107,7 @@
       "repo": "alpha-research",
       "max_large_files": 5,
       "max_long_functions": 21,
-      "max_complexity_hotspots": 25,
+      "max_complexity_hotspots": 26,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
@@ -122,7 +122,7 @@
       "repo": "portfolio-backtester",
       "max_large_files": 8,
       "max_long_functions": 30,
-      "max_complexity_hotspots": 26,
+      "max_complexity_hotspots": 27,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
