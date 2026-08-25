@@ -12,7 +12,6 @@
 | D11-H5 五袖套 | shadow | 否 | [strategies/d11_h5_shadow/README.md](strategies/d11_h5_shadow/README.md) | `alpha-research`、`portfolio-backtester`、`strategy-pipeline` |
 | 红利与成长 ETF 动量 | pre_production | 否 | [pre_production/dividend_growth_momentum/README.md](pre_production/dividend_growth_momentum/README.md) | `strategy-app`、`portfolio-backtester` |
 | 次日开盘到最高价 | exploration | 否 | [experiments/next_open_to_high/README.md](experiments/next_open_to_high/README.md) | `experiments` |
-| 牛门线 | exploration | 否 | [strategies/niu_men_line/README.md](strategies/niu_men_line/README.md) | `alpha-research`、`strategy-app`、`portfolio-backtester` |
 | Guan 周度策略 | external_research | 否 | [strategies/guan_weekly/README.md](strategies/guan_weekly/README.md) | 外部 `guan-factor-research-framework`、`strategy-app` bridge |
 
 完整机器可读字段、代码入口、变体和迁移债务见 [catalog.json](catalog.json)。

@@ -137,36 +137,6 @@
       "extraction_debt": []
     },
     {
-      "id": "niu_men_line",
-      "name": "牛门线",
-      "lifecycle": "exploration",
-      "production_eligible": false,
-      "human_spec": "strategy-research/strategies/niu_men_line/README.md",
-      "executable_owners": [
-        "alpha-research",
-        "strategy-app",
-        "portfolio-backtester"
-      ],
-      "control_plane_owner": "strategy-pipeline",
-      "runtime_entries": [
-        "strategy_app.niu_men_line",
-        "strategy-research/experiments/niu_men_line"
-      ],
-      "variants": [
-        "nml_touch",
-        "qrl_risk_reduction",
-        "atr_stop_1x",
-        "ma10_exit",
-        "cbx20_above_cbx60_filter"
-      ],
-      "extraction_debt": [
-        "formalize regime, convergence and industry confirmation without hindsight",
-        "validate event definition against source formula and data units",
-        "define portfolio sizing and exit rules before promotion",
-        "complete out-of-sample and cost sensitivity evidence"
-      ]
-    },
-    {
       "id": "guan_weekly",
       "name": "Guan 周度多因子策略",
       "lifecycle": "external_research",
