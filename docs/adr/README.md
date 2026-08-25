@@ -10,3 +10,4 @@
 | [ADR-0004](0004-standalone-research-apps-repository.md) | 独立 `research-apps` 仓库与收尾迁移栈 | accepted |
 | [ADR-0005](0005-qlib-alpha-research-backends.md) | Qlib 预处理管线引入 alpha-research 训练后端 | accepted |
 | [ADR-0006](0006-strategy-knowledge-and-runtime-boundaries.md) | 策略知识、可执行应用与运行控制面分离 | accepted |
+| [ADR-0007](0007-style-replica-ownership.md) | StyleReplica 策略规则与通用计算分层 | accepted |

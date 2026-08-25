@@ -59,7 +59,6 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "strategy-pipeline:contracts-pure-handoff",
         "strategy-pipeline:target-contract-no-direct-framework-imports",
         "market-data-platform:published-contract-no-direct-qlib-imports",
-        "alpha-research:artifact-contract-no-direct-qlib-imports",
         "alpha-research:signal-contract-no-direct-qlib-imports",
         "portfolio-backtester:contracts-no-direct-framework-imports",
         "quant-execution-engine:domain-no-direct-vnpy-imports",
@@ -72,6 +71,12 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "strategy-pipeline:no-local-strategy-app-source",
     } == {rule["id"] for rule in report["source_layout_rules"]}
     assert all(rule["count"] == 0 for rule in report["source_layout_rules"])
+    assert {
+        "strategy-app:no-cross-repo-private-imports",
+        "strategy-pipeline:no-cross-repo-private-imports",
+        "strategy-research:no-owner-private-test-imports",
+    } == {rule["id"] for rule in report["private_import_rules"]}
+    assert all(rule["count"] == 0 for rule in report["private_import_rules"])
 
 
 def test_owner_native_cross_imports_are_detected(tmp_path: Path) -> None:
@@ -110,6 +115,38 @@ def test_owner_native_cross_imports_are_detected(tmp_path: Path) -> None:
     assert report["issues"] == [
         "alpha-to-pipeline: 1 imports exceed budget 0",
         "alpha-to-backtesting: 1 imports exceed budget 0",
+    ]
+
+
+def test_cross_repo_private_symbols_are_detected(tmp_path: Path) -> None:
+    source = tmp_path / "strategy-app" / "src" / "strategy_app"
+    source.mkdir(parents=True)
+    (source / "example.py").write_text(
+        textwrap.dedent(
+            """
+            from portfolio_backtester.daily_watch20_oos import _portfolio_daily_rows
+            from alpha_research._internal import public_name
+            """
+        ),
+        encoding="utf-8",
+    )
+    private_rules = (
+        workspace_import_boundaries.PrivateImportRule(
+            identifier="no-private",
+            description="test",
+            repo="strategy-app",
+            source="src/strategy_app",
+            external_roots=("portfolio_backtester", "alpha_research"),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, (), (), private_rules)
+
+    assert report["issues"] == ["no-private: 2 private imports exceed budget 0"]
+    assert [finding["module"] for finding in report["private_import_rules"][0]["findings"]] == [
+        "portfolio_backtester.daily_watch20_oos._portfolio_daily_rows",
+        "alpha_research._internal.public_name",
     ]
 
 

@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from alpha_research.style_factors.factor_calc import _overlay_formation_fundamentals
 from style_factors.robustness_backtest import (
     RobustnessConfig,
     build_constrained_robustness,
@@ -63,35 +62,6 @@ def test_robustness_loader_rejects_duplicate_market_grain() -> None:
 
     with pytest.raises(ValueError, match="duplicate"):
         _require_unique(frame, ["trade_date", "symbol"], label="daily_clean")
-
-
-def test_pit_panel_overlays_non_null_fields_including_growth_inputs() -> None:
-    date = pd.Timestamp("2024-01-31")
-    legacy = pd.DataFrame(
-        {
-            "trade_date": [date],
-            "symbol": ["000001.SZ"],
-            "roe": [8.0],
-            "debt_to_assets": [60.0],
-            "netprofit_yoy": [12.0],
-        }
-    )
-    panel = pd.DataFrame(
-        {
-            "trade_date": [date],
-            "symbol": ["000001.SZ"],
-            "roe": [10.0],
-            "debt_to_assets": [np.nan],
-            "netprofit_yoy": [18.0],
-        }
-    )
-
-    result, used = _overlay_formation_fundamentals(legacy, panel)
-
-    assert used
-    assert result.loc[0, "roe"] == 10.0
-    assert result.loc[0, "debt_to_assets"] == 60.0
-    assert result.loc[0, "netprofit_yoy"] == 18.0
 
 
 def test_reconstructed_st_intervals_expand_only_on_formation_dates(

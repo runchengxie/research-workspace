@@ -146,8 +146,7 @@ def build_report(
     for result in results:
         if result.missing_source and result.rule.required:
             issues.append(
-                f"{result.rule.identifier}: missing source "
-                f"{result.rule.repo}/{result.rule.source}"
+                f"{result.rule.identifier}: missing source {result.rule.repo}/{result.rule.source}"
             )
         elif result.over_budget:
             issues.append(

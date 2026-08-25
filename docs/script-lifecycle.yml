@@ -602,12 +602,22 @@
     {
       "path": "scripts/workspace_import_boundaries.py",
       "owner": "research-workspace",
-      "purpose": "Cross-repo import direction and source layout budget gate for the stage 3.5/4 repo split",
+      "purpose": "Cross-repo import direction, private API, and source layout budget gate for the repository split",
       "lifecycle": "ci",
       "safe_to_run_locally": true,
       "writes_files": "stdout only",
       "external_dependencies": "initialized workspace submodules",
       "removal_condition": "remove only after repo split import direction budgets move into repo-local CI gates and no workspace quality profile calls this script for two release reviews"
+    },
+    {
+      "path": "scripts/workspace_ownership_boundaries.py",
+      "owner": "research-workspace",
+      "purpose": "Definition-level ownership ratchet for strategy-app modules whose reusable kernels are migrating to owner repositories",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "initialized strategy-app submodule",
+      "removal_condition": "remove only after all registered ownership budgets reach their target and equivalent repo-local gates protect the resulting boundaries for two release reviews"
     },
     {
       "path": "src/research_contracts/a_share_readiness.py",

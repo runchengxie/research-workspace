@@ -10,13 +10,13 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 120,
-      "python_loc": 23864,
+      "python_file_count": 126,
+      "python_loc": 24559,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 3,
         "long_functions": 2,
-        "complexity_hotspots": 0,
+        "complexity_hotspots": 1,
         "large_classes": 2
       },
       "large_files": [
@@ -46,11 +46,18 @@
         {
           "path": "strategy-research/style_factors/workflow.py",
           "name": "run_style_factor_analysis",
-          "line_count": 103,
-          "complexity": 14
+          "line_count": 110,
+          "complexity": 15
         }
       ],
-      "complexity_hotspots": [],
+      "complexity_hotspots": [
+        {
+          "path": "strategy-research/style_factors/workflow.py",
+          "name": "run_style_factor_analysis",
+          "line_count": 110,
+          "complexity": 15
+        }
+      ],
       "large_classes": [
         {
           "path": "tests/test_workspace_doctor.py",
@@ -152,6 +159,7 @@
         "scripts/install_pre_push_hooks.py",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
+        "scripts/ownership_boundary_rules.yml",
         "scripts/package_d11_h5_repro.py",
         "scripts/print_version_matrix.py",
         "scripts/research_spec_check.py",
@@ -169,18 +177,19 @@
         "scripts/workspace_governance_facades.py",
         "scripts/workspace_governance_quality.py",
         "scripts/workspace_governance_submodules.py",
-        "scripts/workspace_import_boundaries.py"
+        "scripts/workspace_import_boundaries.py",
+        "scripts/workspace_ownership_boundaries.py"
       ]
     },
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 298,
-      "python_loc": 90028,
+      "python_file_count": 305,
+      "python_loc": 90822,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 41,
-        "long_functions": 80,
+        "long_functions": 81,
         "complexity_hotspots": 42,
         "large_classes": 1
       },
@@ -287,7 +296,7 @@
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
-          "loc": 625,
+          "loc": 619,
           "hk_related": false
         },
         {
@@ -704,14 +713,14 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 173,
-      "python_loc": 34430,
+      "python_file_count": 186,
+      "python_loc": 36179,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
         "long_functions": 21,
         "complexity_hotspots": 25,
-        "large_classes": 0
+        "large_classes": 1
       },
       "large_files": [
         {
@@ -1020,7 +1029,14 @@
           "complexity": 15
         }
       ],
-      "large_classes": [],
+      "large_classes": [
+        {
+          "path": "src/alpha_research/_daily_watch20_ranker.py",
+          "name": "DailyWatch20Ranker",
+          "line_count": 308,
+          "method_count": 19
+        }
+      ],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -1064,12 +1080,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 194,
-      "python_loc": 41447,
+      "python_file_count": 199,
+      "python_loc": 41963,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
-        "long_functions": 29,
+        "long_functions": 30,
         "complexity_hotspots": 26,
         "large_classes": 0
       },
@@ -1091,7 +1107,7 @@
         },
         {
           "path": "tests/test_execution_sim.py",
-          "loc": 629,
+          "loc": 664,
           "hk_related": false
         },
         {
@@ -1141,6 +1157,12 @@
           "complexity": 4
         },
         {
+          "path": "tests/test_package_smoke.py",
+          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
+          "line_count": 98,
+          "complexity": 1
+        },
+        {
           "path": "src/portfolio_backtester/_exposure_industry.py",
           "name": "_industry_exposure_rows",
           "line_count": 97,
@@ -1157,12 +1179,6 @@
           "name": "_execute_nav_buy_orders_for_day",
           "line_count": 96,
           "complexity": 21
-        },
-        {
-          "path": "tests/test_package_smoke.py",
-          "name": "test_portfolio_backtester_package_exports_core_entrypoints",
-          "line_count": 96,
-          "complexity": 1
         },
         {
           "path": "tests/test_position_backtest.py",
@@ -1225,6 +1241,12 @@
           "complexity": 14
         },
         {
+          "path": "src/portfolio_backtester/execution_sim/config.py",
+          "name": "build_execution_sim_config",
+          "line_count": 91,
+          "complexity": 12
+        },
+        {
           "path": "tests/test_backtest_tearsheet.py",
           "name": "test_build_backtest_tearsheet_html_includes_core_sections_and_escapes_title",
           "line_count": 89,
@@ -1241,12 +1263,6 @@
           "name": "_build_grid_row",
           "line_count": 87,
           "complexity": 10
-        },
-        {
-          "path": "src/portfolio_backtester/execution_sim/config.py",
-          "name": "build_execution_sim_config",
-          "line_count": 86,
-          "complexity": 12
         },
         {
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
@@ -1463,12 +1479,12 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 157,
-      "python_loc": 33830,
+      "python_file_count": 168,
+      "python_loc": 35010,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 2,
-        "long_functions": 6,
+        "large_files": 3,
+        "long_functions": 7,
         "complexity_hotspots": 3,
         "large_classes": 0
       },
@@ -1481,6 +1497,11 @@
         {
           "path": "src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
           "loc": 558,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_app/daily_watch20/ablation_evaluation.py",
+          "loc": 556,
           "hk_related": false
         }
       ],
@@ -1508,6 +1529,12 @@
           "name": "build_daily_watch20_minute_cache_bundle",
           "line_count": 92,
           "complexity": 12
+        },
+        {
+          "path": "src/strategy_app/niu_men_line/event_study.py",
+          "name": "run_event_study",
+          "line_count": 87,
+          "complexity": 13
         },
         {
           "path": "src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
@@ -1602,12 +1629,12 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 371,
-      "python_loc": 83602,
+      "python_file_count": 372,
+      "python_loc": 83364,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 29,
-        "long_functions": 111,
+        "large_files": 28,
+        "long_functions": 109,
         "complexity_hotspots": 58,
         "large_classes": 1
       },
@@ -1713,11 +1740,6 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/_daily_watch20_ablation_api.py",
-          "loc": 580,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/liveops/alloc_core.py",
           "loc": 565,
           "hk_related": false
@@ -1735,6 +1757,11 @@
         {
           "path": "src/strategy_pipeline/commands/tune_runner.py",
           "loc": 546,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/release_tools/_package_runs_api.py",
+          "loc": 531,
           "hk_related": false
         }
       ],
