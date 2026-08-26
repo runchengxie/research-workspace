@@ -224,6 +224,28 @@ def test_lagged_turnover_supports_median_aggregation() -> None:
     assert panel.loc[0, "turnover_lagged_median_60d"] == 30.5
 
 
+def test_lagged_turnover_counts_market_sessions_not_observed_rows() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=62)
+    missing_date = dates[-3]
+    daily = pd.DataFrame(
+        [
+            {"trade_date": date, "symbol": "A", "turnover_rate": 1.0}
+            for date in dates
+            if date != missing_date
+        ]
+        + [{"trade_date": date, "symbol": "B", "turnover_rate": 1.0} for date in dates]
+    )
+
+    panel = build_lagged_turnover_panel(
+        daily,
+        pd.DatetimeIndex([dates[-1]]),
+        window=60,
+        minimum_observations=60,
+    )
+
+    assert np.isnan(panel.loc[0, "turnover_lagged_mean_60d"])
+
+
 def test_trade_capacity_matrix_converts_amount_to_weight_capacity() -> None:
     dates = pd.bdate_range("2024-01-02", periods=3)
     daily = pd.DataFrame(
@@ -266,6 +288,28 @@ def test_trade_capacity_matrix_supports_zero_capacity_rows() -> None:
     )
 
     assert capacity.tolist() == [[0.0], [0.0]]
+
+
+def test_trade_capacity_matrix_rejects_nonfinite_capital() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=2)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "pct_chg": [0.0, 0.0],
+            "amount": [100.0, 100.0],
+        }
+    )
+    returns = daily_return_matrix(daily)
+
+    for capital in (np.nan, np.inf):
+        with raises(ValueError, match="positive"):
+            build_trade_capacity_matrix(
+                daily,
+                returns,
+                initial_capital=capital,
+                participation_rate=0.10,
+            )
 
 
 def test_lot_rounding_floors_target_shares() -> None:

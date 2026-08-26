@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 133,
-      "python_loc": 26741,
+      "python_loc": 26808,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -21,13 +21,13 @@
       },
       "large_files": [
         {
-          "path": "tests/test_pre_push_hooks.py",
-          "loc": 632,
+          "path": "strategy-research/style_factors/small_cap_low_turnover.py",
+          "loc": 637,
           "hk_related": false
         },
         {
-          "path": "strategy-research/style_factors/small_cap_low_turnover.py",
-          "loc": 614,
+          "path": "tests/test_pre_push_hooks.py",
+          "loc": 632,
           "hk_related": false
         },
         {

@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Extend the exploratory small-cap × low-turnover comparison with turnover-definition, ADV-participation, and integer-lot sensitivity evidence.
+**Goal:** Extend the exploratory small-cap × low-turnover comparison with turnover-definition, prior-amount participation, and integer-lot sensitivity evidence.
 
 **Architecture:** Keep the experiment in `strategy-research`. Add optional capacity and rounded-target inputs to the existing constrained simulator without changing its default behavior, then let the experiment runner reuse one loaded market contract for a compact robustness matrix. Treat 2015–2023 as development and 2024–2026 as a fixed holdout for reporting only.
 
@@ -53,7 +53,7 @@
 
 - [x] **Step 1: Write a failing unit test** for the development/holdout period return helper.
 - [x] **Step 2: Run the focused test and confirm it fails because the helper is missing.**
-- [x] **Step 3: Implement turnover definitions `mean_20`, `mean_60`, `median_60`, and `mean_120` plus participation cases `unconstrained`, `0.05`, `0.10`, and `0.20`.
+- [x] **Step 3: Implement turnover definitions `mean_20`, `mean_60`, `median_60`, and `mean_120` plus participation cases `unconstrained`, `0.05`, `0.10`, and `0.20`.**
 - [x] **Step 4: Apply 100-share rounding in the sensitivity cases** and write the matrix CSV, report section, and metadata.
 - [x] **Step 5: Run the focused tests and a small synthetic runner check.**
 

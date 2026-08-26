@@ -89,21 +89,44 @@ def build_lagged_turnover_panel(
     frame["trade_date"] = pd.to_datetime(frame["trade_date"]).dt.normalize()
     frame["symbol"] = frame["symbol"].astype(str)
     frame["turnover_rate"] = pd.to_numeric(frame["turnover_rate"], errors="coerce")
-    frame = frame.sort_values(["symbol", "trade_date"])
     turnover_column = f"turnover_lagged_{statistic}_{window}d"
-    frame[turnover_column] = frame.groupby("symbol", sort=False)["turnover_rate"].transform(
-        lambda values: getattr(
-            values.shift(1).rolling(
-                window,
-                min_periods=minimum_observations,
-            ),
-            statistic,
-        )()
-    )
-    return frame.loc[
+    calendar = pd.DatetimeIndex(sorted(frame["trade_date"].unique()))
+    turnover_matrix = frame.pivot(
+        index="trade_date",
+        columns="symbol",
+        values="turnover_rate",
+    ).reindex(index=calendar)
+    lagged = getattr(
+        turnover_matrix.shift(1).rolling(
+            window,
+            min_periods=minimum_observations,
+        ),
+        statistic,
+    )()
+    available = frame.loc[
         frame["trade_date"].isin(dates),
-        ["trade_date", "symbol", turnover_column],
-    ].reset_index(drop=True)
+        ["trade_date", "symbol"],
+    ].drop_duplicates()
+    values = (
+        lagged.loc[lagged.index.isin(dates)]
+        .rename_axis(index="trade_date", columns="symbol")
+        .reset_index()
+        .melt(
+            id_vars="trade_date",
+            var_name="symbol",
+            value_name=turnover_column,
+        )
+    )
+    return (
+        available.merge(
+            values,
+            on=["trade_date", "symbol"],
+            how="left",
+            validate="one_to_one",
+        )
+        .sort_values(["trade_date", "symbol"])
+        .reset_index(drop=True)
+    )
 
 
 def build_trade_capacity_matrix(
@@ -121,7 +144,7 @@ def build_trade_capacity_matrix(
     participation fraction.
     """
     _require_columns(daily_clean, {"trade_date", "symbol", "amount"}, label="daily_clean")
-    if initial_capital <= 0:
+    if not np.isfinite(initial_capital) or initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
     if not 0 <= participation_rate <= 1:
         raise ValueError("participation_rate must be between 0 and 1")
@@ -149,7 +172,7 @@ def round_target_weights_to_lots(
 ) -> dict[pd.Timestamp, dict[str, float]]:
     """Floor target share counts using the prior close and A-share lot size."""
     _require_columns(daily_clean, {"trade_date", "symbol", "close"}, label="daily_clean")
-    if initial_capital <= 0:
+    if not np.isfinite(initial_capital) or initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
     if lot_size <= 0:
         raise ValueError("lot_size must be positive")
@@ -573,7 +596,7 @@ def simulate_long_only_candidates(
         raise ValueError("initial_capital is required when lot_size is supplied")
     if participation_rate is not None and initial_capital is None:
         raise ValueError("initial_capital is required when participation_rate is supplied")
-    if initial_capital is not None and initial_capital <= 0:
+    if initial_capital is not None and (not np.isfinite(initial_capital) or initial_capital <= 0):
         raise ValueError("initial_capital must be positive")
     if (returns is None) != (matrices is None):
         raise ValueError("returns and matrices must be supplied together")

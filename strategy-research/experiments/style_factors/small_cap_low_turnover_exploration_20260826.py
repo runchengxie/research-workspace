@@ -155,9 +155,9 @@ def _run_robustness_matrix(
     )
     participation_cases: tuple[tuple[str, float | None], ...] = (
         ("unconstrained", None),
-        ("adv_5pct", 0.05),
-        ("adv_10pct", 0.10),
-        ("adv_20pct", 0.20),
+        ("prior_amount_5pct", 0.05),
+        ("prior_amount_10pct", 0.10),
+        ("prior_amount_20pct", 0.20),
     )
     rows: list[dict[str, Any]] = []
     for definition, window, statistic in definitions:
@@ -286,7 +286,7 @@ def _write_report(
         "target entries using the prior close.",
         "- Sensitivity cases use configurable research capital; the current run uses "
         "100m CNY and 100-share lot rounding.",
-        "- Sensitivity ADV caps use the prior observed session's traded amount; "
+        "- Sensitivity caps use the prior observed session's traded amount; "
         "they remain static-capacity research approximations.",
         "",
         "## Candidate comparison",
@@ -346,7 +346,8 @@ def _write_report(
             "it with small-cap-only, low-turnover-only, residualized low-turnover, and controls.",
             "- Net results remain exploratory until costs, liquidity, integer lots, and "
             "live execution assumptions are independently reviewed.",
-            "- ADV caps alter the fill path and can improve simulated returns by delaying "
+            "- Prior-session traded-amount caps alter the fill path and can improve "
+            "simulated returns by delaying "
             "trades; this is not evidence of investable alpha.",
             "- The sensitivity matrix uses prior-session amount and close data, but it "
             "is not a full share-ledger or broker-fill model.",
@@ -376,7 +377,7 @@ def run_exploration(
     """Run the candidate comparison and write reproducible research outputs."""
     if transaction_cost_bps < 0:
         raise ValueError("transaction_cost_bps must be non-negative")
-    if initial_capital <= 0:
+    if not np.isfinite(initial_capital) or initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
     outdir.mkdir(parents=True, exist_ok=True)
     market_data = load_robustness_market_data(
@@ -478,7 +479,12 @@ def run_exploration(
         "transaction_cost_bps": transaction_cost_bps,
         "robustness_matrix": {
             "turnover_definitions": ["mean_20", "mean_60", "median_60", "mean_120"],
-            "participation_cases": ["unconstrained", "adv_5pct", "adv_10pct", "adv_20pct"],
+            "participation_cases": [
+                "unconstrained",
+                "prior_amount_5pct",
+                "prior_amount_10pct",
+                "prior_amount_20pct",
+            ],
             "initial_capital": initial_capital,
             "lot_size": 100,
             "development_period": "2015-01-01 to 2023-12-31",

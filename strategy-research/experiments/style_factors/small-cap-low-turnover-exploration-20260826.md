@@ -14,11 +14,11 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Ranking: sector-neutral cross-sectional scores.
 - Portfolio: long-only, equal weight, 40-name target, 60-name holding buffer.
 - Execution: target changes on the next trading session; shared suspension, price-limit, delisting, and transaction-cost mechanics.
-- Sensitivity execution inputs: prior-session close for lot sizing and prior observed traded amount for ADV caps.
+- Sensitivity execution inputs: prior-session close for lot sizing and prior observed traded amount for participation caps.
 - Cost case: 10 bps per unit of simulated traded notional.
 - Eligibility: minimum 180 listed days, non-ST, non-suspended, and present in the formation universe.
 - Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, raw 50/50 composite, residualized 50/50 composite, large-cap control, and low-volatility control.
-- Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% ADV participation cases.
+- Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% prior-session traded-amount cases (not rolling ADV).
 - Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
 ## Full-period result
@@ -28,10 +28,10 @@ Values below are annualized return or turnover unless stated otherwise. Returns 
 | arm | net return | net Sharpe | max drawdown | annualized turnover |
 | --- | ---: | ---: | ---: | ---: |
 | small-cap | 1.66% | 0.20 | -74.67% | 2.97x |
-| low-turnover | 3.40% | 0.26 | -54.49% | 6.70x |
-| low-turnover residual | -11.69% | -0.25 | -90.08% | 19.13x |
-| raw composite | 8.77% | 0.43 | -57.28% | 5.78x |
-| residual composite | 4.31% | 0.29 | -73.23% | 14.96x |
+| low-turnover | 5.44% | 0.33 | -51.84% | 6.79x |
+| low-turnover residual | -10.11% | -0.18 | -88.44% | 19.22x |
+| raw composite | 7.24% | 0.38 | -68.59% | 6.77x |
+| residual composite | 4.22% | 0.29 | -75.23% | 15.42x |
 | large-cap control | 6.72% | 0.41 | -44.05% | 1.40x |
 | low-volatility control | 0.27% | 0.13 | -67.81% | 16.96x |
 
@@ -49,24 +49,24 @@ The raw composite net returns were approximately:
 
 | period | raw composite | large-cap control |
 | --- | ---: | ---: |
-| 2015–2019 | +84.1% | +45.4% |
-| 2020–2023 | -7.3% | +13.9% |
-| 2024–2026 | +48.1% | +23.7% |
+| 2015–2019 | +109.2% | +45.4% |
+| 2020–2023 | -33.1% | +13.9% |
+| 2024–2026 | +54.4% | +23.7% |
 
 The positive full-period result is therefore not uniform across regimes.
 
 ## Robustness matrix
 
-The table below shows the unconstrained and 5% ADV cases. The 10% and 20% cases are in `candidate_robustness_matrix.csv`.
+The table below shows the unconstrained and 5% prior-session traded-amount cases. The 10% and 20% cases are in `candidate_robustness_matrix.csv`.
 
-| turnover definition | unconstrained net | 5% ADV net | unconstrained holdout | 5% ADV holdout | turnover |
+| turnover definition | unconstrained net | 5% prior-amount net | unconstrained holdout | 5% prior-amount holdout | turnover |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| mean 20-day | +10.83% | +14.00% | +23.76% | +25.51% | 8.04x |
-| mean 60-day | +8.89% | +10.98% | +17.21% | +18.21% | 5.80x |
-| median 60-day | +9.00% | +11.00% | +17.79% | +19.09% | 5.76x |
-| mean 120-day | +12.73% | +14.60% | +24.86% | +26.38% | 4.87x |
+| mean 20-day | +7.46% | +11.73% | +25.22% | +27.23% | 8.61x |
+| mean 60-day | +7.28% | +10.23% | +19.16% | +19.40% | 6.78x |
+| median 60-day | +7.45% | +10.14% | +20.14% | +20.87% | 6.64x |
+| mean 120-day | +13.70% | +15.33% | +25.12% | +26.74% | 5.59x |
 
-The ADV caps did not monotonically reduce returns. In this simulator they change the order-fill path: delayed entries and exits can avoid some losing trades. That is an execution-path sensitivity, not evidence that greater constraints create investable alpha.
+The prior-session traded-amount caps did not monotonically reduce returns. In this simulator they change the order-fill path: delayed entries and exits can avoid some losing trades. That is an execution-path sensitivity, not evidence that greater constraints create investable alpha.
 
 ## Evidence files
 
@@ -91,7 +91,7 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 ## Remaining limitations
 
 - The baseline simulator uses continuous portfolio weights. The sensitivity cases round target entry weights to 100-share lots using the prior close, but the daily weight-accounting engine is not a full share-ledger simulator.
-- ADV participation uses prior observed traded amount, constant research capital, and per-symbol static weight caps; it does not model market impact, portfolio cash evolution, or broker fills.
+- Participation caps use prior observed traded amount, constant research capital, and per-symbol static weight caps; this is not rolling ADV and does not model market impact, portfolio cash evolution, or broker fills.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
 - The experiment does not yet include dynamic capacity, broker-specific fills, or a live paper-trading observation period.
