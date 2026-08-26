@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 134,
-      "python_loc": 27296,
+      "python_loc": 27346,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -23,6 +23,11 @@
         {
           "path": "strategy-research/style_factors/small_cap_low_turnover.py",
           "loc": 696,
+          "hk_related": false
+        },
+        {
+          "path": "strategy-research/tests/test_small_cap_low_turnover_exploration.py",
+          "loc": 646,
           "hk_related": false
         },
         {
@@ -38,11 +43,6 @@
         {
           "path": "tests/test_maintainability_governance.py",
           "loc": 608,
-          "hk_related": false
-        },
-        {
-          "path": "strategy-research/tests/test_small_cap_low_turnover_exploration.py",
-          "loc": 596,
           "hk_related": false
         }
       ],
