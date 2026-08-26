@@ -8,6 +8,7 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _build_share_ledger_positions,
     _period_return_metrics,
     _run_rebalance_matrix,
+    _run_reconciliation_matrix,
     _run_share_ledger_matrix,
     _signal_correlations,
 )
@@ -644,3 +645,53 @@ def test_share_ledger_matrix_runs_with_cash_ledger_execution() -> None:
     assert row["status"] == "ok"
     assert row["weight_level_targets"] > 0
     assert row["share_ledger_fill_ratio"] is not None
+
+
+def test_reconciliation_matrix_decomposes_engine_gap() -> None:
+    daily = _synthetic_rebalance_daily()
+    symbols = daily["symbol"].unique().tolist()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+
+    matrix = _run_reconciliation_matrix(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        instruments=instruments,
+        transaction_cost_bps=10.0,
+        target_count=4,
+        buffer_count=6,
+        minimum_listed_days=0,
+        initial_capital=1_000_000.0,
+        returns=returns,
+        matrices=matrices,
+        frequencies=("monthly",),
+    )
+
+    assert not matrix.empty
+    composite_arms = set(matrix.loc[matrix["candidate"] == "composite", "engine_arm"])
+    assert composite_arms == {
+        "weight_level",
+        "ideal_nav",
+        "ledger_full",
+        "ledger_no_participation",
+        "ledger_no_t1",
+        "ledger_no_lot",
+        "ledger_zero_cost",
+    }
+    control_arms = set(matrix.loc[matrix["candidate"] == "large_cap_control", "engine_arm"])
+    assert control_arms == {"weight_level", "ideal_nav", "ledger_full"}
+    weight_rows = matrix.loc[matrix["engine_arm"] == "weight_level"]
+    assert weight_rows["fill_ratio"].isna().all()
+    ledger_rows = matrix.loc[matrix["engine_arm"] != "weight_level"]
+    assert ledger_rows["fill_ratio"].notna().all()
+    assert matrix["net_annual_return"].notna().all()

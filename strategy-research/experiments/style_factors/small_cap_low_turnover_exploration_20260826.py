@@ -17,6 +17,7 @@ import pandas as pd
 from portfolio_backtester.execution_sim import (
     ExecutionSimConfig,
     simulate_execution_adjusted_nav,
+    simulate_ideal_daily_nav,
 )
 from style_factors.data import load_sw_industry_membership
 from style_factors.liquidity_signals import build_liquidity_control_panel
@@ -457,6 +458,280 @@ def _run_share_ledger_matrix(
     return pd.DataFrame(rows)
 
 
+def _ledger_arm_row(
+    result: Any,
+    *,
+    frequency: str,
+    candidate: str,
+    engine_arm: str,
+    initial_capital: float,
+) -> dict[str, Any]:
+    stats = result.summary.get("stats", {})
+    ann_return = stats.get("ann_return")
+    max_drawdown = stats.get("max_drawdown")
+    return {
+        "rebalance_frequency": frequency,
+        "candidate": candidate,
+        "engine_arm": engine_arm,
+        "net_annual_return": ann_return * 100 if ann_return is not None else None,
+        "net_sharpe": stats.get("sharpe"),
+        "max_drawdown": max_drawdown * 100 if max_drawdown is not None else None,
+        "fill_ratio": result.summary.get("fill_ratio"),
+        "avg_cash_weight": result.summary.get("avg_cash_weight"),
+        "cumulative_turnover": (
+            float(result.summary.get("filled_notional", 0.0)) / initial_capital
+        ),
+    }
+
+
+def _weight_level_arm_row(
+    summary: pd.DataFrame,
+    name: str,
+    *,
+    frequency: str,
+    candidate: str,
+) -> dict[str, Any]:
+    row = summary.iloc[0].to_dict()
+    return {
+        "rebalance_frequency": frequency,
+        "candidate": candidate,
+        "engine_arm": "weight_level",
+        "net_annual_return": row.get("net_annual_return"),
+        "net_sharpe": row.get("net_sharpe"),
+        "max_drawdown": row.get("net_max_drawdown"),
+        "fill_ratio": None,
+        "avg_cash_weight": None,
+        "cumulative_turnover": float(row.get("average_daily_turnover", 0.0) or 0.0)
+        * float(row.get("days", 0)),
+    }
+
+
+def _run_reconciliation_matrix(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    returns: pd.DataFrame,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    frequencies: tuple[str, ...] = ("monthly", "biweekly"),
+) -> pd.DataFrame:
+    """Decompose the weight-level versus cash-ledger result gap.
+
+    For identical formation targets the runner reports a weight-level
+    reference, a frictionless ideal NAV with share semantics, and the fully
+    constrained ledger, then relaxes one constraint at a time on the monthly
+    composite so the gap can be attributed to accounting semantics versus
+    execution frictions.
+    """
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
+    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
+        columns={"tr_close": "close"}
+    )
+    pricing = daily_clean[
+        ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
+    ].rename(columns={"tr_close": "close"})
+    candidates = (
+        ("composite", "signal_composite"),
+        ("large_cap_control", "signal_large_cap_control"),
+    )
+
+    def full_config() -> ExecutionSimConfig:
+        return ExecutionSimConfig(
+            enabled=True,
+            portfolio_value=initial_capital,
+            participation_rate=0.05,
+            liquidity_cols=("amount",),
+            liquidity_notional_multiplier=1_000.0,
+            buy_max_days=3,
+            sell_max_days=5,
+            round_lot=100,
+            enforce_t1=True,
+        )
+
+    rows: list[dict[str, Any]] = []
+    for frequency in frequencies:
+        formation_dates = build_rebalance_formation_dates(
+            trading_dates,
+            frequency=frequency,
+        )
+        controls = build_liquidity_control_panel(
+            controls_daily,
+            basics,
+            formation_dates,
+            sw_membership=sw_membership,
+        )
+        turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
+        panel = build_candidate_signal_panel(controls, turnover)
+        eligible = filter_candidate_eligibility(
+            panel,
+            universe,
+            daily_clean,
+            st_history,
+            minimum_listed_days=minimum_listed_days,
+        )
+        for candidate, signal_column in candidates:
+            formation_targets = build_buffered_targets(
+                eligible,
+                formation_dates,
+                signal_column=signal_column,
+                target_count=target_count,
+                buffer_count=buffer_count,
+            )
+            positions = _build_share_ledger_positions(formation_targets, trading_dates)
+            if positions.empty:
+                continue
+            reference_name = f"recon_{candidate}"
+            simulations = simulate_long_only_candidates(
+                panel,
+                daily_clean,
+                universe,
+                st_history,
+                instruments,
+                {reference_name: signal_column},
+                target_count=target_count,
+                buffer_count=buffer_count,
+                minimum_listed_days=minimum_listed_days,
+                initial_capital=initial_capital,
+                returns=returns,
+                matrices=matrices,
+            )
+            summary, _daily = summarize_long_only_simulations(
+                simulations,
+                transaction_cost_bps=transaction_cost_bps,
+            )
+            rows.append(
+                _weight_level_arm_row(
+                    summary, reference_name, frequency=frequency, candidate=candidate
+                )
+            )
+            ideal = simulate_ideal_daily_nav(
+                positions,
+                pricing,
+                price_col="close",
+                transaction_cost_bps=transaction_cost_bps,
+                portfolio_value=initial_capital,
+            )
+            rows.append(
+                _ledger_arm_row(
+                    ideal,
+                    frequency=frequency,
+                    candidate=candidate,
+                    engine_arm="ideal_nav",
+                    initial_capital=initial_capital,
+                )
+            )
+            constrained = simulate_execution_adjusted_nav(
+                positions,
+                pricing,
+                full_config(),
+                price_col="close",
+                tradable_col="amount",
+                transaction_cost_bps=transaction_cost_bps,
+            )
+            rows.append(
+                _ledger_arm_row(
+                    constrained,
+                    frequency=frequency,
+                    candidate=candidate,
+                    engine_arm="ledger_full",
+                    initial_capital=initial_capital,
+                )
+            )
+            if frequency != "monthly" or candidate != "composite":
+                continue
+            ladder: tuple[tuple[str, ExecutionSimConfig, float], ...] = (
+                (
+                    "ledger_no_participation",
+                    ExecutionSimConfig(
+                        enabled=True,
+                        portfolio_value=initial_capital,
+                        participation_rate=1.0,
+                        liquidity_cols=("amount",),
+                        liquidity_notional_multiplier=1_000.0,
+                        buy_max_days=3,
+                        sell_max_days=5,
+                        round_lot=100,
+                        enforce_t1=True,
+                    ),
+                    transaction_cost_bps,
+                ),
+                (
+                    "ledger_no_t1",
+                    ExecutionSimConfig(
+                        enabled=True,
+                        portfolio_value=initial_capital,
+                        participation_rate=0.05,
+                        liquidity_cols=("amount",),
+                        liquidity_notional_multiplier=1_000.0,
+                        buy_max_days=3,
+                        sell_max_days=5,
+                        round_lot=100,
+                        enforce_t1=False,
+                    ),
+                    transaction_cost_bps,
+                ),
+                (
+                    "ledger_no_lot",
+                    ExecutionSimConfig(
+                        enabled=True,
+                        portfolio_value=initial_capital,
+                        participation_rate=0.05,
+                        liquidity_cols=("amount",),
+                        liquidity_notional_multiplier=1_000.0,
+                        buy_max_days=3,
+                        sell_max_days=5,
+                        round_lot=None,
+                        enforce_t1=True,
+                    ),
+                    transaction_cost_bps,
+                ),
+            )
+            for arm_name, config, cost_bps in ladder:
+                relaxed = simulate_execution_adjusted_nav(
+                    positions,
+                    pricing,
+                    config,
+                    price_col="close",
+                    tradable_col="amount",
+                    transaction_cost_bps=cost_bps,
+                )
+                rows.append(
+                    _ledger_arm_row(
+                        relaxed,
+                        frequency=frequency,
+                        candidate=candidate,
+                        engine_arm=arm_name,
+                        initial_capital=initial_capital,
+                    )
+                )
+            zero_cost = simulate_execution_adjusted_nav(
+                positions,
+                pricing,
+                full_config(),
+                price_col="close",
+                tradable_col="amount",
+                transaction_cost_bps=0.0,
+            )
+            rows.append(
+                _ledger_arm_row(
+                    zero_cost,
+                    frequency=frequency,
+                    candidate=candidate,
+                    engine_arm="ledger_zero_cost",
+                    initial_capital=initial_capital,
+                )
+            )
+    return pd.DataFrame(rows)
+
+
 def _period_returns(daily: pd.DataFrame) -> pd.DataFrame:
     periods = {
         "2015-2019": (pd.Timestamp("2015-01-01"), pd.Timestamp("2019-12-31")),
@@ -491,6 +766,7 @@ def _write_report(
     robustness: pd.DataFrame,
     rebalance_matrix: pd.DataFrame,
     share_ledger_matrix: pd.DataFrame,
+    reconciliation_matrix: pd.DataFrame,
     metadata: dict[str, Any],
 ) -> None:
     lines = [
@@ -599,6 +875,22 @@ def _write_report(
             "share_ledger_cumulative_turnover",
         ]
         lines.append(share_ledger_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
+    lines.extend(["", "## Ledger reconciliation", ""])
+    if reconciliation_matrix.empty:
+        lines.append("No reconciliation observations.")
+    else:
+        columns = [
+            "rebalance_frequency",
+            "candidate",
+            "engine_arm",
+            "net_annual_return",
+            "net_sharpe",
+            "max_drawdown",
+            "fill_ratio",
+            "avg_cash_weight",
+            "cumulative_turnover",
+        ]
+        lines.append(reconciliation_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(
         [
             "",
@@ -614,6 +906,10 @@ def _write_report(
             "- The share-ledger section uses the portfolio-backtester cash-ledger "
             "execution model with lot rounding, T+1 inventory, and participation caps; "
             "it is not a broker-fill model.",
+            "- The reconciliation table attributes the engine gap to accounting "
+            "semantics (weight-level versus ideal NAV) and to execution frictions "
+            "(ideal NAV versus constrained ledger); it is an attribution, not a proof "
+            "of investable alpha.",
             "- Rebalance-frequency variants change only the formation cadence; costs and "
             "participation mechanics are otherwise shared.",
             "- No parameter was selected from final out-of-sample results by this runner.",
@@ -733,6 +1029,20 @@ def run_exploration(
         minimum_listed_days=minimum_listed_days,
         initial_capital=initial_capital,
     )
+    reconciliation_matrix = _run_reconciliation_matrix(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        instruments=market_data.instruments,
+        transaction_cost_bps=transaction_cost_bps,
+        target_count=target_count,
+        buffer_count=buffer_count,
+        minimum_listed_days=minimum_listed_days,
+        initial_capital=initial_capital,
+        returns=return_matrix,
+        matrices=execution_context,
+    )
 
     signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
     summary.to_csv(outdir / "candidate_summary.csv", index=False)
@@ -744,6 +1054,7 @@ def run_exploration(
     robustness.to_csv(outdir / "candidate_robustness_matrix.csv", index=False)
     rebalance_matrix.to_csv(outdir / "candidate_rebalance_matrix.csv", index=False)
     share_ledger_matrix.to_csv(outdir / "candidate_share_ledger_matrix.csv", index=False)
+    reconciliation_matrix.to_csv(outdir / "candidate_reconciliation_matrix.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -803,6 +1114,7 @@ def run_exploration(
         robustness=robustness,
         rebalance_matrix=rebalance_matrix,
         share_ledger_matrix=share_ledger_matrix,
+        reconciliation_matrix=reconciliation_matrix,
         metadata=metadata,
     )
     return outdir

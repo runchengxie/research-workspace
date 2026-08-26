@@ -21,6 +21,7 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% prior-session traded-amount cases (not rolling ADV).
 - Rebalance-frequency matrix: raw composite only, weekly/biweekly/monthly/quarterly formation, monthly as the baseline cadence, with the same sector-neutral controls and cost mechanics.
 - Share-ledger check: raw composite re-run through the portfolio-backtester cash-ledger execution model (lot rounding, T+1 inventory, participation caps, daily NAV) for the monthly and biweekly cadences, using 5% participation and the same 10 bps cost case.
+- Ledger reconciliation: identical targets run through a weight-level reference, a frictionless ideal NAV with share semantics, and the fully constrained ledger, plus a one-constraint-at-a-time relaxation ladder (participation, T+1, lot, cost) on the monthly composite; composite and large-cap control are both reconciled so the incremental criterion can be read under each engine.
 - Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
 ## Full-period result
@@ -95,7 +96,31 @@ The raw composite was re-run through the portfolio-backtester cash-ledger execut
 | monthly | 16.01% | 0.70 | -51.10% | 44.98% | 11.62% | 147.9x |
 | biweekly | 14.14% | 0.63 | -59.34% | 75.40% | 21.14% | 69.5x |
 
-The share-ledger monthly result (16.01%, Sharpe 0.70) is substantially higher than the weight-level monthly composite (7.24%, Sharpe 0.38), and the biweekly-vs-monthly ranking reverses. This gap is not yet fully reconciled: the weight-level simulator holds constant normalized weights and applies returns to the full invested portfolio, while the cash-ledger model holds actual shares, starts in cash, and fills orders over several sessions. The two engines therefore measure different portfolio semantics, and the magnitude of the difference should not be read as investable alpha until the accounting is reconciled. The share-ledger does confirm the qualitative point that execution constraints change the outcome materially, and the fill ratios (45% monthly, 75% biweekly) show that participation caps bind meaningfully for this small-cap portfolio. Treat this section as a direction check, not a replacement for the weight-level evidence.
+The share-ledger result differs materially from the weight-level engine; the reconciliation section below decomposes that gap and supersedes the interpretation of this table on its own.
+
+## Ledger reconciliation
+
+Identical formation targets were run through three engines: the weight-level simulator, a frictionless ideal NAV with share semantics, and the fully constrained cash ledger, plus a one-constraint-at-a-time relaxation ladder on the monthly composite.
+
+Monthly raw composite:
+
+| engine arm | net annual | net Sharpe | max drawdown | avg cash weight |
+| --- | ---: | ---: | ---: | ---: |
+| weight_level | 7.24% | 0.38 | -68.59% | fully invested by assumption |
+| ideal_nav (share semantics, zero friction) | 11.95% | 0.57 | -51.86% | ~0% |
+| ledger_full | 16.01% | 0.70 | -51.10% | 11.62% |
+
+Relaxation ladder on the monthly composite: removing the participation cap lowers the result to 14.56%, disabling T+1 changes nothing, disabling lot rounding adds about 0.01pp, and zero cost adds about 0.56pp versus the constrained ledger.
+
+What the decomposition says:
+
+1. Accounting semantics dominate the old numbers. Moving from daily-renormalized constant weights to held shares lifts the monthly composite by about 4.7pp annualized before any friction change, so the previously reported weight-level results structurally understated this strategy family.
+2. Execution constraints raise the simulated composite result by another 4.1pp, and the sign is diagnostic: relaxing participation lowers it to 14.56%. Delayed, partial fills into illiquid small caps dodge losers in this simulator. The large-cap control behaves normally instead: its three engines sit within about 0.3pp (6.72% / 6.63% / 6.41%) with monotone decay, so the composite's constraint gain is specific to the illiquid tail where participation binds (45% fill versus 80% for the control) and must be treated as an execution-path artifact, not alpha.
+3. T+1 and lot rounding are second order here; costs are worth about 0.56pp annualized at 10bps.
+4. The biweekly-versus-monthly ranking reversal resolves: under share semantics the monthly ledger (16.01%) beats the biweekly ledger (14.14%), so the biweekly advantage was an artifact of the weight-level engine's daily renormalization interacting with cadence.
+5. The decision criterion flips with the engine. Incremental composite minus large-cap control is about +0.5pp under the weight-level engine but +5.3pp under ideal NAV and +9.6pp under the constrained ledger. The earlier reading that the composite barely beats the control was engine-specific.
+
+Engine trust going forward: share-semantics engines (ideal or constrained ledger) are the decision basis for costs, capacity, and cadence; the weight-level engine remains useful only for cheap screening. The constraint-induced gain on the composite should be read as an optimistic upper bound until a market-impact or slippage model prices the delayed fills honestly.
 
 ## Evidence files
 
@@ -114,6 +139,7 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_robustness_matrix.csv`
 - `candidate_rebalance_matrix.csv`
 - `candidate_share_ledger_matrix.csv`
+- `candidate_reconciliation_matrix.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
 - `small_cap_low_turnover_exploration.md`
@@ -121,14 +147,15 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 
 ## Remaining limitations
 
-- The baseline simulator uses continuous portfolio weights. The sensitivity cases round target entry weights to 100-share lots using the prior close, but the daily weight-accounting engine is not a full share-ledger simulator.
+- The baseline simulator uses continuous portfolio weights; the reconciliation shows its semantics understate this strategy family, so weight-level rows are screening references only.
 - Participation caps use prior observed traded amount, constant research capital, and per-symbol static weight caps; this is not rolling ADV and does not model market impact, portfolio cash evolution, or broker fills.
-- The share-ledger check reuses the portfolio-backtester cash-ledger model with lot rounding, T+1, and participation, but the large gap versus the weight-level engine is not yet reconciled, so its numbers are a direction check rather than a replacement.
+- The reconciliation attributes the composite's constraint-induced gain to delayed fills in the illiquid tail, but no market-impact or slippage model prices that channel yet, so share-ledger levels remain an optimistic upper bound.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
 - The experiment does not yet include dynamic capacity, broker-specific fills, or a live paper-trading observation period.
+- The 2024–2026 holdout has now been inspected by several sensitivity matrices in this exploration; it is degraded as a clean final out-of-sample window, and future parameter decisions should be made on the 2015–2023 development window only.
 - No final-OOS parameter selection, strategy registration, or E2 audit was performed.
 
 ## Recommended next step
 
-Do not promote this composite yet. The next research step should reconcile the share-ledger engine with the weight-level simulator so the two measure the same portfolio semantics, then use the cash-ledger result as the decision basis. The decision criterion should be incremental net performance versus the large-cap control after cash, lot rounding, T+1 inventory, ADV participation, and slippage constraints, not the raw full-period return.
+Do not promote this composite yet. With the engine gap reconciled, the decision basis is the constrained ledger: evaluate incremental net performance versus the large-cap control on that engine, price the delayed-fill channel with a market-impact or slippage model before trusting its level, and run a capital-scaling ladder to locate where fills collapse. Any cadence or definition choice must be justified on the 2015–2023 development window only.
