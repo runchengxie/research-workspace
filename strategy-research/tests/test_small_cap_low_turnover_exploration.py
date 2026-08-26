@@ -5,8 +5,10 @@ import pandas as pd
 from pytest import approx, raises
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
+    _build_share_ledger_positions,
     _period_return_metrics,
     _run_rebalance_matrix,
+    _run_share_ledger_matrix,
     _signal_correlations,
 )
 from style_factors.robustness_execution import (
@@ -594,3 +596,51 @@ def test_rebalance_matrix_returns_all_frequencies_with_increasing_dates() -> Non
     }
     assert counts["weekly"] > counts["biweekly"] > counts["monthly"] > counts["quarterly"]
     assert all(row["holdout_days"] >= 0 for row in matrix.to_dict(orient="records"))
+
+
+def test_share_ledger_positions_pair_rebalance_and_entry_dates() -> None:
+    trading_dates = pd.bdate_range("2024-01-02", "2024-01-10")
+    formation_targets: dict[pd.Timestamp, dict[str, float]] = {  # ty: ignore[invalid-assignment]
+        pd.Timestamp("2024-01-02"): {"A": 0.5, "B": 0.5},
+        pd.Timestamp("2024-01-09"): {"A": 1.0},
+    }
+    positions = _build_share_ledger_positions(formation_targets, trading_dates)
+    assert list(positions.columns) == ["rebalance_date", "entry_date", "symbol", "weight", "side"]
+    assert positions.loc[0, "rebalance_date"] == pd.Timestamp("2024-01-02")
+    assert positions.loc[0, "entry_date"] == pd.Timestamp("2024-01-03")
+    assert positions.loc[2, "entry_date"] == pd.Timestamp("2024-01-10")
+    assert positions.loc[0, "side"] == "long"
+
+
+def test_share_ledger_matrix_runs_with_cash_ledger_execution() -> None:
+    daily = _synthetic_rebalance_daily()
+    symbols = daily["symbol"].unique().tolist()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+
+    matrix = _run_share_ledger_matrix(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        instruments=instruments,
+        transaction_cost_bps=10.0,
+        target_count=4,
+        buffer_count=6,
+        minimum_listed_days=0,
+        initial_capital=1_000_000.0,
+        frequencies=("monthly",),
+    )
+
+    assert not matrix.empty
+    row = matrix.iloc[0]
+    assert row["rebalance_frequency"] == "monthly"
+    assert row["status"] == "ok"
+    assert row["weight_level_targets"] > 0
+    assert row["share_ledger_fill_ratio"] is not None

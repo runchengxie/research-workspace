@@ -14,15 +14,22 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from portfolio_backtester.execution_sim import (
+    ExecutionSimConfig,
+    simulate_execution_adjusted_nav,
+)
 from style_factors.data import load_sw_industry_membership
 from style_factors.liquidity_signals import build_liquidity_control_panel
 from style_factors.robustness_data import load_robustness_market_data
 from style_factors.robustness_execution import daily_return_matrix, execution_matrices
 from style_factors.small_cap_low_turnover import (
     SIGNAL_COLUMNS,
+    build_buffered_targets,
     build_candidate_signal_panel,
     build_lagged_turnover_panel,
     build_rebalance_formation_dates,
+    filter_candidate_eligibility,
+    map_targets_to_execution_dates,
     simulate_long_only_candidates,
     summarize_long_only_simulations,
 )
@@ -316,6 +323,140 @@ def _run_rebalance_matrix(
     return pd.DataFrame(rows)
 
 
+def _build_share_ledger_positions(
+    formation_targets: dict[pd.Timestamp, dict[str, float]],
+    trading_dates: pd.DatetimeIndex,
+) -> pd.DataFrame:
+    """Expand formation targets into execution-sim position rows.
+
+    Each formation target is paired with its next trading session as the
+    ``entry_date``.  The ``rebalance_date`` is the formation session, matching
+    the simulator's period semantics.
+    """
+    rows: list[dict[str, Any]] = []
+    for formation_date, weights in formation_targets.items():
+        position = int(trading_dates.searchsorted(formation_date, side="right"))
+        if position >= len(trading_dates):
+            continue
+        entry_date = pd.Timestamp(trading_dates[position]).normalize()  # ty: ignore[unresolved-attribute]
+        for symbol, weight in weights.items():
+            rows.append(
+                {
+                    "rebalance_date": pd.Timestamp(formation_date).normalize(),  # ty: ignore[unresolved-attribute]
+                    "entry_date": entry_date,
+                    "symbol": symbol,
+                    "weight": float(weight),
+                    "side": "long",
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def _run_share_ledger_matrix(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    frequencies: tuple[str, ...] = ("monthly", "biweekly"),
+) -> pd.DataFrame:
+    """Run the raw composite under a cash-ledger execution model.
+
+    Targets are built with the same signal panel and buffer as the weight-level
+    simulator, then executed by ``portfolio_backtester.execution_sim`` with lot
+    rounding, T+1 inventory, participation caps, and daily NAV accounting.  The
+    table reports both the share-ledger outcome and the weight-level reference.
+    """
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
+    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
+        columns={"tr_close": "close"}
+    )
+    pricing = daily_clean[
+        ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
+    ].rename(columns={"tr_close": "close"})
+    rows: list[dict[str, Any]] = []
+    for frequency in frequencies:
+        formation_dates = build_rebalance_formation_dates(
+            trading_dates,
+            frequency=frequency,
+        )
+        controls = build_liquidity_control_panel(
+            controls_daily,
+            basics,
+            formation_dates,
+            sw_membership=sw_membership,
+        )
+        turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
+        panel = build_candidate_signal_panel(controls, turnover)
+        eligible = filter_candidate_eligibility(
+            panel,
+            universe,
+            daily_clean,
+            st_history,
+            minimum_listed_days=minimum_listed_days,
+        )
+        formation_targets = build_buffered_targets(
+            eligible,
+            formation_dates,
+            signal_column="signal_composite",
+            target_count=target_count,
+            buffer_count=buffer_count,
+        )
+        execution_targets = map_targets_to_execution_dates(formation_targets, trading_dates)
+        positions = _build_share_ledger_positions(formation_targets, trading_dates)
+        if positions.empty:
+            continue
+        config = ExecutionSimConfig(
+            enabled=True,
+            portfolio_value=initial_capital,
+            participation_rate=0.05,
+            liquidity_cols=("amount",),
+            liquidity_notional_multiplier=1_000.0,
+            buy_max_days=3,
+            sell_max_days=5,
+            round_lot=100,
+            enforce_t1=True,
+        )
+        result = simulate_execution_adjusted_nav(
+            positions,
+            pricing,
+            config,
+            price_col="close",
+            tradable_col="amount",
+            transaction_cost_bps=transaction_cost_bps,
+        )
+        summary = result.summary
+        stats = summary.get("stats", {})
+        rows.append(
+            {
+                "rebalance_frequency": frequency,
+                "formation_dates": len(formation_dates),
+                "status": summary.get("status"),
+                "share_ledger_net_annual_return": stats.get("ann_return") * 100
+                if stats.get("ann_return") is not None
+                else None,
+                "share_ledger_net_sharpe": stats.get("sharpe"),
+                "share_ledger_max_drawdown": stats.get("max_drawdown") * 100
+                if stats.get("max_drawdown") is not None
+                else None,
+                "share_ledger_fill_ratio": summary.get("fill_ratio"),
+                "share_ledger_avg_cash_weight": summary.get("avg_cash_weight"),
+                "share_ledger_cumulative_turnover": (
+                    float(summary.get("filled_notional", 0.0)) / initial_capital
+                ),
+                "weight_level_targets": len(execution_targets),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def _period_returns(daily: pd.DataFrame) -> pd.DataFrame:
     periods = {
         "2015-2019": (pd.Timestamp("2015-01-01"), pd.Timestamp("2019-12-31")),
@@ -349,6 +490,7 @@ def _write_report(
     signal_correlations: pd.DataFrame,
     robustness: pd.DataFrame,
     rebalance_matrix: pd.DataFrame,
+    share_ledger_matrix: pd.DataFrame,
     metadata: dict[str, Any],
 ) -> None:
     lines = [
@@ -441,6 +583,22 @@ def _write_report(
             "holdout_annualized_return",
         ]
         lines.append(rebalance_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
+    lines.extend(["", "## Share-ledger execution", ""])
+    if share_ledger_matrix.empty:
+        lines.append("No share-ledger observations.")
+    else:
+        columns = [
+            "rebalance_frequency",
+            "formation_dates",
+            "status",
+            "share_ledger_net_annual_return",
+            "share_ledger_net_sharpe",
+            "share_ledger_max_drawdown",
+            "share_ledger_fill_ratio",
+            "share_ledger_avg_cash_weight",
+            "share_ledger_cumulative_turnover",
+        ]
+        lines.append(share_ledger_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(
         [
             "",
@@ -453,8 +611,9 @@ def _write_report(
             "- Prior-session traded-amount caps alter the fill path and can improve "
             "simulated returns by delaying "
             "trades; this is not evidence of investable alpha.",
-            "- The sensitivity matrix uses prior-session amount and close data, but it "
-            "is not a full share-ledger or broker-fill model.",
+            "- The share-ledger section uses the portfolio-backtester cash-ledger "
+            "execution model with lot rounding, T+1 inventory, and participation caps; "
+            "it is not a broker-fill model.",
             "- Rebalance-frequency variants change only the formation cadence; costs and "
             "participation mechanics are otherwise shared.",
             "- No parameter was selected from final out-of-sample results by this runner.",
@@ -562,6 +721,18 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    share_ledger_matrix = _run_share_ledger_matrix(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        instruments=market_data.instruments,
+        transaction_cost_bps=transaction_cost_bps,
+        target_count=target_count,
+        buffer_count=buffer_count,
+        minimum_listed_days=minimum_listed_days,
+        initial_capital=initial_capital,
+    )
 
     signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
     summary.to_csv(outdir / "candidate_summary.csv", index=False)
@@ -572,6 +743,7 @@ def run_exploration(
     signal_correlations.to_csv(outdir / "candidate_signal_correlations.csv", index=False)
     robustness.to_csv(outdir / "candidate_robustness_matrix.csv", index=False)
     rebalance_matrix.to_csv(outdir / "candidate_rebalance_matrix.csv", index=False)
+    share_ledger_matrix.to_csv(outdir / "candidate_share_ledger_matrix.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -630,6 +802,7 @@ def run_exploration(
         signal_correlations=signal_correlations,
         robustness=robustness,
         rebalance_matrix=rebalance_matrix,
+        share_ledger_matrix=share_ledger_matrix,
         metadata=metadata,
     )
     return outdir
