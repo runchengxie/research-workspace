@@ -135,6 +135,45 @@ def build_lagged_turnover_panel(
     )
 
 
+def build_rebalance_formation_dates(
+    trading_dates: pd.DatetimeIndex,
+    *,
+    frequency: Literal["weekly", "biweekly", "monthly", "quarterly"],
+) -> pd.DatetimeIndex:
+    """Select formation dates from the trading calendar at a rebalance frequency.
+
+    Each frequency picks the final trading session of its period: the week for
+    weekly, every other week for biweekly, the month for monthly, and the
+    quarter for quarterly.  The returned dates are normalized and sorted.
+    """
+    calendar = (
+        pd.DatetimeIndex(trading_dates).normalize().sort_values().unique()  # ty: ignore[unresolved-attribute]
+    )
+    if calendar.empty:
+        raise ValueError("trading_dates is empty")
+    if frequency not in {"weekly", "biweekly", "monthly", "quarterly"}:
+        raise ValueError("frequency must be weekly, biweekly, monthly, or quarterly")
+
+    dates = pd.Series(calendar, index=calendar)
+    if frequency == "monthly":
+        period_key = dates.index.to_period("M")  # ty: ignore[unresolved-attribute]
+    elif frequency == "quarterly":
+        period_key = dates.index.to_period("Q")  # ty: ignore[unresolved-attribute]
+    else:
+        period_key = dates.index.to_period("W")  # ty: ignore[unresolved-attribute]
+    last_of_period = dates.groupby(period_key).last()
+    if frequency == "biweekly":
+        pairs = last_of_period.groupby(np.arange(len(last_of_period)) // 2).last()
+        return (
+            pd.DatetimeIndex(pairs.to_numpy()).normalize().sort_values()  # ty: ignore[unresolved-attribute]
+        )
+    return (
+        pd.DatetimeIndex(last_of_period.to_numpy())
+        .normalize()  # ty: ignore[unresolved-attribute]
+        .sort_values()
+    )
+
+
 def build_trade_capacity_matrix(
     daily_clean: pd.DataFrame,
     returns: pd.DataFrame,

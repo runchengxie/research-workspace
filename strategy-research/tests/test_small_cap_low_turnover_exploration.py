@@ -6,6 +6,7 @@ from pytest import approx, raises
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _period_return_metrics,
+    _run_rebalance_matrix,
     _signal_correlations,
 )
 from style_factors.robustness_execution import (
@@ -17,6 +18,7 @@ from style_factors.small_cap_low_turnover import (
     build_buffered_targets,
     build_candidate_signal_panel,
     build_lagged_turnover_panel,
+    build_rebalance_formation_dates,
     build_trade_capacity_matrix,
     filter_candidate_eligibility,
     map_targets_to_execution_dates,
@@ -271,6 +273,43 @@ def test_lagged_turnover_counts_market_sessions_not_observed_rows() -> None:
     assert np.isnan(panel.loc[0, "turnover_lagged_mean_60d"])
 
 
+def test_rebalance_formation_dates_monthly_selects_month_end_sessions() -> None:
+    dates = pd.bdate_range("2024-01-02", "2024-06-28")
+    result = build_rebalance_formation_dates(dates, frequency="monthly")
+    expected = pd.DatetimeIndex(
+        ["2024-01-31", "2024-02-29", "2024-03-29", "2024-04-30", "2024-05-31", "2024-06-28"]
+    )
+    assert list(result) == list(expected)
+
+
+def test_rebalance_formation_dates_quarterly_selects_quarter_end_sessions() -> None:
+    dates = pd.bdate_range("2024-01-02", "2024-12-31")
+    result = build_rebalance_formation_dates(dates, frequency="quarterly")
+    expected = pd.DatetimeIndex(["2024-03-29", "2024-06-28", "2024-09-30", "2024-12-31"])
+    assert list(result) == list(expected)
+
+
+def test_rebalance_formation_dates_weekly_has_more_dates_than_monthly() -> None:
+    dates = pd.bdate_range("2024-01-02", "2024-12-31")
+    weekly = build_rebalance_formation_dates(dates, frequency="weekly")
+    monthly = build_rebalance_formation_dates(dates, frequency="monthly")
+    biweekly = build_rebalance_formation_dates(dates, frequency="biweekly")
+    assert len(weekly) > len(biweekly) > len(monthly)
+    assert len(monthly) == 12
+
+
+def test_rebalance_formation_dates_rejects_unknown_frequency() -> None:
+    dates = pd.bdate_range("2024-01-02", "2024-01-31")
+    invalid_frequency: str = "daily"
+    with raises(ValueError, match="frequency"):
+        build_rebalance_formation_dates(dates, frequency=invalid_frequency)  # ty: ignore[invalid-argument-type]
+
+
+def test_rebalance_formation_dates_rejects_empty_calendar() -> None:
+    with raises(ValueError, match="empty"):
+        build_rebalance_formation_dates(pd.DatetimeIndex([]), frequency="monthly")
+
+
 def test_trade_capacity_matrix_converts_amount_to_weight_capacity() -> None:
     dates = pd.bdate_range("2024-01-02", periods=3)
     daily = pd.DataFrame(
@@ -492,3 +531,66 @@ def test_candidate_simulation_accepts_precomputed_execution_context() -> None:
     )
 
     assert set(simulations) == {"candidate"}
+
+
+def _synthetic_rebalance_daily() -> pd.DataFrame:
+    dates = pd.bdate_range("2024-01-02", "2024-09-30")
+    symbols = [f"S{index:02d}" for index in range(8)]
+    rows = []
+    for date in dates:
+        for index, symbol in enumerate(symbols):
+            rows.append(
+                {
+                    "trade_date": date,
+                    "symbol": symbol,
+                    "turnover_rate": 1.0 + index * 0.1,
+                    "pct_chg": 0.0,
+                    "amount": 1000.0 + index,
+                    "close": 10.0 + index,
+                    "tr_close": 10.0 + index,
+                    "total_mv": 1e9 + index * 1e8,
+                    "listed_days": 300,
+                    "is_limit_up": False,
+                    "is_limit_down": False,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def test_rebalance_matrix_returns_all_frequencies_with_increasing_dates() -> None:
+    daily = _synthetic_rebalance_daily()
+    symbols = daily["symbol"].unique().tolist()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+
+    matrix = _run_rebalance_matrix(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        instruments=instruments,
+        transaction_cost_bps=10.0,
+        target_count=4,
+        buffer_count=6,
+        minimum_listed_days=0,
+        initial_capital=1_000_000.0,
+        returns=returns,
+        matrices=matrices,
+    )
+
+    expected_frequencies = {"weekly", "biweekly", "monthly", "quarterly"}
+    assert set(matrix["rebalance_frequency"]) == expected_frequencies
+    counts = {
+        row["rebalance_frequency"]: row["formation_dates"]
+        for row in matrix.to_dict(orient="records")
+    }
+    assert counts["weekly"] > counts["biweekly"] > counts["monthly"] > counts["quarterly"]
+    assert all(row["holdout_days"] >= 0 for row in matrix.to_dict(orient="records"))
