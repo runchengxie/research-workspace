@@ -2,16 +2,26 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from pytest import approx
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
+    _period_return_metrics,
     _signal_correlations,
+)
+from style_factors.robustness_execution import (
+    daily_return_matrix,
+    execution_matrices,
+    simulate_leg,
 )
 from style_factors.small_cap_low_turnover import (
     build_buffered_targets,
     build_candidate_signal_panel,
     build_lagged_turnover_panel,
+    build_trade_capacity_matrix,
     filter_candidate_eligibility,
     map_targets_to_execution_dates,
+    round_target_weights_to_lots,
+    simulate_long_only_candidates,
 )
 
 
@@ -191,3 +201,166 @@ def test_target_mapping_uses_the_following_trading_session() -> None:
     )
 
     assert mapped == {execution_date: {"A": 1.0}}
+
+
+def test_lagged_turnover_supports_median_aggregation() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=61)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "turnover_rate": np.arange(1.0, 62.0),
+        }
+    )
+
+    panel = build_lagged_turnover_panel(
+        daily,
+        pd.DatetimeIndex([dates[-1]]),
+        window=60,
+        minimum_observations=60,
+        statistic="median",
+    )
+
+    assert panel.loc[0, "turnover_lagged_median_60d"] == 30.5
+
+
+def test_trade_capacity_matrix_converts_amount_to_weight_capacity() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=2)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "pct_chg": [0.0, 0.0],
+            "amount": [1000.0, 500.0],
+        }
+    )
+    returns = daily_return_matrix(daily)
+
+    capacity = build_trade_capacity_matrix(
+        daily,
+        returns,
+        initial_capital=1_000_000.0,
+        participation_rate=0.10,
+    )
+
+    assert capacity[:, 0].tolist() == [0.1, 0.05]
+
+
+def test_lot_rounding_floors_target_shares() -> None:
+    execution_date: pd.Timestamp = pd.Timestamp("2024-02-01")  # ty: ignore[invalid-assignment]
+    daily = pd.DataFrame(
+        {
+            "trade_date": [execution_date],
+            "symbol": ["A"],
+            "close": [12.34],
+        }
+    )
+
+    rounded = round_target_weights_to_lots(
+        {execution_date: {"A": 0.5}},
+        daily,
+        initial_capital=100_000.0,
+        lot_size=100,
+    )
+
+    assert rounded[execution_date]["A"] == approx(0.4936)
+
+
+def test_simulation_respects_trade_capacity_without_changing_default() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=2)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "pct_chg": [0.0, 0.0],
+            "amount": [1000.0, 1000.0],
+            "is_limit_up": False,
+            "is_limit_down": False,
+        }
+    )
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+    capacity = np.full((len(dates), 1), 0.25)
+
+    simulation = simulate_leg(
+        returns,
+        matrices,
+        {dates[0]: {"A": 1.0}},
+        terminal_events={},
+        side="long",
+        terminal_return=-0.5,
+        max_trade_weight=capacity,
+    )
+
+    assert simulation.traded_notional.iloc[0] == 0.25
+
+
+def test_period_return_metrics_separates_development_and_holdout_windows() -> None:
+    dates = pd.to_datetime(["2023-12-29", "2024-01-02", "2024-01-03"])
+    returns = pd.Series([0.10, 0.20, -0.10], index=dates)
+    holdout_start: pd.Timestamp = pd.Timestamp("2024-01-01")  # ty: ignore[invalid-assignment]
+    holdout_end: pd.Timestamp = pd.Timestamp("2024-12-31")  # ty: ignore[invalid-assignment]
+
+    metrics = _period_return_metrics(
+        returns,
+        start=holdout_start,
+        end=holdout_end,
+    )
+
+    assert metrics["days"] == 2
+    assert metrics["cumulative_return"] == approx(0.08)
+
+
+def test_candidate_simulation_accepts_precomputed_execution_context() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=3)
+    symbols = ["A", "B"]
+    daily = pd.DataFrame(
+        [
+            {
+                "trade_date": date,
+                "symbol": symbol,
+                "pct_chg": 0.0,
+                "amount": 1000.0,
+                "close": 10.0,
+                "listed_days": 200,
+                "is_limit_up": False,
+                "is_limit_down": False,
+            }
+            for date in dates
+            for symbol in symbols
+        ]
+    )
+    signal_panel = pd.DataFrame(
+        [
+            {"trade_date": dates[0], "symbol": "A", "signal": 1.0},
+            {"trade_date": dates[0], "symbol": "B", "signal": 0.0},
+            {"trade_date": dates[1], "symbol": "A", "signal": 0.0},
+            {"trade_date": dates[1], "symbol": "B", "signal": 1.0},
+        ]
+    )
+    universe = signal_panel[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+
+    simulations = simulate_long_only_candidates(
+        signal_panel,
+        daily,
+        universe,
+        st_history,
+        instruments,
+        {"candidate": "signal"},
+        target_count=1,
+        buffer_count=1,
+        minimum_listed_days=0,
+        returns=returns,
+        matrices=matrices,
+    )
+
+    assert set(simulations) == {"candidate"}

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from itertools import pairwise
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import pandas as pd
@@ -57,12 +57,15 @@ def build_lagged_turnover_panel(
     *,
     window: int = 60,
     minimum_observations: int = 45,
+    statistic: Literal["mean", "median"] = "mean",
 ) -> pd.DataFrame:
     """Build turnover lookbacks that exclude the formation day's observation."""
     if window <= 0:
         raise ValueError("window must be positive")
     if not 1 <= minimum_observations <= window:
         raise ValueError("minimum_observations must be between 1 and window")
+    if statistic not in {"mean", "median"}:
+        raise ValueError("statistic must be 'mean' or 'median'")
     _require_columns(
         daily_clean,
         {"trade_date", "symbol", "turnover_rate"},
@@ -77,21 +80,81 @@ def build_lagged_turnover_panel(
     frame["symbol"] = frame["symbol"].astype(str)
     frame["turnover_rate"] = pd.to_numeric(frame["turnover_rate"], errors="coerce")
     frame = frame.sort_values(["symbol", "trade_date"])
-    turnover_column = f"turnover_lagged_mean_{window}d"
+    turnover_column = f"turnover_lagged_{statistic}_{window}d"
     frame[turnover_column] = frame.groupby("symbol", sort=False)["turnover_rate"].transform(
-        lambda values: (
-            values.shift(1)
-            .rolling(
+        lambda values: getattr(
+            values.shift(1).rolling(
                 window,
                 min_periods=minimum_observations,
-            )
-            .mean()
-        )
+            ),
+            statistic,
+        )()
     )
     return frame.loc[
         frame["trade_date"].isin(dates),
         ["trade_date", "symbol", turnover_column],
     ].reset_index(drop=True)
+
+
+def build_trade_capacity_matrix(
+    daily_clean: pd.DataFrame,
+    returns: pd.DataFrame,
+    *,
+    initial_capital: float,
+    participation_rate: float,
+) -> np.ndarray:
+    """Convert daily traded amount into a per-symbol maximum trade weight.
+
+    The clean-data contract stores ``amount`` in thousand CNY.  The matrix is
+    a research approximation that holds capital constant while limiting each
+    symbol's daily traded notional to an ADV participation fraction.
+    """
+    _require_columns(daily_clean, {"trade_date", "symbol", "amount"}, label="daily_clean")
+    if initial_capital <= 0:
+        raise ValueError("initial_capital must be positive")
+    if not 0 <= participation_rate <= 1:
+        raise ValueError("participation_rate must be between 0 and 1")
+    amounts = daily_clean.pivot(
+        index="trade_date",
+        columns="symbol",
+        values="amount",
+    ).reindex(index=returns.index, columns=returns.columns)
+    amounts = amounts.apply(pd.to_numeric, errors="coerce").fillna(0.0)
+    return amounts.to_numpy(dtype=float) * 1_000.0 * participation_rate / initial_capital
+
+
+def round_target_weights_to_lots(
+    targets: dict[pd.Timestamp, dict[str, float]],
+    daily_clean: pd.DataFrame,
+    *,
+    initial_capital: float,
+    lot_size: int = 100,
+) -> dict[pd.Timestamp, dict[str, float]]:
+    """Floor target share counts to the A-share lot size at execution prices."""
+    _require_columns(daily_clean, {"trade_date", "symbol", "close"}, label="daily_clean")
+    if initial_capital <= 0:
+        raise ValueError("initial_capital must be positive")
+    if lot_size <= 0:
+        raise ValueError("lot_size must be positive")
+    prices = daily_clean.pivot(index="trade_date", columns="symbol", values="close")
+    prices = prices.apply(pd.to_numeric, errors="coerce")
+    rounded: dict[pd.Timestamp, dict[str, float]] = {}
+    for date, target in targets.items():
+        execution_date = pd.Timestamp(date).normalize()  # ty: ignore[unresolved-attribute]
+        if execution_date not in prices.index:
+            rounded[execution_date] = {}
+            continue
+        row = prices.loc[execution_date]
+        target_after_rounding: dict[str, float] = {}
+        for symbol, weight in target.items():
+            price = row.get(symbol, np.nan)
+            if not np.isfinite(price) or price <= 0 or weight <= 0:
+                continue
+            shares = np.floor(initial_capital * weight / (price * lot_size)) * lot_size
+            if shares > 0:
+                target_after_rounding[str(symbol)] = float(shares * price / initial_capital)
+        rounded[execution_date] = target_after_rounding
+    return rounded
 
 
 def build_candidate_signal_panel(
@@ -379,10 +442,23 @@ def simulate_long_only_candidates(
     buffer_count: int = 60,
     minimum_listed_days: int = 180,
     terminal_return: float = -0.50,
+    initial_capital: float | None = None,
+    lot_size: int | None = None,
+    participation_rate: float | None = None,
+    returns: pd.DataFrame | None = None,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray] | None = None,
 ) -> dict[str, LongOnlySimulation]:
     """Run constrained long-only candidates using the shared execution engine."""
     candidates = candidates or dict(SIGNAL_COLUMNS)
     _require_columns(instruments, {"symbol", "delist_date"}, label="instruments")
+    if lot_size is not None and initial_capital is None:
+        raise ValueError("initial_capital is required when lot_size is supplied")
+    if participation_rate is not None and initial_capital is None:
+        raise ValueError("initial_capital is required when participation_rate is supplied")
+    if initial_capital is not None and initial_capital <= 0:
+        raise ValueError("initial_capital must be positive")
+    if (returns is None) != (matrices is None):
+        raise ValueError("returns and matrices must be supplied together")
     eligible = filter_candidate_eligibility(
         signal_panel,
         universe,
@@ -391,10 +467,25 @@ def simulate_long_only_candidates(
         minimum_listed_days=minimum_listed_days,
     )
     formation_dates = pd.DatetimeIndex(sorted(eligible["trade_date"].unique())).normalize()  # ty: ignore[unresolved-attribute]
-    returns = daily_return_matrix(daily_clean)
-    trading_dates = pd.DatetimeIndex(returns.index).normalize()  # ty: ignore[unresolved-attribute]
-    matrices = execution_matrices(daily_clean, returns)
-    symbol_positions = {str(symbol): index for index, symbol in enumerate(returns.columns)}
+    if returns is None:
+        return_matrix = daily_return_matrix(daily_clean)
+        matrix_tuple = execution_matrices(daily_clean, return_matrix)
+    else:
+        assert matrices is not None
+        return_matrix = returns
+        matrix_tuple = matrices
+    trading_dates = pd.DatetimeIndex(return_matrix.index).normalize()  # ty: ignore[unresolved-attribute]
+    capacity_matrix = (
+        build_trade_capacity_matrix(
+            daily_clean,
+            return_matrix,
+            initial_capital=initial_capital,
+            participation_rate=participation_rate,
+        )
+        if participation_rate is not None and initial_capital is not None
+        else None
+    )
+    symbol_positions = {str(symbol): index for index, symbol in enumerate(return_matrix.columns)}
     terminal_events = terminal_event_positions(instruments, trading_dates, symbol_positions)
     active_dates = _active_dates(formation_dates, trading_dates)
     simulations: dict[str, LongOnlySimulation] = {}
@@ -408,15 +499,23 @@ def simulate_long_only_candidates(
             buffer_count=buffer_count,
         )
         execution_targets = map_targets_to_execution_dates(formation_targets, trading_dates)
+        if lot_size is not None and initial_capital is not None:
+            execution_targets = round_target_weights_to_lots(
+                execution_targets,
+                daily_clean,
+                initial_capital=initial_capital,
+                lot_size=lot_size,
+            )
         if not execution_targets:
             continue
         leg = simulate_leg(
-            returns,
-            matrices,
+            return_matrix,
+            matrix_tuple,
             execution_targets,
             terminal_events,
             side="long",
             terminal_return=terminal_return,
+            max_trade_weight=capacity_matrix,
         )
         simulations[name] = LongOnlySimulation(
             name=name,

@@ -86,6 +86,7 @@ def attempt_pending_orders(
     limit_up: np.ndarray,
     limit_down: np.ndarray,
     side: str,
+    max_trade_weight: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray, float, bool, bool]:
     """Attempt one day's pending orders under suspension and limit constraints."""
     before = weights.copy()
@@ -93,13 +94,26 @@ def attempt_pending_orders(
     increasing = pending & (target > weights + 1e-12)
     exit_allowed = tradable & ~(limit_down if side == "long" else limit_up)
     entry_allowed = tradable & ~(limit_up if side == "long" else limit_down)
+    trade_limit = (
+        np.full(weights.shape, np.inf, dtype=float)
+        if max_trade_weight is None
+        else np.asarray(max_trade_weight, dtype=float)
+    )
 
     executable_decreases = decreasing & exit_allowed
-    weights[executable_decreases] = target[executable_decreases]
-    pending[executable_decreases] = False
+    decreases = (
+        np.minimum(
+            np.maximum(weights - target, 0.0),
+            trade_limit,
+        )
+        * executable_decreases
+    )
+    weights -= decreases
+    pending[executable_decreases & (np.abs(target - weights) <= 1e-12)] = False
 
     executable_increases = increasing & entry_allowed
     desired = np.maximum(target - weights, 0.0) * executable_increases
+    desired = np.minimum(desired, trade_limit)
     desired_total = float(desired.sum())
     capacity = max(0.0, 1.0 - float(weights.sum()))
     scale = min(1.0, capacity / desired_total) if desired_total > 0 else 0.0
@@ -123,6 +137,7 @@ def simulate_leg(
     *,
     side: str,
     terminal_return: float,
+    max_trade_weight: np.ndarray | None = None,
 ) -> LegSimulation:
     """Simulate one long-only leg with causal close execution."""
     symbols = returns.columns
@@ -137,6 +152,11 @@ def simulate_leg(
     terminal_events_applied = 0
 
     tradable_matrix, limit_up_matrix, limit_down_matrix = matrices
+    if max_trade_weight is not None:
+        if max_trade_weight.shape != returns.shape:
+            raise ValueError("max_trade_weight must have the same shape as returns")
+        if np.any(max_trade_weight < 0):
+            raise ValueError("max_trade_weight must be non-negative")
     for row_number, (date, row) in enumerate(
         zip(returns.index, returns.to_numpy(dtype=float), strict=True)
     ):
@@ -177,6 +197,9 @@ def simulate_leg(
                 limit_up=limit_up_matrix[row_number],
                 limit_down=limit_down_matrix[row_number],
                 side=side,
+                max_trade_weight=(
+                    max_trade_weight[row_number] if max_trade_weight is not None else None
+                ),
             )
             blocked_entry_days += int(blocked_entry)
             blocked_exit_days += int(blocked_exit)

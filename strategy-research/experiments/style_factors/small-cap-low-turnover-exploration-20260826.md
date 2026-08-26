@@ -17,6 +17,8 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Cost case: 10 bps per unit of simulated traded notional.
 - Eligibility: minimum 180 listed days, non-ST, non-suspended, and present in the formation universe.
 - Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, raw 50/50 composite, residualized 50/50 composite, large-cap control, and low-volatility control.
+- Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% ADV participation cases.
+- Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
 ## Full-period result
 
@@ -52,6 +54,19 @@ The raw composite net returns were approximately:
 
 The positive full-period result is therefore not uniform across regimes.
 
+## Robustness matrix
+
+The table below shows the unconstrained and 5% ADV cases. The 10% and 20% cases are in `candidate_robustness_matrix.csv`.
+
+| turnover definition | unconstrained net | 5% ADV net | unconstrained holdout | 5% ADV holdout | turnover |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| mean 20-day | +10.83% | +14.47% | +23.76% | +26.45% | 8.04x |
+| mean 60-day | +8.89% | +11.14% | +17.21% | +18.03% | 5.80x |
+| median 60-day | +9.00% | +11.30% | +17.79% | +19.39% | 5.76x |
+| mean 120-day | +12.73% | +14.65% | +24.86% | +26.47% | 4.87x |
+
+The ADV caps did not monotonically reduce returns. In this simulator they change the order-fill path: delayed entries and exits can avoid some losing trades. That is an execution-path sensitivity, not evidence that greater constraints create investable alpha.
+
 ## Evidence files
 
 The runner is:
@@ -74,6 +89,8 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 ## Remaining limitations
 
 - The simulator uses continuous portfolio weights and does not round to the A-share 100-share lot size.
+- The sensitivity cases round target entry weights to 100-share lots, but the daily weight-accounting engine is not a full share-ledger simulator.
+- ADV participation uses constant research capital and per-symbol static weight caps; it does not model market impact, portfolio cash evolution, or broker fills.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
 - The experiment does not yet include capacity limits, ADV participation limits, or a live paper-trading observation period.
@@ -81,4 +98,4 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 
 ## Recommended next step
 
-Do not promote this composite yet. The next research step should be a pre-registered robustness matrix: alternative turnover windows and medians, explicit liquidity/ADV participation caps, integer-lot rounding, and a walk-forward holdout. The decision criterion should be incremental net performance versus the large-cap control after these constraints, not the raw full-period return.
+Do not promote this composite yet. The next research step should replace the weight-level approximation with a share-ledger/backtest that models cash, lot rounding, T+1 inventory, ADV participation, and slippage. The decision criterion should be incremental net performance versus the large-cap control after those constraints, not the raw full-period return.
