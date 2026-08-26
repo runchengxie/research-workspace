@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace、strategy-research
-> last_verified: 2026-08-18
+> last_verified: 2026-08-26
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -22,7 +22,7 @@
 最关键的假设是什么、什么观测一出现就必须推翻判断。
 
 本页要补齐的就是这一层。它是决策线索，不是新的知识库或文档层级。不改变现有架构，
-只在 `strategy-research` 增加机器可检查的判断对象。
+只在 `strategy-research` 增加机器可检查的判断与反例对象。
 
 ## 设计目标
 
@@ -31,6 +31,7 @@
 3. 缺数据时显式放弃判断，禁止用模型补全叙事。
 4. 判断的评审由独立视角完成，最终由人类裁决。
 5. 每个判断都可以追溯到问题、实验、证据和生命周期。
+6. 主动寻找最能伤害判断的反例，并把压力前后同口径结果纳入决策线索。
 
 ## 概念映射
 
@@ -39,7 +40,8 @@
 | `research_spec.json` | 这次实验到底做了什么 |
 | `evidence_policy.json` 与证据门禁 | 该信什么，证据是否通过强制检查 |
 | `catalog.json` | 策略处于哪个生命周期 |
-| 本页定义的判断对象 | 为什么可以信这个判断，什么出现就推翻它 |
+| `claim.v1` | 为什么可以信这个判断，什么出现就推翻它 |
+| `counterexample.v1` | 哪种压力条件最能削弱这个判断，证据在哪里 |
 
 ## 待采用项目
 
@@ -86,8 +88,8 @@ strategy-research/cases/
 ```
 
 `case.json` 只做导航，字段包括 `question`、`as_of`、`research_specs`、`claims`、
-`evidence_bundles`、`reviews`、`known_gaps`、`abstentions` 与 `decision`。`decision` 状态
-为 `no_view`、`provisional`、`accepted`、`rejected` 之一，并记录 `thesis`。
+`counterexamples`、`evidence_bundles`、`reviews`、`known_gaps`、`abstentions` 与 `decision`。
+`decision` 状态为 `no_view`、`provisional`、`accepted`、`rejected` 之一，并记录 `thesis`。
 
 schema 文件在 `strategy-research/schemas/research_case.v1.schema.json`，校验脚本为
 `scripts/decision_governance_check.py`，案例目录为 `strategy-research/cases/`。
@@ -108,6 +110,8 @@ research_spec
 证据包
   ↓
 判断账本
+  ↓
+反例 / 压力证据
   ↓
 对抗评审
   ↓
@@ -180,16 +184,39 @@ prompt、不共享对方输出、必要时不同输入切片与确定性检查�
 稳定实体标识。不把关系图塞进 `research-workspace`，避免本仓同时承担数据平台、知识库与
 产业链数据库的职责。
 
+### DG8 反例驱动稳健性
+
+增加 `counterexample.v1`，把 C&CG 式“候选 → 找最危险场景 → 加入问题 → 重新判断”的研究思想
+落到证据治理，而不是假装本工作区已经实现数学规划里的 C&CG 求解器。
+
+每条 counterexample 必须：
+
+- 指向已有 `claim_id`；
+- 记录 `scenario_type` 与至少一个 `stress_dimension`；
+- 给出压力前后的同名 metrics，禁止跨口径比较；
+- 明确 `failure_conditions`；
+- 引用真实 `evidence_refs`；
+- 记录 `severity` 与处理 `status`。
+
+支持的压力类型包括时间窗口、市场状态、成本、流动性、容量、暴露、信号扰动、相关性和
+预注册 custom 场景。计算仍由各职责仓完成，本对象只负责证据导航和决策线索。
+
+schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录目录为
+`strategy-research/counterexamples/`，案例通过可选 `counterexamples` 字段引用。
+详细约束见 `strategy-research/counterexamples/README.md`。
+
 ## 不建议采用
 
 - 把项目目录改造成 raw、wiki、output、rules 四层结构，现有职责拆分已经更成熟
 - 简单来源等级排序，官方公告一定高于路演纪要与网络媒体的假设不成立
 - 多个同模型 Agent 互评互信，同模型共享盲点，不构成独立评审
 - 合成单一置信度总分，容易制造伪精确性
+- 把普通 scenario stress test 宣称成 C&CG / DRO；算法名需要对应真实数学模型与求解过程
 
 ## 与现有文档的关系
 
 - `research-spec.md` 负责实验说明书格式，本页不重复
 - `strategy-evidence-gate.md` 负责证据门禁，本页不改变强制证据集合
 - `strategy-research/README.md` 负责策略身份与生命周期，判断账本只补充认识论身份
+- `strategy-research/counterexamples/README.md` 负责反例记录的具体字段与工作流
 - 观察类工具只作查看层，不作为事实来源，事实来源仍是无障碍 JSON、YAML、Git 与哈希

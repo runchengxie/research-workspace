@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "research_case.v1",
   "title": "research case v1",
-  "description": "研究案例决策记录。case.json 只做导航，把研究问题、实验、证据、判断、评审与决策串成完整线索。",
+  "description": "研究案例决策记录。case.json 只做导航，把研究问题、实验、证据、判断、反例、评审与决策串成完整线索。",
   "type": "object",
   "required": [
     "schema_version",
@@ -36,6 +36,14 @@
     },
     "claims": {
       "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]*$"
+      }
+    },
+    "counterexamples": {
+      "type": "array",
+      "description": "DG8 反例记录 ID；文件位于 strategy-research/counterexamples/<id>.json。",
       "items": {
         "type": "string",
         "pattern": "^[a-z0-9][a-z0-9._-]*$"
