@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-25",
+  "_last_changed": "2026-08-26",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -13,7 +13,7 @@
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 41,
+        "max_large_files": 42,
         "max_long_functions": 80,
         "max_complexity_hotspots": 42,
         "max_large_classes": 1
@@ -82,7 +82,7 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 41,
+      "max_large_files": 42,
       "max_long_functions": 81,
       "max_complexity_hotspots": 42,
       "max_large_classes": 1,
@@ -100,7 +100,8 @@
         "2026-08-10: gitlink 同步至 dependabot 合并后的 mdp main，基线重算后 large_files 41->40（ratchet 下调，非回归）。",
         "2026-08-17: strict-v3 增加有界稀疏 rank 证据校验与回归覆盖，large_files 40->41、long_functions 76->77。owner PR #42/#43 的完整门禁和内部 ratchet 均通过。",
         "2026-08-18: D1 多 dataset 发布工具（mdp #46）与 B1 公开 API（#44）合并后重算基线，long_functions 77->80、complexity_hotspots 40->42（真实新增，owner PR 门禁通过）。",
-        "2026-08-25: 刷新顶层 maintainability baseline 对齐当前 main/gitlink 与本轮边界收口后的真实测量，long_functions 80->81。新增值用于纠正陈旧账本，后续继续按实测棘轮约束。"
+        "2026-08-25: 刷新顶层 maintainability baseline 对齐当前 main/gitlink 与本轮边界收口后的真实测量，long_functions 80->81。新增值用于纠正陈旧账本，后续继续按实测棘轮约束。",
+        "2026-08-26: public_etf_minute.py（758 行）随公共源 ETF 分钟资产合并进入 large_files；已登记路线记录，large_files 41->42。该资产保持独立于 canonical minute_1m。"
       ]
     },
     {
@@ -295,6 +296,18 @@
       "non_goals": "do not change coverage policy, promotion workflow, or audit contract",
       "resolved": true,
       "resolved_note": "2026-07-27: split into four functional-domain submodules (_coverage_common/_coverage_classify/_coverage_manifest/_coverage_materialize) with a_share_minute_coverage.py reduced to a thin re-export shell; __all__ preserved so callers and tests are unchanged. Pure physical relocation, public API and runtime behavior unchanged. market-data-platform commit 262b403."
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/public_etf_minute.py",
+      "owner_repo": "market-data-platform",
+      "risk": "medium",
+      "first_safe_extraction": "workflow_orchestration_separation",
+      "target_layout": "providers/public_etf_minute/{sources.py,normalization.py,storage.py,receipts.py}",
+      "focused_tests": [
+        "market-data-platform/tests/test_public_etf_minute.py",
+        "market-data-platform/tests/test_cli_data_public_etf_minute.py"
+      ],
+      "non_goals": "do not merge the ETF asset into canonical minute_1m or change source fallback semantics"
     }
   ],
   "accepted_hotspots": [
