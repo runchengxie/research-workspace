@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 133,
-      "python_loc": 26808,
+      "python_loc": 26889,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -22,7 +22,7 @@
       "large_files": [
         {
           "path": "strategy-research/style_factors/small_cap_low_turnover.py",
-          "loc": 637,
+          "loc": 657,
           "hk_related": false
         },
         {
