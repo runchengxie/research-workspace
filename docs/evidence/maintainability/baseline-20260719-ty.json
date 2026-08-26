@@ -189,7 +189,7 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 308,
-      "python_loc": 92083,
+      "python_loc": 92310,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 42,
@@ -244,6 +244,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/public_etf_minute.py",
+          "loc": 877,
+          "hk_related": false
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
           "loc": 873,
           "hk_related": false
@@ -256,11 +261,6 @@
         {
           "path": "scripts/operations/detach_a_share_minute_v3.py",
           "loc": 837,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/providers/public_etf_minute.py",
-          "loc": 758,
           "hk_related": false
         },
         {
