@@ -14,6 +14,7 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Ranking: sector-neutral cross-sectional scores.
 - Portfolio: long-only, equal weight, 40-name target, 60-name holding buffer.
 - Execution: target changes on the next trading session; shared suspension, price-limit, delisting, and transaction-cost mechanics.
+- Sensitivity execution inputs: prior-session close for lot sizing and prior observed traded amount for ADV caps.
 - Cost case: 10 bps per unit of simulated traded notional.
 - Eligibility: minimum 180 listed days, non-ST, non-suspended, and present in the formation universe.
 - Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, raw 50/50 composite, residualized 50/50 composite, large-cap control, and low-volatility control.
@@ -60,10 +61,10 @@ The table below shows the unconstrained and 5% ADV cases. The 10% and 20% cases 
 
 | turnover definition | unconstrained net | 5% ADV net | unconstrained holdout | 5% ADV holdout | turnover |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| mean 20-day | +10.83% | +14.47% | +23.76% | +26.45% | 8.04x |
-| mean 60-day | +8.89% | +11.14% | +17.21% | +18.03% | 5.80x |
-| median 60-day | +9.00% | +11.30% | +17.79% | +19.39% | 5.76x |
-| mean 120-day | +12.73% | +14.65% | +24.86% | +26.47% | 4.87x |
+| mean 20-day | +10.83% | +14.00% | +23.76% | +25.51% | 8.04x |
+| mean 60-day | +8.89% | +10.98% | +17.21% | +18.21% | 5.80x |
+| median 60-day | +9.00% | +11.00% | +17.79% | +19.09% | 5.76x |
+| mean 120-day | +12.73% | +14.60% | +24.86% | +26.38% | 4.87x |
 
 The ADV caps did not monotonically reduce returns. In this simulator they change the order-fill path: delayed entries and exits can avoid some losing trades. That is an execution-path sensitivity, not evidence that greater constraints create investable alpha.
 
@@ -81,6 +82,7 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_regime_returns.csv`
 - `candidate_signal_correlations.csv`
 - `candidate_net_correlations.csv`
+- `candidate_robustness_matrix.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
 - `small_cap_low_turnover_exploration.md`
@@ -88,12 +90,11 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 
 ## Remaining limitations
 
-- The simulator uses continuous portfolio weights and does not round to the A-share 100-share lot size.
-- The sensitivity cases round target entry weights to 100-share lots, but the daily weight-accounting engine is not a full share-ledger simulator.
-- ADV participation uses constant research capital and per-symbol static weight caps; it does not model market impact, portfolio cash evolution, or broker fills.
+- The baseline simulator uses continuous portfolio weights. The sensitivity cases round target entry weights to 100-share lots using the prior close, but the daily weight-accounting engine is not a full share-ledger simulator.
+- ADV participation uses prior observed traded amount, constant research capital, and per-symbol static weight caps; it does not model market impact, portfolio cash evolution, or broker fills.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
-- The experiment does not yet include capacity limits, ADV participation limits, or a live paper-trading observation period.
+- The experiment does not yet include dynamic capacity, broker-specific fills, or a live paper-trading observation period.
 - No final-OOS parameter selection, strategy registration, or E2 audit was performed.
 
 ## Recommended next step

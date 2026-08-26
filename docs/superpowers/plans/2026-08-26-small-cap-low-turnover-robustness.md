@@ -15,7 +15,7 @@
 - Keep this as `exploration_only`; do not modify `strategy-research/catalog.json` or production configuration.
 - Preserve the default behavior of `simulate_leg` and all existing robustness callers.
 - Use 100-share A-share lot rounding and report continuous-weight limitations explicitly.
-- Use 5%, 10%, and 20% of daily traded amount as ADV participation sensitivities.
+- Use 5%, 10%, and 20% of prior observed traded amount as ADV participation sensitivities.
 - Use lagged turnover only; never include the formation session in the lookback.
 - Do not select a parameter using the 2024–2026 holdout.
 

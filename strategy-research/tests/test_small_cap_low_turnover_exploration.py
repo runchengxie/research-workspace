@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from pytest import approx
+from pytest import approx, raises
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _period_return_metrics,
@@ -225,13 +225,13 @@ def test_lagged_turnover_supports_median_aggregation() -> None:
 
 
 def test_trade_capacity_matrix_converts_amount_to_weight_capacity() -> None:
-    dates = pd.bdate_range("2024-01-02", periods=2)
+    dates = pd.bdate_range("2024-01-02", periods=3)
     daily = pd.DataFrame(
         {
             "trade_date": dates,
             "symbol": "A",
-            "pct_chg": [0.0, 0.0],
-            "amount": [1000.0, 500.0],
+            "pct_chg": [0.0, 0.0, 0.0],
+            "amount": [1000.0, 500.0, 250.0],
         }
     )
     returns = daily_return_matrix(daily)
@@ -243,16 +243,39 @@ def test_trade_capacity_matrix_converts_amount_to_weight_capacity() -> None:
         participation_rate=0.10,
     )
 
-    assert capacity[:, 0].tolist() == [0.1, 0.05]
+    assert capacity[:, 0].tolist() == [0.0, 0.1, 0.05]
+
+
+def test_trade_capacity_matrix_supports_zero_capacity_rows() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=2)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "pct_chg": [0.0, 0.0],
+            "amount": [100.0, 100.0],
+        }
+    )
+    returns = daily_return_matrix(daily)
+
+    capacity = build_trade_capacity_matrix(
+        daily,
+        returns,
+        initial_capital=1_000_000.0,
+        participation_rate=0.0,
+    )
+
+    assert capacity.tolist() == [[0.0], [0.0]]
 
 
 def test_lot_rounding_floors_target_shares() -> None:
+    prior_date: pd.Timestamp = pd.Timestamp("2024-01-31")  # ty: ignore[invalid-assignment]
     execution_date: pd.Timestamp = pd.Timestamp("2024-02-01")  # ty: ignore[invalid-assignment]
     daily = pd.DataFrame(
         {
-            "trade_date": [execution_date],
-            "symbol": ["A"],
-            "close": [12.34],
+            "trade_date": [prior_date, execution_date],
+            "symbol": ["A", "A"],
+            "close": [12.34, 99.99],
         }
     )
 
@@ -291,8 +314,44 @@ def test_simulation_respects_trade_capacity_without_changing_default() -> None:
         terminal_return=-0.5,
         max_trade_weight=capacity,
     )
+    uncapped = simulate_leg(
+        returns,
+        matrices,
+        {dates[0]: {"A": 1.0}},
+        terminal_events={},
+        side="long",
+        terminal_return=-0.5,
+    )
 
     assert simulation.traded_notional.iloc[0] == 0.25
+    assert uncapped.traded_notional.iloc[0] == 1.0
+
+
+def test_simulation_rejects_nonfinite_trade_capacity() -> None:
+    dates = pd.bdate_range("2024-01-02", periods=1)
+    daily = pd.DataFrame(
+        {
+            "trade_date": dates,
+            "symbol": "A",
+            "pct_chg": [0.0],
+            "amount": [1000.0],
+            "is_limit_up": False,
+            "is_limit_down": False,
+        }
+    )
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+
+    with raises(ValueError, match="finite"):
+        simulate_leg(
+            returns,
+            matrices,
+            {dates[0]: {"A": 1.0}},
+            terminal_events={},
+            side="long",
+            terminal_return=-0.5,
+            max_trade_weight=np.array([[np.nan]]),
+        )
 
 
 def test_period_return_metrics_separates_development_and_holdout_windows() -> None:

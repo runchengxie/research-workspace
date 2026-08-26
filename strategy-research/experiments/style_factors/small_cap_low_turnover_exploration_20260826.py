@@ -216,6 +216,8 @@ def _run_robustness_matrix(
                     "participation_case": participation_case,
                     "participation_rate": participation_rate,
                     "lot_size": 100,
+                    "development_period": "2015-01-01 to 2023-12-31",
+                    "holdout_period": "2024-01-01 to 2026-12-31",
                     "development_cumulative_return": development["cumulative_return"],
                     "development_annualized_return": development["annualized_return"] * 100,
                     "development_days": development["days"],
@@ -280,9 +282,12 @@ def _write_report(
         "- Target changes are submitted on the next trading session, so the "
         "formation-day return is not captured by the new holdings.",
         "- Weights are continuous research weights; integer-lot rounding is a "
-        "remaining implementation limitation.",
+        "remaining limitation for the baseline arm; sensitivity cases round "
+        "target entries using the prior close.",
         "- Sensitivity cases use configurable research capital; the current run uses "
         "100m CNY and 100-share lot rounding.",
+        "- Sensitivity ADV caps use the prior observed session's traded amount; "
+        "they remain static-capacity research approximations.",
         "",
         "## Candidate comparison",
         "",
@@ -343,6 +348,8 @@ def _write_report(
             "live execution assumptions are independently reviewed.",
             "- ADV caps alter the fill path and can improve simulated returns by delaying "
             "trades; this is not evidence of investable alpha.",
+            "- The sensitivity matrix uses prior-session amount and close data, but it "
+            "is not a full share-ledger or broker-fill model.",
             "- No parameter was selected from final out-of-sample results by this runner.",
             "",
             f"Metadata: `{metadata['metadata_file']}`.",
@@ -359,7 +366,7 @@ def run_exploration(
     data_root: Path,
     outdir: Path,
     start_date: str = "2015-01-01",
-    end_date: str | None = None,
+    end_date: str | None = "2026-07-31",
     transaction_cost_bps: float = 10.0,
     minimum_listed_days: int = 180,
     target_count: int = 40,
@@ -481,7 +488,9 @@ def run_exploration(
             "next trading session target execution",
             "suspension and price-limit blocking",
             "known delisting terminal return",
-            "continuous weight accounting; integer lots not modeled",
+            "baseline continuous weight accounting",
+            "sensitivity target entries rounded to lots using prior close",
+            "sensitivity ADV caps use prior observed traded amount",
         ],
         "metadata_file": str(outdir / "exploration_meta.json"),
     }
@@ -503,7 +512,7 @@ def main() -> None:
     parser.add_argument("--data-root", required=True)
     parser.add_argument("--outdir", required=True)
     parser.add_argument("--start-date", default="2015-01-01")
-    parser.add_argument("--end-date")
+    parser.add_argument("--end-date", default="2026-07-31")
     parser.add_argument("--transaction-cost-bps", type=float, default=10.0)
     parser.add_argument("--minimum-listed-days", type=int, default=180)
     parser.add_argument("--target-count", type=int, default=40)

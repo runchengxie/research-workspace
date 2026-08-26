@@ -99,6 +99,12 @@ def attempt_pending_orders(
         if max_trade_weight is None
         else np.asarray(max_trade_weight, dtype=float)
     )
+    if trade_limit.shape != weights.shape:
+        raise ValueError("max_trade_weight must have the same shape as weights")
+    if not np.all(np.isfinite(trade_limit)) and max_trade_weight is not None:
+        raise ValueError("max_trade_weight must contain only finite values")
+    if np.any(trade_limit < 0):
+        raise ValueError("max_trade_weight must be non-negative")
 
     executable_decreases = decreasing & exit_allowed
     decreases = (
@@ -153,8 +159,11 @@ def simulate_leg(
 
     tradable_matrix, limit_up_matrix, limit_down_matrix = matrices
     if max_trade_weight is not None:
+        max_trade_weight = np.asarray(max_trade_weight, dtype=float)
         if max_trade_weight.shape != returns.shape:
             raise ValueError("max_trade_weight must have the same shape as returns")
+        if not np.all(np.isfinite(max_trade_weight)):
+            raise ValueError("max_trade_weight must contain only finite values")
         if np.any(max_trade_weight < 0):
             raise ValueError("max_trade_weight must be non-negative")
     for row_number, (date, row) in enumerate(

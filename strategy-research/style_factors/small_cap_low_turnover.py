@@ -106,18 +106,25 @@ def build_trade_capacity_matrix(
     """Convert daily traded amount into a per-symbol maximum trade weight.
 
     The clean-data contract stores ``amount`` in thousand CNY.  The matrix is
-    a research approximation that holds capital constant while limiting each
-    symbol's daily traded notional to an ADV participation fraction.
+    a research approximation that uses each symbol's prior observed amount,
+    holds capital constant, and limits daily traded notional to an ADV
+    participation fraction.
     """
     _require_columns(daily_clean, {"trade_date", "symbol", "amount"}, label="daily_clean")
     if initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
     if not 0 <= participation_rate <= 1:
         raise ValueError("participation_rate must be between 0 and 1")
-    amounts = daily_clean.pivot(
+    amount_frame = daily_clean[["trade_date", "symbol", "amount"]].copy()
+    amount_frame["trade_date"] = pd.to_datetime(amount_frame["trade_date"]).dt.normalize()
+    amount_frame["symbol"] = amount_frame["symbol"].astype(str)
+    amount_frame["amount"] = pd.to_numeric(amount_frame["amount"], errors="coerce")
+    amount_frame = amount_frame.sort_values(["symbol", "trade_date"])
+    amount_frame["available_amount"] = amount_frame.groupby("symbol", sort=False)["amount"].shift(1)
+    amounts = amount_frame.pivot(
         index="trade_date",
         columns="symbol",
-        values="amount",
+        values="available_amount",
     ).reindex(index=returns.index, columns=returns.columns)
     amounts = amounts.apply(pd.to_numeric, errors="coerce").fillna(0.0)
     return amounts.to_numpy(dtype=float) * 1_000.0 * participation_rate / initial_capital
@@ -130,14 +137,23 @@ def round_target_weights_to_lots(
     initial_capital: float,
     lot_size: int = 100,
 ) -> dict[pd.Timestamp, dict[str, float]]:
-    """Floor target share counts to the A-share lot size at execution prices."""
+    """Floor target share counts using the prior close and A-share lot size."""
     _require_columns(daily_clean, {"trade_date", "symbol", "close"}, label="daily_clean")
     if initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
     if lot_size <= 0:
         raise ValueError("lot_size must be positive")
-    prices = daily_clean.pivot(index="trade_date", columns="symbol", values="close")
-    prices = prices.apply(pd.to_numeric, errors="coerce")
+    price_frame = daily_clean[["trade_date", "symbol", "close"]].copy()
+    price_frame["trade_date"] = pd.to_datetime(price_frame["trade_date"]).dt.normalize()
+    price_frame["symbol"] = price_frame["symbol"].astype(str)
+    price_frame["close"] = pd.to_numeric(price_frame["close"], errors="coerce")
+    price_frame = price_frame.sort_values(["symbol", "trade_date"])
+    price_frame["available_close"] = price_frame.groupby("symbol", sort=False)["close"].shift(1)
+    prices = price_frame.pivot(
+        index="trade_date",
+        columns="symbol",
+        values="available_close",
+    ).apply(pd.to_numeric, errors="coerce")
     rounded: dict[pd.Timestamp, dict[str, float]] = {}
     for date, target in targets.items():
         execution_date = pd.Timestamp(date).normalize()  # ty: ignore[unresolved-attribute]
