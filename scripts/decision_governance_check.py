@@ -4,12 +4,15 @@
 DG1 判断账本使用 ``claim.v1``，每个 claim 是机器可检查的判断对象。DG2 研究案例在
 ``strategy-research/cases/<案例id>/`` 下使用 ``research_case.v1`` 的 ``case.json``
 做导航，配 ``decision.md`` 与 ``reviews/logic.json``、``reviews/evidence.json``。
+DG8 使用 ``counterexample.v1`` 把能明显削弱或推翻 claim 的压力情景提升为一等证据导航对象。
 
 校验内容：
 
 - 判断账本目录下每个 ``*.json`` 文件符合 ``claim.v1`` 字段与取值约束。
 - 每个案例目录的 ``case.json`` 符合 ``research_case.v1``，且引用的 claims、
-  research_specs、reviews 文件真实存在。
+  counterexamples、research_specs、reviews 文件真实存在。
+- 反例目录下每个 ``*.json`` 文件符合 ``counterexample.v1``，引用已有 claim，
+  压力前后 metric 可比较，证据引用非空。
 - 禁止证据缺失时用综合来看等叙事填补结论（DG4）：no_view 必须有 abstentions，known_gaps
   非空时 decision.status 不得为 accepted。
 - DG5：每个 case 的 reviews 必须同时含 logic 与 evidence 两种 kind（双评审）。
@@ -24,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from dataclasses import dataclass, field
@@ -34,9 +38,11 @@ ROOT = Path(__file__).resolve().parents[1]
 CASE_ROOT = ROOT / "strategy-research" / "cases"
 CLAIM_ROOT = ROOT / "strategy-research" / "judgment-ledger"
 SOURCE_ROOT = ROOT / "strategy-research" / "sources"
+COUNTEREXAMPLE_ROOT = ROOT / "strategy-research" / "counterexamples"
 CLAIM_SCHEMA_VERSION = "claim.v1"
 CASE_SCHEMA_VERSION = "research_case.v1"
 SOURCE_SCHEMA_VERSION = "source.v1"
+COUNTEREXAMPLE_SCHEMA_VERSION = "counterexample.v1"
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 CLAIM_TYPES = {"hypothesis", "fact", "estimate", "inference"}
@@ -47,6 +53,19 @@ SOURCE_DIRECTNESS = {"primary", "secondary", "tertiary"}
 SOURCE_VERIFIABILITY = {"independently_verified", "single_source", "unverifiable"}
 REVIEW_KINDS = {"logic", "evidence"}
 REVIEW_STATUSES = {"completed", "in_progress", "pending"}
+COUNTEREXAMPLE_SCENARIO_TYPES = {
+    "time_window",
+    "market_regime",
+    "cost",
+    "liquidity",
+    "capacity",
+    "exposure",
+    "signal_perturbation",
+    "correlation",
+    "custom",
+}
+COUNTEREXAMPLE_STATUSES = {"open", "confirmed", "resolved", "superseded"}
+COUNTEREXAMPLE_SEVERITIES = {"minor", "material", "critical"}
 
 
 @dataclass(frozen=True)
@@ -110,6 +129,33 @@ def _objects_list(
             field_value = item.get(field_name)
             if field_name in item and not isinstance(field_value, str):
                 issues.append(f"{name}[{index}].{field_name} 必须是字符串")
+
+
+def _metric_list(payload: dict[str, Any], name: str, issues: list[str]) -> set[str]:
+    value = payload.get(name)
+    if not isinstance(value, list) or not value:
+        issues.append(f"{name} 必须是非空 metric 列表")
+        return set()
+    seen: set[str] = set()
+    for index, item in enumerate(value):
+        if not isinstance(item, dict):
+            issues.append(f"{name}[{index}] 必须是对象")
+            continue
+        metric_name = item.get("name")
+        metric_value = item.get("value")
+        if not isinstance(metric_name, str) or not metric_name.strip():
+            issues.append(f"{name}[{index}].name 必须是非空字符串")
+        elif metric_name in seen:
+            issues.append(f"{name} metric 名称重复：{metric_name}")
+        else:
+            seen.add(metric_name)
+        if (
+            isinstance(metric_value, bool)
+            or not isinstance(metric_value, (int, float))
+            or not math.isfinite(float(metric_value))
+        ):
+            issues.append(f"{name}[{index}].value 必须是有限数值")
+    return seen
 
 
 def _check_source(relative: str, payload: dict[str, Any]) -> list[str]:
@@ -179,6 +225,74 @@ def _check_claim(relative: str, payload: dict[str, Any]) -> list[str]:
     return issues
 
 
+def _check_counterexample(
+    relative: str,
+    payload: dict[str, Any],
+    root: Path,
+) -> list[str]:
+    issues: list[str] = []
+    if payload.get("schema_version") != COUNTEREXAMPLE_SCHEMA_VERSION:
+        issues.append(f"schema_version 必须是 {COUNTEREXAMPLE_SCHEMA_VERSION}")
+    for field_name in ("counterexample_id", "claim_id", "summary", "as_of"):
+        _required_text(payload, field_name, issues)
+
+    counterexample_id = payload.get("counterexample_id")
+    if isinstance(counterexample_id, str):
+        if ID_RE.fullmatch(counterexample_id) is None:
+            issues.append("counterexample_id 必须是 [a-z0-9][a-z0-9._-]*")
+        expected = root / "strategy-research" / "counterexamples" / f"{counterexample_id}.json"
+        if root / relative != expected:
+            issues.append(f"counterexample 文件名必须与 counterexample_id 一致：{expected}")
+
+    claim_id = payload.get("claim_id")
+    if isinstance(claim_id, str):
+        if ID_RE.fullmatch(claim_id) is None:
+            issues.append("claim_id 必须是 [a-z0-9][a-z0-9._-]*")
+        claim_path = root / "strategy-research" / "judgment-ledger" / f"{claim_id}.json"
+        if not claim_path.is_file():
+            issues.append(f"claim_id 引用缺失：{claim_id}")
+
+    as_of = payload.get("as_of")
+    if isinstance(as_of, str) and DATE_RE.fullmatch(as_of) is None:
+        issues.append("as_of 必须是 YYYY-MM-DD")
+    if payload.get("scenario_type") not in COUNTEREXAMPLE_SCENARIO_TYPES:
+        issues.append(
+            f"scenario_type 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_SCENARIO_TYPES))} 之一"
+        )
+    if payload.get("status") not in COUNTEREXAMPLE_STATUSES:
+        issues.append(f"status 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_STATUSES))} 之一")
+    if payload.get("severity") not in COUNTEREXAMPLE_SEVERITIES:
+        issues.append(f"severity 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_SEVERITIES))} 之一")
+
+    stress_dimensions = payload.get("stress_dimensions")
+    if not isinstance(stress_dimensions, list) or not stress_dimensions:
+        issues.append("stress_dimensions 必须是非空列表")
+    else:
+        for index, item in enumerate(stress_dimensions):
+            if not isinstance(item, dict):
+                issues.append(f"stress_dimensions[{index}] 必须是对象")
+                continue
+            name = item.get("name")
+            if not isinstance(name, str) or not name.strip():
+                issues.append(f"stress_dimensions[{index}].name 必须是非空字符串")
+            for field_name in ("baseline", "stressed"):
+                if field_name not in item:
+                    issues.append(f"stress_dimensions[{index}].{field_name} 缺失")
+                elif isinstance(item[field_name], (dict, list)):
+                    issues.append(f"stress_dimensions[{index}].{field_name} 必须是 JSON 标量")
+
+    baseline_names = _metric_list(payload, "baseline_metrics", issues)
+    stressed_names = _metric_list(payload, "stressed_metrics", issues)
+    if baseline_names and stressed_names and baseline_names != stressed_names:
+        issues.append("baseline_metrics 与 stressed_metrics 的 metric 名称必须一致")
+
+    for field_name in ("failure_conditions", "evidence_refs"):
+        _string_list(payload, field_name, issues)
+        if not payload.get(field_name):
+            issues.append(f"{field_name} 必须非空")
+    return issues
+
+
 def _check_decision(payload: dict[str, Any], issues: list[str]) -> None:
     decision = payload.get("decision")
     if not isinstance(decision, dict):
@@ -206,6 +320,7 @@ def _check_case(relative: str, payload: dict[str, Any], root: Path) -> list[str]
     _check_decision(payload, issues)
     _string_list(payload, "research_specs", issues)
     _string_list(payload, "claims", issues)
+    _string_list(payload, "counterexamples", issues)
     _string_list(payload, "evidence_bundles", issues)
     _string_list(payload, "known_gaps", issues)
     _objects_list(payload, "abstentions", ("dimension", "reason"), issues)
@@ -273,6 +388,14 @@ def _resolve_case_refs(
         claim_path = root / "strategy-research" / "judgment-ledger" / f"{claim_ref}.json"
         if not claim_path.is_file():
             issues.append(f"claims 引用缺失：{claim_ref}")
+    for counterexample_ref in payload.get("counterexamples", []):
+        if not isinstance(counterexample_ref, str):
+            continue
+        counterexample_path = (
+            root / "strategy-research" / "counterexamples" / f"{counterexample_ref}.json"
+        )
+        if not counterexample_path.is_file():
+            issues.append(f"counterexamples 引用缺失：{counterexample_ref}")
     for review in payload.get("reviews", []):
         if not isinstance(review, dict):
             continue
@@ -289,6 +412,13 @@ def _claim_files(root: Path) -> list[Path]:
 
 def _case_files(root: Path) -> list[Path]:
     return sorted((root / "strategy-research" / "cases").rglob("case.json"))
+
+
+def _counterexample_files(root: Path) -> list[Path]:
+    counterexample_dir = root / "strategy-research" / "counterexamples"
+    if not counterexample_dir.is_dir():
+        return []
+    return sorted(counterexample_dir.rglob("*.json"))
 
 
 def _source_files(root: Path) -> list[Path]:
@@ -313,6 +443,14 @@ def check_case(path: Path, *, root: Path) -> GovernanceCheck:
         return GovernanceCheck(str(path), ["case.json 必须是合法 JSON 对象"])
     relative = path.relative_to(root).as_posix()
     return GovernanceCheck(relative, _check_case(relative, payload, root))
+
+
+def check_counterexample(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
+    payload = _load_json(path)
+    if payload is None:
+        return GovernanceCheck(str(path), ["counterexample.json 必须是合法 JSON 对象"])
+    relative = path.relative_to(root).as_posix()
+    return GovernanceCheck(relative, _check_counterexample(relative, payload, root))
 
 
 def check_source(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
@@ -342,6 +480,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--claim", type=Path)
     parser.add_argument("--case", type=Path)
+    parser.add_argument("--counterexample", type=Path)
     parser.add_argument("--source", type=Path)
     parser.add_argument("--json", dest="as_json", action="store_true")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
@@ -349,14 +488,19 @@ def main(argv: list[str] | None = None) -> int:
     root = args.root.resolve()
     checks: list[GovernanceCheck] = []
     if args.claim:
-        checks.append(check_claim(args.claim.resolve()))
+        checks.append(check_claim(args.claim.resolve(), root=root))
     elif args.case:
         checks.append(check_case(args.case.resolve(), root=root))
+    elif args.counterexample:
+        checks.append(check_counterexample(args.counterexample.resolve(), root=root))
     elif args.source:
         checks.append(check_source(args.source.resolve(), root=root))
     else:
         checks.extend(check_claim(path, root=root) for path in _claim_files(root))
         checks.extend(check_case(path, root=root) for path in _case_files(root))
+        checks.extend(
+            check_counterexample(path, root=root) for path in _counterexample_files(root)
+        )
         checks.extend(check_source(path, root=root) for path in _source_files(root))
     print(_render(checks, as_json=args.as_json))
     return 0 if all(check.ok for check in checks) else 1
