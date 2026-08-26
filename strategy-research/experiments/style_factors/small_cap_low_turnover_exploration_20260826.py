@@ -496,7 +496,7 @@ def run_exploration(
             "known delisting terminal return",
             "baseline continuous weight accounting",
             "sensitivity target entries rounded to lots using prior close",
-            "sensitivity ADV caps use prior observed traded amount",
+            "sensitivity caps use prior observed traded amount",
         ],
         "metadata_file": str(outdir / "exploration_meta.json"),
     }

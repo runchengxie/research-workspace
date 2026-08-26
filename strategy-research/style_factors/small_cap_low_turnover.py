@@ -140,8 +140,8 @@ def build_trade_capacity_matrix(
 
     The clean-data contract stores ``amount`` in thousand CNY.  The matrix is
     a research approximation that uses each symbol's prior observed amount,
-    holds capital constant, and limits daily traded notional to an ADV
-    participation fraction.
+    holds capital constant, and limits daily traded notional to a prior-session
+    traded-amount participation fraction.
     """
     _require_columns(daily_clean, {"trade_date", "symbol", "amount"}, label="daily_clean")
     if not np.isfinite(initial_capital) or initial_capital <= 0:
