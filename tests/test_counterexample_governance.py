@@ -8,7 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CHECK_SCRIPT = ROOT / "scripts" / "decision_governance_check.py"
 
-checker = importlib.util.spec_from_file_location("decision_governance_check_counterexamples", CHECK_SCRIPT)
+checker = importlib.util.spec_from_file_location(
+    "decision_governance_check_counterexamples",
+    CHECK_SCRIPT,
+)
 module = importlib.util.module_from_spec(checker)
 assert checker.loader is not None
 sys.modules[checker.name] = module
@@ -140,7 +143,7 @@ def test_case_counterexample_reference_must_exist(tmp_path: Path) -> None:
     assert any("counterexamples 引用缺失" in issue for issue in check.issues)
 
 
-def test_cli_scan_includes_counterexamples(tmp_path: Path, capsys: object) -> None:
+def test_cli_scan_includes_counterexamples(tmp_path: Path) -> None:
     _write_claim(tmp_path)
     _write_counterexample(tmp_path, _valid_counterexample())
 
