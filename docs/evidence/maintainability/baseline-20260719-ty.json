@@ -188,11 +188,11 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 305,
-      "python_loc": 90822,
+      "python_file_count": 308,
+      "python_loc": 92083,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 41,
+        "large_files": 42,
         "long_functions": 81,
         "complexity_hotspots": 42,
         "large_classes": 1
@@ -259,6 +259,11 @@
           "hk_related": false
         },
         {
+          "path": "src/market_data_platform/providers/public_etf_minute.py",
+          "loc": 758,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_guan_annual_minbar.py",
           "loc": 754,
           "hk_related": false
@@ -316,11 +321,6 @@
         {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
           "loc": 552,
-          "hk_related": false
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
-          "loc": 542,
           "hk_related": false
         }
       ],
