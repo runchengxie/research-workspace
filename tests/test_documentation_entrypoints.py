@@ -17,6 +17,7 @@ ACTIVE_DOCS = tuple(
     for path in sorted((ROOT / "docs").rglob("*.md"))
     if "archive" not in path.relative_to(ROOT / "docs").parts
     and "evidence" not in path.relative_to(ROOT / "docs").parts
+    and "superpowers" not in path.relative_to(ROOT / "docs").parts
     and "prereg" not in path.name.lower()
 )
 STYLE_DOCS = (*ROOT_ENTRY_DOCS, *ACTIVE_DOCS)
@@ -38,6 +39,18 @@ def test_entry_docs_use_concise_chinese_style() -> None:
             offenders.append(f"{path.relative_to(ROOT)}:{line_number}:先否定再转折")
 
     assert offenders == []
+
+
+def test_e2_is_documented_as_a_promotion_audit() -> None:
+    roadmap = (ROOT / "docs" / "roadmap.md").read_text(encoding="utf-8")
+    evidence_gate = (ROOT / "docs" / "strategy-evidence-gate.md").read_text(encoding="utf-8")
+    strategy_research = (ROOT / "strategy-research" / "README.md").read_text(encoding="utf-8")
+
+    assert "生产准备审计" in roadmap
+    assert "不替代当前策略研究" in roadmap
+    assert "production-readiness audit" in evidence_gate
+    assert "not active strategy research" in evidence_gate
+    assert "E2" in strategy_research
 
 
 def test_disabled_workflow_status_is_documented() -> None:

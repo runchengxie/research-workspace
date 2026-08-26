@@ -27,10 +27,7 @@ def _ruff_command(*args: str) -> tuple[str, ...]:
 
 
 def _ty_command(*args: str) -> tuple[str, ...]:
-    resolved = shutil.which("ty")
-    if resolved:
-        return (resolved, *args)
-    return ("uv", "run", "--with", "ty", "ty", *args)
+    return ("uv", "run", "--project", str(ROOT), "--with", "ty", "ty", *args)
 
 
 def plan_commands(profile: str) -> list[PlannedCommand]:

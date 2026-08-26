@@ -134,6 +134,26 @@ def test_real_policy_and_catalog_are_aligned() -> None:
         previous = current
 
 
+def test_real_catalog_keeps_e2_candidates_outside_strategy_identity() -> None:
+    catalog = _load_json(CATALOG_PATH)
+    ids = {item["id"] for item in catalog["strategies"]}
+    required = {
+        "daily_watch20",
+        "hotsector",
+        "style_replica_a80_b20",
+        "d11_h5_shadow",
+        "dividend_growth_momentum",
+    }
+
+    assert required <= ids
+    assert "a_share_e2_promotion_candidate_20260825" not in ids
+    assert all(
+        item["production_eligible"] is False
+        for item in catalog["strategies"]
+        if item["id"] in required
+    )
+
+
 def test_evidence_ladder_is_strictly_increasing_for_real_policy() -> None:
     policy = _load_json(POLICY_PATH)
     table = policy["required_by_lifecycle"]
