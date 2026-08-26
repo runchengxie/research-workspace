@@ -274,6 +274,8 @@ def _write_report(
         "- Monthly formation; next-trading-session target execution.",
         "- Sector-neutral small-cap and lagged 60-trading-day turnover signals.",
         "- Low-turnover residualized against size and low volatility.",
+        "- Low-turnover residualized against size, low volatility, and one-hot "
+        "industry dummies to deconfound industry exposure.",
         "- Equal-weight target portfolio with a 40-name target and 60-name buffer.",
         "- Formation eligibility excludes immature listings, ST names, suspended names, "
         "and names outside the point-in-time universe.",
