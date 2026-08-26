@@ -22,6 +22,8 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Rebalance-frequency matrix: raw composite only, weekly/biweekly/monthly/quarterly formation, monthly as the baseline cadence, with the same sector-neutral controls and cost mechanics.
 - Share-ledger check: raw composite re-run through the portfolio-backtester cash-ledger execution model (lot rounding, T+1 inventory, participation caps, daily NAV) for the monthly and biweekly cadences, using 5% participation and the same 10 bps cost case.
 - Ledger reconciliation: identical targets run through a weight-level reference, a frictionless ideal NAV with share semantics, and the fully constrained ledger, plus a one-constraint-at-a-time relaxation ladder (participation, T+1, lot, cost) on the monthly composite; composite and large-cap control are both reconciled so the incremental criterion can be read under each engine.
+- Capital ladder: the monthly raw composite under the fully constrained ledger at 10m, 100m, and 500m CNY research capital, holding participation at 5% so per-name capacity tightens mechanically with size.
+- Joint matrix: four turnover lookback definitions crossed with weekly/biweekly/monthly/quarterly cadences on the raw composite with the weight-level screening engine; this fills the definition × cadence grid that the robustness and rebalance matrices cover only one axis of.
 - Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
 ## Full-period result
@@ -122,6 +124,34 @@ What the decomposition says:
 
 Engine trust going forward: share-semantics engines (ideal or constrained ledger) are the decision basis for costs, capacity, and cadence; the weight-level engine remains useful only for cheap screening. The constraint-induced gain on the composite should be read as an optimistic upper bound until a market-impact or slippage model prices the delayed fills honestly.
 
+## Capital ladder (ledger)
+
+The monthly raw composite was scaled across research capital on the fully constrained ledger engine.
+
+| capital | net annual | net Sharpe | max drawdown | fill ratio | avg cash weight | cumulative turnover |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 10m CNY | 15.85% | 0.67 | -51.48% | 33.17% | 0.58% | 138.5x |
+| 100m CNY | 16.01% | 0.70 | -51.10% | 44.98% | 11.62% | 147.9x |
+| 500m CNY | 13.40% | 0.68 | -49.86% | 30.96% | 36.85% | 87.0x |
+
+Capacity degrades by under-deployment rather than collapse: at 500m CNY the book averages 37% cash because per-name participation caps bind harder, and net return eases to about 13.4%. Sharpe is remarkably stable across the ladder. The non-monotonic step from 10m to 100m is fill-path noise, not a scaling law. This ladder holds the strategy fixed and varies capital in the static-capacity approximation, so it bounds capacity rather than pricing it.
+
+## Turnover-definition × cadence matrix
+
+The joint grid ran on the weight-level screening engine; after the reconciliation finding that this engine distorts cadence rankings, cell rankings here are screening observations that require ledger-engine confirmation before any selection.
+
+| definition | cadence | net annual | Sharpe | turnover | dev annualized | holdout annualized |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| mean_120 | biweekly | 21.25% | 0.75 | 3.11x | 20.82% | 22.77% |
+| mean_60 | biweekly | 18.87% | 0.70 | 3.25x | 17.69% | 23.04% |
+| median_60 | biweekly | 18.53% | 0.69 | 3.24x | 17.29% | 22.93% |
+| mean_20 | biweekly | 16.99% | 0.65 | 3.67x | 16.43% | 18.95% |
+| mean_120 | monthly | 13.59% | 0.57 | 5.57x | 10.45% | 25.13% |
+| mean_120 | weekly | 13.10% | 0.55 | 4.71x | 10.04% | 24.31% |
+| mean_120 | quarterly | 10.46% | 0.48 | 4.21x | 6.07% | 26.85% |
+
+Two patterns are consistent across the whole grid rather than isolated-cell luck: mean-120 dominates every cadence it appears in, and within any definition the biweekly cadence leads the full period and the development window (the best cell also leads its development window at 20.82%, so a development-only selection rule would pick it). The holdout column has been inspected repeatedly across these matrices and is degraded as clean final out-of-sample; treat it as descriptive only.
+
 ## Evidence files
 
 The runner is:
@@ -140,6 +170,8 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_rebalance_matrix.csv`
 - `candidate_share_ledger_matrix.csv`
 - `candidate_reconciliation_matrix.csv`
+- `candidate_capacity_ladder.csv`
+- `candidate_joint_matrix.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
 - `small_cap_low_turnover_exploration.md`

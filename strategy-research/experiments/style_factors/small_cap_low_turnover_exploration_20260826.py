@@ -732,6 +732,208 @@ def _run_reconciliation_matrix(
     return pd.DataFrame(rows)
 
 
+def _run_capacity_ladder(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    capitals: tuple[float, ...] = (10_000_000.0, 100_000_000.0, 500_000_000.0),
+) -> pd.DataFrame:
+    """Run the monthly raw composite through the constrained ledger at capital sizes.
+
+    Participation caps tighten as capital grows because each name's capacity is
+    a fixed fraction of its prior traded amount, so the ladder locates where
+    fills, cash drag, and net results start to collapse.
+    """
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
+    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
+        columns={"tr_close": "close"}
+    )
+    pricing = daily_clean[
+        ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
+    ].rename(columns={"tr_close": "close"})
+    formation_dates = build_rebalance_formation_dates(
+        trading_dates,
+        frequency="monthly",
+    )
+    controls = build_liquidity_control_panel(
+        controls_daily,
+        basics,
+        formation_dates,
+        sw_membership=sw_membership,
+    )
+    turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
+    panel = build_candidate_signal_panel(controls, turnover)
+    eligible = filter_candidate_eligibility(
+        panel,
+        universe,
+        daily_clean,
+        st_history,
+        minimum_listed_days=minimum_listed_days,
+    )
+    formation_targets = build_buffered_targets(
+        eligible,
+        formation_dates,
+        signal_column="signal_composite",
+        target_count=target_count,
+        buffer_count=buffer_count,
+    )
+    positions = _build_share_ledger_positions(formation_targets, trading_dates)
+    rows: list[dict[str, Any]] = []
+    if positions.empty:
+        return pd.DataFrame(rows)
+    for capital in capitals:
+        config = ExecutionSimConfig(
+            enabled=True,
+            portfolio_value=capital,
+            participation_rate=0.05,
+            liquidity_cols=("amount",),
+            liquidity_notional_multiplier=1_000.0,
+            buy_max_days=3,
+            sell_max_days=5,
+            round_lot=100,
+            enforce_t1=True,
+        )
+        result = simulate_execution_adjusted_nav(
+            positions,
+            pricing,
+            config,
+            price_col="close",
+            tradable_col="amount",
+            transaction_cost_bps=transaction_cost_bps,
+        )
+        summary = result.summary
+        stats = summary.get("stats", {})
+        ann_return = stats.get("ann_return")
+        max_drawdown = stats.get("max_drawdown")
+        rows.append(
+            {
+                "capital": capital,
+                "status": summary.get("status"),
+                "net_annual_return": ann_return * 100 if ann_return is not None else None,
+                "net_sharpe": stats.get("sharpe"),
+                "max_drawdown": max_drawdown * 100 if max_drawdown is not None else None,
+                "fill_ratio": summary.get("fill_ratio"),
+                "avg_cash_weight": summary.get("avg_cash_weight"),
+                "cumulative_turnover": (
+                    float(summary.get("filled_notional", 0.0)) / capital
+                ),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _run_joint_matrix(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    returns: pd.DataFrame,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    definitions: tuple[tuple[str, int, str], ...] = (
+        ("mean_20", 20, "mean"),
+        ("mean_60", 60, "mean"),
+        ("median_60", 60, "median"),
+        ("mean_120", 120, "mean"),
+    ),
+    frequencies: tuple[str, ...] = ("weekly", "biweekly", "monthly", "quarterly"),
+) -> pd.DataFrame:
+    """Cross turnover lookback definitions with formation cadences.
+
+    The robustness matrix varies definitions at the monthly cadence and the
+    rebalance matrix varies cadences at the mean-60 definition; this matrix
+    covers the joint grid on the raw composite with the weight-level engine.
+    """
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
+    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
+        columns={"tr_close": "close"}
+    )
+    rows: list[dict[str, Any]] = []
+    for frequency in frequencies:
+        formation_dates = build_rebalance_formation_dates(
+            trading_dates,
+            frequency=frequency,
+        )
+        controls = build_liquidity_control_panel(
+            controls_daily,
+            basics,
+            formation_dates,
+            sw_membership=sw_membership,
+        )
+        for definition, window, statistic in definitions:
+            turnover = build_lagged_turnover_panel(
+                daily_clean,
+                formation_dates,
+                window=window,
+                minimum_observations=int(np.ceil(window * 0.75)),
+                statistic=statistic,
+            )
+            panel = build_candidate_signal_panel(
+                controls,
+                turnover,
+                turnover_column=f"turnover_lagged_{statistic}_{window}d",
+            )
+            candidate_name = f"joint_{definition}_{frequency}"
+            simulations = simulate_long_only_candidates(
+                panel,
+                daily_clean,
+                universe,
+                st_history,
+                instruments,
+                {candidate_name: "signal_composite"},
+                target_count=target_count,
+                buffer_count=buffer_count,
+                minimum_listed_days=minimum_listed_days,
+                initial_capital=initial_capital,
+                returns=returns,
+                matrices=matrices,
+            )
+            summary, daily = summarize_long_only_simulations(
+                simulations,
+                transaction_cost_bps=transaction_cost_bps,
+            )
+            if summary.empty:
+                continue
+            row = summary.iloc[0].to_dict()
+            net = daily[f"{candidate_name}_net"]
+            development = _period_return_metrics(
+                net,
+                start=pd.Timestamp("2015-01-01"),
+                end=pd.Timestamp("2023-12-31"),
+            )
+            holdout = _period_return_metrics(
+                net,
+                start=pd.Timestamp("2024-01-01"),
+                end=pd.Timestamp("2026-12-31"),
+            )
+            rows.append(
+                {
+                    **row,
+                    "turnover_definition": definition,
+                    "rebalance_frequency": frequency,
+                    "formation_dates": len(formation_dates),
+                    "development_annualized_return": development["annualized_return"] * 100,
+                    "holdout_annualized_return": holdout["annualized_return"] * 100,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
 def _period_returns(daily: pd.DataFrame) -> pd.DataFrame:
     periods = {
         "2015-2019": (pd.Timestamp("2015-01-01"), pd.Timestamp("2019-12-31")),
@@ -767,6 +969,8 @@ def _write_report(
     rebalance_matrix: pd.DataFrame,
     share_ledger_matrix: pd.DataFrame,
     reconciliation_matrix: pd.DataFrame,
+    capacity_ladder: pd.DataFrame,
+    joint_matrix: pd.DataFrame,
     metadata: dict[str, Any],
 ) -> None:
     lines = [
@@ -891,6 +1095,36 @@ def _write_report(
             "cumulative_turnover",
         ]
         lines.append(reconciliation_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
+    lines.extend(["", "## Capital ladder (ledger)", ""])
+    if capacity_ladder.empty:
+        lines.append("No capital-ladder observations.")
+    else:
+        columns = [
+            "capital",
+            "status",
+            "net_annual_return",
+            "net_sharpe",
+            "max_drawdown",
+            "fill_ratio",
+            "avg_cash_weight",
+            "cumulative_turnover",
+        ]
+        lines.append(capacity_ladder[columns].to_markdown(index=False, floatfmt=".4f"))
+    lines.extend(["", "## Turnover-definition × cadence matrix", ""])
+    if joint_matrix.empty:
+        lines.append("No joint-matrix observations.")
+    else:
+        columns = [
+            "turnover_definition",
+            "rebalance_frequency",
+            "formation_dates",
+            "net_annual_return",
+            "net_sharpe",
+            "annualized_turnover",
+            "development_annualized_return",
+            "holdout_annualized_return",
+        ]
+        lines.append(joint_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(
         [
             "",
@@ -906,6 +1140,13 @@ def _write_report(
             "- The share-ledger section uses the portfolio-backtester cash-ledger "
             "execution model with lot rounding, T+1 inventory, and participation caps; "
             "it is not a broker-fill model.",
+            "- The capital ladder holds the strategy fixed and scales research capital; "
+            "fill ratios tighten mechanically with size, which is a capacity statement, "
+            "not an alpha change.",
+            "- The joint matrix multiplies looks across definitions and cadences on the "
+            "same history; isolated best cells are expected by chance, it runs on the "
+            "weight-level screening engine, and cell rankings must be confirmed on the "
+            "ledger engine before any selection.",
             "- The reconciliation table attributes the engine gap to accounting "
             "semantics (weight-level versus ideal NAV) and to execution frictions "
             "(ideal NAV versus constrained ledger); it is an attribution, not a proof "
@@ -1043,6 +1284,31 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    capacity_ladder = _run_capacity_ladder(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        instruments=market_data.instruments,
+        transaction_cost_bps=transaction_cost_bps,
+        target_count=target_count,
+        buffer_count=buffer_count,
+        minimum_listed_days=minimum_listed_days,
+    )
+    joint_matrix = _run_joint_matrix(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        instruments=market_data.instruments,
+        transaction_cost_bps=transaction_cost_bps,
+        target_count=target_count,
+        buffer_count=buffer_count,
+        minimum_listed_days=minimum_listed_days,
+        initial_capital=initial_capital,
+        returns=return_matrix,
+        matrices=execution_context,
+    )
 
     signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
     summary.to_csv(outdir / "candidate_summary.csv", index=False)
@@ -1055,6 +1321,8 @@ def run_exploration(
     rebalance_matrix.to_csv(outdir / "candidate_rebalance_matrix.csv", index=False)
     share_ledger_matrix.to_csv(outdir / "candidate_share_ledger_matrix.csv", index=False)
     reconciliation_matrix.to_csv(outdir / "candidate_reconciliation_matrix.csv", index=False)
+    capacity_ladder.to_csv(outdir / "candidate_capacity_ladder.csv", index=False)
+    joint_matrix.to_csv(outdir / "candidate_joint_matrix.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -1115,6 +1383,8 @@ def run_exploration(
         rebalance_matrix=rebalance_matrix,
         share_ledger_matrix=share_ledger_matrix,
         reconciliation_matrix=reconciliation_matrix,
+        capacity_ladder=capacity_ladder,
+        joint_matrix=joint_matrix,
         metadata=metadata,
     )
     return outdir
