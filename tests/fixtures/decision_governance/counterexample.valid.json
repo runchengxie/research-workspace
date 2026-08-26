@@ -1,0 +1,31 @@
+{
+  "schema_version": "counterexample.v1",
+  "counterexample_id": "demo.claim.cost-stress",
+  "claim_id": "demo.claim",
+  "scenario_type": "cost",
+  "summary": "Higher transaction costs erase the candidate advantage.",
+  "as_of": "2026-08-26",
+  "status": "open",
+  "severity": "material",
+  "stress_dimensions": [
+    {
+      "name": "round_trip_cost_bps",
+      "baseline": "10",
+      "stressed": "40"
+    }
+  ],
+  "baseline_metrics": [
+    {
+      "name": "net_sharpe",
+      "value": 0.8
+    }
+  ],
+  "stressed_metrics": [
+    {
+      "name": "net_sharpe",
+      "value": 0.1
+    }
+  ],
+  "failure_conditions": ["net_sharpe < 0.2"],
+  "evidence_refs": ["evidence://demo-cost-stress"]
+}
