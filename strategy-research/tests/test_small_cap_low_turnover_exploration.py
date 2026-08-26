@@ -7,6 +7,8 @@ from pytest import approx, raises
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _build_share_ledger_positions,
     _period_return_metrics,
+    _run_capacity_ladder,
+    _run_joint_matrix,
     _run_rebalance_matrix,
     _run_reconciliation_matrix,
     _run_share_ledger_matrix,
@@ -695,3 +697,75 @@ def test_reconciliation_matrix_decomposes_engine_gap() -> None:
     ledger_rows = matrix.loc[matrix["engine_arm"] != "weight_level"]
     assert ledger_rows["fill_ratio"].notna().all()
     assert matrix["net_annual_return"].notna().all()
+
+
+def test_capacity_ladder_reports_requested_capitals() -> None:
+    daily = _synthetic_rebalance_daily()
+    symbols = daily["symbol"].unique().tolist()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+
+    ladder = _run_capacity_ladder(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        instruments=instruments,
+        transaction_cost_bps=10.0,
+        target_count=4,
+        buffer_count=6,
+        minimum_listed_days=0,
+        capitals=(1_000_000.0, 10_000_000.0),
+    )
+
+    assert not ladder.empty
+    assert ladder["capital"].tolist() == [1_000_000.0, 10_000_000.0]
+    assert (ladder["status"] == "ok").all()
+    assert ladder["fill_ratio"].notna().all()
+    assert ladder["net_annual_return"].notna().all()
+
+
+def test_joint_matrix_covers_definition_and_frequency_grid() -> None:
+    daily = _synthetic_rebalance_daily()
+    symbols = daily["symbol"].unique().tolist()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    instruments = pd.DataFrame({"symbol": symbols, "delist_date": pd.NaT})
+    returns = daily_return_matrix(daily)
+    matrices = execution_matrices(daily, returns)
+
+    matrix = _run_joint_matrix(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        instruments=instruments,
+        transaction_cost_bps=10.0,
+        target_count=4,
+        buffer_count=6,
+        minimum_listed_days=0,
+        initial_capital=1_000_000.0,
+        returns=returns,
+        matrices=matrices,
+        definitions=(("mean_20", 20, "mean"), ("mean_60", 60, "mean")),
+        frequencies=("monthly",),
+    )
+
+    assert not matrix.empty
+    assert set(matrix["turnover_definition"]) == {"mean_20", "mean_60"}
+    assert set(matrix["rebalance_frequency"]) == {"monthly"}
+    assert matrix["net_annual_return"].notna().all()
+    # 合成数据落在 2024 年，开发窗为空属预期，保留期必须有值。
+    assert matrix["development_annualized_return"].isna().all()
+    assert matrix["holdout_annualized_return"].notna().all()
