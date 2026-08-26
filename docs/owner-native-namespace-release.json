@@ -14,14 +14,14 @@
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "6789b1895e6ed9fc292d970ff8a4ca9d7a9a1831",
+      "commit": "98b994b92e04f8072d4e53815618813531ba3138",
       "legacy_source_tree_allowed": false,
       "pr": 35,
       "version": "0.4.0"
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "dfea6d55b9339a8dc3815f55cd28806a2de35963",
+      "commit": "427156ba0223dd93bece97f660a436f53f47551f",
       "legacy_source_tree_allowed": false,
       "pr": 34,
       "version": "0.2.0"

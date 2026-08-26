@@ -186,16 +186,16 @@ prompt、不共享对方输出、必要时不同输入切片与确定性检查�
 
 ### DG8 反例驱动稳健性
 
-增加 `counterexample.v1`，把 C&CG 式“候选 → 找最危险场景 → 加入问题 → 重新判断”的研究思想
-落到证据治理，而不是假装本工作区已经实现数学规划里的 C&CG 求解器。
+增加 `counterexample.v1`，把 C&CG 式 `候选 → 找最危险场景 → 加入问题 → 重新判断` 的研究思想
+落到证据治理。本工作区当前提供研究证据治理，不提供数学规划里的 C&CG 求解器。
 
 每条 counterexample 必须：
 
-- 指向已有 `claim_id`；
-- 记录 `scenario_type` 与至少一个 `stress_dimension`；
-- 给出压力前后的同名 metrics，禁止跨口径比较；
-- 明确 `failure_conditions`；
-- 引用真实 `evidence_refs`；
+- 指向已有 `claim_id`
+- 记录 `scenario_type` 与至少一个 `stress_dimension`
+- 给出压力前后的同名 metrics，禁止跨口径比较
+- 明确 `failure_conditions`
+- 引用真实 `evidence_refs`
 - 记录 `severity` 与处理 `status`。
 
 支持的压力类型包括时间窗口、市场状态、成本、流动性、容量、暴露、信号扰动、相关性和
@@ -211,7 +211,7 @@ schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录
 - 简单来源等级排序，官方公告一定高于路演纪要与网络媒体的假设不成立
 - 多个同模型 Agent 互评互信，同模型共享盲点，不构成独立评审
 - 合成单一置信度总分，容易制造伪精确性
-- 把普通 scenario stress test 宣称成 C&CG / DRO；算法名需要对应真实数学模型与求解过程
+- 普通 scenario stress test 不标记为 C&CG / DRO，算法名需要对应真实数学模型与求解过程
 
 ## 与现有文档的关系
 

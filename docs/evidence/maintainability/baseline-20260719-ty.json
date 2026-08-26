@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 133,
-      "python_loc": 27030,
+      "python_file_count": 134,
+      "python_loc": 27296,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -1100,8 +1100,8 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 201,
-      "python_loc": 42132,
+      "python_file_count": 203,
+      "python_loc": 42327,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1499,8 +1499,8 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 164,
-      "python_loc": 34367,
+      "python_file_count": 166,
+      "python_loc": 34709,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 3,
