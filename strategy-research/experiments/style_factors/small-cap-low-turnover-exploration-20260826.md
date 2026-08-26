@@ -19,6 +19,7 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Eligibility: minimum 180 listed days, non-ST, non-suspended, and present in the formation universe.
 - Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, low-turnover residualized against size, low volatility, and one-hot industry dummies, raw 50/50 composite, residualized 50/50 composite, industry-residualized 50/50 composite, large-cap control, and low-volatility control.
 - Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% prior-session traded-amount cases (not rolling ADV).
+- Rebalance-frequency matrix: raw composite only, weekly/biweekly/monthly/quarterly formation, monthly as the baseline cadence, with the same sector-neutral controls and cost mechanics.
 - Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
 ## Full-period result
@@ -71,6 +72,19 @@ The table below shows the unconstrained and 5% prior-session traded-amount cases
 
 The prior-session traded-amount caps did not monotonically reduce returns. In this simulator they change the order-fill path: delayed entries and exits can avoid some losing trades. That is an execution-path sensitivity, not evidence that greater constraints create investable alpha.
 
+## Rebalance-frequency check
+
+The raw composite was run at four formation cadences with the same sector-neutral controls, buffer, cost, and eligibility mechanics.
+
+| frequency | formation dates | net annual | net Sharpe | max drawdown | annualized turnover | development annualized | holdout annualized |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| weekly | 592 | 9.20% | 0.44 | -61.68% | 5.17x | 5.98% | 21.07% |
+| biweekly | 296 | 18.87% | 0.70 | -59.68% | 3.25x | 17.69% | 23.04% |
+| monthly | 139 | 7.24% | 0.38 | -68.59% | 6.77x | 4.01% | 19.16% |
+| quarterly | 47 | 8.11% | 0.41 | -64.99% | 4.24x | 2.93% | 27.87% |
+
+Biweekly formation is the standout in this test: it roughly doubles the monthly net return while cutting annualized turnover in half, and it is the best in both the development and the holdout windows. Weekly is weaker than monthly on full-period net return, and quarterly is similar to monthly on the full period but stronger in the holdout. The biweekly advantage may come from more frequent refreshes reducing stale positioning under the buffer, but it remains a single-simulator result with a deep drawdown and the same execution-path caveats. No cadence was selected from the holdout.
+
 ## Evidence files
 
 The runner is:
@@ -86,6 +100,7 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_signal_correlations.csv`
 - `candidate_net_correlations.csv`
 - `candidate_robustness_matrix.csv`
+- `candidate_rebalance_matrix.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
 - `small_cap_low_turnover_exploration.md`

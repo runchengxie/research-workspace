@@ -22,6 +22,7 @@ from style_factors.small_cap_low_turnover import (
     SIGNAL_COLUMNS,
     build_candidate_signal_panel,
     build_lagged_turnover_panel,
+    build_rebalance_formation_dates,
     simulate_long_only_candidates,
     summarize_long_only_simulations,
 )
@@ -229,6 +230,92 @@ def _run_robustness_matrix(
     return pd.DataFrame(rows)
 
 
+def _run_rebalance_matrix(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    returns: pd.DataFrame,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+) -> pd.DataFrame:
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
+    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
+        columns={"tr_close": "close"}
+    )
+    frequencies = ("weekly", "biweekly", "monthly", "quarterly")
+    rows: list[dict[str, Any]] = []
+    for frequency in frequencies:
+        formation_dates = build_rebalance_formation_dates(
+            trading_dates,
+            frequency=frequency,
+        )
+        controls = build_liquidity_control_panel(
+            controls_daily,
+            basics,
+            formation_dates,
+            sw_membership=sw_membership,
+        )
+        turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
+        panel = build_candidate_signal_panel(controls, turnover)
+        candidate_name = f"composite_{frequency}"
+        simulations = simulate_long_only_candidates(
+            panel,
+            daily_clean,
+            universe,
+            st_history,
+            instruments,
+            {candidate_name: "signal_composite"},
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=returns,
+            matrices=matrices,
+        )
+        summary, daily = summarize_long_only_simulations(
+            simulations,
+            transaction_cost_bps=transaction_cost_bps,
+        )
+        if summary.empty:
+            continue
+        row = summary.iloc[0].to_dict()
+        net = daily[f"{candidate_name}_net"]
+        development = _period_return_metrics(
+            net,
+            start=pd.Timestamp("2015-01-01"),
+            end=pd.Timestamp("2023-12-31"),
+        )
+        holdout = _period_return_metrics(
+            net,
+            start=pd.Timestamp("2024-01-01"),
+            end=pd.Timestamp("2026-12-31"),
+        )
+        rows.append(
+            {
+                **row,
+                "rebalance_frequency": frequency,
+                "formation_dates": len(formation_dates),
+                "development_period": "2015-01-01 to 2023-12-31",
+                "holdout_period": "2024-01-01 to 2026-12-31",
+                "development_cumulative_return": development["cumulative_return"],
+                "development_annualized_return": development["annualized_return"] * 100,
+                "development_days": development["days"],
+                "holdout_cumulative_return": holdout["cumulative_return"],
+                "holdout_annualized_return": holdout["annualized_return"] * 100,
+                "holdout_days": holdout["days"],
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def _period_returns(daily: pd.DataFrame) -> pd.DataFrame:
     periods = {
         "2015-2019": (pd.Timestamp("2015-01-01"), pd.Timestamp("2019-12-31")),
@@ -261,6 +348,7 @@ def _write_report(
     periods: pd.DataFrame,
     signal_correlations: pd.DataFrame,
     robustness: pd.DataFrame,
+    rebalance_matrix: pd.DataFrame,
     metadata: dict[str, Any],
 ) -> None:
     lines = [
@@ -339,6 +427,20 @@ def _write_report(
             "holdout_annualized_return",
         ]
         lines.append(robustness[columns].to_markdown(index=False, floatfmt=".4f"))
+    lines.extend(["", "## Rebalance-frequency sensitivity", ""])
+    if rebalance_matrix.empty:
+        lines.append("No rebalance-frequency observations.")
+    else:
+        columns = [
+            "rebalance_frequency",
+            "formation_dates",
+            "net_annual_return",
+            "net_max_drawdown",
+            "annualized_turnover",
+            "development_annualized_return",
+            "holdout_annualized_return",
+        ]
+        lines.append(rebalance_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(
         [
             "",
@@ -353,6 +455,8 @@ def _write_report(
             "trades; this is not evidence of investable alpha.",
             "- The sensitivity matrix uses prior-session amount and close data, but it "
             "is not a full share-ledger or broker-fill model.",
+            "- Rebalance-frequency variants change only the formation cadence; costs and "
+            "participation mechanics are otherwise shared.",
             "- No parameter was selected from final out-of-sample results by this runner.",
             "",
             f"Metadata: `{metadata['metadata_file']}`.",
@@ -444,6 +548,20 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    rebalance_matrix = _run_rebalance_matrix(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        instruments=market_data.instruments,
+        transaction_cost_bps=transaction_cost_bps,
+        target_count=target_count,
+        buffer_count=buffer_count,
+        minimum_listed_days=minimum_listed_days,
+        initial_capital=initial_capital,
+        returns=return_matrix,
+        matrices=execution_context,
+    )
 
     signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
     summary.to_csv(outdir / "candidate_summary.csv", index=False)
@@ -453,6 +571,7 @@ def run_exploration(
     correlations.to_csv(outdir / "candidate_net_correlations.csv", index=True)
     signal_correlations.to_csv(outdir / "candidate_signal_correlations.csv", index=False)
     robustness.to_csv(outdir / "candidate_robustness_matrix.csv", index=False)
+    rebalance_matrix.to_csv(outdir / "candidate_rebalance_matrix.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -510,6 +629,7 @@ def run_exploration(
         periods=periods,
         signal_correlations=signal_correlations,
         robustness=robustness,
+        rebalance_matrix=rebalance_matrix,
         metadata=metadata,
     )
     return outdir
