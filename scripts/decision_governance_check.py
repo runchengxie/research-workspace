@@ -190,14 +190,12 @@ def _metric_names(payload: dict[str, Any], name: str, issues: list[str]) -> set[
     return seen
 
 
-def _check_counterexample(
+def _check_counterexample_identity(
     relative: str,
     payload: dict[str, Any],
     root: Path,
-) -> list[str]:
-    issues: list[str] = []
-    if payload.get("schema_version") != COUNTEREXAMPLE_SCHEMA_VERSION:
-        issues.append(f"schema_version 必须是 {COUNTEREXAMPLE_SCHEMA_VERSION}")
+    issues: list[str],
+) -> None:
     for name in ("counterexample_id", "claim_id", "summary", "as_of"):
         _required_text(payload, name, issues)
     counterexample_id = payload.get("counterexample_id")
@@ -217,27 +215,46 @@ def _check_counterexample(
     as_of = payload.get("as_of")
     if isinstance(as_of, str) and DATE_RE.fullmatch(as_of) is None:
         issues.append("as_of 必须是 YYYY-MM-DD")
+
+
+def _check_counterexample_enums(payload: dict[str, Any], issues: list[str]) -> None:
     if payload.get("scenario_type") not in COUNTEREXAMPLE_TYPES:
         issues.append(f"scenario_type 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_TYPES))} 之一")
     if payload.get("status") not in COUNTEREXAMPLE_STATUSES:
         issues.append(f"status 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_STATUSES))} 之一")
     if payload.get("severity") not in COUNTEREXAMPLE_SEVERITIES:
         issues.append(f"severity 必须属于 {'、'.join(sorted(COUNTEREXAMPLE_SEVERITIES))} 之一")
+
+
+def _check_stress_dimensions(payload: dict[str, Any], issues: list[str]) -> None:
     dimensions = payload.get("stress_dimensions")
     if not isinstance(dimensions, list) or not dimensions:
         issues.append("stress_dimensions 必须是非空列表")
-    else:
-        for index, item in enumerate(dimensions):
-            if not isinstance(item, dict):
-                issues.append(f"stress_dimensions[{index}] 必须是对象")
-                continue
-            if not isinstance(item.get("name"), str) or not item["name"].strip():
-                issues.append(f"stress_dimensions[{index}].name 必须是非空字符串")
-            for name in ("baseline", "stressed"):
-                if name not in item:
-                    issues.append(f"stress_dimensions[{index}].{name} 缺失")
-                elif isinstance(item[name], (dict, list)):
-                    issues.append(f"stress_dimensions[{index}].{name} 必须是 JSON 标量")
+        return
+    for index, item in enumerate(dimensions):
+        if not isinstance(item, dict):
+            issues.append(f"stress_dimensions[{index}] 必须是对象")
+            continue
+        if not isinstance(item.get("name"), str) or not item["name"].strip():
+            issues.append(f"stress_dimensions[{index}].name 必须是非空字符串")
+        for name in ("baseline", "stressed"):
+            if name not in item:
+                issues.append(f"stress_dimensions[{index}].{name} 缺失")
+            elif isinstance(item[name], (dict, list)):
+                issues.append(f"stress_dimensions[{index}].{name} 必须是 JSON 标量")
+
+
+def _check_counterexample(
+    relative: str,
+    payload: dict[str, Any],
+    root: Path,
+) -> list[str]:
+    issues: list[str] = []
+    if payload.get("schema_version") != COUNTEREXAMPLE_SCHEMA_VERSION:
+        issues.append(f"schema_version 必须是 {COUNTEREXAMPLE_SCHEMA_VERSION}")
+    _check_counterexample_identity(relative, payload, root, issues)
+    _check_counterexample_enums(payload, issues)
+    _check_stress_dimensions(payload, issues)
     baseline_names = _metric_names(payload, "baseline_metrics", issues)
     stressed_names = _metric_names(payload, "stressed_metrics", issues)
     if baseline_names and stressed_names and baseline_names != stressed_names:
