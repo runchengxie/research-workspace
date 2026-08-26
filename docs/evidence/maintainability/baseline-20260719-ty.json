@@ -10,12 +10,12 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 131,
-      "python_loc": 25669,
+      "python_file_count": 133,
+      "python_loc": 26741,
       "hk_related_file_count": 3,
       "hotspot_counts": {
-        "large_files": 3,
-        "long_functions": 2,
+        "large_files": 4,
+        "long_functions": 3,
         "complexity_hotspots": 1,
         "large_classes": 2
       },
@@ -23,6 +23,11 @@
         {
           "path": "tests/test_pre_push_hooks.py",
           "loc": 632,
+          "hk_related": false
+        },
+        {
+          "path": "strategy-research/style_factors/small_cap_low_turnover.py",
+          "loc": 614,
           "hk_related": false
         },
         {
@@ -48,6 +53,12 @@
           "name": "run_style_factor_analysis",
           "line_count": 110,
           "complexity": 15
+        },
+        {
+          "path": "strategy-research/style_factors/robustness_execution.py",
+          "name": "simulate_leg",
+          "line_count": 80,
+          "complexity": 11
         }
       ],
       "complexity_hotspots": [

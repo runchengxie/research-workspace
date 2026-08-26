@@ -48,7 +48,7 @@
 
 **Interfaces:**
 - Add a runner helper that labels each row with `turnover_definition`, `participation_rate`, `lot_size`, and `holdout_period`.
-- Reuse `simulate_long_only_candidates` for the raw composite only in the sensitivity matrix; retain the full six-arm baseline comparison.
+- Reuse `simulate_long_only_candidates` for the raw composite only in the sensitivity matrix; retain the full seven-arm baseline comparison.
 - Add `candidate_robustness_matrix.csv` and include development/holdout net returns in the Markdown report.
 
 - [x] **Step 1: Write a failing unit test** for the development/holdout period return helper.
