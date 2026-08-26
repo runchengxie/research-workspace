@@ -60,8 +60,10 @@ def test_candidate_signal_panel_has_small_cap_and_turnover_variants() -> None:
         "signal_small_cap",
         "signal_low_turnover",
         "signal_low_turnover_residual",
+        "signal_low_turnover_residual_industry",
         "signal_composite",
         "signal_composite_residual",
+        "signal_composite_residual_industry",
     }
     assert expected <= set(panel.columns)
     by_industry = panel.groupby("industry_l1")
@@ -82,6 +84,7 @@ def test_candidate_signal_panel_has_small_cap_and_turnover_variants() -> None:
         .all()
     )
     assert panel["signal_low_turnover_residual"].notna().all()
+    assert panel["signal_low_turnover_residual_industry"].notna().all()
     assert panel["signal_composite"].notna().all()
 
 
@@ -100,6 +103,28 @@ def test_residual_low_turnover_removes_size_and_lowvol_exposure() -> None:
     residual = panel["signal_low_turnover_residual"]
     assert abs(residual.corr(panel["size_score"])) < 1e-10
     assert abs(residual.corr(panel["lowvol_score"])) < 1e-10
+
+
+def test_industry_residual_removes_industry_dummy_exposure() -> None:
+    controls, turnover = _synthetic_signal_inputs()
+    industry_offset = np.where(controls["industry_l1"] == "A", 2.0, -2.0)
+    turnover["turnover_lagged_mean_60d"] = (
+        4.0 + controls["size_score"] + 0.7 * controls["lowvol_score"] + industry_offset
+    )
+
+    panel = build_candidate_signal_panel(
+        controls,
+        turnover,
+        minimum_sample=30,
+    )
+
+    plain = panel["signal_low_turnover_residual"]
+    industry = panel["signal_low_turnover_residual_industry"]
+    assert abs(industry.corr(panel["size_score"])) < 1e-10
+    assert abs(industry.corr(panel["lowvol_score"])) < 1e-10
+    industry_dummy = (panel["industry_l1"] == "A").astype(float)
+    assert abs(industry.corr(industry_dummy)) < 1e-10
+    assert abs(industry.corr(industry_dummy)) < abs(plain.corr(industry_dummy))
 
 
 def test_buffer_keeps_existing_names_until_exit_rank() -> None:

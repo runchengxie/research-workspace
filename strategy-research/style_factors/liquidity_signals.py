@@ -229,6 +229,42 @@ def _residualize_by_date(
     return (residuals - grouped.transform("mean")) / grouped.transform("std").replace(0, np.nan)
 
 
+def _residualize_by_date_with_industry(
+    frame: pd.DataFrame,
+    signal_column: str,
+    control_columns: tuple[str, ...],
+    *,
+    industry_column: str = "industry_l1",
+    minimum_sample: int = 30,
+) -> pd.Series:
+    """Residualize a signal against continuous controls and industry dummies per date."""
+    if industry_column not in frame.columns:
+        raise ValueError(f"frame must contain an industry column named {industry_column!r}")
+    residuals = pd.Series(np.nan, index=frame.index, dtype=float)
+    industries = pd.Categorical(frame[industry_column])
+    for _trade_date, group in frame.groupby("trade_date", sort=False):
+        columns = [signal_column, *control_columns, industry_column]
+        valid = group[columns].dropna()
+        if len(valid) < minimum_sample:
+            continue
+        industry_dummies = pd.get_dummies(
+            pd.Categorical(valid[industry_column], categories=industries.categories),
+            dtype=float,
+        )
+        design = np.column_stack(
+            [
+                np.ones(len(valid)),
+                *(valid[column].to_numpy() for column in control_columns),
+                industry_dummies.to_numpy(),
+            ]
+        )
+        target = valid[signal_column].to_numpy()
+        coefficients, *_rest = np.linalg.lstsq(design, target, rcond=None)
+        residuals.loc[valid.index] = target - design @ coefficients
+    grouped = residuals.groupby(frame["trade_date"], sort=False)
+    return (residuals - grouped.transform("mean")) / grouped.transform("std").replace(0, np.nan)
+
+
 def _mean_cross_sectional_correlation(
     frame: pd.DataFrame,
     left: str,

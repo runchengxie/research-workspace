@@ -17,7 +17,7 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Sensitivity execution inputs: prior-session close for lot sizing and prior observed traded amount for participation caps.
 - Cost case: 10 bps per unit of simulated traded notional.
 - Eligibility: minimum 180 listed days, non-ST, non-suspended, and present in the formation universe.
-- Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, raw 50/50 composite, residualized 50/50 composite, large-cap control, and low-volatility control.
+- Arms: small-cap, raw low-turnover, low-turnover residualized against size and low volatility, low-turnover residualized against size, low volatility, and one-hot industry dummies, raw 50/50 composite, residualized 50/50 composite, industry-residualized 50/50 composite, large-cap control, and low-volatility control.
 - Robustness matrix: raw composite only, 100m CNY research capital, 100-share lot rounding, and unconstrained/5%/10%/20% prior-session traded-amount cases (not rolling ADV).
 - Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
 
@@ -30,8 +30,10 @@ Values below are annualized return or turnover unless stated otherwise. Returns 
 | small-cap | 1.66% | 0.20 | -74.67% | 2.97x |
 | low-turnover | 5.44% | 0.33 | -51.84% | 6.79x |
 | low-turnover residual | -10.11% | -0.18 | -88.44% | 19.22x |
+| low-turnover residual (industry) | -7.73% | -0.09 | -84.65% | 19.95x |
 | raw composite | 7.24% | 0.38 | -68.59% | 6.77x |
 | residual composite | 4.22% | 0.29 | -75.23% | 15.42x |
+| residual composite (industry) | 1.37% | 0.20 | -81.88% | 13.02x |
 | large-cap control | 6.72% | 0.41 | -44.05% | 1.40x |
 | low-volatility control | 0.27% | 0.13 | -67.81% | 16.96x |
 
@@ -41,7 +43,8 @@ Values below are annualized return or turnover unless stated otherwise. Returns 
 2. The raw composite beats the large-cap control over this window, but the difference is not enough to call it robust: drawdown is severe, the sample is regime-sensitive, and the result is affected by the 2025 run.
 3. Residualizing low-turnover against size and low volatility destroys the standalone result. This is evidence that the observed low-turnover payoff is not an independent linear premium under this specification.
 4. Low-turnover has a mean cross-sectional correlation of about `0.48` with the low-volatility control. After residualization, the correlation with size and low volatility is approximately zero by construction, but the residual portfolio performs poorly.
-5. The result does not prove that low-turnover is “fake.” It says that a production thesis should not claim an independent low-turnover premium without additional controls, alternative definitions, and investability evidence.
+5. Adding one-hot industry dummies to the residualization changes the standalone arm modestly (-10.11% to -7.73%) and weakens the residual composite further (4.22% to 1.37%). The industry-residual signal is about `0.9995` correlated with the plain residual, because the raw signals are already sector-neutral z-scored. Industry neutralization therefore does not rescue the deconfounded low-turnover arm.
+6. The result does not prove that low-turnover is “fake.” It says that a production thesis should not claim an independent low-turnover premium without additional controls, alternative definitions, and investability evidence.
 
 ## Regime check
 

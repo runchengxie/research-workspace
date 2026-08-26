@@ -13,7 +13,11 @@ from typing import Any, Literal
 import numpy as np
 import pandas as pd
 
-from .liquidity_signals import _residualize_by_date, _standardize_signal
+from .liquidity_signals import (
+    _residualize_by_date,
+    _residualize_by_date_with_industry,
+    _standardize_signal,
+)
 from .robustness_execution import (
     LegSimulation,
     daily_return_matrix,
@@ -26,8 +30,10 @@ SIGNAL_COLUMNS = {
     "small_cap": "signal_small_cap",
     "low_turnover": "signal_low_turnover",
     "low_turnover_residual": "signal_low_turnover_residual",
+    "low_turnover_residual_industry": "signal_low_turnover_residual_industry",
     "composite": "signal_composite",
     "composite_residual": "signal_composite_residual",
+    "composite_residual_industry": "signal_composite_residual_industry",
     "large_cap_control": "signal_large_cap_control",
     "lowvol_control": "signal_lowvol_control",
 }
@@ -213,12 +219,14 @@ def build_candidate_signal_panel(
     turnover_column: str = "turnover_lagged_mean_60d",
     minimum_sample: int = 30,
 ) -> pd.DataFrame:
-    """Create sector-neutral candidate signals and two composite variants.
+    """Create sector-neutral candidate signals and composite variants.
 
     ``size_score`` is the existing large-cap score, so its sign is reversed
     for the small-cap candidate.  The raw composite combines raw low-turnover
     with small-cap; the residual composite uses a turnover signal after its
-    linear size and low-volatility components have been removed.
+    linear size and low-volatility components have been removed; the
+    industry-residual composite additionally removes one-hot industry
+    exposure before combining with small-cap.
     """
     _require_columns(
         controls,
@@ -245,6 +253,13 @@ def build_candidate_signal_panel(
         ("size_score", "lowvol_score"),
         minimum_sample=minimum_sample,
     )
+    panel["signal_low_turnover_residual_industry"] = _residualize_by_date_with_industry(
+        panel,
+        "signal_low_turnover",
+        ("size_score", "lowvol_score"),
+        industry_column="industry_l1",
+        minimum_sample=minimum_sample,
+    )
     panel["signal_composite"] = _standardize_signal(
         panel[["signal_small_cap", "signal_low_turnover"]].mean(axis=1),
         dates,
@@ -252,6 +267,11 @@ def build_candidate_signal_panel(
     )
     panel["signal_composite_residual"] = _standardize_signal(
         panel[["signal_small_cap", "signal_low_turnover_residual"]].mean(axis=1),
+        dates,
+        industries,
+    )
+    panel["signal_composite_residual_industry"] = _standardize_signal(
+        panel[["signal_small_cap", "signal_low_turnover_residual_industry"]].mean(axis=1),
         dates,
         industries,
     )
