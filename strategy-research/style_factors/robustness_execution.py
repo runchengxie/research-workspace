@@ -17,6 +17,22 @@ class LegSimulation:
     terminal_events: int
 
 
+def _validated_trade_weight_matrix(
+    max_trade_weight: np.ndarray | None,
+    expected_shape: tuple[int, ...],
+) -> np.ndarray | None:
+    if max_trade_weight is None:
+        return None
+    matrix = np.asarray(max_trade_weight, dtype=float)
+    if matrix.shape != expected_shape:
+        raise ValueError("max_trade_weight must have the expected shape")
+    if not np.all(np.isfinite(matrix)):
+        raise ValueError("max_trade_weight must contain only finite values")
+    if np.any(matrix < 0):
+        raise ValueError("max_trade_weight must be non-negative")
+    return matrix
+
+
 def daily_return_matrix(daily_clean: pd.DataFrame) -> pd.DataFrame:
     """Build the stock-by-date return matrix used by the simulator."""
     returns = daily_clean.pivot(
@@ -94,17 +110,9 @@ def attempt_pending_orders(
     increasing = pending & (target > weights + 1e-12)
     exit_allowed = tradable & ~(limit_down if side == "long" else limit_up)
     entry_allowed = tradable & ~(limit_up if side == "long" else limit_down)
-    trade_limit = (
-        np.full(weights.shape, np.inf, dtype=float)
-        if max_trade_weight is None
-        else np.asarray(max_trade_weight, dtype=float)
-    )
-    if trade_limit.shape != weights.shape:
-        raise ValueError("max_trade_weight must have the same shape as weights")
-    if not np.all(np.isfinite(trade_limit)) and max_trade_weight is not None:
-        raise ValueError("max_trade_weight must contain only finite values")
-    if np.any(trade_limit < 0):
-        raise ValueError("max_trade_weight must be non-negative")
+    trade_limit = _validated_trade_weight_matrix(max_trade_weight, weights.shape)
+    if trade_limit is None:
+        trade_limit = np.full(weights.shape, np.inf, dtype=float)
 
     executable_decreases = decreasing & exit_allowed
     decreases = (
@@ -158,14 +166,7 @@ def simulate_leg(
     terminal_events_applied = 0
 
     tradable_matrix, limit_up_matrix, limit_down_matrix = matrices
-    if max_trade_weight is not None:
-        max_trade_weight = np.asarray(max_trade_weight, dtype=float)
-        if max_trade_weight.shape != returns.shape:
-            raise ValueError("max_trade_weight must have the same shape as returns")
-        if not np.all(np.isfinite(max_trade_weight)):
-            raise ValueError("max_trade_weight must contain only finite values")
-        if np.any(max_trade_weight < 0):
-            raise ValueError("max_trade_weight must be non-negative")
+    max_trade_weight = _validated_trade_weight_matrix(max_trade_weight, returns.shape)
     for row_number, (date, row) in enumerate(
         zip(returns.index, returns.to_numpy(dtype=float), strict=True)
     ):
