@@ -45,6 +45,16 @@ class LongOnlySimulation:
     eligible_rows: int
 
 
+@dataclass(frozen=True)
+class _LongOnlyExecutionContext:
+    return_matrix: pd.DataFrame
+    matrix_tuple: tuple[np.ndarray, np.ndarray, np.ndarray]
+    trading_dates: pd.DatetimeIndex
+    capacity_matrix: np.ndarray | None
+    terminal_events: dict[pd.Timestamp, np.ndarray]
+    active_dates: pd.DatetimeIndex
+
+
 def _require_columns(frame: pd.DataFrame, columns: set[str], *, label: str) -> None:
     missing = sorted(columns - set(frame.columns))
     if missing:
@@ -446,6 +456,98 @@ def summarize_long_only_simulations(
     return pd.DataFrame(summary_rows), pd.DataFrame(daily).sort_index()
 
 
+def _build_long_only_execution_context(
+    daily_clean: pd.DataFrame,
+    instruments: pd.DataFrame,
+    formation_dates: pd.DatetimeIndex,
+    *,
+    initial_capital: float | None,
+    participation_rate: float | None,
+    returns: pd.DataFrame | None,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray] | None,
+) -> _LongOnlyExecutionContext:
+    if returns is None:
+        return_matrix = daily_return_matrix(daily_clean)
+        matrix_tuple = execution_matrices(daily_clean, return_matrix)
+    else:
+        assert matrices is not None
+        return_matrix = returns
+        matrix_tuple = matrices
+    trading_dates = pd.DatetimeIndex(return_matrix.index).normalize()  # ty: ignore[unresolved-attribute]
+    capacity_matrix = (
+        build_trade_capacity_matrix(
+            daily_clean,
+            return_matrix,
+            initial_capital=initial_capital,
+            participation_rate=participation_rate,
+        )
+        if participation_rate is not None and initial_capital is not None
+        else None
+    )
+    symbol_positions = {str(symbol): index for index, symbol in enumerate(return_matrix.columns)}
+    return _LongOnlyExecutionContext(
+        return_matrix=return_matrix,
+        matrix_tuple=matrix_tuple,
+        trading_dates=trading_dates,
+        capacity_matrix=capacity_matrix,
+        terminal_events=terminal_event_positions(instruments, trading_dates, symbol_positions),
+        active_dates=_active_dates(formation_dates, trading_dates),
+    )
+
+
+def _simulate_long_only_candidate(
+    *,
+    name: str,
+    signal_column: str,
+    eligible: pd.DataFrame,
+    formation_dates: pd.DatetimeIndex,
+    daily_clean: pd.DataFrame,
+    context: _LongOnlyExecutionContext,
+    target_count: int,
+    buffer_count: int,
+    initial_capital: float | None,
+    lot_size: int | None,
+    terminal_return: float,
+) -> LongOnlySimulation | None:
+    _require_columns(eligible, {signal_column}, label=f"candidate {name}")
+    formation_targets = build_buffered_targets(
+        eligible,
+        formation_dates,
+        signal_column=signal_column,
+        target_count=target_count,
+        buffer_count=buffer_count,
+    )
+    execution_targets = map_targets_to_execution_dates(
+        formation_targets,
+        context.trading_dates,
+    )
+    if lot_size is not None and initial_capital is not None:
+        execution_targets = round_target_weights_to_lots(
+            execution_targets,
+            daily_clean,
+            initial_capital=initial_capital,
+            lot_size=lot_size,
+        )
+    if not execution_targets:
+        return None
+    return LongOnlySimulation(
+        name=name,
+        signal_column=signal_column,
+        targets=execution_targets,
+        leg=simulate_leg(
+            context.return_matrix,
+            context.matrix_tuple,
+            execution_targets,
+            context.terminal_events,
+            side="long",
+            terminal_return=terminal_return,
+            max_trade_weight=context.capacity_matrix,
+        ),
+        active_dates=context.active_dates,
+        eligible_rows=len(eligible),
+    )
+
+
 def simulate_long_only_candidates(
     signal_panel: pd.DataFrame,
     daily_clean: pd.DataFrame,
@@ -483,62 +585,30 @@ def simulate_long_only_candidates(
         minimum_listed_days=minimum_listed_days,
     )
     formation_dates = pd.DatetimeIndex(sorted(eligible["trade_date"].unique())).normalize()  # ty: ignore[unresolved-attribute]
-    if returns is None:
-        return_matrix = daily_return_matrix(daily_clean)
-        matrix_tuple = execution_matrices(daily_clean, return_matrix)
-    else:
-        assert matrices is not None
-        return_matrix = returns
-        matrix_tuple = matrices
-    trading_dates = pd.DatetimeIndex(return_matrix.index).normalize()  # ty: ignore[unresolved-attribute]
-    capacity_matrix = (
-        build_trade_capacity_matrix(
-            daily_clean,
-            return_matrix,
-            initial_capital=initial_capital,
-            participation_rate=participation_rate,
-        )
-        if participation_rate is not None and initial_capital is not None
-        else None
+    context = _build_long_only_execution_context(
+        daily_clean,
+        instruments,
+        formation_dates,
+        initial_capital=initial_capital,
+        participation_rate=participation_rate,
+        returns=returns,
+        matrices=matrices,
     )
-    symbol_positions = {str(symbol): index for index, symbol in enumerate(return_matrix.columns)}
-    terminal_events = terminal_event_positions(instruments, trading_dates, symbol_positions)
-    active_dates = _active_dates(formation_dates, trading_dates)
     simulations: dict[str, LongOnlySimulation] = {}
     for name, signal_column in candidates.items():
-        _require_columns(eligible, {signal_column}, label=f"candidate {name}")
-        formation_targets = build_buffered_targets(
-            eligible,
-            formation_dates,
-            signal_column=signal_column,
-            target_count=target_count,
-            buffer_count=buffer_count,
-        )
-        execution_targets = map_targets_to_execution_dates(formation_targets, trading_dates)
-        if lot_size is not None and initial_capital is not None:
-            execution_targets = round_target_weights_to_lots(
-                execution_targets,
-                daily_clean,
-                initial_capital=initial_capital,
-                lot_size=lot_size,
-            )
-        if not execution_targets:
-            continue
-        leg = simulate_leg(
-            return_matrix,
-            matrix_tuple,
-            execution_targets,
-            terminal_events,
-            side="long",
-            terminal_return=terminal_return,
-            max_trade_weight=capacity_matrix,
-        )
-        simulations[name] = LongOnlySimulation(
+        simulation = _simulate_long_only_candidate(
             name=name,
             signal_column=signal_column,
-            targets=execution_targets,
-            leg=leg,
-            active_dates=active_dates,
-            eligible_rows=len(eligible),
+            eligible=eligible,
+            formation_dates=formation_dates,
+            daily_clean=daily_clean,
+            context=context,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            initial_capital=initial_capital,
+            lot_size=lot_size,
+            terminal_return=terminal_return,
         )
+        if simulation is not None:
+            simulations[name] = simulation
     return simulations
