@@ -49,6 +49,14 @@
 生命周期变化必须配套证据包，禁止用单点回测数字代替证据清单。
 研究判断与决策记录（判断账本、案例、评审与来源溯源）见 [../docs/research-decision-governance.md](../docs/research-decision-governance.md)。
 
+## 策略研究与 E2
+
+E2 是针对具体策略候选的生产准备审计，不属于 active strategy research。推荐顺序是：
+
+`active strategy research → stable candidate → focused E2 audit → production decision`
+
+E2 不创建策略身份。通用 `strategy run --config ...` 只有在绑定到明确的投资假设、候选范围、信号、组合规则和生命周期后，才能进入策略评审。
+
 ## 新增与晋级
 
 1. 先在本目录新增人类可读说明和 `catalog.json` 条目。

@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-11
+> last_verified: 2026-08-26
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -22,6 +22,15 @@
 证据门禁把这些问题变成策略生命周期每个阶段必须检查的清单。清单由
 [evidence_policy.json](../strategy-research/evidence_policy.json) 定义，机器可读，
 由 [strategy_evidence_gate.py](../scripts/strategy_evidence_gate.py) 执行校验。
+
+## E2 的定位
+
+E2 的定位是 production-readiness audit。E2 is a production-readiness audit, not active strategy research.
+它检查已经选定的策略候选能否形成可复核的长窗口、成本、容量、执行和 lineage 证据。
+E2 不创建新的策略，也不要求每个探索实验立即完成全部晋级检查。
+
+当前五个有强制证据要求的 catalog 策略仍为 `production_eligible: false`。
+通用 `strategy run --config ...` 是可配置运行流程，不能单独作为策略身份或晋级对象。
 
 ## 生命周期与必检证据
 
@@ -96,7 +105,7 @@
 - 已知缺口豁免（known_gaps_waived）：缺失项全部出现在 `known_gaps` 中，且策略在 `catalog.json` 的 `production_eligible` 为 `false` 时，门禁不阻断（退出码 0），但在报告中标注「已知缺口豁免」。
 - 生产策略：`production_eligible` 为 `true` 的策略必须关闭全部必需检查，任何缺失（无论是否登记）都保持硬失败。
 
-每个策略的证据包放在 `strategy-research/evidence/<策略id>.json`。截至 2026-08-17，
+每个策略的证据包放在 `strategy-research/evidence/<策略id>.json`。截至 2026-08-26，
 已将五个策略的既有 A 股研究证据（`docs/evidence/a-share-*.json`、strategy-app 回执）
 如实组装为证据包，并把 `daily_watch20` 从 `operational` 校正为 `research_shadow`
 （`production_eligible` 改为 `false`），消除其证据门禁结果（`present: []`）与治理声明

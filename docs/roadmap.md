@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-25
+> last_verified: 2026-08-26
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -31,11 +31,15 @@
 
 > 状态口径见上。本表数字已与机器账本核对，`production_eligible` 全部为 `false`，故证据门禁当前对五策略均按"已知缺口豁免"放行（见 E1 治理修正）。
 
+### 当前优先级说明
+
+E2 是生产准备审计（production-readiness audit），不替代当前策略研究。当前主线继续推进已登记策略的投资假设、信号和组合实验。只有选定真实策略候选后，才运行该策略的完整 E2 审计。
+
 | 编号 | 优先级 | 状态 | 负责方 | 项目 | 当前缺口（已核实） |
 | --- | --- | --- | --- | --- | --- |
 | D1 | P0 | `complete` | `market-data-platform` | A 股完整研究数据 | `normalized_fundamentals` 已发布（mdp PR #46 多 dataset 发布工具 + 真实发布，2026-08-18）：current 契约 `exists: true`、`is_symlink: true`，latest alias 解析到 `a_share_all_normalized_fundamentals_20260814`，`as_of=20260817`，manifest `schema_version=normalized.v2`，覆盖 20150101–20260815，911,680 行，7,620 只证券，合并快照经 `validate_normalized_fundamentals` 校验 `status passed`。`pit_fundamentals` 同步升级到 v2 PIT（911,669 行）。`capacity`/`turnover-cost` 长窗口压力证据仍 `pending`，属 E2 范围 |
 | E1 | P0 | `complete` | `strategy-research`、workspace | 策略生命周期证据 | 门禁双档已实现（`--strict` 护栏档 + `--strict --zero-gaps` 晋级评审档），`production_eligible` 全 `false` 致原 `--strict` 形同虚设的问题以双档收口，不再误标生产级。五策略真实缺口（含 `daily_watch20` 的 pit/cost/final_oos/regime 非 pass）登记于各自 `known_gaps`，待 E2 长窗口证据补齐后晋级档归零 |
-| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | 长窗口最终样本外、成本压力和容量证据尚未形成当前可晋级组合，PIT/历史行业/日线已发布不等同于晋级完成。生成 runbook 与 `configs/experiments/variants/a_share_long_window.yml` 已落地。2026-08-23 strategy-pipeline PR #74 已合并（`1d0fd1b`），指数/PIT Top800 benchmark 日收益构建与 turnover-cost evidence 生成已从手工步骤工具化，research-workspace PR #189 同步对应 pipeline gitlink。真实 2015→latest 长窗口计算、历史行情覆盖核实和 canonical promotion evidence 仍未生成，因此 E2 保持 `in_progress` |
+| E2 | P0 | `in_progress` | data、alpha、portfolio、strategy owners | A 股长窗口晋级证据 | E2 producer tooling 与一次真实长窗口 diagnostic run 已存在，生成了 test、final OOS、benchmark、CPCV、capacity 和 turnover 产物。当前 benchmark universe、A 股执行规则、成本证据格式和 run 到 receipt 的版本 lineage 仍需修正，且运行产物位于本地 ignored artifacts，尚未形成 canonical promotion evidence。PIT/历史行业/日线已发布不等同于晋级完成。E2 保持 `in_progress`，待选定真实策略候选后再进入完整晋级审计 |
 | C1 | P1 | `complete` | workspace、各产物 owner | Artifact Envelope v2 | 类型、v1 fixture 兼容读取、v2 校验已落地，writer 为 opt-in。生产方已全部采用：`alpha-research` signals 写入方（`signal_artifact.py`/`StyleReplicaSignalGenerator.write`，alpha-research PR #26）、`portfolio-backtester` positions 写入方（`positions_artifact.py`，PR #36）、`strategy-pipeline` targets 写入方（`export_targets.py`，在 `targets.json.lineage.json` sidecar 写 `artifact_envelope` v2，配置/内容/上游文件哈希与 producer 身份由契约测试验证）均已写入 `artifact_envelope` 键并经契约测试。`research-contracts` 作为 git 子目录由各生产方按不可变 commit 安装 |
 | B1 | P1 | `complete` | `strategy-app`、`strategy-pipeline`、owner repos | 跨仓公开 API 收口 | 2026-08-25 收口剩余外围私有调用：`alpha-research` 为 DailyWatch20 日期/涨跌停 helper 与 period evaluation 提供公开入口，`portfolio-backtester` 为 period outputs 提供公开入口，`strategy-app` 为 D11-H5 与 market-shadow 提供公开 facade，pipeline/app 调用方全部改向公开名，原位于 `strategy-research` 的 4 个 alpha 私有 helper 单测已迁回 alpha owner。`workspace_import_boundaries.v3` 新增跨仓 `_private` 符号/模块 AST 门禁，`strategy-app`、`strategy-pipeline` 和 `strategy-research` owner-integration tests 当前均为 0/0 |
 | DOC1 | P1 | `complete` | workspace、各仓文档 owner | 说明文档归集 | 路线图总账已建立，治理修正 G3 已将 `strategy-research/README.md:9` 与 `strategies/daily_watch20/README.md:7-8` 的 `operational`/`生产资格:有` 校正为 `research_shadow`/`否`，与 `catalog.json` 一致（PR #148 已合并）。碎片化清单见 `documentation-consolidation.md`，剩余 DOC2/DOC4/DOC5 等去重按该清单分批推进 |

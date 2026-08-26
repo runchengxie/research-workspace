@@ -48,6 +48,15 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
         assert "strategy-app" not in item.command
 
 
+def test_type_check_runs_with_workspace_dependencies() -> None:
+    command = run_quality_checks._ty_command("check")
+
+    assert command[:3] == ("uv", "run", "--project")
+    assert command[3] == str(ROOT)
+    assert command[4:7] == ("--with", "ty", "ty")
+    assert command[-1] == "check"
+
+
 def test_hard_profile_includes_workspace_architecture_gates() -> None:
     commands = run_quality_checks.plan_commands("hard")
 
