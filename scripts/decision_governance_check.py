@@ -334,7 +334,13 @@ def _check_case(relative: str, payload: dict[str, Any], root: Path) -> list[str]
     if isinstance(case_id, str) and ID_RE.fullmatch(case_id) is None:
         issues.append("case_id 必须是 [a-z0-9][a-z0-9._-]*")
     _check_decision(payload, issues)
-    for name in ("research_specs", "claims", "counterexamples", "evidence_bundles", "known_gaps"):
+    for name in (
+        "research_specs",
+        "claims",
+        "counterexamples",
+        "evidence_bundles",
+        "known_gaps",
+    ):
         _string_list(payload, name, issues)
     _objects_list(payload, "abstentions", ("dimension", "reason"), issues)
     _check_dg4(payload, issues)
@@ -412,7 +418,8 @@ def main(argv: list[str] | None = None) -> int:
     elif args.source:
         checks.append(check_source(args.source.resolve(), root=root))
     else:
-        checks.extend(check_claim(path, root=root) for path in _files(root, "judgment-ledger", "*.json"))
+        claim_files = _files(root, "judgment-ledger", "*.json")
+        checks.extend(check_claim(path, root=root) for path in claim_files)
         checks.extend(check_case(path, root=root) for path in _files(root, "cases", "case.json"))
         checks.extend(
             check_counterexample(path, root=root)
