@@ -46,9 +46,7 @@ def _valid_counterexample(counterexample_id: str = "demo.claim.cost-stress") -> 
         "as_of": "2026-08-26",
         "status": "open",
         "severity": "material",
-        "stress_dimensions": [
-            {"name": "round_trip_cost_bps", "baseline": "10", "stressed": "40"}
-        ],
+        "stress_dimensions": [{"name": "round_trip_cost_bps", "baseline": "10", "stressed": "40"}],
         "baseline_metrics": [{"name": "net_sharpe", "value": 0.8}],
         "stressed_metrics": [{"name": "net_sharpe", "value": 0.1}],
         "failure_conditions": ["net_sharpe < 0.2"],

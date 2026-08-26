@@ -310,6 +310,54 @@ def _check_dg5(payload: dict[str, Any], issues: list[str]) -> None:
         issues.append(f"DG5：reviews 必须同时包含 kind={missing} 的评审")
 
 
+def _check_case_id_ref(
+    payload: dict[str, Any],
+    case_dir: Path,
+    root: Path,
+    issues: list[str],
+) -> None:
+    case_id = payload.get("case_id")
+    if isinstance(case_id, str):
+        expected = root / "strategy-research" / "cases" / case_id
+        if case_dir != expected:
+            issues.append(f"case 目录必须与 case_id 一致：{expected}")
+
+
+def _check_case_claim_refs(
+    payload: dict[str, Any],
+    root: Path,
+    issues: list[str],
+) -> None:
+    for claim_ref in payload.get("claims", []):
+        if isinstance(claim_ref, str):
+            claim_path = root / "strategy-research" / "judgment-ledger" / f"{claim_ref}.json"
+            if not claim_path.is_file():
+                issues.append(f"claims 引用缺失：{claim_ref}")
+
+
+def _check_case_counterexample_refs(
+    payload: dict[str, Any],
+    root: Path,
+    issues: list[str],
+) -> None:
+    for counterexample_ref in payload.get("counterexamples", []):
+        if isinstance(counterexample_ref, str):
+            path = root / "strategy-research" / "counterexamples" / f"{counterexample_ref}.json"
+            if not path.is_file():
+                issues.append(f"counterexamples 引用缺失：{counterexample_ref}")
+
+
+def _check_case_review_refs(
+    payload: dict[str, Any],
+    case_dir: Path,
+    issues: list[str],
+) -> None:
+    for review in payload.get("reviews", []):
+        if isinstance(review, dict) and isinstance(review.get("file"), str):
+            if not (case_dir / review["file"]).is_file():
+                issues.append(f"reviews 引用缺失：{review['file']}")
+
+
 def _resolve_case_refs(
     payload: dict[str, Any],
     relative: str,
@@ -317,25 +365,10 @@ def _resolve_case_refs(
     issues: list[str],
 ) -> None:
     case_dir = (root / relative).parent
-    case_id = payload.get("case_id")
-    if isinstance(case_id, str):
-        expected = root / "strategy-research" / "cases" / case_id
-        if case_dir != expected:
-            issues.append(f"case 目录必须与 case_id 一致：{expected}")
-    for claim_ref in payload.get("claims", []):
-        if isinstance(claim_ref, str):
-            claim_path = root / "strategy-research" / "judgment-ledger" / f"{claim_ref}.json"
-            if not claim_path.is_file():
-                issues.append(f"claims 引用缺失：{claim_ref}")
-    for counterexample_ref in payload.get("counterexamples", []):
-        if isinstance(counterexample_ref, str):
-            path = root / "strategy-research" / "counterexamples" / f"{counterexample_ref}.json"
-            if not path.is_file():
-                issues.append(f"counterexamples 引用缺失：{counterexample_ref}")
-    for review in payload.get("reviews", []):
-        if isinstance(review, dict) and isinstance(review.get("file"), str):
-            if not (case_dir / review["file"]).is_file():
-                issues.append(f"reviews 引用缺失：{review['file']}")
+    _check_case_id_ref(payload, case_dir, root, issues)
+    _check_case_claim_refs(payload, root, issues)
+    _check_case_counterexample_refs(payload, root, issues)
+    _check_case_review_refs(payload, case_dir, issues)
 
 
 def _check_case(relative: str, payload: dict[str, Any], root: Path) -> list[str]:
