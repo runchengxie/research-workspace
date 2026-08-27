@@ -174,6 +174,8 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_reconciliation_matrix.csv`
 - `candidate_capacity_ladder.csv`
 - `candidate_joint_matrix.csv`
+- `candidate_size_turnover_double_sort.csv`
+- `candidate_delayed_fill_attribution.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
 - `small_cap_low_turnover_exploration.md`
@@ -183,7 +185,9 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 
 - The baseline simulator uses continuous portfolio weights; the reconciliation shows its semantics understate this strategy family, so weight-level rows are screening references only.
 - Participation caps use prior observed traded amount, constant research capital, and per-symbol static weight caps; this is not rolling ADV or a broker fill model. The optional participation-based slippage sensitivity prices the requested fill amount against that same source liquidity measure, but is not a full impact calibration.
-- The reconciliation attributes the composite's constraint-induced gain to delayed fills in the illiquid tail. The impact sensitivity is currently wired to the share-ledger matrix only; reconciliation and capital-ladder propagation remain open.
+- The reconciliation attributes the composite's constraint-induced gain to delayed fills in the illiquid tail. The impact sensitivity now propagates through the share-ledger, reconciliation, and capital-ladder outputs, but it remains a parameterized sensitivity rather than a broker-calibrated impact curve.
+- Delayed-fill attribution reports execution-path evidence: positive `delay_opportunity_cost` means the requested side moved against the unfilled quantity before its first fill; negative means the delay helped. Neither should be counted as signal alpha.
+- The owner native backend now supports the same slippage model in ledger mode and emits a capability receipt, but it remains comparison-only until dates, exits, cash, fills, and costs reconcile with the constrained ledger.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
 - The experiment does not yet include dynamic capacity, broker-specific fills, or a live paper-trading observation period.
@@ -192,4 +196,4 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 
 ## Recommended next step
 
-Do not promote this composite yet. With the engine gap reconciled, the decision basis is the constrained ledger: propagate the opt-in impact model through reconciliation and capital scaling, evaluate incremental net performance versus the large-cap control, and locate where fills collapse. Any cadence or definition choice must be justified on the 2015–2023 development window only.
+Do not promote this composite yet. The next decision basis is the constrained ledger with impact enabled: inspect the delay attribution, compare incremental net performance versus both controls, and use the double-sort to test whether low turnover is conditional on small size. Any cadence or definition choice must be justified on the 2015–2023 development window only. Promote the owner backend only after it reproduces these same comparisons and accounting semantics.

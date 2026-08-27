@@ -679,6 +679,7 @@ def test_reconciliation_matrix_decomposes_engine_gap() -> None:
         buffer_count=6,
         minimum_listed_days=0,
         initial_capital=1_000_000.0,
+        impact_bps=100.0,
         returns=returns,
         matrices=matrices,
         frequencies=("monthly",),
@@ -697,10 +698,20 @@ def test_reconciliation_matrix_decomposes_engine_gap() -> None:
     }
     control_arms = set(matrix.loc[matrix["candidate"] == "large_cap_control", "engine_arm"])
     assert control_arms == {"weight_level", "ideal_nav", "ledger_full"}
+    assert set(matrix.loc[matrix["candidate"] == "small_cap", "engine_arm"]) == {
+        "weight_level",
+        "ideal_nav",
+        "ledger_full",
+    }
     weight_rows = matrix.loc[matrix["engine_arm"] == "weight_level"]
     assert weight_rows["fill_ratio"].isna().all()
     ledger_rows = matrix.loc[matrix["engine_arm"] != "weight_level"]
     assert ledger_rows["fill_ratio"].notna().all()
+    assert ledger_rows["temporary_impact"].ge(0.0).all()
+    assert matrix.loc[matrix["engine_arm"] == "ledger_full", "temporary_impact"].gt(0.0).any()
+    comparable = matrix["engine_arm"].isin({"weight_level", "ideal_nav", "ledger_full"})
+    assert matrix.loc[comparable, "incremental_vs_small_cap"].notna().all()
+    assert matrix.loc[comparable, "incremental_vs_large_cap"].notna().all()
     assert matrix["net_annual_return"].notna().all()
 
 
@@ -726,6 +737,7 @@ def test_capacity_ladder_reports_requested_capitals() -> None:
         target_count=4,
         buffer_count=6,
         minimum_listed_days=0,
+        impact_bps=100.0,
         capitals=(1_000_000.0, 10_000_000.0),
     )
 
@@ -733,6 +745,7 @@ def test_capacity_ladder_reports_requested_capitals() -> None:
     assert ladder["capital"].tolist() == [1_000_000.0, 10_000_000.0]
     assert (ladder["status"] == "ok").all()
     assert ladder["fill_ratio"].notna().all()
+    assert ladder["temporary_impact"].gt(0.0).all()
     assert ladder["net_annual_return"].notna().all()
 
 

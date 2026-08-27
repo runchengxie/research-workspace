@@ -24,11 +24,14 @@ from portfolio_backtester.position_backtest import PositionBacktestConfig
 from style_factors.data import load_sw_industry_membership
 from style_factors.liquidity_signals import build_liquidity_control_panel
 from style_factors.portfolio_backtester_adapter import (
+    attribute_delayed_fills,
+    owner_execution_receipt,
     periods_from_positions,
     run_native_position_replay,
 )
 from style_factors.robustness_data import load_robustness_market_data
 from style_factors.robustness_execution import daily_return_matrix, execution_matrices
+from style_factors.size_turnover_double_sort import build_size_turnover_double_sort
 from style_factors.small_cap_low_turnover import (
     SIGNAL_COLUMNS,
     build_buffered_targets,
@@ -359,6 +362,21 @@ def _build_share_ledger_positions(
     return pd.DataFrame(rows)
 
 
+def _participation_slippage_model(
+    impact_bps: float,
+    *,
+    portfolio_value: float,
+) -> ParticipationSlippageModel | None:
+    if impact_bps <= 0:
+        return None
+    return ParticipationSlippageModel(
+        impact_bps=float(impact_bps),
+        amount_col="amount",
+        amount_multiplier=1_000.0,
+        portfolio_value=float(portfolio_value),
+    )
+
+
 def _run_share_ledger_matrix(
     *,
     daily_clean: pd.DataFrame,
@@ -372,6 +390,7 @@ def _run_share_ledger_matrix(
     minimum_listed_days: int,
     initial_capital: float,
     impact_bps: float = 0.0,
+    attribution_rows: list[pd.DataFrame] | None = None,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
 ) -> pd.DataFrame:
     """Run the raw composite under a cash-ledger execution model.
@@ -422,16 +441,6 @@ def _run_share_ledger_matrix(
         if positions.empty:
             continue
         owner_periods = periods_from_positions(positions, pricing)
-        owner_result = run_native_position_replay(
-            positions,
-            pricing,
-            owner_periods,
-            config=PositionBacktestConfig(
-                price_col="close",
-                transaction_cost_bps=transaction_cost_bps,
-            ),
-        )
-        owner_returns = owner_result.performance["net_return"].dropna()
         config = ExecutionSimConfig(
             enabled=True,
             portfolio_value=initial_capital,
@@ -443,16 +452,24 @@ def _run_share_ledger_matrix(
             round_lot=100,
             enforce_t1=True,
         )
-        slippage_model = (
-            ParticipationSlippageModel(
-                impact_bps=float(impact_bps),
-                amount_col="amount",
-                amount_multiplier=1_000.0,
-                portfolio_value=initial_capital,
-            )
-            if impact_bps > 0
-            else None
+        slippage_model = _participation_slippage_model(
+            impact_bps,
+            portfolio_value=initial_capital,
         )
+        owner_result = run_native_position_replay(
+            positions,
+            pricing,
+            owner_periods,
+            config=PositionBacktestConfig(
+                price_col="close",
+                transaction_cost_bps=transaction_cost_bps,
+                tradable_col="amount",
+            ),
+            ledger=True,
+            ledger_config=config,
+            slippage_model=slippage_model,
+        )
+        owner_returns = owner_result.performance["net_return"].dropna()
         result = simulate_execution_adjusted_nav(
             positions,
             pricing,
@@ -462,6 +479,11 @@ def _run_share_ledger_matrix(
             transaction_cost_bps=transaction_cost_bps,
             slippage_model=slippage_model,
         )
+        attribution = attribute_delayed_fills(result.orders, result.fills, pricing)
+        if attribution_rows is not None:
+            detail = attribution.copy()
+            detail.insert(0, "rebalance_frequency", frequency)
+            attribution_rows.append(detail)
         summary = result.summary
         stats = summary.get("stats", {})
         rows.append(
@@ -481,15 +503,19 @@ def _run_share_ledger_matrix(
                 "share_ledger_cumulative_turnover": (
                     float(summary.get("filled_notional", 0.0)) / initial_capital
                 ),
-                "share_ledger_temporary_impact": float(
-                    result.daily["cost_temporary_impact"].sum()
+                "share_ledger_temporary_impact": float(result.daily["cost_temporary_impact"].sum()),
+                "share_ledger_delay_opportunity_cost": float(
+                    attribution["delay_opportunity_cost"].sum()
                 ),
+                "share_ledger_delayed_orders": int(attribution["delay_days"].gt(0).sum()),
                 "weight_level_targets": len(execution_targets),
                 "owner_period_replay_status": "ok",
                 "owner_period_replay_periods": len(owner_returns),
-                "owner_period_replay_cumulative_return": float(
-                    (1.0 + owner_returns).prod() - 1.0
+                "owner_period_replay_cumulative_return": float((1.0 + owner_returns).prod() - 1.0),
+                "owner_ledger_temporary_impact": float(
+                    owner_result.fills.get("cost_temporary_impact", pd.Series(dtype=float)).sum()
                 ),
+                "owner_canonical_status": owner_execution_receipt(owner_result)["canonical_status"],
             }
         )
     return pd.DataFrame(rows)
@@ -517,6 +543,9 @@ def _ledger_arm_row(
         "avg_cash_weight": result.summary.get("avg_cash_weight"),
         "cumulative_turnover": (
             float(result.summary.get("filled_notional", 0.0)) / initial_capital
+        ),
+        "temporary_impact": float(
+            result.fills.get("cost_temporary_impact", pd.Series(dtype=float)).sum()
         ),
     }
 
@@ -557,6 +586,7 @@ def _run_reconciliation_matrix(
     initial_capital: float,
     returns: pd.DataFrame,
     matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    impact_bps: float = 0.0,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
 ) -> pd.DataFrame:
     """Decompose the weight-level versus cash-ledger result gap.
@@ -577,6 +607,7 @@ def _run_reconciliation_matrix(
     ].rename(columns={"tr_close": "close"})
     candidates = (
         ("composite", "signal_composite"),
+        ("small_cap", "signal_small_cap"),
         ("large_cap_control", "signal_large_cap_control"),
     )
 
@@ -672,6 +703,10 @@ def _run_reconciliation_matrix(
                 price_col="close",
                 tradable_col="amount",
                 transaction_cost_bps=transaction_cost_bps,
+                slippage_model=_participation_slippage_model(
+                    impact_bps,
+                    portfolio_value=initial_capital,
+                ),
             )
             rows.append(
                 _ledger_arm_row(
@@ -739,6 +774,10 @@ def _run_reconciliation_matrix(
                     price_col="close",
                     tradable_col="amount",
                     transaction_cost_bps=cost_bps,
+                    slippage_model=_participation_slippage_model(
+                        impact_bps,
+                        portfolio_value=initial_capital,
+                    ),
                 )
                 rows.append(
                     _ledger_arm_row(
@@ -756,6 +795,10 @@ def _run_reconciliation_matrix(
                 price_col="close",
                 tradable_col="amount",
                 transaction_cost_bps=0.0,
+                slippage_model=_participation_slippage_model(
+                    impact_bps,
+                    portfolio_value=initial_capital,
+                ),
             )
             rows.append(
                 _ledger_arm_row(
@@ -766,7 +809,21 @@ def _run_reconciliation_matrix(
                     initial_capital=initial_capital,
                 )
             )
-    return pd.DataFrame(rows)
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    comparison_keys = ["rebalance_frequency", "engine_arm"]
+    small = out.loc[
+        out["candidate"].eq("small_cap"), [*comparison_keys, "net_annual_return"]
+    ].rename(columns={"net_annual_return": "small_cap_return"})
+    large = out.loc[
+        out["candidate"].eq("large_cap_control"), [*comparison_keys, "net_annual_return"]
+    ].rename(columns={"net_annual_return": "large_cap_return"})
+    out = out.merge(small, on=comparison_keys, how="left")
+    out = out.merge(large, on=comparison_keys, how="left")
+    out["incremental_vs_small_cap"] = out["net_annual_return"] - out["small_cap_return"]
+    out["incremental_vs_large_cap"] = out["net_annual_return"] - out["large_cap_return"]
+    return out.drop(columns=["small_cap_return", "large_cap_return"])
 
 
 def _run_capacity_ladder(
@@ -780,6 +837,7 @@ def _run_capacity_ladder(
     target_count: int,
     buffer_count: int,
     minimum_listed_days: int,
+    impact_bps: float = 0.0,
     capitals: tuple[float, ...] = (10_000_000.0, 100_000_000.0, 500_000_000.0),
 ) -> pd.DataFrame:
     """Run the monthly raw composite through the constrained ledger at capital sizes.
@@ -845,7 +903,12 @@ def _run_capacity_ladder(
             price_col="close",
             tradable_col="amount",
             transaction_cost_bps=transaction_cost_bps,
+            slippage_model=_participation_slippage_model(
+                impact_bps,
+                portfolio_value=capital,
+            ),
         )
+        attribution = attribute_delayed_fills(result.orders, result.fills, pricing)
         summary = result.summary
         stats = summary.get("stats", {})
         ann_return = stats.get("ann_return")
@@ -859,9 +922,12 @@ def _run_capacity_ladder(
                 "max_drawdown": max_drawdown * 100 if max_drawdown is not None else None,
                 "fill_ratio": summary.get("fill_ratio"),
                 "avg_cash_weight": summary.get("avg_cash_weight"),
-                "cumulative_turnover": (
-                    float(summary.get("filled_notional", 0.0)) / capital
+                "cumulative_turnover": (float(summary.get("filled_notional", 0.0)) / capital),
+                "temporary_impact": float(
+                    result.fills.get("cost_temporary_impact", pd.Series(dtype=float)).sum()
                 ),
+                "delay_opportunity_cost": float(attribution["delay_opportunity_cost"].sum()),
+                "delayed_orders": int(attribution["delay_days"].gt(0).sum()),
             }
         )
     return pd.DataFrame(rows)
@@ -1117,6 +1183,11 @@ def _write_report(
             "owner_period_replay_status",
             "owner_period_replay_periods",
             "owner_period_replay_cumulative_return",
+            "share_ledger_temporary_impact",
+            "share_ledger_delay_opportunity_cost",
+            "share_ledger_delayed_orders",
+            "owner_ledger_temporary_impact",
+            "owner_canonical_status",
         ]
         lines.append(share_ledger_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(["", "## Ledger reconciliation", ""])
@@ -1133,6 +1204,9 @@ def _write_report(
             "fill_ratio",
             "avg_cash_weight",
             "cumulative_turnover",
+            "temporary_impact",
+            "incremental_vs_small_cap",
+            "incremental_vs_large_cap",
         ]
         lines.append(reconciliation_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(["", "## Capital ladder (ledger)", ""])
@@ -1148,6 +1222,9 @@ def _write_report(
             "fill_ratio",
             "avg_cash_weight",
             "cumulative_turnover",
+            "temporary_impact",
+            "delay_opportunity_cost",
+            "delayed_orders",
         ]
         lines.append(capacity_ladder[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(["", "## Turnover-definition × cadence matrix", ""])
@@ -1261,7 +1338,6 @@ def run_exploration(
         buffer_count=buffer_count,
         minimum_listed_days=minimum_listed_days,
         initial_capital=initial_capital,
-        impact_bps=impact_bps,
         returns=return_matrix,
         matrices=execution_context,
     )
@@ -1273,6 +1349,11 @@ def run_exploration(
     periods = _period_returns(daily)
     correlations = _correlations(daily)
     signal_correlations = _signal_correlations(signal_panel)
+    size_turnover_double_sort = build_size_turnover_double_sort(
+        signal_panel,
+        return_matrix,
+        formation_dates=formation_dates,
+    )
     robustness = _run_robustness_matrix(
         controls=controls,
         daily_clean=daily_clean,
@@ -1302,6 +1383,7 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    attribution_rows: list[pd.DataFrame] = []
     share_ledger_matrix = _run_share_ledger_matrix(
         daily_clean=daily_clean,
         sw_membership=sw_membership if not sw_membership.empty else None,
@@ -1313,6 +1395,8 @@ def run_exploration(
         buffer_count=buffer_count,
         minimum_listed_days=minimum_listed_days,
         initial_capital=initial_capital,
+        impact_bps=impact_bps,
+        attribution_rows=attribution_rows,
     )
     reconciliation_matrix = _run_reconciliation_matrix(
         daily_clean=daily_clean,
@@ -1325,6 +1409,7 @@ def run_exploration(
         buffer_count=buffer_count,
         minimum_listed_days=minimum_listed_days,
         initial_capital=initial_capital,
+        impact_bps=impact_bps,
         returns=return_matrix,
         matrices=execution_context,
     )
@@ -1338,6 +1423,7 @@ def run_exploration(
         target_count=target_count,
         buffer_count=buffer_count,
         minimum_listed_days=minimum_listed_days,
+        impact_bps=impact_bps,
     )
     joint_matrix = _run_joint_matrix(
         daily_clean=daily_clean,
@@ -1367,6 +1453,13 @@ def run_exploration(
     reconciliation_matrix.to_csv(outdir / "candidate_reconciliation_matrix.csv", index=False)
     capacity_ladder.to_csv(outdir / "candidate_capacity_ladder.csv", index=False)
     joint_matrix.to_csv(outdir / "candidate_joint_matrix.csv", index=False)
+    size_turnover_double_sort.to_csv(
+        outdir / "candidate_size_turnover_double_sort.csv", index=False
+    )
+    attribution_frame = (
+        pd.concat(attribution_rows, ignore_index=True) if attribution_rows else pd.DataFrame()
+    )
+    attribution_frame.to_csv(outdir / "candidate_delayed_fill_attribution.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -1389,6 +1482,21 @@ def run_exploration(
             "mean turnover_rate over prior 60 trading sessions, excluding formation date"
         ),
         "signals": candidates,
+        "double_sort": {
+            "artifact": "candidate_size_turnover_double_sort.csv",
+            "size_column": "size_score",
+            "turnover_column": "turnover_lagged_mean_60d",
+            "bucket_count": 5,
+            "forward_window": "formation_date exclusive to next formation date inclusive",
+        },
+        "delayed_fill_attribution": {
+            "artifact": "candidate_delayed_fill_attribution.csv",
+            "delay_opportunity_cost_definition": (
+                "unfilled notional multiplied by side-signed return from entry date "
+                "to first fill date; negative means delay helped"
+            ),
+            "temporary_impact_is_execution_cost": True,
+        },
         "target_count": target_count,
         "buffer_count": buffer_count,
         "minimum_listed_days": minimum_listed_days,
