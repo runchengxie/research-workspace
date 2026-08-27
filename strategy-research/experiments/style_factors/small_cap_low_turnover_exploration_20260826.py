@@ -794,6 +794,7 @@ def _run_reconciliation_matrix(  # noqa: C901
     frequency_cache: dict[str, dict[str, Any]] | None = None,
     checkpoint_path: Path | None = None,
     resume: bool = False,
+    reconciliation_mode: str = "diagnostics",
 ) -> pd.DataFrame:
     """Decompose the weight-level versus cash-ledger result gap.
 
@@ -812,6 +813,8 @@ def _run_reconciliation_matrix(  # noqa: C901
         ("small_cap", "signal_small_cap"),
         ("large_cap_control", "signal_large_cap_control"),
     )
+    if reconciliation_mode not in {"primary", "diagnostics"}:
+        raise ValueError("reconciliation_mode must be primary or diagnostics")
 
     table_config = ExecutionSimConfig(
         enabled=True,
@@ -915,7 +918,11 @@ def _run_reconciliation_matrix(  # noqa: C901
                     )
                 )
                 checkpoint()
-            if frequency != "monthly" or candidate != "composite":
+            if (
+                reconciliation_mode != "diagnostics"
+                or frequency != "monthly"
+                or candidate != "composite"
+            ):
                 continue
             for engine_arm in (
                 "ledger_no_participation",
@@ -1426,10 +1433,13 @@ def run_exploration(  # noqa: C901
     impact_bps: float = 0.0,
     stage: str = "all",
     resume: bool = False,
+    reconciliation_mode: str = "primary",
 ) -> Path:
     """Run the candidate comparison and write reproducible research outputs."""
     if stage not in {"all", "ledger", "capacity"}:
         raise ValueError("stage must be one of: all, ledger, capacity")
+    if reconciliation_mode not in {"primary", "diagnostics"}:
+        raise ValueError("reconciliation_mode must be primary or diagnostics")
     if transaction_cost_bps < 0:
         raise ValueError("transaction_cost_bps must be non-negative")
     if not np.isfinite(initial_capital) or initial_capital <= 0:
@@ -1621,6 +1631,7 @@ def run_exploration(  # noqa: C901
             frequency_cache=frequency_cache,
             checkpoint_path=outdir / "candidate_reconciliation_matrix.csv",
             resume=resume,
+            reconciliation_mode=reconciliation_mode,
         )
         _write_csv_checkpoint(
             reconciliation_matrix, outdir, "candidate_reconciliation_matrix.csv"
@@ -1720,6 +1731,7 @@ def run_exploration(  # noqa: C901
         "impact_bps": impact_bps,
         "stage": stage,
         "resume": resume,
+        "reconciliation_mode": reconciliation_mode,
         "robustness_matrix": {
             "turnover_definitions": ["mean_20", "mean_60", "median_60", "mean_120"],
             "participation_cases": [
@@ -1775,6 +1787,11 @@ def main() -> None:
     parser.add_argument("--impact-bps", type=float, default=0.0)
     parser.add_argument("--stage", choices=("all", "ledger", "capacity"), default="all")
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--reconciliation-mode",
+        choices=("primary", "diagnostics"),
+        default="primary",
+    )
     args = parser.parse_args()
     output = run_exploration(
         data_root=Path(args.data_root).expanduser().resolve(),
@@ -1789,6 +1806,7 @@ def main() -> None:
         impact_bps=args.impact_bps,
         stage=args.stage,
         resume=args.resume,
+        reconciliation_mode=args.reconciliation_mode,
     )
     print(f"[OK] exploration artifacts -> {output}")
 
