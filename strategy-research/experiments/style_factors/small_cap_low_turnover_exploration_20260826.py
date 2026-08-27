@@ -376,40 +376,23 @@ def _participation_slippage_model(
     )
 
 
-def _run_share_ledger_matrix(
+def _prepare_frequency_cache(
     *,
     daily_clean: pd.DataFrame,
     sw_membership: pd.DataFrame | None,
     universe: pd.DataFrame,
     st_history: pd.DataFrame,
-    instruments: pd.DataFrame,
-    transaction_cost_bps: float,
-    target_count: int,
-    buffer_count: int,
     minimum_listed_days: int,
-    initial_capital: float,
-    impact_bps: float = 0.0,
-    attribution_rows: list[pd.DataFrame] | None = None,
-    owner_ledger: bool = False,
-    frequencies: tuple[str, ...] = ("monthly", "biweekly"),
-) -> pd.DataFrame:
-    """Run the raw composite under a cash-ledger execution model.
-
-    Targets are built with the same signal panel and buffer as the weight-level
-    simulator, then executed by ``portfolio_backtester.execution_sim`` with lot
-    rounding, T+1 inventory, participation caps, and daily NAV accounting.  The
-    owner-package period replay is recorded alongside it for migration comparison.
-    """
+    frequencies: tuple[str, ...],
+) -> dict[str, dict[str, Any]]:
+    """Build expensive frequency-specific research inputs exactly once."""
     trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
     basics = daily_clean[["trade_date", "symbol", "total_mv"]]
     controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
         columns={"tr_close": "close"}
     )
-    pricing = daily_clean[
-        ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
-    ].rename(columns={"tr_close": "close"})
-    rows: list[dict[str, Any]] = []
-    for frequency in frequencies:
+    cache: dict[str, dict[str, Any]] = {}
+    for frequency in dict.fromkeys(frequencies):
         formation_dates = build_rebalance_formation_dates(
             trading_dates,
             frequency=frequency,
@@ -429,6 +412,63 @@ def _run_share_ledger_matrix(
             st_history,
             minimum_listed_days=minimum_listed_days,
         )
+        cache[frequency] = {
+            "formation_dates": formation_dates,
+            "controls": controls,
+            "panel": panel,
+            "eligible": eligible,
+        }
+    return cache
+
+
+def _write_csv_checkpoint(frame: pd.DataFrame, outdir: Path, filename: str) -> None:
+    """Persist one completed matrix immediately for interruption-safe runs."""
+    frame.to_csv(outdir / filename, index=False)
+
+
+def _run_share_ledger_matrix(
+    *,
+    daily_clean: pd.DataFrame,
+    sw_membership: pd.DataFrame | None,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    transaction_cost_bps: float,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    impact_bps: float = 0.0,
+    attribution_rows: list[pd.DataFrame] | None = None,
+    owner_ledger: bool = False,
+    frequencies: tuple[str, ...] = ("monthly", "biweekly"),
+    frequency_cache: dict[str, dict[str, Any]] | None = None,
+) -> pd.DataFrame:
+    """Run the raw composite under a cash-ledger execution model.
+
+    Targets are built with the same signal panel and buffer as the weight-level
+    simulator, then executed by ``portfolio_backtester.execution_sim`` with lot
+    rounding, T+1 inventory, participation caps, and daily NAV accounting.  The
+    owner-package period replay is recorded alongside it for migration comparison.
+    """
+    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
+    pricing = daily_clean[
+        ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
+    ].rename(columns={"tr_close": "close"})
+    rows: list[dict[str, Any]] = []
+    for frequency in frequencies:
+        prepared = (frequency_cache or {}).get(frequency)
+        if prepared is None:
+            prepared = _prepare_frequency_cache(
+                daily_clean=daily_clean,
+                sw_membership=sw_membership,
+                universe=universe,
+                st_history=st_history,
+                minimum_listed_days=minimum_listed_days,
+                frequencies=(frequency,),
+            )[frequency]
+        formation_dates = prepared["formation_dates"]
+        eligible = prepared["eligible"]
         formation_targets = build_buffered_targets(
             eligible,
             formation_dates,
@@ -590,6 +630,7 @@ def _run_reconciliation_matrix(
     matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
     impact_bps: float = 0.0,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
+    frequency_cache: dict[str, dict[str, Any]] | None = None,
 ) -> pd.DataFrame:
     """Decompose the weight-level versus cash-ledger result gap.
 
@@ -600,10 +641,6 @@ def _run_reconciliation_matrix(
     execution frictions.
     """
     trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
-    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
-    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
-        columns={"tr_close": "close"}
-    )
     pricing = daily_clean[
         ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
     ].rename(columns={"tr_close": "close"})
@@ -628,25 +665,19 @@ def _run_reconciliation_matrix(
 
     rows: list[dict[str, Any]] = []
     for frequency in frequencies:
-        formation_dates = build_rebalance_formation_dates(
-            trading_dates,
-            frequency=frequency,
-        )
-        controls = build_liquidity_control_panel(
-            controls_daily,
-            basics,
-            formation_dates,
-            sw_membership=sw_membership,
-        )
-        turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
-        panel = build_candidate_signal_panel(controls, turnover)
-        eligible = filter_candidate_eligibility(
-            panel,
-            universe,
-            daily_clean,
-            st_history,
-            minimum_listed_days=minimum_listed_days,
-        )
+        prepared = (frequency_cache or {}).get(frequency)
+        if prepared is None:
+            prepared = _prepare_frequency_cache(
+                daily_clean=daily_clean,
+                sw_membership=sw_membership,
+                universe=universe,
+                st_history=st_history,
+                minimum_listed_days=minimum_listed_days,
+                frequencies=(frequency,),
+            )[frequency]
+        formation_dates = prepared["formation_dates"]
+        panel = prepared["panel"]
+        eligible = prepared["eligible"]
         for candidate, signal_column in candidates:
             formation_targets = build_buffered_targets(
                 eligible,
@@ -841,6 +872,7 @@ def _run_capacity_ladder(
     minimum_listed_days: int,
     impact_bps: float = 0.0,
     capitals: tuple[float, ...] = (10_000_000.0, 100_000_000.0, 500_000_000.0),
+    frequency_cache: dict[str, dict[str, Any]] | None = None,
 ) -> pd.DataFrame:
     """Run the monthly raw composite through the constrained ledger at capital sizes.
 
@@ -849,32 +881,21 @@ def _run_capacity_ladder(
     fills, cash drag, and net results start to collapse.
     """
     trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
-    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
-    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
-        columns={"tr_close": "close"}
-    )
     pricing = daily_clean[
         ["trade_date", "symbol", "tr_close", "amount", "pct_chg", "is_limit_up", "is_limit_down"]
     ].rename(columns={"tr_close": "close"})
-    formation_dates = build_rebalance_formation_dates(
-        trading_dates,
-        frequency="monthly",
-    )
-    controls = build_liquidity_control_panel(
-        controls_daily,
-        basics,
-        formation_dates,
-        sw_membership=sw_membership,
-    )
-    turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
-    panel = build_candidate_signal_panel(controls, turnover)
-    eligible = filter_candidate_eligibility(
-        panel,
-        universe,
-        daily_clean,
-        st_history,
-        minimum_listed_days=minimum_listed_days,
-    )
+    prepared = (frequency_cache or {}).get("monthly")
+    if prepared is None:
+        prepared = _prepare_frequency_cache(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership,
+            universe=universe,
+            st_history=st_history,
+            minimum_listed_days=minimum_listed_days,
+            frequencies=("monthly",),
+        )["monthly"]
+    formation_dates = prepared["formation_dates"]
+    eligible = prepared["eligible"]
     formation_targets = build_buffered_targets(
         eligible,
         formation_dates,
@@ -956,6 +977,7 @@ def _run_joint_matrix(
         ("mean_120", 120, "mean"),
     ),
     frequencies: tuple[str, ...] = ("weekly", "biweekly", "monthly", "quarterly"),
+    frequency_cache: dict[str, dict[str, Any]] | None = None,
 ) -> pd.DataFrame:
     """Cross turnover lookback definitions with formation cadences.
 
@@ -963,23 +985,20 @@ def _run_joint_matrix(
     rebalance matrix varies cadences at the mean-60 definition; this matrix
     covers the joint grid on the raw composite with the weight-level engine.
     """
-    trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
-    basics = daily_clean[["trade_date", "symbol", "total_mv"]]
-    controls_daily = daily_clean[["trade_date", "symbol", "tr_close", "amount"]].rename(
-        columns={"tr_close": "close"}
-    )
     rows: list[dict[str, Any]] = []
     for frequency in frequencies:
-        formation_dates = build_rebalance_formation_dates(
-            trading_dates,
-            frequency=frequency,
-        )
-        controls = build_liquidity_control_panel(
-            controls_daily,
-            basics,
-            formation_dates,
-            sw_membership=sw_membership,
-        )
+        prepared = (frequency_cache or {}).get(frequency)
+        if prepared is None:
+            prepared = _prepare_frequency_cache(
+                daily_clean=daily_clean,
+                sw_membership=sw_membership,
+                universe=universe,
+                st_history=st_history,
+                minimum_listed_days=minimum_listed_days,
+                frequencies=(frequency,),
+            )[frequency]
+        formation_dates = prepared["formation_dates"]
+        controls = prepared["controls"]
         for definition, window, statistic in definitions:
             turnover = build_lagged_turnover_panel(
                 daily_clean,
@@ -1295,8 +1314,11 @@ def run_exploration(
     buffer_count: int = 60,
     initial_capital: float = 100_000_000.0,
     impact_bps: float = 0.0,
+    stage: str = "all",
 ) -> Path:
     """Run the candidate comparison and write reproducible research outputs."""
+    if stage not in {"all", "ledger", "capacity"}:
+        raise ValueError("stage must be one of: all, ledger, capacity")
     if transaction_cost_bps < 0:
         raise ValueError("transaction_cost_bps must be non-negative")
     if not np.isfinite(initial_capital) or initial_capital <= 0:
@@ -1318,6 +1340,19 @@ def run_exploration(
     )
     basics = daily_clean[["trade_date", "symbol", "total_mv"]]
     sw_membership = load_sw_industry_membership(data_root)
+    cache_frequencies = {
+        "all": ("weekly", "biweekly", "monthly", "quarterly"),
+        "ledger": ("monthly", "biweekly"),
+        "capacity": ("monthly",),
+    }[stage]
+    frequency_cache = _prepare_frequency_cache(
+        daily_clean=daily_clean,
+        sw_membership=sw_membership if not sw_membership.empty else None,
+        universe=market_data.universe,
+        st_history=market_data.st_history,
+        minimum_listed_days=minimum_listed_days,
+        frequencies=cache_frequencies,
+    )
     controls = build_liquidity_control_panel(
         controls_daily,
         basics,
@@ -1351,6 +1386,13 @@ def run_exploration(
     periods = _period_returns(daily)
     correlations = _correlations(daily)
     signal_correlations = _signal_correlations(signal_panel)
+    signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
+    summary.to_csv(outdir / "candidate_summary.csv", index=False)
+    daily.to_csv(outdir / "candidate_daily.csv", index=True)
+    yearly.to_csv(outdir / "candidate_yearly_returns.csv", index=False)
+    periods.to_csv(outdir / "candidate_regime_returns.csv", index=False)
+    correlations.to_csv(outdir / "candidate_net_correlations.csv", index=True)
+    signal_correlations.to_csv(outdir / "candidate_signal_correlations.csv", index=False)
     size_turnover_double_sort = build_size_turnover_double_sort(
         signal_panel,
         return_matrix,
@@ -1371,6 +1413,7 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    _write_csv_checkpoint(robustness, outdir, "candidate_robustness_matrix.csv")
     rebalance_matrix = _run_rebalance_matrix(
         daily_clean=daily_clean,
         sw_membership=sw_membership if not sw_membership.empty else None,
@@ -1385,83 +1428,99 @@ def run_exploration(
         returns=return_matrix,
         matrices=execution_context,
     )
+    _write_csv_checkpoint(rebalance_matrix, outdir, "candidate_rebalance_matrix.csv")
     attribution_rows: list[pd.DataFrame] = []
-    share_ledger_matrix = _run_share_ledger_matrix(
-        daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        impact_bps=impact_bps,
-        attribution_rows=attribution_rows,
-    )
-    reconciliation_matrix = _run_reconciliation_matrix(
-        daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        impact_bps=impact_bps,
-        returns=return_matrix,
-        matrices=execution_context,
-    )
-    capacity_ladder = _run_capacity_ladder(
-        daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        impact_bps=impact_bps,
-    )
-    joint_matrix = _run_joint_matrix(
-        daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        returns=return_matrix,
-        matrices=execution_context,
-    )
-
-    signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
-    summary.to_csv(outdir / "candidate_summary.csv", index=False)
-    daily.to_csv(outdir / "candidate_daily.csv", index=True)
-    yearly.to_csv(outdir / "candidate_yearly_returns.csv", index=False)
-    periods.to_csv(outdir / "candidate_regime_returns.csv", index=False)
-    correlations.to_csv(outdir / "candidate_net_correlations.csv", index=True)
-    signal_correlations.to_csv(outdir / "candidate_signal_correlations.csv", index=False)
-    robustness.to_csv(outdir / "candidate_robustness_matrix.csv", index=False)
-    rebalance_matrix.to_csv(outdir / "candidate_rebalance_matrix.csv", index=False)
-    share_ledger_matrix.to_csv(outdir / "candidate_share_ledger_matrix.csv", index=False)
-    reconciliation_matrix.to_csv(outdir / "candidate_reconciliation_matrix.csv", index=False)
-    capacity_ladder.to_csv(outdir / "candidate_capacity_ladder.csv", index=False)
-    joint_matrix.to_csv(outdir / "candidate_joint_matrix.csv", index=False)
-    size_turnover_double_sort.to_csv(
-        outdir / "candidate_size_turnover_double_sort.csv", index=False
-    )
+    share_ledger_matrix = pd.DataFrame()
+    reconciliation_matrix = pd.DataFrame()
+    if stage in {"all", "ledger"}:
+        share_ledger_matrix = _run_share_ledger_matrix(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            impact_bps=impact_bps,
+            attribution_rows=attribution_rows,
+            frequency_cache=frequency_cache,
+        )
+        _write_csv_checkpoint(
+            share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv"
+        )
+        reconciliation_matrix = _run_reconciliation_matrix(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            impact_bps=impact_bps,
+            returns=return_matrix,
+            matrices=execution_context,
+            frequency_cache=frequency_cache,
+        )
+        _write_csv_checkpoint(
+            reconciliation_matrix, outdir, "candidate_reconciliation_matrix.csv"
+        )
+        attribution_frame = (
+            pd.concat(attribution_rows, ignore_index=True)
+            if attribution_rows
+            else pd.DataFrame()
+        )
+        _write_csv_checkpoint(
+            attribution_frame, outdir, "candidate_delayed_fill_attribution.csv"
+        )
+    capacity_ladder = pd.DataFrame()
+    if stage in {"all", "capacity"}:
+        capacity_ladder = _run_capacity_ladder(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            impact_bps=impact_bps,
+            frequency_cache=frequency_cache,
+        )
+        _write_csv_checkpoint(capacity_ladder, outdir, "candidate_capacity_ladder.csv")
+    joint_matrix = pd.DataFrame()
+    if stage == "all":
+        joint_matrix = _run_joint_matrix(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=return_matrix,
+            matrices=execution_context,
+            frequency_cache=frequency_cache,
+        )
+        _write_csv_checkpoint(joint_matrix, outdir, "candidate_joint_matrix.csv")
+    if stage in {"all", "capacity"}:
+        size_turnover_double_sort.to_csv(
+            outdir / "candidate_size_turnover_double_sort.csv", index=False
+        )
     attribution_frame = (
         pd.concat(attribution_rows, ignore_index=True) if attribution_rows else pd.DataFrame()
     )
-    attribution_frame.to_csv(outdir / "candidate_delayed_fill_attribution.csv", index=False)
+    if stage not in {"all", "ledger"}:
+        attribution_frame.to_csv(outdir / "candidate_delayed_fill_attribution.csv", index=False)
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
@@ -1504,6 +1563,7 @@ def run_exploration(
         "minimum_listed_days": minimum_listed_days,
         "transaction_cost_bps": transaction_cost_bps,
         "impact_bps": impact_bps,
+        "stage": stage,
         "robustness_matrix": {
             "turnover_definitions": ["mean_20", "mean_60", "median_60", "mean_120"],
             "participation_cases": [
@@ -1557,6 +1617,7 @@ def main() -> None:
     parser.add_argument("--buffer-count", type=int, default=60)
     parser.add_argument("--initial-capital", type=float, default=100_000_000.0)
     parser.add_argument("--impact-bps", type=float, default=0.0)
+    parser.add_argument("--stage", choices=("all", "ledger", "capacity"), default="all")
     args = parser.parse_args()
     output = run_exploration(
         data_root=Path(args.data_root).expanduser().resolve(),
@@ -1569,6 +1630,7 @@ def main() -> None:
         buffer_count=args.buffer_count,
         initial_capital=args.initial_capital,
         impact_bps=args.impact_bps,
+        stage=args.stage,
     )
     print(f"[OK] exploration artifacts -> {output}")
 

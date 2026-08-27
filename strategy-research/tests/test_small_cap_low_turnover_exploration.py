@@ -7,6 +7,7 @@ from pytest import approx, raises
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _build_share_ledger_positions,
     _period_return_metrics,
+    _prepare_frequency_cache,
     _run_capacity_ladder,
     _run_joint_matrix,
     _run_rebalance_matrix,
@@ -30,6 +31,31 @@ from style_factors.small_cap_low_turnover import (
     round_target_weights_to_lots,
     simulate_long_only_candidates,
 )
+
+
+def test_frequency_cache_prepares_each_requested_frequency_once() -> None:
+    daily = _synthetic_rebalance_daily()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+
+    cache = _prepare_frequency_cache(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        minimum_listed_days=0,
+        frequencies=("monthly", "monthly", "biweekly"),
+    )
+
+    assert set(cache) == {"monthly", "biweekly"}
+    assert cache["monthly"]["controls"] is not None
+    assert cache["monthly"]["panel"] is not None
+    assert cache["monthly"]["eligible"] is not None
 
 
 def _synthetic_signal_inputs() -> tuple[pd.DataFrame, pd.DataFrame]:
