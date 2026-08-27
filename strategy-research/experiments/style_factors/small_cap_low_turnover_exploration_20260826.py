@@ -25,7 +25,6 @@ from style_factors.data import load_sw_industry_membership
 from style_factors.liquidity_signals import build_liquidity_control_panel
 from style_factors.portfolio_backtester_adapter import (
     attribute_delayed_fills,
-    owner_execution_receipt,
     periods_from_positions,
     run_native_position_replay,
 )
@@ -391,6 +390,7 @@ def _run_share_ledger_matrix(
     initial_capital: float,
     impact_bps: float = 0.0,
     attribution_rows: list[pd.DataFrame] | None = None,
+    owner_ledger: bool = False,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
 ) -> pd.DataFrame:
     """Run the raw composite under a cash-ledger execution model.
@@ -465,9 +465,9 @@ def _run_share_ledger_matrix(
                 transaction_cost_bps=transaction_cost_bps,
                 tradable_col="amount",
             ),
-            ledger=True,
+            ledger=owner_ledger,
             ledger_config=config,
-            slippage_model=slippage_model,
+            slippage_model=slippage_model if owner_ledger else None,
         )
         owner_returns = owner_result.performance["net_return"].dropna()
         result = simulate_execution_adjusted_nav(
@@ -515,7 +515,9 @@ def _run_share_ledger_matrix(
                 "owner_ledger_temporary_impact": float(
                     owner_result.fills.get("cost_temporary_impact", pd.Series(dtype=float)).sum()
                 ),
-                "owner_canonical_status": owner_execution_receipt(owner_result)["canonical_status"],
+                "owner_canonical_status": (
+                    "comparison_only_ledger" if owner_ledger else "comparison_only_period_replay"
+                ),
             }
         )
     return pd.DataFrame(rows)
