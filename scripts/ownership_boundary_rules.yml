@@ -108,11 +108,3 @@ ownership_rules:
       - validate_three_arm_day
     max_unowned_definitions: 0
     target_max_unowned_definitions: 0
-
-  - identifier: alpha-research:style-replica-portfolio-migration
-    description: StyleReplica portfolio construction is migration debt owned by portfolio-backtester under ADR-0007
-    repo: alpha-research
-    source: src/alpha_research/style_replica/portfolio.py
-    allowed_definitions: []
-    max_unowned_definitions: 14
-    target_max_unowned_definitions: 0
