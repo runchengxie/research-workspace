@@ -17,6 +17,8 @@ import pandas as pd
 from portfolio_backtester.execution import ParticipationSlippageModel
 from portfolio_backtester.execution_sim import (
     ExecutionSimConfig,
+    PreparedExecutionTables,
+    prepare_execution_tables,
     simulate_execution_adjusted_nav,
     simulate_ideal_daily_nav,
 )
@@ -636,6 +638,7 @@ def _run_reconciliation_arm(
     initial_capital: float,
     transaction_cost_bps: float,
     impact_bps: float,
+    prepared_tables: PreparedExecutionTables,
 ) -> dict[str, Any]:
     """Run exactly one reconciliation arm for an already-built position plan."""
     if engine_arm == "weight_level":
@@ -697,6 +700,7 @@ def _run_reconciliation_arm(
                 impact_bps,
                 portfolio_value=initial_capital,
             ),
+            prepared_tables=prepared_tables,
         )
     return _ledger_arm_row(
         result,
@@ -743,6 +747,24 @@ def _run_reconciliation_matrix(  # noqa: C901
         ("composite", "signal_composite"),
         ("small_cap", "signal_small_cap"),
         ("large_cap_control", "signal_large_cap_control"),
+    )
+
+    table_config = ExecutionSimConfig(
+        enabled=True,
+        portfolio_value=initial_capital,
+        participation_rate=0.05,
+        liquidity_cols=("amount",),
+        liquidity_notional_multiplier=1_000.0,
+        buy_max_days=3,
+        sell_max_days=5,
+        round_lot=100,
+        enforce_t1=True,
+    )
+    prepared_tables = prepare_execution_tables(
+        pricing,
+        table_config,
+        price_col="close",
+        tradable_col="amount",
     )
 
     rows: list[dict[str, Any]] = []
@@ -825,6 +847,7 @@ def _run_reconciliation_matrix(  # noqa: C901
                         initial_capital=initial_capital,
                         transaction_cost_bps=transaction_cost_bps,
                         impact_bps=impact_bps,
+                        prepared_tables=prepared_tables,
                     )
                 )
                 checkpoint()
@@ -859,9 +882,10 @@ def _run_reconciliation_matrix(  # noqa: C901
                         buffer_count=buffer_count,
                         minimum_listed_days=minimum_listed_days,
                         initial_capital=initial_capital,
-                        transaction_cost_bps=transaction_cost_bps,
-                        impact_bps=impact_bps,
-                    )
+                            transaction_cost_bps=transaction_cost_bps,
+                            impact_bps=impact_bps,
+                            prepared_tables=prepared_tables,
+                        )
                 )
                 checkpoint()
     out = pd.concat([existing, pd.DataFrame(rows)], ignore_index=True)
