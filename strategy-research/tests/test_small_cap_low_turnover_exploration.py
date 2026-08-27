@@ -6,6 +6,8 @@ from pytest import approx, raises
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _build_share_ledger_positions,
+    _frequency_cache_manifest,
+    _load_frequency_cache,
     _period_return_metrics,
     _prepare_frequency_cache,
     _run_capacity_ladder,
@@ -14,6 +16,7 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _run_reconciliation_matrix,
     _run_share_ledger_matrix,
     _signal_correlations,
+    _write_frequency_cache,
 )
 from style_factors.robustness_execution import (
     daily_return_matrix,
@@ -56,6 +59,38 @@ def test_frequency_cache_prepares_each_requested_frequency_once() -> None:
     assert cache["monthly"]["controls"] is not None
     assert cache["monthly"]["panel"] is not None
     assert cache["monthly"]["eligible"] is not None
+
+
+def test_frequency_cache_round_trip_and_manifest_mismatch(tmp_path) -> None:
+    daily = _synthetic_rebalance_daily()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    frequencies = ("monthly",)
+    cache = _prepare_frequency_cache(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        minimum_listed_days=0,
+        frequencies=frequencies,
+    )
+    manifest = _frequency_cache_manifest(
+        daily_clean=daily,
+        minimum_listed_days=0,
+        frequencies=frequencies,
+    )
+    _write_frequency_cache(cache, tmp_path, manifest)
+
+    loaded = _load_frequency_cache(tmp_path, manifest)
+    assert loaded is not None
+    pd.testing.assert_frame_equal(loaded["monthly"]["panel"], cache["monthly"]["panel"])
+    mismatched = {**manifest, "minimum_listed_days": 180}
+    assert _load_frequency_cache(tmp_path, mismatched) is None
 
 
 def _synthetic_signal_inputs() -> tuple[pd.DataFrame, pd.DataFrame]:

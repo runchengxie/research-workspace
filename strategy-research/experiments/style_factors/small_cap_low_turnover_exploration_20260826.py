@@ -423,6 +423,70 @@ def _prepare_frequency_cache(
     return cache
 
 
+def _frequency_cache_manifest(
+    *,
+    daily_clean: pd.DataFrame,
+    minimum_listed_days: int,
+    frequencies: tuple[str, ...],
+) -> dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "minimum_listed_days": minimum_listed_days,
+        "frequencies": list(dict.fromkeys(frequencies)),
+        "daily_rows": len(daily_clean),
+        "daily_start": str(pd.Timestamp(daily_clean["trade_date"].min()).date()),
+        "daily_end": str(pd.Timestamp(daily_clean["trade_date"].max()).date()),
+    }
+
+
+def _write_frequency_cache(
+    cache: dict[str, dict[str, Any]],
+    cache_dir: Path,
+    manifest: dict[str, Any],
+) -> None:
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    for frequency, prepared in cache.items():
+        prepared["controls"].to_parquet(cache_dir / f"{frequency}_controls.parquet", index=False)
+        prepared["panel"].to_parquet(cache_dir / f"{frequency}_panel.parquet", index=False)
+        prepared["eligible"].to_parquet(cache_dir / f"{frequency}_eligible.parquet", index=False)
+        pd.DataFrame({"formation_date": prepared["formation_dates"]}).to_parquet(
+            cache_dir / f"{frequency}_formation_dates.parquet", index=False
+        )
+    _write_json(manifest, cache_dir / "manifest.json")
+
+
+def _load_frequency_cache(
+    cache_dir: Path,
+    manifest: dict[str, Any],
+) -> dict[str, dict[str, Any]] | None:
+    manifest_path = cache_dir / "manifest.json"
+    if not manifest_path.exists():
+        return None
+    try:
+        if json.loads(manifest_path.read_text(encoding="utf-8")) != manifest:
+            return None
+        cache: dict[str, dict[str, Any]] = {}
+        for frequency in manifest["frequencies"]:
+            paths = {
+                "controls": cache_dir / f"{frequency}_controls.parquet",
+                "panel": cache_dir / f"{frequency}_panel.parquet",
+                "eligible": cache_dir / f"{frequency}_eligible.parquet",
+                "formation_dates": cache_dir / f"{frequency}_formation_dates.parquet",
+            }
+            if not all(path.exists() for path in paths.values()):
+                return None
+            dates = pd.read_parquet(paths["formation_dates"])["formation_date"]
+            cache[frequency] = {
+                "formation_dates": pd.DatetimeIndex(pd.to_datetime(dates)).normalize(),
+                "controls": pd.read_parquet(paths["controls"]),
+                "panel": pd.read_parquet(paths["panel"]),
+                "eligible": pd.read_parquet(paths["eligible"]),
+            }
+        return cache
+    except (OSError, ValueError, KeyError):
+        return None
+
+
 def _write_csv_checkpoint(frame: pd.DataFrame, outdir: Path, filename: str) -> None:
     """Persist one completed matrix immediately for interruption-safe runs."""
     frame.to_csv(outdir / filename, index=False)
@@ -1392,15 +1456,26 @@ def run_exploration(  # noqa: C901
         "ledger": ("monthly", "biweekly"),
         "capacity": ("monthly",),
     }[stage]
-    frequency_cache = _prepare_frequency_cache(
+    staged_resume = resume and stage != "all"
+    cache_dir = outdir / "frequency_cache"
+    cache_manifest = _frequency_cache_manifest(
         daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
         minimum_listed_days=minimum_listed_days,
         frequencies=cache_frequencies,
     )
-    staged_resume = resume and stage != "all"
+    frequency_cache = (
+        _load_frequency_cache(cache_dir, cache_manifest) if staged_resume else None
+    )
+    if frequency_cache is None:
+        frequency_cache = _prepare_frequency_cache(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            minimum_listed_days=minimum_listed_days,
+            frequencies=cache_frequencies,
+        )
+        _write_frequency_cache(frequency_cache, cache_dir, cache_manifest)
     signal_panel_path = outdir / "candidate_signal_panel.parquet"
     if staged_resume and signal_panel_path.exists():
         signal_panel = pd.read_parquet(signal_panel_path)
