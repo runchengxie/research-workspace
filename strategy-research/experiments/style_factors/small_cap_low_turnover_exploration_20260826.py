@@ -614,7 +614,100 @@ def _weight_level_arm_row(
     }
 
 
-def _run_reconciliation_matrix(
+def _run_reconciliation_arm(
+    *,
+    engine_arm: str,
+    positions: pd.DataFrame,
+    pricing: pd.DataFrame,
+    panel: pd.DataFrame,
+    daily_clean: pd.DataFrame,
+    universe: pd.DataFrame,
+    st_history: pd.DataFrame,
+    instruments: pd.DataFrame,
+    returns: pd.DataFrame,
+    matrices: tuple[np.ndarray, np.ndarray, np.ndarray],
+    signal_column: str,
+    reference_name: str,
+    frequency: str,
+    candidate: str,
+    target_count: int,
+    buffer_count: int,
+    minimum_listed_days: int,
+    initial_capital: float,
+    transaction_cost_bps: float,
+    impact_bps: float,
+) -> dict[str, Any]:
+    """Run exactly one reconciliation arm for an already-built position plan."""
+    if engine_arm == "weight_level":
+        simulations = simulate_long_only_candidates(
+            panel,
+            daily_clean,
+            universe,
+            st_history,
+            instruments,
+            {reference_name: signal_column},
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=returns,
+            matrices=matrices,
+        )
+        summary, _daily = summarize_long_only_simulations(
+            simulations,
+            transaction_cost_bps=transaction_cost_bps,
+        )
+        return _weight_level_arm_row(
+            summary, reference_name, frequency=frequency, candidate=candidate
+        )
+
+    if engine_arm == "ideal_nav":
+        result = simulate_ideal_daily_nav(
+            positions,
+            pricing,
+            price_col="close",
+            transaction_cost_bps=transaction_cost_bps,
+            portfolio_value=initial_capital,
+        )
+    else:
+        participation_rate = 1.0 if engine_arm == "ledger_no_participation" else 0.05
+        round_lot = None if engine_arm == "ledger_no_lot" else 100
+        enforce_t1 = engine_arm != "ledger_no_t1"
+        config = ExecutionSimConfig(
+            enabled=True,
+            portfolio_value=initial_capital,
+            participation_rate=participation_rate,
+            liquidity_cols=("amount",),
+            liquidity_notional_multiplier=1_000.0,
+            buy_max_days=3,
+            sell_max_days=5,
+            round_lot=round_lot,
+            enforce_t1=enforce_t1,
+        )
+        result = simulate_execution_adjusted_nav(
+            positions,
+            pricing,
+            config,
+            price_col="close",
+            tradable_col="amount",
+            transaction_cost_bps=(
+                0.0 if engine_arm == "ledger_zero_cost" else transaction_cost_bps
+            ),
+            slippage_model=_participation_slippage_model(
+                impact_bps,
+                portfolio_value=initial_capital,
+            ),
+        )
+    return _ledger_arm_row(
+        result,
+        frequency=frequency,
+        candidate=candidate,
+        engine_arm=engine_arm,
+        initial_capital=initial_capital,
+    )
+
+
+def _run_reconciliation_matrix(  # noqa: C901
     *,
     daily_clean: pd.DataFrame,
     sw_membership: pd.DataFrame | None,
@@ -631,6 +724,8 @@ def _run_reconciliation_matrix(
     impact_bps: float = 0.0,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
     frequency_cache: dict[str, dict[str, Any]] | None = None,
+    checkpoint_path: Path | None = None,
+    resume: bool = False,
 ) -> pd.DataFrame:
     """Decompose the weight-level versus cash-ledger result gap.
 
@@ -650,20 +745,30 @@ def _run_reconciliation_matrix(
         ("large_cap_control", "signal_large_cap_control"),
     )
 
-    def full_config() -> ExecutionSimConfig:
-        return ExecutionSimConfig(
-            enabled=True,
-            portfolio_value=initial_capital,
-            participation_rate=0.05,
-            liquidity_cols=("amount",),
-            liquidity_notional_multiplier=1_000.0,
-            buy_max_days=3,
-            sell_max_days=5,
-            round_lot=100,
-            enforce_t1=True,
-        )
-
     rows: list[dict[str, Any]] = []
+    position_cache: dict[tuple[str, str], pd.DataFrame] = {}
+    if checkpoint_path is not None and resume and checkpoint_path.exists():
+        existing = pd.read_csv(checkpoint_path)
+        completed = set(
+            zip(
+                existing.get("rebalance_frequency", pd.Series(dtype=str)),
+                existing.get("candidate", pd.Series(dtype=str)),
+                existing.get("engine_arm", pd.Series(dtype=str)),
+                strict=True,
+            )
+        )
+    else:
+        existing = pd.DataFrame()
+        completed = set()
+
+    def checkpoint() -> None:
+        if checkpoint_path is None:
+            return
+        output = pd.DataFrame(rows)
+        if not existing.empty:
+            output = pd.concat([existing, output], ignore_index=True)
+        output.to_csv(checkpoint_path, index=False)
+
     for frequency in frequencies:
         prepared = (frequency_cache or {}).get(frequency)
         if prepared is None:
@@ -679,170 +784,87 @@ def _run_reconciliation_matrix(
         panel = prepared["panel"]
         eligible = prepared["eligible"]
         for candidate, signal_column in candidates:
-            formation_targets = build_buffered_targets(
-                eligible,
-                formation_dates,
-                signal_column=signal_column,
-                target_count=target_count,
-                buffer_count=buffer_count,
-            )
-            positions = _build_share_ledger_positions(formation_targets, trading_dates)
+            cache_key = (frequency, candidate)
+            positions = position_cache.get(cache_key)
+            if positions is None:
+                formation_targets = build_buffered_targets(
+                    eligible,
+                    formation_dates,
+                    signal_column=signal_column,
+                    target_count=target_count,
+                    buffer_count=buffer_count,
+                )
+                positions = _build_share_ledger_positions(formation_targets, trading_dates)
+                position_cache[cache_key] = positions
             if positions.empty:
                 continue
             reference_name = f"recon_{candidate}"
-            simulations = simulate_long_only_candidates(
-                panel,
-                daily_clean,
-                universe,
-                st_history,
-                instruments,
-                {reference_name: signal_column},
-                target_count=target_count,
-                buffer_count=buffer_count,
-                minimum_listed_days=minimum_listed_days,
-                initial_capital=initial_capital,
-                returns=returns,
-                matrices=matrices,
-            )
-            summary, _daily = summarize_long_only_simulations(
-                simulations,
-                transaction_cost_bps=transaction_cost_bps,
-            )
-            rows.append(
-                _weight_level_arm_row(
-                    summary, reference_name, frequency=frequency, candidate=candidate
-                )
-            )
-            ideal = simulate_ideal_daily_nav(
-                positions,
-                pricing,
-                price_col="close",
-                transaction_cost_bps=transaction_cost_bps,
-                portfolio_value=initial_capital,
-            )
-            rows.append(
-                _ledger_arm_row(
-                    ideal,
-                    frequency=frequency,
-                    candidate=candidate,
-                    engine_arm="ideal_nav",
-                    initial_capital=initial_capital,
-                )
-            )
-            constrained = simulate_execution_adjusted_nav(
-                positions,
-                pricing,
-                full_config(),
-                price_col="close",
-                tradable_col="amount",
-                transaction_cost_bps=transaction_cost_bps,
-                slippage_model=_participation_slippage_model(
-                    impact_bps,
-                    portfolio_value=initial_capital,
-                ),
-            )
-            rows.append(
-                _ledger_arm_row(
-                    constrained,
-                    frequency=frequency,
-                    candidate=candidate,
-                    engine_arm="ledger_full",
-                    initial_capital=initial_capital,
-                )
-            )
-            if frequency != "monthly" or candidate != "composite":
-                continue
-            ladder: tuple[tuple[str, ExecutionSimConfig, float], ...] = (
-                (
-                    "ledger_no_participation",
-                    ExecutionSimConfig(
-                        enabled=True,
-                        portfolio_value=initial_capital,
-                        participation_rate=1.0,
-                        liquidity_cols=("amount",),
-                        liquidity_notional_multiplier=1_000.0,
-                        buy_max_days=3,
-                        sell_max_days=5,
-                        round_lot=100,
-                        enforce_t1=True,
-                    ),
-                    transaction_cost_bps,
-                ),
-                (
-                    "ledger_no_t1",
-                    ExecutionSimConfig(
-                        enabled=True,
-                        portfolio_value=initial_capital,
-                        participation_rate=0.05,
-                        liquidity_cols=("amount",),
-                        liquidity_notional_multiplier=1_000.0,
-                        buy_max_days=3,
-                        sell_max_days=5,
-                        round_lot=100,
-                        enforce_t1=False,
-                    ),
-                    transaction_cost_bps,
-                ),
-                (
-                    "ledger_no_lot",
-                    ExecutionSimConfig(
-                        enabled=True,
-                        portfolio_value=initial_capital,
-                        participation_rate=0.05,
-                        liquidity_cols=("amount",),
-                        liquidity_notional_multiplier=1_000.0,
-                        buy_max_days=3,
-                        sell_max_days=5,
-                        round_lot=None,
-                        enforce_t1=True,
-                    ),
-                    transaction_cost_bps,
-                ),
-            )
-            for arm_name, config, cost_bps in ladder:
-                relaxed = simulate_execution_adjusted_nav(
-                    positions,
-                    pricing,
-                    config,
-                    price_col="close",
-                    tradable_col="amount",
-                    transaction_cost_bps=cost_bps,
-                    slippage_model=_participation_slippage_model(
-                        impact_bps,
-                        portfolio_value=initial_capital,
-                    ),
-                )
+            for engine_arm in ("weight_level", "ideal_nav", "ledger_full"):
+                key = (frequency, candidate, engine_arm)
+                if key in completed:
+                    continue
                 rows.append(
-                    _ledger_arm_row(
-                        relaxed,
+                    _run_reconciliation_arm(
+                        engine_arm=engine_arm,
+                        positions=positions,
+                        pricing=pricing,
+                        panel=panel,
+                        daily_clean=daily_clean,
+                        universe=universe,
+                        st_history=st_history,
+                        instruments=instruments,
+                        returns=returns,
+                        matrices=matrices,
+                        signal_column=signal_column,
+                        reference_name=reference_name,
                         frequency=frequency,
                         candidate=candidate,
-                        engine_arm=arm_name,
+                        target_count=target_count,
+                        buffer_count=buffer_count,
+                        minimum_listed_days=minimum_listed_days,
                         initial_capital=initial_capital,
+                        transaction_cost_bps=transaction_cost_bps,
+                        impact_bps=impact_bps,
                     )
                 )
-            zero_cost = simulate_execution_adjusted_nav(
-                positions,
-                pricing,
-                full_config(),
-                price_col="close",
-                tradable_col="amount",
-                transaction_cost_bps=0.0,
-                slippage_model=_participation_slippage_model(
-                    impact_bps,
-                    portfolio_value=initial_capital,
-                ),
-            )
-            rows.append(
-                _ledger_arm_row(
-                    zero_cost,
-                    frequency=frequency,
-                    candidate=candidate,
-                    engine_arm="ledger_zero_cost",
-                    initial_capital=initial_capital,
+                checkpoint()
+            if frequency != "monthly" or candidate != "composite":
+                continue
+            for engine_arm in (
+                "ledger_no_participation",
+                "ledger_no_t1",
+                "ledger_no_lot",
+                "ledger_zero_cost",
+            ):
+                key = (frequency, candidate, engine_arm)
+                if key in completed:
+                    continue
+                rows.append(
+                    _run_reconciliation_arm(
+                        engine_arm=engine_arm,
+                        positions=positions,
+                        pricing=pricing,
+                        panel=panel,
+                        daily_clean=daily_clean,
+                        universe=universe,
+                        st_history=st_history,
+                        instruments=instruments,
+                        returns=returns,
+                        matrices=matrices,
+                        signal_column=signal_column,
+                        reference_name=reference_name,
+                        frequency=frequency,
+                        candidate=candidate,
+                        target_count=target_count,
+                        buffer_count=buffer_count,
+                        minimum_listed_days=minimum_listed_days,
+                        initial_capital=initial_capital,
+                        transaction_cost_bps=transaction_cost_bps,
+                        impact_bps=impact_bps,
+                    )
                 )
-            )
-    out = pd.DataFrame(rows)
+                checkpoint()
+    out = pd.concat([existing, pd.DataFrame(rows)], ignore_index=True)
     if out.empty:
         return out
     comparison_keys = ["rebalance_frequency", "engine_arm"]
@@ -1315,6 +1337,7 @@ def run_exploration(
     initial_capital: float = 100_000_000.0,
     impact_bps: float = 0.0,
     stage: str = "all",
+    resume: bool = False,
 ) -> Path:
     """Run the candidate comparison and write reproducible research outputs."""
     if stage not in {"all", "ledger", "capacity"}:
@@ -1447,6 +1470,8 @@ def run_exploration(
             impact_bps=impact_bps,
             attribution_rows=attribution_rows,
             frequency_cache=frequency_cache,
+            checkpoint_path=outdir / "candidate_reconciliation_matrix.csv",
+            resume=resume,
         )
         _write_csv_checkpoint(
             share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv"
@@ -1564,6 +1589,7 @@ def run_exploration(
         "transaction_cost_bps": transaction_cost_bps,
         "impact_bps": impact_bps,
         "stage": stage,
+        "resume": resume,
         "robustness_matrix": {
             "turnover_definitions": ["mean_20", "mean_60", "median_60", "mean_120"],
             "participation_cases": [
@@ -1618,6 +1644,7 @@ def main() -> None:
     parser.add_argument("--initial-capital", type=float, default=100_000_000.0)
     parser.add_argument("--impact-bps", type=float, default=0.0)
     parser.add_argument("--stage", choices=("all", "ledger", "capacity"), default="all")
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
     output = run_exploration(
         data_root=Path(args.data_root).expanduser().resolve(),
@@ -1631,6 +1658,7 @@ def main() -> None:
         initial_capital=args.initial_capital,
         impact_bps=args.impact_bps,
         stage=args.stage,
+        resume=args.resume,
     )
     print(f"[OK] exploration artifacts -> {output}")
 
