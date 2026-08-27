@@ -1348,7 +1348,7 @@ def _write_report(
     )
 
 
-def run_exploration(
+def run_exploration(  # noqa: C901
     *,
     data_root: Path,
     outdir: Path,
@@ -1400,51 +1400,70 @@ def run_exploration(
         minimum_listed_days=minimum_listed_days,
         frequencies=cache_frequencies,
     )
-    controls = build_liquidity_control_panel(
-        controls_daily,
-        basics,
-        formation_dates,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-    )
-    turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
-    signal_panel = build_candidate_signal_panel(controls, turnover)
+    staged_resume = resume and stage != "all"
+    signal_panel_path = outdir / "candidate_signal_panel.parquet"
+    if staged_resume and signal_panel_path.exists():
+        signal_panel = pd.read_parquet(signal_panel_path)
+        controls = pd.DataFrame()
+    else:
+        controls = build_liquidity_control_panel(
+            controls_daily,
+            basics,
+            formation_dates,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+        )
+        turnover = build_lagged_turnover_panel(daily_clean, formation_dates)
+        signal_panel = build_candidate_signal_panel(controls, turnover)
     candidates = dict(SIGNAL_COLUMNS)
     return_matrix = daily_return_matrix(daily_clean)
     execution_context = execution_matrices(daily_clean, return_matrix)
-    simulations = simulate_long_only_candidates(
-        signal_panel,
-        daily_clean,
-        market_data.universe,
-        market_data.st_history,
-        market_data.instruments,
-        candidates,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        returns=return_matrix,
-        matrices=execution_context,
-    )
-    summary, daily = summarize_long_only_simulations(
-        simulations,
-        transaction_cost_bps=transaction_cost_bps,
-    )
-    yearly = _yearly_returns(daily)
-    periods = _period_returns(daily)
-    correlations = _correlations(daily)
+    if staged_resume:
+        simulations = {}
+        summary = pd.read_csv(outdir / "candidate_summary.csv")
+        daily = pd.read_csv(outdir / "candidate_daily.csv", index_col=0, parse_dates=True)
+        yearly = pd.read_csv(outdir / "candidate_yearly_returns.csv")
+        periods = pd.read_csv(outdir / "candidate_regime_returns.csv")
+        correlations = pd.read_csv(outdir / "candidate_net_correlations.csv", index_col=0)
+    else:
+        simulations = simulate_long_only_candidates(
+            signal_panel,
+            daily_clean,
+            market_data.universe,
+            market_data.st_history,
+            market_data.instruments,
+            candidates,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=return_matrix,
+            matrices=execution_context,
+        )
+        summary, daily = summarize_long_only_simulations(
+            simulations,
+            transaction_cost_bps=transaction_cost_bps,
+        )
+        yearly = _yearly_returns(daily)
+        periods = _period_returns(daily)
+        correlations = _correlations(daily)
     signal_correlations = _signal_correlations(signal_panel)
-    signal_panel.to_parquet(outdir / "candidate_signal_panel.parquet", index=False)
-    summary.to_csv(outdir / "candidate_summary.csv", index=False)
-    daily.to_csv(outdir / "candidate_daily.csv", index=True)
-    yearly.to_csv(outdir / "candidate_yearly_returns.csv", index=False)
-    periods.to_csv(outdir / "candidate_regime_returns.csv", index=False)
-    correlations.to_csv(outdir / "candidate_net_correlations.csv", index=True)
+    signal_panel.to_parquet(signal_panel_path, index=False)
+    if not staged_resume:
+        summary.to_csv(outdir / "candidate_summary.csv", index=False)
+        daily.to_csv(outdir / "candidate_daily.csv", index=True)
+        yearly.to_csv(outdir / "candidate_yearly_returns.csv", index=False)
+        periods.to_csv(outdir / "candidate_regime_returns.csv", index=False)
+        correlations.to_csv(outdir / "candidate_net_correlations.csv", index=True)
     signal_correlations.to_csv(outdir / "candidate_signal_correlations.csv", index=False)
-    size_turnover_double_sort = build_size_turnover_double_sort(
-        signal_panel,
-        return_matrix,
-        formation_dates=formation_dates,
-    )
+    size_sort_path = outdir / "candidate_size_turnover_double_sort.csv"
+    if staged_resume and size_sort_path.exists():
+        size_turnover_double_sort = pd.read_csv(size_sort_path)
+    else:
+        size_turnover_double_sort = build_size_turnover_double_sort(
+            signal_panel,
+            return_matrix,
+            formation_dates=formation_dates,
+        )
     robustness = pd.DataFrame()
     rebalance_matrix = pd.DataFrame()
     if stage == "all":
