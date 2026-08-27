@@ -1483,21 +1483,30 @@ def run_exploration(
     share_ledger_matrix = pd.DataFrame()
     reconciliation_matrix = pd.DataFrame()
     if stage in {"all", "ledger"}:
-        share_ledger_matrix = _run_share_ledger_matrix(
-            daily_clean=daily_clean,
-            sw_membership=sw_membership if not sw_membership.empty else None,
-            universe=market_data.universe,
-            st_history=market_data.st_history,
-            instruments=market_data.instruments,
-            transaction_cost_bps=transaction_cost_bps,
-            target_count=target_count,
-            buffer_count=buffer_count,
-            minimum_listed_days=minimum_listed_days,
-            initial_capital=initial_capital,
-            impact_bps=impact_bps,
-            attribution_rows=attribution_rows,
-            frequency_cache=frequency_cache,
-        )
+        share_checkpoint = outdir / "candidate_share_ledger_matrix.csv"
+        if resume and share_checkpoint.exists():
+            share_ledger_matrix = pd.read_csv(share_checkpoint)
+            attribution_checkpoint = outdir / "candidate_delayed_fill_attribution.csv"
+            if attribution_checkpoint.exists():
+                attribution = pd.read_csv(attribution_checkpoint)
+                if not attribution.empty:
+                    attribution_rows.append(attribution)
+        else:
+            share_ledger_matrix = _run_share_ledger_matrix(
+                daily_clean=daily_clean,
+                sw_membership=sw_membership if not sw_membership.empty else None,
+                universe=market_data.universe,
+                st_history=market_data.st_history,
+                instruments=market_data.instruments,
+                transaction_cost_bps=transaction_cost_bps,
+                target_count=target_count,
+                buffer_count=buffer_count,
+                minimum_listed_days=minimum_listed_days,
+                initial_capital=initial_capital,
+                impact_bps=impact_bps,
+                attribution_rows=attribution_rows,
+                frequency_cache=frequency_cache,
+            )
         _write_csv_checkpoint(
             share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv"
         )
