@@ -1421,37 +1421,40 @@ def run_exploration(
         return_matrix,
         formation_dates=formation_dates,
     )
-    robustness = _run_robustness_matrix(
-        controls=controls,
-        daily_clean=daily_clean,
-        formation_dates=formation_dates,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        returns=return_matrix,
-        matrices=execution_context,
-    )
-    _write_csv_checkpoint(robustness, outdir, "candidate_robustness_matrix.csv")
-    rebalance_matrix = _run_rebalance_matrix(
-        daily_clean=daily_clean,
-        sw_membership=sw_membership if not sw_membership.empty else None,
-        universe=market_data.universe,
-        st_history=market_data.st_history,
-        instruments=market_data.instruments,
-        transaction_cost_bps=transaction_cost_bps,
-        target_count=target_count,
-        buffer_count=buffer_count,
-        minimum_listed_days=minimum_listed_days,
-        initial_capital=initial_capital,
-        returns=return_matrix,
-        matrices=execution_context,
-    )
-    _write_csv_checkpoint(rebalance_matrix, outdir, "candidate_rebalance_matrix.csv")
+    robustness = pd.DataFrame()
+    rebalance_matrix = pd.DataFrame()
+    if stage == "all":
+        robustness = _run_robustness_matrix(
+            controls=controls,
+            daily_clean=daily_clean,
+            formation_dates=formation_dates,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=return_matrix,
+            matrices=execution_context,
+        )
+        _write_csv_checkpoint(robustness, outdir, "candidate_robustness_matrix.csv")
+        rebalance_matrix = _run_rebalance_matrix(
+            daily_clean=daily_clean,
+            sw_membership=sw_membership if not sw_membership.empty else None,
+            universe=market_data.universe,
+            st_history=market_data.st_history,
+            instruments=market_data.instruments,
+            transaction_cost_bps=transaction_cost_bps,
+            target_count=target_count,
+            buffer_count=buffer_count,
+            minimum_listed_days=minimum_listed_days,
+            initial_capital=initial_capital,
+            returns=return_matrix,
+            matrices=execution_context,
+        )
+        _write_csv_checkpoint(rebalance_matrix, outdir, "candidate_rebalance_matrix.csv")
     attribution_rows: list[pd.DataFrame] = []
     share_ledger_matrix = pd.DataFrame()
     reconciliation_matrix = pd.DataFrame()
@@ -1470,8 +1473,6 @@ def run_exploration(
             impact_bps=impact_bps,
             attribution_rows=attribution_rows,
             frequency_cache=frequency_cache,
-            checkpoint_path=outdir / "candidate_reconciliation_matrix.csv",
-            resume=resume,
         )
         _write_csv_checkpoint(
             share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv"
@@ -1491,6 +1492,8 @@ def run_exploration(
             returns=return_matrix,
             matrices=execution_context,
             frequency_cache=frequency_cache,
+            checkpoint_path=outdir / "candidate_reconciliation_matrix.csv",
+            resume=resume,
         )
         _write_csv_checkpoint(
             reconciliation_matrix, outdir, "candidate_reconciliation_matrix.csv"
