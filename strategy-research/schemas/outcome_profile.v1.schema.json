@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "outcome_profile.v1",
+  "title": "decision outcome profile v1",
+  "description": "决策结果目标。它描述研究者希望实现或约束的结果指标，不描述市场预测，也不合成单一效用分数。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "outcome_profile_id",
+    "strategy_id",
+    "decision_type",
+    "statement",
+    "status",
+    "as_of",
+    "metrics"
+  ],
+  "properties": {
+    "schema_version": {"const": "outcome_profile.v1"},
+    "outcome_profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "strategy_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$"
+    },
+    "decision_type": {
+      "enum": ["entry", "exit", "portfolio", "allocation", "execution", "custom"]
+    },
+    "statement": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["proposed", "active", "superseded", "retired"]
+    },
+    "as_of": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "direction", "role", "unit"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "direction": {
+            "enum": ["higher_is_better", "lower_is_better"]
+          },
+          "role": {
+            "enum": ["objective", "constraint", "diagnostic"]
+          },
+          "unit": {"type": "string", "minLength": 1},
+          "operator": {"enum": ["lt", "lte", "gt", "gte"]},
+          "threshold": {"type": "number"}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"role": {"const": "constraint"}},
+              "required": ["role"]
+            },
+            "then": {"required": ["operator", "threshold"]},
+            "else": {
+              "not": {
+                "anyOf": [
+                  {"required": ["operator"]},
+                  {"required": ["threshold"]}
+                ]
+              }
+            }
+          }
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

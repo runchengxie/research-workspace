@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Validate decision-governance claims, cases, sources and counterexamples.
+"""Validate decision-governance claims, cases, sources and outcome records.
 
 DG1 validates ``claim.v1`` judgments, DG2 validates ``research_case.v1`` decision
-navigation, DG3 validates optional ``source.v1`` records, and DG8 validates
-``counterexample.v1`` stress evidence. DG4/DG5/DG6 case rules remain enforced.
+navigation, DG3 validates optional ``source.v1`` records, DG8 validates
+``counterexample.v1`` stress evidence, and outcome profiles declare decision goals.
+DG4/DG5/DG6 case rules remain enforced.
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ CLAIM_SCHEMA_VERSION = "claim.v1"
 CASE_SCHEMA_VERSION = "research_case.v1"
 SOURCE_SCHEMA_VERSION = "source.v1"
 COUNTEREXAMPLE_SCHEMA_VERSION = "counterexample.v1"
+OUTCOME_PROFILE_SCHEMA_VERSION = "outcome_profile.v1"
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 CLAIM_TYPES = {"hypothesis", "fact", "estimate", "inference"}
@@ -45,6 +47,11 @@ COUNTEREXAMPLE_TYPES = {
 }
 COUNTEREXAMPLE_STATUSES = {"open", "confirmed", "resolved", "superseded"}
 COUNTEREXAMPLE_SEVERITIES = {"minor", "material", "critical"}
+OUTCOME_DECISION_TYPES = {"entry", "exit", "portfolio", "allocation", "execution", "custom"}
+OUTCOME_STATUSES = {"proposed", "active", "superseded", "retired"}
+OUTCOME_DIRECTIONS = {"higher_is_better", "lower_is_better"}
+OUTCOME_ROLES = {"objective", "constraint", "diagnostic"}
+OUTCOME_OPERATORS = {"lt", "lte", "gt", "gte"}
 
 
 @dataclass(frozen=True)
@@ -160,6 +167,114 @@ def _check_claim(payload: dict[str, Any]) -> list[str]:
     claim_id = payload.get("claim_id")
     if isinstance(claim_id, str) and ID_RE.fullmatch(claim_id) is None:
         issues.append("claim_id 必须是 [a-z0-9][a-z0-9._-]*")
+    return issues
+
+
+def _check_outcome_metric_name(
+    item: dict[str, Any],
+    *,
+    label: str,
+    seen: set[str],
+    issues: list[str],
+) -> None:
+    name = item.get("name")
+    if not isinstance(name, str) or not name.strip():
+        issues.append(f"{label}.name 必须是非空字符串")
+        return
+    if name in seen:
+        issues.append(f"metrics 名称重复：{name}")
+        return
+    seen.add(name)
+
+
+def _check_outcome_constraint_fields(
+    item: dict[str, Any],
+    *,
+    label: str,
+    role: Any,
+    issues: list[str],
+) -> None:
+    if role != "constraint":
+        if "operator" in item or "threshold" in item:
+            issues.append(f"{label} 只有 constraint 可以包含 operator 或 threshold")
+        return
+    if item.get("operator") not in OUTCOME_OPERATORS:
+        issues.append(f"{label}.operator 必须属于 {sorted(OUTCOME_OPERATORS)}")
+    threshold = item.get("threshold")
+    if (
+        isinstance(threshold, bool)
+        or not isinstance(threshold, (int, float))
+        or not math.isfinite(float(threshold))
+    ):
+        issues.append(f"{label}.threshold 必须是有限数值")
+
+
+def _check_outcome_metric(
+    item: Any,
+    *,
+    index: int,
+    seen: set[str],
+    issues: list[str],
+) -> None:
+    label = f"metrics[{index}]"
+    if not isinstance(item, dict):
+        issues.append(f"{label} 必须是对象")
+        return
+    _check_outcome_metric_name(item, label=label, seen=seen, issues=issues)
+    if item.get("direction") not in OUTCOME_DIRECTIONS:
+        issues.append(f"{label}.direction 必须属于 {sorted(OUTCOME_DIRECTIONS)}")
+    role = item.get("role")
+    if role not in OUTCOME_ROLES:
+        issues.append(f"{label}.role 必须属于 {sorted(OUTCOME_ROLES)}")
+    unit = item.get("unit")
+    if not isinstance(unit, str) or not unit.strip():
+        issues.append(f"{label}.unit 必须是非空字符串")
+    _check_outcome_constraint_fields(item, label=label, role=role, issues=issues)
+
+
+def _check_outcome_profile_identity(
+    relative: str,
+    payload: dict[str, Any],
+    root: Path,
+    issues: list[str],
+) -> None:
+    profile_id = payload.get("outcome_profile_id")
+    if isinstance(profile_id, str):
+        if ID_RE.fullmatch(profile_id) is None:
+            issues.append("outcome_profile_id 必须是 [a-z0-9][a-z0-9._-]*")
+        expected = root / "strategy-research" / "outcome-profiles" / f"{profile_id}.json"
+        if root / relative != expected:
+            issues.append(f"outcome profile 文件名必须与 outcome_profile_id 一致：{expected}")
+    strategy_id = payload.get("strategy_id")
+    if isinstance(strategy_id, str) and ID_RE.fullmatch(strategy_id) is None:
+        issues.append("strategy_id 必须是 [a-z0-9][a-z0-9._-]*")
+    as_of = payload.get("as_of")
+    if isinstance(as_of, str) and DATE_RE.fullmatch(as_of) is None:
+        issues.append("as_of 必须是 YYYY-MM-DD")
+
+
+def _check_outcome_profile(
+    relative: str,
+    payload: dict[str, Any],
+    root: Path,
+) -> list[str]:
+    issues: list[str] = []
+    if payload.get("schema_version") != OUTCOME_PROFILE_SCHEMA_VERSION:
+        issues.append(f"schema_version 必须是 {OUTCOME_PROFILE_SCHEMA_VERSION}")
+    for name in ("outcome_profile_id", "strategy_id", "statement", "as_of"):
+        _required_text(payload, name, issues)
+    _check_outcome_profile_identity(relative, payload, root, issues)
+    if payload.get("decision_type") not in OUTCOME_DECISION_TYPES:
+        issues.append(f"decision_type 必须属于 {sorted(OUTCOME_DECISION_TYPES)}")
+    if payload.get("status") not in OUTCOME_STATUSES:
+        issues.append(f"status 必须属于 {sorted(OUTCOME_STATUSES)}")
+    metrics = payload.get("metrics")
+    if not isinstance(metrics, list) or not metrics:
+        issues.append("metrics 必须是非空列表")
+        return issues
+    seen: set[str] = set()
+    for index, item in enumerate(metrics):
+        _check_outcome_metric(item, index=index, seen=seen, issues=issues)
     return issues
 
 
@@ -347,6 +462,18 @@ def _check_case_counterexample_refs(
                 issues.append(f"counterexamples 引用缺失：{counterexample_ref}")
 
 
+def _check_case_outcome_profile_refs(
+    payload: dict[str, Any],
+    root: Path,
+    issues: list[str],
+) -> None:
+    for profile_ref in payload.get("outcome_profiles", []):
+        if isinstance(profile_ref, str):
+            path = root / "strategy-research" / "outcome-profiles" / f"{profile_ref}.json"
+            if not path.is_file():
+                issues.append(f"outcome_profiles 引用缺失：{profile_ref}")
+
+
 def _check_case_review_refs(
     payload: dict[str, Any],
     case_dir: Path,
@@ -368,6 +495,7 @@ def _resolve_case_refs(
     _check_case_id_ref(payload, case_dir, root, issues)
     _check_case_claim_refs(payload, root, issues)
     _check_case_counterexample_refs(payload, root, issues)
+    _check_case_outcome_profile_refs(payload, root, issues)
     _check_case_review_refs(payload, case_dir, issues)
 
 
@@ -388,6 +516,7 @@ def _check_case(relative: str, payload: dict[str, Any], root: Path) -> list[str]
         "research_specs",
         "claims",
         "counterexamples",
+        "outcome_profiles",
         "evidence_bundles",
         "known_gaps",
     ):
@@ -417,6 +546,14 @@ def check_case(path: Path, *, root: Path) -> GovernanceCheck:
         return GovernanceCheck(str(path), ["case.json 必须是合法 JSON 对象"])
     relative = path.relative_to(root).as_posix()
     return GovernanceCheck(relative, _check_case(relative, payload, root))
+
+
+def check_outcome_profile(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
+    payload = _load_json(path)
+    if payload is None:
+        return GovernanceCheck(str(path), ["outcome profile 必须是合法 JSON 对象"])
+    relative = path.relative_to(root).as_posix()
+    return GovernanceCheck(relative, _check_outcome_profile(relative, payload, root))
 
 
 def check_counterexample(path: Path, *, root: Path = ROOT) -> GovernanceCheck:
@@ -454,6 +591,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--claim", type=Path)
     parser.add_argument("--case", type=Path)
     parser.add_argument("--counterexample", type=Path)
+    parser.add_argument("--outcome-profile", type=Path)
     parser.add_argument("--source", type=Path)
     parser.add_argument("--json", dest="as_json", action="store_true")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
@@ -465,6 +603,8 @@ def main(argv: list[str] | None = None) -> int:
         checks.append(check_case(args.case.resolve(), root=root))
     elif args.counterexample:
         checks.append(check_counterexample(args.counterexample.resolve(), root=root))
+    elif args.outcome_profile:
+        checks.append(check_outcome_profile(args.outcome_profile.resolve(), root=root))
     elif args.source:
         checks.append(check_source(args.source.resolve(), root=root))
     else:
@@ -474,6 +614,10 @@ def main(argv: list[str] | None = None) -> int:
         checks.extend(
             check_counterexample(path, root=root)
             for path in _files(root, "counterexamples", "*.json")
+        )
+        checks.extend(
+            check_outcome_profile(path, root=root)
+            for path in _files(root, "outcome-profiles", "*.json")
         )
         checks.extend(check_source(path, root=root) for path in _files(root, "sources", "*.json"))
     print(_render(checks, as_json=args.as_json))

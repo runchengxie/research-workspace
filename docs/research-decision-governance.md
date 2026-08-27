@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace、strategy-research
-> last_verified: 2026-08-26
+> last_verified: 2026-08-27
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -22,7 +22,7 @@
 最关键的假设是什么、什么观测一出现就必须推翻判断。
 
 本页要补齐的就是这一层。它是决策线索，不是新的知识库或文档层级。不改变现有架构，
-只在 `strategy-research` 增加机器可检查的判断与反例对象。
+只在 `strategy-research` 增加机器可检查的判断、反例和决策结果目标对象。
 
 ## 设计目标
 
@@ -32,6 +32,7 @@
 4. 判断的评审由独立视角完成，最终由人类裁决。
 5. 每个判断都可以追溯到问题、实验、证据和生命周期。
 6. 主动寻找最能伤害判断的反例，并把压力前后同口径结果纳入决策线索。
+7. 把决策目标与市场预测分开登记，允许多个结果目标和约束并存，不强制合成单一分数。
 
 ## 概念映射
 
@@ -42,6 +43,7 @@
 | `catalog.json` | 策略处于哪个生命周期 |
 | `claim.v1` | 为什么可以信这个判断，什么出现就推翻它 |
 | `counterexample.v1` | 哪种压力条件最能削弱这个判断，证据在哪里 |
+| `outcome_profile.v1` | 希望决策结果满足哪些目标和约束，哪些维度只作诊断 |
 
 ## 待采用项目
 
@@ -88,7 +90,8 @@ strategy-research/cases/
 ```
 
 `case.json` 只做导航，字段包括 `question`、`as_of`、`research_specs`、`claims`、
-`counterexamples`、`evidence_bundles`、`reviews`、`known_gaps`、`abstentions` 与 `decision`。
+`counterexamples`、`outcome_profiles`、`evidence_bundles`、`reviews`、`known_gaps`、
+`abstentions` 与 `decision`。
 `decision` 状态为 `no_view`、`provisional`、`accepted`、`rejected` 之一，并记录 `thesis`。
 
 schema 文件在 `strategy-research/schemas/research_case.v1.schema.json`，校验脚本为
@@ -205,6 +208,28 @@ schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录
 `strategy-research/counterexamples/`，案例通过可选 `counterexamples` 字段引用。
 详细约束见 `strategy-research/counterexamples/README.md`。
 
+### DG9 Outcome-first 决策目标
+
+增加 `outcome_profile.v1`，把希望决策结果满足的目标和约束变成机器可检查对象。它描述决策
+偏好，不描述 alpha 预测。预测分数、预期收益或预测分布继续由对应职责仓产生。
+
+每个 profile 至少包含：
+
+- `outcome_profile_id`、`strategy_id`、`decision_type`、`statement`、`status` 与 `as_of`
+- 非空 `metrics`，每项声明 `name`、`direction`、`role` 与 `unit`
+- `role=constraint` 时额外声明比较 `operator` 和有限数值 `threshold`
+
+`role` 分为 `objective`、`constraint` 和 `diagnostic`。多个目标出现冲突时保留 Pareto trade-off，
+不自动合成单一 utility。研究证据无法支持任何候选满足约束时，应记录经验不可行或 `no_view`，
+禁止继续在同一验证窗口调参直至得到 pass。
+
+本对象不使用数学金融里的 `attainable` 术语。工作区只能根据冻结样本外、成本、容量、执行、
+市场状态和反例证据判断 `evidence_feasible` 或类似的经验可行性，不能把历史证据提升为严格的
+随机过程可实现性结论。
+
+schema 位于 `strategy-research/schemas/outcome_profile.v1.schema.json`，记录目录为
+`strategy-research/outcome-profiles/`。`research_case.v1` 通过可选 `outcome_profiles` 字段引用。
+
 ## 不建议采用
 
 - 把项目目录改造成 raw、wiki、output、rules 四层结构，现有职责拆分已经更成熟
@@ -219,4 +244,5 @@ schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录
 - `strategy-evidence-gate.md` 负责证据门禁，本页不改变强制证据集合
 - `strategy-research/README.md` 负责策略身份与生命周期，判断账本只补充认识论身份
 - `strategy-research/counterexamples/README.md` 负责反例记录的具体字段与工作流
+- `strategy-research/outcome-profiles/README.md` 负责决策结果目标的字段与经验可行性语义
 - 观察类工具只作查看层，不作为事实来源，事实来源仍是无障碍 JSON、YAML、Git 与哈希
