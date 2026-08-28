@@ -42,19 +42,23 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "research-workspace:contracts-no-direct-framework-imports",
         "alpha-research:alpha-to-pipeline",
         "alpha-research:alpha-to-backtesting",
+        "alpha-research:alpha-to-execution",
         "alpha-research:alpha-to-strategy-core-metrics",
         "alpha-research:alpha-to-strategy-compat",
         "alpha-research:alpha-to-strategy-rebalance",
         "alpha-research:alpha-to-strategy-signal-contract",
         "portfolio-backtester:backtesting-to-pipeline",
         "portfolio-backtester:backtesting-to-alpha",
+        "portfolio-backtester:backtesting-to-execution",
         "portfolio-backtester:backtesting-to-strategy-core-metrics",
         "portfolio-backtester:backtesting-to-strategy-rebalance",
         "portfolio-backtester:backtesting-to-strategy-liquidity-proxy",
         "portfolio-backtester:backtesting-to-strategy-contracts",
         "market-data-platform:no-legacy-shared-namespace-imports",
         "quant-execution-engine:no-legacy-shared-namespace-imports",
+        "quant-execution-engine:no-research-runtime-imports",
         "strategy-app:no-control-plane-imports",
+        "strategy-app:no-execution-runtime-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
         "strategy-pipeline:target-contract-no-direct-framework-imports",
@@ -147,6 +151,51 @@ def test_cross_repo_private_symbols_are_detected(tmp_path: Path) -> None:
     assert [finding["module"] for finding in report["private_import_rules"][0]["findings"]] == [
         "portfolio_backtester.daily_watch20_oos._portfolio_daily_rows",
         "alpha_research._internal.public_name",
+    ]
+
+
+def test_execution_runtime_cross_edges_are_detected(tmp_path: Path) -> None:
+    portfolio_source = tmp_path / "portfolio-backtester" / "src" / "portfolio_backtester"
+    portfolio_source.mkdir(parents=True)
+    (portfolio_source / "sim.py").write_text(
+        "from quant_execution_engine.domain import OrderIntent\n",
+        encoding="utf-8",
+    )
+    execution_source = tmp_path / "quant-execution-engine" / "src" / "quant_execution_engine"
+    execution_source.mkdir(parents=True)
+    (execution_source / "planner.py").write_text(
+        textwrap.dedent(
+            """
+            from alpha_research.metrics import summarize_ic
+            from portfolio_backtester.engine import backtest_topk
+            """
+        ),
+        encoding="utf-8",
+    )
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="portfolio-to-execution",
+            description="test",
+            repo="portfolio-backtester",
+            source="src/portfolio_backtester",
+            forbidden=("quant_execution_engine",),
+            max_allowed=0,
+        ),
+        workspace_import_boundaries.BoundaryRule(
+            identifier="execution-to-research",
+            description="test",
+            repo="quant-execution-engine",
+            source="src/quant_execution_engine",
+            forbidden=("alpha_research", "portfolio_backtester"),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+    assert report["issues"] == [
+        "portfolio-to-execution: 1 imports exceed budget 0",
+        "execution-to-research: 2 imports exceed budget 0",
     ]
 
 
