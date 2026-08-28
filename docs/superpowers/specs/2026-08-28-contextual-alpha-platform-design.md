@@ -4,7 +4,7 @@
 
 在现有 A 股研究主线上增加一条可复现的宏观、产业、公司基本面与量价联合研究链路，使宏观和产业数据能够以严格的时间点语义进入横截面股票研究，并通过公司暴露映射形成条件化特征。
 
-目标不是复刻某家私募的具体模型或固定因子权重。工作区采用更可验证的实现：
+本设计不复刻某家私募的具体模型或固定因子权重。工作区采用可验证的实现：
 
 - 数据层保存宏观、产业和能源数据的原始观测、发布时间、抓取时间与修订版本。
 - 研究层把公共情境变量映射到行业和公司暴露，生成 `context × exposure` 条件化特征。
@@ -36,7 +36,7 @@ shadow challenger、ablation、晋级证据
 
 ## 核心设计选择
 
-### 1. 不固定 70/30 权重
+### 1. 基本面与量价不固定 70/30 权重
 
 基本面与量价的权重由研究证据决定。第一版通过特征集合 challenger 比较增量价值，不在代码中写死基本面 70%、量价 30%。
 
@@ -49,11 +49,11 @@ context_feature(symbol, t)
     = context_state(t) × company_exposure(symbol, t)
 ```
 
-树模型可以进一步学习非线性交互。只有在显式交互已经稳定产生样本外增量后，才评估 gating network、mixture-of-experts 或分行业模型。
+树模型可以进一步学习非线性交互。显式交互稳定产生样本外增量以后，才评估 gating network、mixture-of-experts 或分行业模型。
 
 ### 3. 宏观数据主要作为情境和调制变量
 
-同一个月度宏观值对当日所有股票相同，直接用于横截面排序的信息有限。研究层必须优先构造：
+同一个月度宏观值对当日所有股票相同，直接用于横截面排序的信息有限。研究层优先构造：
 
 - 利率变化 × 杠杆或久期敏感度
 - 信贷变化 × 融资敏感度
@@ -62,7 +62,13 @@ context_feature(symbol, t)
 - 出口变化 × 出口行业暴露
 - 商品库存变化 × 商品生产或投入暴露
 
-纯宏观状态特征仍可提供给树模型作为 regime 输入，但必须与 interaction challenger 分开做消融。
+纯宏观状态特征可以作为 regime 输入，但必须与 interaction challenger 分开消融。
+
+### 4. 第一轮先验证市场级横截面，再考虑接 DailyWatch20
+
+月度和季度宏观数据的自然频率低于 DailyWatch20 当前短周期标签。第一轮 contextual alpha 以 A 股 PIT universe 的独立横截面实验作为主要验证对象，冻结 5、20、60 个交易日三个 horizon，其中 20 个交易日为主 horizon，5 和 60 个交易日用于期限敏感性诊断。
+
+DailyWatch20 只在独立实验已经显示稳定增量后增加 contextual overlay，避免为了复用现有 runner 强行把慢变量塞进 5 日预测问题。
 
 ## 仓库边界
 
@@ -96,7 +102,7 @@ context_feature(symbol, t)
 
 ### portfolio-backtester
 
-复用现有组合、换手、交易成本、容量和暴露能力。只有现有公开接口无法表达 regime 条件评估时，才增加通用 regime slice 汇总接口。该接口不得包含具体宏观系列或策略名称。
+复用现有组合、换手、交易成本、容量和暴露能力。现有公开接口无法表达 regime 条件评估时，才增加通用 regime slice 汇总接口。该接口不得包含具体宏观系列或策略名称。
 
 ### strategy-research
 
@@ -107,11 +113,50 @@ context_feature(symbol, t)
 - ablation 研究记录
 - 生命周期、失败条件和 evidence 导航
 
-不承载通用特征计算。
+实验 runner 可以组合 owner 仓库公开 API，但不在本目录实现通用数据、特征、模型或组合内核。
 
 ### strategy-app / strategy-pipeline / execution
 
-第一阶段不改变生产策略、不增加生产发布资格，也不修改执行行为。只有某个 contextual challenger 通过既有晋级门禁后，才设计策略应用和编排接线。
+第一阶段不改变生产策略、不增加生产发布资格，也不修改执行行为。某个 contextual challenger 通过既有晋级门禁后，再单独设计策略应用和编排接线。
+
+## 当前数据契约边界
+
+现有 `a_share_current.json` 的 `market=a_share`、`provider=tushare` 语义保持不变。Contextual Alpha 会同时使用 TuShare、国家统计局和国家能源局等来源，因此不把这些资产塞进 A 股单 provider current contract。
+
+`market-data-platform` 新增独立市场域：
+
+```text
+market = cn_context
+provider = composite
+current contract = metadata/current_assets/cn_context_current.json
+```
+
+`paths.py` 相应扩展：
+
+```text
+SUPPORTED_MARKETS += cn_context
+SUPPORTED_PROVIDERS_BY_MARKET[cn_context] = {composite}
+```
+
+`cn_context_current.json` 只选择已经标准化和发布的组合资产，不直接枚举每个 provider 的 raw 快照。第一版稳定 asset key：
+
+```text
+context_catalog
+context_observations
+context_pit
+context_release_calendar
+```
+
+`PublishedAssetRef.provider` 对这些组合资产为 `composite`。完整 manifest 的 `lineage` 记录每个源 provider、源快照、hash、抓取时间和 parser version。
+
+研究层同时读取：
+
+```text
+PublishedAssetContract.load_current(..., market="a_share")
+PublishedAssetContract.load_current(..., market="cn_context")
+```
+
+这样不会改变 A 股现有 provider 语义，也不要求 `PublishedAssetContract` 支持单个 current contract 内的多 provider asset identity。
 
 ## 数据资产设计
 
@@ -125,6 +170,7 @@ source_id
 provider
 source_series_key
 name
+family
 frequency
 unit
 seasonal_adjustment
@@ -174,9 +220,9 @@ source_hash
 
 - `available_at` 是研究是否可见的权威时间。
 - `published_at` 有官方时间时使用官方时间。
-- 只有发布日期而无精确时间时使用保守规则，默认在下一个可交易时点才可用。
+- 只有发布日期而无精确时间时使用保守规则，在下一个 A 股可交易时点才可用。
 - 无可靠发布日期且没有历史抓取证据的回填数据不得声称 revision-safe PIT。
-- `source_retrieved_at` 不得晚于 as-of 读取时间后还被回填进历史。
+- `source_retrieved_at` 晚于研究 as-of 的观测不得回填进历史。
 - 每次重新发布或修订形成新的 vintage，不覆盖旧观测。
 
 ### raw snapshot
@@ -192,7 +238,24 @@ parser version
 rows produced
 ```
 
-完成快照不可修改。新的观测和修订写入新的 dated/vintage 目录。
+建议路径：
+
+```text
+assets/context/cn/raw/<provider>/<dataset>/vintage=<YYYYMMDDTHHMMSS>/
+```
+
+完成快照不可修改。新的观测和修订写入新的 vintage 目录。
+
+### normalized 和 PIT 路径
+
+```text
+assets/context/cn/normalized/cn_context_observations_<version>/
+assets/context/cn/pit/cn_context_pit_<version>/
+assets/context/cn/catalog/cn_context_catalog_<version>.parquet
+assets/context/cn/release_calendar/cn_context_release_calendar_<version>.parquet
+```
+
+current alias 按现有平台模式指向已验证版本，manifest 和 dataset registry 记录覆盖范围与 lineage。
 
 ### PIT panel
 
@@ -213,62 +276,84 @@ series_missing
 series_stale
 selected_vintages
 max_observation_age
+reconstructed_series
 ```
 
-正式 contextual research 要求 audit 通过。探索性研究可以显式允许 reconstructed 历史，但产物必须标记不可用于 promotion。
+正式 contextual research 要求相关 series `revision_covered=true` 且 `freshness_verified=true`。探索性研究可以显式允许 reconstructed 历史，但产物必须标记 `promotion_eligible=false`。
 
 ## 第一批真实数据源
 
 ### P0：TuShare macro pack
 
-利用现有 TuShare 客户端、凭证和限流基础设施接入低维护成本的国内宏观数据。首批覆盖：
+复用现有 TuShare client、凭证、重试和限流基础设施。第一批 endpoint 固定为：
 
-- Shibor
-- LPR
-- M2/货币供应
-- 社融增量
-- PMI
-- CPI
-- PPI
-- GDP 或工业活动类可稳定获得的宏观系列
+```text
+shibor
+shibor_lpr
+cn_m
+sf_month
+cn_pmi
+cn_cpi
+cn_ppi
+cn_gdp
+cn_schedule
+```
 
-TuShare 只作为 provider。平台仍保存自己的 raw snapshot 和 retrieval timestamp，不把供应商当前返回值当作历史真相。
+系列至少覆盖：
+
+- Shibor O/N、1W、1M、3M、6M、1Y
+- LPR 1Y、5Y
+- M1、M2 及其同比字段
+- 社融增量及可稳定获取的主要分项
+- 制造业 PMI 与生产、新订单等第一批核心分项
+- CPI 全国同比和环比
+- PPI 核心同比/环比字段
+- GDP 总量、同比和第二/第三产业同比
+
+`cn_schedule` 用于补充已公布的经济数据发布日期。某个历史 observation 无法通过 schedule、源字段或 observed vintage 证明实际可用日时，标记为 reconstructed。
+
+TuShare 只作为 provider。平台保存自己的 raw snapshot 和 retrieval timestamp，不把供应商当前返回值当作历史真相。
 
 ### P1：国家统计局 activity/energy pack
 
-从国家统计局公开数据入口接入适合产业景气研究的月度或季度序列，优先：
+从国家统计局公开数据入口接入适合产业景气研究的月度或季度序列，第一批固定范围：
 
-- 工业增加值
-- 发电量
-- 火电、水电、风电、光伏等结构数据
-- 原煤、原油、天然气等主要能源产量
+- 规模以上工业增加值同比
+- 发电量总量和同比
+- 火电、水电、核电、风电、太阳能发电量或同比中能够稳定获得的字段
+- 原煤产量和同比
+- 原油产量和同比
+- 天然气产量和同比
 
-若官方接口的历史发布时间无法可靠恢复，历史区间标记为 reconstructed，今后每日/每月抓取形成 observed vintage ladder。
+adapter 直接面向官方公开入口和响应，不把 AKShare 对象或 schema 引入跨仓契约。可以使用 fixture 固定官方响应结构做解析测试。
+
+历史发布时间无法可靠恢复时，历史区间标记为 reconstructed。上线后的定期抓取形成 observed vintage ladder。
 
 ### P1：国家能源局 electricity pack
 
-接入公开发布的全社会用电相关数据，优先：
+接入公开发布的全社会用电相关数据，第一批固定范围：
 
-- 全社会用电量
-- 第二产业或工业用电量
-- 第三产业用电量
-- 可稳定解析的制造业或高技术行业用电指标
+- 全社会用电量及同比
+- 第一、第二、第三产业用电量及同比
+- 城乡居民生活用电量及同比
+- 官方发布中可以稳定解析且口径连续的制造业或高技术行业用电指标
 
-页面解析器必须保存原始页面或响应 hash，并针对标题、发布日期、单位和表格变化做失败关闭。
+页面解析器保存原始页面或响应 hash，并针对标题、发布日期、单位和表格变化失败关闭。新增细分指标必须先进入 catalog，不允许 parser 静默增加列。
 
 ### P2：trade / commodity pack
 
-在前两批证据链稳定后扩展：
+P0/P1 证据链稳定后扩展：
 
 - 海关进出口总量和重点商品
 - 港口吞吐和集装箱
 - 交易所仓单、库存或公开商品库存
+- TuShare `fina_mainbz` 或等价 PIT 合法业务构成，用于改善出口和商品 exposure
 
-P2 不阻塞 P0/P1 contextual alpha 实验。
+P2 不阻塞第一轮 contextual alpha 实验。
 
 ### P3：FRED/ALFRED 和 EIA
 
-作为全球情境扩展。优先使用可提供 vintage 或明确发布时间的 API。第一轮 A 股国内 contextual alpha 不依赖该阶段。
+作为全球情境扩展。优先使用可提供 vintage 或明确发布时间的 API。第一轮国内 A 股 contextual alpha 不依赖该阶段。
 
 ## context transform 设计
 
@@ -301,12 +386,13 @@ feature_name
 
 - 缺少足够历史时输出缺失并记录 evidence，不静默填零。
 - 不跨超过 `max_staleness` 的时间前向填充。
-- 月度数据可在后续交易日保持最近可见值，但必须带 `context_age_days` 或等价 age 特征。
+- 月度数据在后续交易日使用最近可见值时同时输出 `context_age_days`。
+- `yoy` 的 lag 按原始 series frequency 计算，不按交易日硬移 252 天。
 - `surprise` 只有存在独立、PIT 合法的市场预期数据时才启用，第一版不从最终值反推预期。
 
 ## 公司 exposure 设计
 
-第一版 exposure 要可解释、可回测和可消融。禁止维护数千只股票的人工权重表。
+第一版 exposure 可解释、可回测、可消融。禁止维护数千只股票的人工权重表。
 
 ### 基础 exposure family
 
@@ -322,16 +408,30 @@ commodity_output_sensitivity
 property_cycle_sensitivity
 ```
 
-### 构造来源
+### ExposureSpec
 
-按证据可靠性从高到低组合：
+`alpha-research` 增加框架中立的 `ExposureSpec`。每个 spec 固定：
 
-1. PIT 行业分类
-2. PIT 财务比例，例如杠杆、利息负担、毛利率、现金、资本开支强度
-3. 可获得且 PIT 合法的业务分部、地区或收入结构
-4. 显式研究配置中的行业映射
+```text
+name
+industry_prior_map
+fundamental_modifiers
+clip_min
+clip_max
+version
+```
 
-第一版必须至少实现行业基础 exposure 和少量财务调制项，保证大部分 A 股可以获得 exposure，同时避免伪精确。
+`industry_prior_map` 使用 PIT 行业标签给出基础 exposure。`fundamental_modifiers` 是可选的财务调制规则，每条包含输入字段、方向、标准化方式、权重和缺失行为。最终 exposure 在 spec 指定范围内 clip。
+
+第一版 experiment 至少启用：
+
+- `rate_sensitivity`：行业 prior + 杠杆/利息负担类 PIT 财务调制
+- `credit_sensitivity`：行业 prior + 杠杆/现金类 PIT 财务调制
+- `industrial_activity_sensitivity`：行业 prior
+- `energy_input_sensitivity`：行业 prior
+- `energy_output_sensitivity`：行业 prior
+
+`export_sensitivity`、commodity 和 property exposure 可以进入 API 与 schema，但缺少可靠数据时保持未启用，不用人工逐股票猜测补齐。
 
 ### exposure 输出
 
@@ -344,7 +444,7 @@ source_components
 exposure_version
 ```
 
-`exposure_value` 采用有界范围，例如 `[-1, 1]` 或 `[0, 1]`。具体方向由 exposure spec 定义。
+第一版统一使用 `[-1, 1]`。正负方向由 exposure spec 定义。`source_components` 保存行业 prior、财务 modifier 及缺失状态的可序列化证据。
 
 行业映射表是研究配置和版本化证据，不属于 market-data-platform 的原始事实。
 
@@ -366,7 +466,7 @@ symbol_col
 interaction 采用确定性命名，例如：
 
 ```text
-ctx__rates_10y_change20__x__rate_sensitivity
+ctx__shibor_3m_change20__x__rate_sensitivity
 ctx__industrial_power_yoy__x__industrial_activity_sensitivity
 ctx__coal_output_yoy__x__energy_output_sensitivity
 ```
@@ -378,36 +478,47 @@ ctx__coal_output_yoy__x__energy_output_sensitivity
 - exposure spec/version
 - as-of join policy
 
+严格 join 检查同时验证 `available_at <= trade_date/session cutoff` 和 exposure 的 PIT 生效时间。
+
 ## 模型接入
 
-第一版不新增独立模型框架。现有 `DailyWatch20Ranker` 和研究后端接收扩展后的 feature frame。
+第一版不新增独立模型框架。现有原生/XGBoost ranker 接收扩展后的 feature frame。
 
-冻结四组 challenger：
+独立市场级实验冻结四组 challenger：
 
 ```text
-C0 = incumbent / existing baseline
+C0 = price/volume + existing stock-level baseline
 C1 = C0 + context state
-C2 = C0 + context state + context × exposure
+C2 = C1 + context × exposure
 C3 = C2 + PIT fundamental feature group
 ```
 
-如果某个现有 fundamental shadow 已经包含 C3 的部分内容，则以现有 feature set 为基线，保持相同 label、训练窗口、成本和候选池，只增加 context 维度。
+若现有 alpha API 已有可复用的 fundamental feature group，C3 直接复用。缺少统一 market-wide baseline 时，实验配置显式列出 C0/C3 的现有 feature names，不创建第二套特征实现。
 
 研究报告必须同时给出：
 
-- context state 单独增量
-- interaction 相对于 context state 的增量
-- fundamental 与 context 的联合增量
+- C1 - C0：纯 context state 增量
+- C2 - C1：interaction 增量
+- C3 - C2：PIT fundamental 联合增量
+- C3 - C0：完整 contextual fundamental 增量
 
 这样可以区分宏观 regime 信息和真正横截面的公司敏感度信息。
 
 ## 研究协议
 
-### 时间尺度
+### 数据频率和标签
 
-月度和季度 context 数据不以预测未来 1 到 5 天为唯一验证目标。第一轮同时评估多个冻结 horizon，至少包括短周期和中周期，具体 horizon 使用现有研究标签系统表达。
+主研究 universe 使用平台发布的 A 股 PIT by-date universe。
 
-若 DailyWatch20 的策略身份只允许固定短 horizon，则 contextual alpha 先作为独立 cross-sectional experiment 研究，再决定是否接入 DailyWatch20。
+冻结 horizon：
+
+```text
+5 trading days
+20 trading days  # primary
+60 trading days
+```
+
+模型选择和 feature set 决策以 20 日 horizon 为主。5 日和 60 日只判断期限稳定性，不在同一 final OOS 上选择最优 horizon。
 
 ### 样本外与泄漏控制
 
@@ -415,18 +526,19 @@ C3 = C2 + PIT fundamental feature group
 
 - 使用 PIT universe
 - 使用 revision-safe 或明确 reconstructed 状态的数据
-- as-of join 基于 `available_at`
+- context as-of join 基于 `available_at`
+- fundamental/exposure 使用 PIT 生效时间
 - walk-forward
 - CPCV/PBO
 - feature ablation
 - 多 regime 切片
 - 独立 final OOS
 
-最终 OOS 在冻结 feature set 和 transform spec 后才运行。
+最终 OOS 在冻结 feature set、ExposureSpec、TransformSpec 和 interaction set 后才运行。
 
 ### 成本、换手和容量
 
-contextual alpha 若提高预测指标但显著提高换手，必须报告净收益效果。沿用现有 `portfolio-backtester` 的交易成本和容量框架，不创建一套策略专用会计。
+contextual alpha 若提高预测指标但显著提高换手，必须报告净收益效果。沿用现有 `portfolio-backtester` 的交易成本和容量框架，不创建策略专用会计。
 
 至少比较：
 
@@ -442,17 +554,17 @@ industry/style exposure drift
 
 ### regime stability
 
-对以下状态至少保留可重现切片：
+第一版固定诊断 regime：
 
 ```text
 rates_up / rates_down
 credit_expanding / credit_contracting
 industrial_accelerating / industrial_decelerating
 high_vol / low_vol
-bull / bear or benchmark trend state
+benchmark_uptrend / benchmark_downtrend
 ```
 
-regime 只用于诊断和条件有效性判断，不允许在同一个 OOS 样本上反复调阈值直到显著。
+regime 划分阈值只由训练期或预先固定规则产生。final OOS 不重新调阈值。
 
 ## strategy-research 实验
 
@@ -467,28 +579,31 @@ strategy-research/experiments/macro_context_shadow/
 ```text
 README.md
 experiment.yml
-claims / evidence references
+run_contextual_alpha_shadow.py
 ```
+
+runner 只组合公开 owner API，不复制数据、特征或组合内核。
 
 README 说明：
 
 - 投资假设
 - context family
 - exposure family
-- challenger 集合
+- C0/C1/C2/C3 challenger
+- 5/20/60 日 horizon 与 20 日主 horizon
 - 时间点语义
 - 样本外协议
 - 成本假设
 - 失败条件
 
-第一轮失败条件包括：
+第一轮失败条件：
 
-- interaction 相对 context-only 无稳定样本外增量
-- 增量只来自单一行业或单一短窗口
-- 结果对 revision-safe 数据消失
+- C2 相对 C1 无稳定样本外增量
+- 完整增量只来自单一行业或单一短窗口
+- 结果在 revision-safe 子样本消失
 - 成本后增量不可见
 - 特征重要性高度集中且跨 fold 不稳定
-- 必须依赖 reconstructed 数据才能成立
+- 主要结论必须依赖 reconstructed 数据才能成立
 
 满足失败条件允许记录 `no_view` 或 rejected，不通过继续加数据和参数强行挽救。
 
@@ -507,6 +622,7 @@ README 说明：
 - missing periods
 - staleness
 - raw hash / lineage
+- composite manifest 的 source coverage
 
 ### alpha gate
 
@@ -516,6 +632,7 @@ README 说明：
 - revision selection 正确
 - staleness 拒绝
 - transform 边界
+- frequency-aware yoy
 - exposure boundedness
 - interaction 确定性
 - 缺失输入行为
@@ -523,7 +640,7 @@ README 说明：
 
 ### evidence gate
 
-promotion 仍使用现有 evidence/lifecycle 规则。Contextual Alpha 第一阶段固定为 exploration 或 research_shadow，不获得生产资格。
+promotion 继续使用现有 evidence/lifecycle 规则。Contextual Alpha 第一阶段固定为 `exploration`，完成稳定 shadow 后最多升到 `research_shadow`，不会直接获得生产资格。
 
 ## PR 实施顺序
 
@@ -537,15 +654,17 @@ promotion 仍使用现有 evidence/lifecycle 规则。Contextual Alpha 第一阶
 
 内容：
 
+- `cn_context` / `composite` contract domain
 - context series catalog schema
 - normalized observation schema
 - raw/vintage/PIT 语义
-- TuShare macro provider pack
+- TuShare macro endpoint pack
+- `cn_schedule` release calendar
 - CLI 或发布入口
-- current contract asset keys
+- `cn_context_current.json`
 - manifest、validation、tests、docs
 
-首批真实数据至少覆盖 rates、credit、prices、PMI。
+首批真实数据覆盖 rates、credit、prices、PMI/GDP activity。
 
 ### PR 2：market-data-platform official activity/energy
 
@@ -556,44 +675,50 @@ promotion 仍使用现有 evidence/lifecycle 规则。Contextual Alpha 第一阶
 - raw snapshot sealing
 - observed/reconstructed vintage 标识
 - energy/activity series catalog
-- parser fixture 和失败关闭测试
+- parser fixture、结构漂移和失败关闭测试
 
 ### PR 3：alpha-research contextual factors
 
 内容：
 
-- context transform specs
-- company exposure specs
-- PIT-safe join
+- `ContextTransformSpec`
+- `ExposureSpec`
+- PIT-safe context/exposure join
 - interaction feature builder
 - feature evidence
-- 单元和泄漏测试
+- 单元、revision、staleness 和泄漏测试
 - 文档和公开导入 smoke test
 
-### PR 4：research-workspace shadow experiment
+### PR 4：research-workspace market-wide shadow experiment
 
-在 PR 1 至 PR 3 合并后：
+PR 1 至 PR 3 合并后：
 
-- 更新子模块 gitlink
+- 更新 `market-data-platform` 和 `alpha-research` gitlink
 - 增加 `macro_context_shadow` 实验
-- 冻结 C0/C1/C2/C3 challenger
+- 冻结 C0/C1/C2/C3
+- 冻结 5/20/60 日 horizon，20 日为主
 - 接现有数据、alpha 和回测公开接口
 - 保存实验配置和 evidence 路径
 
 ### PR 5：portfolio-backtester regime diagnostics，条件实施
 
-仅当 PR 4 发现现有接口无法复用时增加通用 regime slice 汇总。若现有 API 足够，本 PR 取消。
+只有 PR 4 证明现有接口无法复用时增加通用 regime slice 汇总。现有 API 足够则取消该 PR。
 
-### PR 6：后续低成本数据扩展
+### PR 6：DailyWatch20 contextual overlay，条件实施
 
-独立小 PR 接 trade、commodity、FRED/ALFRED、EIA。每个数据源必须证明增量研究价值或明确服务的 hypothesis，避免无边界数据囤积。
+只有 market-wide shadow 的 C2/C3 通过稳定性标准后，在 DailyWatch20 的现有 fundamental shadow 上增加 opt-in contextual feature set，并保持其原有标签、候选池和成本协议不变。
+
+### PR 7：后续低成本数据扩展
+
+独立小 PR 接 trade、commodity、业务构成、FRED/ALFRED、EIA。每个数据源必须对应明确 hypothesis 或已观察到的数据缺口，避免无边界数据囤积。
 
 ## 兼容性
 
+- 不修改现有 `a_share_current.json` provider 语义。
 - 不修改现有 `signals.parquet` 基础语义。
 - 不修改 `targets.json`。
 - 不改变现有生产策略默认 feature set。
-- 新 context 资产为 opt-in。
+- 新 `cn_context` 资产为 opt-in。
 - 新 contextual features 为 opt-in feature group。
 - 不要求 Qlib。
 - 数据供应商对象不进入跨仓契约。
@@ -614,11 +739,13 @@ promotion 仍使用现有 evidence/lifecycle 规则。Contextual Alpha 第一阶
 
 完整第一阶段以 PR 1 至 PR 4 为目标，满足以下条件才算落地：
 
-1. 至少四类真实 context family 可以从公开或现有低成本 provider 自动更新。
-2. 数据资产有 raw hash、vintage、`available_at`、PIT as-of 读取和完整 audit。
-3. `alpha-research` 可以从普通 DataFrame 生成 context transforms、company exposures 和 interactions。
-4. 测试明确证明未来 publication 和未来 revision 无法进入历史 feature frame。
-5. 至少一个真实 A 股 shadow experiment 完成 C0/C1/C2/C3 冻结对比。
-6. 报告包含 IC/RankIC、OOS、成本、换手、容量代理和 regime stability。
-7. 无稳定增量时能够形成 rejected/no_view 结论，不影响现有生产链。
-8. 所有跨仓改动遵循各 owner 仓库公开 API 和本地质量门禁。
+1. `cn_context_current.json` 能独立发布并读取，不改变 `a_share_current.json`。
+2. 至少四类真实 context family 可以从 TuShare 和官方公开源自动更新。
+3. 数据资产有 raw hash、vintage、`available_at`、PIT as-of 读取和完整 audit。
+4. observed 和 reconstructed 历史在 manifest、PIT audit 和研究 evidence 中明确区分。
+5. `alpha-research` 可以从普通 DataFrame 生成 context transforms、company exposures 和 interactions。
+6. 测试明确证明未来 publication 和未来 revision 无法进入历史 feature frame。
+7. 至少一个真实 A 股 market-wide shadow 完成 C0/C1/C2/C3 与 5/20/60 日冻结对比。
+8. 报告包含 IC/RankIC、final OOS、成本、换手、容量代理和 regime stability。
+9. 无稳定增量时能够形成 rejected/no_view 结论，不影响现有生产链。
+10. 所有跨仓改动遵循各 owner 仓库公开 API 和本地质量门禁。
