@@ -24,6 +24,16 @@ exposures:
   - energy_output_sensitivity
 interactions:
   naming: ctx__{feature}__x__{exposure}
+fund_context:
+  features:
+    - fund_crowding_level
+    - fund_ownership_change
+    - fund_holder_count_change
+    - fund_low_crowding_accumulation
+    - fund_top10_concentration
+    - fund_accumulation_without_crowding
+  pit_requirement: available_date <= trade_date
+  signal_definition: low_crowding_and_increasing_ownership_without_top10_concentration
 model:
   backend: existing_alpha_ranker
   selection_horizon: 20

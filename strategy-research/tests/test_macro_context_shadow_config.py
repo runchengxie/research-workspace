@@ -9,6 +9,8 @@ def test_macro_context_shadow_config_is_frozen_and_non_production() -> None:
     assert config["horizons"] == [5, 20, 60]
     assert config["primary_horizon"] == 20
     assert set(config["challengers"]) == {"C0", "C1", "C2", "C3", "C4"}
+    assert config["fund_context"]["pit_requirement"] == "available_date <= trade_date"
+    assert "fund_accumulation_without_crowding" in config["fund_context"]["features"]
     assert config["lifecycle"] == "exploration"
     assert config["production_eligible"] is False
 
