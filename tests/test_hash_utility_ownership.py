@@ -42,3 +42,11 @@ def _hash_definition_paths() -> set[str]:
 
 def test_sha256_file_helpers_do_not_proliferate_across_workspace() -> None:
     assert _hash_definition_paths() == ALLOWED_HASH_DEFINITIONS
+
+
+def test_sha256_helper_ownership_is_documented() -> None:
+    audit = (ROOT / "docs" / "hash-helper-ownership-audit.md").read_text(encoding="utf-8")
+
+    for path in sorted(ALLOWED_HASH_DEFINITIONS):
+        assert f"`{path}`" in audit
+    assert "每个新增 helper 都必须" in audit
