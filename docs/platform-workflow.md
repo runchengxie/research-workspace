@@ -43,6 +43,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 策略知识 | `strategy-research` | `catalog.json`、策略说明、生命周期与证据导航 |
 | 数据文件约定 | `market-data-platform` | `metadata/current_assets/a_share_current.json`、清单、registry |
 | 研究数据集 | `market-data-platform` / `alpha-research` | 已发布资产、`ResearchDataset`：`raw_panel -> infer_frame -> learn_frame` |
+| L2 深度学习研究 | `deep-learning-tick-data-prediction` | 清洁审计、事件流模型和 formal prediction artifact |
 | 模型 | `alpha-research` | `ResearchModel.detail()`、`feature_importance.csv`、`model_detail` summary |
 | 信号 | `alpha-research` | `signals.parquet` |
 | 组合 | `portfolio-backtester` | 组合规格、`positions_by_rebalance.csv`、`positions_current*.csv` |
@@ -56,6 +57,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 | 策略知识 | `strategy-research` | 维护策略身份、假设、生命周期、评审结论和证据导航 | `strategy-research/catalog.json`、策略 README |
 | 数据平台入口 | `market-data-platform` | 维护共享路径、当前数据清单和资产索引，承载中国大陆市场数据入口、A 股资产发布和港股归档恢复控制面 | `marketdata tushare ...`、`marketdata migration hydrate-hk` |
 | Alpha 研究 | `alpha-research` | 承载特征、模型、CPCV/PBO、feature evidence、signal artifact 和 alpha 诊断 | `alpha_research.*`、`signals.parquet` |
+| L2 深度学习研究 | `deep-learning-tick-data-prediction` | 承载 L2 清洁、事件级标签、模型训练和预测 artifact | `ticknet.research.prediction_contract`、版本化 prediction artifact |
 | 组合回测 | `portfolio-backtester` | 承载组合构造、回测、执行模拟、容量、暴露、turnover 和报告 | `portfolio_backtester.*`、`positions_by_rebalance.csv`、`positions_current*.csv` |
 | 策略应用 | `strategy-app` | 把人类可读策略规格翻译为策略特有纯计算，组合 owner API，不负责最终发布 | `strategy_app.*`、普通 frames/report |
 | 运行控制面 | `strategy-pipeline` | 负责命令行（CLI）、外部调用、运行目录、操作控制、原子发布、门禁和执行目标导出 | `strategy ...`、`summary.json`、`targets.json` |

@@ -13,6 +13,7 @@ EXPECTED_SUBMODULES = {
     "strategy-pipeline",
     "quant-execution-engine",
     "strategy-app",
+    "deep-learning-tick-data-prediction",
 }
 
 

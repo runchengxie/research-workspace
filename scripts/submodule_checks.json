@@ -75,6 +75,21 @@
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
     },
+    "deep-learning-tick-data-prediction": {
+      "path": "deep-learning-tick-data-prediction",
+      "profiles": {
+        "smoke": [["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import ticknet.eventstream; import ticknet.research.prediction_contract"]],
+        "lint": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "."]
+        ],
+        "test": [["uv", "run", "--locked", "--extra", "dev", "python", "-m", "pytest"]],
+        "type": [["uv", "run", "--locked", "--extra", "dev", "ty", "check"]],
+        "release_typecheck": [["uv", "run", "--locked", "--extra", "dev", "ty", "check"]],
+        "full": ["@lint", "@smoke", "@type", "@test"]
+      }
+    },
     "strategy-pipeline": {
       "path": "strategy-pipeline",
       "profiles": {

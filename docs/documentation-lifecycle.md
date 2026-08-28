@@ -15,7 +15,7 @@
 
 ```text
 > status: active | reference | archived | superseded
-> owner: workspace | strategy-research | market-data-platform | alpha-research | portfolio-backtester | strategy-app | strategy-pipeline | quant-execution-engine
+> owner: workspace | strategy-research | market-data-platform | deep-learning-tick-data-prediction | alpha-research | portfolio-backtester | strategy-app | strategy-pipeline | quant-execution-engine
 > last_verified: YYYY-MM-DD
 > source_of_truth: yes | no
 > superseded_by: n/a | <relative path>
