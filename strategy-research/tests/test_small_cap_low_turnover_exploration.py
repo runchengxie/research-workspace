@@ -6,13 +6,17 @@ from pytest import approx, raises
 
 from experiments.style_factors.small_cap_low_turnover_exploration_20260826 import (
     _build_share_ledger_positions,
+    _frequency_cache_manifest,
+    _load_frequency_cache,
     _period_return_metrics,
+    _prepare_frequency_cache,
     _run_capacity_ladder,
     _run_joint_matrix,
     _run_rebalance_matrix,
     _run_reconciliation_matrix,
     _run_share_ledger_matrix,
     _signal_correlations,
+    _write_frequency_cache,
 )
 from style_factors.robustness_execution import (
     daily_return_matrix,
@@ -30,6 +34,63 @@ from style_factors.small_cap_low_turnover import (
     round_target_weights_to_lots,
     simulate_long_only_candidates,
 )
+
+
+def test_frequency_cache_prepares_each_requested_frequency_once() -> None:
+    daily = _synthetic_rebalance_daily()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+
+    cache = _prepare_frequency_cache(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        minimum_listed_days=0,
+        frequencies=("monthly", "monthly", "biweekly"),
+    )
+
+    assert set(cache) == {"monthly", "biweekly"}
+    assert cache["monthly"]["controls"] is not None
+    assert cache["monthly"]["panel"] is not None
+    assert cache["monthly"]["eligible"] is not None
+
+
+def test_frequency_cache_round_trip_and_manifest_mismatch(tmp_path) -> None:
+    daily = _synthetic_rebalance_daily()
+    universe = daily[["trade_date", "symbol"]].copy()
+    st_history = pd.DataFrame(
+        {
+            "trade_date": pd.Series(dtype="datetime64[ns]"),
+            "symbol": pd.Series(dtype="string"),
+        }
+    )
+    frequencies = ("monthly",)
+    cache = _prepare_frequency_cache(
+        daily_clean=daily,
+        sw_membership=None,
+        universe=universe,
+        st_history=st_history,
+        minimum_listed_days=0,
+        frequencies=frequencies,
+    )
+    manifest = _frequency_cache_manifest(
+        daily_clean=daily,
+        minimum_listed_days=0,
+        frequencies=frequencies,
+    )
+    _write_frequency_cache(cache, tmp_path, manifest)
+
+    loaded = _load_frequency_cache(tmp_path, manifest)
+    assert loaded is not None
+    pd.testing.assert_frame_equal(loaded["monthly"]["panel"], cache["monthly"]["panel"])
+    mismatched = {**manifest, "minimum_listed_days": 180}
+    assert _load_frequency_cache(tmp_path, mismatched) is None
 
 
 def _synthetic_signal_inputs() -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -679,6 +740,7 @@ def test_reconciliation_matrix_decomposes_engine_gap() -> None:
         buffer_count=6,
         minimum_listed_days=0,
         initial_capital=1_000_000.0,
+        impact_bps=100.0,
         returns=returns,
         matrices=matrices,
         frequencies=("monthly",),
@@ -697,10 +759,20 @@ def test_reconciliation_matrix_decomposes_engine_gap() -> None:
     }
     control_arms = set(matrix.loc[matrix["candidate"] == "large_cap_control", "engine_arm"])
     assert control_arms == {"weight_level", "ideal_nav", "ledger_full"}
+    assert set(matrix.loc[matrix["candidate"] == "small_cap", "engine_arm"]) == {
+        "weight_level",
+        "ideal_nav",
+        "ledger_full",
+    }
     weight_rows = matrix.loc[matrix["engine_arm"] == "weight_level"]
     assert weight_rows["fill_ratio"].isna().all()
     ledger_rows = matrix.loc[matrix["engine_arm"] != "weight_level"]
     assert ledger_rows["fill_ratio"].notna().all()
+    assert ledger_rows["temporary_impact"].ge(0.0).all()
+    assert matrix.loc[matrix["engine_arm"] == "ledger_full", "temporary_impact"].gt(0.0).any()
+    comparable = matrix["engine_arm"].isin({"weight_level", "ideal_nav", "ledger_full"})
+    assert matrix.loc[comparable, "incremental_vs_small_cap"].notna().all()
+    assert matrix.loc[comparable, "incremental_vs_large_cap"].notna().all()
     assert matrix["net_annual_return"].notna().all()
 
 
@@ -726,6 +798,7 @@ def test_capacity_ladder_reports_requested_capitals() -> None:
         target_count=4,
         buffer_count=6,
         minimum_listed_days=0,
+        impact_bps=100.0,
         capitals=(1_000_000.0, 10_000_000.0),
     )
 
@@ -733,6 +806,7 @@ def test_capacity_ladder_reports_requested_capitals() -> None:
     assert ladder["capital"].tolist() == [1_000_000.0, 10_000_000.0]
     assert (ladder["status"] == "ok").all()
     assert ladder["fill_ratio"].notna().all()
+    assert ladder["temporary_impact"].gt(0.0).all()
     assert ladder["net_annual_return"].notna().all()
 
 
