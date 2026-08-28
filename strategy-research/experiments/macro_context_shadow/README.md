@@ -13,3 +13,25 @@
 ```bash
 python -m macro_context_shadow.run_contextual_alpha_shadow --data-root "$DATA_PLATFORM_ROOT" --dry-run
 ```
+
+## Shibor first exploration
+
+The first reproducible scan is an equal-weight market conditioning test. It uses
+the visible `rates.shibor_3m` series, classifies five-observation changes as
+`up`, `down`, or `flat`, and measures the next 20 trading-day equal-weight
+market return. Historical rows marked `reconstructed` are reported separately
+and do not support a promotion-safe conclusion.
+
+```bash
+PYTHONPATH=strategy-research \
+  python -m experiments.macro_context_shadow.run_shibor_regime_exploration \
+  --data-root "$DATA_PLATFORM_ROOT" \
+  --as-of 20260831 \
+  --output /tmp/shibor-regime.json
+```
+
+The current run is exploratory only: 411 regime rows are available, but only 3
+are strict PIT rows. The observed 20-day means are `down=1.98%`, `flat=4.25%`,
+and `up=2.59%`; these are descriptive results, not evidence of tradable Alpha.
+The next stock-level experiment must add company exposures and PIT fundamentals
+before testing C0/C1/C2 rankers.
