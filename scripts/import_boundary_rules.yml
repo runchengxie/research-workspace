@@ -26,6 +26,13 @@ boundary_rules:
   forbidden:
   - portfolio_backtester
   max_allowed: 0
+- identifier: alpha-research:alpha-to-execution
+  description: alpha-research must stop at signal research and must not import execution runtime
+  repo: alpha-research
+  source: src/alpha_research
+  forbidden:
+  - quant_execution_engine
+  max_allowed: 0
 - identifier: alpha-research:alpha-to-strategy-core-metrics
   description: alpha-research should own research metrics
   repo: alpha-research
@@ -71,6 +78,13 @@ boundary_rules:
   source: src/portfolio_backtester
   forbidden:
   - alpha_research
+  max_allowed: 0
+- identifier: portfolio-backtester:backtesting-to-execution
+  description: portfolio research simulation must remain broker-independent and must not import qexec runtime
+  repo: portfolio-backtester
+  source: src/portfolio_backtester
+  forbidden:
+  - quant_execution_engine
   max_allowed: 0
 - identifier: portfolio-backtester:backtesting-to-strategy-core-metrics
   description: portfolio-backtester should own backtest metrics instead of importing
@@ -121,6 +135,14 @@ boundary_rules:
   forbidden:
   - cstree
   max_allowed: 0
+- identifier: quant-execution-engine:no-research-runtime-imports
+  description: qexec starts from target artifacts and must not import alpha or portfolio research runtimes
+  repo: quant-execution-engine
+  source: src/quant_execution_engine
+  forbidden:
+  - alpha_research
+  - portfolio_backtester
+  max_allowed: 0
 - identifier: strategy-app:no-control-plane-imports
   description: strategy-app contains strategy-specific pure computation and must not import
     the strategy-pipeline control plane
@@ -128,6 +150,13 @@ boundary_rules:
   source: src/strategy_app
   forbidden:
   - strategy_pipeline
+  max_allowed: 0
+- identifier: strategy-app:no-execution-runtime-imports
+  description: strategy-app freezes strategy policy and must not import broker execution runtime
+  repo: strategy-app
+  source: src/strategy_app
+  forbidden:
+  - quant_execution_engine
   max_allowed: 0
 - identifier: strategy-pipeline:no-execution-engine-imports
   description: strategy-pipeline exports execution targets without execution internals

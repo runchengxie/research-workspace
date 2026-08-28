@@ -19,6 +19,7 @@ StyleReplica 按以下职责切分：
 3. `portfolio-backtester` 拥有从已评分候选到目标持仓的通用组合机制，包括槽位分配、buffer、replacement、overlap、weight、position validation 与回放。
 4. `strategy-pipeline` 只负责调用上述公开 API、解析运行参数、写运行目录与发布产物。它不得直接读取数据平台资产内部文件名。
 5. `market-data-platform` 通过 published/current contract 和只读 research view 提供 StyleReplica 所需市场数据。调用方不得依赖 `daily_clean.parquet`、`daily_basic.parquet` 等历史物理布局。
+6. `quant-execution-engine` 负责账户审批、券商适配、真实订单状态、对账和恢复。研究仓库可以模拟执行语义，但不得反向导入 qexec runtime。
 
 ## 兼容与迁移
 
@@ -39,6 +40,7 @@ StyleReplica 按以下职责切分：
 - 持仓数量约束、换仓 buffer、每日替换限制、重叠处理、最终权重进入 `portfolio-backtester`。
 - CLI、运行目录、发布和 `targets.json` 交接进入 `strategy-pipeline`。
 - 数据资产解析、PIT 读取、published asset 路径进入 `market-data-platform`。
+- 账户审批、券商适配、真实订单状态、对账和恢复进入 `quant-execution-engine`，研究模拟保持 broker-independent。
 
 如果一个函数同时需要策略身份参数和组合算法，应把策略参数作为输入传给组合 owner，避免在组合仓硬编码具体策略名称。
 
