@@ -270,6 +270,16 @@
       "removal_condition": "remove only after decision governance checks move to a successor doctor module and no CI/release checklist calls this validation path for two release reviews"
     },
     {
+      "path": "scripts/decision_governance_outcomes.py",
+      "owner": "research-workspace",
+      "purpose": "Outcome-first decision receipt and empirical feasibility validation helper",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "none; stdlib-only",
+      "removal_condition": "remove only after outcome profile receipt checks move to a successor governance command and no CI/research workflow calls this helper for two release reviews"
+    },
+    {
       "path": "scripts/doctor_boundary_checks.py",
       "owner": "research-workspace",
       "purpose": "Top-level script import boundary checks",

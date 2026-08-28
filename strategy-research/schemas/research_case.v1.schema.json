@@ -49,6 +49,14 @@
         "pattern": "^[a-z0-9][a-z0-9._-]*$"
       }
     },
+    "outcome_profiles": {
+      "type": "array",
+      "description": "决策结果目标 ID；文件位于 strategy-research/outcome-profiles/<id>.json。",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]*$"
+      }
+    },
     "evidence_bundles": {
       "type": "array",
       "items": {

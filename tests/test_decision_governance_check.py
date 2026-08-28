@@ -69,6 +69,47 @@ def _valid_case(case_id: str = "demo-case") -> dict[str, object]:
     }
 
 
+def _valid_outcome_profile(profile_id: str = "demo.exit-profile") -> dict[str, object]:
+    return {
+        "schema_version": "outcome_profile.v1",
+        "outcome_profile_id": profile_id,
+        "strategy_id": "daily_watch20",
+        "decision_type": "exit",
+        "statement": "提高典型退出结果，同时约束尾部亏损与利润回吐",
+        "status": "proposed",
+        "as_of": "2026-08-27",
+        "metrics": [
+            {
+                "name": "median_return",
+                "direction": "higher_is_better",
+                "role": "objective",
+                "unit": "return",
+            },
+            {
+                "name": "cvar_05_return",
+                "direction": "higher_is_better",
+                "role": "constraint",
+                "unit": "return",
+                "operator": "gte",
+                "threshold": -0.1,
+            },
+            {
+                "name": "p90_peak_giveback",
+                "direction": "lower_is_better",
+                "role": "diagnostic",
+                "unit": "return",
+            },
+        ],
+    }
+
+
+def _write_outcome_profile(root: Path, profile_id: str, payload: dict[str, object]) -> Path:
+    target = root / "strategy-research" / "outcome-profiles" / f"{profile_id}.json"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    return target
+
+
 def _write_case(root: Path, case_id: str, payload: dict[str, object]) -> tuple[Path, Path, Path]:
     case_dir = root / "strategy-research" / "cases" / case_id
     case_dir.mkdir(parents=True, exist_ok=True)
@@ -85,6 +126,7 @@ def _write_case(root: Path, case_id: str, payload: dict[str, object]) -> tuple[P
 def test_schema_files_exist() -> None:
     for relative in (
         "strategy-research/schemas/claim.v1.schema.json",
+        "strategy-research/schemas/outcome_profile.v1.schema.json",
         "strategy-research/schemas/research_case.v1.schema.json",
     ):
         path = ROOT / relative
@@ -135,6 +177,61 @@ def test_claim_nested_object_fields_fail(tmp_path: Path) -> None:
     payload["critical_assumptions"] = [{"assumption_id": "as1"}]
     path = _write_claim(tmp_path, "demo.claim", payload)
     assert not module.check_claim(path, root=tmp_path).ok
+
+
+def test_valid_outcome_profile_passes(tmp_path: Path) -> None:
+    path = _write_outcome_profile(tmp_path, "demo.exit-profile", _valid_outcome_profile())
+    check = module.check_outcome_profile(path, root=tmp_path)
+    assert check.ok, check.issues
+
+
+def test_outcome_profile_rejects_duplicate_metrics_and_incomplete_constraints(
+    tmp_path: Path,
+) -> None:
+    duplicate = _valid_outcome_profile()
+    metrics = list(duplicate["metrics"])
+    metrics.append(
+        {
+            "name": "median_return",
+            "direction": "higher_is_better",
+            "role": "objective",
+            "unit": "return",
+        }
+    )
+    duplicate["metrics"] = metrics
+    duplicate_path = _write_outcome_profile(tmp_path, "demo.exit-profile", duplicate)
+    duplicate_check = module.check_outcome_profile(duplicate_path, root=tmp_path)
+    assert not duplicate_check.ok
+    assert any("重复" in issue for issue in duplicate_check.issues)
+
+    incomplete = _valid_outcome_profile(profile_id="demo.incomplete")
+    incomplete["metrics"] = [
+        {
+            "name": "cvar_05_return",
+            "direction": "higher_is_better",
+            "role": "constraint",
+            "unit": "return",
+        }
+    ]
+    incomplete_path = _write_outcome_profile(tmp_path, "demo.incomplete", incomplete)
+    incomplete_check = module.check_outcome_profile(incomplete_path, root=tmp_path)
+    assert not incomplete_check.ok
+    assert any("operator" in issue or "threshold" in issue for issue in incomplete_check.issues)
+
+
+def test_case_outcome_profile_reference_must_exist(tmp_path: Path) -> None:
+    payload = _valid_case()
+    payload["outcome_profiles"] = ["missing.exit-profile"]
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert not check.ok
+    assert any("outcome_profiles 引用缺失" in issue for issue in check.issues)
+
+    _write_outcome_profile(tmp_path, "demo.exit-profile", _valid_outcome_profile())
+    payload["outcome_profiles"] = ["demo.exit-profile"]
+    case_path, _, _ = _write_case(tmp_path, "demo-case", payload)
+    check = module.check_case(case_path, root=tmp_path)
+    assert check.ok, check.issues
 
 
 def test_valid_case_passes(tmp_path: Path) -> None:
