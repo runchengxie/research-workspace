@@ -8,7 +8,7 @@ def test_macro_context_shadow_config_is_frozen_and_non_production() -> None:
     assert config["experiment_id"] == "macro_context_shadow_v1"
     assert config["horizons"] == [5, 20, 60]
     assert config["primary_horizon"] == 20
-    assert set(config["challengers"]) == {"C0", "C1", "C2", "C3"}
+    assert set(config["challengers"]) == {"C0", "C1", "C2", "C3", "C4"}
     assert config["lifecycle"] == "exploration"
     assert config["production_eligible"] is False
 

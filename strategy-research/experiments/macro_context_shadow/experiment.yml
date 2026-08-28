@@ -9,6 +9,7 @@ challengers:
   C1: [price_volume, stock_level, context_state]
   C2: [price_volume, stock_level, context_state, context_exposure_interactions]
   C3: [price_volume, stock_level, context_state, context_exposure_interactions, pit_fundamentals]
+  C4: [price_volume, stock_level, context_state, context_exposure_interactions, pit_fundamentals, fund_context]
 context_features:
   - rates.shibor_3m:level
   - rates.lpr_1y:level

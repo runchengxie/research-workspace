@@ -36,13 +36,21 @@ def test_feature_variants_only_add_configured_columns() -> None:
     context = pd.DataFrame({"ctx__rate": [0.2]})
     interactions = pd.DataFrame({"ctx__rate__x__rate_sensitivity": [0.3]})
     fundamentals = pd.DataFrame({"roe": [0.4]})
+    fund = pd.DataFrame({"fund_accumulation_without_crowding": [1.0]})
     variants = build_feature_variants(
         base,
         context_features=context,
         interaction_features=interactions,
         pit_fundamentals=fundamentals,
+        fund_features=fund,
     )
-    assert set(variants["C0"]) < set(variants["C1"]) < set(variants["C2"]) < set(variants["C3"])
+    assert (
+        set(variants["C0"])
+        < set(variants["C1"])
+        < set(variants["C2"])
+        < set(variants["C3"])
+        < set(variants["C4"])
+    )
     assert variants["C2"].iloc[0]["ctx__rate__x__rate_sensitivity"] == 0.3
 
 

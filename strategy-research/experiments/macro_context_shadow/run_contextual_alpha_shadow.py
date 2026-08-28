@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import yaml
 import pandas as pd
+import yaml
 
 from . import EXPERIMENT_ID
 
@@ -47,8 +47,8 @@ def load_config(path: str | Path | None = None) -> dict[str, Any]:
         raise ValueError("invalid macro context shadow configuration")
     if payload.get("horizons") != [5, 20, 60] or payload.get("primary_horizon") != 20:
         raise ValueError("macro context shadow horizons are frozen at [5, 20, 60] with primary 20")
-    if set(payload.get("challengers", {})) != {"C0", "C1", "C2", "C3"}:
-        raise ValueError("macro context shadow challengers must be exactly C0, C1, C2, C3")
+    if set(payload.get("challengers", {})) != {"C0", "C1", "C2", "C3", "C4"}:
+        raise ValueError("macro context shadow challengers must be exactly C0, C1, C2, C3, C4")
     if payload.get("production_eligible") is not False:
         raise ValueError("macro context shadow cannot be production eligible")
     return payload
@@ -100,6 +100,7 @@ def build_feature_variants(
     context_features: Any | None = None,
     interaction_features: Any | None = None,
     pit_fundamentals: Any | None = None,
+    fund_features: Any | None = None,
 ) -> dict[str, Any]:
     """Compose challenger columns without implementing owner feature logic."""
 
@@ -107,6 +108,7 @@ def build_feature_variants(
     variants["C1"] = _join_columns(variants["C0"], context_features)
     variants["C2"] = _join_columns(variants["C1"], interaction_features)
     variants["C3"] = _join_columns(variants["C2"], pit_fundamentals)
+    variants["C4"] = _join_columns(variants["C3"], fund_features)
     return variants
 
 
