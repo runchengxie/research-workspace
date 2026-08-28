@@ -37,6 +37,19 @@ fund_accumulation_without_crowding
 这说明候选信号可能是条件化的，但当前 Shibor 历史大部分为 `reconstructed`，
 基金历史也没有完整 provider vintage；以上结果不能作为 promotion evidence。
 
+可复跑扫描：
+
+```bash
+PYTHONPATH=strategy-research \
+  uv run --no-project --with duckdb --with pandas \
+  python -m experiments.macro_context_shadow.run_fund_context_exploration \
+  --data-root "$DATA_PLATFORM_ROOT" --output /tmp/fund-context-c4.json
+```
+
+按样本期拆分后，行业/规模中性结果显示：2025 年 Shibor 下行阶段信号相对
+其他股票约领先 2.06 个百分点；2026 年同一状态反而落后约 1.96 个百分点。
+该时间不稳定性是 C4 必须继续做 final OOS、CPCV/PBO 和成本检验的直接原因。
+
 没有可靠 `available_at`、`source_retrieved_at`、vintage 或公司暴露的数据会拒绝进入 promotion-safe 运行。探索模式可以记录 reconstructed 历史，但任何依赖 reconstructed 数据的结论都不能晋级。
 
 失败条件包括：PIT 可见性不完整、上下文数据过期、C2/C3/C4 没有样本外增量、
