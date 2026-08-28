@@ -6,4 +6,6 @@ The 2026-08-28 campaign status is recorded in `docs/evidence/e2-execution-eviden
 
 The run is intentionally marked `diagnostic`. Its outputs are under ignored local artifacts, A-share lot, T+1, price-limit, and listing-status rules were inactive, and broker execution was disabled. These facts prevent a canonical promotion receipt.
 
-Before promotion review, rerun the selected candidate with durable hashed inputs and outputs, enable the approved market rules, materialize `strategy_promotion_evidence.v2`, and validate every declared lineage path. A failed or incomplete dimension must remain visible in `limitations`.
+The E2 candidate configuration now explicitly enables 100-share round lots, T+1, price limits, and listing-status enforcement. The execution adapter consumes the configured input column names and fails closed when an enabled input is missing.
+
+Before promotion review, rerun the selected candidate with a pricing panel that contains `is_limit_up`, `is_limit_down`, and `listing_status`, persist the compact evidence inventory, materialize `strategy_promotion_evidence.v2`, and validate every declared lineage path. A failed or incomplete dimension must remain visible in `limitations`; enabling a rule in YAML is not evidence that a historical run consumed it.
