@@ -1,0 +1,45 @@
+schema_version: macro_context_shadow.v1
+experiment_id: macro_context_shadow_v1
+lifecycle: exploration
+production_eligible: false
+horizons: [5, 20, 60]
+primary_horizon: 20
+challengers:
+  C0: [price_volume, stock_level]
+  C1: [price_volume, stock_level, context_state]
+  C2: [price_volume, stock_level, context_state, context_exposure_interactions]
+  C3: [price_volume, stock_level, context_state, context_exposure_interactions, pit_fundamentals]
+context_features:
+  - rates.shibor_3m:level
+  - rates.lpr_1y:level
+  - credit.social_financing_yoy:yoy
+  - activity.pmi_manufacturing:level
+  - energy.industrial_electricity_yoy:yoy
+exposures:
+  - rate_sensitivity
+  - credit_sensitivity
+  - industrial_activity_sensitivity
+  - energy_input_sensitivity
+  - energy_output_sensitivity
+interactions:
+  naming: ctx__{feature}__x__{exposure}
+model:
+  backend: existing_alpha_ranker
+  selection_horizon: 20
+cost:
+  turnover_bps: 30
+  capacity_mode: required
+oos:
+  final_oos_required: true
+  reconstructed_allowed_for_exploration: true
+regimes:
+  - rates_up
+  - rates_down
+  - credit_expanding
+  - credit_contracting
+  - industrial_accelerating
+  - industrial_decelerating
+  - high_vol
+  - low_vol
+  - benchmark_uptrend
+  - benchmark_downtrend
