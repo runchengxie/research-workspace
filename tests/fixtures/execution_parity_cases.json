@@ -1,0 +1,20 @@
+[
+  {
+    "case_id": "buy-round-lot",
+    "semantics": ["target", "lot_rounding", "cash_delta"],
+    "portfolio": {"target_qty": 1200, "filled_qty": 1200, "cash_delta": -12000.0},
+    "execution": {"target_qty": 1200, "filled_qty": 1200, "cash_delta": -12000.0}
+  },
+  {
+    "case_id": "t1-sell-block",
+    "semantics": ["target", "t1_available", "filled_qty"],
+    "portfolio": {"target_qty": 1000, "t1_available": 0, "filled_qty": 0},
+    "execution": {"target_qty": 1000, "t1_available": 0, "filled_qty": 0}
+  },
+  {
+    "case_id": "delayed-fill",
+    "semantics": ["target", "filled_qty", "unfilled_qty"],
+    "portfolio": {"target_qty": 1000, "filled_qty": 400, "unfilled_qty": 600},
+    "execution": {"target_qty": 1000, "filled_qty": 400, "unfilled_qty": 600}
+  }
+]
