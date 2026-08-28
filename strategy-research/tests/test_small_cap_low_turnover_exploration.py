@@ -638,6 +638,7 @@ def test_share_ledger_matrix_runs_with_cash_ledger_execution() -> None:
         buffer_count=6,
         minimum_listed_days=0,
         initial_capital=1_000_000.0,
+        impact_bps=100.0,
         frequencies=("monthly",),
     )
 
@@ -647,6 +648,10 @@ def test_share_ledger_matrix_runs_with_cash_ledger_execution() -> None:
     assert row["status"] == "ok"
     assert row["weight_level_targets"] > 0
     assert row["share_ledger_fill_ratio"] is not None
+    assert row["owner_period_replay_status"] == "ok"
+    assert row["owner_period_replay_periods"] > 0
+    assert row["owner_period_replay_cumulative_return"] is not None
+    assert row["share_ledger_temporary_impact"] > 0.0
 
 
 def test_reconciliation_matrix_decomposes_engine_gap() -> None:

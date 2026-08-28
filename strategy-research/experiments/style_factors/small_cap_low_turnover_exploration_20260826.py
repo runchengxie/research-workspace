@@ -14,13 +14,19 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from portfolio_backtester.execution import ParticipationSlippageModel
 from portfolio_backtester.execution_sim import (
     ExecutionSimConfig,
     simulate_execution_adjusted_nav,
     simulate_ideal_daily_nav,
 )
+from portfolio_backtester.position_backtest import PositionBacktestConfig
 from style_factors.data import load_sw_industry_membership
 from style_factors.liquidity_signals import build_liquidity_control_panel
+from style_factors.portfolio_backtester_adapter import (
+    periods_from_positions,
+    run_native_position_replay,
+)
 from style_factors.robustness_data import load_robustness_market_data
 from style_factors.robustness_execution import daily_return_matrix, execution_matrices
 from style_factors.small_cap_low_turnover import (
@@ -365,6 +371,7 @@ def _run_share_ledger_matrix(
     buffer_count: int,
     minimum_listed_days: int,
     initial_capital: float,
+    impact_bps: float = 0.0,
     frequencies: tuple[str, ...] = ("monthly", "biweekly"),
 ) -> pd.DataFrame:
     """Run the raw composite under a cash-ledger execution model.
@@ -372,7 +379,7 @@ def _run_share_ledger_matrix(
     Targets are built with the same signal panel and buffer as the weight-level
     simulator, then executed by ``portfolio_backtester.execution_sim`` with lot
     rounding, T+1 inventory, participation caps, and daily NAV accounting.  The
-    table reports both the share-ledger outcome and the weight-level reference.
+    owner-package period replay is recorded alongside it for migration comparison.
     """
     trading_dates = pd.DatetimeIndex(daily_clean["trade_date"].unique()).normalize()
     basics = daily_clean[["trade_date", "symbol", "total_mv"]]
@@ -414,6 +421,17 @@ def _run_share_ledger_matrix(
         positions = _build_share_ledger_positions(formation_targets, trading_dates)
         if positions.empty:
             continue
+        owner_periods = periods_from_positions(positions, pricing)
+        owner_result = run_native_position_replay(
+            positions,
+            pricing,
+            owner_periods,
+            config=PositionBacktestConfig(
+                price_col="close",
+                transaction_cost_bps=transaction_cost_bps,
+            ),
+        )
+        owner_returns = owner_result.performance["net_return"].dropna()
         config = ExecutionSimConfig(
             enabled=True,
             portfolio_value=initial_capital,
@@ -425,6 +443,16 @@ def _run_share_ledger_matrix(
             round_lot=100,
             enforce_t1=True,
         )
+        slippage_model = (
+            ParticipationSlippageModel(
+                impact_bps=float(impact_bps),
+                amount_col="amount",
+                amount_multiplier=1_000.0,
+                portfolio_value=initial_capital,
+            )
+            if impact_bps > 0
+            else None
+        )
         result = simulate_execution_adjusted_nav(
             positions,
             pricing,
@@ -432,6 +460,7 @@ def _run_share_ledger_matrix(
             price_col="close",
             tradable_col="amount",
             transaction_cost_bps=transaction_cost_bps,
+            slippage_model=slippage_model,
         )
         summary = result.summary
         stats = summary.get("stats", {})
@@ -452,7 +481,15 @@ def _run_share_ledger_matrix(
                 "share_ledger_cumulative_turnover": (
                     float(summary.get("filled_notional", 0.0)) / initial_capital
                 ),
+                "share_ledger_temporary_impact": float(
+                    result.daily["cost_temporary_impact"].sum()
+                ),
                 "weight_level_targets": len(execution_targets),
+                "owner_period_replay_status": "ok",
+                "owner_period_replay_periods": len(owner_returns),
+                "owner_period_replay_cumulative_return": float(
+                    (1.0 + owner_returns).prod() - 1.0
+                ),
             }
         )
     return pd.DataFrame(rows)
@@ -1077,6 +1114,9 @@ def _write_report(
             "share_ledger_fill_ratio",
             "share_ledger_avg_cash_weight",
             "share_ledger_cumulative_turnover",
+            "owner_period_replay_status",
+            "owner_period_replay_periods",
+            "owner_period_replay_cumulative_return",
         ]
         lines.append(share_ledger_matrix[columns].to_markdown(index=False, floatfmt=".4f"))
     lines.extend(["", "## Ledger reconciliation", ""])
@@ -1175,12 +1215,15 @@ def run_exploration(
     target_count: int = 40,
     buffer_count: int = 60,
     initial_capital: float = 100_000_000.0,
+    impact_bps: float = 0.0,
 ) -> Path:
     """Run the candidate comparison and write reproducible research outputs."""
     if transaction_cost_bps < 0:
         raise ValueError("transaction_cost_bps must be non-negative")
     if not np.isfinite(initial_capital) or initial_capital <= 0:
         raise ValueError("initial_capital must be positive")
+    if not np.isfinite(impact_bps) or impact_bps < 0:
+        raise ValueError("impact_bps must be non-negative")
     outdir.mkdir(parents=True, exist_ok=True)
     market_data = load_robustness_market_data(
         data_root,
@@ -1218,6 +1261,7 @@ def run_exploration(
         buffer_count=buffer_count,
         minimum_listed_days=minimum_listed_days,
         initial_capital=initial_capital,
+        impact_bps=impact_bps,
         returns=return_matrix,
         matrices=execution_context,
     )
@@ -1349,6 +1393,7 @@ def run_exploration(
         "buffer_count": buffer_count,
         "minimum_listed_days": minimum_listed_days,
         "transaction_cost_bps": transaction_cost_bps,
+        "impact_bps": impact_bps,
         "robustness_matrix": {
             "turnover_definitions": ["mean_20", "mean_60", "median_60", "mean_120"],
             "participation_cases": [
@@ -1401,6 +1446,7 @@ def main() -> None:
     parser.add_argument("--target-count", type=int, default=40)
     parser.add_argument("--buffer-count", type=int, default=60)
     parser.add_argument("--initial-capital", type=float, default=100_000_000.0)
+    parser.add_argument("--impact-bps", type=float, default=0.0)
     args = parser.parse_args()
     output = run_exploration(
         data_root=Path(args.data_root).expanduser().resolve(),
@@ -1412,6 +1458,7 @@ def main() -> None:
         target_count=args.target_count,
         buffer_count=args.buffer_count,
         initial_capital=args.initial_capital,
+        impact_bps=args.impact_bps,
     )
     print(f"[OK] exploration artifacts -> {output}")
 
