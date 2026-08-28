@@ -492,6 +492,18 @@ def _write_csv_checkpoint(frame: pd.DataFrame, outdir: Path, filename: str) -> N
     frame.to_csv(outdir / filename, index=False)
 
 
+def _write_stage_artifact(
+    frame: pd.DataFrame,
+    path: Path,
+    *,
+    preserve_existing: bool = False,
+) -> None:
+    """Write a staged artifact without replacing a valid result with an empty frame."""
+    if preserve_existing and frame.empty and path.exists():
+        return
+    frame.to_csv(path, index=False)
+
+
 def _run_share_ledger_matrix(
     *,
     daily_clean: pd.DataFrame,
@@ -1686,13 +1698,21 @@ def run_exploration(  # noqa: C901
         pd.concat(attribution_rows, ignore_index=True) if attribution_rows else pd.DataFrame()
     )
     if stage not in {"all", "ledger"}:
-        attribution_frame.to_csv(outdir / "candidate_delayed_fill_attribution.csv", index=False)
+        _write_stage_artifact(
+            attribution_frame,
+            outdir / "candidate_delayed_fill_attribution.csv",
+            preserve_existing=True,
+        )
     target_rows = [
         {"candidate": name, "execution_date": date, "holdings": len(target)}
         for name, simulation in simulations.items()
         for date, target in simulation.targets.items()
     ]
-    pd.DataFrame(target_rows).to_csv(outdir / "candidate_target_counts.csv", index=False)
+    _write_stage_artifact(
+        pd.DataFrame(target_rows),
+        outdir / "candidate_target_counts.csv",
+        preserve_existing=stage not in {"all", "ledger"},
+    )
 
     metadata: dict[str, Any] = {
         "experiment": "small_cap_low_turnover_exploration_20260826",
