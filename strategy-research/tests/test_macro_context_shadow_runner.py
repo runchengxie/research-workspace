@@ -6,6 +6,7 @@ import pytest
 from experiments.macro_context_shadow.run_contextual_alpha_shadow import (
     ContextShadowInputs,
     build_feature_variants,
+    context_pit_audit,
     preflight_context,
 )
 
@@ -50,3 +51,28 @@ def test_feature_variant_row_count_must_match() -> None:
         build_feature_variants(
             pd.DataFrame({"x": [1]}), context_features=pd.DataFrame({"y": [1, 2]})
         )
+
+
+def test_context_pit_audit_is_derived_from_pit_rows() -> None:
+    frame = pd.DataFrame(
+        {
+            "series_id": ["activity.x"],
+            "period_start": ["2026-07-01"],
+            "period_end": ["2026-07-31"],
+            "value": [1.0],
+            "unit": ["percent"],
+            "published_at": [pd.NaT],
+            "observed_at": ["2026-08-20T00:00:00Z"],
+            "ingested_at": ["2026-08-20T00:00:00Z"],
+            "source_retrieved_at": ["2026-08-20T00:00:00Z"],
+            "available_at": ["2026-08-20T00:00:00Z"],
+            "vintage_id": ["20260820T000000Z"],
+            "revision_number": [0],
+            "source_hash": ["a" * 64],
+            "revision_covered": [True],
+            "reconstructed": [False],
+        }
+    )
+    audit = context_pit_audit(frame, as_of="2026-08-28T23:59:59Z")
+    assert audit["revision_covered"] is True
+    assert audit["freshness_verified"] is True
