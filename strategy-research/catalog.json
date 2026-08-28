@@ -117,6 +117,26 @@
       "extraction_debt": []
     },
     {
+      "id": "macro_context_shadow_v1",
+      "name": "宏观情境 Contextual Alpha Shadow",
+      "lifecycle": "exploration",
+      "production_eligible": false,
+      "human_spec": "strategy-research/experiments/macro_context_shadow/README.md",
+      "executable_owners": [
+        "market-data-platform",
+        "alpha-research",
+        "portfolio-backtester"
+      ],
+      "control_plane_owner": null,
+      "runtime_entries": [
+        "strategy-research/experiments/macro_context_shadow/run_contextual_alpha_shadow.py"
+      ],
+      "variants": ["C0", "C1", "C2", "C3"],
+      "extraction_debt": [
+        "complete a real market-wide PIT run before considering any promotion"
+      ]
+    },
+    {
       "id": "next_open_to_high",
       "name": "A 股次日开盘到最高价",
       "lifecycle": "exploration",
