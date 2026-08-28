@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+import pandas as pd
 
 from . import EXPERIMENT_ID
 
@@ -29,6 +30,14 @@ class ContextShadowAudit:
     promotion_eligible: bool
     reasons: tuple[str, ...]
     context_audit: Mapping[str, Any]
+
+
+def context_pit_audit(frame: pd.DataFrame, *, as_of: str | Any) -> Mapping[str, Any]:
+    """Recompute PIT audit evidence from published rows instead of trusting metadata."""
+
+    from market_data_platform.context.pit import select_context_as_of
+
+    return select_context_as_of(frame, as_of=as_of).audit
 
 
 def load_config(path: str | Path | None = None) -> dict[str, Any]:
@@ -57,9 +66,11 @@ def load_inputs(
     a_share = PublishedAssetContract.load_current(root, market="a_share")
     context = PublishedAssetContract.load_current(root, market="cn_context")
     context_pit = context.asset("context_pit")
-    audit = context_pit.manifest.get("pit_audit", {})
-    if not isinstance(audit, Mapping):
-        audit = {}
+    pit_frame = pd.read_parquet(context_pit.resolve_data_path("data.parquet"))
+    as_of = context_pit.manifest.get("as_of_date")
+    if not as_of:
+        raise ValueError("context PIT manifest must declare as_of_date")
+    audit = context_pit_audit(pit_frame, as_of=f"{as_of}T23:59:59Z")
     return ContextShadowInputs(root, a_share, context, context_pit, audit)
 
 
