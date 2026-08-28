@@ -9,6 +9,7 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _frequency_cache_manifest,
     _load_frequency_cache,
     _period_return_metrics,
+    _write_stage_artifact,
     _prepare_frequency_cache,
     _run_capacity_ladder,
     _run_joint_matrix,
@@ -18,6 +19,16 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _signal_correlations,
     _write_frequency_cache,
 )
+
+
+def test_stage_artifact_does_not_overwrite_existing_nonempty_output(tmp_path) -> None:
+    path = tmp_path / "artifact.csv"
+    existing = pd.DataFrame({"value": [1]})
+    existing.to_csv(path, index=False)
+
+    _write_stage_artifact(pd.DataFrame(), path, preserve_existing=True)
+
+    pd.testing.assert_frame_equal(pd.read_csv(path), existing)
 from style_factors.robustness_execution import (
     daily_return_matrix,
     execution_matrices,
