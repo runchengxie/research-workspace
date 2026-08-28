@@ -6,6 +6,9 @@
 market-data-platform
   发布数据资产
         ↓
+deep-learning-tick-data-prediction
+  L2 事件流清洁审计、模型与预测产物
+        ↓
 alpha-research
   生成特征、模型和信号产物
         ↓
@@ -29,6 +32,7 @@ quant-execution-engine
 | 目录 | 职责 |
 | --- | --- |
 | `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
+| `deep-learning-tick-data-prediction/` | L2 事件流清洁审计、事件流模型和正式预测产物 |
 | `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
 | `strategy-app/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 `DailyWatch20` 和热点板块选股两个应用族（各实验方向见 strategy-app 仓库的[研究应用目录](strategy-app/docs/application-catalog.md)） |
@@ -44,7 +48,7 @@ quant-execution-engine
 
 策略身份、投资假设、生命周期和证据导航以 [strategy-research/README.md](strategy-research/README.md) 与 [strategy-research/catalog.json](strategy-research/catalog.json) 为准。代码放在哪个仓库不再用来表达策略是否处于生产状态。
 
-仓库结构说明：上表中 `market-data-platform/`、`alpha-research/`、`portfolio-backtester/`、`strategy-app/`、`strategy-pipeline/`、`quant-execution-engine/` 六个目录是 git submodule，其版本由 `.gitmodules` 与各子仓库的 gitlink 锁定。`strategy-research/` 并非 submodule，它实际是本 superproject 内的普通顶层目录，其所有文件由本仓库直接版本化（不通过 gitlink 锁定子仓库 commit）。因此 `strategy-research` 的改动随本仓库主线提交，不存在跨仓库版本漂移风险，若未来需要把它独立成仓库，应先抽取历史再 `git submodule add`，当前按"顶层目录"治理即可。详见边界清单 SA-14。
+仓库结构说明：上表中 `market-data-platform/`、`deep-learning-tick-data-prediction/`、`alpha-research/`、`portfolio-backtester/`、`strategy-app/`、`strategy-pipeline/`、`quant-execution-engine/` 七个目录是 git submodule，其版本由 `.gitmodules` 与各子仓库的 gitlink 锁定。`strategy-research/` 并非 submodule，它实际是本 superproject 内的普通顶层目录，其所有文件由本仓库直接版本化（不通过 gitlink 锁定子仓库 commit）。因此 `strategy-research` 的改动随本仓库主线提交，不存在跨仓库版本漂移风险，若未来需要把它独立成仓库，应先抽取历史再 `git submodule add`，当前按"顶层目录"治理即可。详见边界清单 SA-14。
 
 四个研究侧 Python 包使用各自的权威命名空间：
 
@@ -116,13 +120,13 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_submodule_checks.py --profile full --dry-run
 ```
 
-`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。本工作区刻意以本地 pre-push 钩子作为唯一质量门禁，不依赖持续集成：顶层与六个子模块的 GitHub Actions 权限均已禁用，所有检查在推送前由本地钩子完成。这是有意为之的设计，不是临时状态，新成员需要自行安装钩子（见下文）才能跑门禁。安装方法、完整命令和自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)与[质量治理](docs/quality-governance.md)中。
+`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。本工作区刻意以本地 pre-push 钩子作为唯一质量门禁，不依赖持续集成：顶层与七个子模块的 GitHub Actions 权限均已禁用，所有检查在推送前由本地钩子完成。这是有意为之的设计，不是临时状态，新成员需要自行安装钩子（见下文）才能跑门禁。安装方法、完整命令和自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)与[质量治理](docs/quality-governance.md)中。
 
 不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
 
 ## 根测试契约
 
-顶层 `tests/` 是跨仓库集成测试项目，其用例同时验证根工作区与六个子模块。根项目本身
+顶层 `tests/` 是跨仓库集成测试项目，其用例同时验证根工作区与七个子模块。根项目本身
 `package = false`，不发布，不构建 wheel。测试环境借用 `strategy-pipeline` 的虚拟环境
 运行（含 `alpha_research`、`strategy_pipeline` 与数据、组合、执行各 owner 包），命令为：
 

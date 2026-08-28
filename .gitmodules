@@ -16,3 +16,6 @@
 [submodule "strategy-app"]
 	path = strategy-app
 	url = https://github.com/runchengxie/strategy-app.git
+[submodule "deep-learning-tick-data-prediction"]
+	path = deep-learning-tick-data-prediction
+	url = https://github.com/runchengxie/deep-learning-tick-data-prediction.git

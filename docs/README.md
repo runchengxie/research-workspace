@@ -22,6 +22,7 @@
 | 查看仓库职责和命名空间 | [../ARCHITECTURE.md](../ARCHITECTURE.md) |
 | 查看贡献流程 | [../CONTRIBUTING.md](../CONTRIBUTING.md) |
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
+| 查看 deep-learning 集成边界 | [deep-learning-integration.md](deep-learning-integration.md) |
 | 维护子模块和运行检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量检查分类 | [quality-governance.md](quality-governance.md) |
 | 核对 Qlib、LEAN、vn.py 和 Backtrader 的当前状态 | [framework-support-matrix.md](framework-support-matrix.md) |
@@ -70,12 +71,13 @@
 
 ## 子模块文档入口
 
-六个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
+七个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
 
 | 子模块 | 文档入口 | 说明 |
 | --- | --- | --- |
 | `alpha-research` | [../alpha-research/docs/](../alpha-research/docs/) | 研究信号、回测算法与评估方法 |
 | `market-data-platform` | [../market-data-platform/docs/](../market-data-platform/docs/) | 行情数据供给、契约与治理 |
+| `deep-learning-tick-data-prediction` | [../deep-learning-tick-data-prediction/](../deep-learning-tick-data-prediction/) | L2 事件流审计、模型与预测产物 |
 | `portfolio-backtester` | [../portfolio-backtester/docs/](../portfolio-backtester/docs/) | 组合回测、容量与执行模拟 |
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
 | `strategy-app` | [../strategy-app/docs/](../strategy-app/docs/) | 应用目录、迁移栈与质量门禁 |

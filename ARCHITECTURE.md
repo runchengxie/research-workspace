@@ -11,6 +11,10 @@ market-data-platform
   发布数据资产
         |
         v
+deep-learning-tick-data-prediction
+  L2 事件流清洁审计、模型和预测产物
+        |
+        v
 alpha-research
   生成特征、模型评估和信号产物
         |
@@ -44,7 +48,7 @@ quant-execution-engine
 `strategy-pipeline` 只拥有数据提供方调用、操作员控制、运行目录、原子发布和执行交接。
 边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
-仓库结构说明：`strategy-research` 并非 git submodule，它实际是本 superproject 内的普通顶层目录，其文件由本仓库直接版本化，不通过 gitlink 锁定子仓库 commit。六个 submodule（market-data-platform、alpha-research、portfolio-backtester、strategy-app、strategy-pipeline、quant-execution-engine）的版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
+仓库结构说明：`strategy-research` 并非 git submodule，它实际是本 superproject 内的普通顶层目录，其文件由本仓库直接版本化，不通过 gitlink 锁定子仓库 commit。七个 submodule（market-data-platform、deep-learning-tick-data-prediction、alpha-research、portfolio-backtester、strategy-app、strategy-pipeline、quant-execution-engine）的版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
 
 ## 代码和数据边界
 

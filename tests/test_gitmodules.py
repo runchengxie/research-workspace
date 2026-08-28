@@ -12,6 +12,7 @@ EXPECTED_PATHS = {
     "strategy-pipeline",
     "quant-execution-engine",
     "strategy-app",
+    "deep-learning-tick-data-prediction",
 }
 
 
