@@ -4,6 +4,23 @@
   "generated_at": "2026-08-28",
   "status": "diagnostic",
   "canonical_promotion_evidence": false,
+  "execution_rules_configuration": {
+    "round_lot": 100,
+    "enforce_t1": true,
+    "enforce_price_limits": true,
+    "limit_up_col": "is_limit_up",
+    "limit_down_col": "is_limit_down",
+    "enforce_listing_status": true,
+    "listing_status_col": "listing_status",
+    "configuration_source": "strategy-pipeline/configs/experiments/variants/a_share_e2_promotion_candidate_20260825.yml",
+    "runtime_verification": "pending_rerun"
+  },
+  "review_status": {
+    "cost": "evidence_exists_pending_review",
+    "capacity": "evidence_exists_pending_review",
+    "delayed_fill": "evidence_exists_pending_review",
+    "lineage": "contract_exists_pending_durable_rerun"
+  },
   "research_window": {
     "start_date": "20150101",
     "end_date": "20260821",
@@ -36,9 +53,9 @@
     "The result is diagnostic evidence and does not establish production readiness."
   ],
   "next_required_evidence": [
-    "Regenerate outputs under a durable, hash-pinned evidence location.",
-    "Rerun with the approved A-share execution rules enabled.",
-    "Materialize and validate a canonical strategy_promotion_evidence.v2 receipt.",
+    "Expose a listing_status input in the resolved pricing panel and rerun with all configured A-share execution rules.",
+    "Persist the rerun's compact evidence inventory and hash-pinned outputs outside ignored local artifacts.",
+    "Materialize and validate a canonical strategy_promotion_evidence.v2 receipt from the rerun.",
     "Complete review of costs, capacity, delayed fills, and lineage before any promotion decision."
   ]
 }
