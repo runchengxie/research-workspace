@@ -1,0 +1,44 @@
+{
+  "schema_version": "e2_execution_campaign_status.v1",
+  "campaign_id": "a_share_e2_promotion_candidate_20260825",
+  "generated_at": "2026-08-28",
+  "status": "diagnostic",
+  "canonical_promotion_evidence": false,
+  "research_window": {
+    "start_date": "20150101",
+    "end_date": "20260821",
+    "oos_start_date": "20191231",
+    "oos_end_date": "20240531"
+  },
+  "source_run": {
+    "path": "artifacts/runs/a_share_e2_promotion_candidate_20260825_20260826_001524_ab70c882",
+    "config_hash_prefix": "ab70c882",
+    "backend": "native",
+    "market": "a_share",
+    "symbols": 5784,
+    "model_rows": 402265,
+    "feature_count": 28
+  },
+  "observed_results": {
+    "portfolio_periods": 45,
+    "portfolio_sharpe": 0.0904092460,
+    "portfolio_max_drawdown": -0.4925617965,
+    "average_turnover": 0.9163472708,
+    "average_cost_drag": 0.0018104723,
+    "execution_fill_ratio": 0.9943163743,
+    "execution_simulated_sharpe": 0.6672301274,
+    "execution_simulated_max_drawdown": -0.5578523248
+  },
+  "limitations": [
+    "The run output exists only under ignored local artifacts and is not a committed canonical receipt.",
+    "A-share lot, T+1, price-limit, and listing-status rules were inactive in the recorded simulation.",
+    "The promotion sidecar and broker submission were disabled.",
+    "The result is diagnostic evidence and does not establish production readiness."
+  ],
+  "next_required_evidence": [
+    "Regenerate outputs under a durable, hash-pinned evidence location.",
+    "Rerun with the approved A-share execution rules enabled.",
+    "Materialize and validate a canonical strategy_promotion_evidence.v2 receipt.",
+    "Complete review of costs, capacity, delayed fills, and lineage before any promotion decision."
+  ]
+}
