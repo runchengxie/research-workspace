@@ -12,6 +12,7 @@ def test_microcap_manifest_freezes_primary_matrix() -> None:
     manifest = build_microcap_run_manifest(
         data_start="2015-01-01",
         data_end="2026-07-31",
+        data_fingerprint="fingerprint-123",
         alpha_commit="abc",
         portfolio_commit="def",
         minimum_listed_days=180,
@@ -21,6 +22,7 @@ def test_microcap_manifest_freezes_primary_matrix() -> None:
     assert manifest["rebalance_frequency"] == "monthly"
     assert manifest["development_end"] == "2023-12-31"
     assert manifest["holdout_start"] == "2024-01-01"
+    assert manifest["data_fingerprint"] == "fingerprint-123"
     assert manifest["alpha_commit"] == "abc"
     assert manifest["portfolio_commit"] == "def"
 
