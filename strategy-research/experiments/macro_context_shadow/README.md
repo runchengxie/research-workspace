@@ -129,6 +129,12 @@ The benchmark-relative HAC t-statistic for M0 active daily returns was -0.12 in
 was -27.8%. These diagnostics use 20 lags to account for serial dependence and
 are descriptive evidence for the shadow only, not a formal promotion decision.
 
+Treating 2026 as a frozen final-OOS period, the 20-day block bootstrap of net
+active daily returns gave M0 a 95% mean interval of approximately
+`[-0.128%, -0.010%]` and a probability of a positive mean of `0.75%`. M3's
+corresponding interval was `[-0.111%, +0.004%]`, with positive-mean probability
+`3.4%`. This is a negative final-OOS signal, not a basis for production use.
+
 The source contract confirms `daily.amount` is thousand CNY. A first-pass
 participation estimate puts M0's 1% participation capacity at roughly CNY 247
 billion median and CNY 21 billion at the daily p10, but this is only an upper

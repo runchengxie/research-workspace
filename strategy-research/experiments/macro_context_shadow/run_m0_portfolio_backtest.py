@@ -36,6 +36,9 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
         active = net - benchmark
         result["active_hac_t_20"] = _hac_mean_t(active.to_numpy(), lags=20)
         result["active_hit_rate"] = float((active > 0.0).mean())
+        result["active_block_bootstrap_20"] = _block_bootstrap_ci(
+            active.to_numpy(), block_size=20, samples=2000, seed=20260829
+        )
     if "selected_adv_cny" in daily:
         capacity = {}
         for participation in (0.01, 0.03, 0.05):
@@ -72,6 +75,34 @@ def _hac_mean_t(values: Any, *, lags: int) -> float | None:
     if variance <= 0.0:
         return None
     return float(mean / math.sqrt(variance / len(values)))
+
+
+def _block_bootstrap_ci(
+    values: Any, *, block_size: int, samples: int, seed: int
+) -> dict[str, float] | None:
+    values = np.asarray(values, dtype=float)
+    values = values[np.isfinite(values)]
+    if len(values) < block_size or samples <= 0:
+        return None
+    rng = np.random.default_rng(seed)
+    starts = np.arange(len(values) - block_size + 1)
+    means = []
+    totals = []
+    for _ in range(samples):
+        sampled: list[float] = []
+        while len(sampled) < len(values):
+            start = int(rng.choice(starts))
+            sampled.extend(values[start : start + block_size].tolist())
+        path = np.asarray(sampled[: len(values)])
+        means.append(float(path.mean()))
+        totals.append(float(np.prod(1.0 + path) - 1.0))
+    return {
+        "mean_p025": float(np.percentile(means, 2.5)),
+        "mean_p975": float(np.percentile(means, 97.5)),
+        "total_p025": float(np.percentile(totals, 2.5)),
+        "total_p975": float(np.percentile(totals, 97.5)),
+        "positive_mean_probability": float(np.mean(np.asarray(means) > 0.0)),
+    }
 
 
 def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[str, Any]:
