@@ -37,6 +37,7 @@ quant-execution-engine
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
 | `strategy-app/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 `DailyWatch20` 和热点板块选股两个应用族（各实验方向见 strategy-app 仓库的[研究应用目录](strategy-app/docs/application-catalog.md)） |
 | `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
+| `strategy-research/` | 私有策略研究规格、实验、证据和专有研究入口，不作为公共运行时依赖 |
 | `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
 | `alpha-research/src/alpha_research/style_factors/` | 风格因子计算内核（`alpha_research.style_factors`），ADR-0006 后由 alpha-research owner |
