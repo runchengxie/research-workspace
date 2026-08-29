@@ -27,6 +27,16 @@ rows and 163 duplicate keys contain differing portfolio fields. The latter needs
 provider-side deduplication/version-selection rule in `market-data-platform`; it is
 an ingestion-quality issue, not evidence of an economic signal.
 
+Further profiling shows the 163 conflicting rows are concentrated in older report
+periods from 2017-06 through 2021-06, across approximately 35 funds and 116 stocks.
+Many pairs have market value and share count close to a 2x ratio while percentage
+fields differ, so the conflict cannot be safely resolved by taking the maximum,
+dividing by two, or summing. The raw schema has no page, revision, or source-row
+identifier that would justify one of those choices. The correct remediation is to
+re-fetch those periods with immutable request/page evidence, or quarantine them
+from revision-safe research; the loader therefore fails closed on the current
+backfill.
+
 The audit deliberately reports `pit_status=publication_date_pit` and
 `revision_safe=false`. The current TuShare backfill preserves `ann_date` and the
 derived one-trading-day availability rule, but it does not preserve a historical
