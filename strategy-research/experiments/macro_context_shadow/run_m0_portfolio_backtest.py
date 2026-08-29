@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 from typing import Any
+
+import numpy as np
 
 
 def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
@@ -22,6 +25,7 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
         "mean_daily_turnover": float(daily["turnover"].mean()),
         "gross_ann": float((1.0 + gross).prod() ** (252.0 / periods) - 1.0),
         "net_ann": float((1.0 + net).prod() ** (252.0 / periods) - 1.0),
+        "net_max_drawdown": _max_drawdown(net),
     }
     if "benchmark_return" in daily:
         benchmark = daily["benchmark_return"].fillna(0.0)
@@ -29,6 +33,9 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
         result["active_total_after_cost"] = float(
             (1.0 + net).prod() / (1.0 + benchmark).prod() - 1.0
         )
+        active = net - benchmark
+        result["active_hac_t_20"] = _hac_mean_t(active.to_numpy(), lags=20)
+        result["active_hit_rate"] = float((active > 0.0).mean())
     if "selected_adv_cny" in daily:
         capacity = {}
         for participation in (0.01, 0.03, 0.05):
@@ -43,6 +50,28 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
             }
         result["capacity_cny_by_participation"] = capacity
     return result
+
+
+def _max_drawdown(returns: Any) -> float:
+    curve = (1.0 + returns).cumprod()
+    return float((curve / curve.cummax() - 1.0).min())
+
+
+def _hac_mean_t(values: Any, *, lags: int) -> float | None:
+    values = np.asarray(values, dtype=float)
+    values = values[np.isfinite(values)]
+    if len(values) < 2:
+        return None
+    mean = float(values.mean())
+    centered = values - mean
+    max_lag = min(lags, len(values) - 1)
+    variance = float(np.mean(centered * centered))
+    for lag in range(1, max_lag + 1):
+        covariance = float(np.mean(centered[lag:] * centered[:-lag]))
+        variance += 2.0 * (1.0 - lag / (max_lag + 1.0)) * covariance
+    if variance <= 0.0:
+        return None
+    return float(mean / math.sqrt(variance / len(values)))
 
 
 def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[str, Any]:

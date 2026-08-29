@@ -124,6 +124,11 @@ points in 2026. M3 was -4.1 and -5.7 percentage points respectively. The
 signals therefore currently look more like time-varying market/style exposure
 than demonstrated standalone Alpha.
 
+The benchmark-relative HAC t-statistic for M0 active daily returns was -0.12 in
+2025 and -2.11 in 2026; M3 was -0.74 and -1.58. M0's 2026 net maximum drawdown
+was -27.8%. These diagnostics use 20 lags to account for serial dependence and
+are descriptive evidence for the shadow only, not a formal promotion decision.
+
 The source contract confirms `daily.amount` is thousand CNY. A first-pass
 participation estimate puts M0's 1% participation capacity at roughly CNY 247
 billion median and CNY 21 billion at the daily p10, but this is only an upper

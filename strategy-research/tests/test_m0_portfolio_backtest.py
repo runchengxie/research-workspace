@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import pandas as pd
 
-from experiments.macro_context_shadow.run_m0_portfolio_backtest import summarize_portfolio
+from experiments.macro_context_shadow.run_m0_portfolio_backtest import (
+    _hac_mean_t,
+    summarize_portfolio,
+)
 
 
 def test_summarize_portfolio_applies_turnover_cost() -> None:
@@ -11,3 +14,7 @@ def test_summarize_portfolio_applies_turnover_cost() -> None:
     assert result["days"] == 2
     assert result["mean_daily_turnover"] == 0.25
     assert result["net_ann"] < result["gross_ann"]
+
+
+def test_hac_mean_t_is_negative_for_negative_active_returns() -> None:
+    assert _hac_mean_t([-0.01, -0.02, -0.01, -0.03], lags=2) < 0.0
