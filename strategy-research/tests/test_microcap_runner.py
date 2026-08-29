@@ -5,7 +5,7 @@ import pandas as pd
 from experiments.style_factors.microcap_robustness_20260829 import (
     build_microcap_run_manifest,
 )
-from style_factors.microcap_robustness import build_microcap_capacity_matrix
+from style_factors.microcap_capacity import build_microcap_capacity_matrix
 
 
 def test_microcap_manifest_freezes_primary_matrix() -> None:
