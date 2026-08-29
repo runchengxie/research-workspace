@@ -114,3 +114,15 @@ negative in 2026. These figures are not promotion evidence: the history is
 short, labels overlap, the fund source lacks a complete historical vintage
 archive, and the portfolio rule still needs benchmark-relative attribution,
 capacity and a frozen final-OOS protocol.
+
+### Benchmark-relative read-through
+
+An equal-weight return of the same clean A-share price universe was used as a
+descriptive matched benchmark. For M0, 2025 gross total return was 48.6% versus
+41.4% for the benchmark, but after 30bps turnover cost the advantage was only
+about 0.2 percentage points in total. In 2026, M0 net total return was -20.0%
+versus -13.3% for the benchmark, or about -6.7 percentage points active. The
+signal therefore currently looks more like a time-varying market/style
+exposure than demonstrated standalone Alpha. Capacity remains pending until
+the daily `amount` unit is confirmed from the source contract; no unverified
+capacity estimate should be used for promotion.
