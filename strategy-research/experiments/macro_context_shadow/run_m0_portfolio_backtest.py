@@ -105,7 +105,13 @@ def _block_bootstrap_ci(
     }
 
 
-def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[str, Any]:
+def run_backtest(
+    data_root: str | Path,
+    *,
+    turnover_bps: float = 30.0,
+    start_date: str = "20250101",
+    end_date: str = "20260722",
+) -> dict[str, Any]:
     """Backtest M0 and M3 using the latest disclosed state and daily weights."""
 
     import duckdb
@@ -125,13 +131,13 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
              LEAD(adj_close) OVER (PARTITION BY ts_code ORDER BY trade_date)
                / NULLIF(adj_close, 0) - 1 AS fwd1
       FROM read_parquet('{prices}')
-      WHERE trade_date BETWEEN '20250101' AND '20260722' AND adj_close > 0
+      WHERE trade_date BETWEEN '{start_date}' AND '{end_date}' AND adj_close > 0
     ), events AS (
       SELECT symbol AS ts_code, CAST(trade_date AS VARCHAR) AS event_date,
              fund_count_holding_stock_qoq_change AS holder_change,
              fund_hold_mv_to_float_mv_qoq_change AS ownership_change
       FROM read_parquet('{features}')
-      WHERE trade_date BETWEEN 20250120 AND 20260722
+      WHERE trade_date BETWEEN '{start_date}' AND '{end_date}'
         AND fund_count_holding_stock_qoq_change IS NOT NULL
         AND fund_hold_mv_to_float_mv_qoq_change IS NOT NULL
         AND CAST(available_date AS BIGINT) <= trade_date
@@ -155,7 +161,13 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
     """
     selected = duckdb.connect().execute(query).fetchdf()
     if selected.empty:
-        return {"data_root": str(root), "model": "M0", "periods": {}}
+        return {
+            "data_root": str(root),
+            "start_date": start_date,
+            "end_date": end_date,
+            "model": "M0",
+            "periods": {},
+        }
     selected["trade_date"] = pd.to_datetime(selected["trade_date"])
     benchmark_query = f"""
     WITH prices AS (
@@ -163,7 +175,7 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
              LEAD(adj_close) OVER (PARTITION BY ts_code ORDER BY trade_date)
                / NULLIF(adj_close, 0) - 1 AS next_return
       FROM read_parquet('{prices}')
-      WHERE trade_date BETWEEN '20250101' AND '20260722' AND adj_close > 0
+      WHERE trade_date BETWEEN '{start_date}' AND '{end_date}' AND adj_close > 0
     )
     SELECT trade_date, AVG(next_return) AS benchmark_return
     FROM prices WHERE next_return IS NOT NULL GROUP BY trade_date
@@ -199,6 +211,8 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
         }
     return {
         "data_root": str(root),
+        "start_date": start_date,
+        "end_date": end_date,
         "models": {
             "M0": "holder_count_change_top_quintile",
             "M3": "holder_count_change_and_ownership_change_top_quintile",
@@ -214,8 +228,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--data-root", required=True)
     parser.add_argument("--output", required=True)
     parser.add_argument("--turnover-bps", type=float, default=30.0)
+    parser.add_argument("--start-date", default="20250101")
+    parser.add_argument("--end-date", default="20260722")
     args = parser.parse_args(argv)
-    payload = run_backtest(args.data_root, turnover_bps=args.turnover_bps)
+    payload = run_backtest(
+        args.data_root,
+        turnover_bps=args.turnover_bps,
+        start_date=args.start_date,
+        end_date=args.end_date,
+    )
     Path(args.output).expanduser().write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )

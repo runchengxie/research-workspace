@@ -154,6 +154,21 @@ capacity and a frozen final-OOS protocol.
 
 ### Benchmark-relative read-through
 
+### Clean-window sensitivity
+
+As a sensitivity check, the portfolio runner now accepts `--start-date` and was
+rerun from 2022-01-01, after the conflicted historical periods. This uses the
+existing derived asset rather than a newly rebuilt raw asset, so it is a window
+stability check, not a replacement for the pending clean rebuild.
+
+The result does not improve the investment case. M0 underperformed the matched
+benchmark after cost in every year from 2022 through 2026: approximately -27.5%,
+-11.4%, -4.9%, -2.5%, and -7.9%, respectively. M3 was approximately -18.7%,
+-15.5%, -9.0%, -4.1%, and -6.0%. M0's 2026 block-bootstrap probability of a
+positive active mean was 0.55%; M3's was 2.55%. This suggests that excluding
+the early duplicate periods alone is unlikely to rescue the fund-holder-count
+signal.
+
 An equal-weight return of the same clean A-share price universe was used as a
 descriptive matched benchmark. With compounding and 30bps turnover cost, M0's
 active total return was -0.1 percentage points in 2025 and -7.5 percentage
