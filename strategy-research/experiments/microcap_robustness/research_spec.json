@@ -12,19 +12,19 @@
     "source": "platform_assets",
     "start": "2015-01-01",
     "end": "2026-07-31",
-    "pit": true
+    "pit": false
   },
   "prediction": {
     "target": "factor_and_candidate_forward_returns",
     "horizon": "monthly_primary",
-    "task": "diagnostic"
+    "task": "n/a"
   },
   "model": {
     "name": "n/a",
     "training": "n/a"
   },
   "portfolio": {
-    "construction": "factor_long_short_and_long_only"
+    "construction": "long_only"
   },
   "cost": {
     "cost_bps": [0, 10, 20, 30]
@@ -33,6 +33,7 @@
     "cohorts": [
       "microcap_exclusion",
       "EW_VW",
+      "factor_long_short_diagnostics",
       "buffer",
       "large_cap_control"
     ]
