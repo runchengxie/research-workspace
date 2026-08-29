@@ -141,3 +141,19 @@ billion median and CNY 21 billion at the daily p10, but this is only an upper
 bound based on selected-universe ADV. It does not yet model changed-name ADV,
 single-name limits, market impact or capacity decay, and must not be used for
 promotion.
+
+### Final-OOS and regime decision
+
+The fixed M0/M3 pair was also used in a 6-group, 2-test-group CPCV-style model
+selection diagnostic. Across 15 paths, the model selected from the training
+portion had positive test active return on only 40% of paths. M0 was selected
+on 9 paths with a 55.6% positive-test rate; M3 was selected on 6 paths with a
+16.7% positive-test rate. This is a stability warning, not a claim of formal
+CPCV/PBO certification.
+
+Conditioning the daily active returns on the reconstructed Shibor 5-observation
+regime did not rescue the signal. M0's average active return was approximately
+`+0.0077%` per day in down-regime, `-0.0222%` in flat-regime and `-0.0111%` in
+up-regime; M3 was approximately `-0.0028%`, `-0.0230%` and `+0.0007%`.
+Because these results use reconstructed context history and the frozen 2026
+final-OOS test already fails, no Shibor gate is promoted to C3/C4 or production.
