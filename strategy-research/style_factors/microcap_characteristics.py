@@ -91,7 +91,13 @@ def build_microcap_characteristics(
     stock_var = lagged_returns.rolling(60, min_periods=40).var()
     covariance = lagged_returns.rolling(60, min_periods=40).cov(lagged_market)
     market_var = lagged_market.rolling(60, min_periods=40).var()
-    residual_var = stock_var.sub(covariance.pow(2).div(market_var), axis=0).clip(lower=0)
+    # ``market_var`` is indexed by formation date, so the division must be
+    # row-wise.  The default DataFrame alignment is column-wise and silently
+    # produces NaNs when the stock symbols do not match the date labels.
+    residual_var = stock_var.sub(
+        covariance.pow(2).div(market_var, axis=0),
+        axis=0,
+    ).clip(lower=0)
     ivol = np.sqrt(residual_var)
 
     result = _long_from_matrix(
@@ -127,7 +133,9 @@ def build_microcap_characteristics(
         np.isfinite(result["total_mv"].to_numpy(dtype=float)) & result["total_mv"].gt(0)
     )
     result["log_market_cap"] = np.log(valid_cap)
-    return result.drop(columns="total_mv").sort_values(["trade_date", "symbol"]).reset_index(drop=True)
+    return (
+        result.drop(columns="total_mv").sort_values(["trade_date", "symbol"]).reset_index(drop=True)
+    )
 
 
 __all__ = ["CHARACTERISTIC_COLUMNS", "build_microcap_characteristics"]

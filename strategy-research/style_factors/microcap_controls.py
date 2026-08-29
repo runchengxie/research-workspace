@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+
 from alpha_research.style_factors.helpers import merge_sw_industry_pit
 
 from .liquidity_signals import _standardize_signal

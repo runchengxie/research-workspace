@@ -12,6 +12,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
 from portfolio_backtester.style_factors_backtest import (
     available_factor_names,
     build_quantile_portfolio_returns,
@@ -90,8 +91,7 @@ def build_hard_eligible_reference_universe(
         .reset_index()
     )
     diagnostics["eligible_reference"] = (
-        diagnostics["eligible_before_market_cap_filter"]
-        - diagnostics["invalid_market_cap_count"]
+        diagnostics["eligible_before_market_cap_filter"] - diagnostics["invalid_market_cap_count"]
     )
 
     reference = eligible.loc[
@@ -126,9 +126,7 @@ def build_microcap_universe_variants(
     if not bool((finite & work[market_cap_column].gt(0)).all()):
         raise ValueError("reference market caps must be finite and positive")
 
-    variant_parts: dict[float, list[pd.DataFrame]] = {
-        value: [] for value in exclusion_percentiles
-    }
+    variant_parts: dict[float, list[pd.DataFrame]] = {value: [] for value in exclusion_percentiles}
     diagnostic_rows: list[dict[str, object]] = []
     for formation_date, group in work.groupby("trade_date", sort=True):
         ranked = group.sort_values([market_cap_column, "symbol"], kind="stable").copy()
@@ -152,9 +150,7 @@ def build_microcap_universe_variants(
                     "excluded_count": excluded_count,
                     "eligible_after": len(kept),
                     "market_cap_cutoff": (
-                        float(excluded[market_cap_column].max())
-                        if excluded_count
-                        else np.nan
+                        float(excluded[market_cap_column].max()) if excluded_count else np.nan
                     ),
                     "excluded_market_cap_share": (
                         float(excluded[market_cap_column].sum() / total_cap)
@@ -245,9 +241,7 @@ def build_microcap_factor_matrix(
             how="left",
             validate="one_to_one",
         )
-        signals = {
-            name: f"factor_{name}_z" for name in available_factor_names(weighted)
-        }
+        signals = {name: f"factor_{name}_z" for name in available_factor_names(weighted)}
         for weighting in weighting_modes:
             results = build_quantile_portfolio_returns(
                 weighted,
@@ -378,9 +372,7 @@ def build_microcap_long_only_matrix(
     )
     rows: list[dict[str, object]] = []
     simulations: dict[tuple[str, float, str, str], LongOnlySimulation] = {}
-    target_plans: dict[
-        tuple[str, float, str, str], dict[pd.Timestamp, dict[str, float]]
-    ] = {}
+    target_plans: dict[tuple[str, float, str, str], dict[pd.Timestamp, dict[str, float]]] = {}
     buffer_settings = (("no_buffer", target_count), ("buffered", buffered_count))
 
     for exclusion, panel in candidate_panels.items():
@@ -511,9 +503,7 @@ def _period_metrics(group: pd.DataFrame) -> dict[str, float | int]:
         "observations": len(values),
         "period_return": cumulative * 100.0,
         "annual_return": annual * 100.0,
-        "sharpe": (
-            float(values.mean() / volatility * np.sqrt(252)) if volatility > 0 else np.nan
-        ),
+        "sharpe": (float(values.mean() / volatility * np.sqrt(252)) if volatility > 0 else np.nan),
         "max_drawdown": drawdown * 100.0,
         "average_turnover": float(turnover.mean()) if turnover.notna().any() else np.nan,
     }
@@ -579,9 +569,7 @@ def build_microcap_weighting_matrix(factor_matrix: pd.DataFrame) -> pd.DataFrame
         aggfunc="first",
     ).reset_index()
     pivot.columns.name = None
-    pivot = pivot.rename(
-        columns={"equal": "equal_annual_return", "value": "value_annual_return"}
-    )
+    pivot = pivot.rename(columns={"equal": "equal_annual_return", "value": "value_annual_return"})
     if "equal_annual_return" not in pivot:
         pivot["equal_annual_return"] = np.nan
     if "value_annual_return" not in pivot:

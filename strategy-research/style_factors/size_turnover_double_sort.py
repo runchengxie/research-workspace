@@ -53,9 +53,9 @@ def build_double_sort(
         ].copy()
         cross[first_column] = pd.to_numeric(cross[first_column], errors="coerce")
         cross[second_column] = pd.to_numeric(cross[second_column], errors="coerce")
-        cross = cross.dropna(
-            subset=["symbol", first_column, second_column]
-        ).drop_duplicates("symbol")
+        cross = cross.dropna(subset=["symbol", first_column, second_column]).drop_duplicates(
+            "symbol"
+        )
         if cross.empty:
             continue
 
@@ -72,11 +72,7 @@ def build_double_sort(
             [range(1, bucket_count + 1), range(1, bucket_count + 1)],
             names=["first_bucket", "second_bucket"],
         )
-        grouped = (
-            grouped.set_index(["first_bucket", "second_bucket"])
-            .reindex(grid)
-            .reset_index()
-        )
+        grouped = grouped.set_index(["first_bucket", "second_bucket"]).reindex(grid).reset_index()
         grouped["observations"] = grouped["observations"].fillna(0).astype(int)
         grouped.insert(0, "formation_date", formation_date)
         rows.extend(grouped.to_dict("records"))

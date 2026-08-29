@@ -33,9 +33,7 @@ def test_generic_double_sort_matches_legacy_without_ties() -> None:
         formation_dates=dates,
         first_column="size_score",
         second_column="turnover_lagged_mean_60d",
-    ).rename(
-        columns={"first_bucket": "size_bucket", "second_bucket": "turnover_bucket"}
-    )
+    ).rename(columns={"first_bucket": "size_bucket", "second_bucket": "turnover_bucket"})
     pd.testing.assert_frame_equal(
         legacy.reset_index(drop=True),
         generic.reset_index(drop=True),

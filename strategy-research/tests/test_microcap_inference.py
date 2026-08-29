@@ -107,9 +107,7 @@ def test_controls_reduce_spurious_size_coefficient() -> None:
         formation_dates=formation_dates,
         regressors=REGRESSORS,
     )
-    size_only_mean = size_only.loc[
-        size_only["coefficient"].eq("z_log_market_cap"), "value"
-    ].mean()
+    size_only_mean = size_only.loc[size_only["coefficient"].eq("z_log_market_cap"), "value"].mean()
     full_mean = full.loc[full["coefficient"].eq("z_log_market_cap"), "value"].mean()
     assert abs(full_mean) < abs(size_only_mean)
 
