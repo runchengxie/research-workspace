@@ -118,11 +118,15 @@ capacity and a frozen final-OOS protocol.
 ### Benchmark-relative read-through
 
 An equal-weight return of the same clean A-share price universe was used as a
-descriptive matched benchmark. For M0, 2025 gross total return was 48.6% versus
-41.4% for the benchmark, but after 30bps turnover cost the advantage was only
-about 0.2 percentage points in total. In 2026, M0 net total return was -20.0%
-versus -13.3% for the benchmark, or about -6.7 percentage points active. The
-signal therefore currently looks more like a time-varying market/style
-exposure than demonstrated standalone Alpha. Capacity remains pending until
-the daily `amount` unit is confirmed from the source contract; no unverified
-capacity estimate should be used for promotion.
+descriptive matched benchmark. With compounding and 30bps turnover cost, M0's
+active total return was -0.3 percentage points in 2025 and -7.3 percentage
+points in 2026. M3 was -4.1 and -5.7 percentage points respectively. The
+signals therefore currently look more like time-varying market/style exposure
+than demonstrated standalone Alpha.
+
+The source contract confirms `daily.amount` is thousand CNY. A first-pass
+participation estimate puts M0's 1% participation capacity at roughly CNY 247
+billion median and CNY 21 billion at the daily p10, but this is only an upper
+bound based on selected-universe ADV. It does not yet model changed-name ADV,
+single-name limits, market impact or capacity decay, and must not be used for
+promotion.

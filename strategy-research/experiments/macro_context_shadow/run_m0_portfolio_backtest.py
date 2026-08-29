@@ -16,13 +16,33 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
     gross = daily["gross_return"]
     net = gross - daily["turnover"] * turnover_bps / 10_000.0
     periods = len(daily)
-    return {
+    result = {
         "days": periods,
         "turnover_bps": turnover_bps,
         "mean_daily_turnover": float(daily["turnover"].mean()),
         "gross_ann": float((1.0 + gross).prod() ** (252.0 / periods) - 1.0),
         "net_ann": float((1.0 + net).prod() ** (252.0 / periods) - 1.0),
     }
+    if "benchmark_return" in daily:
+        benchmark = daily["benchmark_return"].fillna(0.0)
+        result["benchmark_total"] = float((1.0 + benchmark).prod() - 1.0)
+        result["active_total_after_cost"] = float(
+            (1.0 + net).prod() / (1.0 + benchmark).prod() - 1.0
+        )
+    if "selected_adv_cny" in daily:
+        capacity = {}
+        for participation in (0.01, 0.03, 0.05):
+            values = (
+                daily["selected_adv_cny"]
+                * participation
+                / daily["turnover"].replace(0, float("nan"))
+            )
+            capacity[str(int(participation * 100)) + "pct"] = {
+                "median_cny": float(values.median()),
+                "p10_cny": float(values.quantile(0.10)),
+            }
+        result["capacity_cny_by_participation"] = capacity
+    return result
 
 
 def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[str, Any]:
@@ -41,7 +61,7 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
     )
     query = f"""
     WITH px AS (
-      SELECT ts_code, trade_date, adj_close,
+      SELECT ts_code, trade_date, adj_close, amount,
              LEAD(adj_close) OVER (PARTITION BY ts_code ORDER BY trade_date)
                / NULLIF(adj_close, 0) - 1 AS fwd1
       FROM read_parquet('{prices}')
@@ -56,7 +76,7 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
         AND fund_hold_mv_to_float_mv_qoq_change IS NOT NULL
         AND CAST(available_date AS BIGINT) <= trade_date
     ), known AS (
-      SELECT px.trade_date, px.ts_code, px.fwd1,
+      SELECT px.trade_date, px.ts_code, px.amount, px.fwd1,
              events.holder_change, events.ownership_change
       FROM px ASOF JOIN events
         ON px.ts_code = events.ts_code AND px.trade_date >= events.event_date
@@ -66,10 +86,10 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
              NTILE(5) OVER (PARTITION BY trade_date ORDER BY ownership_change) AS ownership_q
       FROM known WHERE holder_change IS NOT NULL AND fwd1 IS NOT NULL
     )
-    SELECT 'M0' AS model, trade_date, ts_code, fwd1 AS next_return
+    SELECT 'M0' AS model, trade_date, ts_code, amount, fwd1 AS next_return
     FROM ranked WHERE holder_q = 5
     UNION ALL
-    SELECT 'M3' AS model, trade_date, ts_code, fwd1 AS next_return
+    SELECT 'M3' AS model, trade_date, ts_code, amount, fwd1 AS next_return
     FROM ranked WHERE holder_q = 5 AND ownership_q = 5
     ORDER BY model, trade_date, ts_code
     """
@@ -77,6 +97,19 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
     if selected.empty:
         return {"data_root": str(root), "model": "M0", "periods": {}}
     selected["trade_date"] = pd.to_datetime(selected["trade_date"])
+    benchmark_query = f"""
+    WITH prices AS (
+      SELECT trade_date,
+             LEAD(adj_close) OVER (PARTITION BY ts_code ORDER BY trade_date)
+               / NULLIF(adj_close, 0) - 1 AS next_return
+      FROM read_parquet('{prices}')
+      WHERE trade_date BETWEEN '20250101' AND '20260722' AND adj_close > 0
+    )
+    SELECT trade_date, AVG(next_return) AS benchmark_return
+    FROM prices WHERE next_return IS NOT NULL GROUP BY trade_date
+    """
+    benchmark = duckdb.connect().execute(benchmark_query).fetchdf()
+    benchmark["trade_date"] = pd.to_datetime(benchmark["trade_date"])
     periods: dict[str, Any] = {}
     for model, model_frame in selected.groupby("model", sort=True):
         selected_sets = {
@@ -96,6 +129,10 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
             turnovers.append((date, turnover))
             previous = current
         daily["turnover"] = pd.Series(dict(turnovers))
+        daily["benchmark_return"] = benchmark.set_index("trade_date")["benchmark_return"].reindex(
+            daily.index
+        )
+        daily["selected_adv_cny"] = model_frame.groupby("trade_date")["amount"].sum() * 1000.0
         periods[model] = {
             str(year): summarize_portfolio(group, turnover_bps=turnover_bps)
             for year, group in daily.groupby(daily.index.year)
