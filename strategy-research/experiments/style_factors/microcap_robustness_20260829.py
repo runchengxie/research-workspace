@@ -8,6 +8,7 @@ causal effects.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -54,12 +55,14 @@ def build_microcap_run_manifest(
     alpha_commit: str,
     portfolio_commit: str,
     minimum_listed_days: int,
+    data_fingerprint: str = "unknown",
 ) -> dict[str, object]:
     """Return the frozen primary research grid used for cache and audit metadata."""
     return {
         "schema_version": 1,
         "data_start": data_start,
         "data_end": data_end,
+        "data_fingerprint": data_fingerprint,
         "alpha_commit": alpha_commit,
         "portfolio_commit": portfolio_commit,
         "minimum_listed_days": minimum_listed_days,
@@ -70,6 +73,17 @@ def build_microcap_run_manifest(
         "holdout_start": "2024-01-01",
         "registration_regime_boundaries": ["2019-07-22", "2023-02-17"],
     }
+
+
+def _metadata_fingerprint(metadata: dict[str, object]) -> str:
+    payload = json.dumps(
+        metadata,
+        ensure_ascii=False,
+        sort_keys=True,
+        default=str,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
 
 
 def _git_revision(path: Path) -> str:
@@ -231,6 +245,7 @@ def run_microcap_robustness(
     manifest = build_microcap_run_manifest(
         data_start=pd.Timestamp(start_date).date().isoformat(),
         data_end=actual_end,
+        data_fingerprint=_metadata_fingerprint(market.metadata),
         alpha_commit=_git_revision(root / "alpha-research"),
         portfolio_commit=_git_revision(root / "portfolio-backtester"),
         minimum_listed_days=minimum_listed_days,
@@ -244,9 +259,11 @@ def run_microcap_robustness(
         formation_dates=formation_dates,
         minimum_listed_days=minimum_listed_days,
     )
-    cached = _load_variant_cache(effective_cache) if resume and _cache_matches(
-        effective_cache, manifest
-    ) else None
+    cached = (
+        _load_variant_cache(effective_cache)
+        if resume and _cache_matches(effective_cache, manifest)
+        else None
+    )
     if cached is None:
         variants, variant_diagnostics = build_microcap_universe_variants(reference)
         factor_panels = {
