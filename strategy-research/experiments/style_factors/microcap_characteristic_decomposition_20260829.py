@@ -80,7 +80,7 @@ def _write_artifacts(
     coefficients.to_csv(outdir / ARTIFACTS["coefficients"], index=False)
     coefficient_summary.to_csv(outdir / ARTIFACTS["coefficient_summary"], index=False)
     (outdir / ARTIFACTS["summary"]).write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(summary, ensure_ascii=False, indent=2, default=str) + "\n",
         encoding="utf-8",
     )
     return outdir
