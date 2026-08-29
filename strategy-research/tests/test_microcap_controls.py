@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from style_factors.microcap_robustness import build_variant_liquidity_controls
+from style_factors.microcap_controls import build_variant_liquidity_controls
 
 
 def test_liquidity_controls_filter_before_cross_sectional_standardization() -> None:
