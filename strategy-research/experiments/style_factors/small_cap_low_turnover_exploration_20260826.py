@@ -44,6 +44,15 @@ from style_factors.small_cap_low_turnover import (
     simulate_long_only_candidates,
     summarize_long_only_simulations,
 )
+from style_factors.turnover_anatomy import (
+    TURNOVER_DECONFOUNDING_CONTROLS,
+    TURNOVER_DECONFOUNDING_SIGNAL_COLUMNS,
+    TURNOVER_PROXY_RAW_COLUMNS,
+    TURNOVER_PROXY_SCORE_COLUMNS,
+    build_turnover_deconfounding_ladder,
+    build_turnover_proxy_controls,
+    summarize_turnover_anatomy,
+)
 
 
 def _json_safe(value: Any) -> Any:
@@ -148,6 +157,123 @@ def _signal_correlations(panel: pd.DataFrame) -> pd.DataFrame:
                 }
             )
     return pd.DataFrame(rows)
+
+
+def _turnover_anatomy_metadata() -> dict[str, Any]:
+    return {
+        "artifacts": {
+            "deconfounding": "candidate_turnover_deconfounding.csv",
+            "residual_panel": "candidate_turnover_deconfounding_panel.parquet",
+            "anatomy": "candidate_turnover_anatomy.csv",
+            "sequential_size_sort": "candidate_size_turnover_sequential_sort.csv",
+        },
+        "development_period": "2015-01-01 to 2023-12-31",
+        "holdout_period": "2024-01-01 to 2026-12-31",
+        "holdout_usage": "descriptive_only",
+        "anatomy_support": "common non-null support across all deconfounding stage signals",
+        "deconfounding_stages": {
+            stage: list(controls) for stage, controls in TURNOVER_DECONFOUNDING_CONTROLS.items()
+        },
+        "proxy_controls": {
+            "activity": "20-session mean log traded amount, lagged one session",
+            "illiquidity": "20-session mean absolute return / traded amount, lagged one session",
+            "momentum": "105-session log return ending 21 sessions before formation",
+            "reversal": "21-session log return ending one session before formation",
+        },
+        "sequential_sort": (
+            "sector-neutral size_score buckets first, then raw lagged-turnover buckets "
+            "within each size bucket"
+        ),
+    }
+
+
+def _build_turnover_anatomy_evidence(
+    *,
+    signal_panel: pd.DataFrame,
+    daily_clean: pd.DataFrame,
+    return_matrix: pd.DataFrame,
+    formation_dates: pd.DatetimeIndex,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    proxy_controls = build_turnover_proxy_controls(daily_clean, formation_dates)
+    ladder_panel, diagnostics = build_turnover_deconfounding_ladder(
+        signal_panel,
+        proxy_controls,
+    )
+    dates = pd.DatetimeIndex(formation_dates).normalize()  # ty: ignore[unresolved-attribute]
+    dates = dates.sort_values().unique()
+    sample_dates = (
+        (
+            "development",
+            dates[(dates >= pd.Timestamp("2015-01-01")) & (dates <= pd.Timestamp("2023-12-31"))],
+        ),
+        (
+            "holdout_descriptive",
+            dates[(dates >= pd.Timestamp("2024-01-01")) & (dates <= pd.Timestamp("2026-12-31"))],
+        ),
+        ("full_descriptive", dates),
+    )
+    stage_signal_columns = list(dict.fromkeys(TURNOVER_DECONFOUNDING_SIGNAL_COLUMNS.values()))
+    common_support = ladder_panel[stage_signal_columns].notna().all(axis=1)
+    anatomy_panel = ladder_panel.loc[common_support].copy()
+    anatomy_frames = [
+        summarize_turnover_anatomy(
+            anatomy_panel,
+            return_matrix,
+            formation_dates=sample,
+            calendar_dates=dates,
+            sample_label=label,
+        )
+        for label, sample in sample_dates
+        if len(sample) > 0
+    ]
+    anatomy = pd.concat(anatomy_frames, ignore_index=True) if anatomy_frames else pd.DataFrame()
+    if not anatomy.empty:
+        development = anatomy.loc[
+            anatomy["sample"].eq("development"),
+            [
+                "stage",
+                "signal_column",
+                "mean_rank_ic",
+                "low_turnover_leg_return",
+                "high_turnover_leg_return",
+                "low_minus_high_return",
+            ],
+        ].rename(
+            columns={
+                "mean_rank_ic": "development_mean_rank_ic",
+                "low_turnover_leg_return": "development_low_turnover_leg_return",
+                "high_turnover_leg_return": "development_high_turnover_leg_return",
+                "low_minus_high_return": "development_low_minus_high_return",
+            }
+        )
+        diagnostics = diagnostics.merge(
+            development,
+            on=["stage", "signal_column"],
+            how="left",
+            validate="one_to_one",
+        )
+    residual_columns = list(
+        dict.fromkeys(
+            [
+                "trade_date",
+                "symbol",
+                "industry_l1",
+                "size_score",
+                "lowvol_score",
+                *TURNOVER_PROXY_RAW_COLUMNS,
+                *TURNOVER_PROXY_SCORE_COLUMNS.values(),
+                *TURNOVER_DECONFOUNDING_SIGNAL_COLUMNS.values(),
+            ]
+        )
+    )
+    residual_panel = ladder_panel[residual_columns].copy()
+    sequential_sort = build_size_turnover_double_sort(
+        signal_panel,
+        return_matrix,
+        formation_dates=dates,
+        sort_method="sequential",
+    )
+    return diagnostics, anatomy, sequential_sort, residual_panel
 
 
 def _run_robustness_matrix(
@@ -965,10 +1091,10 @@ def _run_reconciliation_matrix(  # noqa: C901
                         buffer_count=buffer_count,
                         minimum_listed_days=minimum_listed_days,
                         initial_capital=initial_capital,
-                            transaction_cost_bps=transaction_cost_bps,
-                            impact_bps=impact_bps,
-                            prepared_tables=prepared_tables,
-                        )
+                        transaction_cost_bps=transaction_cost_bps,
+                        impact_bps=impact_bps,
+                        prepared_tables=prepared_tables,
+                    )
                 )
                 checkpoint()
     out = pd.concat([existing, pd.DataFrame(rows)], ignore_index=True)
@@ -1218,6 +1344,8 @@ def _write_report(
     yearly: pd.DataFrame,
     periods: pd.DataFrame,
     signal_correlations: pd.DataFrame,
+    turnover_deconfounding: pd.DataFrame,
+    turnover_anatomy: pd.DataFrame,
     robustness: pd.DataFrame,
     rebalance_matrix: pd.DataFrame,
     share_ledger_matrix: pd.DataFrame,
@@ -1287,6 +1415,18 @@ def _write_report(
         signal_correlations.to_markdown(index=False, floatfmt=".4f")
         if not signal_correlations.empty
         else "No signal-correlation observations."
+    )
+    lines.extend(["", "## Turnover deconfounding ladder", ""])
+    lines.append(
+        turnover_deconfounding.to_markdown(index=False, floatfmt=".4f")
+        if not turnover_deconfounding.empty
+        else "No turnover-deconfounding observations."
+    )
+    lines.extend(["", "## Turnover long/avoidance anatomy", ""])
+    lines.append(
+        turnover_anatomy.to_markdown(index=False, floatfmt=".4f")
+        if not turnover_anatomy.empty
+        else "No turnover-anatomy observations."
     )
     lines.extend(["", "## Capacity and turnover-definition sensitivity", ""])
     if robustness.empty:
@@ -1485,9 +1625,7 @@ def run_exploration(  # noqa: C901
         minimum_listed_days=minimum_listed_days,
         frequencies=cache_frequencies,
     )
-    frequency_cache = (
-        _load_frequency_cache(cache_dir, cache_manifest) if staged_resume else None
-    )
+    frequency_cache = _load_frequency_cache(cache_dir, cache_manifest) if staged_resume else None
     if frequency_cache is None:
         frequency_cache = _prepare_frequency_cache(
             daily_clean=daily_clean,
@@ -1561,6 +1699,30 @@ def run_exploration(  # noqa: C901
             return_matrix,
             formation_dates=formation_dates,
         )
+    turnover_deconfounding = pd.DataFrame()
+    turnover_anatomy = pd.DataFrame()
+    turnover_residual_panel = pd.DataFrame()
+    size_turnover_sequential_sort = pd.DataFrame()
+    if stage == "all":
+        (
+            turnover_deconfounding,
+            turnover_anatomy,
+            size_turnover_sequential_sort,
+            turnover_residual_panel,
+        ) = _build_turnover_anatomy_evidence(
+            signal_panel=signal_panel,
+            daily_clean=daily_clean,
+            return_matrix=return_matrix,
+            formation_dates=formation_dates,
+        )
+        turnover_deconfounding.to_csv(outdir / "candidate_turnover_deconfounding.csv", index=False)
+        turnover_residual_panel.to_parquet(
+            outdir / "candidate_turnover_deconfounding_panel.parquet", index=False
+        )
+        turnover_anatomy.to_csv(outdir / "candidate_turnover_anatomy.csv", index=False)
+        size_turnover_sequential_sort.to_csv(
+            outdir / "candidate_size_turnover_sequential_sort.csv", index=False
+        )
     robustness = pd.DataFrame()
     rebalance_matrix = pd.DataFrame()
     if stage == "all":
@@ -1623,9 +1785,7 @@ def run_exploration(  # noqa: C901
                 attribution_rows=attribution_rows,
                 frequency_cache=frequency_cache,
             )
-        _write_csv_checkpoint(
-            share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv"
-        )
+        _write_csv_checkpoint(share_ledger_matrix, outdir, "candidate_share_ledger_matrix.csv")
         reconciliation_matrix = _run_reconciliation_matrix(
             daily_clean=daily_clean,
             sw_membership=sw_membership if not sw_membership.empty else None,
@@ -1645,17 +1805,11 @@ def run_exploration(  # noqa: C901
             resume=resume,
             reconciliation_mode=reconciliation_mode,
         )
-        _write_csv_checkpoint(
-            reconciliation_matrix, outdir, "candidate_reconciliation_matrix.csv"
-        )
+        _write_csv_checkpoint(reconciliation_matrix, outdir, "candidate_reconciliation_matrix.csv")
         attribution_frame = (
-            pd.concat(attribution_rows, ignore_index=True)
-            if attribution_rows
-            else pd.DataFrame()
+            pd.concat(attribution_rows, ignore_index=True) if attribution_rows else pd.DataFrame()
         )
-        _write_csv_checkpoint(
-            attribution_frame, outdir, "candidate_delayed_fill_attribution.csv"
-        )
+        _write_csv_checkpoint(attribution_frame, outdir, "candidate_delayed_fill_attribution.csv")
     capacity_ladder = pd.DataFrame()
     if stage in {"all", "capacity"}:
         capacity_ladder = _run_capacity_ladder(
@@ -1734,8 +1888,10 @@ def run_exploration(  # noqa: C901
             "size_column": "size_score",
             "turnover_column": "turnover_lagged_mean_60d",
             "bucket_count": 5,
+            "sort_method": "independent",
             "forward_window": "formation_date exclusive to next formation date inclusive",
         },
+        "turnover_anatomy": _turnover_anatomy_metadata(),
         "delayed_fill_attribution": {
             "artifact": "candidate_delayed_fill_attribution.csv",
             "delay_opportunity_cost_definition": (
@@ -1782,6 +1938,8 @@ def run_exploration(  # noqa: C901
         yearly=yearly,
         periods=periods,
         signal_correlations=signal_correlations,
+        turnover_deconfounding=turnover_deconfounding,
+        turnover_anatomy=turnover_anatomy,
         robustness=robustness,
         rebalance_matrix=rebalance_matrix,
         share_ledger_matrix=share_ledger_matrix,

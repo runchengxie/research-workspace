@@ -20,7 +20,7 @@ def test_double_sort_assigns_deterministic_five_by_five_buckets() -> None:
     returns = pd.DataFrame(
         0.01,
         index=pd.date_range("2024-01-06", periods=2, freq="B"),
-        columns=symbols,
+        columns=pd.Index(symbols),
     )
 
     result = build_size_turnover_double_sort(
@@ -36,6 +36,42 @@ def test_double_sort_assigns_deterministic_five_by_five_buckets() -> None:
     assert result["forward_return"].notna().all()
 
 
+def test_sequential_double_sort_rebuckets_turnover_within_each_size_bucket() -> None:
+    formation = pd.Timestamp("2024-01-05")
+    symbols = [f"S{index:02d}" for index in range(20)]
+    panel = pd.DataFrame(
+        {
+            "trade_date": formation,
+            "symbol": symbols,
+            "size_score": np.repeat([0.0, 1.0], 10),
+            "turnover_lagged_mean_60d": np.r_[np.arange(10.0), 100.0 + np.arange(10.0)],
+        }
+    )
+    returns = pd.DataFrame(
+        0.01,
+        index=pd.date_range("2024-01-06", periods=2, freq="B"),
+        columns=pd.Index(symbols),
+    )
+
+    result = build_size_turnover_double_sort(
+        panel,
+        returns,
+        formation_dates=pd.DatetimeIndex([formation]),
+        bucket_count=2,
+        sort_method="sequential",
+    )
+
+    populated = result.loc[result["observations"] > 0]
+    by_size = populated.groupby("size_bucket")["turnover_bucket"].agg(set)
+    assert by_size.to_dict() == {1: {1, 2}, 2: {1, 2}}
+    assert populated.set_index(["size_bucket", "turnover_bucket"])["observations"].to_dict() == {
+        (1, 1): 5,
+        (1, 2): 5,
+        (2, 1): 5,
+        (2, 2): 5,
+    }
+
+
 def test_double_sort_ignores_rows_with_missing_signal_inputs() -> None:
     panel = pd.DataFrame(
         {
@@ -48,7 +84,7 @@ def test_double_sort_ignores_rows_with_missing_signal_inputs() -> None:
     returns = pd.DataFrame(
         0.01,
         index=pd.date_range("2024-01-06", periods=2, freq="B"),
-        columns=["AAA", "BBB", "CCC"],
+        columns=pd.Index(["AAA", "BBB", "CCC"]),
     )
 
     result = build_size_turnover_double_sort(

@@ -9,7 +9,6 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _frequency_cache_manifest,
     _load_frequency_cache,
     _period_return_metrics,
-    _write_stage_artifact,
     _prepare_frequency_cache,
     _run_capacity_ladder,
     _run_joint_matrix,
@@ -18,17 +17,8 @@ from experiments.style_factors.small_cap_low_turnover_exploration_20260826 impor
     _run_share_ledger_matrix,
     _signal_correlations,
     _write_frequency_cache,
+    _write_stage_artifact,
 )
-
-
-def test_stage_artifact_does_not_overwrite_existing_nonempty_output(tmp_path) -> None:
-    path = tmp_path / "artifact.csv"
-    existing = pd.DataFrame({"value": [1]})
-    existing.to_csv(path, index=False)
-
-    _write_stage_artifact(pd.DataFrame(), path, preserve_existing=True)
-
-    pd.testing.assert_frame_equal(pd.read_csv(path), existing)
 from style_factors.robustness_execution import (
     daily_return_matrix,
     execution_matrices,
@@ -45,6 +35,178 @@ from style_factors.small_cap_low_turnover import (
     round_target_weights_to_lots,
     simulate_long_only_candidates,
 )
+
+
+def test_stage_artifact_does_not_overwrite_existing_nonempty_output(tmp_path) -> None:
+    path = tmp_path / "artifact.csv"
+    existing = pd.DataFrame({"value": [1]})
+    existing.to_csv(path, index=False)
+
+    _write_stage_artifact(pd.DataFrame(), path, preserve_existing=True)
+
+    pd.testing.assert_frame_equal(pd.read_csv(path), existing)
+
+
+def test_turnover_anatomy_evidence_keeps_holdout_descriptive() -> None:
+    from importlib import import_module
+
+    experiment = import_module(
+        "experiments.style_factors.small_cap_low_turnover_exploration_20260826"
+    )
+    build_evidence = experiment._build_turnover_anatomy_evidence
+    dates = pd.bdate_range(end="2024-02-02", periods=170)
+    formation_dates = pd.DatetimeIndex(["2023-12-29", "2024-01-31"])
+    symbols = [f"S{index:02d}" for index in range(60)]
+    daily_rows: list[dict[str, object]] = []
+    for symbol_index, symbol in enumerate(symbols):
+        for day_index, trade_date in enumerate(dates):
+            daily_rows.append(
+                {
+                    "trade_date": trade_date,
+                    "symbol": symbol,
+                    "tr_close": (
+                        10.0 + symbol_index * 0.2 + day_index * 0.01 * (1.0 + symbol_index / 100.0)
+                    ),
+                    "amount": (
+                        np.nan if symbol_index == 0 else 1_000.0 + 5.0 * symbol_index + day_index
+                    ),
+                }
+            )
+    daily_clean = pd.DataFrame(daily_rows)
+    panel_rows: list[dict[str, object]] = []
+    size = np.linspace(-2.0, 2.0, len(symbols))
+    for formation_date in formation_dates:
+        for index, symbol in enumerate(symbols):
+            panel_rows.append(
+                {
+                    "trade_date": formation_date,
+                    "symbol": symbol,
+                    "industry_l1": "A" if index < 30 else "B",
+                    "size_score": size[index],
+                    "lowvol_score": np.cos(index / 5.0),
+                    "signal_low_turnover": np.sin(index / 7.0) - 0.2 * size[index],
+                    "turnover_lagged_mean_60d": 100.0 - index,
+                }
+            )
+    signal_panel = pd.DataFrame(panel_rows)
+    return_matrix = pd.DataFrame(
+        np.tile(np.linspace(-0.001, 0.001, len(symbols)), (len(dates), 1)),
+        index=dates,
+        columns=pd.Index(symbols),
+    )
+
+    diagnostics, anatomy, sequential_sort, residual_panel = build_evidence(
+        signal_panel=signal_panel,
+        daily_clean=daily_clean,
+        return_matrix=return_matrix,
+        formation_dates=formation_dates,
+    )
+
+    assert set(diagnostics["stage"]) == {
+        "raw",
+        "size",
+        "size_lowvol",
+        "size_lowvol_liquidity",
+        "size_lowvol_liquidity_returns",
+    }
+    assert set(anatomy["sample"]) == {
+        "development",
+        "holdout_descriptive",
+        "full_descriptive",
+    }
+    assert anatomy.groupby("sample")["observations"].nunique().eq(1).all()
+    assert {
+        "development_mean_rank_ic",
+        "development_low_turnover_leg_return",
+        "development_high_turnover_leg_return",
+        "development_low_minus_high_return",
+        "mean_cross_sectional_std_ratio",
+    }.issubset(diagnostics.columns)
+    assert {
+        "signal_low_turnover",
+        "signal_low_turnover_residual_size",
+        "signal_low_turnover_residual_size_lowvol",
+        "signal_low_turnover_residual_size_lowvol_liquidity",
+        "signal_low_turnover_residual_size_lowvol_liquidity_returns",
+    }.issubset(residual_panel.columns)
+    assert len(residual_panel) == 120
+    assert sequential_sort["observations"].sum() == 120
+
+
+def test_turnover_anatomy_metadata_marks_holdout_descriptive_only() -> None:
+    from importlib import import_module
+
+    experiment = import_module(
+        "experiments.style_factors.small_cap_low_turnover_exploration_20260826"
+    )
+    metadata = experiment._turnover_anatomy_metadata()
+
+    assert metadata["development_period"] == "2015-01-01 to 2023-12-31"
+    assert metadata["holdout_period"] == "2024-01-01 to 2026-12-31"
+    assert metadata["holdout_usage"] == "descriptive_only"
+    assert metadata["artifacts"] == {
+        "deconfounding": "candidate_turnover_deconfounding.csv",
+        "residual_panel": "candidate_turnover_deconfounding_panel.parquet",
+        "anatomy": "candidate_turnover_anatomy.csv",
+        "sequential_size_sort": "candidate_size_turnover_sequential_sort.csv",
+    }
+
+
+def test_report_includes_turnover_deconfounding_and_anatomy(tmp_path) -> None:
+    from importlib import import_module
+
+    experiment = import_module(
+        "experiments.style_factors.small_cap_low_turnover_exploration_20260826"
+    )
+    diagnostics = pd.DataFrame(
+        {
+            "stage": ["raw", "size_lowvol_liquidity_returns"],
+            "signal_column": [
+                "signal_low_turnover",
+                "signal_low_turnover_residual_size_lowvol_liquidity_returns",
+            ],
+            "control_columns": ["", "size_score|lowvol_score|activity_20d_score"],
+            "non_null_observations": [100, 100],
+            "raw_signal_correlation": [1.0, 0.4],
+            "max_abs_control_correlation": [np.nan, 0.0],
+        }
+    )
+    anatomy = pd.DataFrame(
+        {
+            "sample": ["development", "holdout_descriptive"],
+            "stage": ["raw", "raw"],
+            "signal_column": ["signal_low_turnover", "signal_low_turnover"],
+            "formation_dates": [10, 2],
+            "observations": [1_000, 200],
+            "mean_rank_ic": [0.03, 0.01],
+            "median_rank_ic": [0.02, 0.01],
+            "low_turnover_leg_return": [0.02, 0.01],
+            "high_turnover_leg_return": [-0.01, -0.02],
+            "low_minus_high_return": [0.03, 0.03],
+        }
+    )
+
+    experiment._write_report(
+        tmp_path,
+        summary=pd.DataFrame(),
+        yearly=pd.DataFrame(),
+        periods=pd.DataFrame(),
+        signal_correlations=pd.DataFrame(),
+        turnover_deconfounding=diagnostics,
+        turnover_anatomy=anatomy,
+        robustness=pd.DataFrame(),
+        rebalance_matrix=pd.DataFrame(),
+        share_ledger_matrix=pd.DataFrame(),
+        reconciliation_matrix=pd.DataFrame(),
+        capacity_ladder=pd.DataFrame(),
+        joint_matrix=pd.DataFrame(),
+        metadata={"metadata_file": "exploration_meta.json"},
+    )
+
+    report = (tmp_path / "small_cap_low_turnover_exploration.md").read_text(encoding="utf-8")
+    assert "## Turnover deconfounding ladder" in report
+    assert "## Turnover long/avoidance anatomy" in report
+    assert "holdout_descriptive" in report
 
 
 def test_frequency_cache_prepares_each_requested_frequency_once() -> None:

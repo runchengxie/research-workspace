@@ -26,7 +26,10 @@ This remains an exploration. It is not a strategy-catalog entry and does not tri
 - Ledger reconciliation: identical targets run through a weight-level reference, a frictionless ideal NAV with share semantics, and the fully constrained ledger, plus a one-constraint-at-a-time relaxation ladder (participation, T+1, lot, cost) on the monthly composite; composite and large-cap control are both reconciled so the incremental criterion can be read under each engine.
 - Capital ladder: the monthly raw composite under the fully constrained ledger at 10m, 100m, and 500m CNY research capital, holding participation at 5% so per-name capacity tightens mechanically with size.
 - Joint matrix: four turnover lookback definitions crossed with weekly/biweekly/monthly/quarterly cadences on the raw composite with the weight-level screening engine; this fills the definition × cadence grid that the robustness and rebalance matrices cover only one axis of.
-- Development window: 2015–2023. Fixed holdout: 2024–2026. No parameter was selected from the holdout.
+- Turnover deconfounding ladder: raw low-turnover is residualized sequentially against size, size plus low volatility, lagged traded-amount and Amihud-style liquidity controls, then lagged momentum and reversal controls. Every added proxy control excludes the formation session.
+- Turnover anatomy: report the low-turnover long leg, high-turnover avoidance leg, low-minus-high spread, and rank IC separately for each deconfounding stage on common non-null support across all stages, so apparent signal decay cannot come from changing the stock sample.
+- Size × turnover conditioning: retain the existing independent 5×5 sort and add a sequential 5×5 sort that forms buckets on the existing sector-neutral `size_score` first, then re-ranks raw lagged turnover within each size bucket. This is a within-industry relative-size conditioning test, not a classic global-market-cap sort.
+- Development window: 2015–2023. Fixed holdout: 2024–2026. The holdout is descriptive only and is not used to choose controls, signal definitions, or sort methods.
 
 ## Full-period result
 
@@ -175,6 +178,10 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - `candidate_capacity_ladder.csv`
 - `candidate_joint_matrix.csv`
 - `candidate_size_turnover_double_sort.csv`
+- `candidate_size_turnover_sequential_sort.csv`
+- `candidate_turnover_deconfounding.csv`
+- `candidate_turnover_deconfounding_panel.parquet`
+- `candidate_turnover_anatomy.csv`
 - `candidate_delayed_fill_attribution.csv`
 - `candidate_target_counts.csv`
 - `candidate_signal_panel.parquet`
@@ -190,10 +197,11 @@ It writes the following outputs when given `--data-root` and `--outdir`:
 - The owner native backend now supports the same slippage model in ledger mode and emits a capability receipt, but it remains comparison-only until dates, exits, cash, fills, and costs reconcile with the constrained ledger.
 - The 10 bps cost case is a sensitivity case, not a broker-specific execution model.
 - The loaded reconstructed PIT contract reports that historical revision safety is not complete.
+- The new deconfounding controls are diagnostic proxies for activity, illiquidity, momentum, and reversal. They do not establish a causal mechanism and do not yet include institutional ownership, investor sentiment, margin eligibility, or other investor-composition variables.
 - The experiment does not yet include dynamic capacity, broker-specific fills, or a live paper-trading observation period.
 - The 2024–2026 holdout has now been inspected by several sensitivity matrices in this exploration; it is degraded as a clean final out-of-sample window, and future parameter decisions should be made on the 2015–2023 development window only.
 - No final-OOS parameter selection, strategy registration, or E2 audit was performed.
 
 ## Recommended next step
 
-Do not promote this composite yet. The next decision basis is the constrained ledger with impact enabled: inspect the delay attribution, compare incremental net performance versus both controls, and use the double-sort to test whether low turnover is conditional on small size. Any cadence or definition choice must be justified on the 2015–2023 development window only. Promote the owner backend only after it reproduces these same comparisons and accounting semantics.
+Do not promote this composite yet. Re-run the exploration with the new deconfounding artifacts, then inspect the 2015–2023 sequential size × turnover sort, the staged residual signal decay, and whether the spread comes from the low-turnover long leg or high-turnover avoidance. Treat 2024–2026 as descriptive only. Execution conclusions should still use the constrained ledger with impact enabled, and the owner backend should remain comparison-only until it reproduces the same dates, exits, cash, fills, and cost accounting.
