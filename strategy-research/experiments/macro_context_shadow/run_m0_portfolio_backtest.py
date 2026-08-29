@@ -26,7 +26,7 @@ def summarize_portfolio(daily: Any, *, turnover_bps: float) -> dict[str, Any]:
 
 
 def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[str, Any]:
-    """Backtest M0 using the latest disclosed state and daily equal weights."""
+    """Backtest M0 and M3 using the latest disclosed state and daily weights."""
 
     import duckdb
     import pandas as pd
@@ -48,45 +48,64 @@ def run_backtest(data_root: str | Path, *, turnover_bps: float = 30.0) -> dict[s
       WHERE trade_date BETWEEN '20250101' AND '20260722' AND adj_close > 0
     ), events AS (
       SELECT symbol AS ts_code, CAST(trade_date AS VARCHAR) AS event_date,
-             fund_count_holding_stock_qoq_change AS holder_change
+             fund_count_holding_stock_qoq_change AS holder_change,
+             fund_hold_mv_to_float_mv_qoq_change AS ownership_change
       FROM read_parquet('{features}')
       WHERE trade_date BETWEEN 20250120 AND 20260722
         AND fund_count_holding_stock_qoq_change IS NOT NULL
+        AND fund_hold_mv_to_float_mv_qoq_change IS NOT NULL
         AND CAST(available_date AS BIGINT) <= trade_date
     ), known AS (
-      SELECT px.trade_date, px.ts_code, px.fwd1, events.holder_change
+      SELECT px.trade_date, px.ts_code, px.fwd1,
+             events.holder_change, events.ownership_change
       FROM px ASOF JOIN events
         ON px.ts_code = events.ts_code AND px.trade_date >= events.event_date
     ), ranked AS (
-      SELECT *, NTILE(5) OVER (PARTITION BY trade_date ORDER BY holder_change) AS holder_q
+      SELECT *,
+             NTILE(5) OVER (PARTITION BY trade_date ORDER BY holder_change) AS holder_q,
+             NTILE(5) OVER (PARTITION BY trade_date ORDER BY ownership_change) AS ownership_q
       FROM known WHERE holder_change IS NOT NULL AND fwd1 IS NOT NULL
     )
-    SELECT trade_date, ts_code, fwd1 AS next_return
+    SELECT 'M0' AS model, trade_date, ts_code, fwd1 AS next_return
     FROM ranked WHERE holder_q = 5
-    ORDER BY trade_date, ts_code
+    UNION ALL
+    SELECT 'M3' AS model, trade_date, ts_code, fwd1 AS next_return
+    FROM ranked WHERE holder_q = 5 AND ownership_q = 5
+    ORDER BY model, trade_date, ts_code
     """
     selected = duckdb.connect().execute(query).fetchdf()
     if selected.empty:
         return {"data_root": str(root), "model": "M0", "periods": {}}
     selected["trade_date"] = pd.to_datetime(selected["trade_date"])
-    selected_sets = {
-        date: set(group["ts_code"]) for date, group in selected.groupby("trade_date", sort=True)
-    }
-    daily = selected.groupby("trade_date")["next_return"].mean().rename("gross_return").to_frame()
-    previous: set[str] = set()
-    turnovers: list[tuple[Any, float]] = []
-    for date, current in selected_sets.items():
-        turnover = 1.0 - len(current & previous) / max(len(current), len(previous), 1)
-        turnovers.append((date, turnover))
-        previous = current
-    daily["turnover"] = pd.Series(dict(turnovers))
-    periods = {
-        str(year): summarize_portfolio(group, turnover_bps=turnover_bps)
-        for year, group in daily.groupby(daily.index.year)
-    }
+    periods: dict[str, Any] = {}
+    for model, model_frame in selected.groupby("model", sort=True):
+        selected_sets = {
+            date: set(group["ts_code"])
+            for date, group in model_frame.groupby("trade_date", sort=True)
+        }
+        daily = (
+            model_frame.groupby("trade_date")["next_return"]
+            .mean()
+            .rename("gross_return")
+            .to_frame()
+        )
+        previous: set[str] = set()
+        turnovers: list[tuple[Any, float]] = []
+        for date, current in selected_sets.items():
+            turnover = 1.0 - len(current & previous) / max(len(current), len(previous), 1)
+            turnovers.append((date, turnover))
+            previous = current
+        daily["turnover"] = pd.Series(dict(turnovers))
+        periods[model] = {
+            str(year): summarize_portfolio(group, turnover_bps=turnover_bps)
+            for year, group in daily.groupby(daily.index.year)
+        }
     return {
         "data_root": str(root),
-        "model": "M0_holder_count_change_top_quintile",
+        "models": {
+            "M0": "holder_count_change_top_quintile",
+            "M3": "holder_count_change_and_ownership_change_top_quintile",
+        },
         "strict_disclosure_filter": "available_date <= trade_date",
         "portfolio_rule": "latest_known_state_equal_weight_top_quintile",
         "periods": periods,

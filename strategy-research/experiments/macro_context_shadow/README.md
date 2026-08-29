@@ -86,10 +86,11 @@ before testing C0/C1/C2 rankers.
 
 ## M0 portfolio shadow
 
-The M0-only portfolio shadow uses the latest disclosed holder-count-change state,
-selects the top quintile each day, equal-weights the selected names, and charges
-the configured one-way turnover cost. It is deliberately separate from the
-pooled event scan:
+The M0/M3 portfolio shadow uses the latest disclosed state, selects the top
+quintile each day, equal-weights the selected names, and charges the configured
+one-way turnover cost. M0 ranks holder-count change; M3 requires both holder-count
+change and ownership-ratio change to be in the top quintile. It is deliberately
+separate from the pooled event scan:
 
 ```bash
 PYTHONPATH=strategy-research \
@@ -99,9 +100,17 @@ PYTHONPATH=strategy-research \
   --output /tmp/m0-portfolio.json
 ```
 
-The 2026-08-29 exploratory run produced gross/net annualized returns of 53.3% /
-45.5% in 2025 and -31.2% / -35.1% in 2026, with mean daily turnover of 6.9% /
-7.6%. These figures are not promotion evidence: the history is short, labels
-overlap, the fund source lacks a complete historical vintage archive, and the
-portfolio rule still needs benchmark-relative attribution, capacity and a
-frozen final-OOS protocol.
+The 2026-08-29 exploratory run produced these gross/net annualized returns:
+
+```text
+             2025 gross/net       2026 gross/net
+M0           52.7% / 44.8%        -31.2% / -35.0%
+M3           46.6% / 37.8%        -27.8% / -32.6%
+```
+
+Mean daily turnover was 7.0%/7.6% for M0 and 8.2%/9.1% for M3 in 2025/2026.
+M3 therefore adds turnover without improving the 2025 result; both models are
+negative in 2026. These figures are not promotion evidence: the history is
+short, labels overlap, the fund source lacks a complete historical vintage
+archive, and the portfolio rule still needs benchmark-relative attribution,
+capacity and a frozen final-OOS protocol.
