@@ -11,6 +11,7 @@
 | `daily_watch20_fundamental_shadow/` | DailyWatch20 基本面 shadow 验证 | 探索完成 |
 | `slow_volume_verification/` | slow-volume campaign 产出校验与对账 | 一次性验证 |
 | `style_factors/` | 风格因子全历史约束验证、市场状态、价值周期等 | 探索文档 |
+| `microcap_robustness/` | A 股微盘剔除、EW/VW、buffer、容量与机制分解协议 | 进行中 |
 | `strategy_direction/` | 周度 vs 日度策略方向探索 | 探索完成 |
 | `reproducibility/` | D11-H5 打包辅助、stateful-staggered 复现 | 一次性工具 |
 | `qlib_pilot/` | qlib XGBModel 训练/评估可行性验证 | 进行中 |
