@@ -34,6 +34,8 @@ SUBMODULE_DIRS = {
     "portfolio-backtester",
     "quant-execution-engine",
     "strategy-app",
+    "deep-learning-tick-data-prediction",
+    "strategy-research",
 }
 EXCLUDED_PARTS = {
     ".git",

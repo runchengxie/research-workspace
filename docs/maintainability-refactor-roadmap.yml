@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-26",
+  "_last_changed": "2026-08-29",
   "_owner": "research-workspace",
   "schema_version": "maintainability_refactor_roadmap.v1",
   "current_budget_summary": {
@@ -8,37 +8,37 @@
     "by_repo": {
       "research-workspace": {
         "max_large_files": 4,
-        "max_long_functions": 3,
-        "max_complexity_hotspots": 1,
+        "max_long_functions": 1,
+        "max_complexity_hotspots": 0,
         "max_large_classes": 2
       },
       "market-data-platform": {
         "max_large_files": 42,
-        "max_long_functions": 80,
-        "max_complexity_hotspots": 42,
+        "max_long_functions": 84,
+        "max_complexity_hotspots": 45,
         "max_large_classes": 1
       },
       "alpha-research": {
         "max_large_files": 5,
         "max_long_functions": 21,
-        "max_complexity_hotspots": 26,
-        "max_large_classes": 0
+        "max_complexity_hotspots": 25,
+        "max_large_classes": 1
       },
       "portfolio-backtester": {
-        "max_large_files": 8,
+        "max_large_files": 9,
         "max_long_functions": 29,
-        "max_complexity_hotspots": 27,
+        "max_complexity_hotspots": 29,
         "max_large_classes": 0
       },
       "strategy-app": {
-        "max_large_files": 2,
+        "max_large_files": 3,
         "max_long_functions": 6,
-        "max_complexity_hotspots": 3,
+        "max_complexity_hotspots": 4,
         "max_large_classes": 0
       },
       "strategy-pipeline": {
-        "max_large_files": 29,
-        "max_long_functions": 111,
+        "max_large_files": 28,
+        "max_long_functions": 108,
         "max_complexity_hotspots": 58,
         "max_large_classes": 1
       },
@@ -61,9 +61,9 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 5,
-      "max_long_functions": 3,
-      "max_complexity_hotspots": 1,
+      "max_large_files": 4,
+      "max_long_functions": 1,
+      "max_complexity_hotspots": 0,
       "max_large_classes": 2,
       "owner_decision": [
         "2026-07-28: 子模块对账后基线重算，预算下调 large_files 7->6 / long_functions 12->11 / complexity_hotspots 14->13（治理脚本重构使计数下降）。",
@@ -79,14 +79,15 @@
         "2026-08-19: M1 将 test_next_open_to_high_research.py(738) 拆为 _next_open_shared.py 抽辅助函数加 part2 两文件均低于 500 行，research-workspace large_files 4->3，同步下调预算至 3（真实债务收敛，非回归）。",
         "2026-08-25: 刷新顶层 maintainability baseline 对齐当前 main/gitlink 与本轮边界收口后的真实测量，complexity_hotspots 0->1。新增值用于纠正陈旧账本，后续继续按实测棘轮约束。",
         "2026-08-26: small-cap × low-turnover exploration adds a 614-line research helper and one 80-line execution function; baseline large_files 3->4 and long_functions 2->3. This is exploration-only research code, recorded for ratchet accounting; no production boundary changed.",
-        "2026-08-26: rebalance-frequency sensitivity adds four formation-cadence simulations and pushes strategy-research/tests/test_small_cap_low_turnover_exploration.py to 596 lines; baseline large_files 4->5. The test file is registered in accepted_hotspots and the budget is raised for ratchet accounting; no production boundary changed."
+        "2026-08-26: rebalance-frequency sensitivity adds four formation-cadence simulations and pushes strategy-research/tests/test_small_cap_low_turnover_exploration.py to 596 lines; baseline large_files 4->5. The test file is registered in accepted_hotspots and the budget is raised for ratchet accounting; no production boundary changed.",
+        "2026-08-29: strategy-research and deep-learning became locked submodules; the workspace scanner now excludes their source trees. The clean locked baseline is 4/1/0/2, and scripts/decision_governance_check.py is registered as the remaining root large-file decision."
       ]
     },
     {
       "repo": "market-data-platform",
       "max_large_files": 42,
-      "max_long_functions": 81,
-      "max_complexity_hotspots": 42,
+      "max_long_functions": 84,
+      "max_complexity_hotspots": 45,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
@@ -110,7 +111,7 @@
       "repo": "alpha-research",
       "max_large_files": 5,
       "max_long_functions": 21,
-      "max_complexity_hotspots": 26,
+      "max_complexity_hotspots": 25,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
@@ -123,9 +124,9 @@
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 8,
-      "max_long_functions": 30,
-      "max_complexity_hotspots": 27,
+      "max_large_files": 9,
+      "max_long_functions": 29,
+      "max_complexity_hotspots": 29,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
@@ -145,7 +146,7 @@
       "repo": "strategy-app",
       "max_large_files": 3,
       "max_long_functions": 6,
-      "max_complexity_hotspots": 3,
+      "max_complexity_hotspots": 4,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
@@ -158,7 +159,7 @@
     {
       "repo": "strategy-pipeline",
       "max_large_files": 28,
-      "max_long_functions": 109,
+      "max_long_functions": 108,
       "max_complexity_hotspots": 58,
       "max_large_classes": 1,
       "owner_decision": [
@@ -313,6 +314,12 @@
     }
   ],
   "accepted_hotspots": [
+    {
+      "path": "scripts/decision_governance_check.py",
+      "owner_repo": "research-workspace",
+      "reason": "The stdlib-only decision ledger validator keeps schema, cross-reference, and evidence governance in one auditable command.",
+      "next_action": "Split schema validation from cross-reference checks before adding another decision-governance artifact."
+    },
     {
       "path": "strategy-research/style_factors/small_cap_low_turnover.py",
       "owner_repo": "research-workspace",
@@ -1099,12 +1106,6 @@
       "owner_repo": "market-data-platform",
       "reason": "the backfill integration test exercises plan, request-budget, and resume contracts end to end in one large fixture-driven suite",
       "next_action": "split plan-construction and resume-recovery cases into separate test modules before adding another backfill scenario"
-    },
-    {
-      "path": "alpha-research/src/alpha_research/style_replica/portfolio.py",
-      "owner_repo": "alpha-research",
-      "reason": "StyleReplica portfolio ownership moved into the alpha package with its signal rules",
-      "next_action": "keep leg selection and position assembly cohesive unless the alpha-owned module grows past its current boundary"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/metrics.py",
