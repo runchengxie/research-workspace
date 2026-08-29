@@ -204,6 +204,15 @@ Search for every moved filename, old `scripts/research/` path, and `strategy_pip
 
 - [ ] **Step 2: Run all relevant verification**
 
+The owner and pipeline suites, focused workspace boundary suites, and
+`workspace_doctor` pass. The root suite currently reports three pre-existing
+workspace-accounting failures: the maintainability evidence is stale relative
+to the checked-out submodule sources, one accepted-hotspot path was removed in
+the dirty alpha checkout, and the owner-native namespace manifest does not
+match the dirty alpha/market-data gitlinks. These must be reconciled only after
+those submodule changes are intentionally committed and pinned; this plan does
+not overwrite them.
+
 Run:
 
 ```bash
@@ -217,6 +226,6 @@ python scripts/workspace_doctor.py
 
 Confirm the private repo is private, the parent gitlink points to the pushed private commit, all moved files exist exactly once, and public smoke checks do not require private source checkout.
 
-- [ ] **Step 4: Commit and push repository pointers**
+- [x] **Step 4: Commit and push repository pointers**
 
 Push private repo changes, owner-repo changes, pipeline changes, and finally the parent workspace pointer. Preserve unrelated dirty changes in other submodules.
