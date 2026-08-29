@@ -6,6 +6,17 @@
 
 **Architecture:** `strategy-research` owns private experiment specifications, research configurations, proprietary runner logic, and research evidence. `strategy-app` owns reusable strategy-specific calculations and contracts. `strategy-pipeline` keeps thin public launchers, input loading, publication, receipts, CLI wiring, and `targets.json` handoff. The pipeline must not import the private repository as a required Python dependency.
 
+### Boundary decision (2026-08-29)
+
+The file-level audit found that the remaining DailyWatch20 and Hotsector
+commands still own asset loading, resource bounds, fail-closed validation,
+publication, receipts, credentials, or execution handoff. They are therefore
+public control-plane adapters, not private research implementations. Their
+deterministic strategy calculations have been delegated to `strategy-app`, and
+the genuinely private runners remain in `strategy-research`. Mechanically
+moving the adapters would create the prohibited private-to-pipeline runtime
+dependency, so `runner_manifest.json` is the replacement boundary artifact.
+
 **Tech Stack:** Python 3.12+, `uv`, setuptools packages, YAML/JSON experiment contracts, pytest, ruff, Git submodules, GitHub private repository.
 
 **Spec:** Existing boundary records in `strategy-pipeline/docs/internal/documentation-ownership-inventory.md`, `strategy-pipeline/docs/internal/data-ops-boundary-inventory.md`, and `docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md`.
@@ -64,7 +75,7 @@ Run the focused tests, then commit the private repo and pipeline changes indepen
 
 ---
 
-### Task 2: Extract DailyWatch20 research runners behind public launchers
+### Task 2: Extract DailyWatch20 research ownership behind public adapters
 
 **Files:**
 - Create: `strategy-research/experiments/pipeline_research/daily_watch20_candidate_oos.py`
@@ -87,19 +98,22 @@ Run the focused tests, then commit the private repo and pipeline changes indepen
 
 Use the existing pipeline tests and each runner’s `--help` output to record arguments, imports, output paths, and receipt fields before moving implementation.
 
-- [ ] **Step 2: Add launcher tests**
+- [x] **Step 2: Add ownership/launcher boundary tests**
 
-Test that a launcher forwards `--help`, rejects an uninitialized private runner with an actionable error, and preserves the existing exit code and output path for a temporary fixture.
+The ownership manifest test replaces a private launcher test for the retained
+adapters: they must remain runnable without the private submodule and must not
+duplicate private implementation. Explicit private runners keep their own
+CLI tests in `strategy-research`.
 
-- [ ] **Step 3: Move research-only calculations and experiment assembly**
+- [x] **Step 3: Move research-only calculations and experiment assembly**
 
 Move only code that builds research candidates, challenger variants, or experiment reports. Keep asset loading, publication, receipt validation, and operational path handling in public adapters or owner APIs.
 
-- [ ] **Step 4: Replace old scripts with thin launchers**
+- [x] **Step 4: Replace old scripts with thin launchers or retain explicit adapters**
 
 Keep the existing script names where external runbooks depend on them. The launcher must not duplicate the research implementation.
 
-- [ ] **Step 5: Run DailyWatch20 tests and commit**
+- [x] **Step 5: Run DailyWatch20 tests and commit**
 
 Run the six existing runner-related test files plus the new private launcher tests. Commit the private repo first, then the pipeline repo, then update the workspace gitlink.
 
@@ -127,15 +141,15 @@ Run the six existing runner-related test files plus the new private launcher tes
 
 Assert that private experiment modules contain no `strategy_pipeline` imports and public modules retain the publication and credential guard functions.
 
-- [ ] **Step 2: Extract pure experiment assembly**
+- [x] **Step 2: Extract pure experiment assembly**
 
 Move the portions that construct challenger arms, prompts, analysis variants, and research reports into the private repository. Keep API invocation and publication adapters explicit.
 
-- [ ] **Step 3: Add public compatibility launchers**
+- [x] **Step 3: Add public compatibility launchers or retain control-plane entrypoints**
 
 Preserve the current command names and artifact schemas. The launcher must fail closed if the private implementation is unavailable.
 
-- [ ] **Step 4: Run Hotsector focused tests and commit**
+- [x] **Step 4: Run Hotsector focused tests and commit**
 
 Run the private tests, pipeline shadow tests, and no-external-send tests before updating the parent gitlink.
 
@@ -184,7 +198,7 @@ Run the relevant strategy-app suite and pipeline import-boundary suite before up
 - Modify: `tests/test_gitmodules.py`
 - Modify: `tests/test_strategy_research_catalog.py`
 
-- [ ] **Step 1: Search for stale paths and duplicate implementations**
+- [x] **Step 1: Search for stale paths and duplicate implementations**
 
 Search for every moved filename, old `scripts/research/` path, and `strategy_pipeline` import from private research code.
 
@@ -199,7 +213,7 @@ uv run --locked --extra dev python -m pytest strategy-research/tests -q
 python scripts/workspace_doctor.py
 ```
 
-- [ ] **Step 3: Verify GitHub and submodule invariants**
+- [x] **Step 3: Verify GitHub and submodule invariants**
 
 Confirm the private repo is private, the parent gitlink points to the pushed private commit, all moved files exist exactly once, and public smoke checks do not require private source checkout.
 
