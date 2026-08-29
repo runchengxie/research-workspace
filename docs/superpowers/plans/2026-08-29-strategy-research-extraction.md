@@ -202,16 +202,13 @@ Run the relevant strategy-app suite and pipeline import-boundary suite before up
 
 Search for every moved filename, old `scripts/research/` path, and `strategy_pipeline` import from private research code.
 
-- [ ] **Step 2: Run all relevant verification**
+- [x] **Step 2: Run all relevant verification**
 
 The owner and pipeline suites, focused workspace boundary suites, and
-`workspace_doctor` pass. The root suite currently reports three pre-existing
-workspace-accounting failures: the maintainability evidence is stale relative
-to the checked-out submodule sources, one accepted-hotspot path was removed in
-the dirty alpha checkout, and the owner-native namespace manifest does not
-match the dirty alpha/market-data gitlinks. These must be reconciled only after
-those submodule changes are intentionally committed and pinned; this plan does
-not overwrite them.
+`workspace_doctor` pass. The full root suite passes in a clean worktree at the
+locked submodule pointers (303 passed, one existing FutureWarning). The active
+checkout also contains separate uncommitted alpha/market-data work; it remains
+untouched and is not used as release evidence.
 
 Run:
 
