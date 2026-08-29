@@ -6,6 +6,33 @@
 
 ## Fund context C4
 
+### Fund PIT audit
+
+The reproducible audit is separate from the return experiment and should be run
+before interpreting any fund-only result:
+
+```bash
+PYTHONPATH=strategy-research \
+  uv run --no-project --with duckdb --with pandas \
+  python -m experiments.macro_context_shadow.fund_pit_audit \
+  --data-root "$DATA_PLATFORM_ROOT" --output /tmp/fund-pit-audit.json
+```
+
+The 2026-08-29 audit found 16,725,952 raw rows, 20,430 funds, 7,305 symbols and
+47 report periods. The derived feature asset passed the publication-date PIT
+checks: 0 missing PIT dates, 0 invalid date order, 0 duplicate symbol/trade-date
+rows, and 0 rows whose available date was not the next available trade date.
+The raw asset contains 197 extra rows at its nominal grain: 34 are exact duplicate
+rows and 163 duplicate keys contain differing portfolio fields. The latter needs a
+provider-side deduplication/version-selection rule in `market-data-platform`; it is
+an ingestion-quality issue, not evidence of an economic signal.
+
+The audit deliberately reports `pit_status=publication_date_pit` and
+`revision_safe=false`. The current TuShare backfill preserves `ann_date` and the
+derived one-trading-day availability rule, but it does not preserve a historical
+retrieval/vintage archive for each observation. Fund-only findings therefore
+remain exploration evidence and cannot be promoted as revision-safe Alpha.
+
 基金特征来自 `market-data-platform` 的 `fund_portfolio_features` 与
 `fund_top10_portfolio_features`。研究层只接受已经按 `available_date` 做过
 as-of 过滤的行；`fund_context.build_fund_context_features` 不会自动前填或
