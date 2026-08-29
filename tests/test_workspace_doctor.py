@@ -39,6 +39,8 @@ class WorkspaceDoctorTest(unittest.TestCase):
                 "portfolio-backtester": "portfolio-backtester",
                 "quant-execution-engine": "quant-execution-engine",
                 "strategy-app": "strategy-app",
+                "deep-learning-tick-data-prediction": "deep-learning-tick-data-prediction",
+                "strategy-research": "strategy-research",
             },
             submodules,
         )

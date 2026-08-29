@@ -154,7 +154,7 @@ import direction、source layout 与跨仓 private API 门禁均已通过。`wor
   再决定 owner 和迁移批次。
 - SA-7 原候选池从数据层迁入 strategy-app 的建议撤销。2026-08-20 复核确认 PIT candidate/universe
   数据资产集中在 `market-data-platform/research_views` 符合数据 owner 边界，策略层只保留配置或桥接。
-- SA-14 已完成：`strategy-research` 明确是 superproject tracked 目录，不加入 `.gitmodules`。
+- SA-14 已完成：`strategy-research` 作为私有仓库加入 `.gitmodules`，由 superproject gitlink 锁定；公开工作区可在不初始化它的情况下运行 smoke 检查。
 - SA-4 已收口：StyleReplica 日常 pipeline 通过 `market_data_platform.research_views` 的 published/current owner API 解析日线与证券信息，不再认识 `daily_clean.parquet`、`daily_basic.parquet`、`instruments.parquet`、`industry.parquet` 等历史物理布局。
 - SA-15 已完成三批低耦合归位：Numeric v2 ranking 进入 `alpha-research`，DeepSeek V4 ranking/stability kernel 进入 `alpha-research`，fixed-slot holdings overlay kernel 进入 `portfolio-backtester`。strategy-app 保留 campaign identity、PIT/producer validation、session/evidence 和组合编排适配。剩余 legacy stability、session challenger、three-arm 已进入 definition-level ownership ratchet，预算只能下降。
 - StyleReplica 采用 [ADR-0007](adr/0007-style-replica-ownership.md)：alpha 只扩展 factor/score/signal，策略身份参数归 `strategy-app`，buffer/replacement/overlap/final weights 等组合机制归 `portfolio-backtester`。当前 `alpha_research.style_replica.portfolio` 的 14 个定义登记为迁移债务，target 为 0。

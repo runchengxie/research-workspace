@@ -83,9 +83,8 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
         f"uv run --project {strategy_project} --extra dev python -m pytest {tests_dir} -q".split()
     )
     research_layer = Path(cwd) / "strategy-research"
-    # strategy-research is a directly-tracked ordinary directory with its own
-    # pyproject.toml, uv.lock and local path sources for the owner packages
-    # (alpha-research, portfolio-backtester, research-contracts). Its tests run
+    # strategy-research is a private submodule with its own pyproject.toml,
+    # uv.lock and local path sources for the owner packages. Its tests run
     # inside that project, so no PYTHONPATH or --with injection is needed.
     research_tests = tuple(
         (
