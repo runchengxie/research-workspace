@@ -19,3 +19,7 @@
 [submodule "deep-learning-tick-data-prediction"]
 	path = deep-learning-tick-data-prediction
 	url = https://github.com/runchengxie/deep-learning-tick-data-prediction.git
+[submodule "strategy-research"]
+	path = strategy-research
+	url = https://github.com/runchengxie/strategy-research.git
+	branch = main
