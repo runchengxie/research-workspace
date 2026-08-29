@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from style_factors.liquidity_signals import build_liquidity_control_panel
+from style_factors.microcap_robustness import build_variant_liquidity_controls
 
 
 def test_liquidity_controls_filter_before_cross_sectional_standardization() -> None:
@@ -32,21 +32,19 @@ def test_liquidity_controls_filter_before_cross_sectional_standardization() -> N
     daily = pd.DataFrame(daily_rows)
     basics = pd.DataFrame(basic_rows)
     keep = symbols[30:]
-    formation_universe = pd.DataFrame(
-        {"trade_date": formation, "symbol": keep}
-    )
+    variants = {
+        0.0: pd.DataFrame({"trade_date": formation, "symbol": symbols}),
+        0.3: pd.DataFrame({"trade_date": formation, "symbol": keep}),
+    }
 
-    full = build_liquidity_control_panel(
+    controls = build_variant_liquidity_controls(
         daily,
         basics,
         pd.DatetimeIndex([formation]),
+        variants,
     )
-    filtered = build_liquidity_control_panel(
-        daily,
-        basics,
-        pd.DatetimeIndex([formation]),
-        formation_universe=formation_universe,
-    )
+    full = controls[0.0]
+    filtered = controls[0.3]
 
     assert set(filtered["symbol"]) == set(keep)
     assert abs(filtered["size_score"].mean()) < 1e-10
