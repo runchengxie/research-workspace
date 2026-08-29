@@ -1,0 +1,48 @@
+{
+  "schema_version": "research_spec.v1",
+  "experiment_id": "microcap_robustness",
+  "title": "A股微盘污染与小盘低换手稳健性验证",
+  "market": "a_share",
+  "status": "in_progress",
+  "universe": {
+    "description": "PIT A股形成日 hard-eligible reference universe，按总市值剔除 0/10/20/30% 最小股票",
+    "membership": "a_share_current"
+  },
+  "data": {
+    "source": "platform_assets",
+    "start": "2015-01-01",
+    "end": "2026-07-31",
+    "pit": true
+  },
+  "prediction": {
+    "target": "factor_and_candidate_forward_returns",
+    "horizon": "monthly_primary",
+    "task": "diagnostic"
+  },
+  "model": {
+    "name": "n/a",
+    "training": "n/a"
+  },
+  "portfolio": {
+    "construction": "factor_long_short_and_long_only"
+  },
+  "cost": {
+    "cost_bps": [0, 10, 20, 30]
+  },
+  "benchmark": {
+    "cohorts": [
+      "microcap_exclusion",
+      "EW_VW",
+      "buffer",
+      "large_cap_control"
+    ]
+  },
+  "evaluation": {
+    "oos_protocol": [
+      "development_2015_2023",
+      "final_holdout_2024_plus"
+    ],
+    "final_oos_reserved": true
+  },
+  "evidence_refs": []
+}
