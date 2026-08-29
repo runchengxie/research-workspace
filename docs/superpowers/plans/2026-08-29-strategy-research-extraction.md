@@ -36,11 +36,11 @@
 - `strategy-pipeline.config_utils.resolve_pipeline_config()` continues resolving public presets and accepts an explicit path under `strategy-research/experiments/configs/` when the submodule is initialized.
 - A missing private submodule produces a clear `FileNotFoundError` naming the initialization command, rather than silently falling back to a public config.
 
-- [ ] **Step 1: Write the boundary tests**
+- [x] **Step 1: Write the boundary tests**
 
 Add tests that assert public presets resolve without the private submodule, an initialized private config resolves by explicit path, and an absent private path fails with `git submodule update --init strategy-research` in the error.
 
-- [ ] **Step 2: Run the tests to verify the new contract fails**
+- [x] **Step 2: Run the tests to verify the new contract fails**
 
 Run:
 
@@ -50,15 +50,15 @@ uv run --project strategy-pipeline --extra dev python -m pytest tests/test_priva
 
 Expected: the new private-config assertions fail before implementation.
 
-- [ ] **Step 3: Add the private manifest and resolver behavior**
+- [x] **Step 3: Add the private manifest and resolver behavior**
 
 Keep `configs/presets/` and `configs/catalog.csv` public. Register only active research variants, diagnostics, and sweeps in the private manifest. Make the resolver distinguish public aliases from explicit private paths and never search the private directory implicitly for a public alias.
 
-- [ ] **Step 4: Update config documentation and references**
+- [x] **Step 4: Update config documentation and references**
 
 Document the private config root, initialization command, and the rule that `config.used.yml` is copied into each run directory so later audit does not require the submodule.
 
-- [ ] **Step 5: Run the focused tests and commit each repository separately**
+- [x] **Step 5: Run the focused tests and commit each repository separately**
 
 Run the focused tests, then commit the private repo and pipeline changes independently before updating the parent gitlink.
 
@@ -83,7 +83,7 @@ Run the focused tests, then commit the private repo and pipeline changes indepen
 - Each public launcher resolves the private runner by an explicit submodule path, forwards arguments, and exits with a clear private-submodule error when unavailable.
 - Input bundles, owner API calls, output schemas, publication receipts, and fail-closed checks retain their existing contracts.
 
-- [ ] **Step 1: Characterize current behavior**
+- [x] **Step 1: Characterize current behavior**
 
 Use the existing pipeline tests and each runner’s `--help` output to record arguments, imports, output paths, and receipt fields before moving implementation.
 
@@ -123,7 +123,7 @@ Run the six existing runner-related test files plus the new private launcher tes
 - Public modules own credential boundaries, external-call controls, append-only artifact publication, validation, and operational receipts.
 - No private module writes to a production target path or calls the execution engine directly.
 
-- [ ] **Step 1: Add ownership tests**
+- [x] **Step 1: Add ownership tests**
 
 Assert that private experiment modules contain no `strategy_pipeline` imports and public modules retain the publication and credential guard functions.
 
@@ -154,19 +154,19 @@ Run the private tests, pipeline shadow tests, and no-external-send tests before 
 - Strategy-app public APIs own deterministic ranking, feature-combination, campaign-contract, and strategy-policy calculations.
 - Strategy-pipeline imports only public strategy-app APIs and retains orchestration and publication facades where needed for compatibility.
 
-- [ ] **Step 1: Generate a duplicate and import-boundary inventory**
+- [x] **Step 1: Generate a duplicate and import-boundary inventory**
 
 Compare function definitions and imports in the pipeline strategy modules against `strategy_app` and `alpha_research`. Do not move code solely because a filename contains `strategy`.
 
-- [ ] **Step 2: Add an ownership regression test**
+- [x] **Step 2: Add an ownership regression test**
 
 Fail if a new pure strategy calculation is added under `strategy_pipeline` when the corresponding owner API already exists.
 
-- [ ] **Step 3: Move only duplicated pure calculations**
+- [x] **Step 3: Move only duplicated pure calculations**
 
 Use a public owner API and preserve compatibility imports only where existing callers require them. Leave output schemas and runtime guards in the pipeline.
 
-- [ ] **Step 4: Run owner and pipeline tests, then commit**
+- [x] **Step 4: Run owner and pipeline tests, then commit**
 
 Run the relevant strategy-app suite and pipeline import-boundary suite before updating the workspace version matrix.
 
@@ -206,4 +206,3 @@ Confirm the private repo is private, the parent gitlink points to the pushed pri
 - [ ] **Step 4: Commit and push repository pointers**
 
 Push private repo changes, owner-repo changes, pipeline changes, and finally the parent workspace pointer. Preserve unrelated dirty changes in other submodules.
-
