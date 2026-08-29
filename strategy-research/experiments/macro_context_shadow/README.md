@@ -83,3 +83,25 @@ are strict PIT rows. The observed 20-day means are `down=1.98%`, `flat=4.25%`,
 and `up=2.59%`; these are descriptive results, not evidence of tradable Alpha.
 The next stock-level experiment must add company exposures and PIT fundamentals
 before testing C0/C1/C2 rankers.
+
+## M0 portfolio shadow
+
+The M0-only portfolio shadow uses the latest disclosed holder-count-change state,
+selects the top quintile each day, equal-weights the selected names, and charges
+the configured one-way turnover cost. It is deliberately separate from the
+pooled event scan:
+
+```bash
+PYTHONPATH=strategy-research \
+  uv run --no-project --with duckdb --with pandas \
+  python -m experiments.macro_context_shadow.run_m0_portfolio_backtest \
+  --data-root "$DATA_PLATFORM_ROOT" --turnover-bps 30 \
+  --output /tmp/m0-portfolio.json
+```
+
+The 2026-08-29 exploratory run produced gross/net annualized returns of 53.3% /
+45.5% in 2025 and -31.2% / -35.1% in 2026, with mean daily turnover of 6.9% /
+7.6%. These figures are not promotion evidence: the history is short, labels
+overlap, the fund source lacks a complete historical vintage archive, and the
+portfolio rule still needs benchmark-relative attribution, capacity and a
+frozen final-OOS protocol.
