@@ -31,6 +31,7 @@ def _compute_clean_factors(
     market_data: RobustnessMarketData,
     *,
     data_root: Path,
+    formation_universe: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     clean = market_data.daily_clean
     factor_daily = clean[["trade_date", "symbol", "tr_close", "pct_chg", "amount"]].rename(
@@ -70,6 +71,7 @@ def _compute_clean_factors(
         sw_membership=sw_membership if not sw_membership.empty else None,
         rebalance_dates=rebalance_dates,
         formation_fundamentals=market_data.pit_fundamentals,
+        formation_universe=formation_universe,
     )
 
 
