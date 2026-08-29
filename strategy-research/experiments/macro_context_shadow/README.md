@@ -127,12 +127,12 @@ PYTHONPATH=strategy-research \
   --output /tmp/m0-portfolio.json
 ```
 
-The 2026-08-29 exploratory run produced these gross/net annualized returns:
+The latest rerun on 2026-08-29 produced these gross/net annualized returns:
 
 ```text
              2025 gross/net       2026 gross/net
-M0           52.7% / 44.8%        -31.2% / -35.0%
-M3           46.6% / 37.8%        -27.8% / -32.6%
+M0           53.7% / 45.7%        -30.7% / -34.6%
+M3           48.7% / 39.8%        -27.7% / -32.4%
 ```
 
 Mean daily turnover was 7.0%/7.6% for M0 and 8.2%/9.1% for M3 in 2025/2026.
@@ -146,25 +146,25 @@ capacity and a frozen final-OOS protocol.
 
 An equal-weight return of the same clean A-share price universe was used as a
 descriptive matched benchmark. With compounding and 30bps turnover cost, M0's
-active total return was -0.3 percentage points in 2025 and -7.3 percentage
-points in 2026. M3 was -4.1 and -5.7 percentage points respectively. The
+active total return was -0.1 percentage points in 2025 and -7.5 percentage
+points in 2026. M3 was -3.9 and -6.0 percentage points respectively. The
 signals therefore currently look more like time-varying market/style exposure
 than demonstrated standalone Alpha.
 
-The benchmark-relative HAC t-statistic for M0 active daily returns was -0.12 in
-2025 and -2.11 in 2026; M3 was -0.74 and -1.58. M0's 2026 net maximum drawdown
-was -27.8%. These diagnostics use 20 lags to account for serial dependence and
+The benchmark-relative HAC t-statistic for M0 active daily returns was -0.07 in
+2025 and -2.03 in 2026; M3 was -0.69 and -1.59. M0's 2026 net maximum drawdown
+was -27.6%. These diagnostics use 20 lags to account for serial dependence and
 are descriptive evidence for the shadow only, not a formal promotion decision.
 
 Treating 2026 as a frozen final-OOS period, the 20-day block bootstrap of net
 active daily returns gave M0 a 95% mean interval of approximately
-`[-0.128%, -0.010%]` and a probability of a positive mean of `0.75%`. M3's
-corresponding interval was `[-0.111%, +0.004%]`, with positive-mean probability
-`3.4%`. This is a negative final-OOS signal, not a basis for production use.
+`[-0.129%, -0.011%]` and a probability of a positive mean of `0.7%`. M3's
+corresponding interval was `[-0.112%, +0.002%]`, with positive-mean probability
+`3.0%`. This is a negative final-OOS signal, not a basis for production use.
 
 The source contract confirms `daily.amount` is thousand CNY. A first-pass
-participation estimate puts M0's 1% participation capacity at roughly CNY 247
-billion median and CNY 21 billion at the daily p10, but this is only an upper
+participation estimate puts M0's 1% participation capacity at roughly CNY 252
+billion median and CNY 41 billion at the daily p10, but this is only an upper
 bound based on selected-universe ADV. It does not yet model changed-name ADV,
 single-name limits, market impact or capacity decay, and must not be used for
 promotion.
