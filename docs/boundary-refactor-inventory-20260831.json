@@ -1,0 +1,139 @@
+{
+  "schema_version": "boundary_refactor_inventory.v1",
+  "generated_at": "2026-08-31",
+  "scope": [
+    "strategy-pipeline",
+    "deep-learning-tick-data-prediction",
+    "strategy-research",
+    "market-intel"
+  ],
+  "classifications": [
+    "runtime-owner",
+    "research-reusable",
+    "experiment-entry",
+    "consumer-bridge",
+    "deprecated-duplicate"
+  ],
+  "entries": [
+    {
+      "repo": "strategy-pipeline",
+      "path": "src/strategy_pipeline/daily_watch20_ablation.py",
+      "owner": "strategy-research",
+      "classification": "research-reusable",
+      "target": "strategy-research/src/strategy_research",
+      "status": "audit"
+    },
+    {
+      "repo": "strategy-pipeline",
+      "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
+      "owner": "strategy-research",
+      "classification": "experiment-entry",
+      "target": "strategy-research/experiments",
+      "status": "audit"
+    },
+    {
+      "repo": "strategy-pipeline",
+      "path": "src/strategy_pipeline/liquidity_proxy.py",
+      "owner": "portfolio-backtester",
+      "classification": "research-reusable",
+      "target": "portfolio-backtester/src/portfolio_backtester",
+      "status": "audit"
+    },
+    {
+      "repo": "strategy-pipeline",
+      "path": "src/strategy_pipeline/trade_accounting.py",
+      "owner": "portfolio-backtester",
+      "classification": "deprecated-duplicate",
+      "target": "portfolio-backtester/src/portfolio_backtester",
+      "status": "audit"
+    },
+    {
+      "repo": "strategy-pipeline",
+      "path": "src/strategy_pipeline/pipeline/panel_load_steps.py",
+      "owner": "strategy-pipeline",
+      "classification": "runtime-owner",
+      "target": "strategy-pipeline",
+      "status": "retain"
+    },
+    {
+      "repo": "deep-learning-tick-data-prediction",
+      "path": "src/ticknet/eventstream/canonical_adapter.py",
+      "owner": "market-data-platform",
+      "classification": "consumer-bridge",
+      "target": "market-data-platform published asset API",
+      "status": "audit"
+    },
+    {
+      "repo": "deep-learning-tick-data-prediction",
+      "path": "src/ticknet/eventstream/storage_readiness.py",
+      "owner": "market-data-platform",
+      "classification": "consumer-bridge",
+      "target": "market-data-platform quality receipt API",
+      "status": "audit"
+    },
+    {
+      "repo": "deep-learning-tick-data-prediction",
+      "path": "src/ticknet/nextday/raw_snapshot.py",
+      "owner": "market-data-platform",
+      "classification": "consumer-bridge",
+      "target": "market-data-platform published asset API",
+      "status": "audit"
+    },
+    {
+      "repo": "deep-learning-tick-data-prediction",
+      "path": "src/ticknet/nextday/snapshot_features.py",
+      "owner": "deep-learning-tick-data-prediction",
+      "classification": "runtime-owner",
+      "target": "deep-learning-tick-data-prediction",
+      "status": "retain"
+    },
+    {
+      "repo": "deep-learning-tick-data-prediction",
+      "path": "src/ticknet/nextday/horizon_labels.py",
+      "owner": "deep-learning-tick-data-prediction",
+      "classification": "runtime-owner",
+      "target": "deep-learning-tick-data-prediction",
+      "status": "retain"
+    },
+    {
+      "repo": "strategy-research",
+      "path": "experiments",
+      "owner": "strategy-research",
+      "classification": "experiment-entry",
+      "target": "strategy-research/experiments",
+      "status": "audit"
+    },
+    {
+      "repo": "strategy-research",
+      "path": "src/style_factors",
+      "owner": "strategy-research",
+      "classification": "research-reusable",
+      "target": "strategy-research/src/style_factors",
+      "status": "retain"
+    },
+    {
+      "repo": "market-intel",
+      "path": "src/tushare_jobs",
+      "owner": "market-data-platform",
+      "classification": "consumer-bridge",
+      "target": "market-data-platform published asset API",
+      "status": "audit"
+    },
+    {
+      "repo": "market-intel",
+      "path": "src/a_share_daily/*bridge*.py",
+      "owner": "market-intel",
+      "classification": "consumer-bridge",
+      "target": "market-intel artifact and receipt contracts",
+      "status": "audit"
+    },
+    {
+      "repo": "market-intel",
+      "path": "src/a_share_daily/*delivery*.py",
+      "owner": "market-intel",
+      "classification": "runtime-owner",
+      "target": "market-intel",
+      "status": "retain"
+    }
+  ]
+}

@@ -11,6 +11,10 @@
 [工作区路线图](roadmap.md)、[ADR-0006](adr/0006-strategy-knowledge-and-runtime-boundaries.md) 与
 [ADR-0007](adr/0007-style-replica-ownership.md) 为准。本页不得作为新改动的验收事实来源。
 
+2026-08-31 的新一轮机器可读盘点见
+[boundary-refactor-inventory-20260831.json](boundary-refactor-inventory-20260831.json)，
+执行计划见 [boundary refactor plan](superpowers/plans/2026-08-31-boundary-refactor.md)。
+
 盘点基线：market-data-platform `65e4740`、alpha-research `79cbfd6`、portfolio-backtester `e439be0`、
 strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1f07cf1`（2026-08-18）。
 
