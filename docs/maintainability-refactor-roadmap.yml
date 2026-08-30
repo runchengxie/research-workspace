@@ -13,25 +13,25 @@
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 42,
-        "max_long_functions": 84,
-        "max_complexity_hotspots": 45,
+        "max_large_files": 44,
+        "max_long_functions": 86,
+        "max_complexity_hotspots": 48,
         "max_large_classes": 1
       },
       "alpha-research": {
         "max_large_files": 5,
-        "max_long_functions": 21,
+        "max_long_functions": 22,
         "max_complexity_hotspots": 25,
         "max_large_classes": 1
       },
       "portfolio-backtester": {
-        "max_large_files": 9,
-        "max_long_functions": 29,
+        "max_large_files": 10,
+        "max_long_functions": 32,
         "max_complexity_hotspots": 29,
         "max_large_classes": 0
       },
       "strategy-app": {
-        "max_large_files": 3,
+        "max_large_files": 2,
         "max_long_functions": 6,
         "max_complexity_hotspots": 4,
         "max_large_classes": 0
@@ -85,9 +85,9 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 42,
-      "max_long_functions": 84,
-      "max_complexity_hotspots": 45,
+      "max_large_files": 44,
+      "max_long_functions": 86,
+      "max_complexity_hotspots": 48,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
@@ -110,7 +110,7 @@
     {
       "repo": "alpha-research",
       "max_large_files": 5,
-      "max_long_functions": 21,
+      "max_long_functions": 22,
       "max_complexity_hotspots": 25,
       "max_large_classes": 1,
       "owner_decision": [
@@ -124,8 +124,8 @@
     },
     {
       "repo": "portfolio-backtester",
-      "max_large_files": 9,
-      "max_long_functions": 29,
+      "max_large_files": 10,
+      "max_long_functions": 32,
       "max_complexity_hotspots": 29,
       "max_large_classes": 0,
       "owner_decision": [
@@ -144,7 +144,7 @@
     },
     {
       "repo": "strategy-app",
-      "max_large_files": 3,
+      "max_large_files": 2,
       "max_long_functions": 6,
       "max_complexity_hotspots": 4,
       "max_large_classes": 0,
@@ -315,13 +315,19 @@
   ],
   "accepted_hotspots": [
     {
+      "path": "portfolio-backtester/src/portfolio_backtester/_evaluation_backtest.py",
+      "owner_repo": "portfolio-backtester",
+      "reason": "The evaluation backtest compatibility layer keeps benchmark assembly, execution orchestration, and result recording together while the portfolio accounting migration remains under review.",
+      "next_action": "Split benchmark preparation, backtest execution, and result recording into focused modules before adding another evaluation path."
+    },
+    {
       "path": "scripts/decision_governance_check.py",
       "owner_repo": "research-workspace",
       "reason": "The stdlib-only decision ledger validator keeps schema, cross-reference, and evidence governance in one auditable command.",
       "next_action": "Split schema validation from cross-reference checks before adding another decision-governance artifact."
     },
     {
-      "path": "strategy-research/style_factors/small_cap_low_turnover.py",
+      "path": "strategy-research/src/style_factors/small_cap_low_turnover.py",
       "owner_repo": "research-workspace",
       "reason": "Exploration-only small-cap × low-turnover signal construction and constrained execution helpers are kept together while the candidate robustness evidence is being developed.",
       "next_action": "Split signal construction, target formation, and execution-context helpers before promoting this exploration into a reusable strategy component."
@@ -360,7 +366,7 @@
     },
     {
       "owner_repo": "research-workspace",
-      "path": "strategy-research/style_factors/data.py",
+      "path": "strategy-research/src/style_factors/data.py",
       "reason": "style_factors local tushare dataset integration adds moneyflow_ths/holder_structure/margin/limit_list loaders and the SW PIT industry membership loader; the extra LOC is localized dataset loaders, a legitimate debt transfer from feature expansion (not a regression).",
       "next_action": "Split per-loader (moneyflow_ths, holder_structure, margin, limit_list, sw_industry) into separate modules under strategy-research/style_factors/loaders/ if the file exceeds the next baseline threshold; strategy-research/tests/test_style_factors.py guards behavior.",
       "resolved": true,

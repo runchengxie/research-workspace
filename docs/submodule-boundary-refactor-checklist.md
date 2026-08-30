@@ -203,7 +203,7 @@ strategy-app `e81d53a`、strategy-pipeline `933e133`、quant-execution-engine `1
   7. `strategy-app/src/strategy_app/daily_watch20/daily_watch20_friend_minute_lineage.py:23`（`sha256_file`）
   8. `strategy-app/src/strategy_app/daily_watch20/daily_watch20_minute_campaign_reporting.py:32`、
      `hotsector/hotsector_ai_shadow_contract.py:45`（`sha256_file`）
-  9. `strategy-research/style_factors/robustness_sources.py:30`（`sha256_file`）
+  9. `strategy-research/src/style_factors/robustness_sources.py:30`（`sha256_file`）
   10. `strategy-pipeline/src/strategy_pipeline/_daily_watch20_publication_validation_core.py:40`（`sha256_file`，本地又定义一份）
 - 问题：这是"纯工具被多仓内联复制"，不是"共享库被内联"。`research_contracts.file_sha256` 已存在，但多数仓
   仍自带副本，导致 hash 语义可能漂移。

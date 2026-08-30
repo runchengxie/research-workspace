@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HASH_FUNCTION_NAMES = {"file_sha256", "sha256_file"}
 ALLOWED_HASH_DEFINITIONS = {
     "src/research_contracts/file_receipts.py",
-    "strategy-research/style_factors/robustness_sources.py",
+    "strategy-research/src/style_factors/robustness_sources.py",
     "market-data-platform/src/market_data_platform/file_receipts.py",
     "portfolio-backtester/src/portfolio_backtester/evidence_receipts.py",
     "strategy-app/src/strategy_app/file_receipts.py",
@@ -15,7 +15,7 @@ ALLOWED_HASH_DEFINITIONS = {
 }
 SCAN_ROOTS = (
     ROOT / "src/research_contracts",
-    ROOT / "strategy-research/style_factors",
+    ROOT / "strategy-research/src/style_factors",
     ROOT / "market-data-platform/src/market_data_platform",
     ROOT / "portfolio-backtester/src/portfolio_backtester",
     ROOT / "strategy-app/src/strategy_app",

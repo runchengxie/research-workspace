@@ -5,7 +5,7 @@
 | Owner | Helper | Reason to remain local |
 | --- | --- | --- |
 | `research_contracts` | `src/research_contracts/file_receipts.py` | 顶层跨仓库契约和通用文件 receipt |
-| `alpha-research` | `strategy-research/style_factors/robustness_sources.py` | 研究来源和稳健性产物的本地证据 |
+| `alpha-research` | `strategy-research/src/style_factors/robustness_sources.py` | 研究来源和稳健性产物的本地证据 |
 | `market-data-platform` | `market-data-platform/src/market_data_platform/file_receipts.py` | 数据发布和分区文件 receipt |
 | `portfolio-backtester` | `portfolio-backtester/src/portfolio_backtester/evidence_receipts.py` | 回测产物和组合证据 |
 | `strategy-app` | `strategy-app/src/strategy_app/file_receipts.py` | 策略应用产物 |

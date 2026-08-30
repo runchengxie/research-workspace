@@ -7,7 +7,7 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "ffd831ef7ae323759ba1c5351e4c90833c6eb3e6",
+      "commit": "96e33cdc8d929720b42d3903ab30a3ffab8ef1c9",
       "legacy_source_tree_allowed": false,
       "pr": 47,
       "version": "0.4.0"
@@ -21,7 +21,7 @@
     },
     "strategy-app": {
       "canonical_package": "strategy_app",
-      "commit": "7b589c9e75cc757aaad41799de9cdb72e7a92382",
+      "commit": "46f6a4f1cc4d253bbf18fd3a470ab7dc1770bf91",
       "legacy_source_tree_allowed": false,
       "pr": 34,
       "version": "0.2.0"

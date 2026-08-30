@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 96,
-      "python_loc": 18375,
+      "python_loc": 18376,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -60,7 +60,7 @@
         {
           "path": "tests/test_run_submodule_checks.py",
           "name": "RunSubmoduleChecksTest",
-          "line_count": 413,
+          "line_count": 417,
           "method_count": 11
         }
       ],
@@ -181,13 +181,13 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 327,
-      "python_loc": 95413,
+      "python_file_count": 353,
+      "python_loc": 98394,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 42,
-        "long_functions": 84,
-        "complexity_hotspots": 45,
+        "large_files": 44,
+        "long_functions": 86,
+        "complexity_hotspots": 48,
         "large_classes": 1
       },
       "large_files": [
@@ -415,10 +415,22 @@
           "complexity": 33
         },
         {
+          "path": "src/market_data_platform/quality.py",
+          "name": "profile_parquet",
+          "line_count": 139,
+          "complexity": 34
+        },
+        {
           "path": "scripts/operations/cutover_a_share_minute.py",
           "name": "_validate_raw_promotion_evidence",
           "line_count": 135,
           "complexity": 39
+        },
+        {
+          "path": "src/market_data_platform/l2_quality_gate.py",
+          "name": "evaluate_l2_quality",
+          "line_count": 135,
+          "complexity": 34
         },
         {
           "path": "src/market_data_platform/providers/tushare_a_share_clean_part02.py",
@@ -455,18 +467,6 @@
           "name": "_mirror_resolve_day",
           "line_count": 121,
           "complexity": 12
-        },
-        {
-          "path": "src/market_data_platform/current_path_audit.py",
-          "name": "_audit_asset",
-          "line_count": 120,
-          "complexity": 15
-        },
-        {
-          "path": "tests/test_a_share_minute_coverage.py",
-          "name": "test_materialize_tushare_full_days_replaces_only_whole_eligible_dates",
-          "line_count": 118,
-          "complexity": 8
         }
       ],
       "complexity_hotspots": [
@@ -499,6 +499,18 @@
           "name": "cutover_minute_current",
           "line_count": 185,
           "complexity": 35
+        },
+        {
+          "path": "src/market_data_platform/l2_quality_gate.py",
+          "name": "evaluate_l2_quality",
+          "line_count": 135,
+          "complexity": 34
+        },
+        {
+          "path": "src/market_data_platform/quality.py",
+          "name": "profile_parquet",
+          "line_count": 139,
+          "complexity": 34
         },
         {
           "path": "scripts/operations/cutover_a_share_minute.py",
@@ -585,15 +597,15 @@
           "complexity": 21
         },
         {
+          "path": "src/market_data_platform/providers/tushare_context.py",
+          "name": "normalize_tushare_context",
+          "line_count": 110,
+          "complexity": 21
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
           "name": "validate_normalized_fundamentals",
           "line_count": 107,
-          "complexity": 20
-        },
-        {
-          "path": "src/market_data_platform/providers/tushare_context.py",
-          "name": "normalize_tushare_context",
-          "line_count": 108,
           "complexity": 20
         },
         {
@@ -607,18 +619,6 @@
           "name": "build_minute_backfill_plan",
           "line_count": 143,
           "complexity": 19
-        },
-        {
-          "path": "scripts/operations/cutover_a_share_minute.py",
-          "name": "_validate_sh_sz_gap_contract",
-          "line_count": 59,
-          "complexity": 18
-        },
-        {
-          "path": "src/market_data_platform/providers/_coverage_materialize_part03.py",
-          "name": "_audit_partition",
-          "line_count": 169,
-          "complexity": 18
         }
       ],
       "large_classes": [
@@ -710,12 +710,12 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 204,
-      "python_loc": 37354,
+      "python_file_count": 206,
+      "python_loc": 38005,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 5,
-        "long_functions": 21,
+        "long_functions": 22,
         "complexity_hotspots": 25,
         "large_classes": 1
       },
@@ -830,6 +830,12 @@
           "name": "build_event_sample_weights",
           "line_count": 89,
           "complexity": 17
+        },
+        {
+          "path": "src/alpha_research/style_factors/factor_calc.py",
+          "name": "compute_factors",
+          "line_count": 87,
+          "complexity": 11
         },
         {
           "path": "src/alpha_research/_feature_dataset_prepare.py",
@@ -1077,12 +1083,12 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 207,
-      "python_loc": 43561,
+      "python_file_count": 214,
+      "python_loc": 44713,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 9,
-        "long_functions": 29,
+        "large_files": 10,
+        "long_functions": 32,
         "complexity_hotspots": 29,
         "large_classes": 0
       },
@@ -1131,9 +1137,20 @@
           "path": "src/portfolio_backtester/a_share_executable_oos_topk.py",
           "loc": 508,
           "hk_related": false
+        },
+        {
+          "path": "src/portfolio_backtester/_evaluation_backtest.py",
+          "loc": 503,
+          "hk_related": false
         }
       ],
       "long_functions": [
+        {
+          "path": "src/portfolio_backtester/execution_ledger.py",
+          "name": "settle_execution_fills",
+          "line_count": 153,
+          "complexity": 15
+        },
         {
           "path": "src/portfolio_backtester/_evaluation_positions.py",
           "name": "_record_period_execution_sim",
@@ -1243,6 +1260,12 @@
           "complexity": 13
         },
         {
+          "path": "src/portfolio_backtester/style_factors_backtest.py",
+          "name": "_build_signal_quantile_result",
+          "line_count": 90,
+          "complexity": 10
+        },
+        {
           "path": "tests/test_backtest_tearsheet.py",
           "name": "test_build_backtest_tearsheet_html_includes_core_sections_and_escapes_title",
           "line_count": 89,
@@ -1271,18 +1294,6 @@
           "name": "_select_symbols",
           "line_count": 84,
           "complexity": 17
-        },
-        {
-          "path": "tests/test_construction_grid.py",
-          "name": "test_construction_grid_reuses_existing_scores",
-          "line_count": 84,
-          "complexity": 5
-        },
-        {
-          "path": "src/portfolio_backtester/fixed_slot_overlay.py",
-          "name": "build_fixed_slot_overlay_target",
-          "line_count": 82,
-          "complexity": 10
         }
       ],
       "complexity_hotspots": [
@@ -1481,21 +1492,16 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 171,
-      "python_loc": 36318,
+      "python_file_count": 175,
+      "python_loc": 36463,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 3,
+        "large_files": 2,
         "long_functions": 6,
         "complexity_hotspots": 4,
         "large_classes": 0
       },
       "large_files": [
-        {
-          "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
-          "loc": 764,
-          "hk_related": false
-        },
         {
           "path": "src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
           "loc": 558,
@@ -1521,7 +1527,7 @@
           "complexity": 2
         },
         {
-          "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos.py",
+          "path": "src/strategy_app/daily_watch20/daily_watch20_candidate_oos_selection.py",
           "name": "_daily_row",
           "line_count": 97,
           "complexity": 12
@@ -1632,7 +1638,7 @@
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
       "python_file_count": 372,
-      "python_loc": 83533,
+      "python_loc": 83578,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 28,
