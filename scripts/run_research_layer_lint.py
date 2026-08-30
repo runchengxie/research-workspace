@@ -32,8 +32,8 @@ def main(argv: list[str] | None = None) -> int:
     target = RESEARCH_LAYER
     project = ["uv", "run", "--project", str(target), "--extra", "dev"]
     checks = [
-        [*project, "ruff", "check", "style_factors", "tests", *argv],
-        [*project, "ruff", "format", "--check", "style_factors", "tests"],
+        [*project, "ruff", "check", "src/style_factors", "tests", *argv],
+        [*project, "ruff", "format", "--check", "src/style_factors", "tests"],
         [*project, "ty", "check", "--error-on-warning"],
         [*project, "python", "-m", "style_factors", "--help"],
     ]
