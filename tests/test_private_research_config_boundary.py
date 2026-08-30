@@ -1,9 +1,7 @@
 from pathlib import Path
 
 import pytest
-
 from strategy_pipeline.config_utils import resolve_pipeline_config
-
 
 ROOT = Path(__file__).resolve().parents[1]
 
