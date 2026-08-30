@@ -4,7 +4,6 @@ import os
 import subprocess
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[1]
 SCRIPT = ROOT / "scripts" / "count_loc.sh"
 
@@ -15,11 +14,11 @@ def test_count_loc_discovers_all_initialized_submodules(tmp_path: Path) -> None:
     fake_cloc.write_text(
         "#!/usr/bin/env bash\n"
         "set -euo pipefail\n"
-        "printf '%s\\n' \"$*\" >> \"$CLOC_TEST_LOG\"\n"
-        "for arg in \"$@\"; do\n"
-        "  case \"$arg\" in --report-file=*) report=\"${arg#--report-file=}\";; esac\n"
+        'printf \'%s\\n\' "$*" >> "$CLOC_TEST_LOG"\n'
+        'for arg in "$@"; do\n'
+        '  case "$arg" in --report-file=*) report="${arg#--report-file=}";; esac\n'
         "done\n"
-        "if [[ -n \"${report:-}\" ]]; then printf 'fake report\\n' > \"$report\"; fi\n",
+        'if [[ -n "${report:-}" ]]; then printf \'fake report\\n\' > "$report"; fi\n',
         encoding="utf-8",
     )
     fake_cloc.chmod(0o755)
