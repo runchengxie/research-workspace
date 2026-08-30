@@ -340,7 +340,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             "quant-execution-engine": [("uv", "run", "--locked", "--group", "dev", "ty", "check")],
             "strategy-app": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
-            "deep-learning-tick-data-prediction": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "deep-learning-tick-data-prediction": [
+                ("uv", "run", "--locked", "--extra", "dev", "ty", "check")
+            ],
             "strategy-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
         }
         expected_release = {
@@ -361,7 +363,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
             "quant-execution-engine": [("make", "typecheck")],
             "strategy-app": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
             "strategy-pipeline": [("scripts/dev/run_tests.sh", "typecheck-release")],
-            "deep-learning-tick-data-prediction": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "deep-learning-tick-data-prediction": [
+                ("uv", "run", "--locked", "--extra", "dev", "ty", "check")
+            ],
             "strategy-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
         }
 
