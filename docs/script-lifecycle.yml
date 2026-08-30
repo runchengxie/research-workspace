@@ -20,6 +20,16 @@
   },
   "records": [
     {
+      "path": "scripts/count_loc.sh",
+      "owner": "research-workspace",
+      "purpose": "Count tracked source lines in the superproject and initialized submodules",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "temporary reports unless --keep-reports is provided",
+      "external_dependencies": "git, cloc, initialized submodules",
+      "removal_condition": "remove only after tracked LOC reporting moves to a successor command and no docs or quality checks call this script for two release reviews"
+    },
+    {
       "path": "alpha-research/scripts/dev/maintainability_metrics.py",
       "owner": "alpha-research",
       "purpose": "Alpha research static maintainability metrics and ratchet check",
