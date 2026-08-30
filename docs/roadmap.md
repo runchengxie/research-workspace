@@ -36,14 +36,14 @@
 当前代码落地已拆成三层：`market-data-platform` 的 DailyWatch20 公共 loader 暴露
 `ps_ttm` 并增加结果契约校验，`alpha-research` 提供 Value、Quality、Growth family contract、
 P0/T0 和 5/20/60 horizon profile，`strategy-research` 提供族级 ablation 的特征臂物化、
-共同有效样本键、OOS 身份和不可覆盖 receipt。当前对应候选提交为 MDP `7a6c467`、alpha
-`4c1e399`、strategy-research `b39a2d4`，均尚未在本 workspace 形成已合并的 owner PR，因此这里只记录
-代码状态，不把它们写成生产能力。
+共同有效样本键、OOS 身份和不可覆盖 receipt。对应 owner PR 已合并：MDP `10afd6f`（PR #80）、
+alpha `96e33cd`（PR #48）、strategy-research `1b12bf5`（PR #9）。这些提交已经进入本地待同步的
+workspace gitlink，但这里只记录研究能力，不把它们写成生产能力。
 
 实验固定 20 日为主周期、60 日为预注册慢基本面挑战周期、5 日为诊断，`VQG_F` 仅为基金持仓辅助臂。
 历史数据不得标记为新的 OOS，所有新增 receipt 保持 `production_eligible=false` 和
-`automatic_promotion_allowed=false`。下一步是按 owner 仓库顺序推送和评审这些候选提交，再同步 gitlink，
-不在本项直接修改生产 preset。
+`automatic_promotion_allowed=false`。owner PR 已按数据平台、alpha、研究层顺序完成，当前只需提交
+workspace gitlink 集成，不修改生产 preset。
 
 ### 当前优先级说明
 
