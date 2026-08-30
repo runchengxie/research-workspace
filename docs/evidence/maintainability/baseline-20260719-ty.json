@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 96,
-      "python_loc": 18376,
+      "python_file_count": 97,
+      "python_loc": 18416,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -135,6 +135,7 @@
       "script_inventory": [
         "scripts/benchmark_matrix_build.py",
         "scripts/check.sh",
+        "scripts/count_loc.sh",
         "scripts/dead_code_advisory.py",
         "scripts/decision_governance_check.py",
         "scripts/decision_governance_outcomes.py",
@@ -1084,7 +1085,7 @@
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
       "python_file_count": 214,
-      "python_loc": 44713,
+      "python_loc": 44718,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 10,
