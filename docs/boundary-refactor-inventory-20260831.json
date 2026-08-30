@@ -18,18 +18,18 @@
     {
       "repo": "strategy-pipeline",
       "path": "src/strategy_pipeline/daily_watch20_ablation.py",
-      "owner": "strategy-research",
-      "classification": "research-reusable",
-      "target": "strategy-research/src/strategy_research",
-      "status": "audit"
+      "owner": "strategy-app",
+      "classification": "consumer-bridge",
+      "target": "strategy-app daily_watch20 public APIs",
+      "status": "verified-owner-composition"
     },
     {
       "repo": "strategy-pipeline",
       "path": "src/strategy_pipeline/hotsector_deepseek_campaign.py",
-      "owner": "strategy-research",
-      "classification": "experiment-entry",
-      "target": "strategy-research/experiments",
-      "status": "audit"
+      "owner": "strategy-app",
+      "classification": "consumer-bridge",
+      "target": "strategy-app hotsector public APIs",
+      "status": "verified-owner-composition"
     },
     {
       "repo": "strategy-pipeline",
@@ -37,7 +37,7 @@
       "owner": "portfolio-backtester",
       "classification": "research-reusable",
       "target": "portfolio-backtester/src/portfolio_backtester",
-      "status": "audit"
+      "status": "verified-compatibility-facade"
     },
     {
       "repo": "strategy-pipeline",
@@ -45,7 +45,7 @@
       "owner": "portfolio-backtester",
       "classification": "deprecated-duplicate",
       "target": "portfolio-backtester/src/portfolio_backtester",
-      "status": "audit"
+      "status": "verified-compatibility-facade"
     },
     {
       "repo": "strategy-pipeline",
@@ -58,26 +58,26 @@
     {
       "repo": "deep-learning-tick-data-prediction",
       "path": "src/ticknet/eventstream/canonical_adapter.py",
-      "owner": "market-data-platform",
+      "owner": "deep-learning-tick-data-prediction",
       "classification": "consumer-bridge",
-      "target": "market-data-platform published asset API",
-      "status": "audit"
+      "target": "published canonical event asset adapter",
+      "status": "verified-model-adapter"
     },
     {
       "repo": "deep-learning-tick-data-prediction",
       "path": "src/ticknet/eventstream/storage_readiness.py",
-      "owner": "market-data-platform",
+      "owner": "deep-learning-tick-data-prediction",
       "classification": "consumer-bridge",
-      "target": "market-data-platform quality receipt API",
-      "status": "audit"
+      "target": "quality receipt consumer and readiness gate",
+      "status": "verified-consumer-adapter"
     },
     {
       "repo": "deep-learning-tick-data-prediction",
       "path": "src/ticknet/nextday/raw_snapshot.py",
-      "owner": "market-data-platform",
+      "owner": "deep-learning-tick-data-prediction",
       "classification": "consumer-bridge",
-      "target": "market-data-platform published asset API",
-      "status": "audit"
+      "target": "model-owned snapshot compatibility facade",
+      "status": "verified-compatibility-facade"
     },
     {
       "repo": "deep-learning-tick-data-prediction",
@@ -101,7 +101,7 @@
       "owner": "strategy-research",
       "classification": "experiment-entry",
       "target": "strategy-research/experiments",
-      "status": "audit"
+      "status": "verified-thin-entries"
     },
     {
       "repo": "strategy-research",
@@ -117,7 +117,7 @@
       "owner": "market-data-platform",
       "classification": "consumer-bridge",
       "target": "market-data-platform published asset API",
-      "status": "audit"
+      "status": "verified-consumer-boundary"
     },
     {
       "repo": "market-intel",
@@ -125,7 +125,7 @@
       "owner": "market-intel",
       "classification": "consumer-bridge",
       "target": "market-intel artifact and receipt contracts",
-      "status": "audit"
+      "status": "verified-delivery-boundary"
     },
     {
       "repo": "market-intel",

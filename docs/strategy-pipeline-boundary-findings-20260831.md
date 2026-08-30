@@ -14,45 +14,44 @@
 
 这些数量是 import 面积，不等于全部都是边界错误。后续要按模块职责和调用方向逐项收口。
 
-## P0 候选：pipeline 持有研究算法
+## 已复核的原 P0 候选
 
-### DailyWatch20 ablation
+### DailyWatch20 ablation：已确认是 owner API 编排
 
-- `_daily_watch20_ablation_api.py` 约 373 行。
-- `_daily_watch20_ablation_core.py` 约 126 行。
-- 两者直接组合 `alpha_research`、`strategy_app` 和 `market_data_platform` 的研究 API。
-- 研究统计、样本外决策、source regime 和报告构造不应继续在 pipeline 形成第二套实现。
+- `_daily_watch20_ablation_api.py` 和 `_daily_watch20_ablation_core.py` 保留配置接线、数据加载、
+  执行编排和结果落盘。
+- 研究统计、样本外决策、source regime 和 variant 元数据由 `strategy_app.daily_watch20`
+  的公开 API 提供，pipeline 没有再维护一套 owner kernel。
+- pipeline 的跨包调用属于控制面编排，符合 `docs/roadmap.md` 对 B2/SA-12 的现行定义。
 
-处置方向：保留一个薄的 CLI/orchestration entry，将研究计算移动或委托给
-`strategy_app.daily_watch20` 的公开 API。迁移前需要先冻结当前输入输出契约和报告字段。
+处置结论：保留薄的 CLI/orchestration entry，并由 owner API 测试锁定输入输出契约和报告字段。
+不再进行没有明确收益的整目录搬迁。
 
-### Hotsector / DeepSeek campaign
+### Hotsector / DeepSeek campaign：已确认是 campaign 编排
 
-`hotsector_deepseek_*`、`hotsector_challenger_*` 和相关 campaign 模块大量调用
-`strategy_app.hotsector`。这些模块当前承担的工作更接近研究 campaign runner，通用 pipeline
-编排只占其中一部分。
+`hotsector_deepseek_*`、`hotsector_challenger_*` 和相关 campaign 模块调用
+`strategy_app.hotsector` 的公开 ranking、analysis、contract、reporting API。
+pipeline 保留一次性 campaign runner、运行目录、receipt 和发布调用，未形成第二套研究算法。
 
-处置方向：把可复用的研究计算放入 `strategy-app` 或 `strategy-research`，pipeline 只保留
-运行目录、参数解析、receipt 和发布调用。一次性 campaign 入口可以留在实验目录或保留薄壳。
+处置结论：campaign 入口继续作为薄壳保留。可复用研究计算已经由 strategy-app owner API
+承载，不再将一次性入口强行迁入 strategy-research。
 
-## P1 候选：已存在 owner facade，可先验证再删旧实现
+## P1：兼容 facade 已验证
 
 - `liquidity_proxy.py` 只有约 16 行，当前已经从 `portfolio_backtester.liquidity_proxy` 转出。
 - `trade_accounting.py` 只有约 16 行，当前已经从 `portfolio_backtester.trade_accounting` 转出。
 - `sharpe_stats.py`、`return_metrics.py` 也采用类似 facade 方式。
 
-这些文件不应直接删除。下一步应检查外部调用方是否已经改用 owner-native import，
-再为 facade 增加弃用周期和 import 迁移测试。它们属于低风险收口项，不是当前最大体积来源。
+这些文件是短兼容 facade。pipeline 内部测试和文档已改用 owner-native import，
+外部调用仍可通过 facade 迁移。当前保留它们是为了避免未经公告的 API 破坏，后续可按弃用周期删除。
 
-## P1 候选：pipeline 原始数据读取
+## P1：pipeline 原始数据读取已关闭
 
-`_style_replica_pipeline_core.py` 约 105 行，并直接使用
-`market_data_platform.research_views`。需要继续确认它是否只消费 published/research view，
-还是自行解析 `daily_clean`、`daily_basic`、`instruments`、`industry` 等原始文件。
+`_style_replica_pipeline_core.py` 约 105 行，使用 `market_data_platform.research_views`。
+当前扫描未发现绕过 published/research view 的原始文件直读。
 
-处置方向：由 `market-data-platform` 提供稳定的 published frame 或 receipt API，pipeline
-只保留参数编排和结果落盘。若现有 research view 已经是稳定 API，则只需补边界测试和文档，
-不必再次搬运代码。
+处置结论：现有 research view 即稳定消费边界，pipeline 只保留参数编排和结果落盘，
+无需再次搬运代码。
 
 ## 已确认的保留范围
 
@@ -62,9 +61,9 @@
 - 通过 `alpha_research` 的公开模型、样本切分和信号契约 API 不等于 pipeline 拥有这些实现。
 - 通过 `market_data_platform` 的 published asset、路径和数据契约 API 属于合法消费方向。
 
-## 下一步验收标准
+## 验收结果
 
-1. 为 DailyWatch20 ablation 固定一个公开 owner API 和返回字段测试。
-2. 为 Hotsector campaign 固定 runner 输入、输出 receipt 和生命周期测试。
-3. 对 `_style_replica_pipeline_core.py` 增加原始文件直读扫描，确认是否存在绕过 published API 的路径。
-4. 在 owner API 可用且调用方测试通过后，再删除重复实现或把旧模块降级为短期兼容 facade。
+1. DailyWatch20 ablation 已通过 owner API 和返回字段测试。
+2. Hotsector campaign 已通过 runner、receipt 和生命周期测试。
+3. `_style_replica_pipeline_core.py` 已通过原始文件直读边界扫描。
+4. portfolio/backtest 兼容 facade 已通过 owner-native 调用迁移测试，暂不删除以保留兼容性。
