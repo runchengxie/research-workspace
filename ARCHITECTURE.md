@@ -48,7 +48,7 @@ quant-execution-engine
 `strategy-pipeline` 只拥有数据提供方调用、操作员控制、运行目录、原子发布和执行交接。
 边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
-仓库结构说明：`strategy-research` 并非 git submodule，它实际是本 superproject 内的普通顶层目录，其文件由本仓库直接版本化，不通过 gitlink 锁定子仓库 commit。七个 submodule（market-data-platform、deep-learning-tick-data-prediction、alpha-research、portfolio-backtester、strategy-app、strategy-pipeline、quant-execution-engine）的版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
+仓库结构说明：`strategy-research` 与其余 owner 仓库一样通过 gitlink 锁定子仓 commit。当前八个 submodule 为 market-data-platform、deep-learning-tick-data-prediction、alpha-research、portfolio-backtester、strategy-research、strategy-app、strategy-pipeline、quant-execution-engine；版本由 `.gitmodules` 与各自 gitlink 锁定。详见边界清单 SA-14。
 
 ## 代码和数据边界
 
@@ -59,6 +59,15 @@ quant-execution-engine
 - 数据供应商适配器、券商适配器、凭证、本地数据和交易审计日志留在对应私有运行环境。
 
 跨仓库协作使用稳定文件或公开应用程序接口（API）。第三方框架对象不得进入跨仓库契约。
+
+## 数据质量与 PIT 边界
+
+- `market-data-platform` 负责不可变 raw、数据语义 contract、可复用质量检查、PIT/version provenance、DQ receipt 与 canonical publication。
+- `deep-learning-tick-data-prediction` 继续负责 eventstream/model input、label/leakage、exchange-specific replay 诊断与模型评估；平台 eligibility 不能被模型仓静默覆盖。
+- `alpha-research`、`portfolio-backtester` 与 `strategy-research` 在平台数据证据之上增加研究、组合与策略生命周期门禁，不重复定义 raw-data 清洗规则。
+- `research_only` 与 `quarantine` 必须保持显式状态，不能在跨仓交接时被折叠成普通“可用数据”。
+
+完整约定见 [跨仓库数据质量契约](docs/data-quality-contracts.md)。
 
 ## 外部框架
 
@@ -76,6 +85,7 @@ quant-execution-engine
 - [命名空间边界](docs/adr/0002-owner-native-python-namespaces.md)
 - [策略知识与运行时边界](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)
 - [跨仓库文件契约](docs/contracts.md)
+- [跨仓库数据质量契约](docs/data-quality-contracts.md)
 - [废弃入口](docs/deprecations.md)
 - [脚本生命周期](docs/script-lifecycle.yml)
 - [质量覆盖](docs/quality-coverage-governance.yml)
