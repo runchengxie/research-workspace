@@ -31,6 +31,20 @@
 
 > 状态口径见上。本表数字已与机器账本核对，`production_eligible` 全部为 `false`，故证据门禁当前对五策略均按"已知缺口豁免"放行（见 E1 治理修正）。
 
+### 基本面特征族 Shadow（2026-08-30）
+
+当前代码落地已拆成三层：`market-data-platform` 的 DailyWatch20 公共 loader 暴露
+`ps_ttm` 并增加结果契约校验，`alpha-research` 提供 Value、Quality、Growth family contract、
+P0/T0 和 5/20/60 horizon profile，`strategy-research` 提供族级 ablation 的特征臂物化、
+共同有效样本键、OOS 身份和不可覆盖 receipt。当前对应候选提交为 MDP `7a6c467`、alpha
+`4c1e399`、strategy-research `b39a2d4`，均尚未在本 workspace 形成已合并的 owner PR，因此这里只记录
+代码状态，不把它们写成生产能力。
+
+实验固定 20 日为主周期、60 日为预注册慢基本面挑战周期、5 日为诊断，`VQG_F` 仅为基金持仓辅助臂。
+历史数据不得标记为新的 OOS，所有新增 receipt 保持 `production_eligible=false` 和
+`automatic_promotion_allowed=false`。下一步是按 owner 仓库顺序推送和评审这些候选提交，再同步 gitlink，
+不在本项直接修改生产 preset。
+
 ### 当前优先级说明
 
 E2 是生产准备审计（production-readiness audit），不替代当前策略研究。当前主线继续推进已登记策略的投资假设、信号和组合实验。只有选定真实策略候选后，才运行该策略的完整 E2 审计。
