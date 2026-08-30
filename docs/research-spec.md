@@ -28,6 +28,11 @@
 `experiment_id` 必须与目录名一致。当前已登记的示例见
 [qlib_pilot](../strategy-research/experiments/qlib_pilot/research_spec.json)。
 
+基本面族级 shadow 的当前实现入口见
+[fundamental_family_shadow](../strategy-research/experiments/fundamental_family_shadow/README.md)。
+它固定 Value、Quality、Growth 的族级对照、20 日主周期、60 日慢基本面挑战周期和 5 日诊断周期。
+该实验仍处于研究中，历史回放标记为 `retrospective_diagnostic`，不改变生产 preset，也不允许自动晋级。
+
 ## 格式
 
 schema 版本为 `research_spec.v1`，各字段如下：
