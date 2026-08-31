@@ -134,6 +134,7 @@
       },
       "script_inventory": [
         "scripts/benchmark_matrix_build.py",
+        "scripts/check-production-updates.sh",
         "scripts/check.sh",
         "scripts/count_loc.sh",
         "scripts/dead_code_advisory.py",
