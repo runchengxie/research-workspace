@@ -23,6 +23,8 @@ Production release worktrees remain intentionally available for rollback.
   `fix/tushare-future-release`.
 - Deleted merged `alpha-research/feat/contextual-factors`.
 - Pruned local remote-tracking refs for deleted branches and old merged production/documentation branches.
+- Moved the one-off `/home/richard/transfer/etf-minute-fetcher` staging directory to the desktop
+  trash; it was not a Git repository and contained only an ETF minute-data import handoff.
 
 ## Merged documentation
 
@@ -31,19 +33,15 @@ Production release worktrees remain intentionally available for rollback.
 
 ## Retained
 
-- `market-intel` local branch `feat/worktree-first-layout` still contains two uncommitted snapshot
-  artifacts. Its remote branch was deleted after PR #116 merged, but the local checkout is retained
-  until those data files are explicitly archived, committed, or discarded.
-- `alpha-research/feat/remove-style-replica-portfolio-owner` and
-  `alpha-research/fix/adopt-size-style-signal-owner` remain remote without an associated PR; they
-  require owner review before retirement.
-- `portfolio-backtester/chore/sync-mdp-lazy-view` and
-  `portfolio-backtester/feat/style-replica-portfolio-owner` remain remote without an associated PR;
-  they require diff review before retirement.
+- `alpha-research/fix/adopt-size-style-signal-owner` was extracted into the reusable
+  size-style API and merged as PR #50; the parent gitlink is being synchronized separately.
+- The rebased effective diffs for `alpha-research/feat/remove-style-replica-portfolio-owner` and
+  `portfolio-backtester/feat/style-replica-portfolio-owner` were empty because their changes were
+  already present on the respective main branches; both branches were retired.
+- `portfolio-backtester/chore/sync-mdp-lazy-view` was also empty after comparison and was retired.
 
 ## Follow-up
 
 The parent and market-intel main branches advanced after the production release was created. Production
 must be refreshed through the existing manual promotion command after reviewing those main changes; no
 automatic production switch was performed by this cleanup.
-
