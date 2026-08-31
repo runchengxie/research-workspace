@@ -30,6 +30,7 @@
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
 | 数据、研究与代码目录术语 | [data-lifecycle-terminology.md](data-lifecycle-terminology.md) |
 | 旧数据路径迁移映射 | [data-path-migration-map.md](data-path-migration-map.md) |
+| 数据路径 breaking change 登记 | [data-path-breaking-change-register.md](data-path-breaking-change-register.md) |
 | 生成数据路径审计清单 | `python scripts/data_path_audit.py --data-root <数据根目录> --output <清单路径>` |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看港股恢复专用归档 | [archive/hk/README.md](archive/hk/README.md) |
