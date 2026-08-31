@@ -20,5 +20,6 @@ def test_hard_quality_profile_runs_capability_registry_check() -> None:
 
     assert commands["research-capability-registry"] == (
         sys.executable,
-        str(ROOT / "scripts" / "research_capability_registry_check.py"),
+        "-m",
+        "src.research_contracts.research_capability_registry",
     )
