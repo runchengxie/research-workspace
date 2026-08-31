@@ -1,5 +1,28 @@
 schema_version: research_capability_registry.v1
 capabilities:
+  - capability_id: governance.capability_registry
+    summary: 校验跨仓研究能力目录的 owner、公开入口、依赖图、成熟度和验证证据。
+    owner_repository: research-workspace
+    stage: governance
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: python-module
+      value: python -m src.research_contracts.research_capability_registry
+      source_path: src/research_contracts/research_capability_registry.py
+    inputs:
+      - research_capability_registry.v1
+      - pinned workspace tree
+    outputs:
+      - research_capability_registry_check.v1
+    requires: []
+    method_refs:
+      - type: external
+        ref: https://github.com/quantskills/registry
+    evidence_refs:
+      - tests/test_research_capability_registry.py
+      - tests/test_research_capability_registry_committed.py
+
   - capability_id: governance.research_spec
     summary: 校验 research_spec.v1 的实验身份、研究口径和证据引用。
     owner_repository: research-workspace
