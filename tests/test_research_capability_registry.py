@@ -32,7 +32,7 @@ def _capability(
         "outputs": ["output"],
         "requires": requires or [],
         "method_refs": [],
-        "evidence_refs": evidence_refs or ["tests/test_example.py"],
+        "evidence_refs": evidence_refs if evidence_refs is not None else ["tests/test_example.py"],
     }
 
 
@@ -115,11 +115,32 @@ def test_missing_source_path_is_rejected_for_runnable_capability(tmp_path: Path)
 
 def test_verified_capability_requires_existing_test_evidence(tmp_path: Path) -> None:
     root = _workspace(tmp_path)
+    docs = root / "alpha-research" / "docs"
+    docs.mkdir(parents=True)
+    (docs / "example.md").write_text("evidence\n")
     result = validate_registry(
         _write_registry(root, [_capability(evidence_refs=["docs/example.md"])]),
         root=root,
     )
     assert any("verified" in issue and "test" in issue for issue in result.issues)
+
+
+def test_experimental_capability_cannot_be_empty_shell(tmp_path: Path) -> None:
+    root = _workspace(tmp_path)
+    capability = _capability(maturity="experimental", evidence_refs=[])
+    capability["canonical_entrypoint"].pop("source_path")
+    result = validate_registry(_write_registry(root, [capability]), root=root)
+    assert any("experimental" in issue and "source" in issue for issue in result.issues)
+
+
+def test_canonical_entrypoint_requires_type_and_value(tmp_path: Path) -> None:
+    root = _workspace(tmp_path)
+    capability = _capability()
+    capability["canonical_entrypoint"].pop("type")
+    capability["canonical_entrypoint"].pop("value")
+    result = validate_registry(_write_registry(root, [capability]), root=root)
+    assert any("canonical_entrypoint.type" in issue for issue in result.issues)
+    assert any("canonical_entrypoint.value" in issue for issue in result.issues)
 
 
 def test_private_source_path_is_rejected(tmp_path: Path) -> None:
