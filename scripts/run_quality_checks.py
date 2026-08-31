@@ -74,7 +74,19 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                     "-m",
                     "src.research_contracts.research_capability_registry",
                 ),
-            )
+            ),
+            PlannedCommand(
+                "trial-ledger",
+                (
+                    sys.executable,
+                    str(
+                        ROOT
+                        / "strategy-research"
+                        / "scripts"
+                        / "trial_ledger_check.py"
+                    ),
+                ),
+            ),
         ],
         "dead-code": [
             PlannedCommand(
