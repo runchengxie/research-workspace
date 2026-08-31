@@ -155,6 +155,7 @@
         "scripts/hk_archive_gate.py",
         "scripts/import_boundary_rules.yml",
         "scripts/install_pre_push_hooks.py",
+        "scripts/maintainability_baseline.json",
         "scripts/maintainability_baseline.py",
         "scripts/namespace_contracts.py",
         "scripts/ownership_boundary_rules.yml",
