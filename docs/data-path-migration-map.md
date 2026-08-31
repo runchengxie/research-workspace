@@ -28,7 +28,7 @@
 | `reports/` | `reports/` | 已统一 | 保留验证和发布证据，按 retention 审查历史版本 |
 | `runs/` | `runs/` | 已统一 | 运行完成后不可变，旧运行需单独做保留决定 |
 | `experiments/` | `experiments/` | 已统一 | 固定时点研究快照，不能按普通缓存处理 |
-| `research/` | `experiments/`、`features/`、`reports/`、`receipts/` | 拆分待审 | 当前同时包含 notebook、结果和凭证，先建立子项清单 |
+| `research/` | `experiments/`、`features/`、`reports/`、`receipts/` | 拆分待审 | MDP 根目录仅剩兼容 symlink；watchlist20 研究集合已归入 `experiments/strategies/watchlist20/` |
 | `strategy_inputs/` | `published/` 或 `features/` | 拆分待审 | 稳定策略输入已归位到 `published/strategies/`，其余按生产方和消费者确认 |
 | `strategy_outputs/` | `runs/`、`features/`、`snapshots/`、`reports/`、`receipts/` | 拆分待审 | 稳定策略输出已归位到 `published/strategies/`，保留旧入口和 `latest` 兼容 symlink |
 | `artifacts/` | 按子目录拆成 `runs/`、`reports/`、`snapshots/`、`cache/`、`receipts/` | 拆分待审 | 父目录是历史总称，必须逐子目录核对 manifest |
@@ -37,12 +37,12 @@
 
 | 历史名称或路径 | 规范解释 | 当前动作 |
 | --- | --- | --- |
-| `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 保留现有路径，继续由研究清单和 receipt 管理 |
+| `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 已迁入 `experiments/strategies/watchlist20/incumbent_challenger/`，旧路径保留 symlink |
 | `challenger_entry*` | 上述研究集合的兼容 symlink | 保留，消费者迁移前不得删除 |
-| `strategy-pipeline/artifacts/cache/` | `cache/` | 只有证明可重建且没有运行占用后才可清理 |
-| `strategy-pipeline/artifacts/runs/` | `runs/` | 按运行状态和 receipt 保留 |
-| `strategy-pipeline/artifacts/reports/` | `reports/` | 按报告引用和 retention 保留 |
-| `strategy-pipeline/artifacts/snapshots/` | `snapshots/` | 固定时点证据，先核对引用 |
+| `strategy-pipeline/artifacts/cache/` | `cache/` | 已归位到 `strategy-pipeline/cache/`，旧路径保留 symlink；只有证明可重建且无占用后才可清理 |
+| `strategy-pipeline/artifacts/runs/` | `runs/` | 已归位到 `strategy-pipeline/runs/`，旧路径保留 symlink；按运行状态和 receipt 保留 |
+| `strategy-pipeline/artifacts/reports/` | `reports/` | 已归位到 `strategy-pipeline/reports/`，旧路径保留 symlink；按报告引用和 retention 保留 |
+| `strategy-pipeline/artifacts/snapshots/` | `snapshots/` | 已归位到 `strategy-pipeline/snapshots/`，旧路径保留 symlink；固定时点证据先核对引用 |
 | `trading-research-dashboard/cache/` | `cache/` | 外部项目本地缓存，按 Dashboard 自身规则清理 |
 | `archive/market-data-platform/staging/2026-08-31/` | `archive/` | 已归档的替换任务，保留 archive README 和 receipt |
 | `sclt/archive/2026-08-30/` | `archive/` | 已迁出的研究产物归档，不进入 Git |
@@ -74,8 +74,8 @@ symlink。详细回执见 `metadata/lifecycle/migrations/stable-strategy-layout-
 4. `current`、`latest`、`rollback` 和 successor 核对结果；
 5. 失败时的回滚路径，以及迁移后的 retention 决定。
 
-当前没有发现可以仅凭目录名称安全整体迁移的混合大目录。因此本轮只建立映射，
-不对 `market-data-platform` 的大体积资产、研究结果或生产入口做物理移动。
+本轮已完成可安全归类的实体目录迁移；仍保留兼容 symlink，不删除任何大体积研究或运行结果。
+后续涉及生产默认路径的代码和 cron 更新，必须先经过 shadow read 和日报 dry-run。
 
 涉及日报和生产消费者的 breaking change 管理，见
 [数据路径 breaking change 登记](data-path-breaking-change-register.md)。
