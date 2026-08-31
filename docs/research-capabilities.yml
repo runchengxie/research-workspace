@@ -1,0 +1,212 @@
+schema_version: research_capability_registry.v1
+capabilities:
+  - capability_id: governance.research_spec
+    summary: 校验 research_spec.v1 的实验身份、研究口径和证据引用。
+    owner_repository: research-workspace
+    stage: governance
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: script
+      value: python scripts/research_spec_check.py
+      source_path: scripts/research_spec_check.py
+    inputs:
+      - research_spec.v1
+    outputs:
+      - research_spec_check.v1
+    requires: []
+    method_refs: []
+    evidence_refs:
+      - tests/test_research_spec_check.py
+
+  - capability_id: governance.strategy_evidence_gate
+    summary: 按策略生命周期验证 PIT、样本外、成本、稳健性和生产资格证据。
+    owner_repository: research-workspace
+    stage: governance
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: script
+      value: python scripts/strategy_evidence_gate.py
+      source_path: scripts/strategy_evidence_gate.py
+    inputs:
+      - strategy_evidence_bundle.v1
+      - strategy catalog
+    outputs:
+      - lifecycle evidence gate result
+    requires:
+      - governance.research_spec
+    method_refs:
+      - type: afml
+        ref: chapter-11-the-dangers-of-backtesting
+    evidence_refs:
+      - tests/test_strategy_evidence_gate.py
+
+  - capability_id: governance.decision_governance
+    summary: 校验 claim、counterexample、research case、来源和 outcome profile 的决策证据链。
+    owner_repository: research-workspace
+    stage: governance
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: script
+      value: python scripts/decision_governance_check.py
+      source_path: scripts/decision_governance_check.py
+    inputs:
+      - claim.v1
+      - counterexample.v1
+      - research_case.v1
+      - source.v1
+      - outcome_profile.v1
+    outputs:
+      - decision governance check result
+    requires:
+      - governance.research_spec
+    method_refs: []
+    evidence_refs:
+      - tests/test_decision_governance_check.py
+
+  - capability_id: alpha.event_labeling
+    summary: 生成带精确事件窗口的 triple-barrier 标签，并同时输出 meta-labeling 结果。
+    owner_repository: alpha-research
+    stage: labeling
+    kind: computation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: alpha_research.event_labeling.label_triple_barrier
+      source_path: src/alpha_research/event_labeling.py
+    inputs:
+      - point-in-time prices
+      - event seeds
+      - barrier configuration
+    outputs:
+      - canonical event table
+      - label windows
+      - meta labels
+    requires: []
+    method_refs:
+      - type: afml
+        ref: chapter-3-labeling
+    evidence_refs:
+      - tests/test_afml_methodology.py
+
+  - capability_id: alpha.sample_weighting
+    summary: 基于事件重叠计算 uniqueness 权重，并支持 sequential bootstrap 和时间衰减。
+    owner_repository: alpha-research
+    stage: modeling
+    kind: computation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: alpha_research.sample_weighting.build_event_sample_weights
+      source_path: src/alpha_research/sample_weighting.py
+    inputs:
+      - canonical event table
+      - bar index
+    outputs:
+      - sample weights
+      - sample-weight receipt
+    requires:
+      - alpha.event_labeling
+    method_refs:
+      - type: afml
+        ref: chapter-4-sample-weights
+    evidence_refs:
+      - tests/test_afml_methodology.py
+
+  - capability_id: alpha.cpcv
+    summary: 用 canonical event windows 执行 combinatorial purged cross-validation 和路径审计。
+    owner_repository: alpha-research
+    stage: validation
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: alpha_research.cpcv.run_cpcv_audit
+      source_path: src/alpha_research/cpcv.py
+    inputs:
+      - research dataset
+      - canonical event windows
+      - CPCV configuration
+    outputs:
+      - CPCV splits
+      - path metrics
+      - audit report
+    requires:
+      - alpha.event_labeling
+    method_refs:
+      - type: afml
+        ref: chapter-12-backtesting-through-cross-validation
+    evidence_refs:
+      - tests/test_cpcv.py
+
+  - capability_id: portfolio.bet_sizing
+    summary: 将校准概率、波动率和活动 bet 转换为受上限与离散化约束的组合权重。
+    owner_repository: portfolio-backtester
+    stage: portfolio
+    kind: computation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: portfolio_backtester.bet_sizing.build_sized_weights
+      source_path: src/portfolio_backtester/bet_sizing.py
+    inputs:
+      - signal frame
+      - calibrated probability
+      - predicted volatility
+    outputs:
+      - sized weights
+      - sizing receipt
+    requires: []
+    method_refs:
+      - type: afml
+        ref: chapter-10-bet-sizing
+    evidence_refs:
+      - tests/test_afml_portfolio.py
+
+  - capability_id: portfolio.hrp
+    summary: 用历史收益协方差与层次聚类构造 HRP 权重，并支持滚动时点计算。
+    owner_repository: portfolio-backtester
+    stage: portfolio
+    kind: computation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: portfolio_backtester.hrp.hierarchical_risk_parity
+      source_path: src/portfolio_backtester/hrp.py
+    inputs:
+      - historical returns
+      - HRP configuration
+    outputs:
+      - HRP weights
+      - clustering result
+    requires: []
+    method_refs:
+      - type: afml
+        ref: chapter-16-machine-learning-asset-allocation
+    evidence_refs:
+      - tests/test_afml_portfolio.py
+
+  - capability_id: portfolio.strategy_risk
+    summary: 计算 PSR、收益集中度、策略失败概率和 implementation shortfall 等策略风险指标。
+    owner_repository: portfolio-backtester
+    stage: validation
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: python
+      value: portfolio_backtester.strategy_risk.summarize_strategy_risk
+      source_path: src/portfolio_backtester/strategy_risk.py
+    inputs:
+      - periodic returns
+      - optional turnover and gross returns
+    outputs:
+      - strategy risk report
+      - implementation shortfall metrics
+    requires: []
+    method_refs:
+      - type: afml
+        ref: chapter-15-understanding-strategy-risk
+    evidence_refs:
+      - tests/test_afml_portfolio.py
