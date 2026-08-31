@@ -40,6 +40,16 @@
       "removal_condition": "remove only after a successor deployment command is used for two release reviews"
     },
     {
+      "path": "scripts/data_path_audit.py",
+      "owner": "research-workspace",
+      "purpose": "Build a read-only inventory of shared data paths and lifecycle semantics",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested JSON inventory output",
+      "external_dependencies": "Python and DATA_PLATFORM_ROOT",
+      "removal_condition": "remove after the data-path migration audit is closed and no active migration or release workflow calls this script"
+    },
+    {
       "path": "scripts/count_loc.sh",
       "owner": "research-workspace",
       "purpose": "Count tracked source lines in the superproject and initialized submodules",
