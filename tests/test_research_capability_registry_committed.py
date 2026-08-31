@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from scripts.research_capability_registry_check import validate_registry
+from src.research_contracts.research_capability_registry import validate_registry
 
 
 def test_committed_registry_is_valid_against_pinned_workspace() -> None:
