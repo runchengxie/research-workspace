@@ -71,7 +71,8 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                 "research-capability-registry",
                 (
                     sys.executable,
-                    str(ROOT / "scripts" / "research_capability_registry_check.py"),
+                    "-m",
+                    "src.research_contracts.research_capability_registry",
                 ),
             )
         ],
