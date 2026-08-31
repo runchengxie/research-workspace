@@ -66,6 +66,28 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                 ),
             ),
         ],
+        "governance": [
+            PlannedCommand(
+                "research-capability-registry",
+                (
+                    sys.executable,
+                    "-m",
+                    "src.research_contracts.research_capability_registry",
+                ),
+            ),
+            PlannedCommand(
+                "trial-ledger",
+                (
+                    sys.executable,
+                    str(
+                        ROOT
+                        / "strategy-research"
+                        / "scripts"
+                        / "trial_ledger_check.py"
+                    ),
+                ),
+            ),
+        ],
         "dead-code": [
             PlannedCommand(
                 "dead-code-advisory",
@@ -81,6 +103,7 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
             *commands["lint"],
             *commands["type"],
             *commands["architecture"],
+            *commands["governance"],
             *commands["secrets"],
         ]
     if profile == "ci-smoke":
@@ -119,6 +142,7 @@ def main(argv: list[str] | None = None) -> int:
             "lint",
             "type",
             "architecture",
+            "governance",
             "secrets",
             "dead-code",
             "hard",

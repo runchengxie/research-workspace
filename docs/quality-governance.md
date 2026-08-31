@@ -6,7 +6,7 @@
 
 | 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke、研究能力目录与 Trial Ledger 校验 | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
 | `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current 契约发布 |
 | `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
 | `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
@@ -22,16 +22,27 @@
 python scripts/run_quality_checks.py --profile hard
 python scripts/run_quality_checks.py --profile ci-smoke
 python scripts/run_quality_checks.py --profile architecture
+python scripts/run_quality_checks.py --profile governance
 python scripts/run_quality_checks.py --profile secrets
 python scripts/run_quality_checks.py --profile dead-code
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-`hard` 包含 Ruff、格式、`ty`、工作区导入边界和 secret scan。`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
+`hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和 secret scan。`governance` 当前运行两项检查：
+
+- `research_capability_registry.v1`：确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
+- `strategy-research/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
+
+`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
 
 顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
-`workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py` 和
-`maintainability_baseline.py`。新增质量门禁脚本时，应同时判断是否加入 `ty` 的目标列表。
+`workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py`、
+`maintainability_baseline.py` 与 `src/research_contracts/research_capability_registry.py`。
+新增质量门禁模块时，应同时判断是否加入 `ty` 的目标列表。
+
+研究能力目录的人工说明见 [research-capabilities.md](research-capabilities.md)。外部 AFML、QuantSkills 或论文引用只作为 `method_refs`，不能替代 workspace source/evidence 验证。能力成熟度也不等于策略生产资格或未来收益判断。
+
+Trial Ledger 的 canonical validator 由 `strategy-research` owner 维护。顶层通过已合并的 gitlink 调用它，不复制 parent、fingerprint 或 final OOS 逻辑。`research-layer-tests` 仍会独立执行 owner 仓库 pytest，因此契约文件校验与实现单测是两层保护。
 
 ## 跨仓库边界
 
@@ -53,7 +64,7 @@ baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个�
 
 ## 自动化状态
 
-`.github/workflows/superproject.yml.disabled` 是停用模板，顶层与六个子仓库的 Actions
+`.github/workflows/superproject.yml.disabled` 是停用模板，顶层与子仓库的 Actions
 权限均禁用。`portfolio-backtester` 保留一份 `ci.yml` 定义，但当前不会运行。其余仓库只
 保留停用模板或没有 workflow。当前检查以本地 pre-push 为权威入口。恢复远端自动化时，
 应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。

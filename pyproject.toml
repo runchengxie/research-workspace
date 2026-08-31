@@ -80,6 +80,7 @@ include = [
   "src/research_contracts/__init__.py",
   "src/research_contracts/artifact_envelope.py",
   "src/research_contracts/artifact_contracts.py",
+  "src/research_contracts/research_capability_registry.py",
   "src/research_contracts/promotion_evidence.py",
   "src/research_contracts/promotion_evidence_checks.py",
   "src/research_contracts/promotion_evidence_common.py",

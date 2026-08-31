@@ -26,7 +26,13 @@ SPEC_NAME = "research_spec.json"
 SPEC_VERSION = "research_spec.v1"
 ALLOWED_STATUS = {"proposed", "in_progress", "complete", "archived"}
 NOT_APPLICABLE = "n/a"
-ALLOWED_CONSTRUCTIONS = {"top_k", "long_short", "long_only", "pairwise", NOT_APPLICABLE}
+ALLOWED_CONSTRUCTIONS = {
+    "top_k",
+    "long_short",
+    "long_only",
+    "pairwise",
+    NOT_APPLICABLE,
+}
 ALLOWED_TASKS = {"ranking", "regression", "classification", NOT_APPLICABLE}
 REQUIRED_TOP_LEVEL = (
     "schema_version",
@@ -57,7 +63,9 @@ class SpecCheck:
 
 
 def _spec_files(root: Path) -> list[Path]:
-    return sorted((root / "strategy-research" / "experiments").glob(f"*/{SPEC_NAME}"))
+    return sorted(
+        (root / "strategy-research" / "experiments").glob(f"*/{SPEC_NAME}")
+    )
 
 
 def _dict_field(payload: dict[str, Any], name: str) -> dict[str, Any]:
@@ -67,7 +75,12 @@ def _dict_field(payload: dict[str, Any], name: str) -> dict[str, Any]:
     return value
 
 
-def _require(payload: dict[str, Any], name: str, *, allow_na: bool = False) -> str | None:
+def _require(
+    payload: dict[str, Any],
+    name: str,
+    *,
+    allow_na: bool = False,
+) -> str | None:
     value = payload.get(name)
     if value is None:
         return f"{name} 缺失"
@@ -130,7 +143,9 @@ def _check_structured_fields(payload: dict[str, Any]) -> list[str]:
     issues.extend(_issue("prediction.horizon", _require(prediction, "horizon")))
     task = prediction.get("task")
     if task not in ALLOWED_TASKS:
-        issues.append("prediction.task 必须属于 ranking、regression、classification 或 n/a")
+        issues.append(
+            "prediction.task 必须属于 ranking、regression、classification 或 n/a"
+        )
     model = _dict_field(payload, "model")
     issues.extend(_issue("model.name", _require(model, "name")))
     issues.extend(_issue("model.training", _require(model, "training")))
@@ -147,7 +162,12 @@ def _check_structured_fields(payload: dict[str, Any]) -> list[str]:
         )
     )
     benchmark = _dict_field(payload, "benchmark")
-    issues.extend(_issue("benchmark.cohorts", _list_field(benchmark, "cohorts", allow_na=True)))
+    issues.extend(
+        _issue(
+            "benchmark.cohorts",
+            _list_field(benchmark, "cohorts", allow_na=True),
+        )
+    )
     evaluation = _dict_field(payload, "evaluation")
     issues.extend(
         _issue(
@@ -179,6 +199,89 @@ def _check_evidence(payload: dict[str, Any], root: Path) -> list[str]:
     return issues
 
 
+def _trial_ledger_config(
+    payload: dict[str, Any],
+) -> tuple[str, str] | list[str] | None:
+    config = payload.get("trial_ledger")
+    if config is None:
+        return None
+    if not isinstance(config, dict):
+        return ["trial_ledger 必须是对象"]
+    relative_path = config.get("path")
+    family = config.get("multiple_testing_family")
+    issues: list[str] = []
+    if not isinstance(relative_path, str) or not relative_path.strip():
+        issues.append("trial_ledger.path 缺失或为空")
+    if not isinstance(family, str) or not family.strip():
+        issues.append("trial_ledger.multiple_testing_family 缺失或为空")
+    if issues:
+        return issues
+    return relative_path, family
+
+
+def _resolve_trial_ledger(root: Path, relative_path: str) -> tuple[Path | None, str | None]:
+    strategy_root = (root / "strategy-research").resolve()
+    resolved = (strategy_root / relative_path).resolve()
+    try:
+        resolved.relative_to(strategy_root)
+    except ValueError:
+        return None, "trial_ledger.path 不能逃逸 strategy-research"
+    if not resolved.is_file():
+        return None, f"trial_ledger 不存在：{relative_path}"
+    return resolved, None
+
+
+def _trial_ledger_rows(path: Path) -> tuple[list[dict[str, Any]], list[str]]:
+    rows: list[dict[str, Any]] = []
+    issues: list[str] = []
+    for line_number, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        if not raw.strip():
+            continue
+        try:
+            row = json.loads(raw)
+        except json.JSONDecodeError:
+            issues.append(f"trial_ledger 第 {line_number} 行 JSON 无效")
+            continue
+        if not isinstance(row, dict):
+            issues.append(f"trial_ledger 第 {line_number} 行必须是对象")
+            continue
+        rows.append(row)
+    return rows, issues
+
+
+def _check_trial_ledger(
+    payload: dict[str, Any],
+    expected_id: str,
+    root: Path,
+) -> list[str]:
+    config = _trial_ledger_config(payload)
+    if config is None:
+        return []
+    if isinstance(config, list):
+        return config
+    relative_path, family = config
+    path, error = _resolve_trial_ledger(root, relative_path)
+    if error:
+        return [error]
+    assert path is not None
+    rows, issues = _trial_ledger_rows(path)
+    counted_family = False
+    for row in rows:
+        if row.get("experiment_id") != expected_id:
+            issues.append(f"trial_ledger experiment_id 必须是 {expected_id}")
+        multiple = row.get("multiple_testing")
+        if not isinstance(multiple, dict):
+            continue
+        if multiple.get("family_id") == family and multiple.get("counted") is True:
+            counted_family = True
+    if not counted_family:
+        issues.append(
+            "trial_ledger.multiple_testing_family "
+            f"{family} 没有 counted=true trial"
+        )
+    return issues
+
+
 def _issue(prefix: str, message: str | None) -> list[str]:
     return [f"{prefix} {message}"] if message else []
 
@@ -190,6 +293,7 @@ def check_spec(path: Path, *, expected_id: str, root: Path) -> SpecCheck:
     issues = _check_top_level(payload, expected_id)
     issues.extend(_check_structured_fields(payload))
     issues.extend(_check_evidence(payload, root))
+    issues.extend(_check_trial_ledger(payload, expected_id, root))
     return SpecCheck(expected_id, issues)
 
 
@@ -198,13 +302,24 @@ def _render(checks: list[SpecCheck], *, as_json: bool) -> str:
         payload = {
             "schema_version": "research_spec_check.v1",
             "specs": [
-                {"experiment_id": check.experiment_id, "ok": check.ok, "issues": check.issues}
+                {
+                    "experiment_id": check.experiment_id,
+                    "ok": check.ok,
+                    "issues": check.issues,
+                }
                 for check in checks
             ],
         }
         return json.dumps(payload, ensure_ascii=False, indent=2)
-    lines = [f"[{'OK' if check.ok else 'ERROR'}] {check.experiment_id}" for check in checks]
-    lines.extend(f"  - {issue}" for check in checks for issue in check.issues)
+    lines = [
+        f"[{'OK' if check.ok else 'ERROR'}] {check.experiment_id}"
+        for check in checks
+    ]
+    lines.extend(
+        f"  - {issue}"
+        for check in checks
+        for issue in check.issues
+    )
     return "\n".join(lines)
 
 
@@ -221,7 +336,8 @@ def main(argv: list[str] | None = None) -> int:
         checks = [check_spec(path, expected_id=path.parent.name, root=root)]
     else:
         checks = [
-            check_spec(path, expected_id=path.parent.name, root=root) for path in _spec_files(root)
+            check_spec(path, expected_id=path.parent.name, root=root)
+            for path in _spec_files(root)
         ]
     print(_render(checks, as_json=args.as_json))
     return 0 if all(check.ok for check in checks) else 1
