@@ -6,7 +6,7 @@
 
 | 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke、研究能力目录校验 | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke、研究能力目录与 Trial Ledger 校验 | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
 | `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current 契约发布 |
 | `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
 | `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
@@ -28,10 +28,12 @@ python scripts/run_quality_checks.py --profile dead-code
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-`hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和 secret scan。`governance` 当前运行
-`research_capability_registry.v1` 校验，确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
+`hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和 secret scan。`governance` 当前运行两项检查：
 
-`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
+- `research_capability_registry.v1`：确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
+- `strategy-research/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
+
+`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
 
 顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
 `workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py`、
@@ -40,7 +42,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 研究能力目录的人工说明见 [research-capabilities.md](research-capabilities.md)。外部 AFML、QuantSkills 或论文引用只作为 `method_refs`，不能替代 workspace source/evidence 验证。能力成熟度也不等于策略生产资格或未来收益判断。
 
-Trial Ledger 的 owner validator 位于 `strategy-research`。在 owner PR 与顶层 gitlink 合并之前，顶层不会通过条件跳过的方式假装这项门禁已经存在。gitlink 更新后，Trial Ledger 校验应加入完整 root-quality 路径；当前 `research-layer-tests` 仍会执行 owner 仓库的全部 pytest。
+Trial Ledger 的 canonical validator 由 `strategy-research` owner 维护。顶层通过已合并的 gitlink 调用它，不复制 parent、fingerprint 或 final OOS 逻辑。`research-layer-tests` 仍会独立执行 owner 仓库 pytest，因此契约文件校验与实现单测是两层保护。
 
 ## 跨仓库边界
 
