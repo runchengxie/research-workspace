@@ -11,6 +11,8 @@
 | `strategy_outputs/d11_h5_shadow/` | 影子策略生产、状态恢复和日报交付 | 已迁入 `published/strategies/d11_h5_shadow/`；旧路径保留兼容 symlink | 否 |
 | `strategy_inputs/watchlist20/news_heat/` | DailyWatch20 生产和候选池构建 | 已迁入 `published/strategy_inputs/watchlist20/news_heat/`；旧路径保留兼容 symlink | 否 |
 | `artifacts/assets/benchmark/csi300_daily_return.parquet` | `strategy-research` Qlib 实验配置 | 已迁入 `published/benchmarks/`，旧路径保留 symlink | 已完成兼容迁移 |
+| `strategy_outputs/watchlist20/research/` | DailyWatch20 研究实验和比较分析 | 已迁入 `experiments/strategies/watchlist20/`；旧路径保留兼容 symlink | 否 |
+| `strategy-pipeline/artifacts/*` | pipeline 运行、报告、缓存和元数据 | 已分别归位到项目数据根的 `runs/`、`reports/`、`cache/`、`metadata/`、`assets/`、`snapshots/`；旧子路径保留兼容 symlink | 否 |
 
 这里的 `strategy_outputs` 和 `strategy_inputs` 是业务域命名空间，不再把它们视为生命周期
 层。生命周期语义由内部的 `runs/`、`features/`、`state/`、`latest`、receipt 和 manifest
@@ -34,6 +36,15 @@ metadata/lifecycle/migrations/stable-strategy-layout-20260831.json
 ```
 
 这一步只是物理归位，不代表已经完成生产默认入口切换；旧 symlink 在观察期内不得删除。
+
+同日完成了研究与 pipeline 产物的第二轮归类：
+
+- `strategy_outputs/watchlist20/research/` → `experiments/strategies/watchlist20/`；
+- `strategy-pipeline/artifacts/runs/` → `strategy-pipeline/runs/`；
+- `strategy-pipeline/artifacts/{assets,cache,metadata,reports,snapshots}/` → 对应项目数据根目录；
+- `market-data-platform/research/` 当前只剩已迁移目录的兼容 symlink，不再包含实体研究产物。
+
+回执见 `metadata/lifecycle/migrations/research-and-pipeline-artifacts-layout-20260831.json`。
 
 `artifacts/assets/benchmark/csi300_daily_return.parquet` 已移动到：
 
@@ -68,6 +79,6 @@ metadata/lifecycle/migrations/artifacts-assets-to-published-benchmark-20260831.j
   已发布策略输入；
 - 不删除旧路径、`latest` alias 或任何日报 receipt。
 
-原因是当前 production `market-intel` release 仍可能直接读取旧路径。物理迁移已经通过兼容 symlink
-完成，但默认路径、shadow read、dry-run、观察周期和最终退役仍需要独立的跨仓库变更与 production
-promotion，不能在本次数据目录操作中假设完成。
+原因是当前 production `market-intel` release 和部分 pipeline 代码仍可能直接读取旧路径。物理迁移
+已经通过兼容 symlink 完成，但默认路径、shadow read、dry-run、观察周期和最终退役仍需要独立的
+跨仓库变更与 production promotion，不能在本次数据目录操作中假设完成。
