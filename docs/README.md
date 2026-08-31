@@ -28,6 +28,7 @@
 | 核对 Qlib、LEAN、vn.py 和 Backtrader 的当前状态 | [framework-support-matrix.md](framework-support-matrix.md) |
 | 查看当前锁定组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
+| 数据、研究与代码目录术语 | [data-lifecycle-terminology.md](data-lifecycle-terminology.md) |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看港股恢复专用归档 | [archive/hk/README.md](archive/hk/README.md) |
 | 术语表 | [glossary.md](glossary.md) |
