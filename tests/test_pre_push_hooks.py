@@ -222,7 +222,7 @@ def test_push_ref_policy_rejects_other_branch_and_remote_main_deletion(tmp_path:
     )
 
     assert any(
-        "only refs/heads/main or refs/heads/{feat,fix,hotfix,release}/* are allowed" in issue
+        "only refs/heads/main or refs/heads/{feat,fix,hotfix,chore,release}/* are allowed" in issue
         for issue in issues
     )
     assert any("deleting remote main is forbidden" in issue for issue in issues)
@@ -239,7 +239,7 @@ def test_destination_issue_allows_main_and_feature_prefixes() -> None:
         is None
     )
     # allowed feature-prefix branches allowed (for PR flow)
-    for prefix in ("feat", "fix", "hotfix", "release"):
+    for prefix in ("feat", "fix", "hotfix", "chore", "release"):
         assert (
             run_pre_push_checks._destination_issue(
                 _pushed_ref(
@@ -259,7 +259,7 @@ def test_destination_issue_rejects_unprefixed_branch() -> None:
         _pushed_ref("refs/heads/topic", head, "refs/heads/topic")
     )
     assert issue is not None
-    assert "refs/heads/{feat,fix,hotfix,release}/*" in issue
+    assert "refs/heads/{feat,fix,hotfix,chore,release}/*" in issue
 
 
 def test_destination_issue_forbids_deleting_main_and_feature_and_tag() -> None:
