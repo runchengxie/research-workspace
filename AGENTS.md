@@ -159,8 +159,8 @@ targets.json
 - 并行开发、实验和 agent 任务必须在 `/home/richard/code/.worktrees/` 下创建独立 worktree 和功能分支。
 - `/home/richard/code/production/research-workspace` 是定时任务使用的干净、detached production worktree，不直接编辑。
 - `git push` 只更新远端，不会更新 production。代码合入 `main` 后，必须显式运行 `scripts/promote-production.sh`。
-- production 更新前必须通过 clean-check，更新后必须记录父仓库与 submodule revision manifest；失败时保留原 production 版本。
+- production 更新前必须通过 clean-check，更新后必须记录父仓库与 submodule revision manifest。失败时保留原 production 版本。
 - 未追踪产物、数据快照和日志不得放入可删除的 agent worktree。应放在仓库外的数据目录、被忽略的 artifacts/outputs 目录，或有明确保留策略的归档目录。
-- 不得用符号链接替代 Git submodule；服务配置应指向明确的 production 路径。
+- 不得用符号链接替代 Git submodule。服务配置应指向明确的 production 路径。
 
 production 发布流程见 [`docs/production-update.md`](docs/production-update.md)。
