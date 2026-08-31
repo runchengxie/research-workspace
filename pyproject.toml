@@ -62,6 +62,7 @@ include = [
   "scripts/install_pre_push_hooks.py",
   "scripts/namespace_contracts.py",
   "scripts/print_version_matrix.py",
+  "scripts/research_capability_registry_check.py",
   "scripts/run_pre_push_checks.py",
   "scripts/run_quality_checks.py",
   "scripts/run_submodule_checks.py",
