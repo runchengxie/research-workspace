@@ -7,9 +7,9 @@
 
 | 当前接口 | 主要消费者 | 当前处理 | 是否允许直接改名 |
 | --- | --- | --- | --- |
-| `strategy_outputs/watchlist20/` | `market-intel` 日报、DailyWatch20 校验和投递 | 保留原入口，内部使用 `runs/`、`research/`、`features/`、`latest` | 否 |
-| `strategy_outputs/d11_h5_shadow/` | 影子策略生产、状态恢复和日报交付 | 保留原入口，内部使用 `state/`、`runs/`、`latest` | 否 |
-| `strategy_inputs/watchlist20/news_heat/` | DailyWatch20 生产和候选池构建 | 保留原入口，内部使用 `runs/`、`latest` | 否 |
+| `strategy_outputs/watchlist20/` | `market-intel` 日报、DailyWatch20 校验和投递 | 已迁入 `published/strategies/watchlist20/`；旧路径保留兼容 symlink | 否 |
+| `strategy_outputs/d11_h5_shadow/` | 影子策略生产、状态恢复和日报交付 | 已迁入 `published/strategies/d11_h5_shadow/`；旧路径保留兼容 symlink | 否 |
+| `strategy_inputs/watchlist20/news_heat/` | DailyWatch20 生产和候选池构建 | 已迁入 `published/strategy_inputs/watchlist20/news_heat/`；旧路径保留兼容 symlink | 否 |
 | `artifacts/assets/benchmark/csi300_daily_return.parquet` | `strategy-research` Qlib 实验配置 | 已迁入 `published/benchmarks/`，旧路径保留 symlink | 已完成兼容迁移 |
 
 这里的 `strategy_outputs` 和 `strategy_inputs` 是业务域命名空间，不再把它们视为生命周期
@@ -17,6 +17,23 @@
 表达。这样做不会为了改名破坏日报接口。
 
 ## 已完成的兼容迁移
+
+2026 年 8 月 31 日，三个稳定策略命名空间完成了物理归位：
+
+```text
+published/strategies/watchlist20/
+published/strategies/d11_h5_shadow/
+published/strategy_inputs/watchlist20/news_heat/
+```
+
+旧入口仍然存在并指向上述新目录，因此当前 production 不需要切换配置。文件数量、总字节数、
+文件清单摘要和回滚信息记录在：
+
+```text
+metadata/lifecycle/migrations/stable-strategy-layout-20260831.json
+```
+
+这一步只是物理归位，不代表已经完成生产默认入口切换；旧 symlink 在观察期内不得删除。
 
 `artifacts/assets/benchmark/csi300_daily_return.parquet` 已移动到：
 
@@ -44,10 +61,13 @@ metadata/lifecycle/migrations/artifacts-assets-to-published-benchmark-20260831.j
 
 ## 当前不执行的动作
 
-- 不把 `strategy_outputs/watchlist20/` 整体移动到 `published/`；
-- 不把 `strategy_outputs/d11_h5_shadow/` 整体移动到 `experiments/`；
-- 不把 `strategy_inputs/watchlist20/` 整体移动到 `features/`；
+- 不把 `published/strategies/watchlist20/` 改成 `experiments/`；它包含正式发布结果和研究结果，
+  仍由业务域命名空间承载；
+- 不把 `published/strategies/d11_h5_shadow/` 改成 `experiments/`；它包含生产状态和日报消费结果；
+- 不把 `published/strategy_inputs/watchlist20/news_heat/` 改成普通 `features/`；它是有契约的
+  已发布策略输入；
 - 不删除旧路径、`latest` alias 或任何日报 receipt。
 
-原因是当前 production `market-intel` release 仍直接读取这些路径。它们的 breaking change
-需要跨仓库代码变更和 production promotion，不能只在数据目录层完成。
+原因是当前 production `market-intel` release 仍可能直接读取旧路径。物理迁移已经通过兼容 symlink
+完成，但默认路径、shadow read、dry-run、观察周期和最终退役仍需要独立的跨仓库变更与 production
+promotion，不能在本次数据目录操作中假设完成。
