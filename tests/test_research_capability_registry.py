@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from scripts.research_capability_registry_check import validate_registry
+from src.research_contracts.research_capability_registry import validate_registry
 
 
 def _capability(
