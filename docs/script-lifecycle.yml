@@ -20,6 +20,16 @@
   },
   "records": [
     {
+      "path": "scripts/promote-production.sh",
+      "owner": "research-workspace",
+      "purpose": "Promote the reviewed superproject main revision and its pinned submodules into the clean production worktree",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "production worktree checkout state and submodule working trees",
+      "external_dependencies": "git, github remote, initialized production checkout",
+      "removal_condition": "remove only after production promotion is replaced by a versioned deployment command and the replacement has been used for two release reviews"
+    },
+    {
       "path": "scripts/count_loc.sh",
       "owner": "research-workspace",
       "purpose": "Count tracked source lines in the superproject and initialized submodules",
