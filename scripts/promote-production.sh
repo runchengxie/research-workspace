@@ -75,7 +75,7 @@ prepare_release() {
       run git -C "$release" submodule update --init --recursive
       if (( ! DRY_RUN )); then
         for project in market-data-platform strategy-pipeline; do
-          [[ -f "$release/$project/pyproject.toml" ]] && (cd "$release/$project" && uv sync --locked --extra dev)
+          [[ -f "$release/$project/pyproject.toml" ]] && (cd "$release/$project" && uv sync --locked --extra dev --extra tushare)
         done
       fi
     elif [[ -f "$release/pyproject.toml" ]] && (( ! DRY_RUN )); then
