@@ -12,7 +12,7 @@ if str(SCRIPTS) not in sys.path:
 run_quality_checks = importlib.import_module("run_quality_checks")
 
 
-def test_hard_quality_profile_runs_capability_registry_check() -> None:
+def test_hard_quality_profile_runs_research_governance_checks() -> None:
     commands = {
         command.name: command.command
         for command in run_quality_checks.plan_commands("hard")
@@ -22,4 +22,8 @@ def test_hard_quality_profile_runs_capability_registry_check() -> None:
         sys.executable,
         "-m",
         "src.research_contracts.research_capability_registry",
+    )
+    assert commands["trial-ledger"] == (
+        sys.executable,
+        str(ROOT / "strategy-research" / "scripts" / "trial_ledger_check.py"),
     )
