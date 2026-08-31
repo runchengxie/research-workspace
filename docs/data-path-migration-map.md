@@ -76,6 +76,9 @@
 当前没有发现可以仅凭目录名称安全整体迁移的混合大目录。因此本轮只建立映射，
 不对 `market-data-platform` 的大体积资产、研究结果或生产入口做物理移动。
 
+涉及日报和生产消费者的 breaking change 管理，见
+[数据路径 breaking change 登记](data-path-breaking-change-register.md)。
+
 ## 当前审计清单
 
 可重复生成的只读审计工具是：
