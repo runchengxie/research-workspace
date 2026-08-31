@@ -60,9 +60,6 @@ prepare_release() {
     printf '[%s] warning: source has local changes; only %s/%s is promoted\n' "$name" "$remote" "$ref" >&2
   fi
   if [[ "$current" == "$commit" ]]; then
-    if [[ ! -f "$base/manifests/$commit.txt" ]]; then
-      write_manifest "$name" "$base" "$commit"
-    fi
     printf '[%s] current already points to %s\n' "$name" "$commit"
     return
   fi
