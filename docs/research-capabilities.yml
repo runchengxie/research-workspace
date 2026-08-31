@@ -23,6 +23,31 @@ capabilities:
       - tests/test_research_capability_registry.py
       - tests/test_research_capability_registry_committed.py
 
+  - capability_id: governance.trial_ledger
+    summary: 记录并校验多候选研究的真实 trial 历史、多重检验记账、派生关系和 final OOS 边界。
+    owner_repository: strategy-research
+    stage: governance
+    kind: validation
+    maturity: verified
+    canonical_entrypoint:
+      type: script
+      value: python scripts/trial_ledger_check.py
+      source_path: scripts/trial_ledger_check.py
+    inputs:
+      - trial_ledger_entry.v1 JSONL
+    outputs:
+      - trial ledger validation result
+      - multiple-testing accounting evidence
+    requires: []
+    method_refs:
+      - type: external
+        ref: https://github.com/quantskills/skill-backtest-overfit
+      - type: afml
+        ref: chapter-11-the-dangers-of-backtesting
+    evidence_refs:
+      - tests/test_trial_ledger.py
+      - tests/test_trial_ledger_cli.py
+
   - capability_id: governance.research_spec
     summary: 校验 research_spec.v1 的实验身份、研究口径和证据引用。
     owner_repository: research-workspace
