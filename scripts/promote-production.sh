@@ -15,8 +15,7 @@ fi
 
 die() { printf 'promotion blocked: %s\n' "$1" >&2; exit 1; }
 run() {
-  printf '+ %q' "$1"
-  shift
+  printf '+'
   printf ' %q' "$@"
   printf '\n'
   (( DRY_RUN )) || "$@"
