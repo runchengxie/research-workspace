@@ -8,6 +8,8 @@
 
 外部方法只出现在 `method_refs`，用于解释方法来源。运行时依赖只由 owner 仓库和既有跨仓契约决定。
 
+Registry validator 位于 `src/research_contracts/`，因为它验证的是跨仓库能力契约。它不在顶层新增研究计算实现，也不进入 `scripts/` 生命周期清单。
+
 ## 条目字段
 
 每个 capability 至少包含：
@@ -37,11 +39,13 @@
 ## 校验
 
 ```bash
-python scripts/research_capability_registry_check.py
-python scripts/research_capability_registry_check.py --json
+python -m src.research_contracts.research_capability_registry
+python -m src.research_contracts.research_capability_registry --json
 ```
 
 Validator 会检查 ID、owner、路径越界、私有入口、依赖缺失、依赖环、source/evidence 是否存在，以及 verified 项是否真的有测试证据。
+
+`python scripts/run_quality_checks.py --profile hard` 会运行这项校验，因此它属于现有本地 pre-push root-quality 门禁的一部分，不新增第二套 CI。
 
 目录以当前 workspace 的 pinned 子模块为准。owner 主分支后来新增了能力，但顶层 gitlink 尚未更新时，该能力仍不能登记成当前工作区已经具备。
 
