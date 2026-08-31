@@ -7,14 +7,14 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "96e33cdc8d929720b42d3903ab30a3ffab8ef1c9",
+      "commit": "158e6f2e89d91110ca44100324bdbc5597cbdaee",
       "legacy_source_tree_allowed": false,
       "pr": 47,
       "version": "0.4.0"
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "ef8c0c244f36a9fe2391d542ed156ef3e1024e9b",
+      "commit": "935342047f1f08331fce0566d94770f4ea8e8993",
       "legacy_source_tree_allowed": false,
       "pr": 55,
       "version": "0.4.0"
