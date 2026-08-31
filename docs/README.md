@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-25
+> last_verified: 2026-08-31
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -12,6 +12,7 @@
 
 | 目标 | 文档 |
 | --- | --- |
+| 第一次理解为什么需要顶层工作区 | [workspace-overview.md](workspace-overview.md) |
 | 第一次拉起工作区 | [bootstrap.md](bootstrap.md) |
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
 | 查看全部已完成事项、剩余项目和优先级 | [roadmap.md](roadmap.md) |
@@ -71,7 +72,7 @@
 
 ## 子模块文档入口
 
-七个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
+八个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
 
 | 子模块 | 文档入口 | 说明 |
 | --- | --- | --- |
@@ -79,11 +80,12 @@
 | `market-data-platform` | [../market-data-platform/docs/](../market-data-platform/docs/) | 行情数据供给、契约与治理 |
 | `deep-learning-tick-data-prediction` | [../deep-learning-tick-data-prediction/](../deep-learning-tick-data-prediction/) | L2 事件流审计、模型与预测产物 |
 | `portfolio-backtester` | [../portfolio-backtester/docs/](../portfolio-backtester/docs/) | 组合回测、容量与执行模拟 |
+| `strategy-research` | [../strategy-research/](../strategy-research/) | 策略身份、生命周期、证据和专有研究入口 |
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
 | `strategy-app` | [../strategy-app/docs/](../strategy-app/docs/) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
 
-> 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
+> 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录或仓库根文档。
 
 ## 当前事实
 
