@@ -39,6 +39,7 @@ def test_scan_data_root_reports_files_bytes_and_symlink_without_following_it(
     assert by_path["reports"]["file_count"] == 1
     assert by_path["reports"]["byte_count"] == 3
     assert by_path["strategy_outputs"]["status"] == "拆分待审"
+    assert by_path["strategy_outputs"]["children"][0]["path"] == "strategy_outputs/run.csv"
     assert by_path["current_assets"]["object_kind"] == "symlink"
     assert by_path["current_assets"]["file_count"] == 0
 

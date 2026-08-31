@@ -111,7 +111,7 @@ def _summary(path: Path) -> tuple[int, int]:
     return files, bytes_total
 
 
-def _entry(path: Path, relative: str) -> dict[str, Any]:
+def _entry(path: Path, relative: str, *, include_children: bool = True) -> dict[str, Any]:
     result: dict[str, Any] = {
         "path": relative,
         "object_kind": _kind(path),
@@ -123,6 +123,11 @@ def _entry(path: Path, relative: str) -> dict[str, Any]:
         result["target"] = os.readlink(path)
     else:
         result["file_count"], result["byte_count"] = _summary(path)
+        if include_children and path.is_dir() and result["status"] == "拆分待审":
+            result["children"] = [
+                _entry(child, f"{relative}/{child.name}", include_children=False)
+                for child in sorted(path.iterdir(), key=lambda item: item.name)
+            ]
     return result
 
 
