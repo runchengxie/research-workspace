@@ -60,6 +60,21 @@
 当前没有发现可以仅凭目录名称安全整体迁移的混合大目录。因此本轮只建立映射，
 不对 `market-data-platform` 的大体积资产、研究结果或生产入口做物理移动。
 
+## 当前审计清单
+
+可重复生成的只读审计工具是：
+
+```bash
+python scripts/data_path_audit.py \
+  --data-root /home/richard/data/market-data-platform \
+  --output /home/richard/data/market-data-platform/metadata/lifecycle/path-audit-20260831.json
+```
+
+当前清单位于 `/home/richard/data/market-data-platform/metadata/lifecycle/path-audit-20260831.json`。
+它记录顶层路径的规范语义、状态、文件数量和字节数，并且不会跟随符号链接或执行移动、
+删除和 alias 修改。当前扫描结果与数据根目录的总字节数一致，约为 513 GB；这只是盘点结果，
+不是删除建议。
+
 ## 后续顺序
 
 1. 先处理小型、已终态且有明确 receipt 的元数据目录；
