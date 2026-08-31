@@ -47,6 +47,22 @@
 | `archive/market-data-platform/staging/2026-08-31/` | `archive/` | 已归档的替换任务，保留 archive README 和 receipt |
 | `sclt/archive/2026-08-30/` | `archive/` | 已迁出的研究产物归档，不进入 Git |
 
+## 首批已执行迁移
+
+2026 年 8 月 31 日，以下两个没有生产消费者精确引用的研究目录完成了物理迁移：
+
+| 原路径 | 新路径 | 兼容入口 | 回执 |
+| --- | --- | --- | --- |
+| `research/multi_horizon_stateful_minute_gate_20260729/` | `experiments/multi_horizon_stateful_minute_gate_20260729/` | 原路径 symlink | `metadata/lifecycle/migrations/research-to-experiments-20260831.json` |
+| `research/minute_strategy/tushare_sh_sz_last30m_reversal_20260729/` | `experiments/minute_strategy/tushare_sh_sz_last30m_reversal_20260729/` | 原路径 symlink | 同上 |
+
+迁移前后文件数量、字节数和文件清单 SHA-256 一致，原路径仍可读取。回执中的
+`deletion_authorized=false` 表示兼容入口和新目录都不能因本次迁移而删除。
+
+`strategy_outputs/watchlist20/`、`strategy_outputs/d11_h5_shadow/`、
+`strategy_inputs/watchlist20/` 和其他含有 `latest`、生产 receipt 或日报引用的目录仍保持
+原位置，待消费者完成新路径支持后再处理。
+
 ## 迁移门禁
 
 每次实际迁移都必须留下以下记录：
