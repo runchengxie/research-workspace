@@ -29,8 +29,8 @@
 | `runs/` | `runs/` | 已统一 | 运行完成后不可变，旧运行需单独做保留决定 |
 | `experiments/` | `experiments/` | 已统一 | 固定时点研究快照，不能按普通缓存处理 |
 | `research/` | `experiments/`、`features/`、`reports/`、`receipts/` | 拆分待审 | 当前同时包含 notebook、结果和凭证，先建立子项清单 |
-| `strategy_inputs/` | `published/` 或 `features/` | 拆分待审 | 按生产方和消费者确认是已发布输入还是研究特征 |
-| `strategy_outputs/` | `runs/`、`features/`、`snapshots/`、`reports/`、`receipts/` | 拆分待审 | 不能整体改名，保留 `latest` 和兼容 symlink |
+| `strategy_inputs/` | `published/` 或 `features/` | 拆分待审 | 稳定策略输入已归位到 `published/strategies/`，其余按生产方和消费者确认 |
+| `strategy_outputs/` | `runs/`、`features/`、`snapshots/`、`reports/`、`receipts/` | 拆分待审 | 稳定策略输出已归位到 `published/strategies/`，保留旧入口和 `latest` 兼容 symlink |
 | `artifacts/` | 按子目录拆成 `runs/`、`reports/`、`snapshots/`、`cache/`、`receipts/` | 拆分待审 | 父目录是历史总称，必须逐子目录核对 manifest |
 
 ## 已确认的具体兼容项
@@ -61,7 +61,8 @@
 
 `strategy_outputs/watchlist20/`、`strategy_outputs/d11_h5_shadow/`、
 `strategy_inputs/watchlist20/` 和其他含有 `latest`、生产 receipt 或日报引用的目录仍保持
-原位置，待消费者完成新路径支持后再处理。
+旧入口，但物理内容已经归位到 `published/strategies/`，待消费者完成新路径支持后再退役兼容
+symlink。详细回执见 `metadata/lifecycle/migrations/stable-strategy-layout-20260831.json`。
 
 ## 迁移门禁
 
