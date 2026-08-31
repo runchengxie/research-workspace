@@ -6,9 +6,10 @@ import argparse
 import json
 import re
 import sys
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
 import yaml
 
@@ -115,6 +116,14 @@ def _list_of_text(value: Any) -> bool:
     )
 
 
+def _list_field_issues(entry: dict[str, Any], prefix: str) -> list[str]:
+    issues: list[str] = []
+    for key in ("inputs", "outputs", "requires", "evidence_refs"):
+        if not _list_of_text(entry.get(key)):
+            issues.append(f"{prefix}: {key} must be a string list")
+    return issues
+
+
 def _shape_issues(entry: dict[str, Any], prefix: str) -> list[str]:
     issues: list[str] = []
     missing = sorted(REQUIRED - entry.keys())
@@ -134,12 +143,45 @@ def _shape_issues(entry: dict[str, Any], prefix: str) -> list[str]:
         issues.append(f"{prefix}: kind is invalid")
     if entry.get("maturity") not in MATURITIES:
         issues.append(f"{prefix}: maturity is invalid")
-    for key in ("inputs", "outputs", "requires", "evidence_refs"):
-        if not _list_of_text(entry.get(key)):
-            issues.append(f"{prefix}: {key} must be a string list")
+    issues.extend(_list_field_issues(entry, prefix))
     if not isinstance(entry.get("method_refs"), list):
         issues.append(f"{prefix}: method_refs must be a list")
     return issues
+
+
+def _entrypoint_field_issues(entrypoint: dict[str, Any], prefix: str) -> list[str]:
+    issues: list[str] = []
+    for key in ("type", "value"):
+        value = entrypoint.get(key)
+        if not isinstance(value, str) or not value.strip():
+            issues.append(f"{prefix}: canonical_entrypoint.{key} must be a non-empty string")
+    if _is_private(entrypoint):
+        issues.append(f"{prefix}: canonical entrypoint cannot be private")
+    return issues
+
+
+def _source_path_issues(
+    entry: dict[str, Any],
+    prefix: str,
+    root: Path,
+    entrypoint: dict[str, Any],
+) -> list[str]:
+    owner = entry.get("owner_repository")
+    maturity = entry.get("maturity")
+    source = entrypoint.get("source_path")
+    if owner not in OWNER_REPOSITORIES:
+        return []
+    if not isinstance(source, str):
+        if maturity in {"experimental", "runnable", "verified"}:
+            return [f"{prefix}: {maturity} capability requires source_path"]
+        return []
+    resolved, error = _resolve_owner_path(root, owner, source)
+    if error:
+        return [f"{prefix}: source_path {error}"]
+    if maturity in {"experimental", "runnable", "verified"} and resolved is not None:
+        if not resolved.is_file():
+            return [f"{prefix}: source_path does not exist: {source}"]
+    return []
 
 
 def _entrypoint_issues(
@@ -150,25 +192,8 @@ def _entrypoint_issues(
     entrypoint = entry.get("canonical_entrypoint")
     if not isinstance(entrypoint, dict):
         return [f"{prefix}: canonical_entrypoint must be an object"]
-    issues: list[str] = []
-    if _is_private(entrypoint):
-        issues.append(f"{prefix}: canonical entrypoint cannot be private")
-    owner = entry.get("owner_repository")
-    maturity = entry.get("maturity")
-    source = entrypoint.get("source_path")
-    if owner not in OWNER_REPOSITORIES:
-        return issues
-    if not isinstance(source, str):
-        if maturity in {"runnable", "verified"}:
-            issues.append(f"{prefix}: runnable capability requires source_path")
-        return issues
-    resolved, error = _resolve_owner_path(root, owner, source)
-    if error:
-        issues.append(f"{prefix}: source_path {error}")
-        return issues
-    if maturity in {"runnable", "verified"} and resolved is not None:
-        if not resolved.is_file():
-            issues.append(f"{prefix}: source_path does not exist: {source}")
+    issues = _entrypoint_field_issues(entrypoint, prefix)
+    issues.extend(_source_path_issues(entry, prefix, root, entrypoint))
     return issues
 
 
