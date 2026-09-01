@@ -101,3 +101,19 @@ def test_prune_preserves_shared_environment_referenced_by_sibling_app(tmp_path: 
 
     assert result.returncode == 0
     assert referenced.is_dir()
+
+
+def test_prune_handles_current_nested_shared_venv_layout(tmp_path: Path) -> None:
+    base = make_release_tree(tmp_path, ["r1", "r2"], "r2")
+    shared = tmp_path / "shared"
+    referenced = shared / "venvs" / "market-intel" / "keep"
+    orphan = shared / "venvs" / "market-intel" / "orphan"
+    referenced.mkdir(parents=True)
+    orphan.mkdir(parents=True)
+    os.symlink(referenced, base / "releases" / "r2" / ".venv")
+
+    result = run_prune(base, "--keep", "2", "--shared-root", str(shared))
+
+    assert result.returncode == 0
+    assert referenced.is_dir()
+    assert not orphan.exists()

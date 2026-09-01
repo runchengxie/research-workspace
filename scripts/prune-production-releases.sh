@@ -86,7 +86,7 @@ done
 prune_shared_environments() {
   [[ -n "$SHARED_ROOT" && -d "$SHARED_ROOT" ]] || return 0
   declare -A referenced=()
-  local link target env sibling_releases production_root
+  local link target env sibling_releases production_root project_root
   local reference_roots=("$BASE/releases")
   production_root=$(dirname "$BASE")
   for sibling_releases in "$production_root"/*/releases; do
@@ -98,14 +98,33 @@ prune_shared_environments() {
     [[ -n "$target" ]] && referenced["$target"]=1
   done < <(find "${reference_roots[@]}" -type l -name .venv -print0)
 
-  for env in "$SHARED_ROOT"/*/*; do
-    [[ -d "$env" ]] || continue
-    [[ -n "${referenced[$(readlink -f "$env")]+x}" ]] && continue
-    if (( DRY_RUN )); then
-      printf '[prune] would remove unreferenced shared environment %s\n' "$env"
+  # Current layout is shared/venvs/<project>/<hash>.  Keep supporting the
+  # older shared/<project>/<hash> layout, but never treat shared/venvs/<project>
+  # itself as an environment.
+  for project_root in "$SHARED_ROOT"/*; do
+    [[ -d "$project_root" ]] || continue
+    if [[ "$(basename "$project_root")" == "venvs" ]]; then
+      for env in "$project_root"/*/*; do
+        [[ -d "$env" ]] || continue
+        [[ -n "${referenced[$(readlink -f "$env")]+x}" ]] && continue
+        if (( DRY_RUN )); then
+          printf '[prune] would remove unreferenced shared environment %s\n' "$env"
+        else
+          rm -rf -- "$env"
+          printf '[prune] removed unreferenced shared environment %s\n' "$env"
+        fi
+      done
     else
-      rm -rf -- "$env"
-      printf '[prune] removed unreferenced shared environment %s\n' "$env"
+      for env in "$project_root"/*; do
+        [[ -d "$env" ]] || continue
+        [[ -n "${referenced[$(readlink -f "$env")]+x}" ]] && continue
+        if (( DRY_RUN )); then
+          printf '[prune] would remove unreferenced shared environment %s\n' "$env"
+        else
+          rm -rf -- "$env"
+          printf '[prune] removed unreferenced shared environment %s\n' "$env"
+        fi
+      done
     fi
   done
 }
