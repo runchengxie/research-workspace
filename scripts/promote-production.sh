@@ -64,6 +64,18 @@ ensure_project_venv() {
   bash "$SCRIPT_DIR/ensure-shared-production-venv.sh" "${args[@]}"
 }
 
+ensure_release_venvs() {
+  local release=$1
+  if [[ -d "$release/market-data-platform" && -f "$release/market-data-platform/pyproject.toml" \
+    && ! -x "$release/market-data-platform/.venv/bin/python" ]]; then
+    ensure_project_venv "$release/market-data-platform" market-data-platform
+  fi
+  if [[ -d "$release/strategy-pipeline" && -f "$release/strategy-pipeline/pyproject.toml" \
+    && ! -x "$release/strategy-pipeline/.venv/bin/python" ]]; then
+    ensure_project_venv "$release/strategy-pipeline" strategy-pipeline
+  fi
+}
+
 refresh_minute_campaign_units() {
   local release=$1
   local mdp_dir="$release/market-data-platform"
@@ -137,11 +149,15 @@ prepare_release() {
     fi
   else
     assert_clean "$release"
+    if (( ! DRY_RUN )) && [[ "$name" == research-workspace ]]; then
+      ensure_release_venvs "$release"
+    elif (( ! DRY_RUN )) && [[ -f "$release/pyproject.toml" && ! -x "$release/.venv/bin/python" ]]; then
+      ensure_project_venv "$release" "$name"
+    fi
   fi
   if (( ! DRY_RUN )); then
-    # A fresh release intentionally gains generated .venv links while being
-    # prepared. Existing releases must still pass the cleanliness gate.
-    (( fresh )) || assert_clean "$release"
+    # Generated .venv links are operational release metadata and are allowed
+    # after the pre-ensure cleanliness gate for both fresh and existing releases.
     write_manifest "$name" "$base" "$commit"
     tmp="$base/.current.$$"
     rm -f "$tmp"
