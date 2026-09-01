@@ -68,6 +68,7 @@ def build_report(
         *import_graph["errors"],
         *call_graph["errors"],
         *artifact_graph["errors"],
+        *version_graph["errors"],
         *_boundary_coverage_errors(root, model),
         *[f"runtime import cycle: {' -> '.join(cycle)}" for cycle in cycles],
     ]
