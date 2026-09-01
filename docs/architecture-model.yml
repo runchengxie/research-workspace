@@ -1,0 +1,94 @@
+schema_version: workspace_architecture.v1
+components:
+  - id: research-workspace
+    repo_path: .
+    plane: governance
+    role: superproject-governance
+    package_roots: []
+    source_roots:
+      - scripts
+    runtime_cycle_check: false
+  - id: research-contracts
+    repo_path: .
+    plane: contract
+    role: shared-artifact-contracts
+    package_roots:
+      - research_contracts
+    source_roots:
+      - src/research_contracts
+    runtime_cycle_check: true
+  - id: market-data-platform
+    repo_path: market-data-platform
+    plane: data
+    role: canonical-data-owner
+    package_roots:
+      - market_data_platform
+    source_roots:
+      - src/market_data_platform
+    runtime_cycle_check: true
+  - id: deep-learning-tick-data-prediction
+    repo_path: deep-learning-tick-data-prediction
+    plane: research
+    role: specialized-model-producer
+    package_roots:
+      - ticknet
+    source_roots:
+      - src/ticknet
+    runtime_cycle_check: true
+  - id: alpha-research
+    repo_path: alpha-research
+    plane: research
+    role: alpha-owner
+    package_roots:
+      - alpha_research
+    source_roots:
+      - src/alpha_research
+    runtime_cycle_check: true
+  - id: portfolio-backtester
+    repo_path: portfolio-backtester
+    plane: research
+    role: portfolio-and-backtest-owner
+    package_roots:
+      - portfolio_backtester
+    source_roots:
+      - src/portfolio_backtester
+    runtime_cycle_check: true
+  - id: strategy-app
+    repo_path: strategy-app
+    plane: application
+    role: strategy-application-composition
+    package_roots:
+      - strategy_app
+    source_roots:
+      - src/strategy_app
+    runtime_cycle_check: true
+  - id: strategy-pipeline
+    repo_path: strategy-pipeline
+    plane: control
+    role: orchestration-and-publication
+    package_roots:
+      - strategy_pipeline
+    source_roots:
+      - src/strategy_pipeline
+    runtime_cycle_check: true
+  - id: strategy-research
+    repo_path: strategy-research
+    plane: knowledge
+    role: research-evidence-and-presentation
+    package_roots:
+      - style_factors
+    source_roots:
+      - src/style_factors
+    runtime_cycle_check: true
+  - id: quant-execution-engine
+    repo_path: quant-execution-engine
+    plane: execution
+    role: execution-and-broker-runtime
+    package_roots:
+      - quant_execution_engine
+    source_roots:
+      - src/quant_execution_engine
+    runtime_cycle_check: true
+external_components:
+  - market-intel
+  - market-intel/hot-sector-screener
