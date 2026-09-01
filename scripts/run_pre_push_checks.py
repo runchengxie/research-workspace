@@ -242,6 +242,7 @@ def _valid_object_id(value: str, length: int) -> bool:
 
 
 ALLOWED_BRANCH_PREFIXES = (
+    "refs/heads/chore/",
     "refs/heads/feat/",
     "refs/heads/fix/",
     "refs/heads/hotfix/",
@@ -259,7 +260,7 @@ def _destination_issue(pushed_ref: PushedRef) -> str | None:
             if pushed_ref.is_deletion:
                 return f"deleting remote branch {pushed_ref.remote_ref} is forbidden"
             return None
-        return "only refs/heads/main or refs/heads/{feat,fix,hotfix,release}/* are allowed"
+        return "only refs/heads/main or refs/heads/{chore,feat,fix,hotfix,release}/* are allowed"
     if pushed_ref.remote_ref.startswith("refs/tags/"):
         return "deleting remote tags is forbidden" if pushed_ref.is_deletion else None
     return "only remote main and tags are allowed"
