@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "maintain-production.sh"
+PROMOTE_SCRIPT = Path(__file__).parents[1] / "scripts" / "promote-production.sh"
 
 
 def make_app(root: Path, name: str) -> Path:
@@ -54,3 +55,10 @@ def test_maintenance_stops_when_disk_threshold_is_not_met(tmp_path: Path) -> Non
 
     assert result.returncode == 2
     assert "free space" in result.stderr
+
+
+def test_promotion_does_not_recheck_generated_venv_links_as_source_changes() -> None:
+    script = PROMOTE_SCRIPT.read_text(encoding="utf-8")
+
+    assert "local commit release current tmp fresh=0" in script
+    assert "(( fresh )) || assert_clean \"$release\"" in script
