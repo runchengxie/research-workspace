@@ -2,6 +2,8 @@
 set -euo pipefail
 
 PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
+KEEP_RELEASES="${PRODUCTION_KEEP_RELEASES:-5}"
+SHARED_VENV_ROOT="${PRODUCTION_SHARED_VENV_ROOT:-$PRODUCTION_ROOT/shared/venvs}"
 LOCK_FILE="$PRODUCTION_ROOT/.promotion.lock"
 DRY_RUN=0
 REPO_FILTER=all
@@ -148,7 +150,7 @@ prepare_release() {
       ensure_project_venv "$release" "$name"
     fi
   else
-    assert_clean "$release"
+    (( fresh )) || assert_clean "$release"
     if (( ! DRY_RUN )) && [[ "$name" == research-workspace ]]; then
       ensure_release_venvs "$release"
     elif (( ! DRY_RUN )) && [[ -f "$release/pyproject.toml" && ! -x "$release/.venv/bin/python" ]]; then
@@ -167,6 +169,13 @@ prepare_release() {
   fi
 }
 
+prune_releases() {
+  local name=$1 source=$2 base=$3
+  local args=(--base "$base" --keep "$KEEP_RELEASES" --source "$source" --shared-root "$SHARED_VENV_ROOT")
+  (( DRY_RUN )) && args+=(--dry-run)
+  bash "$(dirname "$0")/prune-production-releases.sh" "${args[@]}"
+}
+
 mkdir -p "$PRODUCTION_ROOT"
 exec 9>"$LOCK_FILE"
 flock -n 9 || die "another promotion is running"
@@ -175,12 +184,14 @@ if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == research-workspace ]]; then
   if (( ! DRY_RUN )); then
     refresh_minute_campaign_units "$PRODUCTION_ROOT/research-workspace/current"
   fi
+  prune_releases research-workspace /home/richard/code/research-workspace "$PRODUCTION_ROOT/research-workspace"
 fi
 if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == market-intel ]]; then
   prepare_release market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel" origin main
   if (( ! DRY_RUN )); then
     sync_hermes_market_intel_workdir
   fi
+  prune_releases market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel"
 fi
 
 printf '\nproduction manifest:\n'

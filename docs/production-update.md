@@ -61,4 +61,21 @@ git -C /home/richard/code/production/research-workspace/current submodule update
 
 `research-production-update-check.timer` 只负责定期 fetch 并把新版本写入 systemd journal。它不会自动切换 `current`。发现更新后，由人工或 agent 审核，再执行 promotion。
 
-旧 release 默认不自动删除。确认新版本稳定后，再按保留策略手动归档，避免误删可回滚版本。
+旧 release 在 promotion 成功后按保留策略自动清理。每周的
+`production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
+共享虚拟环境只清理没有被保留 release 引用的指纹目录。
+
+现有 release 的实体 `.venv` 可以用以下命令分批迁移。默认每次最多处理 2 个非 current
+环境，先 dry-run 再执行：
+
+```bash
+bash /home/richard/code/research-workspace/scripts/migrate-production-venvs.sh --dry-run
+bash /home/richard/code/research-workspace/scripts/migrate-production-venvs.sh --max 2
+```
+
+安装每周维护 timer：
+
+```bash
+bash /home/richard/code/research-workspace/scripts/install-production-maintenance.sh --dry-run
+bash /home/richard/code/research-workspace/scripts/install-production-maintenance.sh
+```
