@@ -120,6 +120,30 @@ def _entrypoint_issues(root: Path, artifact: str, entrypoints: object) -> list[s
     return issues
 
 
+def _exactly_one_group_issues(artifact: str, record: Mapping[str, Any]) -> list[str]:
+    raw_groups = record.get("exactly_one_of_fields")
+    if raw_groups is None:
+        return []
+    if not isinstance(raw_groups, list) or not raw_groups:
+        return [f"{artifact}: exactly_one_of_fields must be a non-empty list"]
+
+    required = set(_strings(record.get("required_fields")))
+    issues: list[str] = []
+    for raw_group in raw_groups:
+        fields = _strings(raw_group)
+        if len(fields) < 2:
+            issues.append(f"{artifact}: exactly_one_of_fields groups need at least two fields")
+            continue
+        if len(fields) != len(set(fields)):
+            issues.append(f"{artifact}: exactly_one_of_fields groups must not contain duplicates")
+        overlap = sorted(required.intersection(fields))
+        if overlap:
+            issues.append(
+                f"{artifact}: exactly_one_of_fields overlap required_fields: {', '.join(overlap)}"
+            )
+    return issues
+
+
 def _artifact_record_issues(
     root: Path,
     record: Mapping[str, Any],
@@ -142,6 +166,7 @@ def _artifact_record_issues(
         issues.append(f"{artifact}: unknown owner {owner!r}")
     if not _strings(record.get("required_fields")):
         issues.append(f"{artifact}: required_fields must be non-empty")
+    issues.extend(_exactly_one_group_issues(artifact, record))
     issues.extend(_docs_sync_issues(record, docs_text))
     issues.extend(_entrypoint_issues(root, artifact, record.get("entrypoints")))
     return issues
