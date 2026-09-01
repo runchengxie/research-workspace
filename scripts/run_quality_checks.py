@@ -90,6 +90,7 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                     str(
                         ROOT
                         / "strategy-research"
+                        / "tools"
                         / "scripts"
                         / "trial_ledger_check.py"
                     ),

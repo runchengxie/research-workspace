@@ -25,5 +25,11 @@ def test_hard_quality_profile_runs_research_governance_checks() -> None:
     )
     assert commands["trial-ledger"] == (
         sys.executable,
-        str(ROOT / "strategy-research" / "scripts" / "trial_ledger_check.py"),
+        str(
+            ROOT
+            / "strategy-research"
+            / "tools"
+            / "scripts"
+            / "trial_ledger_check.py"
+        ),
     )
