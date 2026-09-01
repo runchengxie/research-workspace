@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -127,6 +128,83 @@ def test_version_pin_differences_are_warnings() -> None:
             "dependency": "producer",
             "workspace_revision": "aaaaaaaa",
             "standalone_revision": "bbbbbbbb",
+            "severity": "warning",
+        }
+    ]
+
+
+def test_version_graph_uses_workspace_head_for_root_subdirectory_packages(tmp_path: Path) -> None:
+    model_path = tmp_path / "docs" / "architecture-model.yml"
+    _write(
+        model_path,
+        """
+schema_version: workspace_architecture.v1
+components:
+  - id: research-contracts
+    repo_path: .
+    plane: contract
+    role: shared-contracts
+    package_roots: [research_contracts]
+    source_roots: [src/research_contracts]
+    runtime_cycle_check: true
+  - id: consumer
+    repo_path: consumer
+    plane: application
+    role: consumer
+    package_roots: [consumer_pkg]
+    source_roots: [src/consumer_pkg]
+    runtime_cycle_check: true
+external_components: []
+""".strip()
+        + "\n",
+    )
+    _write(
+        tmp_path / "consumer" / "pyproject.toml",
+        """
+[project]
+name = "consumer"
+version = "0.1.0"
+
+[tool.uv.sources]
+research-contracts = { git = "https://example.invalid/workspace.git", rev = "deadbeef" }
+""".strip()
+        + "\n",
+    )
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    subprocess.run(["git", "-C", str(tmp_path), "add", "."], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(tmp_path),
+            "-c",
+            "user.name=Architecture Test",
+            "-c",
+            "user.email=architecture@example.invalid",
+            "commit",
+            "-q",
+            "-m",
+            "fixture",
+        ],
+        check=True,
+    )
+    head = subprocess.run(
+        ["git", "-C", str(tmp_path), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    model = workspace_architecture.load_model(tmp_path, model_path=model_path)
+
+    graph = workspace_architecture.build_version_graph(tmp_path, model)
+
+    assert graph["workspace_revisions"]["research-contracts"] == head
+    assert graph["standalone_pin_differences"] == [
+        {
+            "consumer": "consumer",
+            "dependency": "research-contracts",
+            "workspace_revision": head,
+            "standalone_revision": "deadbeef",
             "severity": "warning",
         }
     ]
