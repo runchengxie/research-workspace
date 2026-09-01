@@ -65,6 +65,24 @@ def test_hard_profile_includes_workspace_architecture_gates() -> None:
     assert "ty-check" in names
     assert "workspace-import-boundaries" in names
     assert "workspace-ownership-boundaries" in names
+    assert "workspace-architecture" in names
+
+
+def test_architecture_profile_includes_combined_projection_gate() -> None:
+    commands = run_quality_checks.plan_commands("architecture")
+
+    names = [item.name for item in commands]
+    architecture = next(item for item in commands if item.name == "workspace-architecture")
+
+    assert names == [
+        "workspace-import-boundaries",
+        "workspace-ownership-boundaries",
+        "workspace-architecture",
+    ]
+    assert architecture.command[-2:] == (
+        str(ROOT / "scripts" / "workspace_architecture.py"),
+        "--check",
+    )
 
 
 def test_ci_smoke_profile_skips_workspace_architecture_gates() -> None:
@@ -75,6 +93,7 @@ def test_ci_smoke_profile_skips_workspace_architecture_gates() -> None:
     assert names == ["ruff-check", "ruff-format", "ty-check", "secret-scan"]
     assert "workspace-import-boundaries" not in names
     assert "workspace-ownership-boundaries" not in names
+    assert "workspace-architecture" not in names
 
 
 def test_dead_code_profile_runs_advisory_wrapper() -> None:
