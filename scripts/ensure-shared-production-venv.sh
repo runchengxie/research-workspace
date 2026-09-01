@@ -78,16 +78,20 @@ fi
 
 if [[ ! -x "$env_dir/bin/python" ]]; then
   mkdir -p "$env_dir"
-  printf '[venv] syncing %s into %s\n' "$NAME" "$env_dir"
-  uv_args=(sync --locked)
-  for extra in "${EXTRAS[@]}"; do
-    uv_args+=(--extra "$extra")
-  done
-  (
-    cd "$PROJECT"
-    UV_PROJECT_ENVIRONMENT="$env_dir" "$UV_BIN" --project "$PROJECT" "${uv_args[@]}"
-  )
 fi
+
+# The fingerprint intentionally describes dependency inputs, not the release
+# path.  Re-sync even when the environment already exists so uv refreshes the
+# editable project binding to the release currently being prepared.
+printf '[venv] syncing %s into %s\n' "$NAME" "$env_dir"
+uv_args=(sync --locked)
+for extra in "${EXTRAS[@]}"; do
+  uv_args+=(--extra "$extra")
+done
+(
+  cd "$PROJECT"
+  UV_PROJECT_ENVIRONMENT="$env_dir" "$UV_BIN" --project "$PROJECT" "${uv_args[@]}"
+)
 
 [[ -x "$env_dir/bin/python" ]] || {
   printf 'uv sync did not create a usable environment: %s\n' "$env_dir" >&2
