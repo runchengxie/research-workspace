@@ -7,6 +7,12 @@ from pathlib import Path
 SCRIPT = Path(__file__).parents[1] / "scripts" / "ensure-shared-production-venv.sh"
 
 
+def test_shared_environment_install_is_non_editable() -> None:
+    script = SCRIPT.read_text(encoding="utf-8")
+
+    assert "uv_args=(sync --locked --no-editable)" in script
+
+
 def test_reuses_shared_environment_but_refreshes_project_binding(tmp_path: Path) -> None:
     project = tmp_path / "project"
     project.mkdir()
