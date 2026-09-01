@@ -5,6 +5,7 @@ PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
 LOCK_FILE="$PRODUCTION_ROOT/.promotion.lock"
 DRY_RUN=0
 REPO_FILTER=all
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 usage() { printf 'usage: %s [--dry-run] [--repo all|research-workspace|market-intel]\n' "$0" >&2; }
 while [[ $# -gt 0 ]]; do
@@ -48,6 +49,21 @@ write_manifest() {
   } >"$out"
 }
 
+ensure_project_venv() {
+  local project=$1 name=$2
+  local args=(
+    --project "$project"
+    --name "$name"
+    --shared-root "$PRODUCTION_ROOT/shared/venvs"
+  )
+  if [[ "$name" == market-data-platform ]]; then
+    args+=(--extra dev --extra tushare)
+  elif [[ "$name" == strategy-pipeline ]]; then
+    args+=(--extra dev)
+  fi
+  bash "$SCRIPT_DIR/ensure-shared-production-venv.sh" "${args[@]}"
+}
+
 prepare_release() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5
   local commit release current tmp
@@ -76,16 +92,12 @@ prepare_release() {
       if (( ! DRY_RUN )); then
         for project in market-data-platform strategy-pipeline; do
           if [[ -f "$release/$project/pyproject.toml" ]]; then
-            if [[ "$project" == market-data-platform ]]; then
-              (cd "$release/$project" && uv sync --locked --extra dev --extra tushare)
-            else
-              (cd "$release/$project" && uv sync --locked --extra dev)
-            fi
+            ensure_project_venv "$release/$project" "$project"
           fi
         done
       fi
     elif [[ -f "$release/pyproject.toml" ]] && (( ! DRY_RUN )); then
-      (cd "$release" && uv sync --locked)
+      ensure_project_venv "$release" "$name"
     fi
   else
     assert_clean "$release"
