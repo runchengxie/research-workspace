@@ -158,6 +158,15 @@ boundary_rules:
   forbidden:
   - quant_execution_engine
   max_allowed: 0
+- identifier: strategy-research:no-control-or-execution-runtime-imports
+  description: strategy-research is a research evidence and presentation consumer and must
+    not become an alternate orchestration or execution runtime
+  repo: strategy-research
+  source: src/style_factors
+  forbidden:
+  - strategy_pipeline
+  - quant_execution_engine
+  max_allowed: 0
 - identifier: strategy-pipeline:no-execution-engine-imports
   description: strategy-pipeline exports execution targets without execution internals
   repo: strategy-pipeline
