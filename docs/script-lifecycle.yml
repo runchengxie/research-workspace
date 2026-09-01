@@ -758,6 +758,56 @@
       "writes_files": "DATA_PLATFORM_ROOT/strategy_outputs/style-factors/<name>/",
       "external_dependencies": "DATA_PLATFORM_ROOT, local style_factors package, pandas/numpy/matplotlib/pyarrow",
       "removal_condition": "remove after style factor analysis is promoted to alpha-research or a pip-installable shared research library, or two release reviews record no active use"
+    },
+    {
+      "path": "scripts/ensure-shared-production-venv.sh",
+      "owner": "research-workspace",
+      "purpose": "Create or migrate a content-addressed shared virtual environment for a production release",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "production shared virtual environments and release .venv symlinks",
+      "external_dependencies": "uv, project pyproject.toml and uv.lock",
+      "removal_condition": "remove only after production release provisioning no longer requires shared virtual environments and the replacement is recorded for two release reviews"
+    },
+    {
+      "path": "scripts/prune-production-releases.sh",
+      "owner": "research-workspace",
+      "purpose": "Retain the current and newest production releases and remove unreferenced shared environments",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "production release worktrees and unreferenced shared virtual environments",
+      "external_dependencies": "git, filesystem metadata, and production release manifests",
+      "removal_condition": "remove only after a successor retention and environment cleanup command is used for two release reviews"
+    },
+    {
+      "path": "scripts/migrate-production-venvs.sh",
+      "owner": "research-workspace",
+      "purpose": "Migrate legacy entity production virtual environments into shared storage",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "legacy virtual environment backups, shared environment directories, and release .venv symlinks",
+      "external_dependencies": "production release layout and filesystem permissions",
+      "removal_condition": "remove after all known entity production virtual environments are migrated and two release reviews confirm no new legacy environments"
+    },
+    {
+      "path": "scripts/maintain-production.sh",
+      "owner": "research-workspace",
+      "purpose": "Run bounded release retention and shared environment maintenance",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "production release worktrees and unreferenced shared virtual environments",
+      "external_dependencies": "git, flock, filesystem metadata, and production release manifests",
+      "removal_condition": "remove only after the scheduled maintenance successor is used for two release reviews"
+    },
+    {
+      "path": "scripts/install-production-maintenance.sh",
+      "owner": "research-workspace",
+      "purpose": "Install the user systemd timer for production release maintenance",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "user systemd service and timer units",
+      "external_dependencies": "systemctl --user and XDG_CONFIG_HOME",
+      "removal_condition": "remove only after scheduled production maintenance is provided by a successor mechanism and two release reviews confirm migration"
     }
   ]
 }
