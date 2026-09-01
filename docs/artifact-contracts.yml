@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-08-18",  "_owner": "research-workspace",
+  "_last_changed": "2026-09-01",  "_owner": "research-workspace",
   "schema_version": "artifact_contracts.v1",
   "policy": {
     "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
@@ -209,11 +209,15 @@
       "required_fields": [
         "targets",
         "symbol",
-        "market",
-        "target_weight",
-        "target_quantity"
+        "market"
       ],
-      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. The producer writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
+      "exactly_one_of_fields": [
+        [
+          "target_weight",
+          "target_quantity"
+        ]
+      ],
+      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The producer writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
     },
     {
       "artifact": "watchlist_20.csv",

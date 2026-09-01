@@ -52,6 +52,10 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
     assert records["positions_by_rebalance.csv"]["owner"] == "portfolio-backtester"
     assert records["targets.json"]["owner"] == "quant-execution-engine"
     assert records["targets.json"]["producer"] == "strategy-pipeline"
+    assert records["targets.json"]["required_fields"] == ["targets", "symbol", "market"]
+    assert records["targets.json"]["exactly_one_of_fields"] == [
+        ["target_weight", "target_quantity"]
+    ]
     assert records["watchlist_20.csv"]["owner"] == "strategy-pipeline"
     assert records["watchlist_20.csv"]["consumers"] == ["market-intel"]
     watchlist_notes = str(records["watchlist_20.csv"]["notes"])
@@ -94,6 +98,58 @@ def test_artifact_contract_manifest_is_docs_and_path_validated() -> None:
     assert result.ok
 
 
+def test_exactly_one_field_groups_reject_required_field_overlap(tmp_path: Path) -> None:
+    contracts = _load_contracts_package()
+    manifest = tmp_path / "artifact-contracts.yml"
+    docs = tmp_path / "contracts.md"
+    entrypoint = tmp_path / "quant-execution-engine" / "src" / "targets.py"
+    entrypoint.parent.mkdir(parents=True)
+    entrypoint.write_text("# fixture\n", encoding="utf-8")
+    docs.write_text(
+        "targets.json quant-execution-engine.targets/v2 quant-execution-engine",
+        encoding="utf-8",
+    )
+    manifest.write_text(
+        json.dumps(
+            {
+                "schema_version": "artifact_contracts.v1",
+                "artifact_envelope": {
+                    "schema_version": "research.artifact-envelope.v2",
+                    "write_mode": "opt_in",
+                    "container_key": "artifact_envelope",
+                    "required_fields": ["schema_version"],
+                },
+                "artifacts": [
+                    {
+                        "artifact": "targets.json",
+                        "contract": "quant-execution-engine.targets/v2",
+                        "owner": "quant-execution-engine",
+                        "required_fields": ["targets", "symbol", "market", "target_weight"],
+                        "exactly_one_of_fields": [["target_weight", "target_quantity"]],
+                        "canonical_files": ["targets.json"],
+                        "entrypoints": [
+                            {
+                                "repo": "quant-execution-engine",
+                                "path": "src/targets.py",
+                            }
+                        ],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    result = contracts.validate_artifact_contract_manifest(
+        root=tmp_path,
+        manifest_path=manifest,
+        docs_path=docs,
+        required_artifacts=("targets.json",),
+    )
+
+    assert "targets.json: exactly_one_of_fields overlap required_fields: target_weight" in result.issues
+
+
 def test_shared_contract_package_loads_manifest() -> None:
     contracts = _load_contracts_package()
     manifest = contracts.load_artifact_contract_manifest(MANIFEST)
@@ -131,3 +187,9 @@ def test_artifact_envelope_adoption_lists_match_producer_status() -> None:
     } <= adopted
     assert not pending
     assert not adopted.intersection(pending)
+
+
+def test_contract_docs_do_not_claim_targets_envelope_is_pending() -> None:
+    docs = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
+
+    assert "`targets.json` 的导出方尚未接入" not in docs
