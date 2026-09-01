@@ -72,6 +72,7 @@ include = [
   "scripts/benchmark_matrix_build.py",
   "scripts/workspace_doctor.py",
   "scripts/doctor_*.py",
+  "scripts/workspace_architecture.py",
   "scripts/workspace_governance.py",
   "scripts/workspace_governance_common.py",
   "scripts/workspace_governance_quality.py",
