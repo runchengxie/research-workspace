@@ -158,6 +158,15 @@ boundary_rules:
   forbidden:
   - quant_execution_engine
   max_allowed: 0
+- identifier: strategy-research:no-control-or-execution-runtime-imports
+  description: strategy-research is a research evidence and presentation consumer and must
+    not become an alternate orchestration or execution runtime
+  repo: strategy-research
+  source: src/style_factors
+  forbidden:
+  - strategy_pipeline
+  - quant_execution_engine
+  max_allowed: 0
 - identifier: strategy-pipeline:no-execution-engine-imports
   description: strategy-pipeline exports execution targets without execution internals
   repo: strategy-pipeline
@@ -166,14 +175,31 @@ boundary_rules:
   - quant_execution_engine
   max_allowed: 0
 - identifier: strategy-pipeline:contracts-pure-handoff
-  description: strategy-pipeline orchestration schema modules stay pure before extraction
+  description: strategy-pipeline handoff schemas stay independent from runtime orchestration,
+    liveops, CLI dispatch, owner implementations, and execution internals
   repo: strategy-pipeline
   source: src/strategy_pipeline/contracts
   forbidden:
   - alpha_research
   - portfolio_backtester
   - strategy_pipeline.pipeline
+  - strategy_pipeline.liveops
+  - strategy_pipeline.cli
   - quant_execution_engine
+  max_allowed: 0
+- identifier: strategy-pipeline:liveops-no-cli-backedge
+  description: strategy-pipeline liveops is a runtime layer and must not depend on CLI dispatch
+  repo: strategy-pipeline
+  source: src/strategy_pipeline/liveops
+  forbidden:
+  - strategy_pipeline.cli
+  max_allowed: 0
+- identifier: strategy-pipeline:pipeline-no-cli-backedge
+  description: strategy-pipeline orchestration internals must not depend on CLI dispatch
+  repo: strategy-pipeline
+  source: src/strategy_pipeline/pipeline
+  forbidden:
+  - strategy_pipeline.cli
   max_allowed: 0
 - identifier: strategy-pipeline:target-contract-no-direct-framework-imports
   description: target handoff contracts must not directly import optional framework

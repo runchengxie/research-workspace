@@ -59,8 +59,11 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "quant-execution-engine:no-research-runtime-imports",
         "strategy-app:no-control-plane-imports",
         "strategy-app:no-execution-runtime-imports",
+        "strategy-research:no-control-or-execution-runtime-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
+        "strategy-pipeline:liveops-no-cli-backedge",
+        "strategy-pipeline:pipeline-no-cli-backedge",
         "strategy-pipeline:target-contract-no-direct-framework-imports",
         "market-data-platform:published-contract-no-direct-qlib-imports",
         "alpha-research:signal-contract-no-direct-qlib-imports",
@@ -199,6 +202,38 @@ def test_execution_runtime_cross_edges_are_detected(tmp_path: Path) -> None:
     ]
 
 
+def test_strategy_research_cannot_import_control_or_execution_runtime(tmp_path: Path) -> None:
+    source = tmp_path / "strategy-research" / "src" / "style_factors"
+    source.mkdir(parents=True)
+    (source / "example.py").write_text(
+        textwrap.dedent(
+            """
+            from strategy_pipeline.pipeline.runner import run_pipeline
+            from quant_execution_engine.targets import read_targets_json
+            """
+        ),
+        encoding="utf-8",
+    )
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="strategy-research-no-runtime",
+            description="test",
+            repo="strategy-research",
+            source="src/style_factors",
+            forbidden=("strategy_pipeline", "quant_execution_engine"),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+    assert report["issues"] == ["strategy-research-no-runtime: 2 imports exceed budget 0"]
+    assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
+        "strategy_pipeline",
+        "quant_execution_engine",
+    ]
+
+
 @pytest.mark.parametrize(
     ("statement", "framework"),
     (
@@ -279,6 +314,8 @@ def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
         textwrap.dedent(
             """
             from ..pipeline.runner import run_pipeline
+            from ..liveops.export_targets import main as export_targets
+            from ..cli import build_parser
             from quant_execution_engine.targets import TargetSet
             """
         ),
@@ -290,7 +327,12 @@ def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
             description="test",
             repo="strategy-pipeline",
             source="src/strategy_pipeline/contracts",
-            forbidden=("strategy_pipeline.pipeline", "quant_execution_engine"),
+            forbidden=(
+                "strategy_pipeline.pipeline",
+                "strategy_pipeline.liveops",
+                "strategy_pipeline.cli",
+                "quant_execution_engine",
+            ),
             max_allowed=0,
         ),
     )
@@ -298,9 +340,45 @@ def test_strategy_pipeline_contract_boundary_blocks_runtime_back_edges(
     report = workspace_import_boundaries.build_report(tmp_path, rules)
 
     assert report["issues"] == [
-        "contracts-pure-handoff: 2 imports exceed budget 0",
+        "contracts-pure-handoff: 4 imports exceed budget 0",
     ]
     assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
         "strategy_pipeline.pipeline",
+        "strategy_pipeline.liveops",
+        "strategy_pipeline.cli",
         "quant_execution_engine",
+    ]
+
+
+def test_strategy_pipeline_runtime_layers_cannot_import_cli(tmp_path: Path) -> None:
+    liveops = tmp_path / "strategy-pipeline" / "src" / "strategy_pipeline" / "liveops"
+    pipeline = tmp_path / "strategy-pipeline" / "src" / "strategy_pipeline" / "pipeline"
+    liveops.mkdir(parents=True)
+    pipeline.mkdir(parents=True)
+    (liveops / "runner.py").write_text("from ..cli import build_parser\n", encoding="utf-8")
+    (pipeline / "runner.py").write_text("from ..cli.core import handle_run\n", encoding="utf-8")
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="liveops-no-cli",
+            description="test",
+            repo="strategy-pipeline",
+            source="src/strategy_pipeline/liveops",
+            forbidden=("strategy_pipeline.cli",),
+            max_allowed=0,
+        ),
+        workspace_import_boundaries.BoundaryRule(
+            identifier="pipeline-no-cli",
+            description="test",
+            repo="strategy-pipeline",
+            source="src/strategy_pipeline/pipeline",
+            forbidden=("strategy_pipeline.cli",),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+    assert report["issues"] == [
+        "liveops-no-cli: 1 imports exceed budget 0",
+        "pipeline-no-cli: 1 imports exceed budget 0",
     ]
