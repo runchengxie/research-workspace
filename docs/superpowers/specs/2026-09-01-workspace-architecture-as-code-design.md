@@ -10,7 +10,8 @@ The workspace already has strong architecture governance, but the relevant facts
 
 - `scripts/import_boundary_rules.yml` owns forbidden Python import directions.
 - `docs/artifact-contracts.yml` owns cross-repository artifact producer/consumer contracts.
-- Git submodule gitlinks own the verified workspace source composition.
+- Git submodule gitlinks own the verified workspace revisions of subrepositories.
+- the superproject `HEAD` owns the workspace revision of root Git-subdirectory packages such as `research-contracts`.
 - each subrepository `pyproject.toml` may pin different Git revisions for standalone reproducibility.
 
 Those sources are useful independently, but they do not currently produce one combined view of the architecture. This makes it easy to miss artifact-only dependencies, version-resolution divergence, or component coverage gaps.
@@ -31,14 +32,14 @@ The registry deliberately does **not** duplicate forbidden import rules or artif
 
 ### Scanner
 
-Add `scripts/workspace_architecture.py` with four projections:
+Add `scripts/workspace_architecture.py` with four projections, implemented through focused helper modules:
 
 1. **Import graph**: parse Python source with the standard-library AST and resolve first-party package roots to workspace components. Edges are component-to-component imports with source evidence.
 2. **Call graph**: conservatively record direct calls through imported first-party symbols or module aliases. Dynamic dispatch and runtime reflection are intentionally omitted and the report labels this graph as conservative.
 3. **Artifact graph**: read `docs/artifact-contracts.yml` and project producer/consumer relationships through artifact nodes.
-4. **Version graph**: read workspace gitlink revisions with `git ls-tree HEAD` and compare them with repository-local `[tool.uv.sources]` Git `rev` pins. Differences are reported as `standalone_pin_differences`, not hard failures, because repository-local pins intentionally support standalone environments.
+4. **Version graph**: read subrepository revisions from workspace gitlinks, root Git-subdirectory package revisions from superproject `HEAD`, and compare them with repository-local `[tool.uv.sources]` Git `rev` pins. Differences are reported as `standalone_pin_differences`, not hard failures, because repository-local pins intentionally support standalone environments.
 
-The scanner also validates registry coverage, unknown artifact producers/consumers, duplicate package roots, and runtime import cycles.
+The scanner also validates registry coverage, unknown artifact producers/consumers, duplicate package roots, runtime import cycles, and parseability of present component `pyproject.toml` files.
 
 ### Output
 
@@ -59,9 +60,9 @@ The existing `architecture` quality profile will run the scanner in `--check` mo
 ## Error handling
 
 - Missing optional submodule source roots are reported as warnings so the scanner remains useful in partial source snapshots; existing workspace doctor/submodule checks continue to own submodule initialization enforcement.
-- Invalid registry shape, duplicate Python package ownership, unknown artifact component references, and runtime component import cycles are errors.
-- Missing Git metadata disables gitlink comparison with a warning rather than crashing, so source archives remain readable.
-- TOML parse errors in a present component `pyproject.toml` are errors because they make version analysis unreliable.
+- Invalid registry shape, duplicate Python package ownership, unknown artifact component references, runtime component import cycles, and parse failures in present component `pyproject.toml` files are errors.
+- Missing Git metadata disables workspace revision comparison with a warning rather than crashing, so source archives remain readable.
+- Workspace-vs-standalone revision differences are warnings because the two modes currently serve different reproducibility use cases.
 
 ## Testing
 
@@ -71,7 +72,9 @@ Tests use temporary synthetic workspaces so they do not depend on current submod
 - conservative direct-call edge discovery;
 - artifact producer/consumer projection;
 - runtime cycle detection;
+- root Git-subdirectory package revision resolution through superproject `HEAD`;
 - standalone package pin differences remaining warnings;
+- invalid component `pyproject.toml` files becoming version-graph errors;
 - quality-profile inclusion of the architecture scanner.
 
 ## Non-goals
