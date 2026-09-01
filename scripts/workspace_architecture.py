@@ -77,7 +77,7 @@ def build_report(
     warnings.update(version_graph["warnings"])
     for difference in version_graph["standalone_pin_differences"]:
         warnings.add(
-            "standalone pin differs from workspace gitlink: "
+            "standalone pin differs from workspace revision: "
             f"{difference['consumer']} -> {difference['dependency']} "
             f"({difference['standalone_revision']} != {difference['workspace_revision']})"
         )
