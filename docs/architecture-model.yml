@@ -92,3 +92,4 @@ components:
 external_components:
   - market-intel
   - market-intel/hot-sector-screener
+  - human-audit
