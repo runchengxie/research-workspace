@@ -90,6 +90,15 @@ refresh_minute_campaign_units() {
   run systemctl --user daemon-reload
 }
 
+sync_hermes_market_intel_workdir() {
+  local current="$PRODUCTION_ROOT/market-intel/current"
+  local sync_script="$SCRIPT_DIR/sync_hermes_market_intel_workdir.sh"
+  [[ -x "$sync_script" ]] || die "Hermes workdir sync script missing or not executable: $sync_script"
+  run env \
+    MARKET_INTEL_CURRENT="$current" \
+    "$sync_script"
+}
+
 prepare_release() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5
   local commit release current tmp fresh=0
@@ -153,6 +162,9 @@ if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == research-workspace ]]; then
 fi
 if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == market-intel ]]; then
   prepare_release market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel" origin main
+  if (( ! DRY_RUN )); then
+    sync_hermes_market_intel_workdir
+  fi
 fi
 
 printf '\nproduction manifest:\n'
