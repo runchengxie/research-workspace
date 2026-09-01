@@ -65,7 +65,7 @@ E2 不创建新的策略，也不要求每个探索实验立即完成全部晋�
 
 ## 证据包格式
 
-每个策略的证据放在 `strategy-research/evidence/<策略id>.json`，格式如下：
+每个策略的证据放在 `strategy-research/research/evidence/<策略id>.json`，格式如下：
 
 ```json
 {
@@ -105,7 +105,7 @@ E2 不创建新的策略，也不要求每个探索实验立即完成全部晋�
 - 已知缺口豁免（known_gaps_waived）：缺失项全部出现在 `known_gaps` 中，且策略在 `catalog.json` 的 `production_eligible` 为 `false` 时，门禁不阻断（退出码 0），但在报告中标注「已知缺口豁免」。
 - 生产策略：`production_eligible` 为 `true` 的策略必须关闭全部必需检查，任何缺失（无论是否登记）都保持硬失败。
 
-每个策略的证据包放在 `strategy-research/evidence/<策略id>.json`。截至 2026-08-26，
+每个策略的证据包放在 `strategy-research/research/evidence/<策略id>.json`。截至 2026-08-26，
 已将五个策略的既有 A 股研究证据（`docs/evidence/a-share-*.json`、strategy-app 回执）
 如实组装为证据包，并把 `daily_watch20` 从 `operational` 校正为 `research_shadow`
 （`production_eligible` 改为 `false`），消除其证据门禁结果（`present: []`）与治理声明

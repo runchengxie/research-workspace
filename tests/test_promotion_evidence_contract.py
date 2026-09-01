@@ -92,7 +92,7 @@ def _write_receipt(
     manifest_entries: list[dict[str, Any]],
     source: Path,
 ) -> dict[str, Any]:
-    receipt_path = root / "strategy-research/evidence/promotion/s/review.json"
+    receipt_path = root / "strategy-research/research/evidence/promotion/s/review.json"
     receipt: dict[str, Any] = {
         "schema_version": "strategy_promotion_evidence.v2",
         "strategy_id": "s",
@@ -164,8 +164,8 @@ def _fixture(tmp_path: Path) -> tuple[Path, Path, dict[str, Any], dict[str, Any]
             }
         },
         "promotion_evidence": {
-            "pit": "strategy-research/evidence/promotion/s/review.json",
-            "capacity": "strategy-research/evidence/promotion/s/review.json",
+            "pit": "strategy-research/research/evidence/promotion/s/review.json",
+            "capacity": "strategy-research/research/evidence/promotion/s/review.json",
         },
         "known_gaps": [],
     }
@@ -218,7 +218,7 @@ def test_missing_promotion_source_is_reported_without_changing_lifecycle_count(
 def test_diagnostic_receipt_fails_closed(tmp_path: Path) -> None:
     root, data_root, bundle, receipt = _fixture(tmp_path)
     receipt["status"] = "diagnostic"
-    _write_json(root / "strategy-research/evidence/promotion/s/review.json", receipt)
+    _write_json(root / "strategy-research/research/evidence/promotion/s/review.json", receipt)
 
     result = _validate(root, data_root, bundle)
 
@@ -256,7 +256,7 @@ def test_gitlink_mismatch_fails_closed(tmp_path: Path) -> None:
 def test_stale_research_window_fails_closed(tmp_path: Path) -> None:
     root, data_root, bundle, receipt = _fixture(tmp_path)
     receipt["research_window"]["end_date"] = "20260820"
-    _write_json(root / "strategy-research/evidence/promotion/s/review.json", receipt)
+    _write_json(root / "strategy-research/research/evidence/promotion/s/review.json", receipt)
 
     result = _validate(root, data_root, bundle)
 

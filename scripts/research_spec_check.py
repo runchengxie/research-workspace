@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate research_spec.v1 experiment manifests (实验说明书).
 
-Each experiment under ``strategy-research/experiments/<id>/`` may carry a
+Each experiment under ``strategy-research/research/experiments/<id>/`` may carry a
 ``research_spec.json`` that describes in one place what the experiment did:
 universe, data, prediction target and horizon, model, portfolio construction,
 cost, benchmark and out-of-sample protocol. The checker enforces the schema and,
@@ -63,9 +63,7 @@ class SpecCheck:
 
 
 def _spec_files(root: Path) -> list[Path]:
-    return sorted(
-        (root / "strategy-research" / "experiments").glob(f"*/{SPEC_NAME}")
-    )
+    return sorted((root / "strategy-research" / "research" / "experiments").glob(f"*/{SPEC_NAME}"))
 
 
 def _dict_field(payload: dict[str, Any], name: str) -> dict[str, Any]:
@@ -143,9 +141,7 @@ def _check_structured_fields(payload: dict[str, Any]) -> list[str]:
     issues.extend(_issue("prediction.horizon", _require(prediction, "horizon")))
     task = prediction.get("task")
     if task not in ALLOWED_TASKS:
-        issues.append(
-            "prediction.task 必须属于 ranking、regression、classification 或 n/a"
-        )
+        issues.append("prediction.task 必须属于 ranking、regression、classification 或 n/a")
     model = _dict_field(payload, "model")
     issues.extend(_issue("model.name", _require(model, "name")))
     issues.extend(_issue("model.training", _require(model, "training")))
@@ -275,10 +271,7 @@ def _check_trial_ledger(
         if multiple.get("family_id") == family and multiple.get("counted") is True:
             counted_family = True
     if not counted_family:
-        issues.append(
-            "trial_ledger.multiple_testing_family "
-            f"{family} 没有 counted=true trial"
-        )
+        issues.append(f"trial_ledger.multiple_testing_family {family} 没有 counted=true trial")
     return issues
 
 
@@ -311,15 +304,8 @@ def _render(checks: list[SpecCheck], *, as_json: bool) -> str:
             ],
         }
         return json.dumps(payload, ensure_ascii=False, indent=2)
-    lines = [
-        f"[{'OK' if check.ok else 'ERROR'}] {check.experiment_id}"
-        for check in checks
-    ]
-    lines.extend(
-        f"  - {issue}"
-        for check in checks
-        for issue in check.issues
-    )
+    lines = [f"[{'OK' if check.ok else 'ERROR'}] {check.experiment_id}" for check in checks]
+    lines.extend(f"  - {issue}" for check in checks for issue in check.issues)
     return "\n".join(lines)
 
 
@@ -336,8 +322,7 @@ def main(argv: list[str] | None = None) -> int:
         checks = [check_spec(path, expected_id=path.parent.name, root=root)]
     else:
         checks = [
-            check_spec(path, expected_id=path.parent.name, root=root)
-            for path in _spec_files(root)
+            check_spec(path, expected_id=path.parent.name, root=root) for path in _spec_files(root)
         ]
     print(_render(checks, as_json=args.as_json))
     return 0 if all(check.ok for check in checks) else 1

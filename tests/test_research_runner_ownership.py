@@ -4,7 +4,14 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "strategy-research" / "experiments" / "pipeline_research" / "runner_manifest.json"
+MANIFEST = (
+    ROOT
+    / "strategy-research"
+    / "research"
+    / "experiments"
+    / "pipeline_research"
+    / "runner_manifest.json"
+)
 
 
 def _manifest() -> dict[str, object]:
@@ -28,7 +35,7 @@ def test_every_public_research_entrypoint_has_one_explicit_owner() -> None:
     for item in entries:
         assert item["owner"] in {"strategy-app", "strategy-pipeline"}
         assert item["research_spec"] in {
-            "strategy-research/experiments/configs/daily_watch20_research.yml",
+            "strategy-research/research/experiments/configs/daily_watch20_research.yml",
             None,
         }
         assert item["operational_responsibilities"]

@@ -79,9 +79,9 @@
 
 质量、盈利收益率、低波动、成长和低杠杆尚未通过全部门槛。主要原因包括收益方向翻转、回撤恶化、财务样本覆盖不足和成本敏感。
 
-整套核心因子需要全部通过稳健性门槛。目前通过数量为 5 个，整套体系维持研究筛查定位。详细结果见[全历史约束稳健性附录](../strategy-research/experiments/style_factors/style-factor-constrained-robustness-2008-2026.md)。
+整套核心因子需要全部通过稳健性门槛。目前通过数量为 5 个，整套体系维持研究筛查定位。详细结果见[全历史约束稳健性附录](../strategy-research/research/experiments/style_factors/style-factor-constrained-robustness-2008-2026.md)。
 
-低换手因子还完成了定义敏感性诊断。20 日和 60 日平均及中位换手率的多空年化收益均为正，联合剔除市值和低波动影响后仍保持正向。平滑口径的收益幅度低于月末单日口径，说明月末单日交易状态贡献了部分差异。详细结果见[低换手因子定义与暴露诊断](../strategy-research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)。
+低换手因子还完成了定义敏感性诊断。20 日和 60 日平均及中位换手率的多空年化收益均为正，联合剔除市值和低波动影响后仍保持正向。平滑口径的收益幅度低于月末单日口径，说明月末单日交易状态贡献了部分差异。详细结果见[低换手因子定义与暴露诊断](../strategy-research/research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)。
 
 ## 报告体系与更新方式
 
@@ -133,9 +133,9 @@ uv run --project strategy-research python -m style_factors.yearly_chart \
 
 ## 相关报告
 
-- [A 股年度市场风格解读：2008 年至 2026 年](../strategy-research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
-- [价值因子长周期风格轮动分析](../strategy-research/experiments/style_factors/value-regime-18y.md)
-- [A 股低换手因子定义与暴露诊断](../strategy-research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)
-- [A 股风格因子全历史约束稳健性附录](../strategy-research/experiments/style_factors/style-factor-constrained-robustness-2008-2026.md)
+- [A 股年度市场风格解读：2008 年至 2026 年](../strategy-research/research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
+- [价值因子长周期风格轮动分析](../strategy-research/research/experiments/style_factors/value-regime-18y.md)
+- [A 股低换手因子定义与暴露诊断](../strategy-research/research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)
+- [A 股风格因子全历史约束稳健性附录](../strategy-research/research/experiments/style_factors/style-factor-constrained-robustness-2008-2026.md)
 
 复核日期：2026 年 8 月 3 日。

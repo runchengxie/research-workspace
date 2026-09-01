@@ -43,8 +43,8 @@ quant-execution-engine
 | `alpha-research/src/alpha_research/style_factors/` | 风格因子计算内核（`alpha_research.style_factors`），ADR-0006 后由 alpha-research owner |
 | `portfolio-backtester/src/portfolio_backtester/style_factors_backtest.py` | 分位数多空回测内核（`portfolio_backtester.style_factors_backtest`），由 portfolio-backtester owner |
 | `strategy-research/style_factors/` | 表现层：风格因子归因、报告、图表、稳健性与发布校验（`python -m style_factors`），由 strategy-research 维护 |
-| `strategy-research/pre_production/` | 长期跟踪型策略（已验证、值得跟踪、未完全生产化），目录与升格门槛见 [strategy-research/pre_production/README.md](strategy-research/pre_production/README.md) |
-| `strategy-research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [strategy-research/experiments/README.md](strategy-research/experiments/README.md) |
+| `strategy-research/research/strategies/` | 策略身份与生命周期说明，生命周期状态以 catalog 为准 |
+| `strategy-research/research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [research/experiments/README.md](strategy-research/research/experiments/README.md) |
 | `strategy-research/packaging/` | 系统级复现打包器脚本（D11-H5），产物不进入仓库 |
 
 策略身份、投资假设、生命周期和证据导航以 [strategy-research/README.md](strategy-research/README.md) 与 [strategy-research/catalog.json](strategy-research/catalog.json) 为准。代码放在哪个仓库不再用来表达策略是否处于生产状态。

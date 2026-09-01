@@ -699,19 +699,19 @@
       "next_action": "split by research asset family when tests change"
     },
     {
-      "path": "strategy-research/experiments/adhoc/path_b_production.py",
+      "path": "strategy-research/research/experiments/adhoc/path_b_production.py",
       "owner_repo": "research-workspace",
       "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-research/experiments/adhoc/concept_etf_ml_backtest.py",
+      "path": "strategy-research/research/experiments/adhoc/concept_etf_ml_backtest.py",
       "owner_repo": "research-workspace",
       "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-research/experiments/adhoc/path_c_m1_validate.py",
+      "path": "strategy-research/research/experiments/adhoc/path_c_m1_validate.py",
       "owner_repo": "research-workspace",
       "reason": "已归档的一次性研究脚本（原 large-file hotspot），债务随文件移入 experiments/adhoc，不再计入活跃 scripts 基线",
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"

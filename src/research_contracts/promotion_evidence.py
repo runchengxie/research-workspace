@@ -38,7 +38,7 @@ def _receipt_path(root: Path, value: object) -> tuple[Path | None, str | None]:
     path, relative = safe_relative(root, value)
     if path is None or relative is None:
         return None, None
-    if not relative.startswith("strategy-research/evidence/promotion/"):
+    if not relative.startswith("strategy-research/research/evidence/promotion/"):
         return None, None
     return path, relative
 

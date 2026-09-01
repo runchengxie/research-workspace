@@ -210,18 +210,18 @@ python -m strategy_pipeline.e2_promotion_receipt \
   --spec artifacts/reports/<tag>/promotion-receipt-spec.json \
   --workspace-root .. \
   --data-platform-root "$DATA_PLATFORM_ROOT" \
-  --output ../strategy-research/evidence/promotion/<strategy_id>/<review_id>.json
+  --output ../strategy-research/research/evidence/promotion/<strategy_id>/<review_id>.json
 ```
 
-随后在 `strategy-research/evidence/<strategy_id>.json` 顶层增加 `promotion_evidence` 映射。每个已经形成
+随后在 `strategy-research/research/evidence/<strategy_id>.json` 顶层增加 `promotion_evidence` 映射。每个已经形成
 canonical source 的 lifecycle check 以及 profile check 指向对应 receipt，例如：
 
 ```json
 {
   "promotion_evidence": {
-    "pit": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json",
-    "cost": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json",
-    "capacity": "strategy-research/evidence/promotion/<strategy_id>/<review_id>.json"
+    "pit": "strategy-research/research/evidence/promotion/<strategy_id>/<review_id>.json",
+    "cost": "strategy-research/research/evidence/promotion/<strategy_id>/<review_id>.json",
+    "capacity": "strategy-research/research/evidence/promotion/<strategy_id>/<review_id>.json"
   }
 }
 ```
