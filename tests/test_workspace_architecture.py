@@ -210,6 +210,17 @@ research-contracts = { git = "https://example.invalid/workspace.git", rev = "dea
     ]
 
 
+def test_version_graph_reports_invalid_pyproject_as_error(tmp_path: Path) -> None:
+    model_path = _synthetic_model(tmp_path)
+    _write(tmp_path / "consumer" / "pyproject.toml", "[project\n")
+    model = workspace_architecture.load_model(tmp_path, model_path=model_path)
+
+    graph = workspace_architecture.build_version_graph(tmp_path, model)
+
+    assert graph["errors"]
+    assert graph["errors"][0].startswith("consumer: cannot parse pyproject.toml:")
+
+
 def test_runtime_import_cycle_is_reported(tmp_path: Path) -> None:
     model_path = _synthetic_model(tmp_path, cyclic=True)
     model = workspace_architecture.load_model(tmp_path, model_path=model_path)
