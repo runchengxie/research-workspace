@@ -34,6 +34,13 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
     } <= set(ruff["extend-exclude"])
 
 
+def test_architecture_scanner_is_in_root_typecheck_scope() -> None:
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    ty_include = config["tool"]["ty"]["src"]["include"]
+
+    assert "scripts/workspace_architecture.py" in ty_include
+
+
 def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
     commands = run_quality_checks.plan_commands("lint")
 
