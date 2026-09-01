@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "docs" / "architecture-model.yml"
 ARTIFACT_MANIFEST_PATH = ROOT / "docs" / "artifact-contracts.yml"
 SCHEMA_VERSION = "workspace_architecture.v1"
+Graph = dict[str, Any]
 
 
 @dataclass(frozen=True)
@@ -64,6 +65,38 @@ def _strings(value: object) -> tuple[str, ...]:
     return tuple(str(item).strip() for item in value if str(item).strip())
 
 
+def _component_from_mapping(path: Path, raw: Mapping[str, Any]) -> Component:
+    identifier = str(raw.get("id", "")).strip()
+    if not identifier:
+        raise ValueError(f"{path}: component id is required")
+    return Component(
+        identifier=identifier,
+        repo_path=str(raw.get("repo_path", ".")).strip() or ".",
+        plane=str(raw.get("plane", "")).strip(),
+        role=str(raw.get("role", "")).strip(),
+        package_roots=_strings(raw.get("package_roots")),
+        source_roots=_strings(raw.get("source_roots")),
+        runtime_cycle_check=bool(raw.get("runtime_cycle_check", True)),
+    )
+
+
+def _validate_component_uniqueness(path: Path, components: list[Component]) -> None:
+    seen_ids: set[str] = set()
+    seen_packages: dict[str, str] = {}
+    for component in components:
+        if component.identifier in seen_ids:
+            raise ValueError(f"{path}: duplicate component id {component.identifier!r}")
+        seen_ids.add(component.identifier)
+        for package in component.package_roots:
+            previous = seen_packages.get(package)
+            if previous:
+                raise ValueError(
+                    f"{path}: package root {package!r} belongs to both "
+                    f"{previous!r} and {component.identifier!r}"
+                )
+            seen_packages[package] = component.identifier
+
+
 def load_model(
     root: Path = ROOT,
     *,
@@ -74,44 +107,13 @@ def load_model(
     schema_version = str(payload.get("schema_version", ""))
     if schema_version != SCHEMA_VERSION:
         raise ValueError(f"{path}: unsupported schema_version {schema_version!r}")
-
     raw_components = payload.get("components")
     if not isinstance(raw_components, list) or not raw_components:
         raise ValueError(f"{path}: components must be a non-empty list")
-
-    components: list[Component] = []
-    seen_ids: set[str] = set()
-    seen_packages: dict[str, str] = {}
-    for raw in raw_components:
-        if not isinstance(raw, Mapping):
-            raise ValueError(f"{path}: component entries must be mappings")
-        identifier = str(raw.get("id", "")).strip()
-        if not identifier:
-            raise ValueError(f"{path}: component id is required")
-        if identifier in seen_ids:
-            raise ValueError(f"{path}: duplicate component id {identifier!r}")
-        seen_ids.add(identifier)
-        package_roots = _strings(raw.get("package_roots"))
-        for package in package_roots:
-            previous = seen_packages.get(package)
-            if previous:
-                raise ValueError(
-                    f"{path}: package root {package!r} belongs to both "
-                    f"{previous!r} and {identifier!r}"
-                )
-            seen_packages[package] = identifier
-        components.append(
-            Component(
-                identifier=identifier,
-                repo_path=str(raw.get("repo_path", ".")).strip() or ".",
-                plane=str(raw.get("plane", "")).strip(),
-                role=str(raw.get("role", "")).strip(),
-                package_roots=package_roots,
-                source_roots=_strings(raw.get("source_roots")),
-                runtime_cycle_check=bool(raw.get("runtime_cycle_check", True)),
-            )
-        )
-
+    if not all(isinstance(raw, Mapping) for raw in raw_components):
+        raise ValueError(f"{path}: component entries must be mappings")
+    components = [_component_from_mapping(path, raw) for raw in raw_components]
+    _validate_component_uniqueness(path, components)
     return ArchitectureModel(
         schema_version=schema_version,
         components=tuple(components),
@@ -126,17 +128,17 @@ def _component_root(root: Path, component: Component) -> Path:
 def _python_sources(
     root: Path,
     model: ArchitectureModel,
-) -> Iterable[tuple[Component, Path, Path]]:
+) -> Iterable[tuple[Component, Path]]:
     for component in model.components:
         repo_root = _component_root(root, component)
         for source in component.source_roots:
             source_root = repo_root / source
             if source_root.is_file() and source_root.suffix == ".py":
-                yield component, source_root, source_root
+                yield component, source_root
             elif source_root.is_dir():
                 for path in sorted(source_root.rglob("*.py")):
                     if "__pycache__" not in path.parts:
-                        yield component, source_root, path
+                        yield component, path
 
 
 def _missing_source_warnings(root: Path, model: ArchitectureModel) -> list[str]:
@@ -150,8 +152,15 @@ def _missing_source_warnings(root: Path, model: ArchitectureModel) -> list[str]:
 
 
 def _target_component(module: str, package_owners: Mapping[str, str]) -> str | None:
-    package = module.split(".", 1)[0]
-    return package_owners.get(package)
+    return package_owners.get(module.split(".", 1)[0])
+
+
+def _parse_python(path: Path, root: Path) -> tuple[ast.AST | None, str | None]:
+    try:
+        return ast.parse(path.read_text(encoding="utf-8"), filename=str(path)), None
+    except SyntaxError as exc:
+        relative = path.relative_to(root).as_posix()
+        return None, f"{relative}:{exc.lineno or 0}: syntax error"
 
 
 def _iter_imports(tree: ast.AST) -> Iterable[tuple[int, str]]:
@@ -163,18 +172,16 @@ def _iter_imports(tree: ast.AST) -> Iterable[tuple[int, str]]:
             yield node.lineno, node.module
 
 
-def build_import_graph(root: Path, model: ArchitectureModel) -> dict[str, object]:
+def build_import_graph(root: Path, model: ArchitectureModel) -> Graph:
     package_owners = model.package_owners
-    edges: list[dict[str, object]] = []
+    edges: list[dict[str, Any]] = []
     errors: list[str] = []
-    for component, _source_root, path in _python_sources(root, model):
-        try:
-            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-        except SyntaxError as exc:
-            errors.append(
-                f"{path.relative_to(root).as_posix()}:{exc.lineno or 0}: syntax error"
-            )
+    for component, path in _python_sources(root, model):
+        tree, error = _parse_python(path, root)
+        if error:
+            errors.append(error)
             continue
+        assert tree is not None
         for line, module in _iter_imports(tree):
             target = _target_component(module, package_owners)
             if target is None or target == component.identifier:
@@ -190,11 +197,11 @@ def build_import_graph(root: Path, model: ArchitectureModel) -> dict[str, object
             )
     edges.sort(
         key=lambda edge: (
-            str(edge["source"]),
-            str(edge["target"]),
-            str(edge["path"]),
-            int(edge["line"]),
-            str(edge["module"]),
+            edge["source"],
+            edge["target"],
+            edge["path"],
+            edge["line"],
+            edge["module"],
         )
     )
     return {
@@ -213,14 +220,11 @@ def _import_aliases(tree: ast.AST) -> dict[str, str]:
         if isinstance(node, ast.Import):
             for alias in node.names:
                 bound_name = alias.asname or alias.name.split(".", 1)[0]
-                bound_target = alias.name if alias.asname else bound_name
-                aliases[bound_name] = bound_target
+                aliases[bound_name] = alias.name if alias.asname else bound_name
         elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
             for alias in node.names:
-                if alias.name == "*":
-                    continue
-                bound_name = alias.asname or alias.name
-                aliases[bound_name] = f"{node.module}.{alias.name}"
+                if alias.name != "*":
+                    aliases[alias.asname or alias.name] = f"{node.module}.{alias.name}"
     return aliases
 
 
@@ -249,18 +253,16 @@ def _called_symbol(func: ast.AST, aliases: Mapping[str, str]) -> str | None:
     return f"{base}.{suffix}" if suffix else base
 
 
-def build_call_graph(root: Path, model: ArchitectureModel) -> dict[str, object]:
+def build_call_graph(root: Path, model: ArchitectureModel) -> Graph:
     package_owners = model.package_owners
-    edges: list[dict[str, object]] = []
+    edges: list[dict[str, Any]] = []
     errors: list[str] = []
-    for component, _source_root, path in _python_sources(root, model):
-        try:
-            tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-        except SyntaxError as exc:
-            errors.append(
-                f"{path.relative_to(root).as_posix()}:{exc.lineno or 0}: syntax error"
-            )
+    for component, path in _python_sources(root, model):
+        tree, error = _parse_python(path, root)
+        if error:
+            errors.append(error)
             continue
+        assert tree is not None
         aliases = _import_aliases(tree)
         for node in ast.walk(tree):
             if not isinstance(node, ast.Call):
@@ -282,11 +284,11 @@ def build_call_graph(root: Path, model: ArchitectureModel) -> dict[str, object]:
             )
     edges.sort(
         key=lambda edge: (
-            str(edge["source"]),
-            str(edge["target"]),
-            str(edge["path"]),
-            int(edge["line"]),
-            str(edge["target_symbol"]),
+            edge["source"],
+            edge["target"],
+            edge["path"],
+            edge["line"],
+            edge["target_symbol"],
         )
     )
     return {
@@ -304,12 +306,90 @@ def _known_reference(model: ArchitectureModel, identifier: str) -> bool:
     return identifier in model.by_id or identifier in model.external_components
 
 
+def _reference_error(
+    model: ArchitectureModel,
+    artifact: str,
+    identifier: str,
+    field: str,
+) -> str | None:
+    if not identifier or _known_reference(model, identifier):
+        return None
+    return f"{artifact}: unknown {field} component {identifier!r}"
+
+
+def _producer_edges(
+    model: ArchitectureModel,
+    artifact: str,
+    artifact_node: str,
+    raw: Mapping[str, Any],
+) -> tuple[list[dict[str, str]], list[str]]:
+    edges: list[dict[str, str]] = []
+    errors: list[str] = []
+    producer = str(raw.get("producer", "")).strip()
+    error = _reference_error(model, artifact, producer, "producer")
+    if error:
+        errors.append(error)
+    if producer:
+        edges.append({"source": producer, "target": artifact_node, "kind": "produces"})
+    for identifier in _strings(raw.get("external_producers")):
+        error = _reference_error(model, artifact, identifier, "external producer")
+        if error:
+            errors.append(error)
+        edges.append({"source": identifier, "target": artifact_node, "kind": "produces"})
+    return edges, errors
+
+
+def _consumer_edges(
+    model: ArchitectureModel,
+    artifact: str,
+    artifact_node: str,
+    raw: Mapping[str, Any],
+) -> tuple[list[dict[str, str]], list[str]]:
+    edges: list[dict[str, str]] = []
+    errors: list[str] = []
+    for identifier in _strings(raw.get("consumers")):
+        error = _reference_error(model, artifact, identifier, "consumer")
+        if error:
+            errors.append(error)
+        edges.append({"source": artifact_node, "target": identifier, "kind": "consumes"})
+    return edges, errors
+
+
+def _artifact_record(
+    model: ArchitectureModel,
+    raw: Mapping[str, Any],
+) -> tuple[dict[str, Any] | None, list[dict[str, str]], list[str]]:
+    artifact = str(raw.get("artifact", "")).strip()
+    if not artifact:
+        return None, [], []
+    artifact_node = f"artifact:{artifact}"
+    owner = str(raw.get("owner", "")).strip()
+    errors: list[str] = []
+    owner_error = _reference_error(model, artifact, owner, "owner")
+    if owner_error:
+        errors.append(owner_error)
+    producer_edges, producer_errors = _producer_edges(model, artifact, artifact_node, raw)
+    consumer_edges, consumer_errors = _consumer_edges(model, artifact, artifact_node, raw)
+    node = {
+        "id": artifact_node,
+        "artifact": artifact,
+        "owner": owner,
+        "contract": str(raw.get("contract", "")).strip(),
+        "schema_version": raw.get("schema_version"),
+    }
+    return node, [*producer_edges, *consumer_edges], [
+        *errors,
+        *producer_errors,
+        *consumer_errors,
+    ]
+
+
 def build_artifact_graph(
     root: Path,
     model: ArchitectureModel,
     *,
     manifest_path: Path | None = None,
-) -> dict[str, object]:
+) -> Graph:
     path = manifest_path or root / "docs" / "artifact-contracts.yml"
     if not path.exists():
         return {
@@ -321,64 +401,21 @@ def build_artifact_graph(
             "warnings": [f"missing artifact manifest: {path}"],
         }
     payload = _load_yaml_or_json(path)
-    records = payload.get("artifacts")
-    if not isinstance(records, list):
-        records = []
-
-    nodes: list[dict[str, object]] = []
-    edges: list[dict[str, object]] = []
+    raw_records = payload.get("artifacts")
+    records = raw_records if isinstance(raw_records, list) else []
+    nodes: list[dict[str, Any]] = []
+    edges: list[dict[str, str]] = []
     errors: list[str] = []
     for raw in records:
         if not isinstance(raw, Mapping):
             continue
-        artifact = str(raw.get("artifact", "")).strip()
-        if not artifact:
-            continue
-        artifact_node = f"artifact:{artifact}"
-        owner = str(raw.get("owner", "")).strip()
-        producer = str(raw.get("producer", "")).strip()
-        nodes.append(
-            {
-                "id": artifact_node,
-                "artifact": artifact,
-                "owner": owner,
-                "contract": str(raw.get("contract", "")).strip(),
-                "schema_version": raw.get("schema_version"),
-            }
-        )
-        for identifier, field in ((owner, "owner"), (producer, "producer")):
-            if identifier and not _known_reference(model, identifier):
-                errors.append(f"{artifact}: unknown {field} component {identifier!r}")
-        if producer:
-            edges.append(
-                {"source": producer, "target": artifact_node, "kind": "produces"}
-            )
-        external_producers = raw.get("external_producers")
-        if isinstance(external_producers, list):
-            for item in external_producers:
-                identifier = str(item).strip()
-                if not identifier:
-                    continue
-                if not _known_reference(model, identifier):
-                    errors.append(
-                        f"{artifact}: unknown external producer component {identifier!r}"
-                    )
-                edges.append(
-                    {"source": identifier, "target": artifact_node, "kind": "produces"}
-                )
-        consumers = raw.get("consumers")
-        if isinstance(consumers, list):
-            for item in consumers:
-                identifier = str(item).strip()
-                if not identifier:
-                    continue
-                if not _known_reference(model, identifier):
-                    errors.append(f"{artifact}: unknown consumer component {identifier!r}")
-                edges.append(
-                    {"source": artifact_node, "target": identifier, "kind": "consumes"}
-                )
-    nodes.sort(key=lambda node: str(node["id"]))
-    edges.sort(key=lambda edge: (str(edge["source"]), str(edge["target"]), str(edge["kind"])))
+        node, record_edges, record_errors = _artifact_record(model, raw)
+        if node:
+            nodes.append(node)
+        edges.extend(record_edges)
+        errors.extend(record_errors)
+    nodes.sort(key=lambda node: node["id"])
+    edges.sort(key=lambda edge: (edge["source"], edge["target"], edge["kind"]))
     return {
         "schema_version": SCHEMA_VERSION,
         "kind": "artifact_graph",
@@ -389,7 +426,10 @@ def build_artifact_graph(
     }
 
 
-def _workspace_gitlinks(root: Path, model: ArchitectureModel) -> tuple[dict[str, str], list[str]]:
+def _workspace_gitlinks(
+    root: Path,
+    model: ArchitectureModel,
+) -> tuple[dict[str, str], list[str]]:
     repo_components = {
         component.repo_path: component.identifier
         for component in model.components
@@ -407,20 +447,47 @@ def _workspace_gitlinks(root: Path, model: ArchitectureModel) -> tuple[dict[str,
     if result.returncode != 0:
         message = result.stderr.strip() or "git ls-tree failed"
         return {}, [f"gitlink scan unavailable: {message}"]
-
     revisions: dict[str, str] = {}
     for line in result.stdout.splitlines():
         metadata, separator, path = line.partition("\t")
-        if not separator or path not in repo_components:
-            continue
         parts = metadata.split()
-        if len(parts) != 3 or parts[0] != "160000":
-            continue
-        revisions[repo_components[path]] = parts[2]
+        if separator and path in repo_components and len(parts) == 3 and parts[0] == "160000":
+            revisions[repo_components[path]] = parts[2]
     return revisions, []
 
 
-def _standalone_pins(root: Path, model: ArchitectureModel) -> tuple[dict[str, dict[str, str]], list[str]]:
+def _load_pyproject(path: Path) -> tuple[Mapping[str, Any] | None, str | None]:
+    try:
+        return tomllib.loads(path.read_text(encoding="utf-8")), None
+    except (OSError, tomllib.TOMLDecodeError) as exc:
+        return None, str(exc)
+
+
+def _uv_source_pins(payload: Mapping[str, Any], component_ids: set[str]) -> dict[str, str]:
+    tool = payload.get("tool")
+    if not isinstance(tool, Mapping):
+        return {}
+    uv = tool.get("uv")
+    if not isinstance(uv, Mapping):
+        return {}
+    sources = uv.get("sources")
+    if not isinstance(sources, Mapping):
+        return {}
+    pins: dict[str, str] = {}
+    for dependency, raw in sources.items():
+        dependency_id = str(dependency)
+        if dependency_id not in component_ids or not isinstance(raw, Mapping):
+            continue
+        revision = str(raw.get("rev", "")).strip()
+        if revision:
+            pins[dependency_id] = revision
+    return pins
+
+
+def _standalone_pins(
+    root: Path,
+    model: ArchitectureModel,
+) -> tuple[dict[str, dict[str, str]], list[str]]:
     component_ids = set(model.by_id)
     pins: dict[str, dict[str, str]] = {}
     warnings: list[str] = []
@@ -428,28 +495,12 @@ def _standalone_pins(root: Path, model: ArchitectureModel) -> tuple[dict[str, di
         pyproject = _component_root(root, component) / "pyproject.toml"
         if not pyproject.is_file():
             continue
-        try:
-            payload = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-        except (OSError, tomllib.TOMLDecodeError) as exc:
-            warnings.append(f"{component.identifier}: cannot parse pyproject.toml: {exc}")
+        payload, error = _load_pyproject(pyproject)
+        if error:
+            warnings.append(f"{component.identifier}: cannot parse pyproject.toml: {error}")
             continue
-        tool = payload.get("tool")
-        if not isinstance(tool, Mapping):
-            continue
-        uv = tool.get("uv")
-        if not isinstance(uv, Mapping):
-            continue
-        sources = uv.get("sources")
-        if not isinstance(sources, Mapping):
-            continue
-        component_pins: dict[str, str] = {}
-        for dependency, raw in sources.items():
-            dependency_id = str(dependency)
-            if dependency_id not in component_ids or not isinstance(raw, Mapping):
-                continue
-            revision = str(raw.get("rev", "")).strip()
-            if revision:
-                component_pins[dependency_id] = revision
+        assert payload is not None
+        component_pins = _uv_source_pins(payload, component_ids)
         if component_pins:
             pins[component.identifier] = component_pins
     return pins, warnings
@@ -479,7 +530,7 @@ def compare_version_pins(
     return differences
 
 
-def build_version_graph(root: Path, model: ArchitectureModel) -> dict[str, object]:
+def build_version_graph(root: Path, model: ArchitectureModel) -> Graph:
     workspace_revisions, git_warnings = _workspace_gitlinks(root, model)
     standalone_pins, pin_warnings = _standalone_pins(root, model)
     differences = compare_version_pins(
@@ -504,14 +555,9 @@ def _canonical_cycle(cycle: list[str]) -> list[str]:
     return [*chosen, chosen[0]]
 
 
-def find_runtime_cycles(
-    model: ArchitectureModel,
-    edges: object,
-) -> list[list[str]]:
+def find_runtime_cycles(model: ArchitectureModel, edges: object) -> list[list[str]]:
     runtime = {
-        component.identifier
-        for component in model.components
-        if component.runtime_cycle_check
+        component.identifier for component in model.components if component.runtime_cycle_check
     }
     adjacency = {identifier: set() for identifier in runtime}
     if isinstance(edges, list):
@@ -522,14 +568,12 @@ def find_runtime_cycles(
             target = str(edge.get("target", ""))
             if source in runtime and target in runtime:
                 adjacency[source].add(target)
-
     found: set[tuple[str, ...]] = set()
 
     def visit(node: str, path: list[str]) -> None:
         if node in path:
             start = path.index(node)
-            cycle = _canonical_cycle([*path[start:], node])
-            found.add(tuple(cycle))
+            found.add(tuple(_canonical_cycle([*path[start:], node])))
             return
         if len(path) >= len(runtime):
             return
@@ -567,30 +611,25 @@ def build_report(
     *,
     model_path: Path | None = None,
     manifest_path: Path | None = None,
-) -> dict[str, object]:
+) -> Graph:
     model = load_model(root, model_path=model_path)
     import_graph = build_import_graph(root, model)
     call_graph = build_call_graph(root, model)
     artifact_graph = build_artifact_graph(root, model, manifest_path=manifest_path)
     version_graph = build_version_graph(root, model)
     cycles = find_runtime_cycles(model, import_graph["edges"])
-
     errors = [
-        *[str(item) for item in import_graph["errors"]],
-        *[str(item) for item in call_graph["errors"]],
-        *[str(item) for item in artifact_graph["errors"]],
+        *import_graph["errors"],
+        *call_graph["errors"],
+        *artifact_graph["errors"],
         *_boundary_coverage_errors(root, model),
         *[f"runtime import cycle: {' -> '.join(cycle)}" for cycle in cycles],
     ]
-    warnings = sorted(
-        set(
-            [str(item) for item in import_graph["warnings"]]
-            + [str(item) for item in artifact_graph["warnings"]]
-            + [str(item) for item in version_graph["warnings"]]
-        )
-    )
+    warnings = set(import_graph["warnings"])
+    warnings.update(artifact_graph["warnings"])
+    warnings.update(version_graph["warnings"])
     for difference in version_graph["standalone_pin_differences"]:
-        warnings.append(
+        warnings.add(
             "standalone pin differs from workspace gitlink: "
             f"{difference['consumer']} -> {difference['dependency']} "
             f"({difference['standalone_revision']} != {difference['workspace_revision']})"
@@ -598,7 +637,7 @@ def build_report(
     return {
         "schema_version": SCHEMA_VERSION,
         "errors": sorted(set(errors)),
-        "warnings": sorted(set(warnings)),
+        "warnings": sorted(warnings),
         "cycles": cycles,
         "graphs": {
             "import_graph": import_graph,
@@ -609,38 +648,29 @@ def build_report(
     }
 
 
-def render_report(report: Mapping[str, object]) -> str:
-    graphs = report.get("graphs")
-    graph_map = graphs if isinstance(graphs, Mapping) else {}
-    lines = ["# Workspace architecture report", ""]
-    errors = report.get("errors") if isinstance(report.get("errors"), list) else []
-    warnings = report.get("warnings") if isinstance(report.get("warnings"), list) else []
-    lines.extend(
-        [
-            f"- errors: {len(errors)}",
-            f"- warnings: {len(warnings)}",
-            "",
-            "## Graph sizes",
-            "",
-        ]
-    )
+def render_report(report: Mapping[str, Any]) -> str:
+    graphs = report.get("graphs", {})
+    errors = report.get("errors", [])
+    warnings = report.get("warnings", [])
+    lines = [
+        "# Workspace architecture report",
+        "",
+        f"- errors: {len(errors)}",
+        f"- warnings: {len(warnings)}",
+        "",
+        "## Graph sizes",
+        "",
+    ]
     for name in ("import_graph", "call_graph", "artifact_graph"):
-        graph = graph_map.get(name)
-        edge_count = len(graph.get("edges", [])) if isinstance(graph, Mapping) else 0
-        lines.append(f"- {name}: {edge_count} edges")
-    version_graph = graph_map.get("version_graph")
-    difference_count = (
-        len(version_graph.get("standalone_pin_differences", []))
-        if isinstance(version_graph, Mapping)
-        else 0
-    )
-    lines.append(f"- version_graph: {difference_count} standalone pin differences")
+        graph = graphs.get(name, {})
+        lines.append(f"- {name}: {len(graph.get('edges', []))} edges")
+    version_graph = graphs.get("version_graph", {})
+    differences = version_graph.get("standalone_pin_differences", [])
+    lines.append(f"- version_graph: {len(differences)} standalone pin differences")
     if errors:
-        lines.extend(["", "## Errors", ""])
-        lines.extend(f"- {item}" for item in errors)
+        lines.extend(["", "## Errors", "", *[f"- {item}" for item in errors]])
     if warnings:
-        lines.extend(["", "## Warnings", ""])
-        lines.extend(f"- {item}" for item in warnings)
+        lines.extend(["", "## Warnings", "", *[f"- {item}" for item in warnings]])
     lines.extend(
         [
             "",
@@ -650,11 +680,9 @@ def render_report(report: Mapping[str, object]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def write_outputs(report: Mapping[str, object], out_dir: Path) -> None:
+def write_outputs(report: Mapping[str, Any], out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
-    graphs = report.get("graphs")
-    if not isinstance(graphs, Mapping):
-        raise ValueError("report is missing graphs")
+    graphs = report["graphs"]
     for name in ("import_graph", "call_graph", "artifact_graph", "version_graph"):
         path = out_dir / f"{name}.json"
         path.write_text(
@@ -671,7 +699,6 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--out-dir", type=Path)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
-
     try:
         report = build_report(
             ROOT,
@@ -684,8 +711,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.out_dir:
         write_outputs(report, args.out_dir)
     print(render_report(report), end="")
-    errors = report.get("errors")
-    return 1 if args.check and isinstance(errors, list) and errors else 0
+    return 1 if args.check and report["errors"] else 0
 
 
 if __name__ == "__main__":
