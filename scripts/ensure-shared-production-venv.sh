@@ -85,7 +85,7 @@ if [[ ! -x "$env_dir/bin/python" ]]; then
   done
   (
     cd "$PROJECT"
-    UV_PROJECT_ENVIRONMENT="$env_dir" "$UV_BIN" "${uv_args[@]}"
+    UV_PROJECT_ENVIRONMENT="$env_dir" "$UV_BIN" --project "$PROJECT" "${uv_args[@]}"
   )
 fi
 
