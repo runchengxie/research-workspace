@@ -125,6 +125,38 @@ python scripts/run_submodule_checks.py --profile full --dry-run
 
 不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
 
+## Production release 保留
+
+`scripts/promote-production.sh` 在成功切换 `production/<项目>/current` 后，会自动清理旧
+release。默认每个项目保留最近 5 个版本，并始终保留当前版本，最少保留数量为 2，保证
+至少有一个回滚候选。可通过环境变量调整数量：
+
+```bash
+PRODUCTION_KEEP_RELEASES=5 bash scripts/promote-production.sh --repo all
+```
+
+只想查看将要清理的版本时使用 dry-run；它不会切换 `current` 或删除文件：
+
+```bash
+bash scripts/promote-production.sh --repo all --dry-run
+```
+
+底层清理器也可以单独运行，但生产目录应通过 promotion 脚本调用，以便正确移除 Git
+worktree：
+
+```bash
+bash scripts/prune-production-releases.sh \
+  --base /home/richard/code/production/research-workspace \
+  --source /home/richard/code/research-workspace \
+  --keep 5 --dry-run
+```
+
+新 release 的 Python 环境按 `pyproject.toml` 与 `uv.lock` 的内容指纹共享，存放在
+`production/shared/venvs/<项目>/<指纹>/`。release 内的 `.venv` 是指向共享环境的链接；
+依赖锁文件变化时会创建新环境，旧 release 回滚时仍使用原来的环境。清理旧 release 时，
+没有任何保留 release 引用的共享环境也会自动清理。已有 release 的实体 `.venv` 不会被
+自动迁移。
+
 ## 根测试契约
 
 顶层 `tests/` 是跨仓库集成测试项目，其用例同时验证根工作区与七个子模块。根项目本身
