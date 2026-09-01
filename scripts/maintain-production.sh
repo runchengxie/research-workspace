@@ -49,7 +49,9 @@ prune_repo() {
   local name=$1 base=$2 source=$3
   [[ -d "$base" ]] || return 0
   local args=(--base "$base" --source "$source" --shared-root "$SHARED_VENV_ROOT" --keep "$KEEP_RELEASES")
-  (( DRY_RUN )) && args+=(--dry-run)
+  if (( DRY_RUN )); then
+    args+=(--dry-run)
+  fi
   bash "$SCRIPT_DIR/prune-production-releases.sh" "${args[@]}"
 }
 
