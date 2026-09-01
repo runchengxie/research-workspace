@@ -1,0 +1,11 @@
+[Unit]
+Description=Weekly production release maintenance
+
+[Timer]
+OnCalendar=Sun *-*-* 04:00:00 Asia/Shanghai
+Persistent=true
+RandomizedDelaySec=15m
+Unit=production-maintenance.service
+
+[Install]
+WantedBy=timers.target

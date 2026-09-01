@@ -1,0 +1,6 @@
+[Unit]
+Description=Production release and shared virtualenv maintenance
+
+[Service]
+Type=oneshot
+ExecStart=/home/richard/code/research-workspace/scripts/maintain-production.sh --repo all
