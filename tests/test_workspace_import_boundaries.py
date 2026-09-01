@@ -59,6 +59,7 @@ def test_current_workspace_import_boundary_budgets_hold() -> None:
         "quant-execution-engine:no-research-runtime-imports",
         "strategy-app:no-control-plane-imports",
         "strategy-app:no-execution-runtime-imports",
+        "strategy-research:no-control-or-execution-runtime-imports",
         "strategy-pipeline:no-execution-engine-imports",
         "strategy-pipeline:contracts-pure-handoff",
         "strategy-pipeline:liveops-no-cli-backedge",
@@ -198,6 +199,38 @@ def test_execution_runtime_cross_edges_are_detected(tmp_path: Path) -> None:
     assert report["issues"] == [
         "portfolio-to-execution: 1 imports exceed budget 0",
         "execution-to-research: 2 imports exceed budget 0",
+    ]
+
+
+def test_strategy_research_cannot_import_control_or_execution_runtime(tmp_path: Path) -> None:
+    source = tmp_path / "strategy-research" / "src" / "style_factors"
+    source.mkdir(parents=True)
+    (source / "example.py").write_text(
+        textwrap.dedent(
+            """
+            from strategy_pipeline.pipeline.runner import run_pipeline
+            from quant_execution_engine.targets import read_targets_json
+            """
+        ),
+        encoding="utf-8",
+    )
+    rules = (
+        workspace_import_boundaries.BoundaryRule(
+            identifier="strategy-research-no-runtime",
+            description="test",
+            repo="strategy-research",
+            source="src/style_factors",
+            forbidden=("strategy_pipeline", "quant_execution_engine"),
+            max_allowed=0,
+        ),
+    )
+
+    report = workspace_import_boundaries.build_report(tmp_path, rules)
+
+    assert report["issues"] == ["strategy-research-no-runtime: 2 imports exceed budget 0"]
+    assert [finding["matched"] for finding in report["rules"][0]["findings"]] == [
+        "strategy_pipeline",
+        "quant_execution_engine",
     ]
 
 
