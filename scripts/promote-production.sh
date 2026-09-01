@@ -66,7 +66,7 @@ ensure_project_venv() {
 
 prepare_release() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5
-  local commit release current tmp
+  local commit release current tmp fresh=0
   git -C "$source" fetch "$remote" "$ref"
   commit=$(git -C "$source" rev-parse "$remote/$ref")
   release="$base/releases/$commit"
@@ -85,6 +85,7 @@ prepare_release() {
   [[ ! -e "$base/current" || -L "$base/current" ]] || die "$base/current exists but is not a symlink"
   run mkdir -p "$base/releases"
   if [[ ! -e "$release" ]]; then
+    fresh=1
     run git -C "$source" worktree add --detach "$release" "$commit"
     if [[ "$name" == research-workspace ]]; then
       run git -C "$release" submodule sync --recursive
@@ -103,7 +104,9 @@ prepare_release() {
     assert_clean "$release"
   fi
   if (( ! DRY_RUN )); then
-    assert_clean "$release"
+    # A fresh release intentionally gains generated .venv links while being
+    # prepared. Existing releases must still pass the cleanliness gate.
+    (( fresh )) || assert_clean "$release"
     write_manifest "$name" "$base" "$commit"
     tmp="$base/.current.$$"
     rm -f "$tmp"
