@@ -64,6 +64,32 @@ ensure_project_venv() {
   bash "$SCRIPT_DIR/ensure-shared-production-venv.sh" "${args[@]}"
 }
 
+refresh_minute_campaign_units() {
+  local release=$1
+  local mdp_dir="$release/market-data-platform"
+  local renderer="$mdp_dir/scripts/operations/render_tushare_minute_campaign_units.py"
+  local manifest="${TUSHARE_MINUTE_CAMPAIGN_MANIFEST:-$HOME/data/market-data-platform/metadata/minute_backfill/tushare_historical_campaign_v1_20260831/manifest.json}"
+  local data_root="${MARKET_DATA_PLATFORM_DATA_ROOT:-$HOME/data/market-data-platform}"
+  local logs_dir="${TUSHARE_MINUTE_LOGS_DIR:-$HOME/.hermes/logs}"
+  local output_dir="${TUSHARE_MINUTE_SYSTEMD_OUTPUT_DIR:-$HOME/.config/systemd/user}"
+
+  if [[ ! -f "$manifest" ]]; then
+    printf '[research-workspace] minute campaign manifest unavailable; skipped unit render: %s\n' "$manifest" >&2
+    return 0
+  fi
+  [[ -x "$mdp_dir/.venv/bin/python" ]] || die "shared market-data-platform venv missing: $mdp_dir/.venv/bin/python"
+  [[ -f "$renderer" ]] || die "minute campaign renderer missing: $renderer"
+
+  run "$mdp_dir/.venv/bin/python" "$renderer" \
+    --home "$HOME" \
+    --mdp-dir "$mdp_dir" \
+    --data-platform-root "$data_root" \
+    --campaign-manifest "$manifest" \
+    --logs-dir "$logs_dir" \
+    --output-dir "$output_dir"
+  run systemctl --user daemon-reload
+}
+
 prepare_release() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5
   local commit release current tmp fresh=0
@@ -121,6 +147,9 @@ exec 9>"$LOCK_FILE"
 flock -n 9 || die "another promotion is running"
 if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == research-workspace ]]; then
   prepare_release research-workspace /home/richard/code/research-workspace "$PRODUCTION_ROOT/research-workspace" github main
+  if (( ! DRY_RUN )); then
+    refresh_minute_campaign_units "$PRODUCTION_ROOT/research-workspace/current"
+  fi
 fi
 if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == market-intel ]]; then
   prepare_release market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel" origin main
