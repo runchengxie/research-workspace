@@ -65,6 +65,14 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                     "--check",
                 ),
             ),
+            PlannedCommand(
+                "workspace-architecture",
+                (
+                    sys.executable,
+                    str(ROOT / "scripts" / "workspace_architecture.py"),
+                    "--check",
+                ),
+            ),
         ],
         "governance": [
             PlannedCommand(
