@@ -62,7 +62,7 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 
 `src/research_contracts` 已提供 v2 写入辅助层：`attach_artifact_envelope_v2`、`canonical_json_sha256`、`file_sha256` 和 `ProducerIdentity`/`LineageInput` 类型，并有契约测试覆盖写入与校验往返。
 
-生产方采用已覆盖信号与持仓两类产物。`alpha-research` 的 `write_signal_artifact` 与 `StyleReplicaSignalGenerator.write` 分别在 `signals.meta.json` 和 `signals_style_replica.meta.json` 写入 `artifact_envelope` 键。`portfolio-backtester` 的 `write_positions_by_rebalance_artifact` 在 companion `positions_by_rebalance.meta.json` 写入同一键。两个 owner 仓库均以 git subdirectory 依赖接入 `research-contracts`。`targets.json` 的导出方尚未接入，仍停留在 `adoption_pending`。现有 v1 artifact 和 reader 保持有效，读取方继续兼容未携带 envelope 的 v1 metadata。envelope 只作为附加键写入对应 metadata 文件。
+生产方已经覆盖信号、持仓和执行目标三类产物。`alpha-research` 的 `write_signal_artifact` 与 `StyleReplicaSignalGenerator.write` 分别在 `signals.meta.json` 和 `signals_style_replica.meta.json` 写入 `artifact_envelope` 键。`portfolio-backtester` 的 `write_positions_by_rebalance_artifact` 在 companion `positions_by_rebalance.meta.json` 写入同一键。两个 owner 仓库均以 git subdirectory 依赖接入 `research-contracts`。`strategy export-targets` 在 `targets.json.lineage.json` 写入同一 `research.artifact-envelope.v2` envelope，并以实际写出的 `targets.json` 计算 content SHA-256。上述产物均已进入 `adopted_by`，当前 `adoption_pending` 为空。现有 v1 artifact 和 reader 保持有效，读取方继续兼容未携带 envelope 的 v1 metadata。envelope 只作为附加键写入对应 metadata 或 lineage sidecar。
 
 | Artifact | 契约 | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
@@ -70,8 +70,8 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 | `signals.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `signal_artifact_summary` | 契约 name、schema version、文件路径、行数、required columns、`artifact_envelope` |
 | `positions_by_rebalance.csv` | `portfolio_backtester.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`。常见字段包括 `entry_date`、`side`、`signal`、`rank` |
 | `positions_by_rebalance.meta.json` | `portfolio_backtester.positions_by_rebalance` envelope | `portfolio-backtester` | `portfolio_backtester.positions_artifact` | contract、schema version、文件路径、行数、required columns、`artifact_envelope` |
-| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity` |
-| `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `strategy export-targets` | run id、输入持仓文件、配置、质量检查和导出时间 |
+| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity`，且二者恰好存在一个 |
+| `targets.json.lineage.json` | target export lineage | `strategy-pipeline` | `strategy export-targets` | run id、输入持仓文件、配置、质量检查、导出时间和 `artifact_envelope` |
 | `signals_style_replica.parquet` | `alpha_research.signals`（style_replica variant） | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
 | `signals_style_replica.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | 契约 name、schema version、model_version、config（a/b slots、theme quotas）、`artifact_envelope` |
 | `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
