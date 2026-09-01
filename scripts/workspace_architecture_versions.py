@@ -11,6 +11,21 @@ from typing import Any
 from workspace_architecture_model import ArchitectureModel, Graph, component_root
 
 
+def _run_git(root: Path, *args: str) -> tuple[str | None, str | None]:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(root), *args],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+    except OSError as exc:
+        return None, str(exc)
+    if result.returncode != 0:
+        return None, result.stderr.strip() or f"git {' '.join(args)} failed"
+    return result.stdout, None
+
+
 def _workspace_gitlinks(
     root: Path,
     model: ArchitectureModel,
@@ -20,25 +35,34 @@ def _workspace_gitlinks(
         for component in model.components
         if component.repo_path != "."
     }
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(root), "ls-tree", "HEAD"],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError as exc:
-        return {}, [f"gitlink scan unavailable: {exc}"]
-    if result.returncode != 0:
-        message = result.stderr.strip() or "git ls-tree failed"
-        return {}, [f"gitlink scan unavailable: {message}"]
+    output, error = _run_git(root, "ls-tree", "HEAD")
+    if error:
+        return {}, [f"gitlink scan unavailable: {error}"]
+    assert output is not None
     revisions: dict[str, str] = {}
-    for line in result.stdout.splitlines():
+    for line in output.splitlines():
         metadata, separator, path = line.partition("\t")
         parts = metadata.split()
         if separator and path in repo_components and len(parts) == 3 and parts[0] == "160000":
             revisions[repo_components[path]] = parts[2]
     return revisions, []
+
+
+def _workspace_revisions(
+    root: Path,
+    model: ArchitectureModel,
+) -> tuple[dict[str, str], list[str]]:
+    revisions, warnings = _workspace_gitlinks(root, model)
+    output, error = _run_git(root, "rev-parse", "HEAD")
+    if error:
+        warnings.append(f"root revision scan unavailable: {error}")
+        return revisions, warnings
+    assert output is not None
+    root_revision = output.strip()
+    for component in model.components:
+        if component.repo_path == ".":
+            revisions[component.identifier] = root_revision
+    return revisions, warnings
 
 
 def _load_pyproject(path: Path) -> tuple[Mapping[str, Any] | None, str | None]:
@@ -116,7 +140,7 @@ def compare_version_pins(
 
 
 def build_version_graph(root: Path, model: ArchitectureModel) -> Graph:
-    workspace_revisions, git_warnings = _workspace_gitlinks(root, model)
+    workspace_revisions, git_warnings = _workspace_revisions(root, model)
     standalone_pins, pin_warnings = _standalone_pins(root, model)
     differences = compare_version_pins(
         workspace_revisions=workspace_revisions,
