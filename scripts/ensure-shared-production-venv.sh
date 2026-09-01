@@ -84,7 +84,7 @@ fi
 # path.  Re-sync even when the environment already exists so uv refreshes the
 # editable project binding to the release currently being prepared.
 printf '[venv] syncing %s into %s\n' "$NAME" "$env_dir"
-uv_args=(sync --locked)
+uv_args=(sync --locked --no-editable)
 for extra in "${EXTRAS[@]}"; do
   uv_args+=(--extra "$extra")
 done
