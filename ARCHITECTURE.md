@@ -79,6 +79,7 @@ quant-execution-engine
 
 ## 治理入口
 
+- [Architecture as Code](docs/architecture-as-code.md)
 - [工作区聚合路线图](docs/roadmap.md)
 - [文档归集与去重清单](docs/documentation-consolidation.md)
 - [框架集成边界](docs/adr/0001-framework-integration-boundaries.md)
