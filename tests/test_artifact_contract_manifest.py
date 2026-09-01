@@ -52,6 +52,10 @@ def test_artifact_contract_manifest_covers_stage3_core_handoff() -> None:
     assert records["positions_by_rebalance.csv"]["owner"] == "portfolio-backtester"
     assert records["targets.json"]["owner"] == "quant-execution-engine"
     assert records["targets.json"]["producer"] == "strategy-pipeline"
+    assert records["targets.json"]["required_fields"] == ["targets", "symbol", "market"]
+    assert records["targets.json"]["exactly_one_of_fields"] == [
+        ["target_weight", "target_quantity"]
+    ]
     assert records["watchlist_20.csv"]["owner"] == "strategy-pipeline"
     assert records["watchlist_20.csv"]["consumers"] == ["market-intel"]
     watchlist_notes = str(records["watchlist_20.csv"]["notes"])
@@ -131,3 +135,9 @@ def test_artifact_envelope_adoption_lists_match_producer_status() -> None:
     } <= adopted
     assert not pending
     assert not adopted.intersection(pending)
+
+
+def test_contract_docs_do_not_claim_targets_envelope_is_pending() -> None:
+    docs = (ROOT / "docs" / "contracts.md").read_text(encoding="utf-8")
+
+    assert "`targets.json` 的导出方尚未接入" not in docs
