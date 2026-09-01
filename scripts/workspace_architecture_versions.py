@@ -99,20 +99,20 @@ def _standalone_pins(
 ) -> tuple[dict[str, dict[str, str]], list[str]]:
     component_ids = set(model.by_id)
     pins: dict[str, dict[str, str]] = {}
-    warnings: list[str] = []
+    errors: list[str] = []
     for component in model.components:
         pyproject = component_root(root, component) / "pyproject.toml"
         if not pyproject.is_file():
             continue
         payload, error = _load_pyproject(pyproject)
         if error:
-            warnings.append(f"{component.identifier}: cannot parse pyproject.toml: {error}")
+            errors.append(f"{component.identifier}: cannot parse pyproject.toml: {error}")
             continue
         assert payload is not None
         component_pins = _uv_source_pins(payload, component_ids)
         if component_pins:
             pins[component.identifier] = component_pins
-    return pins, warnings
+    return pins, errors
 
 
 def compare_version_pins(
@@ -141,7 +141,7 @@ def compare_version_pins(
 
 def build_version_graph(root: Path, model: ArchitectureModel) -> Graph:
     workspace_revisions, git_warnings = _workspace_revisions(root, model)
-    standalone_pins, pin_warnings = _standalone_pins(root, model)
+    standalone_pins, pin_errors = _standalone_pins(root, model)
     differences = compare_version_pins(
         workspace_revisions=workspace_revisions,
         local_pins=standalone_pins,
@@ -152,6 +152,6 @@ def build_version_graph(root: Path, model: ArchitectureModel) -> Graph:
         "workspace_revisions": workspace_revisions,
         "standalone_pins": standalone_pins,
         "standalone_pin_differences": differences,
-        "errors": [],
-        "warnings": [*git_warnings, *pin_warnings],
+        "errors": pin_errors,
+        "warnings": git_warnings,
     }
