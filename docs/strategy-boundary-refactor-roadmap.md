@@ -87,7 +87,7 @@ owner 仓补齐公开 API
 | 1 | 已有 owner wrapper | `alpha-research`、`market-data-platform`、`portfolio-backtester`、`strategy-app` | 已完成：46 个 delegating wrapper 删除，provenance v2 |
 | 2 | DailyWatch20 | `strategy-app` 加现有 data、alpha、portfolio API | 已完成：策略计算迁 owner，pipeline 只保留运行、发布和状态汇总 |
 | 3 | 热点板块 | `strategy-app` 加 `portfolio-backtester`，外部候选继续文件耦合 | 已完成：three-arm、v4-month、numeric-v2、holdings-overlay、session-challenger、evidence-bundle 迁入 strategy-app |
-| 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | 已完成：脚本已迁 `strategy-research/experiments/next_open_to_high/`，pipeline 无残留 |
+| 4 | 次日开盘到最高价 | 模型进 `alpha-research`，回放与成本进 `portfolio-backtester`，策略组合进 `strategy-app` | 已完成：脚本已迁 `strategy-research/research/experiments/next_open_to_high/`，pipeline 无残留 |
 | 5 | D11-H5 | 模型与信号进 `alpha-research`，目标构造与袖套回放进 `portfolio-backtester` | 已完成：owner 负责计算与合同，pipeline 保留 shadow runner 编排壳 |
 | 6 | 红利与成长 ETF 动量 | 通用回测进 `portfolio-backtester`，策略配置与报告组合进 `strategy-app` | 已完成：四模块迁入 strategy-app，研究 runner 改向 |
 | 7 | StyleReplica | 行业平衡袖套组合构造已迁入 `portfolio-backtester`。因子计算内核迁 `alpha-research.style_factors`，分位数多空回测内核迁 `portfolio_backtester.style_factors_backtest`，呈现/研究层整包迁 `strategy-research/style_factors` | 已完成：根仓 `src/style_factors` 已删除，调用方（qlib_pilot 等）改向子模块内核，R4 切片 7 收口 |

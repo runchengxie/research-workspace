@@ -46,9 +46,9 @@ def _valid_case(case_id: str = "demo-case") -> dict[str, object]:
         "case_id": case_id,
         "question": "演示问题",
         "as_of": "2026-08-18",
-        "research_specs": ["strategy-research/experiments/demo/research_spec.json"],
+        "research_specs": ["strategy-research/research/experiments/demo/research_spec.json"],
         "claims": ["demo.claim"],
-        "evidence_bundles": ["strategy-research/evidence/demo.json"],
+        "evidence_bundles": ["strategy-research/research/evidence/demo.json"],
         "reviews": [
             {
                 "review_id": "logic-1",
@@ -125,9 +125,9 @@ def _write_case(root: Path, case_id: str, payload: dict[str, object]) -> tuple[P
 
 def test_schema_files_exist() -> None:
     for relative in (
-        "strategy-research/schemas/claim.v1.schema.json",
-        "strategy-research/schemas/outcome_profile.v1.schema.json",
-        "strategy-research/schemas/research_case.v1.schema.json",
+        "strategy-research/tools/schemas/claim.v1.schema.json",
+        "strategy-research/tools/schemas/outcome_profile.v1.schema.json",
+        "strategy-research/tools/schemas/research_case.v1.schema.json",
     ):
         path = ROOT / relative
         assert path.is_file(), f"缺失 schema：{relative}"
@@ -397,7 +397,7 @@ def test_dg3_source_unknown_claim_type_fails(tmp_path: Path) -> None:
 
 
 def test_schema_files_exist_includes_source(tmp_path: Path) -> None:
-    path = ROOT / "strategy-research" / "schemas" / "source.v1.schema.json"
+    path = ROOT / "strategy-research" / "tools" / "schemas" / "source.v1.schema.json"
     assert path.is_file()
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert isinstance(payload, dict)

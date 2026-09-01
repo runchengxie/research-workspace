@@ -67,12 +67,12 @@
 失效条件正式替代口语化的命门概念。引用路径必须存在，与 `research_spec.v1` 的
 `evidence_refs` 非空要求保持一致。
 
-schema 文件在 `strategy-research/schemas/claim.v1.schema.json`，校验脚本为
-`scripts/decision_governance_check.py`，判断账本目录为 `strategy-research/judgment-ledger/`。
+schema 文件在 `strategy-research/tools/schemas/claim.v1.schema.json`，校验脚本为
+`tools/scripts/decision_governance_check.py`，判断账本目录为 `strategy-research/research/ledgers/judgments/`。
 
 判断账本已填入六个真实 claim，覆盖五个策略（`daily_watch20`×2、`hotsector`、
 `style_replica`、`d11_h5`、`dividend_growth_momentum`），均以
-`strategy-research/evidence/*.json` 与策略 README 为依据。缺证据维度如实登记
+`strategy-research/research/evidence/*.json` 与策略 README 为依据。缺证据维度如实登记
 `abstain_conditions`，不伪造 pass。校验入口：`python scripts/decision_governance_check.py`。
 
 ### DG2 研究案例与决策记录
@@ -94,8 +94,8 @@ strategy-research/cases/
 `abstentions` 与 `decision`。
 `decision` 状态为 `no_view`、`provisional`、`accepted`、`rejected` 之一，并记录 `thesis`。
 
-schema 文件在 `strategy-research/schemas/research_case.v1.schema.json`，校验脚本为
-`scripts/decision_governance_check.py`，案例目录为 `strategy-research/cases/`。
+schema 文件在 `strategy-research/tools/schemas/research_case.v1.schema.json`，校验脚本为
+`tools/scripts/decision_governance_check.py`，案例目录为 `strategy-research/research/cases/`。
 
 案例目录已填入三个真实案例：`daily-watch20-promotion-readiness`、
 `hotsector-pit-discipline`、`style-replica-evidence-gap`。各案例按真实证据登记
@@ -204,8 +204,8 @@ prompt、不共享对方输出、必要时不同输入切片与确定性检查�
 支持的压力类型包括时间窗口、市场状态、成本、流动性、容量、暴露、信号扰动、相关性和
 预注册 custom 场景。计算仍由各职责仓完成，本对象只负责证据导航和决策线索。
 
-schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录目录为
-`strategy-research/counterexamples/`，案例通过可选 `counterexamples` 字段引用。
+schema 位于 `strategy-research/tools/schemas/counterexample.v1.schema.json`，记录目录为
+`strategy-research/research/counterexamples/`，案例通过可选 `counterexamples` 字段引用。
 详细约束见 `strategy-research/counterexamples/README.md`。
 
 ### DG9 Outcome-first 决策目标
@@ -227,8 +227,8 @@ schema 位于 `strategy-research/schemas/counterexample.v1.schema.json`，记录
 市场状态和反例证据判断 `evidence_feasible` 或类似的经验可行性，不能把历史证据提升为严格的
 随机过程可实现性结论。
 
-schema 位于 `strategy-research/schemas/outcome_profile.v1.schema.json`，记录目录为
-`strategy-research/outcome-profiles/`。`research_case.v1` 通过可选 `outcome_profiles` 字段引用。
+schema 位于 `strategy-research/tools/schemas/outcome_profile.v1.schema.json`，记录目录为
+`strategy-research/research/outcome-profiles/`。`research_case.v1` 通过可选 `outcome_profiles` 字段引用。
 
 ## 不建议采用
 
@@ -243,6 +243,6 @@ schema 位于 `strategy-research/schemas/outcome_profile.v1.schema.json`，记�
 - `research-spec.md` 负责实验说明书格式，本页不重复
 - `strategy-evidence-gate.md` 负责证据门禁，本页不改变强制证据集合
 - `strategy-research/README.md` 负责策略身份与生命周期，判断账本只补充认识论身份
-- `strategy-research/counterexamples/README.md` 负责反例记录的具体字段与工作流
-- `strategy-research/outcome-profiles/README.md` 负责决策结果目标的字段与经验可行性语义
+- `strategy-research/research/counterexamples/README.md` 负责反例记录的具体字段与工作流
+- `strategy-research/research/outcome-profiles/README.md` 负责决策结果目标的字段与经验可行性语义
 - 观察类工具只作查看层，不作为事实来源，事实来源仍是无障碍 JSON、YAML、Git 与哈希

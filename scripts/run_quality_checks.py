@@ -87,13 +87,7 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
                 "trial-ledger",
                 (
                     sys.executable,
-                    str(
-                        ROOT
-                        / "strategy-research"
-                        / "tools"
-                        / "scripts"
-                        / "trial_ledger_check.py"
-                    ),
+                    str(ROOT / "strategy-research" / "tools" / "scripts" / "trial_ledger_check.py"),
                 ),
             ),
         ],

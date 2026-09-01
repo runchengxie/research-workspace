@@ -31,7 +31,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 `hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和 secret scan。`governance` 当前运行两项检查：
 
 - `research_capability_registry.v1`：确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
-- `strategy-research/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
+- `strategy-research/tools/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
 
 `ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
 

@@ -32,7 +32,7 @@ def _payload(experiment_id: str = "ledger_demo") -> dict[str, object]:
         "evaluation": {"oos_protocol": ["walk_forward"], "final_oos_reserved": True},
         "evidence_refs": ["evidence.md"],
         "trial_ledger": {
-            "path": f"trial-ledger/{experiment_id}.jsonl",
+            "path": f"research/ledgers/trials/{experiment_id}.jsonl",
             "multiple_testing_family": "factor-search-v1",
         },
     }
@@ -40,7 +40,14 @@ def _payload(experiment_id: str = "ledger_demo") -> dict[str, object]:
 
 def _write_spec(root: Path, payload: dict[str, object]) -> Path:
     experiment_id = str(payload["experiment_id"])
-    path = root / "strategy-research" / "experiments" / experiment_id / "research_spec.json"
+    path = (
+        root
+        / "strategy-research"
+        / "research"
+        / "experiments"
+        / experiment_id
+        / "research_spec.json"
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload), encoding="utf-8")
     (root / "evidence.md").write_text("evidence", encoding="utf-8")
@@ -54,7 +61,7 @@ def _write_ledger(
     family: str = "factor-search-v1",
     counted: bool = True,
 ) -> Path:
-    path = root / "strategy-research" / "trial-ledger" / f"{experiment_id}.jsonl"
+    path = root / "strategy-research" / "research" / "ledgers" / "trials" / f"{experiment_id}.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     row = {
         "experiment_id": experiment_id,
@@ -88,7 +95,9 @@ def test_trial_ledger_link_rejects_missing_file(tmp_path: Path) -> None:
 
 def test_trial_ledger_link_rejects_foreign_experiment(tmp_path: Path) -> None:
     path = _write_spec(tmp_path, _payload())
-    ledger = tmp_path / "strategy-research" / "trial-ledger" / "ledger_demo.jsonl"
+    ledger = (
+        tmp_path / "strategy-research" / "research" / "ledgers" / "trials" / "ledger_demo.jsonl"
+    )
     ledger.parent.mkdir(parents=True, exist_ok=True)
     ledger.write_text(
         json.dumps(

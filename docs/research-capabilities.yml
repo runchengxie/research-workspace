@@ -31,8 +31,8 @@ capabilities:
     maturity: verified
     canonical_entrypoint:
       type: script
-      value: python scripts/trial_ledger_check.py
-      source_path: scripts/trial_ledger_check.py
+      value: python tools/scripts/trial_ledger_check.py
+      source_path: tools/scripts/trial_ledger_check.py
     inputs:
       - trial_ledger_entry.v1 JSONL
     outputs:

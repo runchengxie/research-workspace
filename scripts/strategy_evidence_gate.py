@@ -32,7 +32,7 @@ _promotion = importlib.import_module("research_contracts.promotion_evidence")
 
 DEFAULT_POLICY = "strategy-research/evidence_policy.json"
 DEFAULT_CATALOG = "strategy-research/catalog.json"
-DEFAULT_EVIDENCE_DIR = "strategy-research/evidence"
+DEFAULT_EVIDENCE_DIR = "strategy-research/research/evidence"
 DEFAULT_PROMOTION_PROFILES = "strategy-research/promotion_profiles.json"
 BENCHMARK_MATRIX_AXES = ("universe", "horizon", "regime", "cost_bps")
 

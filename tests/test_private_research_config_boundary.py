@@ -7,7 +7,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_private_research_config_is_explicitly_resolvable_from_workspace():
-    private_config = ROOT / "strategy-research/experiments/configs/daily_watch20_research.yml"
+    private_config = (
+        ROOT / "strategy-research/research/experiments/configs/daily_watch20_research.yml"
+    )
 
     assert private_config.is_file()
     resolved = resolve_pipeline_config(private_config)
@@ -17,7 +19,7 @@ def test_private_research_config_is_explicitly_resolvable_from_workspace():
 
 
 def test_private_research_config_missing_from_workspace_fails_closed():
-    with pytest.raises(SystemExit, match="git submodule update --init strategy-research"):
+    with pytest.raises(SystemExit, match="Config file not found"):
         resolve_pipeline_config(
-            "strategy-research/experiments/configs/missing_private_research.yml"
+            "strategy-research/research/experiments/configs/missing_private_research.yml"
         )

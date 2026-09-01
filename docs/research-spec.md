@@ -24,12 +24,12 @@
 
 ## 文件位置
 
-每个实验在 `strategy-research/experiments/<实验id>/research_spec.json` 放一份说明书。
+每个实验在 `strategy-research/research/experiments/<实验id>/research_spec.json` 放一份说明书。
 `experiment_id` 必须与目录名一致。当前已登记的示例见
-[qlib_pilot](../strategy-research/experiments/qlib_pilot/research_spec.json)。
+[qlib_pilot](../strategy-research/research/experiments/qlib_pilot/research_spec.json)。
 
 基本面族级 shadow 的当前实现入口见
-[fundamental_family_shadow](../strategy-research/experiments/fundamental_family_shadow/README.md)。
+[fundamental_family_shadow](../strategy-research/research/experiments/fundamental_family_shadow/README.md)。
 它固定 Value、Quality、Growth 的族级对照、20 日主周期、60 日慢基本面挑战周期和 5 日诊断周期。
 该实验仍处于研究中，历史回放标记为 `retrospective_diagnostic`，不改变生产 preset，也不允许自动晋级。
 
@@ -78,7 +78,7 @@ schema 版本为 `research_spec.v1`，各字段如下：
 - `multiple_testing_family` 至少存在一个 `counted=true` 的 trial
 
 Trial 的 parent 图、exact duplicate fingerprint、排除理由和 final OOS 污染规则由
-`strategy-research/scripts/trial_ledger_check.py` 管理。顶层不复制 owner 的统计记账逻辑。
+`strategy-research/tools/scripts/trial_ledger_check.py` 管理。顶层不复制 owner 的统计记账逻辑。
 
 一开始就在 ResearchSpec 中预留 final OOS，不代表训练 trial 已经读取 final OOS。只有某个 trial 真正执行该窗口时，Trial Ledger 才记录 `role=final_oos`。
 
@@ -95,7 +95,7 @@ python scripts/research_spec_check.py
 校验单个说明书：
 
 ```bash
-python scripts/research_spec_check.py --spec strategy-research/experiments/qlib_pilot/research_spec.json
+python scripts/research_spec_check.py --spec strategy-research/research/experiments/qlib_pilot/research_spec.json
 ```
 
 机器可读输出：
