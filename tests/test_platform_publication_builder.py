@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from research_contracts import build_platform_publication
@@ -25,7 +25,7 @@ def test_builder_copies_projection_and_writes_manifest_without_source_path(tmp_p
             }
         ],
         output_root=output,
-        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=timezone.utc),
+        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=UTC),
         producer_repository="runchengxie/research-workspace",
         producer_commit="abc123",
         run_id="run-1",
@@ -60,7 +60,7 @@ def test_builder_replaces_previous_bundle_without_stale_projection(tmp_path: Pat
             }
         ],
         output_root=output,
-        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=timezone.utc),
+        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=UTC),
         producer_repository="runchengxie/research-workspace",
         producer_commit="abc123",
         run_id="run-2",
