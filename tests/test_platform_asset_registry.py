@@ -44,6 +44,25 @@ def test_registry_topological_order_describes_platform_flow() -> None:
     )
 
 
+def test_topological_order_is_stable_across_registration_order() -> None:
+    first = PlatformAssetRegistry()
+    first.register(_asset("market"))
+    first.register(_asset("features.a", dependencies=("market",)))
+    first.register(_asset("features.b", dependencies=("market",)))
+
+    second = PlatformAssetRegistry()
+    second.register(_asset("features.b", dependencies=("market",)))
+    second.register(_asset("features.a", dependencies=("market",)))
+    second.register(_asset("market"))
+
+    assert first.topological_order() == second.topological_order() == (
+        "market",
+        "features.a",
+        "features.b",
+    )
+    assert first.to_mapping() == second.to_mapping()
+
+
 def test_registry_rejects_missing_internal_dependency() -> None:
     registry = PlatformAssetRegistry()
     registry.register(_asset("signals.dailywatch20", dependencies=("missing.features",)))
