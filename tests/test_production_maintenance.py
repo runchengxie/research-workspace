@@ -2,7 +2,6 @@ import os
 import subprocess
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "maintain-production.sh"
 PROMOTE_SCRIPT = Path(__file__).parents[1] / "scripts" / "promote-production.sh"
 
