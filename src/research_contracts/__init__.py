@@ -36,6 +36,18 @@ from .platform_publication import (
     load_platform_publication_manifest,
 )
 from .publication_builder import build_platform_publication
+from .research_clock import (
+    RESEARCH_CLOCK_SCHEMA_VERSION,
+    ResearchClock,
+    validate_research_clock,
+)
+from .research_run_manifest import (
+    RESEARCH_EVIDENCE_TIERS,
+    RESEARCH_RUN_MANIFEST_SCHEMA_VERSION,
+    ArtifactRef,
+    ProducerVersion,
+    ResearchRunManifest,
+)
 
 __all__ = [
     "ARTIFACT_ENVELOPE_KEY",
@@ -45,8 +57,12 @@ __all__ = [
     "KNOWN_REPOS",
     "PLATFORM_PUBLICATION_SCHEMA_VERSION",
     "PUBLICATION_AUDIENCES",
-    "ArtifactEnvelopeV2",
+    "RESEARCH_CLOCK_SCHEMA_VERSION",
+    "RESEARCH_EVIDENCE_TIERS",
+    "RESEARCH_RUN_MANIFEST_SCHEMA_VERSION",
     "ArtifactContractManifest",
+    "ArtifactEnvelopeV2",
+    "ArtifactRef",
     "ContractValidationResult",
     "FileReceipt",
     "LegacyArtifactMetadata",
@@ -54,6 +70,9 @@ __all__ = [
     "PlatformPublicationArtifact",
     "PlatformPublicationManifest",
     "ProducerIdentity",
+    "ProducerVersion",
+    "ResearchClock",
+    "ResearchRunManifest",
     "TargetHandoffContext",
     "attach_artifact_envelope_v2",
     "build_file_receipts",
@@ -66,4 +85,5 @@ __all__ = [
     "read_artifact_envelope",
     "validate_artifact_contract_manifest",
     "validate_file_receipts",
+    "validate_research_clock",
 ]
