@@ -14,7 +14,15 @@ EXPECTED_SUBMODULES = {
     "quant-execution-engine",
     "strategy-app",
     "deep-learning-tick-data-prediction",
+    "strategy-research",
 }
+ROOT_MARKDOWN = (
+    ROOT / "README.md",
+    ROOT / "AGENTS.md",
+    ROOT / "ARCHITECTURE.md",
+    ROOT / "CONTRIBUTING.md",
+    ROOT / ".github" / "pull_request_template.md",
+)
 
 
 def _uninitialized_submodule_for(path: Path) -> str | None:
@@ -34,7 +42,7 @@ def _uninitialized_submodule_for(path: Path) -> str | None:
 
 class DocsLinksTest(unittest.TestCase):
     def test_top_level_markdown_links_resolve(self) -> None:
-        markdown_files = [ROOT / "README.md", *sorted((ROOT / "docs").rglob("*.md"))]
+        markdown_files = [*ROOT_MARKDOWN, *sorted((ROOT / "docs").rglob("*.md"))]
         missing: list[str] = []
         for markdown in markdown_files:
             text = markdown.read_text(encoding="utf-8")
@@ -75,6 +83,24 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("> owner: workspace |", lifecycle)
         for submodule in EXPECTED_SUBMODULES:
             self.assertIn(submodule, lifecycle)
+
+    def test_codeowners_and_pr_template_cover_all_submodules(self) -> None:
+        codeowners = (ROOT / "CODEOWNERS").read_text(encoding="utf-8")
+        template = (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+        labels = {
+            "market-data-platform": "数据平台",
+            "deep-learning-tick-data-prediction": "深度学习数据模型",
+            "alpha-research": "Alpha 研究",
+            "portfolio-backtester": "组合回测",
+            "strategy-research": "策略研究",
+            "strategy-app": "策略应用",
+            "strategy-pipeline": "策略编排",
+            "quant-execution-engine": "交易执行",
+        }
+
+        for submodule in EXPECTED_SUBMODULES:
+            self.assertIn(f"/{submodule}/", codeowners)
+            self.assertIn(labels[submodule], template)
 
     def test_docs_preserve_hk_restore_only_boundary(self) -> None:
         docs_index = (ROOT / "docs" / "README.md").read_text(encoding="utf-8")
