@@ -23,6 +23,16 @@ ACTIVE_DOCS = tuple(
 STYLE_DOCS = (*ROOT_ENTRY_DOCS, *ACTIVE_DOCS)
 FORBIDDEN_FRAGMENTS = ("**", "；", "——", "“", "”")
 INDIRECT_CONTRAST = re.compile(r"不是[^。]{0,100}而是|而不是")
+EXPECTED_SUBMODULES = {
+    "market-data-platform",
+    "deep-learning-tick-data-prediction",
+    "alpha-research",
+    "portfolio-backtester",
+    "strategy-research",
+    "strategy-app",
+    "strategy-pipeline",
+    "quant-execution-engine",
+}
 
 
 def test_entry_docs_use_concise_chinese_style() -> None:
@@ -53,16 +63,31 @@ def test_e2_is_documented_as_a_promotion_audit() -> None:
     assert "E2" in strategy_research
 
 
-def test_disabled_workflow_status_is_documented() -> None:
-    active = ROOT / ".github" / "workflows" / "superproject.yml"
-    disabled = ROOT / ".github" / "workflows" / "superproject.yml.disabled"
+def test_public_ci_policy_matches_active_workflow() -> None:
+    active = ROOT / ".github" / "workflows" / "contracts.yml"
+    obsolete = ROOT / ".github" / "workflows" / "superproject.yml.disabled"
     maintenance = (ROOT / "docs" / "workspace-maintenance.md").read_text(encoding="utf-8")
     quality = (ROOT / "docs" / "quality-governance.md").read_text(encoding="utf-8")
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
 
-    assert not active.exists()
-    assert disabled.is_file()
-    assert "当前没有启用顶层 GitHub Actions workflow" in maintenance
-    assert "目前没有活动 GitHub Actions workflow" in quality
+    assert active.is_file()
+    assert not obsolete.exists()
+    workflow = active.read_text(encoding="utf-8")
+    assert "submodules: false" in workflow
+    assert "tests/test_platform_publication.py" in workflow
+    assert "tests/test_run_submodule_fail_fast.py" in workflow
+    for text in (maintenance, quality, agents):
+        assert "public 仓库默认启用 GitHub Actions" in text
+        assert "private 仓库默认关闭 GitHub Actions" in text
+
+
+def test_ci_policy_covers_all_submodules() -> None:
+    quality = (ROOT / "docs" / "quality-governance.md").read_text(encoding="utf-8")
+    agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+
+    for name in EXPECTED_SUBMODULES:
+        assert f"`{name}`" in quality
+        assert f"`{name}`" in agents
 
 
 def test_framework_matrix_matches_current_main_surfaces() -> None:
