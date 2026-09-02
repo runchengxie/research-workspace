@@ -30,6 +30,19 @@ def _ty_command(*args: str) -> tuple[str, ...]:
     return ("uv", "run", "--project", str(ROOT), "--with", "ty", "ty", *args)
 
 
+def _pip_audit_command(*args: str) -> tuple[str, ...]:
+    return (
+        "uv",
+        "run",
+        "--project",
+        str(ROOT),
+        "--group",
+        "dev",
+        "pip-audit",
+        *args,
+    )
+
+
 def plan_commands(profile: str) -> list[PlannedCommand]:
     commands = {
         "lint": [
@@ -38,6 +51,12 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
         ],
         "type": [
             PlannedCommand("ty-check", _ty_command("check")),
+        ],
+        "dependencies": [
+            PlannedCommand(
+                "pip-audit",
+                _pip_audit_command("--progress-spinner", "off"),
+            ),
         ],
         "secrets": [
             PlannedCommand(
@@ -113,6 +132,7 @@ def plan_commands(profile: str) -> list[PlannedCommand]:
         return [
             *commands["lint"],
             *commands["type"],
+            *commands["dependencies"],
             *commands["secrets"],
         ]
     if profile in commands:
@@ -144,6 +164,7 @@ def main(argv: list[str] | None = None) -> int:
         choices=(
             "lint",
             "type",
+            "dependencies",
             "architecture",
             "governance",
             "secrets",
