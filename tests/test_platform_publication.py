@@ -59,6 +59,19 @@ def test_platform_publication_rejects_path_escape() -> None:
         )
 
 
+def test_platform_publication_rejects_bundle_root_as_artifact_path() -> None:
+    with pytest.raises(ValueError, match="relative_path"):
+        PlatformPublicationArtifact(
+            artifact_id="bad-root",
+            relative_path=".",
+            schema_version="example.v1",
+            sha256=SHA,
+            media_type="application/json",
+            audience="public",
+            consumers=("trading-research-dashboard",),
+        )
+
+
 def test_dashboard_consumer_rejects_internal_artifact() -> None:
     payload = _manifest(audience="internal").to_mapping()
 
