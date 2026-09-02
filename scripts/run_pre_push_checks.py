@@ -76,9 +76,8 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
     # standalone Git pin 覆盖当前 gitlink 对应的源码组合。
     root_tests = (sys.executable, "scripts/run_workspace_tests.py")
     research_layer = Path(cwd) / "strategy-research"
-    # strategy-research is a private submodule with its own pyproject.toml,
-    # uv.lock and local path sources for the owner packages. Its tests run
-    # inside that project, so no PYTHONPATH or --with injection is needed.
+    # strategy-research 是 private submodule，拥有独立 pyproject.toml、uv.lock 和
+    # Git 固定的 owner 依赖。测试在该项目环境中运行，不需要额外注入 PYTHONPATH。
     research_tests = tuple(
         (
             "uv",
