@@ -15,7 +15,7 @@ from typing import Any
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-RESEARCH_DIR = ROOT / "strategy-research" / "experiments" / "next_open_to_high"
+RESEARCH_DIR = ROOT / "strategy-research" / "research" / "experiments" / "next_open_to_high"
 
 
 def _load_research_module(filename: str, module_name: str):

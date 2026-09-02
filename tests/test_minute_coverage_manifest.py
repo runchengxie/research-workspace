@@ -9,6 +9,7 @@ def _load_research_module(filename: str, module_name: str):
     research_dir = (
         Path(__file__).resolve().parents[1]
         / "strategy-research"
+        / "research"
         / "experiments"
         / "next_open_to_high"
     )
