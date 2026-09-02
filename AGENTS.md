@@ -25,14 +25,16 @@
 | 仓库 | 主要职责 |
 | --- | --- |
 | `market-data-platform` | 数据资产生产、检查、发布和读取 |
+| `deep-learning-tick-data-prediction` | L2 事件流审计、模型训练和预测产物 |
 | `alpha-research` | 特征、模型、研究评估和信号产物 |
 | `portfolio-backtester` | 组合构造、回测、成本、容量、暴露和报告 |
+| `strategy-research` | 策略身份、投资假设、生命周期、实验和证据导航 |
 | `strategy-app` | 策略特有的纯计算、冻结合同与研究应用，不承担生产发布 |
 | `strategy-pipeline` | 运行编排、外部调用、命令行（CLI）、发布控制和 `targets.json` 导出 |
 | `quant-execution-engine` | 预演、风控、券商执行、对账和审计 |
 
 各子项目已注册的命令行入口（`strategy`、`strategy-pipeline`、`qexec`、`stockq`、`marketdata`）见
-[README 子项目命令行（CLI）](README.md#子项目命令行cli)。
+[README 命令行入口](README.md#命令行入口)。
 
 顶层不保存大型数据、研究运行产物、数据提供方缓存、券商凭证或交易审计日志。
 
@@ -52,12 +54,23 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `run_submodule_checks.py` 只执行 `scripts/submodule_checks.json` 中登记的命令。不要在顶层复制子仓库内部检查逻辑。
 
-顶层 workflow 只运行不递归 checkout 私有子模块的公开契约集成检查。各子模块按自身可见性和
-职责决定是否启用 PR、nightly 或手动检查；完整 delegated gates 仍由本地门禁和 release 流程负责。
+顶层 GitHub Actions 只运行无需递归检出私有子模块的公开检查。完整 delegated gates 仍由本地门禁和 release 流程负责。
+
+## GitHub Actions 策略
+
+工作区统一采用以下默认规则：
+
+- public 仓库默认启用 GitHub Actions，用于拉取请求的轻量自动检查。
+- private 仓库默认关闭 GitHub Actions，避免持续占用私有仓库的 Actions 额度。
+- private 仓库如需启用远端 CI，应在仓库文档中记录原因、检查范围和资源成本，并由维护者明确批准。
+- 本地 `pre-push` 和发布流程继续承担完整质量门禁。
+- 远端 CI 应尽量调用仓库自己的权威检查入口，减少本地和 GitHub Actions 两套命令长期分叉。
+
+本顶层仓库是 public 仓库，`.github/workflows/contracts.yml` 当前运行公开契约和根仓轻量回归测试。子模块的可见性和当前远端 CI 状态见 `docs/quality-governance.md`。
 
 ## 文件约定
 
-A 股权威 current 契约：
+A 股权威当前契约：
 
 ```text
 metadata/current_assets/a_share_current.json
@@ -96,7 +109,7 @@ targets.json
 - 修改 `scripts/submodule_checks.json` 时同步更新 `tests/test_run_submodule_checks.py`
 - 修改子模块列表时同步更新 `.gitmodules`、doctor、版本矩阵和测试
 - 修改 Python 命名空间边界时运行 `tests/test_namespace_contracts.py` 和 `tests/test_workspace_import_boundaries.py`
-- 修改 `targets.json` 或 current 契约 时运行对应契约测试
+- 修改 `targets.json` 或当前数据契约时运行对应契约测试
 
 ## Git 工作流
 
@@ -108,7 +121,7 @@ targets.json
 各自 `AGENTS.md` 的示例操作，不要混用。
 
 `main` 是受保护常驻分支，改动一律走 worktree + PR 流程，不直接在主检出目录提交。
-功能分支（`feat/*`、`fix/*`、`hotfix/*`、`release/*`）只用于拉取请求流程、临时存在。
+功能分支（`feat/*`、`fix/*`、`hotfix/*`、`chore/*`、`release/*`）只用于拉取请求流程、临时存在。
 每个改动遵循以下顺序：
 
 1. 从 `github/main` 新建 worktree 与功能分支：
@@ -151,14 +164,14 @@ targets.json
 
 ## 汇报顺序
 
-跨仓库工作按数据平台、alpha 研究、组合回测、策略编排、交易执行、顶层工作区的顺序汇报。完成状态应附真实命令结果或明确说明尚未运行的检查。
+跨仓库工作按数据平台、深度学习数据模型、alpha 研究、组合回测、策略研究、策略应用、策略编排、交易执行、顶层工作区的顺序汇报。完成状态应附真实命令结果或明确说明尚未运行的检查。
 
 ## Worktree-first 与 production 目录规范
 
-- `/home/richard/code/research-workspace` 是完整的 `main` 主工作树，作为稳定基线和人工检查入口，不是空目录。
+- `/home/richard/code/research-workspace` 是完整的 `main` 主工作树，作为稳定基线和人工检查入口。
 - 并行开发、实验和 agent 任务必须在 `/home/richard/code/.worktrees/` 下创建独立 worktree 和功能分支。
 - `/home/richard/code/production/` 是定时任务使用的发布根目录。每个项目使用 `releases/<commit>/` 保存不可变版本，并通过 `current` 符号链接提供运行入口。
-- `git push` 只更新远端，不会更新 production。代码合入 `main` 后，必须显式运行 `scripts/promote-production.sh`，由它创建 release 并原子切换 `current`。
+- `git push` 只更新远端。代码合入 `main` 后，必须显式运行 `scripts/promote-production.sh`，由它创建 release 并原子切换 `current`。
 - production 更新前必须通过 clean-check，更新后必须记录父仓库与 submodule revision manifest。失败时保留原 `current` 和旧 release。
 - 未追踪产物、数据快照和日志不得放入可删除的 agent worktree。应放在仓库外的数据目录、被忽略的 artifacts/outputs 目录，或有明确保留策略的归档目录。
 - 不得用符号链接替代 Git submodule。服务配置应指向明确的 production 路径。
