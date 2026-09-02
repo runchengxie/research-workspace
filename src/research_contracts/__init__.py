@@ -35,6 +35,7 @@ from .platform_publication import (
     PlatformPublicationManifest,
     load_platform_publication_manifest,
 )
+from .publication_builder import build_platform_publication
 
 __all__ = [
     "ARTIFACT_ENVELOPE_KEY",
@@ -56,6 +57,7 @@ __all__ = [
     "TargetHandoffContext",
     "attach_artifact_envelope_v2",
     "build_file_receipts",
+    "build_platform_publication",
     "canonical_json_sha256",
     "file_receipt_payload",
     "file_sha256",
