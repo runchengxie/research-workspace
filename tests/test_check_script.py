@@ -53,6 +53,24 @@ def test_standard_returns_nonzero_when_an_early_gate_fails() -> None:
     assert completed.returncode != 0
 
 
+def test_standard_delegates_root_tests_to_workspace_runner() -> None:
+    with tempfile.TemporaryDirectory() as tmp:
+        env, log = _fake_environment(tmp)
+        completed = subprocess.run(
+            ["bash", str(SCRIPT), "standard"],
+            cwd=ROOT,
+            env=env,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        commands = log.read_text(encoding="utf-8")
+
+    assert completed.returncode == 0
+    assert "python scripts/run_workspace_tests.py\n" in commands
+    assert "uv run --project strategy-pipeline" not in commands
+
+
 def test_full_executes_submodule_full_profile_instead_of_dry_run() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         env, log = _fake_environment(tmp)
