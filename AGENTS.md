@@ -52,8 +52,8 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `run_submodule_checks.py` 只执行 `scripts/submodule_checks.json` 中登记的命令。不要在顶层复制子仓库内部检查逻辑。
 
-当前顶层和八个子模块的 GitHub Actions 仓库权限均禁用。`portfolio-backtester` 虽保留
-workflow 定义，也不会触发远端检查。文档中不得把停用模板或本地命令描述为正在运行的远端 CI。
+顶层 workflow 只运行不递归 checkout 私有子模块的公开契约集成检查。各子模块按自身可见性和
+职责决定是否启用 PR、nightly 或手动检查；完整 delegated gates 仍由本地门禁和 release 流程负责。
 
 ## 文件约定
 
