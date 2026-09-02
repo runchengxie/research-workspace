@@ -808,6 +808,86 @@
       "writes_files": "user systemd service and timer units",
       "external_dependencies": "systemctl --user and XDG_CONFIG_HOME",
       "removal_condition": "remove only after scheduled production maintenance is provided by a successor mechanism and two release reviews confirm migration"
+    },
+    {
+      "path": "scripts/build_platform_publication.py",
+      "owner": "research-workspace",
+      "purpose": "Build the public platform publication contract from validated source metadata",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "explicit publication output",
+      "external_dependencies": "Python and repository contract files",
+      "removal_condition": "remove only after publication contract generation moves to a successor command"
+    },
+    {
+      "path": "scripts/run_workspace_tests.py",
+      "owner": "research-workspace",
+      "purpose": "Run the workspace-owned integration test surface with the selected dependency profile",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout and test cache files",
+      "external_dependencies": "Python, uv, initialized public or private submodules as selected",
+      "removal_condition": "remove only after the workspace test runner is replaced and all documented callers migrate"
+    },
+    {
+      "path": "scripts/sync_hermes_market_intel_workdir.sh",
+      "owner": "research-workspace",
+      "purpose": "Synchronize the explicitly configured Hermes market-intel work directory",
+      "lifecycle": "migration",
+      "safe_to_run_locally": false,
+      "writes_files": "the configured work directory",
+      "external_dependencies": "shell, configured filesystem paths and market-intel checkout",
+      "removal_condition": "remove after the market-intel workdir migration is closed and no runbook calls this script"
+    },
+    {
+      "path": "scripts/workspace_architecture.py",
+      "owner": "research-workspace",
+      "purpose": "Generate and validate the workspace architecture projections",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested architecture report directory",
+      "external_dependencies": "Python and initialized submodule source trees",
+      "removal_condition": "remove only after architecture validation moves to a successor command"
+    },
+    {
+      "path": "scripts/workspace_architecture_artifacts.py",
+      "owner": "research-workspace",
+      "purpose": "Build the workspace artifact dependency projection",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested architecture report directory",
+      "external_dependencies": "Python and repository contract metadata",
+      "removal_condition": "remove only after the artifact projection has a successor implementation"
+    },
+    {
+      "path": "scripts/workspace_architecture_model.py",
+      "owner": "research-workspace",
+      "purpose": "Define the typed model used by workspace architecture projections",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "none",
+      "external_dependencies": "Python standard library",
+      "removal_condition": "remove only after workspace architecture validation no longer imports this model"
+    },
+    {
+      "path": "scripts/workspace_architecture_source.py",
+      "owner": "research-workspace",
+      "purpose": "Build the workspace source and import projection",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested architecture report directory",
+      "external_dependencies": "Python and repository source trees",
+      "removal_condition": "remove only after source projection generation moves to a successor"
+    },
+    {
+      "path": "scripts/workspace_architecture_versions.py",
+      "owner": "research-workspace",
+      "purpose": "Build the standalone-pin and gitlink version projection",
+      "lifecycle": "ci",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested architecture report directory",
+      "external_dependencies": "Python, Git metadata and repository configuration",
+      "removal_condition": "remove only after version projection generation moves to a successor"
     }
   ]
 }
