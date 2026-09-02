@@ -88,9 +88,12 @@ def test_root_gate_runs_root_quality_and_cross_repo_checks_only() -> None:
     )
 
 
-def test_submodule_gate_expands_only_that_repositories_full_profile() -> None:
+def test_submodule_gate_expands_only_that_repositories_full_profile(
+    monkeypatch: object,
+) -> None:
     configs = run_submodule_checks.load_manifest(ROOT / "scripts/submodule_checks.json")
     repository = ROOT / "alpha-research"
+    monkeypatch.setattr(run_pre_push_checks, "_is_same_git_repo", lambda _a, _b: False)
 
     plan = run_pre_push_checks.plan_gate(ROOT, repository, configs)
     expected = run_submodule_checks.plan_commands(
@@ -105,6 +108,31 @@ def test_submodule_gate_expands_only_that_repositories_full_profile() -> None:
     assert plan.check_workspace_consistency is False
     assert [command.command for command in plan.commands] == [item.command for item in expected]
     assert {command.cwd for command in plan.commands} == {repository}
+
+
+def test_submodule_gate_runs_linked_worktree_commands_in_that_worktree(
+    monkeypatch: object,
+) -> None:
+    configs = run_submodule_checks.load_manifest(ROOT / "scripts/submodule_checks.json")
+    primary = ROOT / "alpha-research"
+    linked_worktree = ROOT / ".worktrees" / "alpha-research-check"
+    monkeypatch.setattr(
+        run_pre_push_checks,
+        "_matching_submodule",
+        lambda _root, _repository, _configs: "alpha-research",
+    )
+    monkeypatch.setattr(run_pre_push_checks, "_is_same_git_repo", lambda _a, _b: False)
+    monkeypatch.setattr(
+        run_pre_push_checks,
+        "plan_commands",
+        lambda _root, _configs, *, profile, submodules: [
+            run_submodule_checks.PlannedCommand("alpha-research", primary, ("echo", "check"))
+        ],
+    )
+
+    plan = run_pre_push_checks.plan_gate(ROOT, linked_worktree, configs)
+
+    assert {command.cwd for command in plan.commands} == {linked_worktree}
 
 
 def _pushed_ref(
