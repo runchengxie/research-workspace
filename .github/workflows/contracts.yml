@@ -38,11 +38,13 @@ jobs:
           enable-cache: true
           python-version: "3.12"
 
-      - name: Install contract test dependencies
+      - name: Install public test dependencies
         run: uv sync --locked --no-install-package research-workspace
 
-      - name: Validate workspace contracts
+      - name: Validate public workspace checks
         run: >-
           PYTHONPATH=src uv run --locked pytest -q
           tests/test_platform_publication.py
           tests/test_platform_asset_registry.py
+          tests/test_run_submodule_fail_fast.py
+          tests/test_check_script.py
