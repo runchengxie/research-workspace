@@ -10,7 +10,6 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-
 from workspace_architecture_artifacts import build_artifact_graph
 from workspace_architecture_model import (
     SCHEMA_VERSION,
