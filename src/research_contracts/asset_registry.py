@@ -57,8 +57,13 @@ class PlatformAssetDefinition:
         if self.freshness_kind == "none":
             if self.freshness_value is not None:
                 raise ValueError("freshness_value must be null when freshness_kind=none")
-        elif self.freshness_value is None or self.freshness_value <= 0:
-            raise ValueError("freshness_value must be > 0 for an active freshness policy")
+        else:
+            if isinstance(self.freshness_value, bool) or not isinstance(
+                self.freshness_value, int
+            ):
+                raise ValueError("freshness_value must be a positive integer")
+            if self.freshness_value <= 0:
+                raise ValueError("freshness_value must be > 0 for an active freshness policy")
         if self.asset_id in self.dependencies:
             raise ValueError("asset cannot depend on itself")
         if self.description is not None:
@@ -138,7 +143,9 @@ class PlatformAssetRegistry:
             indegree[asset.asset_id] = len(asset.dependencies)
             for dependency in asset.dependencies:
                 children[dependency].append(asset.asset_id)
-        queue = [asset_id for asset_id in self._assets if indegree[asset_id] == 0]
+        for values in children.values():
+            values.sort()
+        queue = sorted(asset_id for asset_id in self._assets if indegree[asset_id] == 0)
         ordered: list[str] = []
         while queue:
             current = queue.pop(0)
@@ -147,6 +154,7 @@ class PlatformAssetRegistry:
                 indegree[child] -= 1
                 if indegree[child] == 0:
                     queue.append(child)
+            queue.sort()
         if len(ordered) != len(self._assets):
             unresolved = [asset_id for asset_id, value in indegree.items() if value > 0]
             raise ValueError("platform asset dependency cycle: " + ", ".join(sorted(unresolved)))
