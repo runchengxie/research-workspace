@@ -77,6 +77,9 @@ class ResearchClock:
         if self.decision_at > self.valuation_at:
             raise ValueError("decision_at must be <= valuation_at")
 
+        self._validate_execution_window()
+
+    def _validate_execution_window(self) -> None:
         start = self.execution_window_start_at
         end = self.execution_window_end_at
         if (start is None) != (end is None):
@@ -85,15 +88,17 @@ class ResearchClock:
             )
         if self.earliest_order_at is not None and self.decision_at > self.earliest_order_at:
             raise ValueError("decision_at must be <= earliest_order_at")
-        if start is not None and end is not None:
-            if self.decision_at > start:
-                raise ValueError("decision_at must be <= execution_window_start_at")
-            if start > end:
-                raise ValueError("execution_window_start_at must be <= execution_window_end_at")
-            if self.earliest_order_at is not None and self.earliest_order_at > end:
-                raise ValueError("earliest_order_at must be <= execution_window_end_at")
-            if end > self.valuation_at:
-                raise ValueError("execution_window_end_at must be <= valuation_at")
+        if start is None or end is None:
+            return
+
+        if self.decision_at > start:
+            raise ValueError("decision_at must be <= execution_window_start_at")
+        if start > end:
+            raise ValueError("execution_window_start_at must be <= execution_window_end_at")
+        if self.earliest_order_at is not None and self.earliest_order_at > end:
+            raise ValueError("earliest_order_at must be <= execution_window_end_at")
+        if end > self.valuation_at:
+            raise ValueError("execution_window_end_at must be <= valuation_at")
 
     @classmethod
     def from_mapping(cls, payload: Mapping[str, Any]) -> ResearchClock:

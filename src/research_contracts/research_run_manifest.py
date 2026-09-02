@@ -125,8 +125,7 @@ def _artifact_refs(value: object, field: str) -> tuple[ArtifactRef, ...]:
 
 def _producer_versions(value: object) -> tuple[ProducerVersion, ...]:
     items = tuple(
-        ProducerVersion.from_mapping(item)
-        for item in _mapping_list(value, "producer_versions")
+        ProducerVersion.from_mapping(item) for item in _mapping_list(value, "producer_versions")
     )
     repositories = [item.repository for item in items]
     if len(repositories) != len(set(repositories)):

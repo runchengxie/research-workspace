@@ -89,9 +89,7 @@ def test_manifest_rejects_duplicate_artifact_refs():
 
 def test_manifest_rejects_duplicate_producer_repository():
     payload = valid_payload()
-    payload["producer_versions"].append(
-        {"repository": "alpha-research", "commit": "other"}
-    )
+    payload["producer_versions"].append({"repository": "alpha-research", "commit": "other"})
     with pytest.raises(ValueError, match="producer_versions contains duplicate repository"):
         ResearchRunManifest.from_mapping(payload)
 
