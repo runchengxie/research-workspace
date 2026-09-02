@@ -11,7 +11,7 @@
 - 根 `AGENTS.md` 修正为八个子模块，并确认 `strategy-research` 的子模块身份。
 - `docs/README.md` 改为按使用场景和主题导航，不再维护动态资产数量和运行状态。
 - 新增 `docs/documentation-style.md`，统一中文表达、标点、事实来源和审阅步骤。
-- `docs/data-path-migration-map.md` 补充根目录 `challenger_entry*` 链接已修复的当前事实。
+- `docs/data-path-migration-map.md` 补充根目录 `challenger_entry*` 已移除、代码直接读取规范目录的当前事实。
 - `~/data` 增加 artifacts、staging、archive 和 strategy-pipeline 的中文入口说明。
 - `~/data/deep-learning-tick-data-prediction/.venv` 已移到 `/home/richard/code/.venvs/`，
   源码项目的 `.venv` 入口继续可用。

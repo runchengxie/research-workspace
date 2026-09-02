@@ -28,17 +28,17 @@
 | `reports/` | `reports/` | 已统一 | 保留验证和发布证据，按 retention 审查历史版本 |
 | `runs/` | `runs/` | 已统一 | 运行完成后不可变，旧运行需单独做保留决定 |
 | `experiments/` | `experiments/` | 已统一 | 固定时点研究快照，不能按普通缓存处理 |
-| `research/` | `experiments/`、`features/`、`reports/`、`receipts/` | 拆分待审 | MDP 根目录仅剩兼容 symlink；watchlist20 研究集合已归入 `experiments/strategies/watchlist20/` |
+| `research/` | `experiments/`、`features/`、`reports/`、`receipts/` | 拆分待审 | watchlist20 研究集合已归入 `experiments/strategies/watchlist20/` |
 | `strategy_inputs/` | `published/` 或 `features/` | 拆分待审 | 稳定策略输入已归位到 `published/strategies/`，其余按生产方和消费者确认 |
-| `strategy_outputs/` | `runs/`、`features/`、`snapshots/`、`reports/`、`receipts/` | 拆分待审 | 稳定策略输出已归位到 `published/strategies/`，保留旧入口和 `latest` 兼容 symlink |
+| `strategy_outputs/` | `runs/`、`features/`、`snapshots/`、`reports/`、`receipts/` | 拆分待审 | 稳定策略输出已归位到 `published/strategies/`，仅保留项目内部仍在使用的兼容入口 |
 | `artifacts/` | 按子目录拆成 `runs/`、`reports/`、`snapshots/`、`cache/`、`receipts/` | 拆分待审 | 父目录是历史总称，必须逐子目录核对 manifest |
 
 ## 已确认的具体兼容项
 
 | 历史名称或路径 | 规范解释 | 当前动作 |
 | --- | --- | --- |
-| `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 已迁入 `experiments/strategies/watchlist20/incumbent_challenger/`，旧路径保留 symlink |
-| `~/data/challenger_entry*` | 上述研究集合的根目录兼容 symlink | 已修复，均指向实际研究目录 |
+| `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 已迁入 `experiments/strategies/watchlist20/incumbent_challenger/`，历史记录保留旧路径 |
+| `~/data/challenger_entry*` | 上述研究集合的历史根目录入口 | 已移除，当前代码直接读取规范目录 |
 | `strategy-pipeline/artifacts/cache/` | `cache/` | 已归位到 `strategy-pipeline/cache/`，旧路径保留 symlink；只有证明可重建且无占用后才可清理 |
 | `strategy-pipeline/artifacts/runs/` | `runs/` | 已归位到 `strategy-pipeline/runs/`，旧路径保留 symlink；按运行状态和 receipt 保留 |
 | `strategy-pipeline/artifacts/reports/` | `reports/` | 已归位到 `strategy-pipeline/reports/`，旧路径保留 symlink；按报告引用和 retention 保留 |
@@ -74,7 +74,7 @@ symlink。详细回执见 `metadata/lifecycle/migrations/stable-strategy-layout-
 4. `current`、`latest`、`rollback` 和 successor 核对结果；
 5. 失败时的回滚路径，以及迁移后的 retention 决定。
 
-本轮已完成可安全归类的实体目录迁移，并修复了根目录兼容 symlink。大体积研究和运行结果仍按各自清单保留。
+本轮已完成可安全归类的实体目录迁移，并移除了已无活跃消费者的根目录兼容入口。大体积研究和运行结果仍按各自清单保留。
 后续涉及生产默认路径的代码和 cron 更新，必须先经过 shadow read 和日报 dry-run。
 
 涉及日报和生产消费者的 breaking change 管理，见
