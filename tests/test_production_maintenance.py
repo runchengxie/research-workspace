@@ -60,4 +60,4 @@ def test_promotion_does_not_recheck_generated_venv_links_as_source_changes() -> 
     script = PROMOTE_SCRIPT.read_text(encoding="utf-8")
 
     assert "local commit release current tmp fresh=0" in script
-    assert "(( fresh )) || assert_clean \"$release\"" in script
+    assert '(( fresh )) || assert_clean "$release"' in script
