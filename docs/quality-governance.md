@@ -1,20 +1,20 @@
 # 工作区质量治理
 
-顶层仓库只维护跨仓库质量入口。每个子仓库仍拥有自己的 Ruff、格式、类型检查、pytest 和维护性配置。
+顶层仓库维护跨仓库质量入口。各子仓库继续负责自己的 Ruff、格式、类型检查、pytest、覆盖率和维护性配置。
 
 ## 检查分类
 
 | 仓库 | 基础检查 | 补充诊断 | 人工复核 |
 | --- | --- | --- | --- |
-| 顶层工作区 | Ruff、格式、`ty`、secret scan、pytest、doctor、契约 smoke、研究能力目录与 Trial Ledger 校验 | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
-| `market-data-platform` | Ruff、格式、`ty`、pytest、架构治理 | 依赖审计 | 数据权限、数据质量和 current 契约发布 |
-| `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟 | 研究证据定点测试 | signal artifact 和候选晋升证据 |
-| `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟 | 回测定点测试 | 成本、换手、容量和报告口径 |
-| `strategy-app` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
+| 顶层工作区 | Ruff、格式、`ty`、密钥扫描、pytest、doctor、契约冒烟、研究能力目录与 Trial Ledger 校验 | 依赖审计、dead-code 报告 | 私有子模块权限、版本组合和发布清单 |
+| `market-data-platform` | Ruff、格式、`ty`、pytest、维护性和架构治理 | 依赖审计、覆盖率 | 数据权限、数据质量和当前契约发布 |
+| `deep-learning-tick-data-prediction` | Ruff、格式、`ty`、pytest、覆盖率和研究协议检查 | 训练环境与依赖安全复核 | 真实数据、训练结果和研究口径 |
+| `alpha-research` | Ruff、格式、`ty`、pytest、导入冒烟和维护性检查 | 依赖审计、研究证据定点测试 | signal artifact 和候选晋升证据 |
+| `portfolio-backtester` | Ruff、格式、`ty`、pytest、导入冒烟和维护性检查 | 依赖审计、回测定点测试 | 成本、换手、容量和报告口径 |
+| `strategy-research` | Ruff、格式、`ty`、pytest 和研究层检查 | 覆盖率 | 策略身份、生命周期和证据完整性 |
+| `strategy-app` | lockfile、Ruff、格式、`ty`、pytest、维护性棘轮和隔离构建 | 依赖审计 | 冻结合同和研究应用结果 |
 | `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | 依赖审计 | 长窗口研究、编排和目标文件导出 |
-| `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | 集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
-
-执行引擎已经移除 mypy。顶层委托配置不再提供对应的建议检查 profile。
+| `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest 和维护性检查 | 集成、端到端测试和依赖审计 | 券商凭证、模拟盘、实盘和对账 |
 
 ## 顶层命令
 
@@ -28,21 +28,40 @@ python scripts/run_quality_checks.py --profile dead-code
 python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 ```
 
-`hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和 secret scan。`governance` 当前运行两项检查：
+`hard` 包含 Ruff、格式、`ty`、工作区导入边界、研究治理和密钥扫描。`governance` 当前运行两项检查：
 
-- `research_capability_registry.v1`：确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
-- `strategy-research/tools/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
+- `research_capability_registry.v1`：确认 capability 指向当前锁定工作区中真实存在的归属源码和验证证据，并检查依赖图与成熟度声明。
+- `strategy-research/tools/scripts/trial_ledger_check.py`：校验 Trial Ledger 的 JSONL 契约、多重检验排除、重复项、父子关系和最终样本外规则。
 
-`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
+`ci-smoke` 用于缺少私有子模块的环境，只运行顶层可独立执行的轻量检查。GitHub Actions 可以使用这类公开检查，完整工作区门禁继续在本地运行。
 
-顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
-`workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py`、
-`maintainability_baseline.py` 与 `src/research_contracts/research_capability_registry.py`。
-新增质量门禁模块时，应同时判断是否加入 `ty` 的目标列表。
+顶层类型检查只覆盖 `pyproject.toml` 登记的工作区自有模块和脚本。新增质量门禁模块时，应同步判断是否加入 `ty` 范围。后续计划把当前手工文件列表收敛为目录范围，减少新文件漏检。
 
-研究能力目录的人工说明见 [research-capabilities.md](research-capabilities.md)。外部 AFML、QuantSkills 或论文引用只作为 `method_refs`，不能替代 workspace source/evidence 验证。能力成熟度也不等于策略生产资格或未来收益判断。
+## GitHub Actions 策略
 
-Trial Ledger 的 canonical validator 由 `strategy-research` owner 维护。顶层通过已合并的 gitlink 调用它，不复制 parent、fingerprint 或 final OOS 逻辑。`research-layer-tests` 仍会独立执行 owner 仓库 pytest，因此契约文件校验与实现单测是两层保护。
+工作区采用统一的远端 CI 默认规则：
+
+- public 仓库默认启用 GitHub Actions。远端 CI 主要提供拉取请求的快速反馈。
+- private 仓库默认关闭 GitHub Actions，避免持续占用私有仓库的 Actions 额度。
+- private 仓库需要远端 CI 时，应在仓库文档中记录原因、检查范围和资源成本，并由维护者明确批准。
+- 本地 `pre-push` 和发布流程负责完整质量门禁。
+- public 仓库的 workflow 应尽量调用仓库自己的权威检查入口，减少本地与远端命令分叉。
+
+当前仓库可见性和默认状态如下：
+
+| 仓库 | 可见性 | GitHub Actions 默认状态 | 说明 |
+| --- | --- | --- | --- |
+| `research-workspace` | public | 启用 | `contracts.yml` 运行无需私有子模块的公开检查 |
+| `market-data-platform` | private | 关闭 | 使用仓库本地门禁和共享 `pre-push` |
+| `deep-learning-tick-data-prediction` | public | 启用 | `ci.yml` 运行轻量 PR 检查 |
+| `alpha-research` | private | 关闭 | 使用仓库本地门禁和共享 `pre-push` |
+| `portfolio-backtester` | public | 启用 | `ci.yml` 运行 PR 检查 |
+| `strategy-research` | private | 关闭 | 使用本仓测试、研究层质量门禁和共享 `pre-push` |
+| `strategy-app` | private | 关闭 | 使用仓库权威 `scripts/dev/check.py` |
+| `strategy-pipeline` | private | 关闭 | 使用仓库 `scripts/dev/run_tests.sh full` |
+| `quant-execution-engine` | public | 启用 | `ci.yml` 运行 lint、格式、类型和单元测试 |
+
+顶层 workflow 不递归检出 private 子模块。远端检查通过只说明公开范围已通过，不能代替完整工作区验证。
 
 ## 跨仓库边界
 
@@ -55,23 +74,17 @@ Trial Ledger 的 canonical validator 由 `strategy-research` owner 维护。顶�
 - `strategy-pipeline` 不重新承载 `alpha_research`、`portfolio_backtester` 或策略应用源码
 - 第三方框架对象不跨仓库文件契约
 
-顶层委托配置是 `scripts/submodule_checks.json`。所有委托 `lint` 和 `full` 都先验证
-lockfile，清单里的直接 `uv run` 使用 `--locked`。子仓库的维护性阈值和排除项留在
-各自仓库。
+顶层委托配置是 `scripts/submodule_checks.json`。所有委托 `lint` 和 `full` 都先验证 lockfile，清单里的直接 `uv run` 使用 `--locked`。子仓库的维护性阈值和排除项留在各自仓库。
 
-维护性 baseline 是已知债务上限。删除大文件、长函数或复杂热点后，应在同一提交中下调
-baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个数值来吸收新增债务。
-
-## 自动化状态
-
-`.github/workflows/superproject.yml.disabled` 是停用模板，顶层与子仓库的 Actions
-权限均禁用。`portfolio-backtester` 保留一份 `ci.yml` 定义，但当前不会运行。其余仓库只
-保留停用模板或没有 workflow。当前检查以本地 pre-push 为权威入口。恢复远端自动化时，
-应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。
+维护性基线记录已知债务上限。删除大文件、长函数或复杂热点后，应在同一提交中下调基线和预算。上调需要独立的负责人决策记录。
 
 ## 依赖与安全
 
-所有仓库的 `dev` 依赖都包含 `pytest-cov` 和 `pip-audit`。依赖审计和静态安全扫描按仓库运行：
+依赖审计能力按仓库实际配置管理，不能假定所有仓库都已经安装 `pip-audit`。
+
+当前顶层、`market-data-platform`、`alpha-research`、`portfolio-backtester`、`strategy-app`、`strategy-pipeline` 和 `quant-execution-engine` 的开发依赖包含 `pip-audit`。当前 `deep-learning-tick-data-prediction` 和 `strategy-research` 尚未把 `pip-audit` 纳入开发依赖，需要在后续依赖治理中补齐或登记明确例外。
+
+常用手工检查：
 
 ```bash
 uv run --group dev pip-audit
@@ -79,8 +92,30 @@ uvx deptry .
 uvx bandit -q -r src -lll
 ```
 
-使用 `[project.optional-dependencies].dev` 的仓库改用 `uv run --extra dev pip-audit`，使用 `[dependency-groups].dev` 的仓库（顶层工作区和 `quant-execution-engine`）用 `uv run --group dev pip-audit`。各仓库测试文档给出对应的准确命令。
+使用 `[project.optional-dependencies].dev` 的仓库改用 `uv run --extra dev pip-audit`。使用 `[dependency-groups].dev` 的仓库按自身配置使用 `uv run --group dev pip-audit`。
 
-子仓库使用各自包名作为 coverage 的 `source`，例如 `strategy-pipeline` 的 `src/strategy_pipeline`。各仓库 `run_tests.sh` 或测试文档提供 `coverage` 入口。provider 软件开发工具包（SDK）、券商 SDK、动态导入和可选依赖需要记录用途、负责人和复核命令。凭证泄漏属于阻塞问题。
+依赖审计目前主要属于发布前诊断。后续应按风险和运行成本决定哪些检查进入 public CI、本地完整门禁或定期审计，避免只安装工具却长期不执行。
 
-coverage 按高风险模块逐步提高，不设置跨仓库统一阈值。
+## 覆盖率
+
+各仓库使用自己的包路径作为 coverage 的 `source`。覆盖率按风险分层提高，不设置跨仓库统一百分比。
+
+建议采用以下原则：
+
+- 契约、发布、执行和资金相关模块优先提高 branch coverage。
+- 已有覆盖率不应无理由下降。
+- 新增关键路径需要相应测试覆盖。
+- 研究探索和一次性诊断可以使用较低覆盖要求，但应保持明确边界。
+- `deep-learning-tick-data-prediction` 当前已经配置 branch coverage 和 `fail_under = 80`，其他仓库不应直接复制这个数值。
+
+## 非 Python 文件
+
+工作区包含 Bash、systemd 和 GitHub Actions YAML。后续质量治理应在相应文件发生改动时使用 ShellCheck、`shfmt --diff` 和 `actionlint`。是否引入 `yamllint` 取决于实际 YAML 结构和误报成本。
+
+## Dead code 与忽略项
+
+`python scripts/run_quality_checks.py --profile dead-code` 运行高置信度 dead-code 建议检查。它默认只报告，不阻塞日常门禁。
+
+历史 `# noqa` 审计已经确认，早期数千条统计主要来自把 `.venv` 第三方代码计入扫描。当前重点是缩小真实设计类豁免范围，并为必要例外保留原因、负责人、复核节点和删除条件。
+
+`market-data-platform` 的大面积 `F401` 文件级豁免用于兼容门面重导出，后续应在保证公开 API 稳定的前提下逐步收窄。`strategy-pipeline` 和 `quant-execution-engine` 的类型检查例外也应继续按具体模块缩小范围。
