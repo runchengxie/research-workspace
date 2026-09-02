@@ -209,7 +209,7 @@ def run_planned_commands(
             results.append(CheckResult("DRY-RUN", item.submodule, item.command, str(item.cwd)))
         else:
             results.append(_execute_one(item, timeout=timeout))
-        if fail_fast:
+        if fail_fast and results[-1].severity == "ERROR":
             break
     return results
 
