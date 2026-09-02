@@ -1,0 +1,48 @@
+name: Workspace contract integration
+
+on:
+  pull_request:
+    paths:
+      - "src/research_contracts/**"
+      - "scripts/**"
+      - "tests/**"
+      - "docs/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".gitmodules"
+      - ".github/workflows/contracts.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "30 18 * * 0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: research-workspace-contracts-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository without private submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Install contract test dependencies
+        run: uv sync --locked --no-install-package research-workspace
+
+      - name: Validate workspace contracts
+        run: >-
+          PYTHONPATH=src uv run --locked pytest -q
+          tests/test_platform_publication.py
+          tests/test_platform_asset_registry.py
