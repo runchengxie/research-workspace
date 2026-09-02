@@ -7,7 +7,9 @@ import pandas as pd
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "strategy-research" / "experiments" / "qlib_pilot" / "compare_5way.py"
+MODULE_PATH = (
+    ROOT / "strategy-research" / "research" / "experiments" / "qlib_pilot" / "compare_5way.py"
+)
 SPEC = importlib.util.spec_from_file_location("compare_5way", MODULE_PATH)
 assert SPEC is not None and SPEC.loader is not None
 compare_5way = importlib.util.module_from_spec(SPEC)

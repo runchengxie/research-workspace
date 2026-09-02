@@ -13,6 +13,7 @@ def _load_minute_audit():
     research_dir = (
         Path(__file__).resolve().parents[1]
         / "strategy-research"
+        / "research"
         / "experiments"
         / "next_open_to_high"
     )
