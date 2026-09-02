@@ -50,3 +50,4 @@ jobs:
           tests/test_check_script.py
           tests/test_root_quality.py
           tests/test_workspace_test_runner.py
+          tests/test_workspace_gate_entrypoints.py
