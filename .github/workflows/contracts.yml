@@ -51,3 +51,6 @@ jobs:
           tests/test_root_quality.py
           tests/test_workspace_test_runner.py
           tests/test_workspace_gate_entrypoints.py
+
+      - name: Run public root quality profile
+        run: python scripts/run_quality_checks.py --profile ci-smoke
