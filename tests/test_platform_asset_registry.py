@@ -8,9 +8,7 @@ from research_contracts.asset_registry import (
 )
 
 
-def _asset(
-    asset_id: str, *, dependencies: tuple[str, ...] = ()
-) -> PlatformAssetDefinition:
+def _asset(asset_id: str, *, dependencies: tuple[str, ...] = ()) -> PlatformAssetDefinition:
     return PlatformAssetDefinition(
         asset_id=asset_id,
         owner_repository="runchengxie/research-workspace",
@@ -29,12 +27,8 @@ def test_registry_topological_order_describes_platform_flow() -> None:
     registry.register(
         _asset("features.dailywatch20.v17", dependencies=("market.a_share_daily_clean",))
     )
-    registry.register(
-        _asset("signals.dailywatch20", dependencies=("features.dailywatch20.v17",))
-    )
-    registry.register(
-        _asset("publication.dashboard", dependencies=("signals.dailywatch20",))
-    )
+    registry.register(_asset("signals.dailywatch20", dependencies=("features.dailywatch20.v17",)))
+    registry.register(_asset("publication.dashboard", dependencies=("signals.dailywatch20",)))
 
     registry.validate_graph()
 
@@ -57,10 +51,14 @@ def test_topological_order_is_stable_across_registration_order() -> None:
     second.register(_asset("features.a", dependencies=("market",)))
     second.register(_asset("market"))
 
-    assert first.topological_order() == second.topological_order() == (
-        "market",
-        "features.a",
-        "features.b",
+    assert (
+        first.topological_order()
+        == second.topological_order()
+        == (
+            "market",
+            "features.a",
+            "features.b",
+        )
     )
     assert first.to_mapping() == second.to_mapping()
 
