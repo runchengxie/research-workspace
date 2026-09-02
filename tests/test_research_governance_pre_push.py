@@ -14,8 +14,7 @@ run_quality_checks = importlib.import_module("run_quality_checks")
 
 def test_hard_quality_profile_runs_research_governance_checks() -> None:
     commands = {
-        command.name: command.command
-        for command in run_quality_checks.plan_commands("hard")
+        command.name: command.command for command in run_quality_checks.plan_commands("hard")
     }
 
     assert commands["research-capability-registry"] == (
@@ -25,11 +24,5 @@ def test_hard_quality_profile_runs_research_governance_checks() -> None:
     )
     assert commands["trial-ledger"] == (
         sys.executable,
-        str(
-            ROOT
-            / "strategy-research"
-            / "tools"
-            / "scripts"
-            / "trial_ledger_check.py"
-        ),
+        str(ROOT / "strategy-research" / "tools" / "scripts" / "trial_ledger_check.py"),
     )
