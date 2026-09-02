@@ -71,6 +71,18 @@ def test_type_check_runs_with_workspace_dependencies() -> None:
     assert command[-1] == "check"
 
 
+def test_dependency_profile_runs_pip_audit_in_root_project() -> None:
+    commands = run_quality_checks.plan_commands("dependencies")
+
+    assert [item.name for item in commands] == ["pip-audit"]
+    command = commands[0].command
+    assert command[:4] == ("uv", "run", "--project", str(ROOT))
+    assert command[4:6] == ("--group", "dev")
+    assert command[6] == "pip-audit"
+    assert "--progress-spinner" in command
+    assert "off" in command
+
+
 def test_hard_profile_includes_workspace_architecture_gates() -> None:
     commands = run_quality_checks.plan_commands("hard")
 
@@ -99,12 +111,12 @@ def test_architecture_profile_includes_combined_projection_gate() -> None:
     )
 
 
-def test_ci_smoke_profile_skips_workspace_architecture_gates() -> None:
+def test_ci_smoke_profile_skips_private_workspace_gates_but_audits_dependencies() -> None:
     commands = run_quality_checks.plan_commands("ci-smoke")
 
     names = [item.name for item in commands]
 
-    assert names == ["ruff-check", "ruff-format", "ty-check", "secret-scan"]
+    assert names == ["ruff-check", "ruff-format", "ty-check", "pip-audit", "secret-scan"]
     assert "workspace-import-boundaries" not in names
     assert "workspace-ownership-boundaries" not in names
     assert "workspace-architecture" not in names
