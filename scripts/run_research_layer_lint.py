@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Run the strategy-research presentation-layer quality gate.
 
-The ``strategy-research`` directory is a directly-tracked ordinary directory
-(not a submodule). Its ``pyproject.toml`` carries its own ruff profile that
-intentionally permits Chinese full-width punctuation (RUF001/002/003), its own
-``uv.lock``, and local path sources for alpha-research, portfolio-backtester
-and research-contracts. All checks run inside the project environment, so the
-project stays independently runnable without PYTHONPATH injection.
+``strategy-research`` is an independently versioned Git submodule with its own
+``pyproject.toml`` and development environment. Its Ruff profile permits the
+Chinese punctuation used in documentation strings and comments. Repository
+local Git sources support standalone installation, while the superproject
+locks the workspace source version through the submodule gitlink.
 
-The gate covers ruff lint, ruff format, the ty typed surface, and a CLI
-import/help smoke for ``python -m style_factors``.
+The gate runs inside the strategy-research project and covers Ruff lint, Ruff
+format, the ty typed surface, and the ``python -m style_factors`` CLI smoke.
 """
 
 from __future__ import annotations
