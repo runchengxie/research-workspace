@@ -93,10 +93,12 @@ exclude = [
   "alpha-research",
   "artifacts",
   "build",
+  "deep-learning-tick-data-prediction",
   "dist",
   "market-data-platform",
   "portfolio-backtester",
   "quant-execution-engine",
   "strategy-app",
   "strategy-pipeline",
+  "strategy-research",
 ]
