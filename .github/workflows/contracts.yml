@@ -48,3 +48,4 @@ jobs:
           tests/test_platform_asset_registry.py
           tests/test_run_submodule_fail_fast.py
           tests/test_check_script.py
+          tests/test_root_quality.py
