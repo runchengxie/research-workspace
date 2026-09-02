@@ -90,6 +90,13 @@ targets.json
 
 文档润色不得顺手修改公开接口、路径、资产键或历史产物名称。
 
+## GitHub Actions 策略
+
+- public 仓库默认启用 GitHub Actions，至少运行轻量的拉取请求检查。
+- private 仓库默认关闭 GitHub Actions，以节省有限的 Actions 分钟额度。
+- private 仓库如需启用远端 CI，必须在仓库文档中记录原因、检查范围和资源成本。
+- public CI 不得依赖 private 仓库凭证、真实数据或生产目录。
+
 ## 测试与验证
 
 - 文档改动至少运行链接检查、入口文档风格检查和相关事实测试

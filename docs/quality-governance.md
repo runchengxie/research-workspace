@@ -13,6 +13,21 @@
 | `strategy-app` | lockfile、Ruff、格式、`ty`、pytest、维护性 ratchet 和隔离构建 | 仓库权威 `scripts/dev/check.py` | F-lite、slow-volume、DeepSeek V4 runner 和普通研究报告 |
 | `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | 依赖审计 | 长窗口研究、编排和目标文件导出 |
 | `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest | 集成和端到端测试 | 券商凭证、模拟盘、实盘和对账 |
+| `deep-learning-tick-data-prediction` | public CI 的 Ruff、格式、编译检查 | 本地 `scripts/check.py`、pytest、覆盖率和冒烟检查 | 真实行情数据、训练产物和实验结论 |
+
+## 仓库可见性
+
+| 仓库 | 当前可见性 | GitHub Actions 默认策略 | 说明 |
+| --- | --- | --- | --- |
+| `research-workspace` | public | 开启轻量 CI | 不访问私有子仓库凭证 |
+| `alpha-research` | public | 开启轻量 CI | 默认安装不依赖私有数据平台，数据平台能力通过 `market-data` extra 提供 |
+| `deep-learning-tick-data-prediction` | public | 开启轻量 CI | CI 使用离线检查和合成数据 |
+| `portfolio-backtester` | public | 开启轻量 CI | 完整回测仍在本地验证 |
+| `quant-execution-engine` | public | 开启轻量 CI | 券商凭证、模拟盘和实盘检查不进入公开 CI |
+| `market-data-platform` | private | 默认关闭 | 包含数据供应商、数据目录和生产数据操作 |
+| `strategy-app` | private | 默认关闭 | 包含策略专用应用和私有数据平台依赖 |
+| `strategy-pipeline` | private | 默认关闭 | 包含研究编排、发布目录和生产相邻流程 |
+| `strategy-research` | private | 默认关闭 | 包含个人策略判断、研究结果和完整 Git 历史 |
 
 执行引擎已经移除 mypy。顶层委托配置不再提供对应的建议检查 profile。
 
@@ -33,7 +48,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 - `research_capability_registry.v1`：确认每个 capability 都指向当前 pinned workspace 中真实存在的 owner source 和验证证据，并检查依赖图与成熟度声明。
 - `strategy-research/tools/scripts/trial_ledger_check.py`：校验已登记 Trial Ledger 的 JSONL 契约、多重检验排除、duplicate、parent 图与 final OOS 规则。
 
-`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。名称保留用于本地和未来自动化，目前没有活动 GitHub Actions workflow。
+`ci-smoke` 是缺少私有子模块时可运行的顶层轻量档位。它不会验证需要完整 pinned owner tree 的能力目录和 Trial Ledger。根仓库为 public，远端 CI 应调用这个轻量档位。完整门禁仍由本地 pre-push 和具备完整依赖的环境负责。
 
 顶层类型检查只覆盖 `pyproject.toml` 登记的 workspace 自有模块和脚本。当前已纳入
 `workspace_doctor.py`、`workspace_governance.py`、`workspace_governance_quality.py`、
@@ -64,10 +79,9 @@ baseline 和 budget。上调需要独立的 waiver 记录，不能只改两个�
 
 ## 自动化状态
 
-`.github/workflows/superproject.yml.disabled` 是停用模板，顶层与子仓库的 Actions
-权限均禁用。`portfolio-backtester` 保留一份 `ci.yml` 定义，但当前不会运行。其余仓库只
-保留停用模板或没有 workflow。当前检查以本地 pre-push 为权威入口。恢复远端自动化时，
-应先核对私有子模块权限、Python 版本和每个子仓库的实际命令，再更新文档。
+根仓库为 public，默认启用轻量 GitHub Actions。private 子仓库默认关闭远端 CI，除非在
+本仓库和子仓库文档中记录例外。恢复或新增远端自动化时，应先核对私有子模块权限、Python
+版本和每个子仓库的实际命令，再更新文档。
 
 ## 依赖与安全
 

@@ -56,8 +56,8 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 ```
 
-本工作区使用本地 pre-push 检查作为质量门禁。GitHub Actions 当前未启用，文档中的本地
-命令不能理解为远端 CI 状态。
+本工作区使用本地 pre-push 检查作为质量门禁。根仓库是 public，GitHub Actions 默认用于
+轻量拉取请求检查。各子仓库是否启用远端 CI，按仓库可见性和对应文档中的例外说明执行。
 
 根项目的集成测试使用 `strategy-pipeline` 环境：
 
