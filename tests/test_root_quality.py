@@ -38,6 +38,13 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
     assert EXPECTED_SUBMODULES <= set(ruff["extend-exclude"])
 
 
+def test_root_typecheck_explicitly_excludes_all_submodules() -> None:
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    ty = config["tool"]["ty"]["src"]
+
+    assert EXPECTED_SUBMODULES <= set(ty["exclude"])
+
+
 def test_architecture_scanner_is_in_root_typecheck_scope() -> None:
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     ty_include = config["tool"]["ty"]["src"]["include"]
