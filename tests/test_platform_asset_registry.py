@@ -8,7 +8,9 @@ from research_contracts.asset_registry import (
 )
 
 
-def _asset(asset_id: str, *, dependencies: tuple[str, ...] = ()) -> PlatformAssetDefinition:
+def _asset(
+    asset_id: str, *, dependencies: tuple[str, ...] = ()
+) -> PlatformAssetDefinition:
     return PlatformAssetDefinition(
         asset_id=asset_id,
         owner_repository="runchengxie/research-workspace",
