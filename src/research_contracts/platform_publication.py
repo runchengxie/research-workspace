@@ -97,9 +97,7 @@ class PlatformPublicationArtifact:
         _sha256(self.sha256, "sha256")
         _required_text(self.media_type, "media_type")
         if self.audience not in PUBLICATION_AUDIENCES:
-            raise ValueError(
-                "audience must be one of " + ", ".join(sorted(PUBLICATION_AUDIENCES))
-            )
+            raise ValueError("audience must be one of " + ", ".join(sorted(PUBLICATION_AUDIENCES)))
         object.__setattr__(self, "consumers", _consumers(self.consumers))
 
     @classmethod
@@ -219,7 +217,9 @@ def load_platform_publication_manifest(
     consumer_name = _required_text(consumer, "consumer")
     targeted = [artifact for artifact in manifest.artifacts if consumer_name in artifact.consumers]
     if not allow_internal:
-        internal = [artifact.artifact_id for artifact in targeted if artifact.audience == "internal"]
+        internal = [
+            artifact.artifact_id for artifact in targeted if artifact.audience == "internal"
+        ]
         if internal:
             raise ValueError(
                 f"internal artifacts cannot be published to {consumer_name}: "
