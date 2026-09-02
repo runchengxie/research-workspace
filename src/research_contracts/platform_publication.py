@@ -56,6 +56,8 @@ def _relative_path(value: object) -> str:
     path = PurePosixPath(text)
     if path.is_absolute() or text.startswith("/"):
         raise ValueError("relative_path must be relative")
+    if not path.parts or path.as_posix() == ".":
+        raise ValueError("relative_path must point to a file below the bundle root")
     if any(part in {"", ".", ".."} for part in path.parts):
         raise ValueError("relative_path must not contain path traversal")
     return path.as_posix()
