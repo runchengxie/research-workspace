@@ -1,207 +1,110 @@
 # 量化研发工作区
 
-`research-workspace` 用 Git 子模块锁定一组可以协同工作的量化研发仓库，并维护跨仓库文件约定、版本组合和轻量校验。
+`research-workspace` 用 Git 子模块锁定一组协同工作的量化研发仓库，维护跨仓库契约、
+版本组合、发布流程和轻量检查。大型数据、研究运行产物和交易审计记录位于仓库外的
+数据目录，当前数据入口见 `~/data/README.md`。
 
-```text
-market-data-platform
-  发布数据资产
-        ↓
-deep-learning-tick-data-prediction
-  L2 事件流清洁审计、模型与预测产物
-        ↓
-alpha-research
-  生成特征、模型和信号产物
-        ↓
-portfolio-backtester
-  构造组合并完成回测、成本和容量分析
-        ↓
-strategy-app
-  执行策略特有的纯计算与研究应用
-        ↓
-strategy-pipeline
-  编排研究流程并导出 targets.json
-        ↓
-quant-execution-engine
-  预演、风控、执行和审计
-```
-
-当前活跃主线是 A 股数据、研究和执行交接。港股真实资产与历史研究输出进入恢复专用归档。公开合成演示仓库独立维护，不参与本工作区的版本锁定和检查。
-
-## 仓库组成
+## 工作区组成
 
 | 目录 | 职责 |
 | --- | --- |
-| `market-data-platform/` | 采集、检查、发布和读取市场数据资产 |
-| `deep-learning-tick-data-prediction/` | L2 事件流清洁审计、事件流模型和正式预测产物 |
-| `alpha-research/` | 特征工程、模型训练、稳健性诊断和信号产物 |
-| `portfolio-backtester/` | 组合构造、回测、成本、换手、容量、暴露和报告 |
-| `strategy-app/` | 组合数据、alpha 和回测的 owner 应用程序接口（API），运行 `DailyWatch20` 和热点板块选股两个应用族（各实验方向见 strategy-app 仓库的[研究应用目录](strategy-app/docs/application-catalog.md)） |
-| `strategy-pipeline/` | 研究编排、命令行（CLI）、运行目录、持仓快照和目标文件导出 |
-| `strategy-research/` | 私有策略研究规格、实验、证据和专有研究入口，不作为公共运行时依赖 |
-| `quant-execution-engine/` | `targets.json` 解析、预演、风控、券商执行和审计 |
-| `src/research_contracts/` | 顶层直接维护的跨仓库产物契约校验薄包 |
-| `alpha-research/src/alpha_research/style_factors/` | 风格因子计算内核（`alpha_research.style_factors`），ADR-0006 后由 alpha-research owner |
-| `portfolio-backtester/src/portfolio_backtester/style_factors_backtest.py` | 分位数多空回测内核（`portfolio_backtester.style_factors_backtest`），由 portfolio-backtester owner |
-| `strategy-research/style_factors/` | 表现层：风格因子归因、报告、图表、稳健性与发布校验（`python -m style_factors`），由 strategy-research 维护 |
-| `strategy-research/research/strategies/` | 策略身份与生命周期说明，生命周期状态以 catalog 为准 |
-| `strategy-research/research/experiments/` | 一次性探索脚本与结论记录，目录与规则见 [research/experiments/README.md](strategy-research/research/experiments/README.md) |
-| `strategy-research/packaging/` | 系统级复现打包器脚本（D11-H5），产物不进入仓库 |
+| `market-data-platform/` | 采集、检查、发布和读取市场数据 |
+| `deep-learning-tick-data-prediction/` | L2 事件流清洁审计、模型训练和预测产物 |
+| `alpha-research/` | 特征、模型、稳健性诊断和信号产物 |
+| `portfolio-backtester/` | 组合构造、回测、成本、换手、容量和风险分析 |
+| `strategy-app/` | 策略专用计算、冻结合同和研究应用 |
+| `strategy-pipeline/` | 研究编排、运行目录、结果汇总和 `targets.json` 导出 |
+| `strategy-research/` | 策略身份、投资假设、生命周期、实验和证据导航 |
+| `quant-execution-engine/` | 目标解析、预演、风控、券商执行和审计 |
+| `src/research_contracts/` | 顶层维护的跨仓库产物契约校验 |
 
-策略身份、投资假设、生命周期和证据导航以 [strategy-research/README.md](strategy-research/README.md) 与 [strategy-research/catalog.json](strategy-research/catalog.json) 为准。代码放在哪个仓库不再用来表达策略是否处于生产状态。
+职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
+各自仓库的 README、`AGENTS.md` 和 `docs/` 为准。
 
-仓库结构说明：上表中的八个目录均为 git submodule，其版本由 `.gitmodules` 与各子仓库的 gitlink 锁定。`strategy-research/` 是私有子模块，保存策略研究规格、实验、证据和专有研究入口。公开的 `research-workspace` 可以在不初始化它的情况下运行顶层 smoke 检查，但完整研究与跨仓库测试需要 GitHub 访问权限。详见边界清单 SA-14。
+## 数据与产物边界
 
-四个研究侧 Python 包使用各自的权威命名空间：
-
-- `alpha_research`
-- `portfolio_backtester`
-- `strategy_app`
-- `strategy_pipeline`
-
-工作区 2.0 已删除旧共享命名空间、兼容命令和隐式环境变量回退。权威命令是
-`strategy` 与 `strategy-pipeline`。具体边界见
-[ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
-策略知识、可执行应用和运行控制面的边界见
-[ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
-
-## 子项目命令行（CLI）
-
-各子项目通过 `uv run --project <子项目>` 调用，已注册的命令如下：
-
-| 命令 | 所属子项目 | 用途 |
-|------|------------|------|
-| `strategy` | strategy-pipeline | 研究编排：读取数据资产、调用研究与回测、导出 `targets.json` |
-| `strategy-pipeline` | strategy-pipeline | 同上（`strategy` 的等价命令名） |
-| `qexec` | quant-execution-engine | 券商执行与预演：config、preflight、rebalance、orders |
-| `stockq` | quant-execution-engine | 同上（`qexec` 的等价命令名） |
-| `marketdata` | market-data-platform | 市场数据资产的采集、检查、发布与读取 |
+- 大型市场数据、研究产物、缓存、运行 receipt 和交易审计日志放在 `~/data` 或专用生产目录。
+- A 股权威 current 契约是 `metadata/current_assets/a_share_current.json`。
+- 研究到执行的交接文件是 `targets.json`。
+- 策略生命周期以 `strategy-research/catalog.json` 为准，代码位置不表达生产状态。
+- 生产代码使用 `/home/richard/code/production/` 下的版本化目录，开发和实验使用独立 worktree。
+- 凭证只放在对应子仓库规定的私有位置，不进入仓库和共享数据说明。
 
 ## 快速开始
+
+首次获取完整工作区：
 
 ```bash
 git clone --recurse-submodules https://github.com/runchengxie/research-workspace.git
 cd research-workspace
+git submodule sync --recursive
+git submodule update --init --recursive
 python scripts/workspace_doctor.py
 python src/research_contracts/smoke_contracts.py
 ```
 
-已有本地仓库时先同步子模块：
+新机器的完整安装步骤见 [初始化工作区](docs/bootstrap.md)。各项目的开发依赖、测试和
+命令以子项目文档为准。
+
+## 常用检查
 
 ```bash
-git submodule sync --recursive
-git submodule update --init --recursive
-```
-
-新机器的完整安装步骤见 [docs/bootstrap.md](docs/bootstrap.md)。
-
-D11-H5 可移植复现包使用以下命令构建，默认写入 `~/Downloads` 目录：
-
-```bash
-python scripts/package_d11_h5_repro.py --component all
-```
-
-完整包约 3 GB，包含日频数据和冻结研究账本。TuShare 一分钟快照约 14 GB，作为独立可选包。
-解压后的使用方法见[复现包说明](strategy-research/packaging/d11_h5/README.md)。
-归档旁的 `restore_d11_h5_repro.sh` 会先校验 SHA-256，再恢复核心包。传入
-`--component all` 可在同一次恢复中合并分钟数据。
-
-## 本地质量门禁
-
-先查看 pre-push 将运行哪些检查：
-
-```bash
+python scripts/workspace_doctor.py
+python src/research_contracts/smoke_contracts.py
+python scripts/run_quality_checks.py --profile hard
+python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 ```
 
-日常检查常用以下三个入口：
+本工作区使用本地 pre-push 检查作为质量门禁。GitHub Actions 当前未启用，文档中的本地
+命令不能理解为远端 CI 状态。
 
-```bash
-python scripts/run_quality_checks.py --profile hard
-python scripts/run_submodule_checks.py --profile smoke
-python scripts/run_submodule_checks.py --profile full --dry-run
-```
-
-`full` 先验证 lockfile，再运行各仓库登记的本地权威门禁。本工作区刻意以本地 pre-push 钩子作为唯一质量门禁，不依赖持续集成：顶层与七个子模块的 GitHub Actions 权限均已禁用，所有检查在推送前由本地钩子完成。这是有意为之的设计，不是临时状态，新成员需要自行安装钩子（见下文）才能跑门禁。安装方法、完整命令和自动化状态统一记录在[工作区维护](docs/workspace-maintenance.md)与[质量治理](docs/quality-governance.md)中。
-
-不依赖 Git 钩子的一键本地门禁：`bash scripts/check.sh`（等价于推送顶层仓库前会跑的检查集合）。
-
-## Production release 保留
-
-`scripts/promote-production.sh` 在成功切换 `production/<项目>/current` 后，会自动清理旧
-release。默认每个项目保留最近 5 个版本，并始终保留当前版本，最少保留数量为 2，保证
-至少有一个回滚候选。可通过环境变量调整数量：
-
-```bash
-PRODUCTION_KEEP_RELEASES=5 bash scripts/promote-production.sh --repo all
-```
-
-只想查看将要清理的版本时使用 dry-run；它不会切换 `current` 或删除文件：
-
-```bash
-bash scripts/promote-production.sh --repo all --dry-run
-```
-
-底层清理器也可以单独运行，但生产目录应通过 promotion 脚本调用，以便正确移除 Git
-worktree：
-
-```bash
-bash scripts/prune-production-releases.sh \
-  --base /home/richard/code/production/research-workspace \
-  --source /home/richard/code/research-workspace \
-  --keep 5 --dry-run
-```
-
-新 release 的 Python 环境按 `pyproject.toml` 与 `uv.lock` 的内容指纹共享，存放在
-`production/shared/venvs/<项目>/<指纹>/`。release 内的 `.venv` 是指向共享环境的链接；
-依赖锁文件变化时会创建新环境，旧 release 回滚时仍使用原来的环境。清理旧 release 时，
-没有任何保留 release 引用的共享环境也会自动清理。已有 release 的实体 `.venv` 不会被
-自动迁移。
-
-## 根测试契约
-
-顶层 `tests/` 是跨仓库集成测试项目，其用例同时验证根工作区与七个子模块。根项目本身
-`package = false`，不发布，不构建 wheel。测试环境借用 `strategy-pipeline` 的虚拟环境
-运行（含 `alpha_research`、`strategy_pipeline` 与数据、组合、执行各 owner 包），命令为：
+根项目的集成测试使用 `strategy-pipeline` 环境：
 
 ```bash
 uv run --project strategy-pipeline --extra dev python -m pytest tests -q
 ```
 
-带覆盖率统计的命令为：
+## 命令行入口
+
+| 命令 | 所属项目 | 用途 |
+| --- | --- | --- |
+| `strategy` | `strategy-pipeline` | 编排研究流程并导出目标文件 |
+| `strategy-pipeline` | `strategy-pipeline` | `strategy` 的完整命令名 |
+| `qexec` | `quant-execution-engine` | 预演、风控和受控交易 |
+| `stockq` | `quant-execution-engine` | `qexec` 的兼容命令名 |
+| `marketdata` | `market-data-platform` | 市场数据采集、检查、发布和读取 |
+
+各命令使用 `uv run --project <项目>` 调用。策略知识、计算内核、编排和执行之间的边界
+由 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md) 维护。
+
+## 发布与生产目录
+
+生产发布使用 `scripts/promote-production.sh`。脚本在成功切换 `current` 后清理旧版本，
+默认保留最近 5 个版本，并始终保留当前版本和至少一个回滚版本。
+
+查看清理计划：
 
 ```bash
-uv run --project strategy-pipeline --extra dev \
-  python -m coverage run -m pytest tests -q
-python -m coverage report
+bash scripts/promote-production.sh --repo all --dry-run
 ```
 
-覆盖率只统计根工作区 `src/`（`research_contracts` 与 `style_factors`），不统计子模块，
-不设 `fail_under` 阈值。跨仓库集成测试不要求根项目达成固定覆盖率，质量看护以
-`scripts/run_quality_checks.py --profile hard` 与各子模块自带的维护性预算为准。
-
-## 重要边界
-
-- 大型市场数据、研究输出、缓存和交易审计日志放在仓库外。
-- 数据资产从 `$DATA_PLATFORM_ROOT/metadata/current_assets/*.json` 和 `dataset_registry.csv` 读取。
-- A 股权威 current 契约 是 `metadata/current_assets/a_share_current.json`。
-- 研究到执行的交接文件是 `targets.json`。
-- 顶层脚本不会绕过执行引擎的模拟盘或实盘安全门禁。
-- 凭证只放在对应子仓库规定的私有位置，不进入顶层 `.env`。
+完整发布流程见 [生产更新](docs/production-update.md) 和 [发布检查清单](docs/release-checklist.md)。
 
 ## 文档入口
 
-- [工作区路线图](docs/roadmap.md)
-- [研究判断治理](docs/research-decision-governance.md)
+- [文档总入口](docs/README.md)
+- [架构边界](ARCHITECTURE.md)
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
-- [策略研究与生命周期](strategy-research/README.md)
-- [架构边界](ARCHITECTURE.md)
-- [跨仓库文件约定](docs/contracts.md)
-- [工作区维护](docs/workspace-maintenance.md)
+- [跨仓库文件契约](docs/contracts.md)
 - [质量治理](docs/quality-governance.md)
-- [外部框架支持矩阵](docs/framework-support-matrix.md)
+- [工作区维护](docs/workspace-maintenance.md)
 - [版本矩阵](docs/version-matrix.md)
-- [发布检查清单](docs/release-checklist.md)
-- [文档总入口](docs/README.md)
-- [文档归集与去重清单](docs/documentation-consolidation.md)
+- [生产更新](docs/production-update.md)
 - [术语表](docs/glossary.md)
+
+### 文档写作
+
+当前文档以中文为主，正文使用中文标点和直接表达。命令、路径、配置键、包名、API 名称
+和数据字段保留原文。文档分工和写作约定见 [文档写作与维护](docs/documentation-style.md)。

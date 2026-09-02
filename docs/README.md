@@ -17,7 +17,7 @@
 | 查看全部已完成事项、剩余项目和优先级 | [roadmap.md](roadmap.md) |
 | 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
 | 查看截面股票 ML 的长期研究问题与实验地图 | [cross-sectional ML research agenda](../strategy-research/research/cross_sectional_ml_research_agenda.md) |
-| 整理研究资产、抽取通用能力和执行 Research GC | [research-lifecycle-and-workspace-hygiene.md](research-lifecycle-and-workspace-hygiene.md) |
+| 整理研究资产、抽取通用能力和执行研究资产清理 | [research-lifecycle-and-workspace-hygiene.md](research-lifecycle-and-workspace-hygiene.md) |
 | 查看策略边界 R0 至 R6 的实施记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 | 查看子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) |
 | 查看说明文档归集和去重顺序 | [documentation-consolidation.md](documentation-consolidation.md) |
@@ -32,7 +32,7 @@
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
 | 数据、研究与代码目录术语 | [data-lifecycle-terminology.md](data-lifecycle-terminology.md) |
 | 旧数据路径迁移映射 | [data-path-migration-map.md](data-path-migration-map.md) |
-| 数据路径 breaking change 登记 | [data-path-breaking-change-register.md](data-path-breaking-change-register.md) |
+| 登记数据路径重大变更 | [data-path-breaking-change-register.md](data-path-breaking-change-register.md) |
 | 生成数据路径审计清单 | `python scripts/data_path_audit.py --data-root <数据根目录> --output <清单路径>` |
 | 推进 A 股主线或恢复港股归档 | [data-transition-playbook.md](data-transition-playbook.md) |
 | 查看港股恢复专用归档 | [archive/hk/README.md](archive/hk/README.md) |
@@ -77,6 +77,9 @@
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档只保留当前做法和归档链接。
 
+文档写作约定见 [documentation-style.md](documentation-style.md)，本轮文档审计见
+[documentation-audit-20260902.md](documentation-audit-20260902.md)。
+
 ## 子模块文档入口
 
 七个子模块的内部实现、依赖、业务参数与完整命令各自成体系，以下为入口导航（路径相对本文件）：
@@ -90,8 +93,9 @@
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
 | `strategy-app` | [../strategy-app/docs/](../strategy-app/docs/) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
+| `strategy-research` | [../strategy-research/README.md](../strategy-research/README.md) | 策略目录、实验、证据与生命周期 |
 
-> 子模块文档以各仓 `docs/` 为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
+> 八个子模块的内部文档以各仓库为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
 
 ## 当前事实
 

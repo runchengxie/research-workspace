@@ -38,7 +38,7 @@
 | 历史名称或路径 | 规范解释 | 当前动作 |
 | --- | --- | --- |
 | `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 已迁入 `experiments/strategies/watchlist20/incumbent_challenger/`，旧路径保留 symlink |
-| `challenger_entry*` | 上述研究集合的兼容 symlink | 保留，消费者迁移前不得删除 |
+| `~/data/challenger_entry*` | 上述研究集合的根目录兼容 symlink | 已修复，均指向实际研究目录 |
 | `strategy-pipeline/artifacts/cache/` | `cache/` | 已归位到 `strategy-pipeline/cache/`，旧路径保留 symlink；只有证明可重建且无占用后才可清理 |
 | `strategy-pipeline/artifacts/runs/` | `runs/` | 已归位到 `strategy-pipeline/runs/`，旧路径保留 symlink；按运行状态和 receipt 保留 |
 | `strategy-pipeline/artifacts/reports/` | `reports/` | 已归位到 `strategy-pipeline/reports/`，旧路径保留 symlink；按报告引用和 retention 保留 |
@@ -74,7 +74,7 @@ symlink。详细回执见 `metadata/lifecycle/migrations/stable-strategy-layout-
 4. `current`、`latest`、`rollback` 和 successor 核对结果；
 5. 失败时的回滚路径，以及迁移后的 retention 决定。
 
-本轮已完成可安全归类的实体目录迁移；仍保留兼容 symlink，不删除任何大体积研究或运行结果。
+本轮已完成可安全归类的实体目录迁移，并修复了根目录兼容 symlink。大体积研究和运行结果仍按各自清单保留。
 后续涉及生产默认路径的代码和 cron 更新，必须先经过 shadow read 和日报 dry-run。
 
 涉及日报和生产消费者的 breaking change 管理，见
@@ -92,8 +92,8 @@ python scripts/data_path_audit.py \
 
 当前清单位于 `/home/richard/data/market-data-platform/metadata/lifecycle/path-audit-20260831.json`。
 它记录顶层路径及混合目录直接子项的规范语义、状态、文件数量和字节数，并且不会跟随符号
-链接或执行移动、删除和 alias 修改。当前扫描结果与数据根目录的总字节数一致，约为 513 GB；
-这只是盘点结果，不是删除建议。
+链接，也不会执行移动、删除或 alias 修改。清单中的容量随生成时间变化，查看当前容量时应
+重新运行审计命令。这份清单用于盘点，不是删除建议。
 
 ## 后续顺序
 
