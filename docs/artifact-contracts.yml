@@ -1,5 +1,5 @@
 {
-  "_last_changed": "2026-09-01",  "_owner": "research-workspace",
+  "_last_changed": "2026-09-02",  "_owner": "research-workspace",
   "schema_version": "artifact_contracts.v1",
   "policy": {
     "purpose": "Machine-readable cross-module artifact contracts for the research workspace.",
@@ -218,6 +218,43 @@
         ]
       ],
       "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The producer writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
+    },
+    {
+      "artifact": "research-run.manifest.json",
+      "contract": "research.backtest-run.v1",
+      "schema_version": 1,
+      "owner": "strategy-pipeline",
+      "producer": "strategy-pipeline",
+      "consumers": [
+        "strategy-research",
+        "research-workspace"
+      ],
+      "canonical_files": [
+        "research-run.manifest.json"
+      ],
+      "entrypoints": [
+        {
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.research_evidence",
+          "path": "src/strategy_pipeline/research_evidence.py",
+          "role": "canonical_implementation"
+        }
+      ],
+      "required_fields": [
+        "schema_version",
+        "run_id",
+        "strategy_ref",
+        "research_purpose",
+        "evidence_tier",
+        "clock",
+        "configuration_sha256",
+        "producer_versions",
+        "data_refs",
+        "signal_refs",
+        "portfolio_result_ref",
+        "created_at"
+      ],
+      "notes": "The pipeline creates this root lineage manifest from already-produced artifacts. It records content hashes and a validated ResearchClock; it does not replace the portfolio-backtester canonical bundle or alter backtest semantics."
     },
     {
       "artifact": "watchlist_20.csv",
