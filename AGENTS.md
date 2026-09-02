@@ -6,7 +6,7 @@
 
 顶层仓库负责以下内容：
 
-- 锁定六个子模块的提交版本
+- 锁定八个子模块的提交版本
 - 维护跨仓库文件约定和 `src/research_contracts`
 - 维护工作区 doctor、质量检查和子仓库委托脚本
 - 维护风格因子计算内核（`alpha_research.style_factors`，alpha-research owner）、分位回测内核（`portfolio_backtester.style_factors_backtest`，portfolio-backtester owner）与表现层（`strategy-research/style_factors`，可 `python -m style_factors`）的交接与说明
@@ -16,7 +16,7 @@
 
 子仓库内部实现、依赖、业务参数和完整测试配置留在对应仓库。
 
-`strategy-research` 是顶层仓库的 tracked 目录，不是子模块。它有独立的
+`strategy-research` 是一个独立仓库，同时作为顶层仓库的子模块使用。它有独立的
 `pyproject.toml` 与 `tests/`，pre-push 会额外运行其 `research-layer-tests` 与
 `research-layer-quality` 门禁（见 `scripts/run_pre_push_checks.py`）。
 
@@ -52,7 +52,7 @@ python scripts/run_submodule_checks.py --profile release_typecheck --dry-run
 
 `run_submodule_checks.py` 只执行 `scripts/submodule_checks.json` 中登记的命令。不要在顶层复制子仓库内部检查逻辑。
 
-当前顶层和六个子模块的 GitHub Actions 仓库权限均禁用。`portfolio-backtester` 虽保留
+当前顶层和八个子模块的 GitHub Actions 仓库权限均禁用。`portfolio-backtester` 虽保留
 workflow 定义，也不会触发远端检查。文档中不得把停用模板或本地命令描述为正在运行的远端 CI。
 
 ## 文件约定
@@ -103,8 +103,8 @@ targets.json
 本工作区可能由多个 agent 并行开发。每个改动都必须使用独立 worktree 与功能分支，
 避免多个 agent 在同一检出目录竞争同一组文件。
 
-远端命名：本顶层 superproject 的远端名为 `github`（不是 `origin`），推送与拉取用
-`git push -u github ...` / `git fetch github`。六个子模块的远端名为 `origin`，请按
+远端命名：本顶层 superproject 的远端名为 `github`，推送与拉取用
+`git push -u github ...` / `git fetch github`。八个子模块的远端名为 `origin`，请按
 各自 `AGENTS.md` 的示例操作，不要混用。
 
 `main` 是受保护常驻分支，改动一律走 worktree + PR 流程，不直接在主检出目录提交。

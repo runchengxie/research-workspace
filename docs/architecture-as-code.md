@@ -1,6 +1,6 @@
 # Architecture as Code
 
-本工作区把架构约束分成可执行的源，并用 `scripts/workspace_architecture.py` 生成统一视图。目标不是维护另一套手工架构图，而是从已经用于治理和运行的事实中投影出架构。
+本工作区把架构约束分成可执行的源，并用 `scripts/workspace_architecture.py` 生成统一视图。统一视图直接来自治理和运行所使用的事实，手工架构图只作为辅助阅读材料。
 
 ## 权威来源
 

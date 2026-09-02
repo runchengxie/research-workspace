@@ -211,7 +211,7 @@ import direction、source layout 与跨仓 private API 门禁均已通过。`wor
 | 策略证据 | [strategy-evidence-gate.md](strategy-evidence-gate.md) | 生命周期对应的强制证据集合 |
 | A 股数据与研究 | [data-transition-playbook.md](data-transition-playbook.md) | current asset 和长窗口研究入口 |
 | 会计与执行模拟 | [accounting_execution_roadmap.md](../portfolio-backtester/docs/accounting_execution_roadmap.md) | 统一账本和后续精度增强项 |
-| 概念级机器学习 | [concept-level-ml-exploration.md](../strategy-research/experiments/style_factors/concept-level-ml-exploration.md) | 低优先级研究探索 |
+| 概念级机器学习 | [concept-level-ml-exploration.md](../strategy-research/research/experiments/style_factors/concept-level-ml-exploration.md) | 低优先级研究探索 |
 | 研究判断治理 | [research-decision-governance.md](research-decision-governance.md) | 判断账本、决策记录、来源溯源的采用顺序 |
 | 文档归集 | [documentation-consolidation.md](documentation-consolidation.md) | 碎片化说明、权威入口和去重顺序 |
 
