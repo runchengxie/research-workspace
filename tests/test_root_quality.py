@@ -143,3 +143,4 @@ def test_public_workflow_runs_root_regression_checks_without_private_submodules(
     assert "tests/test_run_submodule_fail_fast.py" in workflow
     assert "tests/test_check_script.py" in workflow
     assert "tests/test_root_quality.py" in workflow
+    assert "python scripts/run_quality_checks.py --profile ci-smoke" in workflow
