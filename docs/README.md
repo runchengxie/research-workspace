@@ -2,7 +2,7 @@
 
 > status: active
 > owner: workspace
-> last_verified: 2026-08-25
+> last_verified: 2026-09-02
 > source_of_truth: yes
 > superseded_by: n/a
 
@@ -16,6 +16,8 @@
 | 理解端到端链路 | [platform-workflow.md](platform-workflow.md) |
 | 查看全部已完成事项、剩余项目和优先级 | [roadmap.md](roadmap.md) |
 | 查找策略思路、状态和代码归属 | [../strategy-research/README.md](../strategy-research/README.md) |
+| 查看截面股票 ML 的长期研究问题与实验地图 | [cross-sectional ML research agenda](../strategy-research/research/cross_sectional_ml_research_agenda.md) |
+| 整理研究资产、抽取通用能力和执行 Research GC | [research-lifecycle-and-workspace-hygiene.md](research-lifecycle-and-workspace-hygiene.md) |
 | 查看策略边界 R0 至 R6 的实施记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 | 查看子模块边界重构项 | [submodule-boundary-refactor-checklist.md](submodule-boundary-refactor-checklist.md) |
 | 查看说明文档归集和去重顺序 | [documentation-consolidation.md](documentation-consolidation.md) |
@@ -50,11 +52,13 @@
 - 治理文件索引：[governance-index.md](governance-index.md)
 - 子模块 noqa 历史清债计划：[noqa-clearing-plan.md](noqa-clearing-plan.md)
 - 文档生命周期：[documentation-lifecycle.md](documentation-lifecycle.md)
+- 研究生命周期与工作区瘦身：[research-lifecycle-and-workspace-hygiene.md](research-lifecycle-and-workspace-hygiene.md)
 - 架构拆分收口记录：[architecture-split-closure-checklist.md](architecture-split-closure-checklist.md)
 - 外部策略项目接入：[strategy-satellites.md](strategy-satellites.md)
 - 策略总览导航索引：[strategy-catalog.md](strategy-catalog.md)
 - 策略边界重构完成记录：[strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md)
 - 策略生命周期权威目录：[../strategy-research/catalog.json](../strategy-research/catalog.json)
+- 截面股票机器学习研究议程：[cross-sectional ML research agenda](../strategy-research/research/cross_sectional_ml_research_agenda.md)
 - A 股风格因子研究方法与功能：[style-factors.md](style-factors.md)
 - A 股年度市场风格解读（2008 年至 2026 年）：[style-factor-market-regimes-2008-2026.md](../strategy-research/research/experiments/style_factors/style-factor-market-regimes-2008-2026.md)
 - A 股低换手因子定义与暴露诊断（2008 年至 2026 年）：[low-turnover-factor-diagnostics-2008-2026.md](../strategy-research/research/experiments/style_factors/low-turnover-factor-diagnostics-2008-2026.md)
