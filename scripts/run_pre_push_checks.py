@@ -218,7 +218,7 @@ def plan_gate(
         raise ManifestError(f"repository is outside the managed workspace: {repository}")
     delegated = plan_commands(root, configs, profile="full", submodules=[name])
     commands = tuple(
-        GateCommand(f"{name}:{index}", item.cwd, item.command)
+        GateCommand(f"{name}:{index}", repository, item.command)
         for index, item in enumerate(delegated, start=1)
     )
     if not commands:
