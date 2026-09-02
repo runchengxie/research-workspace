@@ -19,9 +19,7 @@ case "$profile" in
     python src/research_contracts/smoke_contracts.py
 
     echo "==> 顶层测试"
-    uv run --project strategy-pipeline --extra dev \
-      --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
-      python -m pytest tests -q
+    python scripts/run_workspace_tests.py
     ;;
   full)
     echo "==> 子模块委托 full"
