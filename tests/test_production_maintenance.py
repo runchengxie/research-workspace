@@ -2,7 +2,6 @@ import os
 import subprocess
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "maintain-production.sh"
 PROMOTE_SCRIPT = Path(__file__).parents[1] / "scripts" / "promote-production.sh"
 
@@ -61,4 +60,4 @@ def test_promotion_does_not_recheck_generated_venv_links_as_source_changes() -> 
     script = PROMOTE_SCRIPT.read_text(encoding="utf-8")
 
     assert "local commit release current tmp fresh=0" in script
-    assert "(( fresh )) || assert_clean \"$release\"" in script
+    assert '(( fresh )) || assert_clean "$release"' in script

@@ -51,16 +51,12 @@ class PlatformAssetDefinition:
         object.__setattr__(self, "external_inputs", _tuple(self.external_inputs, "external_inputs"))
         object.__setattr__(self, "consumers", _tuple(self.consumers, "consumers"))
         if self.freshness_kind not in FRESHNESS_KINDS:
-            raise ValueError(
-                "freshness_kind must be one of " + ", ".join(sorted(FRESHNESS_KINDS))
-            )
+            raise ValueError("freshness_kind must be one of " + ", ".join(sorted(FRESHNESS_KINDS)))
         if self.freshness_kind == "none":
             if self.freshness_value is not None:
                 raise ValueError("freshness_value must be null when freshness_kind=none")
         else:
-            if isinstance(self.freshness_value, bool) or not isinstance(
-                self.freshness_value, int
-            ):
+            if isinstance(self.freshness_value, bool) or not isinstance(self.freshness_value, int):
                 raise ValueError("freshness_value must be a positive integer")
             if self.freshness_value <= 0:
                 raise ValueError("freshness_value must be > 0 for an active freshness policy")
@@ -164,7 +160,9 @@ class PlatformAssetRegistry:
         self.validate_graph()
         return {
             "schema_version": PLATFORM_ASSET_REGISTRY_SCHEMA,
-            "assets": [self._assets[asset_id].to_mapping() for asset_id in self.topological_order()],
+            "assets": [
+                self._assets[asset_id].to_mapping() for asset_id in self.topological_order()
+            ],
         }
 
     @classmethod

@@ -9,7 +9,7 @@ def test_syncs_report_jobs_to_current_production_release(tmp_path: Path) -> None
     calls = tmp_path / "calls"
     hermes.write_text(
         "#!/bin/sh\n"
-        "if [ \"$1\" = cron ] && [ \"$2\" = list ]; then\n"
+        'if [ "$1" = cron ] && [ "$2" = list ]; then\n'
         "  cat <<'EOF'\n"
         "  morning123456 [active]\n"
         "    Script: morning_pipeline.sh\n"
@@ -24,8 +24,8 @@ def test_syncs_report_jobs_to_current_production_release(tmp_path: Path) -> None
         "    Script: other.sh\n"
         "    Workdir: /old/release\n"
         "EOF\n"
-        "elif [ \"$1\" = cron ] && [ \"$2\" = edit ]; then\n"
-        "  printf '%s\n' \"$*\" >> \"$CALLS\"\n"
+        'elif [ "$1" = cron ] && [ "$2" = edit ]; then\n'
+        '  printf \'%s\n\' "$*" >> "$CALLS"\n'
         "fi\n",
         encoding="utf-8",
     )

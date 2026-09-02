@@ -7,6 +7,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "run_quality_checks.py"
+EXPECTED_SUBMODULES = {
+    "alpha-research",
+    "market-data-platform",
+    "portfolio-backtester",
+    "strategy-pipeline",
+    "quant-execution-engine",
+    "strategy-app",
+    "deep-learning-tick-data-prediction",
+    "strategy-research",
+}
 
 spec = importlib.util.spec_from_file_location("run_quality_checks", SCRIPT)
 run_quality_checks = importlib.util.module_from_spec(spec)
@@ -19,19 +29,20 @@ def test_root_ruff_scope_excludes_submodule_source_trees() -> None:
     config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     ruff = config["tool"]["ruff"]
 
+    assert ruff["target-version"] == "py312"
     assert ruff["include"] == [
         "src/research_contracts/**/*.py",
         "scripts/**/*.py",
         "tests/**/*.py",
     ]
-    assert {
-        "alpha-research",
-        "market-data-platform",
-        "portfolio-backtester",
-        "strategy-pipeline",
-        "quant-execution-engine",
-        "strategy-app",
-    } <= set(ruff["extend-exclude"])
+    assert EXPECTED_SUBMODULES <= set(ruff["extend-exclude"])
+
+
+def test_root_typecheck_explicitly_excludes_all_submodules() -> None:
+    config = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    ty = config["tool"]["ty"]["src"]
+
+    assert EXPECTED_SUBMODULES <= set(ty["exclude"])
 
 
 def test_architecture_scanner_is_in_root_typecheck_scope() -> None:
@@ -47,12 +58,8 @@ def test_root_lint_profile_names_only_superproject_owned_paths() -> None:
     assert commands
     for item in commands:
         assert item.command[-1] == "."
-        assert "alpha-research" not in item.command
-        assert "market-data-platform" not in item.command
-        assert "portfolio-backtester" not in item.command
-        assert "strategy-pipeline" not in item.command
-        assert "quant-execution-engine" not in item.command
-        assert "strategy-app" not in item.command
+        for submodule in EXPECTED_SUBMODULES:
+            assert submodule not in item.command
 
 
 def test_type_check_runs_with_workspace_dependencies() -> None:
@@ -62,6 +69,18 @@ def test_type_check_runs_with_workspace_dependencies() -> None:
     assert command[3] == str(ROOT)
     assert command[4:7] == ("--with", "ty", "ty")
     assert command[-1] == "check"
+
+
+def test_dependency_profile_runs_pip_audit_in_root_project() -> None:
+    commands = run_quality_checks.plan_commands("dependencies")
+
+    assert [item.name for item in commands] == ["pip-audit"]
+    command = commands[0].command
+    assert command[:4] == ("uv", "run", "--project", str(ROOT))
+    assert command[4:6] == ("--group", "dev")
+    assert command[6] == "pip-audit"
+    assert "--progress-spinner" in command
+    assert "off" in command
 
 
 def test_hard_profile_includes_workspace_architecture_gates() -> None:
@@ -92,12 +111,12 @@ def test_architecture_profile_includes_combined_projection_gate() -> None:
     )
 
 
-def test_ci_smoke_profile_skips_workspace_architecture_gates() -> None:
+def test_ci_smoke_profile_skips_private_workspace_gates_but_audits_dependencies() -> None:
     commands = run_quality_checks.plan_commands("ci-smoke")
 
     names = [item.name for item in commands]
 
-    assert names == ["ruff-check", "ruff-format", "ty-check", "secret-scan"]
+    assert names == ["ruff-check", "ruff-format", "ty-check", "pip-audit", "secret-scan"]
     assert "workspace-import-boundaries" not in names
     assert "workspace-ownership-boundaries" not in names
     assert "workspace-architecture" not in names
@@ -110,22 +129,18 @@ def test_dead_code_profile_runs_advisory_wrapper() -> None:
     assert commands[0].command[-1].endswith("scripts/dead_code_advisory.py")
 
 
-def test_superproject_ci_runs_top_level_quality_gates() -> None:
-    active = ROOT / ".github" / "workflows" / "superproject.yml"
-    disabled = ROOT / ".github" / "workflows" / "superproject.yml.disabled"
-    assert not active.exists()
-    assert disabled.is_file()
-    workflow = disabled.read_text(encoding="utf-8")
+def test_public_workflow_runs_root_regression_checks_without_private_submodules() -> None:
+    active = ROOT / ".github" / "workflows" / "contracts.yml"
+    obsolete = ROOT / ".github" / "workflows" / "superproject.yml.disabled"
+    assert active.is_file()
+    assert not obsolete.exists()
+    workflow = active.read_text(encoding="utf-8")
 
     assert "submodules: false" in workflow
-    assert "WORKSPACE_SUBMODULE_READ_TOKEN" in workflow
-    assert "Checkout private submodules" in workflow
-    assert "python scripts/run_quality_checks.py --profile hard" in workflow
-    assert "Run superproject smoke quality profile without private submodules" in workflow
+    assert "WORKSPACE_SUBMODULE_READ_TOKEN" not in workflow
+    assert "tests/test_platform_publication.py" in workflow
+    assert "tests/test_platform_asset_registry.py" in workflow
+    assert "tests/test_run_submodule_fail_fast.py" in workflow
+    assert "tests/test_check_script.py" in workflow
+    assert "tests/test_root_quality.py" in workflow
     assert "python scripts/run_quality_checks.py --profile ci-smoke" in workflow
-    assert "uv run --project strategy-pipeline --extra dev" in workflow
-    assert "--with 'matplotlib>=3.8' --with 'tabulate>=0.9'" in workflow
-    assert "python -m pytest tests -q" in workflow
-    assert "Run superproject smoke tests without private submodules" in workflow
-    assert "python scripts/run_submodule_checks.py --profile full --dry-run" in workflow
-    assert "python src/research_contracts/smoke_contracts.py --timeout 10" in workflow

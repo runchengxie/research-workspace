@@ -23,8 +23,8 @@
 
 ## 数据与产物边界
 
-- 大型市场数据、研究产物、缓存、运行 receipt 和交易审计日志放在 `~/data` 或专用生产目录。
-- A 股权威 current 契约是 `metadata/current_assets/a_share_current.json`。
+- 大型市场数据、研究产物、缓存、运行凭证和交易审计日志放在 `~/data` 或专用生产目录。
+- A 股权威当前契约是 `metadata/current_assets/a_share_current.json`。
 - 研究到执行的交接文件是 `targets.json`。
 - 策略生命周期以 `strategy-research/catalog.json` 为准，代码位置不表达生产状态。
 - 生产代码使用 `/home/richard/code/production/` 下的版本化目录，开发和实验使用独立 worktree。
@@ -56,8 +56,9 @@ python scripts/run_submodule_checks.py --profile smoke
 python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 ```
 
-本工作区使用本地 pre-push 检查作为质量门禁。根仓库是 public，GitHub Actions 默认用于
-轻量拉取请求检查。各子仓库是否启用远端 CI，按仓库可见性和对应文档中的例外说明执行。
+本地 `pre-push` 是完整质量门禁。远端 CI 按仓库可见性管理：public 仓库默认启用 GitHub Actions，private 仓库默认关闭。private 仓库如需启用远端 CI，应在对应仓库说明原因、检查范围和资源成本。
+
+本顶层仓库是 public 仓库，`.github/workflows/contracts.yml` 会在相关拉取请求、手动触发和每周计划任务中运行无需私有子模块的公开检查。完整跨仓检查仍由本地 `pre-push` 和发布流程负责。各子模块的当前自动化状态见 [质量治理](docs/quality-governance.md)。
 
 根项目的集成测试使用 `strategy-pipeline` 环境：
 

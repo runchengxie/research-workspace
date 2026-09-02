@@ -3,7 +3,6 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "ensure-shared-production-venv.sh"
 
 
@@ -25,9 +24,9 @@ def test_reuses_shared_environment_but_refreshes_project_binding(tmp_path: Path)
         "#!/usr/bin/env bash\n"
         "set -euo pipefail\n"
         f"printf '%s\\n' \"$UV_PROJECT_ENVIRONMENT\" >> {log}\n"
-        "mkdir -p \"$UV_PROJECT_ENVIRONMENT/bin\"\n"
-        "touch \"$UV_PROJECT_ENVIRONMENT/bin/python\"\n"
-        "chmod +x \"$UV_PROJECT_ENVIRONMENT/bin/python\"\n",
+        'mkdir -p "$UV_PROJECT_ENVIRONMENT/bin"\n'
+        'touch "$UV_PROJECT_ENVIRONMENT/bin/python"\n'
+        'chmod +x "$UV_PROJECT_ENVIRONMENT/bin/python"\n',
         encoding="utf-8",
     )
     uv.chmod(0o755)
@@ -61,9 +60,9 @@ def write_fake_uv(tmp_path: Path) -> tuple[Path, Path]:
         "#!/usr/bin/env bash\n"
         "set -euo pipefail\n"
         f"printf '%s\\n' \"$UV_PROJECT_ENVIRONMENT\" >> {log!s}\n"
-        "mkdir -p \"$UV_PROJECT_ENVIRONMENT/bin\"\n"
-        "touch \"$UV_PROJECT_ENVIRONMENT/bin/python\"\n"
-        "chmod +x \"$UV_PROJECT_ENVIRONMENT/bin/python\"\n",
+        'mkdir -p "$UV_PROJECT_ENVIRONMENT/bin"\n'
+        'touch "$UV_PROJECT_ENVIRONMENT/bin/python"\n'
+        'chmod +x "$UV_PROJECT_ENVIRONMENT/bin/python"\n',
         encoding="utf-8",
     )
     uv.chmod(0o755)

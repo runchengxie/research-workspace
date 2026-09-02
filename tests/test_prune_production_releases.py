@@ -2,11 +2,15 @@ import os
 import subprocess
 from pathlib import Path
 
-
 SCRIPT = Path(__file__).parents[1] / "scripts" / "prune-production-releases.sh"
 
 
-def make_release_tree(tmp_path: Path, names: list[str], current: str, app_name: str = "app") -> Path:
+def make_release_tree(
+    tmp_path: Path,
+    names: list[str],
+    current: str,
+    app_name: str = "app",
+) -> Path:
     base = tmp_path / app_name
     releases = base / "releases"
     releases.mkdir(parents=True)

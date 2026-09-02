@@ -26,7 +26,7 @@
 | 查看跨仓库文件约定 | [contracts.md](contracts.md) |
 | 查看 deep-learning 集成边界 | [deep-learning-integration.md](deep-learning-integration.md) |
 | 维护子模块和运行检查 | [workspace-maintenance.md](workspace-maintenance.md) |
-| 查看质量检查分类 | [quality-governance.md](quality-governance.md) |
+| 查看质量检查分类和 CI 策略 | [quality-governance.md](quality-governance.md) |
 | 核对 Qlib、LEAN、vn.py 和 Backtrader 的当前状态 | [framework-support-matrix.md](framework-support-matrix.md) |
 | 查看当前锁定组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
@@ -95,7 +95,7 @@
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
 | `strategy-research` | [../strategy-research/README.md](../strategy-research/README.md) | 策略目录、实验、证据与生命周期 |
 
-> 八个子模块的内部文档以各仓库为准。如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
+如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。
 
 ## 当前事实
 
@@ -106,4 +106,4 @@
 - A 股长窗口 producer 已完成一次 diagnostic run，但运行产物仍是本地 ignored outputs，尚未形成 canonical promotion evidence。E2 是生产准备审计，当前主线仍是推进真实策略研究，见 [roadmap E2](roadmap.md)
 - 港股资产和历史研究输出按恢复专用归档管理
 
-> 子模块组成、GitHub Actions 停用状态与分支策略见根目录 [README.md](../README.md)。本段只记录跨仓库事实中根 README 未涵盖的部分，避免两处各说各话。
+> 子模块组成、GitHub Actions 策略与分支规则见根目录 [README.md](../README.md) 和 [AGENTS.md](../AGENTS.md)。本段只记录跨仓库事实中根入口未涵盖的部分，避免重复维护。

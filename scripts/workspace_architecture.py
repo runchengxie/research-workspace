@@ -10,12 +10,11 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-
 from workspace_architecture_artifacts import build_artifact_graph
 from workspace_architecture_model import (
+    SCHEMA_VERSION,
     ArchitectureModel,
     Graph,
-    SCHEMA_VERSION,
     load_mapping,
     load_model,
 )
@@ -121,7 +120,8 @@ def render_report(report: Mapping[str, Any]) -> str:
     lines.extend(
         [
             "",
-            "Call graph note: direct imported-symbol calls only; dynamic Python dispatch is omitted.",
+            "Call graph note: direct imported-symbol calls only; "
+            "dynamic Python dispatch is omitted.",
         ]
     )
     return "\n".join(lines) + "\n"

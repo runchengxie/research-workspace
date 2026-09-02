@@ -149,7 +149,10 @@ def test_exactly_one_field_groups_reject_required_field_overlap(tmp_path: Path) 
         required_artifacts=("targets.json",),
     )
 
-    assert "targets.json: exactly_one_of_fields overlap required_fields: target_weight" in result.issues
+    assert (
+        "targets.json: exactly_one_of_fields overlap required_fields: target_weight"
+        in result.issues
+    )
 
 
 def test_shared_contract_package_loads_manifest() -> None:

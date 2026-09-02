@@ -3,8 +3,10 @@
 
 # Submodule boundaries
 /market-data-platform/ @runchengxie
+/deep-learning-tick-data-prediction/ @runchengxie
 /alpha-research/ @runchengxie
 /portfolio-backtester/ @runchengxie
+/strategy-research/ @runchengxie
 /strategy-app/ @runchengxie
 /strategy-pipeline/ @runchengxie
 /quant-execution-engine/ @runchengxie
@@ -14,5 +16,7 @@
 /docs/deprecations.* @runchengxie
 /docs/hk-public-split-manifest.yml @runchengxie
 /docs/quality-coverage-governance.yml @runchengxie
+/docs/quality-governance.md @runchengxie
 /docs/maintainability-refactor-roadmap.yml @runchengxie
+/.github/workflows/ @runchengxie
 /scripts/ @runchengxie

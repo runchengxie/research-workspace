@@ -249,9 +249,7 @@ def _entry_issues(entry: Any, index: int, root: Path) -> list[str]:
 
 def _unknown_dependency_issues(entries: list[dict[str, Any]]) -> list[str]:
     known = {
-        entry["capability_id"]
-        for entry in entries
-        if isinstance(entry.get("capability_id"), str)
+        entry["capability_id"] for entry in entries if isinstance(entry.get("capability_id"), str)
     }
     issues: list[str] = []
     for entry in entries:
@@ -261,9 +259,7 @@ def _unknown_dependency_issues(entries: list[dict[str, Any]]) -> list[str]:
             continue
         for dependency in requires:
             if dependency not in known:
-                issues.append(
-                    f"{capability_id}: requires unknown capability {dependency}"
-                )
+                issues.append(f"{capability_id}: requires unknown capability {dependency}")
     return issues
 
 
@@ -271,8 +267,7 @@ def _dependency_cycle_issues(entries: list[dict[str, Any]]) -> list[str]:
     graph = {
         entry["capability_id"]: list(entry.get("requires", []))
         for entry in entries
-        if isinstance(entry.get("capability_id"), str)
-        and isinstance(entry.get("requires"), list)
+        if isinstance(entry.get("capability_id"), str) and isinstance(entry.get("requires"), list)
     }
     issues: list[str] = []
     state: dict[str, int] = {}

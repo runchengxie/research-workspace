@@ -84,11 +84,15 @@ def _artifact_record(
         "contract": str(raw.get("contract", "")).strip(),
         "schema_version": raw.get("schema_version"),
     }
-    return node, [*producer_edges, *consumer_edges], [
-        *errors,
-        *producer_errors,
-        *consumer_errors,
-    ]
+    return (
+        node,
+        [*producer_edges, *consumer_edges],
+        [
+            *errors,
+            *producer_errors,
+            *consumer_errors,
+        ],
+    )
 
 
 def build_artifact_graph(

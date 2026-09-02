@@ -22,7 +22,7 @@ dev = [
 package = false
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 100
 include = ["src/research_contracts/**/*.py", "scripts/**/*.py", "tests/**/*.py"]
 extend-exclude = [
@@ -35,6 +35,7 @@ extend-exclude = [
   "portfolio-backtester",
   "quant-execution-engine",
   "strategy-app",
+  "deep-learning-tick-data-prediction",
   "demo",
   "strategy-research",
 ]
@@ -92,10 +93,12 @@ exclude = [
   "alpha-research",
   "artifacts",
   "build",
+  "deep-learning-tick-data-prediction",
   "dist",
   "market-data-platform",
   "portfolio-backtester",
   "quant-execution-engine",
   "strategy-app",
   "strategy-pipeline",
+  "strategy-research",
 ]

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -11,13 +11,12 @@ from research_contracts import (
     load_platform_publication_manifest,
 )
 
-
 SHA = "a" * 64
 
 
 def _manifest(*, audience: str = "public") -> PlatformPublicationManifest:
     return PlatformPublicationManifest(
-        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=timezone.utc),
+        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=UTC),
         producer_repository="runchengxie/research-workspace",
         producer_commit="abc123",
         run_id="research-20260902",
@@ -85,7 +84,7 @@ def test_dashboard_consumer_rejects_internal_artifact() -> None:
 
 def test_consumer_filter_returns_only_declared_artifacts() -> None:
     manifest = PlatformPublicationManifest(
-        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=timezone.utc),
+        generated_at=datetime(2026, 9, 2, 5, 20, tzinfo=UTC),
         producer_repository="runchengxie/research-workspace",
         producer_commit="abc123",
         run_id="research-20260902",
