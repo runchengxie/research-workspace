@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e405209e2c2c1ea8f8d102776e6f8aa004a2e7b1`
+> source_commit: `e405209db006989bdd7288ebd324e845d822e5b7`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "e405209e2c2c1ea8f8d102776e6f8aa004a2e7b1",
+    "source_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
   "inventory": {
     "python_source_files": 129,
     "test_files": 201,
@@ -595,7 +595,7 @@
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_application_policy.py",
       "status": "complete",
-      "internal_commit": "e405209e2c2c1ea8f8d102776e6f8aa004a2e7b1",
+      "internal_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
       "test_evidence": "internal tests/test_retired_daily_watch20_application_policy.py; internal tests/test_standalone_strategy_app_extraction.py; import boundary check",
       "rationale": "The module had no active runtime callers. Its research policy and publication currentness inputs already belong to their respective owner packages, so the unused composition facade was retired instead of creating a reverse dependency from strategy-app to strategy-pipeline."
     }
