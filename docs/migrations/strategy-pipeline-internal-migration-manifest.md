@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `c124f0c54f0cd804589f9dea59a3cd018809ed51`
+> source_commit: `4d2ea8028456d9a0b19f2bbf4f876d0fe28a7d11`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "c124f0c54f0cd804589f9dea59a3cd018809ed51",
+  "source_commit": "4d2ea8028456d9a0b19f2bbf4f876d0fe28a7d11",
   "inventory": {
-    "python_source_files": 114,
-    "test_files": 214,
+    "python_source_files": 113,
+    "test_files": 215,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 43,
+      "file_count": 42,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -245,10 +245,21 @@
       "target_path": "src/portfolio_backtester/promotion_sidecar.py",
       "status": "complete",
       "owner_commit": "8cdb4d6971ca489088b84a72d6ae472b1f54a9cc",
-      "internal_commit": "c124f0c54f0cd804589f9dea59a3cd018809ed51",
+      "internal_commit": "4d2ea8028456d9a0b19f2bbf4f876d0fe28a7d11",
       "test_evidence": "portfolio-backtester tests/test_promotion_sidecar.py; internal tests/test_retired_promotion_sidecar.py and pipeline regression tests",
       "doc_evidence": "portfolio-backtester/docs/guides/promotion-sidecar.md; portfolio-backtester/docs/README.md",
       "consumer_switch": "internal output orchestration now imports portfolio_backtester.promotion_sidecar, the internal simulation module was deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/position_output_artifacts.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/position_outputs.py",
+      "status": "complete",
+      "owner_commit": "e06e48eb443dad47b492eee084cf3299edcd3024",
+      "internal_commit": "4d2ea8028456d9a0b19f2bbf4f876d0fe28a7d11",
+      "test_evidence": "portfolio-backtester tests/test_position_outputs.py; internal tests/test_retired_position_output_artifacts.py and pipeline regression tests",
+      "doc_evidence": "portfolio-backtester/docs/reference/outputs/positions.md",
+      "consumer_switch": "internal output artifacts now import portfolio_backtester.position_outputs, and the internal writer was deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",

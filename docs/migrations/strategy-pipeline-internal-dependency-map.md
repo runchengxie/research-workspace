@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source: internal `pyproject.toml`、源码导入和当前 submodule 关系
-> last_verified: 2026-09-03
+> last_verified: 2026-09-04
 
 ## 当前关系
 
@@ -19,6 +19,8 @@ research-workspace
 ```
 
 internal 当前同时承担策略应用、研究证据、数据接口、组合回测、执行交接、CLI 和运行目录编排。这个组合关系是退役风险的来源，单独替换 CLI 或公共包不能解除它。
+
+本次切片已将 `pipeline/position_output_artifacts.py` 的持仓视图写入职责归入 `portfolio-backtester.position_outputs`。internal 的输出编排仍在过渡期保留，但不再维护这份重复实现。
 
 ## 目标关系
 
