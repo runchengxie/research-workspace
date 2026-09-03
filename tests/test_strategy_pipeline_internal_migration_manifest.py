@@ -78,9 +78,16 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
             "status": "complete",
             "owner_commit": "6eefb9668d10c11f0098b44bf578b462db218299",
             "internal_commit": "cd25c8985f3e52486f11d7244aaa06fcc06dd8e5",
-            "test_evidence": "portfolio-backtester tests/test_liquidity_proxy.py; internal tests/test_retired_liquidity_proxy.py; internal tests/test_pipeline_memory_path.py",
+            "test_evidence": (
+                "portfolio-backtester tests/test_liquidity_proxy.py; "
+                "internal tests/test_retired_liquidity_proxy.py; "
+                "internal tests/test_pipeline_memory_path.py"
+            ),
             "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
-            "consumer_switch": "internal panel loading now imports liquidity proxy helpers directly from portfolio_backtester",
+            "consumer_switch": (
+                "internal panel loading now imports liquidity proxy helpers directly "
+                "from portfolio_backtester"
+            ),
         },
         {
             "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
