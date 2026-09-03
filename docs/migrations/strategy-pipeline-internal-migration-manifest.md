@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e405209db006989bdd7288ebd324e845d822e5b7`
+> source_commit: `369c26bb7b58da5a4c028326e643a57e612f7f2e`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
+    "source_commit": "369c26bb7b58da5a4c028326e643a57e612f7f2e",
   "inventory": {
-    "python_source_files": 129,
+    "python_source_files": 128,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 50,
+      "file_count": 49,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "planned", "rationale": "The catalog covers workspace-wide commands and operational handoff, so its stable owner is the cross-repository workspace documentation."}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/news_heat_export.py",
+      "status": "complete",
+      "owner_commit": "60b87f454552311e874f837471d2e9b38300fc3e",
+      "internal_commit": "442eb4b6c5dcbc341991641530cc1eb66348a93c",
+      "test_evidence": "strategy-app tests/test_daily_watch20_news_heat_export.py; internal tests/test_daily_watch20_news_heat_export_owner.py and test_retired_daily_watch20_news_heat_export.py; import boundary check",
+      "doc_evidence": "strategy-app/docs/daily-watch20-news-heat-export.md; internal docs/outputs.md",
+      "consumer_switch": "internal watchlist20 CLI now imports strategy_app.daily_watch20.news_heat_export"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_policy.py",
       "owner_repo": "strategy-app",
