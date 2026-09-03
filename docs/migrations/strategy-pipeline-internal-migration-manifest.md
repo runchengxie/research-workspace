@@ -20,9 +20,9 @@
     "config_files": 18,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
-        "complete": 13,
+        "complete": 14,
       "private": 58,
-        "planned": 11,
+        "planned": 10,
       "archive": 32
     }
   },
@@ -104,7 +104,7 @@
     {"source_path": "docs/research/daily-watch20-live-readiness-20260714.md", "owner_repo": "strategy-app", "target_path": "docs/research/daily-watch20-live-readiness-20260714.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/incumbent-challenger-evidence-v2.md", "owner_repo": "strategy-app", "target_path": "docs/research/incumbent-challenger-evidence-v2.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/next-open-to-high-audit.md", "owner_repo": "strategy-app", "target_path": "docs/research/next-open-to-high-audit.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
-    {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "planned", "rationale": "The catalog covers workspace-wide commands and operational handoff, so its stable owner is the cross-repository workspace documentation."}
+    {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
     {

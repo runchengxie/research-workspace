@@ -27,9 +27,9 @@ def test_manifest_has_verified_inventory_baseline() -> None:
         "config_files": 18,
         "ownership_document_files": 114,
         "ownership_document_status_counts": {
-            "complete": 13,
+            "complete": 14,
             "private": 58,
-            "planned": 11,
+            "planned": 10,
             "archive": 32,
         },
     }
@@ -131,8 +131,8 @@ def test_cross_repository_playbooks_record_workspace_owner() -> None:
 
     catalog = documents["docs/strategy-catalog.md"]
     assert catalog["owner_repo"] == "research-workspace"
-    assert catalog["status"] == "planned"
-    assert catalog["rationale"]
+    assert catalog["status"] == "complete"
+    assert catalog["test_evidence"]
 
 
 def test_style_replica_migrations_record_owner_and_consumer_switch() -> None:
