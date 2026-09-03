@@ -22,8 +22,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     inventory = payload["inventory"]
     assert inventory == {
-        "python_source_files": 182,
-        "test_files": 182,
+        "python_source_files": 181,
+        "test_files": 183,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -40,7 +40,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 182
+    assert sum(group["file_count"] for group in groups) == 181
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -71,6 +71,17 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
     assert migrations == [
+        {
+            "source_path": "src/strategy_pipeline_internal/liquidity_proxy.py",
+            "owner_repo": "portfolio-backtester",
+            "target_path": "src/portfolio_backtester/liquidity_proxy.py",
+            "status": "complete",
+            "owner_commit": "6eefb9668d10c11f0098b44bf578b462db218299",
+            "internal_commit": "cd25c8985f3e52486f11d7244aaa06fcc06dd8e5",
+            "test_evidence": "portfolio-backtester tests/test_liquidity_proxy.py; internal tests/test_retired_liquidity_proxy.py; internal tests/test_pipeline_memory_path.py",
+            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+            "consumer_switch": "internal panel loading now imports liquidity proxy helpers directly from portfolio_backtester",
+        },
         {
             "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
             "owner_repo": "portfolio-backtester",
