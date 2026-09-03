@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a99764837b2cc2c377715c13ad5efa3452a20da7`
+> source_commit: `a79fdd5e289910903cbc0288baf489c75e8b8bd6`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "a99764837b2cc2c377715c13ad5efa3452a20da7",
+    "source_commit": "a79fdd5e289910903cbc0288baf489c75e8b8bd6",
   "inventory": {
-    "python_source_files": 122,
-    "test_files": 208,
+    "python_source_files": 121,
+    "test_files": 209,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -128,6 +128,17 @@
       "test_evidence": "workspace tests/test_research_run_manifest_writer.py and tests/test_research_run_manifest.py; internal tests/test_research_evidence.py and tests/test_retired_research_evidence.py",
       "doc_evidence": "workspace docs/artifact-contracts.yml and docs/contracts.md",
       "consumer_switch": "internal research evidence tests now import research_contracts, the internal writer was deleted, and the workspace contract package owns manifest creation"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/research_protocols.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/research_protocols.py",
+      "status": "complete",
+      "owner_commit": "f529f9d6385f6834a1da62be9c653c9f16a35c8f",
+      "internal_commit": "a79fdd5e289910903cbc0288baf489c75e8b8bd6",
+      "test_evidence": "alpha-research tests/test_research_protocols.py; internal protocol, AFML, CLI, and retirement tests",
+      "doc_evidence": "alpha-research/docs/concepts/research-protocols.md; alpha-research/docs/README.md",
+      "consumer_switch": "internal CLI and liveops quality gate now import alpha_research.research_protocols and the internal module was deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/identity.py",
