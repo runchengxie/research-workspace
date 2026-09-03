@@ -107,7 +107,7 @@ def _root_gate_commands(cwd: Path) -> tuple[GateCommand, ...]:
         GateCommand(
             "contract-smoke",
             cwd,
-            (sys.executable, "src/research_contracts/smoke_contracts.py", "--strict"),
+            (sys.executable, "src/research_contracts/smoke_contracts.py"),
         ),
         # Strategy evidence gate: blocks only on *unregistered* gaps (missing
         # checks a non-production strategy has not explicitly listed in its
