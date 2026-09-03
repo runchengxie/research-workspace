@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `dcfee24da90b82fe3338b58e2b53c6d3be53a9ef`
+> source_commit: `183d22aac9fd471b1cce43fd50e95e38e18ee9ce`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,12 +12,12 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "dcfee24da90b82fe3338b58e2b53c6d3be53a9ef",
+  "source_commit": "183d22aac9fd471b1cce43fd50e95e38e18ee9ce",
   "inventory": {
-    "python_source_files": 183,
-    "test_files": 181,
+    "python_source_files": 182,
+    "test_files": 182,
     "script_files": 34,
-    "config_files": 21,
+    "config_files": 18,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
       "complete": 8,
@@ -27,16 +27,6 @@
     }
   },
   "module_groups": [
-    {
-      "source_path": "src/strategy_pipeline_internal/campaign_specs",
-      "file_count": 1,
-      "owner_repo": "strategy-app",
-      "target_path": "src/strategy_app/campaigns",
-      "status": "planned",
-      "test_evidence": "tests to be migrated with strategy application slice",
-      "doc_evidence": "docs/research/README.md",
-      "removal_condition": "strategy-app owns campaign loading and validation"
-    },
     {
       "source_path": "src/strategy_pipeline_internal/cli",
       "file_count": 7,
