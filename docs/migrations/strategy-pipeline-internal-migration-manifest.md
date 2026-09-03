@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `1f5f2c3d594e0f52ed90c43faa5b7070d882f512`
+> source_commit: `cfe5cf69191cd40a102c5625faa13dd895f25cca`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "1f5f2c3d594e0f52ed90c43faa5b7070d882f512",
+    "source_commit": "cfe5cf69191cd40a102c5625faa13dd895f25cca",
   "inventory": {
-    "python_source_files": 118,
-    "test_files": 210,
+    "python_source_files": 117,
+    "test_files": 211,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -29,7 +29,7 @@
   "module_groups": [
     {
       "source_path": "src/strategy_pipeline_internal/cli",
-      "file_count": 7,
+      "file_count": 6,
       "owner_repo": "research-workspace",
       "target_path": "workspace entrypoints and owner-native commands",
       "status": "private",
@@ -205,6 +205,17 @@
       "test_evidence": "portfolio-backtester tests/test_allocation_rendering.py; internal tests/test_retired_allocation_rendering.py and allocation regression tests",
       "doc_evidence": "portfolio-backtester/docs/reference/allocation-reference.md; portfolio-backtester/docs/README.md",
       "consumer_switch": "internal allocation core now imports portfolio_backtester.allocation_rendering, the internal renderer and formatting test were deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/alloc_selection.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/allocation_selection.py",
+      "status": "complete",
+      "owner_commit": "81c80ee8054a35f1566b0f5f82756992f805ae2b",
+      "internal_commit": "cfe5cf69191cd40a102c5625faa13dd895f25cca",
+      "test_evidence": "portfolio-backtester tests/test_allocation_selection.py; internal tests/test_retired_allocation_selection.py and allocation regression tests",
+      "doc_evidence": "portfolio-backtester/docs/reference/allocation-reference.md; portfolio-backtester/docs/README.md",
+      "consumer_switch": "internal allocation core now delegates pure selection to portfolio_backtester.allocation_selection, the internal selection module was deleted, and holdings payload loading remains in alloc_core"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
