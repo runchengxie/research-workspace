@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `369c26bb7b58da5a4c028326e643a57e612f7f2e`
+> source_commit: `7b88da25606d042bcf31fafc37769c350182c1a7`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "369c26bb7b58da5a4c028326e643a57e612f7f2e",
+    "source_commit": "7b88da25606d042bcf31fafc37769c350182c1a7",
   "inventory": {
-    "python_source_files": 128,
+    "python_source_files": 127,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 49,
+      "file_count": 48,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -117,6 +117,17 @@
       "test_evidence": "strategy-app tests/test_daily_watch20_news_heat_export.py; internal tests/test_daily_watch20_news_heat_export_owner.py and test_retired_daily_watch20_news_heat_export.py; import boundary check",
       "doc_evidence": "strategy-app/docs/daily-watch20-news-heat-export.md; internal docs/outputs.md",
       "consumer_switch": "internal watchlist20 CLI now imports strategy_app.daily_watch20.news_heat_export"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_minute.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/minute_features.py",
+      "status": "complete",
+      "owner_commit": "c9a4273c6befaad50abe114cc529866e80c44469",
+      "internal_commit": "f9e07e2427d677c535d998f1f41d9c9451fecbf1",
+      "test_evidence": "strategy-app tests/test_daily_watch20_minute_features.py; internal tests/test_daily_watch20_minute.py and test_retired_daily_watch20_minute.py; import boundary check",
+      "doc_evidence": "strategy-app/docs/application-catalog.md; internal docs/cli.md",
+      "consumer_switch": "internal pipeline, research scripts, and market-shadow runtime metadata now import strategy_app.daily_watch20.minute_features"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_policy.py",
