@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `f456533f5b3600e182ebac2e752bbd8ed3e27ada`
+> source_commit: `3a4191213dd7f1645844076d628658aa66088178`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+  "source_commit": "3a4191213dd7f1645844076d628658aa66088178",
   "inventory": {
-    "python_source_files": 176,
-    "test_files": 183,
+    "python_source_files": 170,
+    "test_files": 185,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 81,
+      "file_count": 75,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -205,6 +205,50 @@
       "test_evidence": "portfolio-backtester tests/test_rebalance.py; internal tests/test_rebalance_contracts.py",
       "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
       "consumer_switch": "internal compatibility exports now delegate to portfolio_backtester.rebalance"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/_style_replica_pipeline_core.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/style_replica/_style_replica_pipeline_core.py",
+      "status": "complete",
+      "owner_commit": "a30fe5af462c9baeabcb499eb5ae183a1873c419",
+      "internal_commit": "3a4191213dd7f1645844076d628658aa66088178",
+      "test_evidence": "strategy-app tests/test_style_replica_pipeline.py; internal tests/test_retired_style_replica_pipeline.py",
+      "doc_evidence": "strategy-app/docs/application-catalog.md",
+      "consumer_switch": "internal StyleReplica pipeline tests now import the strategy-app owner"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/_style_replica_pipeline_output.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/style_replica/_style_replica_pipeline_output.py",
+      "status": "complete",
+      "owner_commit": "a30fe5af462c9baeabcb499eb5ae183a1873c419",
+      "internal_commit": "3a4191213dd7f1645844076d628658aa66088178",
+      "test_evidence": "strategy-app tests/test_style_replica_output_ownership.py; internal tests/test_retired_style_replica_pipeline.py",
+      "doc_evidence": "strategy-app/docs/application-catalog.md",
+      "consumer_switch": "internal output ownership tests now import the strategy-app owner"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/_style_replica_pipeline_owner_api.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/style_replica/_style_replica_pipeline_owner_api.py",
+      "status": "complete",
+      "owner_commit": "a30fe5af462c9baeabcb499eb5ae183a1873c419",
+      "internal_commit": "3a4191213dd7f1645844076d628658aa66088178",
+      "test_evidence": "strategy-app tests/test_style_replica_data_boundary.py; internal tests/test_style_replica_data_boundary.py",
+      "doc_evidence": "strategy-app/docs/application-catalog.md",
+      "consumer_switch": "internal data-boundary tests now import the strategy-app owner"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/style_replica_pipeline.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/style_replica/style_replica_pipeline.py",
+      "status": "complete",
+      "owner_commit": "a30fe5af462c9baeabcb499eb5ae183a1873c419",
+      "internal_commit": "3a4191213dd7f1645844076d628658aa66088178",
+      "test_evidence": "strategy-app tests/test_style_replica_pipeline.py; internal tests/test_style_replica_ownership.py",
+      "doc_evidence": "strategy-app/docs/application-catalog.md",
+      "consumer_switch": "internal StyleReplica ownership tests now import the strategy-app owner"
     }
   ],
   "partial_code_migrations": [
