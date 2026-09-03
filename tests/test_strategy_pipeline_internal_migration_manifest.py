@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 139,
+        "python_source_files": 138,
         "test_files": 201,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 139
+    assert sum(group["file_count"] for group in groups) == 138
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -398,6 +398,22 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert slow_minute_campaign["internal_commit"] == "5cf7c2f8731324071ae2ead7bd8ec7825ff27cf1"
     assert slow_minute_campaign["test_evidence"]
     assert slow_minute_campaign["rationale"]
+
+    minute_campaign = facades[
+        "src/strategy_pipeline_internal/daily_watch20_minute_campaign.py"
+    ]
+    assert minute_campaign["status"] == "complete"
+    assert minute_campaign["internal_commit"] == "a198c155a5cc59ca04e0d7b1bcfd5f0ba48980d4"
+    assert minute_campaign["test_evidence"]
+    assert minute_campaign["rationale"]
+
+    minute_campaign_inputs = facades[
+        "src/strategy_pipeline_internal/daily_watch20_minute_campaign_inputs.py"
+    ]
+    assert minute_campaign_inputs["status"] == "complete"
+    assert minute_campaign_inputs["internal_commit"] == "9c9555de0b1bdff85ebbb0dcc813795d5535f075"
+    assert minute_campaign_inputs["test_evidence"]
+    assert minute_campaign_inputs["rationale"]
 
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:

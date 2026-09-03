@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `5cf7c2f8731324071ae2ead7bd8ec7825ff27cf1`
+> source_commit: `9c9555de0b1bdff85ebbb0dcc813795d5535f075`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "5cf7c2f8731324071ae2ead7bd8ec7825ff27cf1",
+  "source_commit": "9c9555de0b1bdff85ebbb0dcc813795d5535f075",
   "inventory": {
-    "python_source_files": 139,
+    "python_source_files": 138,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 60,
+      "file_count": 59,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -528,6 +528,20 @@
       "internal_commit": "5cf7c2f8731324071ae2ead7bd8ec7825ff27cf1",
       "test_evidence": "strategy-app tests for slow-minute contracts and execution; internal tests/test_daily_watch20_slow_minute_campaign.py; internal full test suite; import boundary check",
       "rationale": "The campaign orchestration was composed entirely from strategy-app contracts, analysis, input, execution, decision, and reporting APIs. It now lives with the strategy-app owner and internal callers use that module directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_minute_campaign.py",
+      "status": "complete",
+      "internal_commit": "a198c155a5cc59ca04e0d7b1bcfd5f0ba48980d4",
+      "test_evidence": "strategy-app tests/test_daily_watch20_minute_campaign_contract.py; internal tests/test_daily_watch20_minute_campaign.py; internal full test suite; import boundary check",
+      "rationale": "The D/M/F/H campaign entrypoint only composed strategy-app campaign contracts, metrics, reporting, and input APIs. It now lives with the strategy-app owner."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_minute_campaign_inputs.py",
+      "status": "complete",
+      "internal_commit": "9c9555de0b1bdff85ebbb0dcc813795d5535f075",
+      "test_evidence": "strategy-app tests/test_daily_watch20_minute_campaign_contract.py; strategy-app minute cache and friend-minute tests; internal tests/test_daily_watch20_minute_campaign.py; import boundary check",
+      "rationale": "Minute campaign input loading, universe freezing, friend-feature lineage, and Hermite input binding now live in strategy-app alongside the campaign owner."
     }
   ],
   "completed_boundary_cleanups": [
