@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 133,
-      "python_loc": 23094,
+      "python_file_count": 134,
+      "python_loc": 23229,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
@@ -180,6 +180,7 @@
         "scripts/framework_adapter_evidence.py",
         "scripts/framework_adapter_execution_evidence.py",
         "scripts/framework_adapter_release_gate.py",
+        "scripts/git-fetch-with-fallback.sh",
         "scripts/hk_archive_gate.py",
         "scripts/import_boundary_rules.yml",
         "scripts/install-production-maintenance.sh",
