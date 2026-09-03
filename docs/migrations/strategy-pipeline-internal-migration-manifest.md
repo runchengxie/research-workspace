@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `6c3f709f1131d9459270a8847dc3e0f3a3e8f3ae`
+> source_commit: `a25253244d6a5368d502b8190a7c16d598a86e9d`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "6c3f709f1131d9459270a8847dc3e0f3a3e8f3ae",
+    "source_commit": "a25253244d6a5368d502b8190a7c16d598a86e9d",
   "inventory": {
-    "python_source_files": 135,
+    "python_source_files": 134,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 56,
+      "file_count": 55,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -556,6 +556,13 @@
       "internal_commit": "6c3f709f1131d9459270a8847dc3e0f3a3e8f3ae",
       "test_evidence": "strategy-app tests/test_daily_watch20_ablation_evaluation.py; internal tests/test_daily_watch20_ablation.py; internal import-boundary tests",
       "rationale": "The report builder only assembled the DailyWatch20 research report and now lives with the strategy-app ablation owner."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_topic_summary.py",
+      "status": "complete",
+      "internal_commit": "a25253244d6a5368d502b8190a7c16d598a86e9d",
+      "test_evidence": "strategy-app tests/test_daily_watch20_topic_summary.py; internal DailyWatch20 publication-safety and late-recovery tests; import boundary check",
+      "rationale": "The topic summary is presentation-only aggregation logic. It now lives with the strategy-app DailyWatch20 application owner."
     }
   ],
   "completed_boundary_cleanups": [
