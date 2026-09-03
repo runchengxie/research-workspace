@@ -30,6 +30,17 @@ done
 [[ -f "$PROJECT/uv.lock" ]] || { printf 'missing uv.lock: %s\n' "$PROJECT" >&2; exit 1; }
 [[ -n "$NAME" && -n "$SHARED_ROOT" ]] || { usage; exit 2; }
 
+ensure_local_venv_ignore() {
+  local exclude_file
+  exclude_file=$(git -C "$PROJECT" rev-parse --git-path info/exclude 2>/dev/null) || return 0
+  if [[ "$exclude_file" != /* ]]; then
+    exclude_file="$PROJECT/$exclude_file"
+  fi
+  mkdir -p "$(dirname "$exclude_file")"
+  touch "$exclude_file"
+  grep -Fxq '.venv' "$exclude_file" 2>/dev/null || printf '.venv\n' >> "$exclude_file"
+}
+
 venv_link="$PROJECT/.venv"
 if [[ -e "$venv_link" && ! -L "$venv_link" ]]; then
   (( MIGRATE_EXISTING )) || {
@@ -37,6 +48,8 @@ if [[ -e "$venv_link" && ! -L "$venv_link" ]]; then
     exit 1
   }
 fi
+
+ensure_local_venv_ignore
 
 fingerprint=$(sha256sum "$PROJECT/pyproject.toml" "$PROJECT/uv.lock" | sha256sum | cut -d' ' -f1)
 env_dir="$SHARED_ROOT/$NAME/$fingerprint"

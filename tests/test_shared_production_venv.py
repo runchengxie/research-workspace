@@ -108,6 +108,59 @@ def test_creates_shared_environment_and_links_project_venv(tmp_path: Path) -> No
     assert log.read_text(encoding="utf-8").count("\n") == 1
 
 
+def test_venv_link_is_ignored_by_the_project_git_worktree(tmp_path: Path) -> None:
+    project = tmp_path / "market-data-platform"
+    project.mkdir()
+    (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+    (project / "uv.lock").write_text("lock-v1\n", encoding="utf-8")
+    subprocess.run(["git", "init", "-q", str(project)], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(project),
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=test",
+            "add",
+            "pyproject.toml",
+            "uv.lock",
+        ],
+        check=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(project),
+            "-c",
+            "user.email=test@example.com",
+            "-c",
+            "user.name=test",
+            "commit",
+            "-qm",
+            "fixture",
+        ],
+        check=True,
+    )
+    shared = tmp_path / "shared" / "venvs"
+    uv, _ = write_fake_uv(tmp_path)
+
+    result = run_script(project, shared, uv)
+
+    assert result.returncode == 0, result.stderr
+    assert (
+        subprocess.run(
+            ["git", "-C", str(project), "status", "--porcelain"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+        == ""
+    )
+
+
 def test_refuses_to_replace_real_project_venv(tmp_path: Path) -> None:
     project = tmp_path / "project"
     project.mkdir()
