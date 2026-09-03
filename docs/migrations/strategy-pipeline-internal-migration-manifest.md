@@ -20,9 +20,9 @@
     "config_files": 18,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
-        "complete": 12,
+        "complete": 13,
       "private": 58,
-        "planned": 12,
+        "planned": 11,
       "archive": 32
     }
   },
@@ -95,7 +95,7 @@
     {"source_path": "docs/concepts/pit-coverage.md", "owner_repo": "market-data-platform", "target_path": "docs/a-share-fundamentals.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_tushare_a_share_fundamentals.py; tests/test_current_path_audit.py"},
     {"source_path": "docs/concepts/research-protocols.md", "owner_repo": "alpha-research", "target_path": "docs/concepts/feature-research-protocol.md; docs/concepts/overfitting-controls.md", "status": "complete", "test_evidence": "tests/test_feature_evidence.py; tests/test_promotion_gate.py"},
     {"source_path": "docs/concepts/shared-hk-data-platform.md", "owner_repo": "market-data-platform", "target_path": "docs/operations/hk-archive-restore.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_quality_governance.py; tests/test_dataset_contracts.py"},
-    {"source_path": "docs/playbooks/a-share-baseline.md", "owner_repo": "research-workspace", "target_path": "docs/playbooks/a-share-baseline.md", "status": "planned", "rationale": "The playbook documents cross-repository CLI, data-asset, and publication boundaries. It must be rewritten against the post-internal workspace entrypoints."},
+    {"source_path": "docs/playbooks/a-share-baseline.md", "owner_repo": "research-workspace", "target_path": "docs/playbooks/a-share-baseline.md", "status": "complete", "test_evidence": "tests/test_a_share_baseline_playbook.py", "doc_evidence": "docs/playbooks/a-share-baseline.md", "migration_pr": "pending"},
     {"source_path": "docs/playbooks/hk-selected.md", "owner_repo": "strategy-app", "target_path": "docs/playbooks/hk-selected.md", "status": "planned"},
     {"source_path": "docs/providers.md", "owner_repo": "market-data-platform", "target_path": "docs/integrations.md; docs/operations/credentials.md", "status": "complete", "test_evidence": "tests/test_data_providers_cache.py; tests/test_cli_dependency_boundaries.py"},
     {"source_path": "docs/reference/outputs/full-reference.md", "owner_repo": "research-workspace", "target_path": "docs/reference/outputs/full-reference.md", "status": "planned"},
