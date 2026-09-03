@@ -458,7 +458,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
         "src/strategy_pipeline_internal/daily_watch20_application_policy.py"
     ]
     assert application_policy["status"] == "complete"
-    assert application_policy["internal_commit"] == "e405209e2c2c1ea8f8d102776e6f8aa004a2e7b1"
+    assert application_policy["internal_commit"] == "e405209db006989bdd7288ebd324e845d822e5b7"
     assert application_policy["test_evidence"]
     assert application_policy["rationale"]
 
