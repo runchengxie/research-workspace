@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `cfe5cf69191cd40a102c5625faa13dd895f25cca`
+> source_commit: `136357b2e0372943c9064d5d2e97b0ac729ddb45`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "cfe5cf69191cd40a102c5625faa13dd895f25cca",
+    "source_commit": "136357b2e0372943c9064d5d2e97b0ac729ddb45",
   "inventory": {
-    "python_source_files": 117,
-    "test_files": 211,
+    "python_source_files": 116,
+    "test_files": 212,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -49,7 +49,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",
-      "file_count": 7,
+      "file_count": 6,
       "owner_repo": "quant-execution-engine",
       "target_path": "src/quant_execution_engine/liveops",
       "status": "planned",
@@ -216,6 +216,17 @@
       "test_evidence": "portfolio-backtester tests/test_allocation_selection.py; internal tests/test_retired_allocation_selection.py and allocation regression tests",
       "doc_evidence": "portfolio-backtester/docs/reference/allocation-reference.md; portfolio-backtester/docs/README.md",
       "consumer_switch": "internal allocation core now delegates pure selection to portfolio_backtester.allocation_selection, the internal selection module was deleted, and holdings payload loading remains in alloc_core"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/afml_evidence.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/afml_evidence.py",
+      "status": "complete",
+      "owner_commit": "5476e6c21219e24eadd44807e54aae7c6c1e1733",
+      "internal_commit": "136357b2e0372943c9064d5d2e97b0ac729ddb45",
+      "test_evidence": "portfolio-backtester tests/test_afml_evidence.py; internal tests/test_retired_afml_evidence.py and AFML regression tests",
+      "doc_evidence": "portfolio-backtester/docs/concepts/afml-sizing-and-risk.md",
+      "consumer_switch": "internal CLI and pipeline output now import portfolio_backtester.afml_evidence, and the internal implementation was deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
