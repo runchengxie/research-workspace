@@ -116,7 +116,7 @@ sync_hermes_market_intel_workdir() {
 prepare_release() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5
   local commit release current tmp fresh=0
-  git -C "$source" fetch "$remote" "$ref"
+  bash "$SCRIPT_DIR/git-fetch-with-fallback.sh" "$source" "$remote" "$ref"
   commit=$(git -C "$source" rev-parse "$remote/$ref")
   release="$base/releases/$commit"
   current=$(current_commit "$base")

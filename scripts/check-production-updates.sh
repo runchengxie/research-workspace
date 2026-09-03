@@ -2,10 +2,11 @@
 set -euo pipefail
 
 PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 check_repo() {
   local name=$1 source=$2 base=$3 remote=$4 ref=$5 current target
-  git -C "$source" fetch "$remote" "$ref" >/dev/null
+  bash "$SCRIPT_DIR/git-fetch-with-fallback.sh" "$source" "$remote" "$ref" >/dev/null
   target=$(git -C "$source" rev-parse "$remote/$ref")
   current=missing
   [[ -L "$base/current" ]] && current=$(basename "$(readlink "$base/current")")

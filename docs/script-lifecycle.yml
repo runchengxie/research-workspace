@@ -20,6 +20,16 @@
   },
   "records": [
     {
+      "path": "scripts/git-fetch-with-fallback.sh",
+      "owner": "research-workspace",
+      "purpose": "Fetch a GitHub branch with configured remote, GitHub CLI authentication, SSH, and HTTPS fallbacks",
+      "lifecycle": "release",
+      "safe_to_run_locally": true,
+      "writes_files": "Git remote-tracking references and stdout",
+      "external_dependencies": "git, optional GitHub CLI, SSH or HTTPS access to GitHub",
+      "removal_condition": "remove only after the production update and promotion workflows use a successor fetch mechanism for two release reviews"
+    },
+    {
       "path": "scripts/check-production-updates.sh",
       "owner": "research-workspace",
       "purpose": "Fetch remote main references and report production releases that are behind",
