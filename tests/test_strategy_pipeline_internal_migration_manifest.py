@@ -106,4 +106,20 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
                 "internal compatibility exports now delegate to alpha_research.signal_artifact"
             ),
         },
+        {
+            "source_path": "src/strategy_pipeline_internal/contracts/rebalance.py",
+            "owner_repo": "portfolio-backtester",
+            "target_path": "src/portfolio_backtester/rebalance.py",
+            "status": "complete",
+            "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
+            "internal_commit": "df444be",
+            "test_evidence": (
+                "portfolio-backtester tests/test_rebalance.py; "
+                "internal tests/test_rebalance_contracts.py"
+            ),
+            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+            "consumer_switch": (
+                "internal compatibility exports now delegate to portfolio_backtester.rebalance"
+            ),
+        },
     ]
