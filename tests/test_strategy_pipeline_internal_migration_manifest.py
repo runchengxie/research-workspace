@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 170,
+        "python_source_files": 169,
         "test_files": 185,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 170
+    assert sum(group["file_count"] for group in groups) == 169
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -94,3 +94,28 @@ def test_style_replica_migrations_record_owner_and_consumer_switch() -> None:
         assert migration["test_evidence"]
         assert migration["doc_evidence"]
         assert migration["consumer_switch"]
+
+
+def test_d11_h5_migration_records_owner_and_consumer_switch() -> None:
+    payload = _load_manifest()
+    migrations = payload["completed_code_migrations"]
+    migration = next(
+        item
+        for item in migrations
+        if item["source_path"] == "src/strategy_pipeline_internal/d11_h5_shadow.py"
+    )
+
+    assert migration == {
+        "source_path": "src/strategy_pipeline_internal/d11_h5_shadow.py",
+        "owner_repo": "strategy-app",
+        "target_path": "src/strategy_app/daily_watch20/d11_h5_shadow.py",
+        "status": "complete",
+        "owner_commit": "b59a881da300a06a65d8420b626e0306f4971fdd",
+        "internal_commit": "8414f8a412b2d96fdb0fc48c062b7fb3e398dda7",
+        "test_evidence": (
+            "strategy-app tests/test_d11_h5_shadow_pipeline.py; "
+            "internal tests/test_retired_d11_h5_shadow.py"
+        ),
+        "doc_evidence": "strategy-app/docs/application-catalog.md",
+        "consumer_switch": "internal D11-H5 CLI registration now imports the strategy-app owner",
+    }
