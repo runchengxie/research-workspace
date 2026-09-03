@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `2d6d132f0588001dcbd244000af52109603050c8`
+> source_commit: `5b51c2059b987869c9d4e876073bcf22288f3a19`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "2d6d132f0588001dcbd244000af52109603050c8",
+  "source_commit": "5b51c2059b987869c9d4e876073bcf22288f3a19",
   "inventory": {
-    "python_source_files": 157,
-    "test_files": 195,
+    "python_source_files": 156,
+    "test_files": 196,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 50,
+      "file_count": 49,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -402,6 +402,13 @@
       "internal_commit": "2d6d132f0588001dcbd244000af52109603050c8",
       "test_evidence": "internal tests/test_retired_panel_enrichment_facade.py; internal full test suite",
       "rationale": "The six-line aggregation facade had no domain logic. Its consumer now imports the existing fundamentals and industry implementations directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/context_builder.py",
+      "status": "complete",
+      "internal_commit": "5b51c2059b987869c9d4e876073bcf22288f3a19",
+      "test_evidence": "internal tests/test_retired_context_builder_facade.py; internal full test suite",
+      "rationale": "The re-export shell had no unique implementation. Runner consumers now import the split API and core modules directly."
     }
   ]
 }
