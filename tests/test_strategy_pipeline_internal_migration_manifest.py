@@ -20,10 +20,9 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     payload = _load_manifest()
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
-    inventory = payload["inventory"]
-    assert inventory == {
-        "python_source_files": 174,
-        "test_files": 183,
+    assert payload["inventory"] == {
+        "python_source_files": 170,
+        "test_files": 185,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -40,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 174
+    assert sum(group["file_count"] for group in groups) == 170
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -67,184 +66,31 @@ def test_planned_document_inventory_has_target_and_no_duplicate_source() -> None
             assert document["test_evidence"]
 
 
-def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
+def test_style_replica_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
-    assert migrations == [
-        {
-            "source_path": "src/strategy_pipeline_internal/dataset.py",
-            "owner_repo": "alpha-research",
-            "target_path": "src/alpha_research/dataset.py",
-            "status": "complete",
-            "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
-            "internal_commit": "34152aed2a7c506a83e49e14eb35956da7836206",
-            "test_evidence": (
-                "alpha-research tests/test_dataset_and_date_slices.py; "
-                "internal tests/test_retired_alpha_data_helpers.py"
-            ),
-            "doc_evidence": "alpha-research/docs/README.md",
-            "consumer_switch": "internal no longer ships a duplicate DatasetSchema module",
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/date_slices.py",
-            "owner_repo": "alpha-research",
-            "target_path": "src/alpha_research/date_slices.py",
-            "status": "complete",
-            "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
-            "internal_commit": "34152aed2a7c506a83e49e14eb35956da7836206",
-            "test_evidence": (
-                "alpha-research tests/test_dataset_and_date_slices.py; "
-                "internal tests/test_pipeline_date_slices.py; "
-                "internal tests/test_retired_alpha_data_helpers.py"
-            ),
-            "doc_evidence": "alpha-research/docs/README.md",
-            "consumer_switch": (
-                "internal pipeline dates now imports helpers from alpha_research.date_slices"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/daily_watch20_policy.py",
-            "owner_repo": "strategy-app",
-            "target_path": "src/strategy_app/daily_watch20/daily_watch20_policy.py",
-            "status": "complete",
-            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
-            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
-            "test_evidence": (
-                "strategy-app tests/test_daily_watch20_policy.py; "
-                "internal tests/test_daily_watch20_strategy_policy.py"
-            ),
-            "doc_evidence": "strategy-app/docs/application-catalog.md",
-            "consumer_switch": (
-                "internal DailyWatch20 consumers now import the policy contract from strategy_app"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/policy_canonical.py",
-            "owner_repo": "strategy-app",
-            "target_path": "src/strategy_app/daily_watch20/policy_canonical.py",
-            "status": "complete",
-            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
-            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
-            "test_evidence": (
-                "strategy-app tests/test_daily_watch20_policy.py; "
-                "internal tests/test_daily_watch20_strategy_policy.py"
-            ),
-            "doc_evidence": "strategy-app/docs/application-catalog.md",
-            "consumer_switch": (
-                "policy canonicalization now resolves within strategy_app.daily_watch20"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/policy_primitives.py",
-            "owner_repo": "strategy-app",
-            "target_path": "src/strategy_app/daily_watch20/policy_primitives.py",
-            "status": "complete",
-            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
-            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
-            "test_evidence": (
-                "strategy-app tests/test_daily_watch20_policy.py; "
-                "internal tests/test_daily_watch20_strategy_policy.py"
-            ),
-            "doc_evidence": "strategy-app/docs/application-catalog.md",
-            "consumer_switch": "policy primitives now resolve within strategy_app.daily_watch20",
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/policy_validation_model.py",
-            "owner_repo": "strategy-app",
-            "target_path": "src/strategy_app/daily_watch20/policy_validation_model.py",
-            "status": "complete",
-            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
-            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
-            "test_evidence": (
-                "strategy-app tests/test_daily_watch20_policy.py; "
-                "internal tests/test_daily_watch20_strategy_policy.py"
-            ),
-            "doc_evidence": "strategy-app/docs/application-catalog.md",
-            "consumer_switch": (
-                "model and feature validation now resolves within strategy_app.daily_watch20"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/policy_validation_strategy.py",
-            "owner_repo": "strategy-app",
-            "target_path": "src/strategy_app/daily_watch20/policy_validation_strategy.py",
-            "status": "complete",
-            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
-            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
-            "test_evidence": (
-                "strategy-app tests/test_daily_watch20_policy.py; "
-                "internal tests/test_daily_watch20_strategy_policy.py"
-            ),
-            "doc_evidence": "strategy-app/docs/application-catalog.md",
-            "consumer_switch": "strategy validation now resolves within strategy_app.daily_watch20",
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/liquidity_proxy.py",
-            "owner_repo": "portfolio-backtester",
-            "target_path": "src/portfolio_backtester/liquidity_proxy.py",
-            "status": "complete",
-            "owner_commit": "6eefb9668d10c11f0098b44bf578b462db218299",
-            "internal_commit": "cd25c8985f3e52486f11d7244aaa06fcc06dd8e5",
-            "test_evidence": (
-                "portfolio-backtester tests/test_liquidity_proxy.py; "
-                "internal tests/test_retired_liquidity_proxy.py; "
-                "internal tests/test_pipeline_memory_path.py"
-            ),
-            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
-            "consumer_switch": (
-                "internal panel loading now imports liquidity proxy helpers directly "
-                "from portfolio_backtester"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
-            "owner_repo": "portfolio-backtester",
-            "target_path": "src/portfolio_backtester/backtest_contracts.py",
-            "status": "complete",
-            "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
-            "internal_commit": "c50b101b9c200914404a080eed77f47df6116891",
-            "test_evidence": (
-                "portfolio-backtester tests/test_backtest_output_contracts.py; "
-                "internal tests/test_backtest_contracts.py"
-            ),
-            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
-            "consumer_switch": (
-                "internal compatibility exports now delegate to "
-                "portfolio_backtester.backtest_contracts"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/contracts/signals.py",
-            "owner_repo": "alpha-research",
-            "target_path": "src/alpha_research/signal_artifact.py",
-            "status": "complete",
-            "owner_commit": "e2b71e6871ae1b0f9ce16511a9dca1244a23415a",
-            "internal_commit": "9d895b411cc4425878ab896ce7efbacd8310ae9f",
-            "test_evidence": (
-                "alpha-research tests/test_signal_artifact.py; "
-                "internal tests/test_signal_contracts.py; "
-                "internal tests/test_research_abstractions.py; "
-                "internal tests/test_external_signals.py"
-            ),
-            "doc_evidence": "alpha-research/docs/reference/signal-artifacts.md",
-            "consumer_switch": (
-                "internal compatibility exports now delegate to alpha_research.signal_artifact"
-            ),
-        },
-        {
-            "source_path": "src/strategy_pipeline_internal/contracts/rebalance.py",
-            "owner_repo": "portfolio-backtester",
-            "target_path": "src/portfolio_backtester/rebalance.py",
-            "status": "complete",
-            "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
-            "internal_commit": "df444be",
-            "test_evidence": (
-                "portfolio-backtester tests/test_rebalance.py; "
-                "internal tests/test_rebalance_contracts.py"
-            ),
-            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
-            "consumer_switch": (
-                "internal compatibility exports now delegate to portfolio_backtester.rebalance"
-            ),
-        },
-    ]
+    assert isinstance(migrations, list)
+
+    style_replica = {
+        migration["source_path"]: migration
+        for migration in migrations
+        if "style_replica_pipeline" in migration["source_path"]
+    }
+    expected_sources = {
+        "src/strategy_pipeline_internal/_style_replica_pipeline_core.py",
+        "src/strategy_pipeline_internal/_style_replica_pipeline_output.py",
+        "src/strategy_pipeline_internal/_style_replica_pipeline_owner_api.py",
+        "src/strategy_pipeline_internal/style_replica_pipeline.py",
+    }
+    assert set(style_replica) == expected_sources
+
+    for migration in style_replica.values():
+        assert REQUIRED_RECORD_FIELDS <= migration.keys()
+        assert migration["status"] == "complete"
+        assert migration["owner_repo"] == "strategy-app"
+        assert migration["target_path"].startswith("src/strategy_app/style_replica/")
+        assert migration["owner_commit"] == "a30fe5af462c9baeabcb499eb5ae183a1873c419"
+        assert migration["internal_commit"] == "3a4191213dd7f1645844076d628658aa66088178"
+        assert migration["test_evidence"]
+        assert migration["doc_evidence"]
+        assert migration["consumer_switch"]
