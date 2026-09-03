@@ -22,7 +22,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     inventory = payload["inventory"]
     assert inventory == {
-        "python_source_files": 176,
+        "python_source_files": 174,
         "test_files": 183,
         "script_files": 34,
         "config_files": 18,
@@ -40,7 +40,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 176
+    assert sum(group["file_count"] for group in groups) == 174
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -71,6 +71,37 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
     assert migrations == [
+        {
+            "source_path": "src/strategy_pipeline_internal/dataset.py",
+            "owner_repo": "alpha-research",
+            "target_path": "src/alpha_research/dataset.py",
+            "status": "complete",
+            "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+            "internal_commit": "34152aed2a7c506a83e49e14eb35956da7836206",
+            "test_evidence": (
+                "alpha-research tests/test_dataset_and_date_slices.py; "
+                "internal tests/test_retired_alpha_data_helpers.py"
+            ),
+            "doc_evidence": "alpha-research/docs/README.md",
+            "consumer_switch": "internal no longer ships a duplicate DatasetSchema module",
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/date_slices.py",
+            "owner_repo": "alpha-research",
+            "target_path": "src/alpha_research/date_slices.py",
+            "status": "complete",
+            "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+            "internal_commit": "34152aed2a7c506a83e49e14eb35956da7836206",
+            "test_evidence": (
+                "alpha-research tests/test_dataset_and_date_slices.py; "
+                "internal tests/test_pipeline_date_slices.py; "
+                "internal tests/test_retired_alpha_data_helpers.py"
+            ),
+            "doc_evidence": "alpha-research/docs/README.md",
+            "consumer_switch": (
+                "internal pipeline dates now imports helpers from alpha_research.date_slices"
+            ),
+        },
         {
             "source_path": "src/strategy_pipeline_internal/daily_watch20_policy.py",
             "owner_repo": "strategy-app",
