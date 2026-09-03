@@ -13,13 +13,13 @@ internal 的 `legacy_rqdata_runtime.py` 仍属于当前运行路径，暂时不�
 当前核对的 internal main 为 `8dcf457`。公共 `strategy-pipeline` main 为 `c2a13e75`，公共仓库没有
 `strategy_pipeline.legacy_rqdata_runtime` 模块。
 
-## 当前 active 引用
+## 当前 active 引用和已完成收口
 
 | 引用位置 | 使用内容 | 后续处理 |
 | --- | --- | --- |
 | `cli/common.py` | 已删除未使用的 RQData 初始化入口 | internal PR #140 已完成 |
 | `liveops/alloc_market_data.py` | RQData 符号格式转换 | 改用 execution owner 的 broker symbol API |
-| `liveops/holdings.py` | HK 历史持仓符号标准化 | 先确认 execution owner 的 HK 规范，再替换 |
+| `liveops/holdings.py` | 已改用 market-data-platform 的历史 HK 符号 API | internal PR #141 已完成 |
 | `pipeline/support.py` | 已改用 market-data-platform 的历史 HK 符号 API | internal PR #141 已完成 |
 | `legacy_rqdata_runtime.py` | RQData 和本地历史文件实现 | 完成上述调用方迁移后归档并删除 |
 
