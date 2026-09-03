@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 161,
-        "test_files": 192,
+        "python_source_files": 160,
+        "test_files": 193,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 161
+    assert sum(group["file_count"] for group in groups) == 160
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -222,3 +222,17 @@ def test_freshness_overlay_migration_records_alpha_owner() -> None:
     assert migration["target_path"] == "src/alpha_research/freshness_overlay.py"
     assert migration["status"] == "complete"
     assert migration["internal_commit"] == "29cf2f2d3a98549ce05c62c6d82a7de9b839224c"
+
+
+def test_publication_tier_migration_records_strategy_app_owner() -> None:
+    payload = _load_manifest()
+    migration = next(
+        item
+        for item in payload["completed_code_migrations"]
+        if item["source_path"] == "src/strategy_pipeline_internal/daily_watch20_publication_tier.py"
+    )
+
+    assert migration["owner_repo"] == "strategy-app"
+    assert migration["target_path"] == "src/strategy_app/daily_watch20/publication_tier.py"
+    assert migration["status"] == "complete"
+    assert migration["internal_commit"] == "3d7ac1d6535e5181dbea91b2bd8be45670d81330"

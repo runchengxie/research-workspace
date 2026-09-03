@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `29cf2f2d3a98549ce05c62c6d82a7de9b839224c`
+> source_commit: `3d7ac1d6535e5181dbea91b2bd8be45670d81330`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "29cf2f2d3a98549ce05c62c6d82a7de9b839224c",
+  "source_commit": "3d7ac1d6535e5181dbea91b2bd8be45670d81330",
   "inventory": {
-    "python_source_files": 161,
-    "test_files": 192,
+    "python_source_files": 160,
+    "test_files": 193,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 73,
+      "file_count": 72,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -348,6 +348,17 @@
       "test_evidence": "alpha-research freshness overlay tests; internal tests/test_retired_freshness_overlay_facade.py",
       "doc_evidence": "alpha-research/docs/README.md",
       "consumer_switch": "internal freshness overlay consumers now import alpha_research.freshness_overlay"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_publication_tier.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/publication_tier.py",
+      "status": "complete",
+      "owner_commit": "2dac0322ab60baa0dbcf59cf46c8ed51d59948fd",
+      "internal_commit": "3d7ac1d6535e5181dbea91b2bd8be45670d81330",
+      "test_evidence": "strategy-app tests/test_publication_tier.py; internal tests/test_retired_publication_tier.py",
+      "doc_evidence": "strategy-app/docs/application-catalog.md",
+      "consumer_switch": "internal DailyWatch20 pipeline now imports strategy_app.daily_watch20.publication_tier"
     }
   ],
   "partial_code_migrations": [
