@@ -10,7 +10,7 @@
 
 以 `strategy-pipeline-internal` 当前 main 的归属清单和源码树为准：
 
-- internal 有 197 个 Python 源文件、180 个测试文件、34 个脚本和 21 个配置文件。
+- internal 当前 main 有 194 个 Python 源文件、180 个测试文件、34 个脚本和 21 个配置文件。
 - 文档归属清单覆盖 114 份文档，其中 8 份已完成迁移、58 份仍保留在 internal、16 份标记为 `planned`、32 份属于归档材料。
 - 公共 `strategy-pipeline` 当前只提供 18 个 Python 文件，职责集中在 request、artifact reference、receipt、publication、handoff 和通用 runner。
 - internal 的默认依赖仍包含 `alpha-research`、`market-data-platform`、`portfolio-backtester`、`strategy-app` 和 workspace 内的 `research-contracts`。
