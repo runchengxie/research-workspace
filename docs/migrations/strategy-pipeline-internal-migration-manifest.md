@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `3d7ac1d6535e5181dbea91b2bd8be45670d81330`
+> source_commit: `37151c5a9e46098137fa94d0364e18aaf56acc0a`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "3d7ac1d6535e5181dbea91b2bd8be45670d81330",
+  "source_commit": "37151c5a9e46098137fa94d0364e18aaf56acc0a",
   "inventory": {
-    "python_source_files": 160,
-    "test_files": 193,
+    "python_source_files": 158,
+    "test_files": 194,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 53,
+      "file_count": 51,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -359,6 +359,28 @@
       "test_evidence": "strategy-app tests/test_publication_tier.py; internal tests/test_retired_publication_tier.py",
       "doc_evidence": "strategy-app/docs/application-catalog.md",
       "consumer_switch": "internal DailyWatch20 pipeline now imports strategy_app.daily_watch20.publication_tier"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/promotion_gate.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/promotion_gate.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "37151c5a9e46098137fa94d0364e18aaf56acc0a",
+      "test_evidence": "alpha-research promotion gate tests; internal tests/test_retired_promotion_gate_facades.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal promotion gate consumers now resolve through alpha_research"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/promotion_gate_thresholds.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/promotion_gate_thresholds.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "37151c5a9e46098137fa94d0364e18aaf56acc0a",
+      "test_evidence": "alpha-research promotion gate threshold tests; internal tests/test_retired_promotion_gate_facades.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal promotion threshold consumers now resolve through alpha_research"
     }
   ],
   "partial_code_migrations": [
