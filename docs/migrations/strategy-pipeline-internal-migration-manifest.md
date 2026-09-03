@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `f8fffa5172af7640784f5fb8cb6f6a5ba70c88b1`
+> source_commit: `58068cd719022559822d93ba9b105b5c37020bae`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "f8fffa5172af7640784f5fb8cb6f6a5ba70c88b1",
+  "source_commit": "58068cd719022559822d93ba9b105b5c37020bae",
   "inventory": {
-    "python_source_files": 142,
+    "python_source_files": 141,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 63,
+      "file_count": 62,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -507,6 +507,13 @@
       "internal_commit": "f8fffa5172af7640784f5fb8cb6f6a5ba70c88b1",
       "test_evidence": "internal tests/test_hotsector_deepseek_campaign_runner.py; internal documentation entrypoint tests; internal full test suite; import boundary check",
       "rationale": "The re-export shell had no unique implementation. Campaign scripts and tests now use the split campaign API/core modules directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_ablation.py",
+      "status": "complete",
+      "internal_commit": "58068cd719022559822d93ba9b105b5c37020bae",
+      "test_evidence": "internal tests/test_daily_watch20_ablation.py; internal DailyWatch20 policy and ownership tests; internal full test suite; import boundary check",
+      "rationale": "The re-export shell had no unique implementation. DailyWatch20 callers now use the split ablation API/core and owner modules directly."
     }
   ],
   "completed_boundary_cleanups": [
