@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `2f9f5c144ee218cc99fbac8fbe973831b3cac2a9`
+> source_commit: `77519f89828a72fc3141e5aacb60bd2f9a06ddc5`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "2f9f5c144ee218cc99fbac8fbe973831b3cac2a9",
+  "source_commit": "77519f89828a72fc3141e5aacb60bd2f9a06ddc5",
   "inventory": {
-    "python_source_files": 155,
-    "test_files": 197,
+    "python_source_files": 154,
+    "test_files": 198,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 48,
+      "file_count": 47,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -416,6 +416,13 @@
       "internal_commit": "2f9f5c144ee218cc99fbac8fbe973831b3cac2a9",
       "test_evidence": "internal tests/test_retired_panel_load_steps_facade.py; internal full test suite; data operations boundary check",
       "rationale": "The re-export shell had no unique implementation. Panel consumers now import the split API and core modules directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/external_signals.py",
+      "status": "complete",
+      "internal_commit": "77519f89828a72fc3141e5aacb60bd2f9a06ddc5",
+      "test_evidence": "internal tests/test_retired_external_signals_facade.py; internal full test suite; import boundary check",
+      "rationale": "The re-export shell had no unique implementation. Runner consumers now import the external-signal API and core modules directly."
     }
   ],
   "completed_boundary_cleanups": [
