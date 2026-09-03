@@ -10,14 +10,14 @@ internal 的 `legacy_rqdata_runtime.py` 仍属于当前运行路径，暂时不�
 它包含 RQData 客户端初始化、历史本地 RQData 文件读取、RQData 调整价格兼容补丁和 HK 历史符号转换。
 这些内容与公共 `strategy-pipeline` 的 clean-room 边界不一致。
 
-当前核对的 internal main 为 `df444be`。公共 `strategy-pipeline` main 为 `c2a13e75`，公共仓库没有
+当前核对的 internal main 为 `d6bd28a`。公共 `strategy-pipeline` main 为 `c2a13e75`，公共仓库没有
 `strategy_pipeline.legacy_rqdata_runtime` 模块。
 
 ## 当前 active 引用
 
 | 引用位置 | 使用内容 | 后续处理 |
 | --- | --- | --- |
-| `cli/common.py` | RQData 初始化配置和运行时初始化 | 随 CLI 迁移，删除 RQData 初始化入口 |
+| `cli/common.py` | 已删除未使用的 RQData 初始化入口 | internal PR #140 已完成 |
 | `liveops/alloc_market_data.py` | RQData 符号格式转换 | 改用 execution owner 的 broker symbol API |
 | `liveops/holdings.py` | HK 历史持仓符号标准化 | 先确认 execution owner 的 HK 规范，再替换 |
 | `pipeline/support.py` | HK 历史符号标准化 | 迁移 pipeline 支持层时移除历史 RQData 依赖 |
@@ -27,7 +27,7 @@ internal 的 `legacy_rqdata_runtime.py` 仍属于当前运行路径，暂时不�
 
 下列条件全部满足后，才能把该模块标记为 `archive` 并从 active source tree 删除：
 
-1. internal CLI 不再导入 RQData 初始化函数。
+1. internal CLI 不再导入 RQData 初始化函数。该项已由 internal PR #140 完成。
 2. liveops 不再调用 RQData 符号格式转换。
 3. pipeline 支持层改用 owner API，且 HK 历史兼容逻辑有明确归属。
 4. internal 测试不再覆盖 RQData 运行时和本地 RQData 读取实现。
