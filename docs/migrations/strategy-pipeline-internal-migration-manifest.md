@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `311592c8a0d12ee586a39ec54800065c0b72ae98`
+> source_commit: `18f59c659fbf2500d9d4a9727edaf63e6cef1fab`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "311592c8a0d12ee586a39ec54800065c0b72ae98",
+  "source_commit": "18f59c659fbf2500d9d4a9727edaf63e6cef1fab",
   "inventory": {
-    "python_source_files": 152,
-    "test_files": 200,
+    "python_source_files": 151,
+    "test_files": 201,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -39,7 +39,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/commands",
-      "file_count": 12,
+      "file_count": 11,
       "owner_repo": "research-workspace",
       "target_path": "scripts and workspace entrypoints",
       "status": "private",
@@ -437,6 +437,13 @@
       "internal_commit": "311592c8a0d12ee586a39ec54800065c0b72ae98",
       "test_evidence": "internal tests/test_retired_runner_facade.py; internal runner tests; import boundary check",
       "rationale": "The runner module was a compatibility shell around the split runner API and core. Package and CLI consumers now use the API module directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/commands/linear_sweep.py",
+      "status": "complete",
+      "internal_commit": "18f59c659fbf2500d9d4a9727edaf63e6cef1fab",
+      "test_evidence": "internal tests/test_retired_linear_sweep_facade.py; internal linear-sweep tests; import boundary check",
+      "rationale": "The command module was a re-export shell. CLI and tests now use the split linear-sweep API directly."
     }
   ],
   "completed_boundary_cleanups": [
