@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `7889af04b7aa9115073746fcce284106fc6ac285`
+> source_commit: `aa648a6c4ca975c4adb9f8593629da3ee76583aa`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "7889af04b7aa9115073746fcce284106fc6ac285",
+    "source_commit": "aa648a6c4ca975c4adb9f8593629da3ee76583aa",
   "inventory": {
-    "python_source_files": 132,
+    "python_source_files": 131,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 53,
+      "file_count": 52,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -577,6 +577,13 @@
       "internal_commit": "7889af04b7aa9115073746fcce284106fc6ac285",
       "test_evidence": "market-data-platform tests/test_daily_watch20_freshness_receipt.py; internal tests/test_daily_watch20_freshness.py and runtime-preflight tests; import boundary check",
       "rationale": "Canonical minute partition, coverage receipt, daily audit, and hash validation belong to the market-data-platform data-quality boundary."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_runtime_preflight.py",
+      "status": "complete",
+      "internal_commit": "aa648a6c4ca975c4adb9f8593629da3ee76583aa",
+      "test_evidence": "market-data-platform tests/test_daily_watch20_runtime_preflight.py; internal freshness tests; import boundary check",
+      "rationale": "The preflight only verifies the market-data-platform minute-cache rolling-window contract, so it now lives with that dependency owner."
     }
   ],
   "completed_boundary_cleanups": [
