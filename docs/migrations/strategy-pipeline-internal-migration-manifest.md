@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a25253244d6a5368d502b8190a7c16d598a86e9d`
+> source_commit: `7184ffdc90cf6554ddaef682bbd8fb72b5cd9867`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "a25253244d6a5368d502b8190a7c16d598a86e9d",
+    "source_commit": "7184ffdc90cf6554ddaef682bbd8fb72b5cd9867",
   "inventory": {
-    "python_source_files": 134,
+    "python_source_files": 133,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 55,
+      "file_count": 54,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -563,6 +563,13 @@
       "internal_commit": "a25253244d6a5368d502b8190a7c16d598a86e9d",
       "test_evidence": "strategy-app tests/test_daily_watch20_topic_summary.py; internal DailyWatch20 publication-safety and late-recovery tests; import boundary check",
       "rationale": "The topic summary is presentation-only aggregation logic. It now lives with the strategy-app DailyWatch20 application owner."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_explanations.py",
+      "status": "complete",
+      "internal_commit": "7184ffdc90cf6554ddaef682bbd8fb72b5cd9867",
+      "test_evidence": "strategy-app tests/test_daily_watch20_explanations.py; internal tests/test_daily_watch20_pipeline.py and publication-safety tests; import boundary check",
+      "rationale": "Theme grouping, feature labels, candidate explanations, and market-regime summaries are application presentation logic. They now live with the strategy-app DailyWatch20 owner."
     }
   ],
   "completed_boundary_cleanups": [
