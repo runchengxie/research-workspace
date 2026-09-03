@@ -102,9 +102,6 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
                 "internal tests/test_external_signals.py"
             ),
             "doc_evidence": "alpha-research/docs/reference/signal-artifacts.md",
-            "consumer_switch": (
-                "internal compatibility exports now delegate to "
-                "alpha_research.signal_artifact"
-            ),
+            "consumer_switch": "internal compatibility exports now delegate to alpha_research.signal_artifact",
         },
     ]
