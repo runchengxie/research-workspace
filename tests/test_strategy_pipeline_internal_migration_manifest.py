@@ -22,7 +22,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     inventory = payload["inventory"]
     assert inventory == {
-        "python_source_files": 181,
+        "python_source_files": 176,
         "test_files": 183,
         "script_files": 34,
         "config_files": 18,
@@ -40,7 +40,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 181
+    assert sum(group["file_count"] for group in groups) == 176
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -71,6 +71,82 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
     assert migrations == [
+        {
+            "source_path": "src/strategy_pipeline_internal/daily_watch20_policy.py",
+            "owner_repo": "strategy-app",
+            "target_path": "src/strategy_app/daily_watch20/daily_watch20_policy.py",
+            "status": "complete",
+            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
+            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+            "test_evidence": (
+                "strategy-app tests/test_daily_watch20_policy.py; "
+                "internal tests/test_daily_watch20_strategy_policy.py"
+            ),
+            "doc_evidence": "strategy-app/docs/application-catalog.md",
+            "consumer_switch": (
+                "internal DailyWatch20 consumers now import the policy contract from strategy_app"
+            ),
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/policy_canonical.py",
+            "owner_repo": "strategy-app",
+            "target_path": "src/strategy_app/daily_watch20/policy_canonical.py",
+            "status": "complete",
+            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
+            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+            "test_evidence": (
+                "strategy-app tests/test_daily_watch20_policy.py; "
+                "internal tests/test_daily_watch20_strategy_policy.py"
+            ),
+            "doc_evidence": "strategy-app/docs/application-catalog.md",
+            "consumer_switch": (
+                "policy canonicalization now resolves within strategy_app.daily_watch20"
+            ),
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/policy_primitives.py",
+            "owner_repo": "strategy-app",
+            "target_path": "src/strategy_app/daily_watch20/policy_primitives.py",
+            "status": "complete",
+            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
+            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+            "test_evidence": (
+                "strategy-app tests/test_daily_watch20_policy.py; "
+                "internal tests/test_daily_watch20_strategy_policy.py"
+            ),
+            "doc_evidence": "strategy-app/docs/application-catalog.md",
+            "consumer_switch": "policy primitives now resolve within strategy_app.daily_watch20",
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/policy_validation_model.py",
+            "owner_repo": "strategy-app",
+            "target_path": "src/strategy_app/daily_watch20/policy_validation_model.py",
+            "status": "complete",
+            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
+            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+            "test_evidence": (
+                "strategy-app tests/test_daily_watch20_policy.py; "
+                "internal tests/test_daily_watch20_strategy_policy.py"
+            ),
+            "doc_evidence": "strategy-app/docs/application-catalog.md",
+            "consumer_switch": (
+                "model and feature validation now resolves within strategy_app.daily_watch20"
+            ),
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/policy_validation_strategy.py",
+            "owner_repo": "strategy-app",
+            "target_path": "src/strategy_app/daily_watch20/policy_validation_strategy.py",
+            "status": "complete",
+            "owner_commit": "7daf1ce50aaa804ffa6491dbd301bdf0f0cd3af4",
+            "internal_commit": "f456533f5b3600e182ebac2e752bbd8ed3e27ada",
+            "test_evidence": (
+                "strategy-app tests/test_daily_watch20_policy.py; "
+                "internal tests/test_daily_watch20_strategy_policy.py"
+            ),
+            "doc_evidence": "strategy-app/docs/application-catalog.md",
+            "consumer_switch": "strategy validation now resolves within strategy_app.daily_watch20",
+        },
         {
             "source_path": "src/strategy_pipeline_internal/liquidity_proxy.py",
             "owner_repo": "portfolio-backtester",
