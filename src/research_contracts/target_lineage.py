@@ -51,7 +51,7 @@ def lineage_inputs(*, run_dir: Path, holdings_payload: dict[str, Any]) -> list[L
         inputs.append(
             LineageInput(
                 artifact_id="strategy-pipeline.run:positions_file",
-                sha256=file_sha256(positions_file),
+                sha256=file_sha256(Path(positions_file)),
             )
         )
     return inputs
