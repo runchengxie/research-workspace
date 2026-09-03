@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `3e1e1660dd0a8362d5ae45f71610ffb2aa049a11`
+> source_commit: `29cf2f2d3a98549ce05c62c6d82a7de9b839224c`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "3e1e1660dd0a8362d5ae45f71610ffb2aa049a11",
+  "source_commit": "29cf2f2d3a98549ce05c62c6d82a7de9b839224c",
   "inventory": {
-    "python_source_files": 162,
-    "test_files": 191,
+    "python_source_files": 161,
+    "test_files": 192,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 54,
+      "file_count": 53,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -337,6 +337,17 @@
       "test_evidence": "alpha-research date and walk-forward tests; internal tests/test_retired_date_facade.py",
       "doc_evidence": "alpha-research/docs/README.md",
       "consumer_switch": "internal runtime and date tests now import alpha_research date owners"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/freshness_overlay.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/freshness_overlay.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "29cf2f2d3a98549ce05c62c6d82a7de9b839224c",
+      "test_evidence": "alpha-research freshness overlay tests; internal tests/test_retired_freshness_overlay_facade.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal freshness overlay consumers now import alpha_research.freshness_overlay"
     }
   ],
   "partial_code_migrations": [
