@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 127,
+        "python_source_files": 126,
         "test_files": 201,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 127
+    assert sum(group["file_count"] for group in groups) == 126
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -49,6 +49,23 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
         assert group["test_evidence"]
         assert group["doc_evidence"]
         assert group["removal_condition"]
+
+
+def test_identity_migration_records_public_owner_and_retirement() -> None:
+    payload = _load_manifest()
+    migrations = {
+        item["source_path"]: item for item in payload["completed_code_migrations"]
+    }
+    migration = migrations["src/strategy_pipeline_internal/identity.py"]
+
+    assert migration["owner_repo"] == "strategy-pipeline"
+    assert migration["target_path"] == "src/strategy_pipeline/identity.py"
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "6571c9cc110c98c26e0ac209eac45f3c91fd24d0"
+    assert migration["internal_commit"] == "5a4aa78c51ae6910de28f2804130b45b1d8dfd19"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
 
 
 def test_news_heat_export_migration_records_owner_and_consumer_switch() -> None:
