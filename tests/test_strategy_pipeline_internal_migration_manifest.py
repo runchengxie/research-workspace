@@ -66,6 +66,24 @@ def test_planned_document_inventory_has_target_and_no_duplicate_source() -> None
             assert document["test_evidence"]
 
 
+def test_daily_watch20_research_documents_record_strategy_app_owner() -> None:
+    payload = _load_manifest()
+    documents = {
+        document["source_path"]: document
+        for document in payload["planned_documents"]
+    }
+    expected = {
+        "docs/research/daily-watch20-live-readiness-20260714.md",
+        "docs/research/incumbent-challenger-evidence-v2.md",
+        "docs/research/next-open-to-high-audit.md",
+    }
+    for source_path in expected:
+        document = documents[source_path]
+        assert document["owner_repo"] == "strategy-app"
+        assert document["status"] == "complete"
+        assert document["test_evidence"]
+
+
 def test_style_replica_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
