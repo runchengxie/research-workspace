@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 169,
+        "python_source_files": 168,
         "test_files": 185,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 169
+    assert sum(group["file_count"] for group in groups) == 168
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -119,3 +119,21 @@ def test_d11_h5_migration_records_owner_and_consumer_switch() -> None:
         "doc_evidence": "strategy-app/docs/application-catalog.md",
         "consumer_switch": "internal D11-H5 CLI registration now imports the strategy-app owner",
     }
+
+
+def test_afml_lineage_migration_records_public_owner() -> None:
+    payload = _load_manifest()
+    migration = next(
+        item
+        for item in payload["completed_code_migrations"]
+        if item["source_path"] == "src/strategy_pipeline_internal/afml_lineage.py"
+    )
+
+    assert migration["owner_repo"] == "strategy-pipeline"
+    assert migration["target_path"] == "src/strategy_pipeline/control_plane/afml_lineage.py"
+    assert migration["owner_commit"] == "e15d463cde0512e5cbf9cc24b95f09f6c9c898ea"
+    assert migration["internal_commit"] == "e4f75b92c031e4e634d40f8581e614b0cf572633"
+    assert migration["status"] == "complete"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]

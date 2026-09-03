@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `8414f8a412b2d96fdb0fc48c062b7fb3e398dda7`
+> source_commit: `e4f75b92c031e4e634d40f8581e614b0cf572633`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "8414f8a412b2d96fdb0fc48c062b7fb3e398dda7",
+  "source_commit": "e4f75b92c031e4e634d40f8581e614b0cf572633",
   "inventory": {
-    "python_source_files": 169,
+    "python_source_files": 168,
     "test_files": 185,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 74,
+      "file_count": 73,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -260,6 +260,17 @@
       "test_evidence": "strategy-app tests/test_d11_h5_shadow_pipeline.py; internal tests/test_retired_d11_h5_shadow.py",
       "doc_evidence": "strategy-app/docs/application-catalog.md",
       "consumer_switch": "internal D11-H5 CLI registration now imports the strategy-app owner"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/afml_lineage.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/control_plane/afml_lineage.py",
+      "status": "complete",
+      "owner_commit": "e15d463cde0512e5cbf9cc24b95f09f6c9c898ea",
+      "internal_commit": "e4f75b92c031e4e634d40f8581e614b0cf572633",
+      "test_evidence": "strategy-pipeline tests/control_plane/test_afml_lineage.py; internal tests/test_retired_afml_lineage.py",
+      "doc_evidence": "strategy-pipeline/docs/control-plane.md",
+      "consumer_switch": "internal AFML lineage tests now import the public control-plane owner"
     }
   ],
   "partial_code_migrations": [
