@@ -52,7 +52,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
         assert group["removal_condition"]
 
 
-def test_planned_documents_have_target_and_no_duplicate_source() -> None:
+def test_planned_document_inventory_has_target_and_no_duplicate_source() -> None:
     payload = _load_manifest()
     documents = payload["planned_documents"]
     assert isinstance(documents, list)
@@ -61,5 +61,7 @@ def test_planned_documents_have_target_and_no_duplicate_source() -> None:
 
     for document in documents:
         assert REQUIRED_RECORD_FIELDS <= document.keys()
-        assert document["status"] == "planned"
+        assert document["status"] in VALID_STATUSES
         assert document["owner_repo"] != "strategy-pipeline-internal"
+        if document["status"] == "complete":
+            assert document["test_evidence"]
