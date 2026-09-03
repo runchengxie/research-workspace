@@ -14,7 +14,7 @@
   "source_repository": "runchengxie/strategy-pipeline-internal",
   "source_commit": "9c9555de0b1bdff85ebbb0dcc813795d5535f075",
   "inventory": {
-    "python_source_files": 138,
+    "python_source_files": 137,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 59,
+      "file_count": 58,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
