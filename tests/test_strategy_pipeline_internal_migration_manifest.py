@@ -22,7 +22,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
         "python_source_files": 168,
-        "test_files": 185,
+        "test_files": 187,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,

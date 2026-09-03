@@ -15,7 +15,7 @@
   "source_commit": "e4f75b92c031e4e634d40f8581e614b0cf572633",
   "inventory": {
     "python_source_files": 168,
-    "test_files": 185,
+    "test_files": 187,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
