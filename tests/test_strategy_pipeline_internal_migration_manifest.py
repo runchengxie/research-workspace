@@ -65,3 +65,27 @@ def test_planned_document_inventory_has_target_and_no_duplicate_source() -> None
         assert document["owner_repo"] != "strategy-pipeline-internal"
         if document["status"] == "complete":
             assert document["test_evidence"]
+
+
+def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
+    payload = _load_manifest()
+    migrations = payload["completed_code_migrations"]
+    assert migrations == [
+        {
+            "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
+            "owner_repo": "portfolio-backtester",
+            "target_path": "src/portfolio_backtester/backtest_contracts.py",
+            "status": "complete",
+            "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
+            "internal_commit": "c50b101b9c200914404a080eed77f47df6116891",
+            "test_evidence": (
+                "portfolio-backtester tests/test_backtest_output_contracts.py; "
+                "internal tests/test_backtest_contracts.py"
+            ),
+            "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+            "consumer_switch": (
+                "internal compatibility exports now delegate to "
+                "portfolio_backtester.backtest_contracts"
+            ),
+        }
+    ]

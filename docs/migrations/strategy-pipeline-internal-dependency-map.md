@@ -54,8 +54,8 @@ strategy-pipeline
 
 ```bash
 rg -n "strategy_pipeline_internal|strategy-pipeline-internal" . \
-  --glob '!docs/archive/**' \
-  --glob '!docs/migrations/**'
+  --glob '!docs/archive/*' \
+  --glob '!docs/migrations/*'
 ```
 
 历史归档中的引用只用于恢复和溯源，必须在归档说明中标注，不能重新成为默认安装、CI 或运行入口。
