@@ -27,9 +27,9 @@ def test_manifest_has_verified_inventory_baseline() -> None:
         "config_files": 18,
         "ownership_document_files": 114,
         "ownership_document_status_counts": {
-            "complete": 11,
+            "complete": 12,
             "private": 58,
-            "planned": 13,
+            "planned": 12,
             "archive": 32,
         },
     }
