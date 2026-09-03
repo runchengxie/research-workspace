@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 147,
+        "python_source_files": 146,
         "test_files": 201,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 147
+    assert sum(group["file_count"] for group in groups) == 146
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -334,6 +334,14 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert publication_inputs["internal_commit"] == "19e5924b72e7ebd83aa79c6a054c885f9aa3b8ff"
     assert publication_inputs["test_evidence"]
     assert publication_inputs["rationale"]
+
+    hotsector_support = facades[
+        "src/strategy_pipeline_internal/hotsector_deepseek_campaign_support.py"
+    ]
+    assert hotsector_support["status"] == "complete"
+    assert hotsector_support["internal_commit"] == "9c695366023613f2b3544f18b07c6996103f1da9"
+    assert hotsector_support["test_evidence"]
+    assert hotsector_support["rationale"]
 
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
