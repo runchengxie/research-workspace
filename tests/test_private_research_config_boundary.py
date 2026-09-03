@@ -19,7 +19,7 @@ def test_private_research_config_is_explicitly_resolvable_from_workspace():
 
 
 def test_private_research_config_missing_from_workspace_fails_closed():
-    with pytest.raises(SystemExit, match="Config file not found"):
+    with pytest.raises(SystemExit, match="Private research config not found"):
         resolve_pipeline_config(
             "strategy-research/research/experiments/configs/missing_private_research.yml"
         )

@@ -63,7 +63,7 @@ def _write_counterexample(root: Path, payload: dict[str, object]) -> Path:
 
 
 def test_counterexample_schema_exists() -> None:
-    path = ROOT / "strategy-research" / "schemas" / "counterexample.v1.schema.json"
+    path = ROOT / "strategy-research" / "tools" / "schemas" / "counterexample.v1.schema.json"
     assert path.is_file()
     assert json.loads(path.read_text(encoding="utf-8"))["$id"] == "counterexample.v1"
 

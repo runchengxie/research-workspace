@@ -15,7 +15,8 @@ def _load_script():
     path = (
         Path(__file__).resolve().parents[1]
         / "strategy-research"
-        / "pre_production"
+        / "research"
+        / "experiments"
         / "dividend_growth_momentum"
         / "dividend_growth_momentum.py"
     )

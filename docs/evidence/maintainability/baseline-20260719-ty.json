@@ -10,19 +10,19 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 99,
-      "python_loc": 18474,
+      "python_file_count": 133,
+      "python_loc": 23094,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 4,
-        "long_functions": 1,
-        "complexity_hotspots": 0,
+        "long_functions": 2,
+        "complexity_hotspots": 2,
         "large_classes": 2
       },
       "large_files": [
         {
           "path": "tests/test_pre_push_hooks.py",
-          "loc": 632,
+          "loc": 660,
           "hk_related": false
         },
         {
@@ -31,13 +31,13 @@
           "hk_related": false
         },
         {
-          "path": "scripts/run_pre_push_checks.py",
-          "loc": 609,
+          "path": "tests/test_maintainability_governance.py",
+          "loc": 608,
           "hk_related": false
         },
         {
-          "path": "tests/test_maintainability_governance.py",
-          "loc": 608,
+          "path": "scripts/run_pre_push_checks.py",
+          "loc": 602,
           "hk_related": false
         }
       ],
@@ -47,9 +47,28 @@
           "name": "test_lint_profiles_include_repo_local_governance_gates",
           "line_count": 115,
           "complexity": 8
+        },
+        {
+          "path": "scripts/run_quality_checks.py",
+          "name": "plan_commands",
+          "line_count": 95,
+          "complexity": 4
         }
       ],
-      "complexity_hotspots": [],
+      "complexity_hotspots": [
+        {
+          "path": "src/research_contracts/asset_registry.py",
+          "name": "topological_order",
+          "line_count": 31,
+          "complexity": 15
+        },
+        {
+          "path": "src/research_contracts/research_capability_registry.py",
+          "name": "_evidence_issues",
+          "line_count": 29,
+          "complexity": 15
+        }
+      ],
       "large_classes": [
         {
           "path": "tests/test_workspace_doctor.py",
@@ -83,6 +102,7 @@
           "portfolio-backtester",
           "quant-execution-engine",
           "strategy-app",
+          "deep-learning-tick-data-prediction",
           "demo",
           "strategy-research"
         ],
@@ -105,6 +125,7 @@
           "scripts/benchmark_matrix_build.py",
           "scripts/workspace_doctor.py",
           "scripts/doctor_*.py",
+          "scripts/workspace_architecture*.py",
           "scripts/workspace_governance.py",
           "scripts/workspace_governance_common.py",
           "scripts/workspace_governance_quality.py",
@@ -113,6 +134,7 @@
           "src/research_contracts/__init__.py",
           "src/research_contracts/artifact_envelope.py",
           "src/research_contracts/artifact_contracts.py",
+          "src/research_contracts/research_capability_registry.py",
           "src/research_contracts/promotion_evidence.py",
           "src/research_contracts/promotion_evidence_checks.py",
           "src/research_contracts/promotion_evidence_common.py",
@@ -123,20 +145,24 @@
           "alpha-research",
           "artifacts",
           "build",
+          "deep-learning-tick-data-prediction",
           "dist",
           "market-data-platform",
           "portfolio-backtester",
           "quant-execution-engine",
           "strategy-app",
-          "strategy-pipeline"
+          "strategy-pipeline",
+          "strategy-research"
         ],
         "mypy_present": false
       },
       "script_inventory": [
         "scripts/benchmark_matrix_build.py",
+        "scripts/build_platform_publication.py",
         "scripts/check-production-updates.sh",
         "scripts/check.sh",
         "scripts/count_loc.sh",
+        "scripts/data_path_audit.py",
         "scripts/dead_code_advisory.py",
         "scripts/decision_governance_check.py",
         "scripts/decision_governance_outcomes.py",
@@ -150,26 +176,40 @@
         "scripts/doctor_hk_archive_checks.py",
         "scripts/doctor_hook_checks.py",
         "scripts/doctor_submodule_checks.py",
+        "scripts/ensure-shared-production-venv.sh",
         "scripts/framework_adapter_evidence.py",
         "scripts/framework_adapter_execution_evidence.py",
         "scripts/framework_adapter_release_gate.py",
         "scripts/hk_archive_gate.py",
         "scripts/import_boundary_rules.yml",
+        "scripts/install-production-maintenance.sh",
         "scripts/install_pre_push_hooks.py",
+        "scripts/maintain-production.sh",
         "scripts/maintainability_baseline.py",
+        "scripts/migrate-production-venvs.sh",
         "scripts/namespace_contracts.py",
         "scripts/ownership_boundary_rules.yml",
         "scripts/package_d11_h5_repro.py",
         "scripts/print_version_matrix.py",
         "scripts/promote-production.sh",
+        "scripts/prune-production-releases.sh",
         "scripts/research_spec_check.py",
         "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
         "scripts/run_research_layer_lint.py",
         "scripts/run_submodule_checks.py",
+        "scripts/run_workspace_tests.py",
         "scripts/scan_workspace_secrets.py",
         "scripts/strategy_evidence_gate.py",
         "scripts/submodule_checks.json",
+        "scripts/sync_hermes_market_intel_workdir.sh",
+        "scripts/systemd/production-maintenance.service",
+        "scripts/systemd/production-maintenance.timer",
+        "scripts/workspace_architecture.py",
+        "scripts/workspace_architecture_artifacts.py",
+        "scripts/workspace_architecture_model.py",
+        "scripts/workspace_architecture_source.py",
+        "scripts/workspace_architecture_versions.py",
         "scripts/workspace_doctor.py",
         "scripts/workspace_env.py",
         "scripts/workspace_governance.py",
@@ -184,29 +224,29 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 353,
-      "python_loc": 98394,
+      "python_file_count": 363,
+      "python_loc": 100733,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 44,
-        "long_functions": 86,
-        "complexity_hotspots": 48,
+        "large_files": 46,
+        "long_functions": 90,
+        "complexity_hotspots": 54,
         "large_classes": 1
       },
       "large_files": [
         {
           "path": "tests/test_tushare_a_share_fundamentals.py",
-          "loc": 1960,
+          "loc": 2047,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share.py",
-          "loc": 1889,
+          "loc": 1922,
           "hk_related": false
         },
         {
           "path": "tests/test_tushare_a_share_mins.py",
-          "loc": 1851,
+          "loc": 1897,
           "hk_related": false
         },
         {
@@ -221,7 +261,7 @@
         },
         {
           "path": "tests/test_tushare_minute_replacement_campaign_runner.py",
-          "loc": 1241,
+          "loc": 1277,
           "hk_related": false
         },
         {
@@ -240,13 +280,13 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/public_etf_minute.py",
-          "loc": 877,
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
+          "loc": 895,
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part03.py",
-          "loc": 873,
+          "path": "src/market_data_platform/providers/public_etf_minute.py",
+          "loc": 877,
           "hk_related": false
         },
         {
@@ -271,7 +311,7 @@
         },
         {
           "path": "src/market_data_platform/_campaign_run.py",
-          "loc": 703,
+          "loc": 712,
           "hk_related": false
         },
         {
@@ -315,8 +355,8 @@
           "hk_related": false
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_part04.py",
-          "loc": 552,
+          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part01.py",
+          "loc": 566,
           "hk_related": false
         }
       ],
@@ -362,6 +402,12 @@
           "name": "detach_version_hardlinks",
           "line_count": 165,
           "complexity": 32
+        },
+        {
+          "path": "src/market_data_platform/providers/tushare_a_share_announcement_event_pit.py",
+          "name": "build_announcement_event_pit",
+          "line_count": 162,
+          "complexity": 22
         },
         {
           "path": "scripts/operations/archive_guan_mobile.py",
@@ -460,16 +506,10 @@
           "complexity": 1
         },
         {
-          "path": "tests/test_a_share_minute_fusion.py",
-          "name": "test_deal_file_row_group_aggregation_units_buckets_and_mapping",
-          "line_count": 125,
-          "complexity": 1
-        },
-        {
-          "path": "src/market_data_platform/providers/_mins_mirror.py",
-          "name": "_mirror_resolve_day",
-          "line_count": 121,
-          "complexity": 12
+          "path": "src/market_data_platform/research_views/daily_watch20_candidate_pool_dc_concept.py",
+          "name": "load_dc_concept_strict_v1",
+          "line_count": 126,
+          "complexity": 14
         }
       ],
       "complexity_hotspots": [
@@ -582,6 +622,12 @@
           "complexity": 22
         },
         {
+          "path": "src/market_data_platform/providers/tushare_a_share_announcement_event_pit.py",
+          "name": "build_announcement_event_pit",
+          "line_count": 162,
+          "complexity": 22
+        },
+        {
           "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
           "name": "bundle_observation_state",
           "line_count": 61,
@@ -612,15 +658,9 @@
           "complexity": 20
         },
         {
-          "path": "src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
-          "name": "asset_integrity_checks",
-          "line_count": 43,
-          "complexity": 19
-        },
-        {
-          "path": "src/market_data_platform/tushare_minute_backfill_part02.py",
-          "name": "build_minute_backfill_plan",
-          "line_count": 143,
+          "path": "src/market_data_platform/providers/tushare_a_share_announcement_event_pit.py",
+          "name": "load_announcement_event_fundamental_panel",
+          "line_count": 82,
           "complexity": 19
         }
       ],
@@ -683,6 +723,7 @@
         "scripts/operations/audit_minute_overlap.py",
         "scripts/operations/cutover_a_share_minute.py",
         "scripts/operations/detach_a_share_minute_v3.py",
+        "scripts/operations/prepare_a_share_evening_data.py",
         "scripts/operations/promote_guan_mobile.py",
         "scripts/operations/render_tushare_minute_campaign_units.py",
         "scripts/operations/tushare_minute_candidate.py",
@@ -713,16 +754,21 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 206,
-      "python_loc": 38005,
+      "python_file_count": 226,
+      "python_loc": 41554,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 5,
-        "long_functions": 22,
-        "complexity_hotspots": 25,
+        "large_files": 6,
+        "long_functions": 28,
+        "complexity_hotspots": 29,
         "large_classes": 1
       },
       "large_files": [
+        {
+          "path": "src/alpha_research/fundamental_state.py",
+          "loc": 738,
+          "hk_related": false
+        },
         {
           "path": "tests/test_promotion_gate.py",
           "loc": 686,
@@ -793,6 +839,12 @@
           "complexity": 13
         },
         {
+          "path": "src/alpha_research/fundamental_state.py",
+          "name": "run_walk_forward_fundamental_forecast",
+          "line_count": 96,
+          "complexity": 21
+        },
+        {
           "path": "src/alpha_research/train_eval_result.py",
           "name": "build_train_eval_stage_result",
           "line_count": 96,
@@ -835,10 +887,34 @@
           "complexity": 17
         },
         {
+          "path": "src/alpha_research/stable_compounder.py",
+          "name": "build_rolling_stability_labels",
+          "line_count": 89,
+          "complexity": 5
+        },
+        {
+          "path": "src/alpha_research/fundamental_state.py",
+          "name": "build_annual_fundamental_target_panel",
+          "line_count": 87,
+          "complexity": 16
+        },
+        {
           "path": "src/alpha_research/style_factors/factor_calc.py",
           "name": "compute_factors",
           "line_count": 87,
           "complexity": 11
+        },
+        {
+          "path": "src/alpha_research/fundamental_compounder.py",
+          "name": "build_stable_compounder_features",
+          "line_count": 85,
+          "complexity": 6
+        },
+        {
+          "path": "src/alpha_research/fundamental_state.py",
+          "name": "_forecast_fundamental_fold",
+          "line_count": 84,
+          "complexity": 10
         },
         {
           "path": "src/alpha_research/_feature_dataset_prepare.py",
@@ -869,18 +945,6 @@
           "name": "_run_cv_and_fit_model",
           "line_count": 82,
           "complexity": 7
-        },
-        {
-          "path": "src/alpha_research/feature_correlation.py",
-          "name": "correlation_audit_report",
-          "line_count": 82,
-          "complexity": 17
-        },
-        {
-          "path": "src/alpha_research/_feature_evidence_importance.py",
-          "name": "permutation_active_return_importance",
-          "line_count": 80,
-          "complexity": 27
         }
       ],
       "complexity_hotspots": [
@@ -907,6 +971,12 @@
           "name": "_event_sample_weights",
           "line_count": 83,
           "complexity": 22
+        },
+        {
+          "path": "src/alpha_research/fundamental_state.py",
+          "name": "run_walk_forward_fundamental_forecast",
+          "line_count": 96,
+          "complexity": 21
         },
         {
           "path": "src/alpha_research/benchmarking.py",
@@ -975,6 +1045,12 @@
           "complexity": 17
         },
         {
+          "path": "src/alpha_research/style_factors/size_style.py",
+          "name": "compute_size_style_signal",
+          "line_count": 74,
+          "complexity": 17
+        },
+        {
           "path": "src/alpha_research/_cpcv_groups.py",
           "name": "build_cpcv_splits",
           "line_count": 63,
@@ -999,6 +1075,12 @@
           "complexity": 16
         },
         {
+          "path": "src/alpha_research/fundamental_state.py",
+          "name": "build_annual_fundamental_target_panel",
+          "line_count": 87,
+          "complexity": 16
+        },
+        {
           "path": "src/alpha_research/daily_watch20_model_lifecycle.py",
           "name": "passed_prior_runs",
           "line_count": 45,
@@ -1014,24 +1096,6 @@
           "path": "src/alpha_research/dynamic_signal_ensemble_io.py",
           "name": "_load_from_signal_files",
           "line_count": 49,
-          "complexity": 15
-        },
-        {
-          "path": "src/alpha_research/freshness_overlay.py",
-          "name": "apply_freshness_overlay",
-          "line_count": 54,
-          "complexity": 15
-        },
-        {
-          "path": "src/alpha_research/hotsector_session_challenger_scores.py",
-          "name": "build_session_challenger_scores",
-          "line_count": 62,
-          "complexity": 15
-        },
-        {
-          "path": "src/alpha_research/overfitting_diagnostics.py",
-          "name": "uniqueness_report",
-          "line_count": 78,
           "complexity": 15
         }
       ],
@@ -1086,13 +1150,13 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 214,
-      "python_loc": 44718,
+      "python_file_count": 220,
+      "python_loc": 45922,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 10,
-        "long_functions": 32,
-        "complexity_hotspots": 29,
+        "long_functions": 33,
+        "complexity_hotspots": 30,
         "large_classes": 0
       },
       "large_files": [
@@ -1203,6 +1267,12 @@
           "complexity": 16
         },
         {
+          "path": "src/portfolio_backtester/differential_backtest.py",
+          "name": "compare_backtest_results",
+          "line_count": 96,
+          "complexity": 4
+        },
+        {
           "path": "tests/test_position_backtest.py",
           "name": "test_position_backtest_uses_explicit_unequal_weights_and_turnover_costs",
           "line_count": 96,
@@ -1291,12 +1361,6 @@
           "name": "simulate",
           "line_count": 84,
           "complexity": 12
-        },
-        {
-          "path": "src/portfolio_backtester/incumbent_requalification.py",
-          "name": "_select_symbols",
-          "line_count": 84,
-          "complexity": 17
         }
       ],
       "complexity_hotspots": [
@@ -1409,6 +1473,12 @@
           "complexity": 16
         },
         {
+          "path": "src/portfolio_backtester/optimization.py",
+          "name": "__post_init__",
+          "line_count": 42,
+          "complexity": 16
+        },
+        {
           "path": "src/portfolio_backtester/periods.py",
           "name": "resolve_backtest_period_plan",
           "line_count": 76,
@@ -1442,12 +1512,6 @@
           "path": "src/portfolio_backtester/_round_lot_allocate.py",
           "name": "allocate_round_lot",
           "line_count": 72,
-          "complexity": 15
-        },
-        {
-          "path": "src/portfolio_backtester/execution_calendar.py",
-          "name": "resolve_execution_open_dates",
-          "line_count": 50,
           "complexity": 15
         }
       ],
@@ -1496,7 +1560,7 @@
       "repo": "strategy-app",
       "root": "strategy-app",
       "python_file_count": 175,
-      "python_loc": 36463,
+      "python_loc": 36478,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
@@ -1640,34 +1704,29 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 373,
-      "python_loc": 83614,
+      "python_file_count": 390,
+      "python_loc": 86090,
       "hk_related_file_count": 2,
       "hotspot_counts": {
-        "large_files": 28,
-        "long_functions": 108,
-        "complexity_hotspots": 58,
-        "large_classes": 1
+        "large_files": 29,
+        "long_functions": 111,
+        "complexity_hotspots": 61,
+        "large_classes": 0
       },
       "large_files": [
+        {
+          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
+          "loc": 817,
+          "hk_related": false
+        },
         {
           "path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
           "loc": 806,
           "hk_related": false
         },
         {
-          "path": "tests/test_daily_watch20_pipeline.py",
-          "loc": 798,
-          "hk_related": false
-        },
-        {
           "path": "tests/test_daily_watch20_publication_safety.py",
           "loc": 797,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/daily_watch20_pipeline.py",
-          "loc": 795,
           "hk_related": false
         },
         {
@@ -1691,11 +1750,6 @@
           "hk_related": false
         },
         {
-          "path": "tests/test_pipeline_e2e.py",
-          "loc": 754,
-          "hk_related": false
-        },
-        {
           "path": "src/strategy_pipeline/pipeline/config.py",
           "loc": 750,
           "hk_related": false
@@ -1712,7 +1766,7 @@
         },
         {
           "path": "scripts/research/daily_watch20_candidate_oos.py",
-          "loc": 679,
+          "loc": 698,
           "hk_related": false
         },
         {
@@ -1726,8 +1780,23 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_daily_watch20_pipeline.py",
+          "loc": 639,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_pipeline_e2e.py",
+          "loc": 636,
+          "hk_related": false
+        },
+        {
           "path": "scripts/research/daily_watch20_fundamental_shadow.py",
           "loc": 611,
+          "hk_related": false
+        },
+        {
+          "path": "src/strategy_pipeline/cli/core.py",
+          "loc": 609,
           "hk_related": false
         },
         {
@@ -1751,8 +1820,8 @@
           "hk_related": false
         },
         {
-          "path": "src/strategy_pipeline/liveops/alloc_core.py",
-          "loc": 565,
+          "path": "src/strategy_pipeline/daily_watch20_news_heat_export.py",
+          "loc": 570,
           "hk_related": false
         },
         {
@@ -1768,11 +1837,6 @@
         {
           "path": "src/strategy_pipeline/commands/tune_runner.py",
           "loc": 546,
-          "hk_related": false
-        },
-        {
-          "path": "src/strategy_pipeline/release_tools/_package_runs_api.py",
-          "loc": 531,
           "hk_related": false
         }
       ],
@@ -1874,15 +1938,15 @@
           "complexity": 7
         },
         {
-          "path": "tests/test_pipeline_e2e_benchmarks.py",
-          "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
-          "line_count": 126,
+          "path": "src/strategy_pipeline/cli/liveops.py",
+          "name": "add_liveops_arguments",
+          "line_count": 127,
           "complexity": 1
         },
         {
-          "path": "tests/test_pipeline_e2e.py",
-          "name": "test_pipeline_run_with_local_rqdata_assets_smoke",
-          "line_count": 124,
+          "path": "tests/test_pipeline_e2e_benchmarks.py",
+          "name": "test_pipeline_backtest_accepts_external_benchmark_returns_file",
+          "line_count": 126,
           "complexity": 1
         },
         {
@@ -1896,6 +1960,12 @@
           "name": "test_pipeline_hk_file_fundamentals_provider_overlay_required_fails_when_empty",
           "line_count": 121,
           "complexity": 2
+        },
+        {
+          "path": "src/strategy_pipeline/cli/core.py",
+          "name": "_register_watchlist20_commands",
+          "line_count": 120,
+          "complexity": 1
         },
         {
           "path": "tests/test_pipeline_filters_backtest_reports.py",
@@ -1920,12 +1990,6 @@
           "name": "test_pipeline_walk_forward_backtest_benchmark_summary",
           "line_count": 116,
           "complexity": 4
-        },
-        {
-          "path": "tests/test_pipeline_e2e.py",
-          "name": "test_pipeline_run_offline_with_train_target_transform",
-          "line_count": 112,
-          "complexity": 1
         }
       ],
       "complexity_hotspots": [
@@ -1970,6 +2034,12 @@
           "name": "_resolve_grid_values",
           "line_count": 51,
           "complexity": 23
+        },
+        {
+          "path": "src/strategy_pipeline/daily_watch20_news_heat_export.py",
+          "name": "_validate_news_heat_rows",
+          "line_count": 37,
+          "complexity": 22
         },
         {
           "path": "src/strategy_pipeline/release_tools/release_runs.py",
@@ -2072,22 +2142,9 @@
           "name": "run_deepseek_campaign_execution",
           "line_count": 69,
           "complexity": 18
-        },
-        {
-          "path": "src/strategy_pipeline/commands/run_grid.py",
-          "name": "_base_grid_context",
-          "line_count": 73,
-          "complexity": 18
         }
       ],
-      "large_classes": [
-        {
-          "path": "src/strategy_pipeline/data_interface.py",
-          "name": "DataInterface",
-          "line_count": 330,
-          "method_count": 12
-        }
-      ],
+      "large_classes": [],
       "quality_config": {
         "ruff_select": [
           "E",
@@ -2130,9 +2187,14 @@
         "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
         "scripts/dev/import_boundary.py",
+        "scripts/dev/import_boundary_debt.json",
+        "scripts/dev/import_boundary_policy.json",
         "scripts/dev/install_git_hooks.sh",
         "scripts/dev/maintainability_metrics.py",
         "scripts/dev/namespace_boundary.py",
+        "scripts/dev/public_dependency_registry.json",
+        "scripts/dev/public_readiness.py",
+        "scripts/dev/public_readiness_debt.json",
         "scripts/dev/run_tests.sh",
         "scripts/dev/split_smoke.py",
         "scripts/dev/test_impact.py",

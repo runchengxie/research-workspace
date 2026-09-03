@@ -11,7 +11,7 @@
 - superproject `HEAD`：`research-contracts` 这类根仓 Git subdirectory package 的 workspace 版本。
 - 各子仓 `pyproject.toml` 的 `[tool.uv.sources]`：子仓 standalone 模式的 Git pin。
 
-`architecture-model.yml` 刻意不复制 artifact schema 或 forbidden import 规则，避免出现多份互相校验的“唯一真相”。
+`architecture-model.yml` 刻意不复制 artifact schema 或 forbidden import 规则，避免出现多份互相校验的唯一真相。
 
 ## 四张图
 
@@ -37,19 +37,19 @@ python scripts/workspace_architecture.py --check
 
 以下情况返回非零：
 
-- 架构 registry 重复 component/package ownership；
-- artifact manifest 引用了未知的 component；
-- Python 源文件存在 syntax error；
-- runtime component import graph 出现环；
+- 架构 registry 重复 component/package ownership。
+- artifact manifest 引用了未知的 component。
+- Python 源文件存在 syntax error。
+- runtime component import graph 出现环。
 - import-boundary rule 的 repo 没被 component registry 覆盖。
 
 以下情况只报告 warning：
 
-- source snapshot 没有初始化某个 submodule source root；
-- source archive 没有 `.git`，因此无法读取 workspace revision；
+- source snapshot 没有初始化某个 submodule source root。
+- source archive 没有 `.git`，因此无法读取 workspace revision。
 - 子仓 standalone Git pin 与对应 workspace gitlink 或 root `HEAD` 不同。
 
-最后一项目前故意不作为失败条件。workspace composition 和 repo-local pin 服务于两种不同的可复现模式；在正式统一 resolution policy 之前，把差异先变成可见证据，比擅自重写 lockfile 更安全。
+最后一项目前故意不作为失败条件。workspace composition 和 repo-local pin 服务于两种不同的可复现模式。在正式统一 resolution policy 之前，把差异先变成可见证据，比擅自重写 lockfile 更安全。
 
 ## 质量门
 
@@ -61,7 +61,7 @@ workspace-ownership-boundaries
 workspace-architecture
 ```
 
-完整 hard profile 也包含这三项。现有 AST boundary checker 仍负责精确的 forbidden-import budget；combined scanner 负责跨 import/artifact/version 来源的结构一致性。
+完整 hard profile 也包含这三项。现有 AST boundary checker 仍负责精确的 forbidden-import budget，combined scanner 负责跨 import/artifact/version 来源的结构一致性。
 
 ## 阅读原则
 
@@ -72,4 +72,4 @@ workspace-architecture
 - Artifact Graph 说明不经过 import 的数据依赖怎么走。
 - Version Graph 说明 workspace 和 standalone 环境到底可能运行哪一版代码。
 
-分析跨仓问题时，应同时查看四者，而不是把“没有 Python import”误解成“没有依赖”。
+分析跨仓问题时，应同时查看四者。没有 Python import 不代表没有依赖。

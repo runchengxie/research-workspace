@@ -39,10 +39,10 @@
 | --- | --- | --- |
 | `strategy_outputs/watchlist20/research/incumbent_challenger/` | `experiments/`、`runs/`、`reports/` 的研究集合 | 已迁入 `experiments/strategies/watchlist20/incumbent_challenger/`，历史记录保留旧路径 |
 | `~/data/challenger_entry*` | 上述研究集合的历史根目录入口 | 已移除，当前代码直接读取规范目录 |
-| `strategy-pipeline/artifacts/cache/` | `cache/` | 已归位到 `strategy-pipeline/cache/`，旧路径保留 symlink；只有证明可重建且无占用后才可清理 |
-| `strategy-pipeline/artifacts/runs/` | `runs/` | 已归位到 `strategy-pipeline/runs/`，旧路径保留 symlink；按运行状态和 receipt 保留 |
-| `strategy-pipeline/artifacts/reports/` | `reports/` | 已归位到 `strategy-pipeline/reports/`，旧路径保留 symlink；按报告引用和 retention 保留 |
-| `strategy-pipeline/artifacts/snapshots/` | `snapshots/` | 已归位到 `strategy-pipeline/snapshots/`，旧路径保留 symlink；固定时点证据先核对引用 |
+| `strategy-pipeline/artifacts/cache/` | `cache/` | 已归位到 `strategy-pipeline/cache/`，旧路径保留 symlink。只有证明可重建且无占用后才可清理 |
+| `strategy-pipeline/artifacts/runs/` | `runs/` | 已归位到 `strategy-pipeline/runs/`，旧路径保留 symlink。按运行状态和 receipt 保留 |
+| `strategy-pipeline/artifacts/reports/` | `reports/` | 已归位到 `strategy-pipeline/reports/`，旧路径保留 symlink。按报告引用和 retention 保留 |
+| `strategy-pipeline/artifacts/snapshots/` | `snapshots/` | 已归位到 `strategy-pipeline/snapshots/`，旧路径保留 symlink。固定时点证据先核对引用 |
 | `trading-research-dashboard/cache/` | `cache/` | 外部项目本地缓存，按 Dashboard 自身规则清理 |
 | `archive/market-data-platform/staging/2026-08-31/` | `archive/` | 已归档的替换任务，保留 archive README 和 receipt |
 | `sclt/archive/2026-08-30/` | `archive/` | 已迁出的研究产物归档，不进入 Git |
@@ -68,10 +68,10 @@ symlink。详细回执见 `metadata/lifecycle/migrations/stable-strategy-layout-
 
 每次实际迁移都必须留下以下记录：
 
-1. 原路径、目标路径、文件数量、字节数和校验摘要；
-2. 对应 manifest、receipt、运行状态和数据 owner；
-3. 代码、服务、cron、symlink 和文档引用扫描结果；
-4. `current`、`latest`、`rollback` 和 successor 核对结果；
+1. 原路径、目标路径、文件数量、字节数和校验摘要。
+2. 对应 manifest、receipt、运行状态和数据 owner。
+3. 代码、服务、cron、symlink 和文档引用扫描结果。
+4. `current`、`latest`、`rollback` 和 successor 核对结果。
 5. 失败时的回滚路径，以及迁移后的 retention 决定。
 
 本轮已完成可安全归类的实体目录迁移，并移除了已无活跃消费者的根目录兼容入口。大体积研究和运行结果仍按各自清单保留。
@@ -97,8 +97,8 @@ python scripts/data_path_audit.py \
 
 ## 后续顺序
 
-1. 先处理小型、已终态且有明确 receipt 的元数据目录；
-2. 再为 `strategy_outputs`、`research` 和 `artifacts` 生成子项 manifest；
-3. 为每个消费者增加新路径读取能力并保留兼容 alias；
-4. 观察至少一个完整运行周期后，再归档旧路径；
+1. 先处理小型、已终态且有明确 receipt 的元数据目录。
+2. 再为 `strategy_outputs`、`research` 和 `artifacts` 生成子项 manifest。
+3. 为每个消费者增加新路径读取能力并保留兼容 alias。
+4. 观察至少一个完整运行周期后，再归档旧路径。
 5. 最后依据 retention 报告决定是否删除归档内容。

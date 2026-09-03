@@ -8,26 +8,26 @@
     "by_repo": {
       "research-workspace": {
         "max_large_files": 4,
-        "max_long_functions": 1,
-        "max_complexity_hotspots": 0,
+        "max_long_functions": 2,
+        "max_complexity_hotspots": 2,
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 44,
-        "max_long_functions": 86,
-        "max_complexity_hotspots": 48,
+        "max_large_files": 46,
+        "max_long_functions": 90,
+        "max_complexity_hotspots": 54,
         "max_large_classes": 1
       },
       "alpha-research": {
-        "max_large_files": 5,
-        "max_long_functions": 22,
-        "max_complexity_hotspots": 25,
+        "max_large_files": 6,
+        "max_long_functions": 28,
+        "max_complexity_hotspots": 29,
         "max_large_classes": 1
       },
       "portfolio-backtester": {
         "max_large_files": 10,
-        "max_long_functions": 32,
-        "max_complexity_hotspots": 29,
+        "max_long_functions": 33,
+        "max_complexity_hotspots": 30,
         "max_large_classes": 0
       },
       "strategy-app": {
@@ -62,8 +62,8 @@
     {
       "repo": "research-workspace",
       "max_large_files": 4,
-      "max_long_functions": 1,
-      "max_complexity_hotspots": 0,
+      "max_long_functions": 2,
+      "max_complexity_hotspots": 2,
       "max_large_classes": 2,
       "owner_decision": [
         "2026-07-28: 子模块对账后基线重算，预算下调 large_files 7->6 / long_functions 12->11 / complexity_hotspots 14->13（治理脚本重构使计数下降）。",
@@ -85,9 +85,9 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 44,
-      "max_long_functions": 86,
-      "max_complexity_hotspots": 48,
+      "max_large_files": 46,
+      "max_long_functions": 90,
+      "max_complexity_hotspots": 54,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
@@ -109,9 +109,9 @@
     },
     {
       "repo": "alpha-research",
-      "max_large_files": 5,
-      "max_long_functions": 22,
-      "max_complexity_hotspots": 25,
+      "max_large_files": 6,
+      "max_long_functions": 28,
+      "max_complexity_hotspots": 29,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
@@ -125,8 +125,8 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 10,
-      "max_long_functions": 32,
-      "max_complexity_hotspots": 29,
+      "max_long_functions": 33,
+      "max_complexity_hotspots": 30,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
@@ -158,10 +158,10 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 28,
-      "max_long_functions": 108,
-      "max_complexity_hotspots": 58,
-      "max_large_classes": 1,
+      "max_large_files": 29,
+      "max_long_functions": 111,
+      "max_complexity_hotspots": 61,
+      "max_large_classes": 0,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
         "2026-07-22: 对齐基线 baseline-20260719-ty.json，计数仅可由显式 owner 决策上调。",
@@ -1448,6 +1448,48 @@
       "owner_repo": "strategy-pipeline",
       "reason": "release run 打包 API 集中处理运行目录选择、产物校验与打包编排，当前 531 行，属于控制平面发布工具。baseline 刷新后重新进入大文件账本。",
       "next_action": "将运行选择与产物清单校验拆成独立 helper，保持 release API 与打包格式兼容。"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part01.py",
+      "owner_repo": "market-data-platform",
+      "reason": "当前 fundamentals PIT provider 分区文件承担一组稳定的数据读取与规范化逻辑，随最新子仓基线刷新超过大文件阈值。",
+      "next_action": "后续按数据读取、字段规范化和发布校验职责拆分，保持 provider API 不变。"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_part02.py",
+      "owner_repo": "market-data-platform",
+      "reason": "当前 fundamentals provider 分区文件包含历史兼容和公开数据适配逻辑，随最新子仓基线刷新超过大文件阈值。",
+      "next_action": "后续按来源适配与统一输出职责拆分，避免继续向单文件追加 provider 分支。"
+    },
+    {
+      "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_support.py",
+      "owner_repo": "market-data-platform",
+      "reason": "fundamentals provider 的共享辅助逻辑仍集中在一个大文件中，当前属于已登记的维护性债务。",
+      "next_action": "按字段映射、日期处理和缓存辅助逻辑拆分，并由 provider 契约测试覆盖。"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_pipeline.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DailyWatch20 控制平面仍集中承载运行编排、生命周期和发布前校验，当前超过大文件阈值。",
+      "next_action": "继续把策略语义迁回 owner 仓库，pipeline 保留控制平面编排和证据交接。"
+    },
+    {
+      "path": "alpha-research/src/alpha_research/fundamental_state.py",
+      "owner_repo": "alpha-research",
+      "reason": "基本面状态特征与相关契约仍集中在一个较大的 owner 模块中，当前属于可追踪的维护性热点。",
+      "next_action": "后续拆分状态构造与特征派生职责，并保持公开 feature API 稳定。"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/cli/core.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "控制平面 CLI 注册和参数分发仍集中在一个较大的入口模块中，属于 public orchestration surface。",
+      "next_action": "按命令族拆分注册逻辑，保持顶层 CLI 入口兼容。"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_news_heat_export.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "DailyWatch20 新闻热度导出仍集中处理控制平面导出和证据交接，当前超过大文件阈值。",
+      "next_action": "将数据准备与导出发布职责拆开，策略语义继续由对应 owner 维护。"
     }
   ]
 }

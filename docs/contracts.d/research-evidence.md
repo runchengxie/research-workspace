@@ -53,10 +53,10 @@ Contract owner：`research-workspace` 的 `research-contracts`。
 `research.clock.v1` 必须具有完整执行窗口。
 
 `ArtifactRef` 只包含 `artifact_id`、SHA-256 和可选相对路径。`ProducerVersion` 记录 repository、
-commit 和可选 version。消费者应通过这些引用定位对应 owner 的稳定 artifact，而不是从 run manifest
+commit 和可选 version。消费者应通过这些引用定位对应 owner 的稳定 artifact，不要从 run manifest
 重新推导业务结果。
 
 本契约种子 PR 不把 `research.backtest-run.v1` 加入 `artifact-contracts.yml`。当前 registry 校验要求
-artifact 同时存在真实 owner entrypoint；等 `strategy-pipeline` producer 与 `portfolio-backtester`
+artifact 同时存在真实 owner entrypoint。等 `strategy-pipeline` producer 与 `portfolio-backtester`
 canonical bundle 都合入后，由工作区集成 PR 一次性登记 producer、consumer 和 canonical file，避免
 把计划能力误写成当前能力。

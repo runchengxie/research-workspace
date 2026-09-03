@@ -13,6 +13,7 @@ EXPECTED_STRATEGIES = {
     "dividend_growth_momentum",
     "next_open_to_high",
     "macro_context_shadow_v1",
+    "fundamental_state_forecasting_v1",
     "guan_weekly",
 }
 

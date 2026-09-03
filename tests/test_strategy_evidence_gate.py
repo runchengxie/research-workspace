@@ -95,13 +95,13 @@ def _write_fixture(root: Path) -> None:
             },
         ),
     }
-    (root / "strategy-research" / "evidence").mkdir(parents=True)
+    (root / "strategy-research" / "research" / "evidence").mkdir(parents=True)
     (root / "strategy-research" / "evidence_policy.json").write_text(
         json.dumps(policy), encoding="utf-8"
     )
     (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
     for strategy_id, bundle in bundles.items():
-        (root / "strategy-research" / "evidence" / f"{strategy_id}.json").write_text(
+        (root / "strategy-research" / "research" / "evidence" / f"{strategy_id}.json").write_text(
             json.dumps(bundle), encoding="utf-8"
         )
 
@@ -210,7 +210,7 @@ def test_evaluate_marks_compliant_and_missing(tmp_path: Path) -> None:
     policy = _load_json(tmp_path / "strategy-research" / "evidence_policy.json")
     catalog = _load_json(tmp_path / "strategy-research" / "catalog.json")
 
-    bundle_dir = tmp_path / "strategy-research" / "evidence"
+    bundle_dir = tmp_path / "strategy-research" / "research" / "evidence"
     results = [
         gate._evaluate(
             item,
@@ -285,7 +285,7 @@ def test_known_gap_waiver_blocks_on_unregistered_gap(tmp_path: Path) -> None:
         json.dumps(policy), encoding="utf-8"
     )
     (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
-    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir = root / "strategy-research" / "research" / "evidence"
     bundle_dir.mkdir(parents=True)
 
     # Both required checks missing, pit registered as a known gap, cost not.
@@ -329,7 +329,7 @@ def test_production_strategy_cannot_waive_gaps(tmp_path: Path) -> None:
         json.dumps(policy), encoding="utf-8"
     )
     (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
-    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir = root / "strategy-research" / "research" / "evidence"
     bundle_dir.mkdir(parents=True)
     bundle = {
         "schema_version": "strategy_evidence_bundle.v1",
@@ -378,7 +378,7 @@ def test_zero_gaps_blocks_research_strategy_with_known_gaps(tmp_path: Path) -> N
         json.dumps(policy), encoding="utf-8"
     )
     (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
-    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir = root / "strategy-research" / "research" / "evidence"
     bundle_dir.mkdir(parents=True)
     bundle = {
         "schema_version": "strategy_evidence_bundle.v1",
@@ -409,7 +409,7 @@ def test_zero_gaps_passes_research_strategy_without_gaps(tmp_path: Path) -> None
         json.dumps(policy), encoding="utf-8"
     )
     (root / "strategy-research" / "catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
-    bundle_dir = root / "strategy-research" / "evidence"
+    bundle_dir = root / "strategy-research" / "research" / "evidence"
     bundle_dir.mkdir(parents=True)
     bundle = {
         "schema_version": "strategy_evidence_bundle.v1",

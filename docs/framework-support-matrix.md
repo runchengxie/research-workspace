@@ -86,7 +86,7 @@ vectorbt、Alphalens Reloaded、Evidently 和 MLflow 目前均没有运行时适
 
 Qlib 差分后端和 LEAN 文件化场景曾出现在旧候选分支，当前 `main` 没有对应源码、依赖或测试。LEAN 目前只用于职责划分参考。Backtrader 仍处于规划阶段，当前没有适配器、固定样例或运行时门禁。
 
-RQAlpha 的优先用途是 A 股 differential backtest，而不是替换原生语义。组合优化侧应先建立框架中立 request/result，再评估 PyPortfolioOpt/cvxportfolio/Riskfolio 适配器。现有 equal/rank/sleeve/HRP 构造继续作为基线。
+RQAlpha 的优先用途是 A 股 differential backtest，用于对照原生语义。组合优化侧应先建立框架中立 request/result，再评估 PyPortfolioOpt/cvxportfolio/Riskfolio 适配器。现有 equal/rank/sleeve/HRP 构造继续作为基线。
 
 ### strategy-app 与 strategy-pipeline
 
@@ -105,6 +105,6 @@ RQAlpha 的优先用途是 A 股 differential backtest，而不是替换原生�
 - 跨仓库边界继续使用平台自己的请求、回执和文件产物。
 - 历史候选分支、格式校验测试和导入边界测试不能单独证明运行时可用。
 - 新适配器需要有可选依赖、无框架导入测试、真实运行时测试、固定场景差分证据、许可证检查和回滚说明。
-- screening backend 的结果不能直接获得策略晋级资格；必须回到平台 PIT/OOS/成本/容量/证据门禁。
+- screening backend 的结果不能直接获得策略晋级资格，必须回到平台 PIT/OOS/成本/容量/证据门禁。
 
 长期边界见 [ADR-0001](adr/0001-framework-integration-boundaries.md)。采用取舍与后续顺序见 [框架采用评估](framework-adoption-assessment.md)。历史候选发布记录见 [archive/framework-adapter-release.md](archive/framework-adapter-release.md)。

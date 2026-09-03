@@ -20,11 +20,11 @@ current contract 和兼容链接维持可发现性。
 
 目录名称只表达默认生命周期语义，不授予删除权限。删除或移动前必须检查：
 
-1. `manifest` 是否存在且内容完整；
-2. `receipt` 是否为成功或明确终止状态；
-3. 是否被 `current`、`latest`、rollback alias 或其他 contract 引用；
-4. 是否有活动锁、进程或未结束 campaign；
-5. 是否存在经过校验的 successor；
+1. `manifest` 是否存在且内容完整。
+2. `receipt` 是否为成功或明确终止状态。
+3. 是否被 `current`、`latest`、rollback alias 或其他 contract 引用。
+4. 是否有活动锁、进程或未结束 campaign。
+5. 是否存在经过校验的 successor。
 6. 是否记录了归档、迁移或删除凭证。
 
 ## 研究目录
@@ -61,10 +61,10 @@ current contract 和兼容链接维持可发现性。
 
 旧目录不因名称不符合规范而立即重命名。迁移顺序为：
 
-1. 在 manifest 或 README 中注明规范名称和旧名称的对应关系；
-2. 检查代码、服务、receipt 和报告中的引用；
-3. 建立兼容 alias 或迁移后的稳定入口；
-4. 更新消费者并验证；
+1. 在 manifest 或 README 中注明规范名称和旧名称的对应关系。
+2. 检查代码、服务、receipt 和报告中的引用。
+3. 建立兼容 alias 或迁移后的稳定入口。
+4. 更新消费者并验证。
 5. 生成 retention 报告后，才考虑删除旧路径。
 
 最后复核：`cache` 不代表一定可删除，`staging` 不代表一定是垃圾，`archive` 也不代表

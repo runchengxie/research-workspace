@@ -6,7 +6,7 @@
 > source_of_truth: yes
 > superseded_by: n/a
 
-本页定义 `research-workspace` 随研究数量增长时的长期整理规则。目标不是让仓库保持小，而是让活跃研究、通用基础设施和历史知识保持清楚边界。
+本页定义 `research-workspace` 随研究数量增长时的长期整理规则。重点是让活跃研究、通用基础设施和历史知识保持清楚边界。
 
 本页补充现有文档生命周期、维护债治理、研究判断治理和 ADR-0006，不替代这些入口。
 
@@ -100,7 +100,7 @@ generic metrics
 
 - active experiment 只保留调用 owner API 的薄层。
 - 重复实现删除，不保留长期双轨。
-- 如历史复现依赖旧实现，使用 commit SHA、归档证据或冻结 artifact 说明，而不是让旧实现继续活跃维护。
+- 如历史复现依赖旧实现，使用 commit SHA、归档证据或冻结 artifact 说明，避免旧实现继续活跃维护。
 - owner 仓必须拥有相应测试和公开契约。
 
 ## 4. 研究生命周期
@@ -135,7 +135,7 @@ strategy lifecycle or archive
 
 ### Paused
 
-当前缺数据、依赖或研究优先级不足。必须记录恢复条件，避免“以后再看”无限占据 active 导航。
+当前缺数据、依赖或研究优先级不足。必须记录恢复条件，避免 `以后再看` 无限占据 active 导航。
 
 ## 5. Research GC
 
@@ -164,7 +164,7 @@ Research GC 是人工或 agent 辅助评审，不是按文件年龄自动删除�
 | `supersede` | 保留兼容导航，明确新的权威入口 |
 | `delete` | 没有独立历史价值且可由其他权威资产完全替代 |
 
-GC 记录应说明理由和相关 PR / evidence，不只记录“清理了一批文件”。
+GC 记录应说明理由和相关 PR / evidence，并说明具体清理内容。
 
 ## 6. Archive 与 Delete 的区别
 
@@ -207,7 +207,7 @@ GC 记录应说明理由和相关 PR / evidence，不只记录“清理了一批
 - 历史阶段记录进入 archive。
 - 超过 300 行且需要持续人工维护的文档，优先拆成稳定主题或生成索引。
 - 一个事实只保留一个 source of truth，其他页面链接过去。
-- 研究 agenda 可以较长，因为它描述问题地图；具体实验结果应拆到独立 experiment / evidence 页面，避免 agenda 变成运行日志。
+- 研究 agenda 可以较长，因为它描述问题地图。具体实验结果应拆到独立 experiment / evidence 页面，避免 agenda 变成运行日志。
 
 ## 9. 什么时候不应该新建仓库
 
@@ -258,10 +258,10 @@ ADR-0006 已经确定：
 8. record GC decision summary
 ```
 
-衡量 GC 是否成功的标准不是删除了多少 LOC，而是：
+衡量 GC 是否成功的标准是：
 
 - active surface 是否更容易理解。
 - owner 边界是否更清楚。
 - 重复实现是否减少。
 - 历史结论是否仍可追溯。
-- 新研究是否能复用已有基础设施而不是复制旧实验。
+- 新研究是否能复用已有基础设施，减少复制旧实验。

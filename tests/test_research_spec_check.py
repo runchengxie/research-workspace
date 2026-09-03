@@ -37,7 +37,14 @@ def _valid_spec(experiment_id: str = "demo_experiment") -> dict[str, object]:
 
 
 def _write_spec(root: Path, experiment_id: str, payload: dict[str, object]) -> Path:
-    target = root / "strategy-research" / "experiments" / experiment_id / "research_spec.json"
+    target = (
+        root
+        / "strategy-research"
+        / "research"
+        / "experiments"
+        / experiment_id
+        / "research_spec.json"
+    )
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(payload), encoding="utf-8")
     (root / "evidence.md").write_text("evidence", encoding="utf-8")
@@ -45,7 +52,14 @@ def _write_spec(root: Path, experiment_id: str, payload: dict[str, object]) -> P
 
 
 def test_real_qlib_pilot_spec_is_valid() -> None:
-    path = ROOT / "strategy-research" / "experiments" / "qlib_pilot" / "research_spec.json"
+    path = (
+        ROOT
+        / "strategy-research"
+        / "research"
+        / "experiments"
+        / "qlib_pilot"
+        / "research_spec.json"
+    )
     assert path.is_file()
     result = checker.check_spec(path, expected_id="qlib_pilot", root=ROOT)
     assert result.ok, result.issues
@@ -130,7 +144,12 @@ def test_cli_scan_reports_exit_code(tmp_path: Path) -> None:
     assert checker.main(["--root", str(tmp_path)]) == 1
 
     specific = (
-        tmp_path / "strategy-research" / "experiments" / "demo_experiment" / "research_spec.json"
+        tmp_path
+        / "strategy-research"
+        / "research"
+        / "experiments"
+        / "demo_experiment"
+        / "research_spec.json"
     )
     assert checker.main(["--root", str(tmp_path), "--spec", str(specific)]) == 0
 

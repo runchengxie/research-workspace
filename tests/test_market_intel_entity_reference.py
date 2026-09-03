@@ -1,7 +1,11 @@
 from pathlib import Path
 
 REFERENCE = (
-    Path(__file__).parents[1] / "strategy-research" / "references" / "market_intel_entity_ids.md"
+    Path(__file__).parents[1]
+    / "strategy-research"
+    / "research"
+    / "references"
+    / "market_intel_entity_ids.md"
 )
 
 
