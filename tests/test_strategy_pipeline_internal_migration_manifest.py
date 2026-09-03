@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 164,
-        "test_files": 189,
+        "python_source_files": 163,
+        "test_files": 190,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 164
+    assert sum(group["file_count"] for group in groups) == 163
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -178,3 +178,17 @@ def test_owner_facade_migrations_record_owner_repositories() -> None:
         assert migrations[source_path]["owner_repo"] == owner_repo
         assert migrations[source_path]["target_path"] == target_path
         assert migrations[source_path]["status"] == "complete"
+
+
+def test_dataset_sampling_migration_records_alpha_owner() -> None:
+    payload = _load_manifest()
+    migration = next(
+        item
+        for item in payload["completed_code_migrations"]
+        if item["source_path"] == "src/strategy_pipeline_internal/pipeline/dataset_sampling.py"
+    )
+
+    assert migration["owner_repo"] == "alpha-research"
+    assert migration["target_path"] == "src/alpha_research/dataset_sampling.py"
+    assert migration["status"] == "complete"
+    assert migration["internal_commit"] == "1b6d54b1e29867793f2a0b56f3b0a8d1a578f46c"

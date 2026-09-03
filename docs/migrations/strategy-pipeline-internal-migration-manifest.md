@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `eaa14daf88d4d9c30de98d0b74f839d94102a08c`
+> source_commit: `1b6d54b1e29867793f2a0b56f3b0a8d1a578f46c`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "eaa14daf88d4d9c30de98d0b74f839d94102a08c",
+  "source_commit": "1b6d54b1e29867793f2a0b56f3b0a8d1a578f46c",
   "inventory": {
-    "python_source_files": 164,
-    "test_files": 189,
+    "python_source_files": 163,
+    "test_files": 190,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 56,
+      "file_count": 55,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -315,6 +315,17 @@
       "test_evidence": "alpha-research train-eval result tests; internal tests/test_retired_owner_facades.py",
       "doc_evidence": "alpha-research/docs/README.md",
       "consumer_switch": "internal train-eval result consumers now import alpha_research.train_eval_result"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/dataset_sampling.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/dataset_sampling.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "1b6d54b1e29867793f2a0b56f3b0a8d1a578f46c",
+      "test_evidence": "alpha-research dataset sampling tests; internal tests/test_retired_dataset_sampling_facade.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal dataset sampling consumers now import alpha_research.dataset_sampling"
     }
   ],
   "partial_code_migrations": [
