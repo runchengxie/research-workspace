@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `aa648a6c4ca975c4adb9f8593629da3ee76583aa`
+> source_commit: `c430667f95eb7de6655d0d5ab9d25e8f280e182a`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "aa648a6c4ca975c4adb9f8593629da3ee76583aa",
+    "source_commit": "c430667f95eb7de6655d0d5ab9d25e8f280e182a",
   "inventory": {
-    "python_source_files": 131,
+    "python_source_files": 130,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 52,
+      "file_count": 51,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -584,6 +584,13 @@
       "internal_commit": "aa648a6c4ca975c4adb9f8593629da3ee76583aa",
       "test_evidence": "market-data-platform tests/test_daily_watch20_runtime_preflight.py; internal freshness tests; import boundary check",
       "rationale": "The preflight only verifies the market-data-platform minute-cache rolling-window contract, so it now lives with that dependency owner."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_publication_policy.py",
+      "status": "complete",
+      "internal_commit": "c430667f95eb7de6655d0d5ab9d25e8f280e182a",
+      "test_evidence": "strategy-pipeline tests/control_plane/test_currentness.py; internal tests/test_daily_watch20_freshness.py and strategy extraction tests; public history audit",
+      "rationale": "The policy only applied generic production or research currentness rules. Its domain-neutral implementation now lives in public strategy-pipeline, while internal keeps only the DailyWatch20 result-shape adapter."
     }
   ],
   "completed_boundary_cleanups": [
