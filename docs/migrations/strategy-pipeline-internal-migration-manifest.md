@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `9d895b411cc4425878ab896ce7efbacd8310ae9f`
+> source_commit: `df444be`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "9d895b411cc4425878ab896ce7efbacd8310ae9f",
+  "source_commit": "df444be",
   "inventory": {
     "python_source_files": 194,
     "test_files": 180,
@@ -158,6 +158,17 @@
       "test_evidence": "alpha-research tests/test_signal_artifact.py; internal tests/test_signal_contracts.py; internal tests/test_research_abstractions.py; internal tests/test_external_signals.py",
       "doc_evidence": "alpha-research/docs/reference/signal-artifacts.md",
       "consumer_switch": "internal compatibility exports now delegate to alpha_research.signal_artifact"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/contracts/rebalance.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/rebalance.py",
+      "status": "complete",
+      "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
+      "internal_commit": "df444be",
+      "test_evidence": "portfolio-backtester tests/test_rebalance.py; internal tests/test_rebalance_contracts.py",
+      "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+      "consumer_switch": "internal compatibility exports now delegate to portfolio_backtester.rebalance"
     }
   ]
 }

@@ -69,3 +69,12 @@ artifact envelope v2。internal 当前只保留历史导入路径的兼容导出
 对应测试为 alpha-research 的 `tests/test_signal_artifact.py`，以及 internal 的
 `tests/test_signal_contracts.py`、`tests/test_research_abstractions.py` 和
 `tests/test_external_signals.py`。
+
+## 再平衡契约
+
+`strategy_pipeline_internal.contracts.rebalance` 的再平衡日期计算和 frame 采样已迁入
+`portfolio_backtester.rebalance`。internal 当前只保留历史导入路径的兼容导出，现有 pipeline
+调用已经直接使用 portfolio owner API。
+
+对应测试为 portfolio-backtester 的 `tests/test_rebalance.py` 和 internal 的
+`tests/test_rebalance_contracts.py`。
