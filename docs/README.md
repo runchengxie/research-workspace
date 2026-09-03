@@ -27,6 +27,7 @@
 | 查看 deep-learning 集成边界 | [deep-learning-integration.md](deep-learning-integration.md) |
 | 维护子模块和运行检查 | [workspace-maintenance.md](workspace-maintenance.md) |
 | 查看质量检查分类和 CI 策略 | [quality-governance.md](quality-governance.md) |
+| 查看指标代码归属 | [metric-ownership.md](metric-ownership.md) |
 | 核对 Qlib、LEAN、vn.py 和 Backtrader 的当前状态 | [framework-support-matrix.md](framework-support-matrix.md) |
 | 查看当前锁定组合 | [version-matrix.md](version-matrix.md) |
 | 发布或更新组合 | [release-checklist.md](release-checklist.md) |
