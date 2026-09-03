@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 160,
-        "test_files": 193,
+        "python_source_files": 158,
+        "test_files": 194,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 160
+    assert sum(group["file_count"] for group in groups) == 158
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -236,3 +236,20 @@ def test_publication_tier_migration_records_strategy_app_owner() -> None:
     assert migration["target_path"] == "src/strategy_app/daily_watch20/publication_tier.py"
     assert migration["status"] == "complete"
     assert migration["internal_commit"] == "3d7ac1d6535e5181dbea91b2bd8be45670d81330"
+
+
+def test_promotion_gate_migrations_record_alpha_owner() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    expected = {
+        "src/strategy_pipeline_internal/pipeline/research_ops/promotion_gate.py": (
+            "src/alpha_research/promotion_gate.py"
+        ),
+        "src/strategy_pipeline_internal/pipeline/research_ops/promotion_gate_thresholds.py": (
+            "src/alpha_research/promotion_gate_thresholds.py"
+        ),
+    }
+    for source_path, target_path in expected.items():
+        assert migrations[source_path]["owner_repo"] == "alpha-research"
+        assert migrations[source_path]["target_path"] == target_path
+        assert migrations[source_path]["status"] == "complete"
