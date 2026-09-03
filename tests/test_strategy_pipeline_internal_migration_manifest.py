@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 124,
-        "test_files": 206,
+        "python_source_files": 120,
+        "test_files": 209,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 124
+    assert sum(group["file_count"] for group in groups) == 120
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -106,6 +106,21 @@ def test_news_heat_export_migration_records_owner_and_consumer_switch() -> None:
     assert migration["status"] == "complete"
     assert migration["owner_commit"] == "60b87f454552311e874f837471d2e9b38300fc3e"
     assert migration["internal_commit"] == "442eb4b6c5dcbc341991641530cc1eb66348a93c"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
+def test_style_factor_refresh_migration_records_owner_and_consumer_switch() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    migration = migrations["src/strategy_pipeline_internal/style_factor_publication.py"]
+
+    assert migration["owner_repo"] == "strategy-research"
+    assert migration["target_path"] == "src/style_factors/refresh.py"
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "da296bf5fc4761d44bc1da28e65d600ab5b39590"
+    assert migration["internal_commit"] == "6efa17cfb58dc0a67cc07fd3c46540baafb486f1"
     assert migration["test_evidence"]
     assert migration["doc_evidence"]
     assert migration["consumer_switch"]

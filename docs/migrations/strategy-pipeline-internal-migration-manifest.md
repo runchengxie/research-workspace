@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a79fdd5e289910903cbc0288baf489c75e8b8bd6`
+> source_commit: `6efa17cfb58dc0a67cc07fd3c46540baafb486f1`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "a79fdd5e289910903cbc0288baf489c75e8b8bd6",
+    "source_commit": "6efa17cfb58dc0a67cc07fd3c46540baafb486f1",
   "inventory": {
-    "python_source_files": 121,
+    "python_source_files": 120,
     "test_files": 209,
     "script_files": 34,
     "config_files": 18,
@@ -69,7 +69,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/release_tools",
-      "file_count": 7,
+      "file_count": 6,
       "owner_repo": "research-workspace",
       "target_path": "scripts and release governance",
       "status": "private",
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 45,
+      "file_count": 42,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -172,6 +172,17 @@
       "test_evidence": "strategy-research tests/test_weekly_analysis_artifacts.py; internal tests/test_retired_weekly_analysis_artifacts.py and weekly-analysis CLI regression tests",
       "doc_evidence": "strategy-research/docs/weekly-analysis-artifacts.md",
       "consumer_switch": "internal weekly-analysis CLI now imports strategy_research.weekly_analysis_artifacts and the internal module was deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/style_factor_publication.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/style_factors/refresh.py",
+      "status": "complete",
+      "owner_commit": "da296bf5fc4761d44bc1da28e65d600ab5b39590",
+      "internal_commit": "6efa17cfb58dc0a67cc07fd3c46540baafb486f1",
+      "test_evidence": "strategy-research tests/test_refresh.py; internal tests/test_cli_style_factor_refresh.py and full test suite",
+      "doc_evidence": "strategy-research/docs/style-factor-refresh.md; internal docs/internal/data-ops-boundary-inventory.md",
+      "consumer_switch": "internal style-factors CLI now imports style_factors.refresh, the internal bridge and its owner tests were deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
