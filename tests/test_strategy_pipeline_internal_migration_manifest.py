@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 137,
+        "python_source_files": 136,
         "test_files": 201,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 137
+    assert sum(group["file_count"] for group in groups) == 136
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -414,6 +414,14 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert minute_campaign_inputs["internal_commit"] == "9c9555de0b1bdff85ebbb0dcc813795d5535f075"
     assert minute_campaign_inputs["test_evidence"]
     assert minute_campaign_inputs["rationale"]
+
+    market_shadow = facades[
+        "src/strategy_pipeline_internal/daily_watch20_market_shadow.py"
+    ]
+    assert market_shadow["status"] == "complete"
+    assert market_shadow["internal_commit"] == "8be7c39894bcbb338b981a6868aee97f0d4dbc11"
+    assert market_shadow["test_evidence"]
+    assert market_shadow["rationale"]
 
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
