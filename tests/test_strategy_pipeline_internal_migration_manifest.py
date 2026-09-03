@@ -270,3 +270,16 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert context_builder["internal_commit"] == "5b51c2059b987869c9d4e876073bcf22288f3a19"
     assert context_builder["test_evidence"]
     assert context_builder["rationale"]
+
+
+def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
+    payload = _load_manifest()
+    cleanups = {
+        item["source_path"]: item for item in payload["completed_boundary_cleanups"]
+    }
+    cleanup = cleanups["src/strategy_pipeline_internal/pipeline/research_ops/__init__.py"]
+
+    assert cleanup["status"] == "complete"
+    assert cleanup["internal_commit"] == "cd5d9e0411a97242d71eabc971824d79024cbdd9"
+    assert cleanup["test_evidence"]
+    assert cleanup["consumer_switch"]

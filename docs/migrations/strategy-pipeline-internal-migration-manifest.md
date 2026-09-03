@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `5b51c2059b987869c9d4e876073bcf22288f3a19`
+> source_commit: `cd5d9e0411a97242d71eabc971824d79024cbdd9`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "5b51c2059b987869c9d4e876073bcf22288f3a19",
+  "source_commit": "cd5d9e0411a97242d71eabc971824d79024cbdd9",
   "inventory": {
     "python_source_files": 156,
     "test_files": 196,
@@ -409,6 +409,15 @@
       "internal_commit": "5b51c2059b987869c9d4e876073bcf22288f3a19",
       "test_evidence": "internal tests/test_retired_context_builder_facade.py; internal full test suite",
       "rationale": "The re-export shell had no unique implementation. Runner consumers now import the split API and core modules directly."
+    }
+  ],
+  "completed_boundary_cleanups": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/__init__.py",
+      "status": "complete",
+      "internal_commit": "cd5d9e0411a97242d71eabc971824d79024cbdd9",
+      "test_evidence": "internal tests/test_retired_promotion_gate_facades.py; internal full test suite; import boundary check",
+      "consumer_switch": "promotion-gate config and CLI tests now import alpha_research.promotion_gate directly"
     }
   ]
 }
