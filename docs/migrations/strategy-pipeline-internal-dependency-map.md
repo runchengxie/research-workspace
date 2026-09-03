@@ -24,6 +24,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `pipeline/position_postprocess_artifacts.py` 的后处理诊断写入职责也已归入 `portfolio-backtester.position_postprocess_outputs`，并由 owner API 继续维护四类运行产物。
 
+`pipeline/output_context.py` 已归入公共 `strategy-pipeline.control_plane.output_context`，internal 输出编排只消费公共上下文接口。
+
 ## 目标关系
 
 ```text

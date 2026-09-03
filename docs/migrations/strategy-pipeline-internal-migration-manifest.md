@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a763a0d957a08c517b56f5a5504269d88004b613`
+> source_commit: `cc0824e8b5f991dbb7781b8637414d69ff956409`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "a763a0d957a08c517b56f5a5504269d88004b613",
+  "source_commit": "cc0824e8b5f991dbb7781b8637414d69ff956409",
   "inventory": {
-    "python_source_files": 112,
-    "test_files": 216,
+    "python_source_files": 111,
+    "test_files": 217,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 41,
+      "file_count": 40,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -271,6 +271,17 @@
       "test_evidence": "portfolio-backtester tests/test_position_postprocess_outputs.py; internal tests/test_retired_position_postprocess_artifacts.py and pipeline regression tests",
       "doc_evidence": "portfolio-backtester/docs/reference/outputs/positions.md",
       "consumer_switch": "internal output artifacts now import portfolio_backtester.position_postprocess_outputs, and the internal writer was deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_context.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/control_plane/output_context.py",
+      "status": "complete",
+      "owner_commit": "02f8b789ed66eadf664365d38358ae298bb2dab4",
+      "internal_commit": "cc0824e8b5f991dbb7781b8637414d69ff956409",
+      "test_evidence": "strategy-pipeline tests/control_plane/test_output_context.py; internal tests/test_retired_output_context.py and pipeline regression tests",
+      "doc_evidence": "strategy-pipeline/docs/control-plane.md",
+      "consumer_switch": "internal output orchestration now imports strategy_pipeline.control_plane.output_context, and the internal context implementation was deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
