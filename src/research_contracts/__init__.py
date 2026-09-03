@@ -53,6 +53,7 @@ from .research_run_manifest_writer import (
     build_research_run_manifest,
     validate_research_run_manifest,
 )
+from .target_lineage import lineage_inputs, lineage_payload, targets_envelope_v2
 
 __all__ = [
     "ARTIFACT_ENVELOPE_KEY",
@@ -94,4 +95,7 @@ __all__ = [
     "validate_file_receipts",
     "validate_research_run_manifest",
     "validate_research_clock",
+    "lineage_inputs",
+    "lineage_payload",
+    "targets_envelope_v2",
 ]
