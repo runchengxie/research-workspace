@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `183d22aac9fd471b1cce43fd50e95e38e18ee9ce`
+> source_commit: `cd25c8985f3e52486f11d7244aaa06fcc06dd8e5`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "183d22aac9fd471b1cce43fd50e95e38e18ee9ce",
+  "source_commit": "cd25c8985f3e52486f11d7244aaa06fcc06dd8e5",
   "inventory": {
-    "python_source_files": 182,
-    "test_files": 182,
+    "python_source_files": 181,
+    "test_files": 183,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 87,
+      "file_count": 86,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "strategy-app", "target_path": "docs/strategy-catalog.md", "status": "planned"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/liquidity_proxy.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/liquidity_proxy.py",
+      "status": "complete",
+      "owner_commit": "6eefb9668d10c11f0098b44bf578b462db218299",
+      "internal_commit": "cd25c8985f3e52486f11d7244aaa06fcc06dd8e5",
+      "test_evidence": "portfolio-backtester tests/test_liquidity_proxy.py; internal tests/test_retired_liquidity_proxy.py; internal tests/test_pipeline_memory_path.py",
+      "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+      "consumer_switch": "internal panel loading now imports liquidity proxy helpers directly from portfolio_backtester"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
       "owner_repo": "portfolio-backtester",
