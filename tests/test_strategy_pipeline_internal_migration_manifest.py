@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 153,
-        "test_files": 199,
+        "python_source_files": 152,
+        "test_files": 200,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 153
+    assert sum(group["file_count"] for group in groups) == 152
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -294,6 +294,12 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert summarize_runs["internal_commit"] == "adf73b0caa93a1ecec6d806ac1079e3fd785ace6"
     assert summarize_runs["test_evidence"]
     assert summarize_runs["rationale"]
+
+    runner = facades["src/strategy_pipeline_internal/pipeline/runner.py"]
+    assert runner["status"] == "complete"
+    assert runner["internal_commit"] == "311592c8a0d12ee586a39ec54800065c0b72ae98"
+    assert runner["test_evidence"]
+    assert runner["rationale"]
 
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
