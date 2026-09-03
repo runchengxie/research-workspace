@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 113,
-        "test_files": 215,
+        "python_source_files": 112,
+        "test_files": 216,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 113
+    assert sum(group["file_count"] for group in groups) == 112
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -226,6 +226,23 @@ def test_position_output_migration_records_portfolio_owner() -> None:
     assert migration["status"] == "complete"
     assert migration["owner_commit"] == "e06e48eb443dad47b492eee084cf3299edcd3024"
     assert migration["internal_commit"] == "4d2ea8028456d9a0b19f2bbf4f876d0fe28a7d11"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
+def test_position_postprocess_migration_records_portfolio_owner() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    migration = migrations[
+        "src/strategy_pipeline_internal/pipeline/position_postprocess_artifacts.py"
+    ]
+
+    assert migration["owner_repo"] == "portfolio-backtester"
+    assert migration["target_path"] == "src/portfolio_backtester/position_postprocess_outputs.py"
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "9357711768d8c58febbc57b9ba1d9877ea1a046a"
+    assert migration["internal_commit"] == "a763a0d957a08c517b56f5a5504269d88004b613"
     assert migration["test_evidence"]
     assert migration["doc_evidence"]
     assert migration["consumer_switch"]
