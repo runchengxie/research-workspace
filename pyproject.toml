@@ -9,6 +9,7 @@ dependencies = [
   "pyarrow>=14",
   "pyyaml>=6.0",
   "tabulate>=0.9",
+  "strategy-pipeline @ git+https://github.com/runchengxie/strategy-pipeline.git",
 ]
 
 [dependency-groups]
