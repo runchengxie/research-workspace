@@ -201,30 +201,6 @@
     }
   ],
   "broad_exclude_register": [
-    {
-      "repo": "strategy-pipeline",
-      "path": "configs/local",
-      "tool": "ruff",
-      "owner": "strategy-pipeline",
-      "reason": "local override configs are personal and not active package code",
-      "next_include_target": "not_applicable",
-      "review_milestone": "keep excluded by policy",
-      "coverage_patterns": [
-        "configs/local"
-      ]
-    },
-    {
-      "repo": "strategy-pipeline",
-      "path": "configs/local",
-      "tool": "ty",
-      "owner": "strategy-pipeline",
-      "reason": "local override configs are personal and not active package code",
-      "next_include_target": "not_applicable",
-      "review_milestone": "keep excluded by policy",
-      "coverage_patterns": [
-        "configs/local"
-      ]
-    }
   ],
   "per_file_ignore_register": [
     {
