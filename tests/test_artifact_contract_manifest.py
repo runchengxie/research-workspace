@@ -75,15 +75,12 @@ def test_orchestration_contract_identities_match_owner_packages() -> None:
     from portfolio_backtester.contracts import (
         STRATEGY_SPEC_CONTRACT_NAME as portfolio_strategy_name,
     )
-    from strategy_pipeline.contracts.signals import (
-        SIGNAL_CONTRACT_NAME as orchestration_signal_name,
-    )
 
     records = {
         str(record["artifact"]): record
         for record in _load_manifest()["artifacts"]  # type: ignore[index]
     }
-    assert alpha_signal_name == orchestration_signal_name == "alpha_research.signals"
+    assert alpha_signal_name == "alpha_research.signals"
     assert records["signals.parquet"]["contract"] == alpha_signal_name
     assert portfolio_pricing_name == "portfolio_backtester.backtest_pricing"
     assert portfolio_strategy_name == "portfolio_backtester.strategy_spec"

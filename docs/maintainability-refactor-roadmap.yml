@@ -158,9 +158,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 29,
-      "max_long_functions": 111,
-      "max_complexity_hotspots": 61,
+      "max_large_files": 0,
+      "max_long_functions": 0,
+      "max_complexity_hotspots": 0,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -216,32 +216,6 @@
       "resolved_note": "2026-07-27: refactored into provider submodules (_env/_io/_frame/_client/_adapters) with tushare_a_share.py reduced to an 81-line re-export shell; no longer a large_file. Pure physical relocation, public API and runtime behavior unchanged. market-data-platform commit 4ea0c14."
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/eval.py",
-      "owner_repo": "strategy-pipeline",
-      "risk": "high",
-      "first_safe_extraction": "rendering_reporting",
-      "target_layout": "pipeline/eval/{metrics.py,reporting.py,orchestration.py}",
-      "focused_tests": [
-        "strategy-pipeline pipeline and docs contract tests"
-      ],
-      "non_goals": "do not change evaluation metrics",
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. Dropped from REQUIRED_ROADMAP_PATHS; remaining debt tracked under accepted_hotspots if re-surfaces."
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/context_builder.py",
-      "owner_repo": "strategy-pipeline",
-      "risk": "medium",
-      "first_safe_extraction": "workflow_orchestration_separation",
-      "target_layout": "pipeline/context/{panel_request.py,settings.py,assembly.py}",
-      "focused_tests": [
-        "strategy-pipeline pipeline context and panel loading tests"
-      ],
-      "non_goals": "do not change TrainEvalRequest fields or panel loading behavior",
-      "resolved": true,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json."
-    },
-    {
       "path": "quant-execution-engine/src/quant_execution_engine/broker/longport.py",
       "owner_repo": "quant-execution-engine",
       "risk": "high",
@@ -264,28 +238,6 @@
       "focused_tests": [],
       "resolved": true,
       "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. 2026-08-17 reconcile: file is 39 LOC, confirmed absent from baseline-20260719-ty.json large_files; the 2026-07-27 correction claiming STILL >500 was erroneous. Debt resolved."
-    },
-    {
-      "owner_repo": "strategy-pipeline",
-      "path": "strategy-pipeline/scripts/research/daily_watch20_candidate_oos.py",
-      "first_safe_extraction": "workspace_governance_refresh",
-      "risk": "medium",
-      "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
-      "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
-      "focused_tests": [],
-      "resolved": false,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
-    },
-    {
-      "owner_repo": "strategy-pipeline",
-      "path": "strategy-pipeline/tests/test_daily_watch20_fundamental_shadow.py",
-      "first_safe_extraction": "workspace_governance_refresh",
-      "risk": "medium",
-      "non_goals": "no behavior change; record the large file/class surfaced by the committed maintainability baseline refresh.",
-      "target_layout": "defer any split to a follow-up owner decision; recorded here so the cross-repo hotspot budget stays tight.",
-      "focused_tests": [],
-      "resolved": false,
-      "resolved_note": "2026-07-27: no longer a large_file in baseline-20260719-ty.json. [2026-07-27 correction: this file is STILL a large_file in baseline-20260719-ty.json (LOC>500); the earlier 'no longer a large_file' note was erroneous. Debt is accepted via accepted_hotspots, not resolved.]"
     },
     {
       "path": "market-data-platform/src/market_data_platform/providers/a_share_minute_coverage.py",
@@ -399,42 +351,6 @@
       "next_action": "extract validation and retention helpers if new sleeves or additional portfolio constraints are added"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_pipeline.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 orchestration is split into short stage functions but remains one auditable transaction for the first delivery",
-      "next_action": "extract candidate preparation and receipt assembly after the MVP contract stabilizes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_minute.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 minute-cache planning, incremental partition reads, validation, and receipt evidence share one fail-closed publication boundary for the initial scheduled workflow",
-      "next_action": "extract cache planning and partition aggregation before adding another minute source or changing the minute-feature schema"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_ablation.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The research-only ablation runner keeps fold construction, frozen variants, conditional-coverage metrics, and lineage assembly in one auditable workflow after publication and statistics helpers were extracted",
-      "next_action": "split variant evaluation from run orchestration before adding another model family or promoting any ablation result"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_publication_inputs.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "Lock-time publication evidence reconstruction binds current assets, minute lineage, candidate rows, freshness, news heat, and model metadata before the live latest pointer can move",
-      "next_action": "split asset, candidate, minute, and model evidence validators into dedicated modules before expanding production inputs"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_daily_watch20_publication_safety.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The publication safety suite shares one realistic canonical input fixture while covering immutable identity, namespace isolation, lock timing, evidence rehashing, candidate binding, and finalized-state recovery",
-      "next_action": "split namespace, evidence, identity, and recovery scenarios after the production receipt schema stabilizes"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_daily_watch20_ablation.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The fixture-heavy research test covers continuous calendar windows, frozen buckets, conditional labels, source regimes, and strict publication receipts in one end-to-end contract suite",
-      "next_action": "split by window, execution, and publication concerns when the ablation contract next changes"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/cli.py",
       "owner_repo": "market-data-platform",
       "reason": "CLI dispatcher debt is lower priority than HK asset restore modules",
@@ -475,108 +391,6 @@
       "owner_repo": "market-data-platform",
       "reason": "A-share provider quality checks are outside the HK maintainability first wave",
       "next_action": "extract quality rule models and renderers when provider quality work resumes"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_pipeline_e2e.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "large fixture-heavy test file is tracked but not active production code",
-      "next_action": "split by scenario when pipeline e2e tests change"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/config.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "pipeline config debt is lower priority than eval orchestration split",
-      "next_action": "split schema and resolver after contract modules stay typed"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_pipeline_filters_backtest.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "large scenario test file is tracked but not active production code",
-      "next_action": "split by filter family when backtest filter tests change"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/release_tools/package_runs.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "release packaging debt is lower priority than research pipeline refactor",
-      "next_action": "split packaging checks when release tooling changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/panel_loader.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "platform asset loading debt entered the refreshed baseline after A-share panel support expanded",
-      "next_action": "split path resolution, validation, and load orchestration when panel loading changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/panel_load_steps.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "panel loading was split into step helpers, but the step module remains a large-file hotspot after feature dataset tests moved out",
-      "next_action": "split source fetch, benchmark separation, pricing preparation, and lifecycle diagnostics when panel loading changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/commands/tune_runner.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "tune runner became visible in the refreshed baseline after tune CLI extraction work moved orchestration out of tune.py",
-      "next_action": "split job materialization, execution, and result collection when tune workflow work resumes"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_pipeline_filters_file_derived.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "large derived-feature scenario test file is tracked but not active production code",
-      "next_action": "split by derived feature group when tests change"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_summarize_runs.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "large report test file mirrors summarize_runs.py debt",
-      "next_action": "split after summarize_runs.py reporting extraction"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/commands/linear_sweep.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
-      "next_action": "split parser and runner only when sweep command changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/commands/run_grid.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "C901 debt is cleared; file remains an accepted command-surface hotspot below the active large-file threshold",
-      "next_action": "split parser, fixed-signal runner, and summary writer only when grid command changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/fundamentals_enrichment.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "fundamental enrichment debt waits behind pipeline contract typing",
-      "next_action": "split enrichment schema and resolver when fundamentals work resumes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_artifacts.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "output artifact module is newly included in staged ty coverage",
-      "next_action": "promote further only after focused typecheck stays green"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/cli/liveops.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "liveops CLI wiring debt waits behind allocation/export contract modules",
-      "next_action": "split parser wiring after alloc-hk compatibility decision"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/liveops/holdings.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "holdings C901 debt was cleared, but the file remains a liveops large-file hotspot",
-      "next_action": "split parser, run selection, and output rendering when holdings changes resume"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_freshness.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 freshness validation keeps artifact lineage, trade-date eligibility, and fail-closed publication checks in one delivery boundary for the current scheduled workflow",
-      "next_action": "split lineage parsing from eligibility and publication validation before adding another producer cadence or freshness policy"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_daily_watch20_pipeline.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "The end-to-end DailyWatch20 suite covers strict hotspot-pool enforcement, freshness failures, deterministic selection, and publication receipts in one contract-focused test module",
-      "next_action": "split candidate-pool, freshness, and publication scenarios when the delivery contract next changes"
     },
     {
       "path": "quant-execution-engine/src/quant_execution_engine/domain.py",
@@ -903,64 +717,10 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_summary_sections.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_cli_research.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
       "path": "alpha-research/tests/test_promotion_gate.py",
       "owner_repo": "alpha-research",
       "reason": "promotion gate 主体已经迁到 alpha-research，这个大测试文件随模块一起登记",
       "next_action": "promotion gate 测试变更时按证据类型拆分"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/dataset_sampling.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_run_release_scripts.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_pipeline_memory_path.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_pipeline_validation.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/release_tools/release_runs.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "existing large-file hotspot surfaced by the refreshed stage-3 split baseline; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/liveops/alloc_core.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "live allocation core remains a large typed-island-adjacent module outside this tooling migration",
-      "next_action": "split sizing, guard, and rendering helpers when live allocation work resumes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/data_interface.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DataInterface is a class-size hotspot behind the current data access compatibility boundary",
-      "next_action": "split path resolution and data loading helpers when data interface work resumes"
     },
     {
       "path": "alpha-research/src/alpha_research/promotion_gate.py",
@@ -968,12 +728,6 @@
       "reason": "promotion gate 的主体实现已经迁到 alpha-research，当前先登记为 alpha 研究侧维护性债务",
       "next_action": "promotion gate 变更时拆分证据读取、阈值判定和报告渲染逻辑",
       "progress": "2026-07-26 completed the config-concern extraction: dataclasses, coercion helpers, and load_promotion_gate_config moved to promotion_gate_config.py; promotion_gate.py re-exports the public config API so alpha_research.promotion_gate imports are unchanged. Remaining: split evidence loading from record building / CLI when promotion-gate work resumes."
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/research_ops/summarize_runs.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "汇总报告实现进入当前基线，先登记为研究汇总流程的现有债务",
-      "next_action": "summarize_runs 变更时拆分读取、指标汇总和渲染逻辑"
     },
     {
       "path": "portfolio-backtester/src/portfolio_backtester/a_share_executable_oos_topk.py",
@@ -1120,34 +874,10 @@
       "next_action": "extract specialized metric families when this module next changes"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/external_signals.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "external signal ingestion centralizes schema validation, alignment, and diagnostics",
-      "next_action": "split loaders from alignment diagnostics when external signal support expands"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/style_replica_pipeline.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "StyleReplica orchestration remains a large integration module after oversize functions were extracted",
-      "next_action": "split artifact loading from daily run orchestration when StyleReplica workflow changes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DeepSeek 稳定性实验的执行调度、失败分类和追加式账本写入集中在同一个可审计边界内，当前版本已经绑定冻结证据并通过专项测试",
-      "next_action": "实验协议再次变更时，先拆分重试调度、尝试历史校验和账本写入逻辑"
-    },
-    {
       "path": "strategy-app/src/strategy_app/hotsector/hotsector_three_arm_shadow.py",
       "owner_repo": "strategy-app",
       "reason": "R4 迁移：three-arm 计算迁入 strategy-app，冻结的 owner 校验与配对结果边界保持在一个可审计模块",
       "next_action": "提取 owner 元数据校验与内容寻址结果持久化后再增加新的 arm、horizon 或晋升规则"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_campaign_support.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "活动计划、输入绑定和证据复核共用一套严格失败语义，当前模块低于项目的 800 行硬门槛",
-      "next_action": "增加新的活动类型前，将计划构造和证据复核提取为独立模块"
     },
     {
       "path": "market-data-platform/src/market_data_platform/tushare_minute_replacement_campaign_runner.py",
@@ -1160,18 +890,6 @@
       "owner_repo": "market-data-platform",
       "reason": "替换活动场景测试集中覆盖安全窗口、配额检查点、进程信号、readiness 证据和失败关闭路径",
       "next_action": "活动协议再次变更时，按调度、配额和 readiness 证据拆分场景与共享 fixture"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/hotsector_deepseek_v4_month_plans.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "V4 月度计划生成和信号校验在同一模块内，当前版本低于 800 行硬门槛并有冻结证据",
-      "next_action": "新增计划变体前，将计划构造逻辑和信号校验逻辑分离"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_hotsector_deepseek_v4_month.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "V4 月度计划专项测试集中覆盖信号稳定性、熔断和冻结证据路径",
-      "next_action": "保持测试与源模块同步重构"
     },
     {
       "path": "quant-execution-engine/src/quant_execution_engine/renderers/diff.py",
@@ -1196,18 +914,6 @@
       "owner_repo": "market-data-platform",
       "reason": "A-share fundamentals point-in-time provider module sits outside the HK maintainability first wave; still a large_file. Accepted pending provider schema split.",
       "next_action": "split provider schema and request planning when provider work resumes"
-    },
-    {
-      "path": "strategy-pipeline/scripts/research/daily_watch20_candidate_oos.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 candidate out-of-sample research script is large; accepted as a research-only script with a cohesive workflow.",
-      "next_action": "split candidate generation and oos evaluation when the script gains a second workflow"
-    },
-    {
-      "path": "strategy-pipeline/tests/test_daily_watch20_fundamental_shadow.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 fundamental shadow test concentrates fixture-heavy comparison cases; accepted as a large test file.",
-      "next_action": "keep the test in sync with the source module refactor"
     },
     {
       "path": "market-data-platform/src/market_data_platform/providers/_coverage_materialize.py",
@@ -1348,30 +1054,6 @@
       "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
     },
     {
-      "path": "strategy-pipeline/scripts/research/daily_watch20_fundamental_shadow.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "large-file hotspot surfaced by the 2026-07-28 module split baseline refresh; accepted as debt outside this structural split",
-      "next_action": "split by responsibility when this file changes for feature work or focused maintainability cleanup"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/_daily_watch20_ablation_api.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "re-export _api split submodule that still aggregates ablation orchestration above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
-      "next_action": "split fold construction and conditional-coverage reporting when ablation work resumes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_campaign_api.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "re-export _api split submodule that still aggregates campaign execution above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
-      "next_action": "split retry scheduling and attempt-history validation when campaign work resumes"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/_hotsector_deepseek_campaign_support_core.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "re-export _core split submodule that still aggregates campaign support above the 500-LOC threshold; debt transferred from the original monolith, accepted pending a focused split",
-      "next_action": "split plan construction and evidence review when campaign support changes"
-    },
-    {
       "path": "market-data-platform/src/market_data_platform/providers/_mins_mirror.py",
       "owner_repo": "market-data-platform",
       "reason": "tushare_a_share_mins.py(1090) 拆为 _mins_fetch/_mins_mirror 后的编排接收者（567 行），债务从原单体转移，非新债；公开 API 与运行时行为不变",
@@ -1420,12 +1102,6 @@
       "next_action": "将 PIT 快照校验与特征计算拆分为独立模块后再增加新的 PIT 特征族"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_market_shadow_publish.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "Market shadow 的原子 research-only 发布与代码/输入/环境快照哈希保持在一个可审计模块，属于编排层发布门禁",
-      "next_action": "拆分快照哈希收集与原子发布步骤后再增加新的发布面"
-    },
-    {
       "path": "quant-execution-engine/src/quant_execution_engine/broker/mock_sim.py",
       "owner_repo": "quant-execution-engine",
       "reason": "X1 离线执行证据链新增确定性 mock 券商适配器，模拟提交/成交/查询/撤单/对账并持久化状态，支撑重启恢复证据（359 行大类的真实新增，非回归）",
@@ -1442,12 +1118,6 @@
       "owner_repo": "strategy-app",
       "reason": "DailyWatch20 研究消融评估仍集中保存策略专属评价流程与证据组装，当前 556 行。该文件未由本轮边界收口新增，baseline 刷新后重新进入大文件账本。",
       "next_action": "下一次扩展消融维度前拆分统计评价与证据组装，保持 strategy-app 只承载策略专属纯计算。"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/release_tools/_package_runs_api.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "release run 打包 API 集中处理运行目录选择、产物校验与打包编排，当前 531 行，属于控制平面发布工具。baseline 刷新后重新进入大文件账本。",
-      "next_action": "将运行选择与产物清单校验拆成独立 helper，保持 release API 与打包格式兼容。"
     },
     {
       "path": "market-data-platform/src/market_data_platform/providers/tushare_a_share_fundamentals_pit_part01.py",
@@ -1468,28 +1138,10 @@
       "next_action": "按字段映射、日期处理和缓存辅助逻辑拆分，并由 provider 契约测试覆盖。"
     },
     {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_pipeline.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 控制平面仍集中承载运行编排、生命周期和发布前校验，当前超过大文件阈值。",
-      "next_action": "继续把策略语义迁回 owner 仓库，pipeline 保留控制平面编排和证据交接。"
-    },
-    {
       "path": "alpha-research/src/alpha_research/fundamental_state.py",
       "owner_repo": "alpha-research",
       "reason": "基本面状态特征与相关契约仍集中在一个较大的 owner 模块中，当前属于可追踪的维护性热点。",
       "next_action": "后续拆分状态构造与特征派生职责，并保持公开 feature API 稳定。"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/cli/core.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "控制平面 CLI 注册和参数分发仍集中在一个较大的入口模块中，属于 public orchestration surface。",
-      "next_action": "按命令族拆分注册逻辑，保持顶层 CLI 入口兼容。"
-    },
-    {
-      "path": "strategy-pipeline/src/strategy_pipeline/daily_watch20_news_heat_export.py",
-      "owner_repo": "strategy-pipeline",
-      "reason": "DailyWatch20 新闻热度导出仍集中处理控制平面导出和证据交接，当前超过大文件阈值。",
-      "next_action": "将数据准备与导出发布职责拆开，策略语义继续由对应 owner 维护。"
     }
   ]
 }

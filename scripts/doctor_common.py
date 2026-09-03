@@ -12,7 +12,7 @@ EXPECTED_SUBMODULES: dict[str, str | None] = {
     "market-data-platform": "marketdata",
     "alpha-research": None,
     "portfolio-backtester": None,
-    "strategy-pipeline": "strategy",
+    "strategy-pipeline": "strategy-pipeline",
     "quant-execution-engine": "qexec",
     "strategy-app": None,
     "deep-learning-tick-data-prediction": None,

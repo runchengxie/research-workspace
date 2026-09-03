@@ -78,9 +78,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.contracts.signals",
-          "path": "src/strategy_pipeline/contracts/signals.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.contracts.signals",
+          "path": "src/strategy_pipeline_internal/contracts/signals.py",
           "role": "orchestration_schema_helper"
         }
       ],
@@ -194,9 +194,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.liveops.export_targets",
-          "path": "src/strategy_pipeline/liveops/export_targets.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.liveops.export_targets",
+          "path": "src/strategy_pipeline_internal/liveops/export_targets.py",
           "role": "producer"
         },
         {
@@ -234,9 +234,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.research_evidence",
-          "path": "src/strategy_pipeline/research_evidence.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.research_evidence",
+          "path": "src/strategy_pipeline_internal/research_evidence.py",
           "role": "canonical_implementation"
         }
       ],
@@ -271,9 +271,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.daily_watch20_publish",
-          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.daily_watch20_publish",
+          "path": "src/strategy_pipeline_internal/daily_watch20_publish.py",
           "role": "canonical_producer"
         }
       ],
@@ -311,9 +311,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.daily_watch20_publish",
-          "path": "src/strategy_pipeline/daily_watch20_publish.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.daily_watch20_publish",
+          "path": "src/strategy_pipeline_internal/daily_watch20_publish.py",
           "role": "canonical_producer"
         }
       ],
@@ -498,9 +498,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.afml_evidence",
-          "path": "src/strategy_pipeline/afml_evidence.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.afml_evidence",
+          "path": "src/strategy_pipeline_internal/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -537,9 +537,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.afml_evidence",
-          "path": "src/strategy_pipeline/afml_evidence.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.afml_evidence",
+          "path": "src/strategy_pipeline_internal/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -579,9 +579,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.afml_evidence",
-          "path": "src/strategy_pipeline/afml_evidence.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.afml_evidence",
+          "path": "src/strategy_pipeline_internal/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -612,9 +612,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.afml_evidence",
-          "path": "src/strategy_pipeline/afml_evidence.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.afml_evidence",
+          "path": "src/strategy_pipeline_internal/afml_evidence.py",
           "role": "canonical_implementation"
         }
       ],
@@ -640,9 +640,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline",
-          "module": "strategy_pipeline.research_protocols",
-          "path": "src/strategy_pipeline/research_protocols.py",
+          "repo": "strategy-pipeline-internal",
+          "module": "strategy_pipeline_internal.research_protocols",
+          "path": "src/strategy_pipeline_internal/research_protocols.py",
           "role": "canonical_implementation"
         }
       ],
