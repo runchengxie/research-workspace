@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `4e2f5edf9fc1168113fe1b06fd2dd76b745ddef9`
+> source_commit: `2ace7c2bba8817e281d2e105ad6171b8ead105c8`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "4e2f5edf9fc1168113fe1b06fd2dd76b745ddef9",
+    "source_commit": "2ace7c2bba8817e281d2e105ad6171b8ead105c8",
   "inventory": {
-    "python_source_files": 125,
-    "test_files": 201,
+    "python_source_files": 124,
+    "test_files": 206,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 46,
+      "file_count": 45,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -128,6 +128,17 @@
       "test_evidence": "strategy-app tests/test_daily_watch20_policy_snapshot.py; internal tests/test_retired_daily_watch20_policy_snapshot.py and DailyWatch20 pipeline regression tests",
       "doc_evidence": "strategy-app/docs/application-catalog.md",
       "consumer_switch": "internal DailyWatch20 pipeline consumers now import strategy_app.daily_watch20.policy_snapshot and the internal module was deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/weekly_analysis_artifacts.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/weekly_analysis_artifacts.py",
+      "status": "complete",
+      "owner_commit": "1be76c5fca862404028843faa4cc29fc1578c640",
+      "internal_commit": "2ace7c2bba8817e281d2e105ad6171b8ead105c8",
+      "test_evidence": "strategy-research tests/test_weekly_analysis_artifacts.py; internal tests/test_retired_weekly_analysis_artifacts.py and weekly-analysis CLI regression tests",
+      "doc_evidence": "strategy-research/docs/weekly-analysis-artifacts.md",
+      "consumer_switch": "internal weekly-analysis CLI now imports strategy_research.weekly_analysis_artifacts and the internal module was deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
