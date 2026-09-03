@@ -1,0 +1,24 @@
+{
+  "schema_version": "research.ten_year_d11h5.production_gate.v1",
+  "as_of_date": "2026-09-03",
+  "research_only": true,
+  "production_eligible": false,
+  "decision": "retain_research_only",
+  "evidence": {
+    "d11_ladder": "ten_year_d11h5_20260903/d11_ladder_true_120d/audit.json",
+    "unified_replay": "ten_year_d11h5_20260903/unified_monthly_replay_true_d11/summary.csv",
+    "report": "docs/research/ten_year_d11h5_layered_comparison_20260903.md"
+  },
+  "gates": {
+    "historical_d11_score_integrity": "passed",
+    "common_universe_cost_oos": "passed_diagnostically",
+    "long_window_return_robustness": "not_passed",
+    "three_to_five_year_maturity": "not_passed",
+    "production_promotion": "not_allowed"
+  },
+  "limitations": [
+    "D11 historical reconstruction uses 120-session refit blocks rather than the 40-session shadow cadence.",
+    "Common fundamental comparison starts 2018-03-30 because earlier fundamental scores are sparse.",
+    "The long-window common replay is diagnostic evidence, not a mature live track record."
+  ]
+}
