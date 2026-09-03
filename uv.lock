@@ -1123,6 +1123,7 @@ dependencies = [
     { name = "pandas" },
     { name = "pyarrow" },
     { name = "pyyaml" },
+    { name = "strategy-pipeline" },
     { name = "tabulate" },
 ]
 
@@ -1140,6 +1141,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2" },
     { name = "pyarrow", specifier = ">=14" },
     { name = "pyyaml", specifier = ">=6.0" },
+    { name = "strategy-pipeline", git = "https://github.com/runchengxie/strategy-pipeline.git" },
     { name = "tabulate", specifier = ">=0.9" },
 ]
 
@@ -1180,6 +1182,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/e8/c4/ba2f8066cceb6f233
 wheels = [
     { url = "https://files.pythonhosted.org/packages/32/46/9cb0e58b2deb7f82b84065f37f3bffeb12413f947f9388e4cac22c4621ce/sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0", size = 29575, upload-time = "2021-05-16T22:03:41.177Z" },
 ]
+
+[[package]]
+name = "strategy-pipeline"
+version = "0.1.0"
+source = { git = "https://github.com/runchengxie/strategy-pipeline.git#708e25cd4dc381f38631af9899118399f2cc1045" }
 
 [[package]]
 name = "tabulate"
