@@ -22,6 +22,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 本次切片已将 `pipeline/position_output_artifacts.py` 的持仓视图写入职责归入 `portfolio-backtester.position_outputs`。internal 的输出编排仍在过渡期保留，但不再维护这份重复实现。
 
+`pipeline/position_postprocess_artifacts.py` 的后处理诊断写入职责也已归入 `portfolio-backtester.position_postprocess_outputs`，并由 owner API 继续维护四类运行产物。
+
 ## 目标关系
 
 ```text
