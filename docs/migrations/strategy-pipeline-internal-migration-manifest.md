@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `8af4c527c09d4a8d7eff65a8ed17c68b61bbe831`
+> source_commit: `05c1b7b05a576eef33b1a0d98874f2c9ee110bcc`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "8af4c527c09d4a8d7eff65a8ed17c68b61bbe831",
+  "source_commit": "05c1b7b05a576eef33b1a0d98874f2c9ee110bcc",
   "inventory": {
-    "python_source_files": 192,
-    "test_files": 182,
+    "python_source_files": 188,
+    "test_files": 180,
     "script_files": 34,
     "config_files": 21,
     "ownership_document_files": 114,
@@ -66,16 +66,6 @@
       "test_evidence": "workspace command and pre-push smoke tests",
       "doc_evidence": "workspace maintenance and bootstrap docs",
       "removal_condition": "all commands have owner-native replacements"
-    },
-    {
-      "source_path": "src/strategy_pipeline_internal/contracts",
-      "file_count": 4,
-      "owner_repo": "research-workspace",
-      "target_path": "docs/contracts and src/research_contracts",
-      "status": "planned",
-      "test_evidence": "artifact contract and lineage tests",
-      "doc_evidence": "docs/contracts.md and docs/artifact-contracts.yml",
-      "removal_condition": "workspace contract is the only cross-repository schema entry"
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",

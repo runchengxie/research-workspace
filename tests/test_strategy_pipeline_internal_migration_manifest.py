@@ -22,8 +22,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     inventory = payload["inventory"]
     assert inventory == {
-        "python_source_files": 192,
-        "test_files": 182,
+        "python_source_files": 188,
+        "test_files": 180,
         "script_files": 34,
         "config_files": 21,
         "ownership_document_files": 114,
@@ -40,7 +40,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 192
+    assert sum(group["file_count"] for group in groups) == 188
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
