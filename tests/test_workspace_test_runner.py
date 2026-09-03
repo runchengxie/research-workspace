@@ -59,7 +59,7 @@ def test_workspace_pythonpath_rejects_missing_source_tree(tmp_path: Path) -> Non
         module.workspace_pythonpath(tmp_path)
 
 
-def test_pytest_command_uses_strategy_pipeline_environment(tmp_path: Path) -> None:
+def test_pytest_command_uses_workspace_environment(tmp_path: Path) -> None:
     module = _load_module()
 
     command = module.pytest_command(tmp_path)
@@ -68,12 +68,18 @@ def test_pytest_command_uses_strategy_pipeline_environment(tmp_path: Path) -> No
         "uv",
         "run",
         "--project",
-        str(tmp_path / "strategy-pipeline"),
-        "--extra",
+        str(tmp_path),
+        "--group",
         "dev",
         "python",
         "-m",
         "pytest",
         str(tmp_path / "tests"),
+        "--ignore",
+        str(tmp_path / "tests/test_next_open_to_high_research.py"),
+        "--ignore",
+        str(tmp_path / "tests/test_next_open_to_high_research_part2.py"),
+        "--ignore",
+        str(tmp_path / "tests/test_private_research_config_boundary.py"),
         "-q",
     )

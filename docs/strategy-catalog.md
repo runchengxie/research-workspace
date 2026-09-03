@@ -37,7 +37,7 @@
 | 查看外部候选、选择与因子卫星 | [strategy-satellites.md](strategy-satellites.md) |
 | 查看信号产物合同 | [alpha-research/docs/reference/signal-artifacts.md](../alpha-research/docs/reference/signal-artifacts.md) |
 | 查看组合与回测职责 | [portfolio-backtester/README.md](../portfolio-backtester/README.md) |
-| 查看运行与发布控制面 | [strategy-pipeline/docs/strategy-catalog.md](../strategy-pipeline/docs/strategy-catalog.md) |
+| 查看运行与发布控制面 | [strategy-pipeline-internal/docs/strategy-catalog.md](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/strategy-catalog.md) |
 | 查看工作区剩余项目和优先级 | [roadmap.md](roadmap.md) |
 | 查看策略边界拆分完成记录 | [strategy-boundary-refactor-roadmap.md](strategy-boundary-refactor-roadmap.md) |
 

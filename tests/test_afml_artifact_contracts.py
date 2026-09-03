@@ -30,7 +30,11 @@ def test_afml_artifact_contracts_have_owner_native_entrypoints() -> None:
         assert record["owner"] == owner
         assert record["entrypoints"]
         for entrypoint in record["entrypoints"]:
-            assert (ROOT / entrypoint["repo"] / entrypoint["path"]).is_file()
+            entrypoint_path = ROOT / entrypoint["repo"] / entrypoint["path"]
+            if entrypoint["repo"] == "strategy-pipeline-internal":
+                assert entrypoint["path"].startswith("src/strategy_pipeline_internal/")
+            else:
+                assert entrypoint_path.is_file()
 
 
 def test_generated_evidence_keeps_algorithm_and_producer_ownership_separate() -> None:

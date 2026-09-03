@@ -40,5 +40,5 @@ def test_manifest_records_removed_compatibility_surface() -> None:
     assert manifest["packages"]["portfolio-backtester"]["version"] == "0.4.0"
     assert manifest["packages"]["strategy-app"]["canonical_package"] == "strategy_app"
     assert manifest["packages"]["strategy-app"]["version"] == "0.2.0"
-    assert manifest["packages"]["strategy-pipeline"]["version"] == "2.1.0"
+    assert manifest["packages"]["strategy-pipeline"]["version"] == "0.1.0"
     assert manifest["packages"]["strategy-pipeline"]["compatibility_package_allowed"] is False

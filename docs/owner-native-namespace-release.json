@@ -28,10 +28,10 @@
     },
     "strategy-pipeline": {
       "canonical_package": "strategy_pipeline",
-      "commit": "bd6aab69fca57e789b9704af53c2c449cceef479",
+      "commit": "c2a13e75d62486258d6446d98bc79f1d973e6244",
       "compatibility_package_allowed": false,
       "pr": 93,
-      "version": "2.1.0"
+      "version": "0.1.0"
     }
   },
   "schema": "owner_native_namespace_release.v2",

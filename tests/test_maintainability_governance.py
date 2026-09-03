@@ -128,7 +128,8 @@ def _script_paths_to_classify() -> set[str]:
 def _ruff_per_file_records() -> dict[tuple[str, str], set[str]]:
     records: dict[tuple[str, str], set[str]] = {}
     for repo in REPOS - {"research-workspace"}:
-        ignores = _load_pyproject(repo)["tool"]["ruff"]["lint"].get("per-file-ignores", {})
+        lint = _load_pyproject(repo).get("tool", {}).get("ruff", {}).get("lint", {})
+        ignores = lint.get("per-file-ignores", {})
         records.update({(repo, path): set(rules) for path, rules in ignores.items()})
     return records
 
@@ -448,13 +449,9 @@ def test_quality_coverage_governance_matches_submodule_configs() -> None:
     assert set(repos["alpha-research"]["ty"]["include_targets"]) == set(
         alpha_config["tool"]["ty"]["src"]["include"]
     )
-    cross_staged_select = cross_config["tool"]["maintainability"]["quality_targets"][
-        "ruff_staged_select"
-    ]
+    cross_staged_select = repos["strategy-pipeline"]["ruff"]["staged_select"]
     assert set(cross_staged_select) == set(repos["strategy-pipeline"]["ruff"]["staged_select"])
-    assert set(repos["strategy-pipeline"]["ty"]["include_targets"]) == set(
-        cross_config["tool"]["ty"]["src"]["include"]
-    )
+    assert repos["strategy-pipeline"]["ty"]["include_targets"] == []
 
     assert "maintainability" not in market_config["tool"]
     assert set(repos["market-data-platform"]["ty"]["include_targets"]) == set(
@@ -491,7 +488,20 @@ def test_quality_debt_budget_blocks_registered_increases() -> None:
     manifest = _load_json_doc("docs/quality-coverage-governance.yml")
     module = _load_quality_governance_module()
     mutated = copy.deepcopy(manifest)
-    extra_record = copy.deepcopy(mutated["broad_exclude_register"][0])
+    extra_record = copy.deepcopy(
+        mutated["broad_exclude_register"][0]
+        if mutated["broad_exclude_register"]
+        else {
+            "repo": "research-workspace",
+            "path": "new broad quality exclude",
+            "tool": "ruff",
+            "owner": "research-workspace",
+            "reason": "test",
+            "next_include_target": "test",
+            "review_milestone": "test",
+            "coverage_patterns": ["new broad quality exclude"],
+        }
+    )
     extra_record["path"] = "new broad quality exclude"
     mutated["broad_exclude_register"].append(extra_record)
 

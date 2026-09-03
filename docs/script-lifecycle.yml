@@ -730,36 +730,6 @@
       "removal_condition": "remove only after cross-repo handoff smoke coverage moves to repo-local gates and no release checklist calls this script for two release reviews"
     },
     {
-      "path": "strategy-pipeline/scripts/internal/export_repo_source.py",
-      "owner": "strategy-pipeline",
-      "purpose": "Source export for release/provenance bundles",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "explicit export destination",
-      "external_dependencies": "git checkout",
-      "removal_condition": "remove only after source export evidence is produced by a successor command and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "strategy-pipeline/scripts/internal/freeze_hk_research_outputs.py",
-      "owner": "strategy-pipeline",
-      "purpose": "HK research output cold-storage freeze",
-      "lifecycle": "release",
-      "safe_to_run_locally": false,
-      "writes_files": "cold-storage package and manifest paths",
-      "external_dependencies": "research output archive paths and release packaging tools",
-      "removal_condition": "move to archive only after research freeze evidence is no longer refreshed, archive manifest coverage remains available, and no release checklist calls this script for two release reviews"
-    },
-    {
-      "path": "strategy-pipeline/scripts/internal/package_repo.sh",
-      "owner": "strategy-pipeline",
-      "purpose": "Package repository source for release",
-      "lifecycle": "release",
-      "safe_to_run_locally": true,
-      "writes_files": "explicit package output",
-      "external_dependencies": "shell, tar, git",
-      "removal_condition": "remove only after release source packaging is automated or replaced and no release checklist calls this script for two release reviews"
-    },
-    {
       "path": "strategy-research/src/style_factors/style_factor_attribution.py",
       "owner": "research-workspace",
       "purpose": "Run A-share 15-factor style analysis with optional strategy OLS attribution, publish to DATA_PLATFORM_ROOT standard location",

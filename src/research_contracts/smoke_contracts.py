@@ -176,19 +176,12 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
                 )
             )
 
-    strategy = _command_for(root, "strategy-pipeline", "strategy", "strategy_pipeline")
-    if strategy is None:
-        results.append(_skip("strategy export-targets help", "strategy CLI is unavailable"))
-    else:
-        base, env = strategy
-        results.append(
-            _run(
-                "strategy export-targets help",
-                [*base, "export-targets", "--help"],
-                env=env,
-                timeout=timeout,
-            )
+    results.append(
+        _skip(
+            "strategy export-targets help",
+            "export-targets belongs to the private strategy-pipeline-internal distribution",
         )
+    )
 
     qexec = _command_for(root, "quant-execution-engine", "qexec", "quant_execution_engine")
     if qexec is None:
