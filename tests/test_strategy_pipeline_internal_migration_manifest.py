@@ -87,5 +87,23 @@ def test_completed_code_migrations_record_owner_and_consumer_switch() -> None:
                 "internal compatibility exports now delegate to "
                 "portfolio_backtester.backtest_contracts"
             ),
-        }
+        },
+        {
+            "source_path": "src/strategy_pipeline_internal/contracts/signals.py",
+            "owner_repo": "alpha-research",
+            "target_path": "src/alpha_research/signal_artifact.py",
+            "status": "complete",
+            "owner_commit": "e2b71e6871ae1b0f9ce16511a9dca1244a23415a",
+            "internal_commit": "9d895b411cc4425878ab896ce7efbacd8310ae9f",
+            "test_evidence": (
+                "alpha-research tests/test_signal_artifact.py; "
+                "internal tests/test_signal_contracts.py; "
+                "internal tests/test_research_abstractions.py; "
+                "internal tests/test_external_signals.py"
+            ),
+            "doc_evidence": "alpha-research/docs/reference/signal-artifacts.md",
+            "consumer_switch": (
+                "internal compatibility exports now delegate to alpha_research.signal_artifact"
+            ),
+        },
     ]

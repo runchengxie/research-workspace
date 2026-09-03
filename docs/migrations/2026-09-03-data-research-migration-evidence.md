@@ -59,3 +59,13 @@ internal 的以下 planned 文档已有对应 owner 页面，workspace 清单已
 
 `research-workspace` 的 `strategy-pipeline` submodule 仍指向公共仓库。internal commit 不应写入
 这个 gitlink，workspace 只记录迁移关系，不依赖 private repository。
+
+## 信号产物契约
+
+`strategy_pipeline_internal.contracts.signals` 的实现已经迁入 `alpha_research.signal_artifact`。
+alpha owner 保留原有 parquet 契约、字段标准化、校验、读写和元数据摘要，并额外提供
+artifact envelope v2。internal 当前只保留历史导入路径的兼容导出。
+
+对应测试为 alpha-research 的 `tests/test_signal_artifact.py`，以及 internal 的
+`tests/test_signal_contracts.py`、`tests/test_research_abstractions.py` 和
+`tests/test_external_signals.py`。

@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `fa0e2aae6273c78331da19888b95070254d490c3`
+> source_commit: `9d895b411cc4425878ab896ce7efbacd8310ae9f`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "fa0e2aae6273c78331da19888b95070254d490c3",
+  "source_commit": "9d895b411cc4425878ab896ce7efbacd8310ae9f",
   "inventory": {
     "python_source_files": 194,
     "test_files": 180,
@@ -147,6 +147,17 @@
       "test_evidence": "portfolio-backtester tests/test_backtest_output_contracts.py; internal tests/test_backtest_contracts.py",
       "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
       "consumer_switch": "internal compatibility exports now delegate to portfolio_backtester.backtest_contracts"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/contracts/signals.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/signal_artifact.py",
+      "status": "complete",
+      "owner_commit": "e2b71e6871ae1b0f9ce16511a9dca1244a23415a",
+      "internal_commit": "9d895b411cc4425878ab896ce7efbacd8310ae9f",
+      "test_evidence": "alpha-research tests/test_signal_artifact.py; internal tests/test_signal_contracts.py; internal tests/test_research_abstractions.py; internal tests/test_external_signals.py",
+      "doc_evidence": "alpha-research/docs/reference/signal-artifacts.md",
+      "consumer_switch": "internal compatibility exports now delegate to alpha_research.signal_artifact"
     }
   ]
 }
