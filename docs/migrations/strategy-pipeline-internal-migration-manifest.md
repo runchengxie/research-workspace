@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `7513bd72c9ac8162670fabb0439c7d66062f979a`
+> source_commit: `eaa14daf88d4d9c30de98d0b74f839d94102a08c`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "7513bd72c9ac8162670fabb0439c7d66062f979a",
+  "source_commit": "eaa14daf88d4d9c30de98d0b74f839d94102a08c",
   "inventory": {
-    "python_source_files": 167,
-    "test_files": 188,
+    "python_source_files": 164,
+    "test_files": 189,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 59,
+      "file_count": 56,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -282,6 +282,39 @@
       "test_evidence": "alpha-research train-eval contract tests; internal tests/test_retired_train_eval_contract_facade.py",
       "doc_evidence": "alpha-research/docs/README.md",
       "consumer_switch": "internal train-eval contract tests now import alpha_research.train_eval_contracts"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/eval_benchmark.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/benchmarking.py",
+      "status": "complete",
+      "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
+      "internal_commit": "eaa14daf88d4d9c30de98d0b74f839d94102a08c",
+      "test_evidence": "portfolio-backtester benchmarking tests; internal tests/test_retired_owner_facades.py",
+      "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+      "consumer_switch": "internal benchmark tests now import portfolio_backtester.benchmarking"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/train_eval_request_builder.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/train_eval_request_builder.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "eaa14daf88d4d9c30de98d0b74f839d94102a08c",
+      "test_evidence": "alpha-research train-eval request tests; internal tests/test_retired_owner_facades.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal train-eval request consumers now import alpha_research.train_eval_request_builder"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/train_eval_result.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/train_eval_result.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "eaa14daf88d4d9c30de98d0b74f839d94102a08c",
+      "test_evidence": "alpha-research train-eval result tests; internal tests/test_retired_owner_facades.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal train-eval result consumers now import alpha_research.train_eval_result"
     }
   ],
   "partial_code_migrations": [
