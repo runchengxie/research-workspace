@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 130,
+        "python_source_files": 129,
         "test_files": 201,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 130
+    assert sum(group["file_count"] for group in groups) == 129
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -453,6 +453,14 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert market_shadow["internal_commit"] == "8be7c39894bcbb338b981a6868aee97f0d4dbc11"
     assert market_shadow["test_evidence"]
     assert market_shadow["rationale"]
+
+    application_policy = facades[
+        "src/strategy_pipeline_internal/daily_watch20_application_policy.py"
+    ]
+    assert application_policy["status"] == "complete"
+    assert application_policy["internal_commit"] == "e405209e2c2c1ea8f8d102776e6f8aa004a2e7b1"
+    assert application_policy["test_evidence"]
+    assert application_policy["rationale"]
 
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
