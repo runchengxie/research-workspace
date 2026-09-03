@@ -49,3 +49,13 @@ internal 的以下 planned 文档已有对应 owner 页面，workspace 清单已
 
 这两份文档已在迁移清单标记为 `complete`。`strategy_pipeline_internal.afml_evidence` 的运行侧
 编排仍未删除，后续要在执行交接切片中确认其输出由 owner API 消费，再移除 internal 入口。
+
+## 回测输出契约
+
+`strategy_pipeline_internal.contracts.backtest` 的独立实现已迁入
+`portfolio_backtester.backtest_contracts`。portfolio owner 提供 contract、验证器、构造器、
+包级入口、公开 API 文档和 509 个测试中的对应覆盖。internal 当前只保留兼容导出，避免已有
+调用方立即中断。该兼容层可在所有 active consumer 切换完成后删除。
+
+`research-workspace` 的 `strategy-pipeline` submodule 仍指向公共仓库。internal commit 不应写入
+这个 gitlink，workspace 只记录迁移关系，不依赖 private repository。

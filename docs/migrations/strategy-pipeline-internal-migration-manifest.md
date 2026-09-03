@@ -135,6 +135,19 @@
     {"source_path": "docs/research/incumbent-challenger-evidence-v2.md", "owner_repo": "strategy-app", "target_path": "docs/research/incumbent-challenger-evidence-v2.md", "status": "planned"},
     {"source_path": "docs/research/next-open-to-high-audit.md", "owner_repo": "strategy-app", "target_path": "docs/research/next-open-to-high-audit.md", "status": "planned"},
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "strategy-app", "target_path": "docs/strategy-catalog.md", "status": "planned"}
+  ],
+  "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/contracts/backtest.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/backtest_contracts.py",
+      "status": "complete",
+      "owner_commit": "7a7338629e19f4d8639cd13dcb31765a22acd2b3",
+      "internal_commit": "c50b101b9c200914404a080eed77f47df6116891",
+      "test_evidence": "portfolio-backtester tests/test_backtest_output_contracts.py; internal tests/test_backtest_contracts.py",
+      "doc_evidence": "portfolio-backtester/docs/reference/public-api.md",
+      "consumer_switch": "internal compatibility exports now delegate to portfolio_backtester.backtest_contracts"
+    }
   ]
 }
 ```
