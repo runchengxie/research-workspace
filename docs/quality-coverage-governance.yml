@@ -3,7 +3,7 @@
   "_owner": "research-workspace",
   "schema_version": "quality_coverage_governance.v1",
   "debt_budget": {
-    "broad_exclude_register_max": 2,
+    "broad_exclude_register_max": 0,
     "per_file_ignore_register_max": 32,
     "policy": "ratchet_only; lower these maxima after cleanup, do not raise them without explicit release review"
   },
@@ -40,30 +40,15 @@
     {
       "repo": "strategy-pipeline",
       "ruff": {
-        "staged_select": [
-          "E",
-          "F",
-          "I",
-          "UP",
-          "B",
-          "C4",
-          "RET",
-          "SIM",
-          "RUF",
-          "C90"
-        ],
-        "current_hard_gate": "scripts/dev/run_tests.sh lint",
-        "staged_check": "ruff check --select E,F,I,UP,B,C4,RET,SIM,RUF,C90 src/strategy_pipeline/pipeline/contracts.py src/strategy_pipeline/pipeline/output_context.py src/strategy_pipeline/pipeline/output_artifacts.py src/strategy_pipeline/pipeline/output.py src/strategy_pipeline/pipeline/output_orchestration.py src/strategy_pipeline/pipeline/output_summary.py src/strategy_pipeline/pipeline/final_oos_stage.py src/strategy_pipeline/liveops/export_targets.py src/strategy_pipeline/liveops/alloc_core.py src/strategy_pipeline/liveops/alloc_selection.py",
-        "promotion_criteria": "focused Ruff passes on covered modules and remaining exceptions are registered"
+        "staged_select": [],
+        "current_hard_gate": "not_applicable",
+        "staged_check": "not_applicable",
+        "promotion_criteria": "add a Ruff gate when the public package adopts a lint dependency"
       },
       "ty": {
-        "current_hard_gate": "scripts/dev/run_tests.sh typecheck",
-        "include_targets": [
-          "src",
-          "scripts",
-          "tests"
-        ],
-        "promotion_criteria": "expand typed islands after staged modules are free of dynamic protocol assumptions"
+        "current_hard_gate": "not_applicable",
+        "include_targets": [],
+        "promotion_criteria": "add a type-check gate only when the public package adopts a type-check dependency"
       }
     },
     {

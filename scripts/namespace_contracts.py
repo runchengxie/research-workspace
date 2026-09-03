@@ -77,7 +77,6 @@ def check_initialized_layout() -> list[str]:
     project = tomllib.loads((ROOT / "strategy-pipeline/pyproject.toml").read_text(encoding="utf-8"))
     scripts = project["project"]["scripts"]
     expected_scripts = {
-        "strategy": "strategy_pipeline.cli:main",
         "strategy-pipeline": "strategy_pipeline.cli:main",
     }
     if scripts != expected_scripts:
