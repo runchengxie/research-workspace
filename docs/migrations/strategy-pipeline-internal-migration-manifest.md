@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `9c9555de0b1bdff85ebbb0dcc813795d5535f075`
+> source_commit: `8be7c39894bcbb338b981a6868aee97f0d4dbc11`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "9c9555de0b1bdff85ebbb0dcc813795d5535f075",
+  "source_commit": "8be7c39894bcbb338b981a6868aee97f0d4dbc11",
   "inventory": {
-    "python_source_files": 137,
+    "python_source_files": 136,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 58,
+      "file_count": 57,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -542,6 +542,13 @@
       "internal_commit": "9c9555de0b1bdff85ebbb0dcc813795d5535f075",
       "test_evidence": "strategy-app tests/test_daily_watch20_minute_campaign_contract.py; strategy-app minute cache and friend-minute tests; internal tests/test_daily_watch20_minute_campaign.py; import boundary check",
       "rationale": "Minute campaign input loading, universe freezing, friend-feature lineage, and Hermite input binding now live in strategy-app alongside the campaign owner."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_market_shadow.py",
+      "status": "complete",
+      "internal_commit": "8be7c39894bcbb338b981a6868aee97f0d4dbc11",
+      "test_evidence": "internal market-shadow, publication, candidate OOS, and full test suites; import boundary check",
+      "rationale": "The module was a compatibility re-export of the strategy-app market-shadow API. Internal callers now import the owner module directly."
     }
   ],
   "completed_boundary_cleanups": [
