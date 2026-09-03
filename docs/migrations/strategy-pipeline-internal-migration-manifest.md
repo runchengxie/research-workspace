@@ -20,9 +20,9 @@
     "config_files": 18,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
-      "complete": 8,
+      "complete": 11,
       "private": 58,
-      "planned": 16,
+      "planned": 13,
       "archive": 32
     }
   },
