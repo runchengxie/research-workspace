@@ -234,9 +234,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.research_evidence",
-          "path": "src/strategy_pipeline_internal/research_evidence.py",
+          "repo": "research-workspace",
+          "module": "research_contracts.research_run_manifest_writer",
+          "path": "src/research_contracts/research_run_manifest_writer.py",
           "role": "canonical_implementation"
         }
       ],

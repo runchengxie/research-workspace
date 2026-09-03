@@ -48,6 +48,11 @@ from .research_run_manifest import (
     ProducerVersion,
     ResearchRunManifest,
 )
+from .research_run_manifest_writer import (
+    MANIFEST_FILENAME,
+    build_research_run_manifest,
+    validate_research_run_manifest,
+)
 
 __all__ = [
     "ARTIFACT_ENVELOPE_KEY",
@@ -67,6 +72,7 @@ __all__ = [
     "FileReceipt",
     "LegacyArtifactMetadata",
     "LineageInput",
+    "MANIFEST_FILENAME",
     "PlatformPublicationArtifact",
     "PlatformPublicationManifest",
     "ProducerIdentity",
@@ -76,6 +82,7 @@ __all__ = [
     "TargetHandoffContext",
     "attach_artifact_envelope_v2",
     "build_file_receipts",
+    "build_research_run_manifest",
     "build_platform_publication",
     "canonical_json_sha256",
     "file_receipt_payload",
@@ -85,5 +92,6 @@ __all__ = [
     "read_artifact_envelope",
     "validate_artifact_contract_manifest",
     "validate_file_receipts",
+    "validate_research_run_manifest",
     "validate_research_clock",
 ]
