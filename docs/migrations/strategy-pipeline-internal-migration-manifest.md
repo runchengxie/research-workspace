@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e4f75b92c031e4e634d40f8581e614b0cf572633`
+> source_commit: `7513bd72c9ac8162670fabb0439c7d66062f979a`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "e4f75b92c031e4e634d40f8581e614b0cf572633",
+  "source_commit": "7513bd72c9ac8162670fabb0439c7d66062f979a",
   "inventory": {
-    "python_source_files": 168,
-    "test_files": 187,
+    "python_source_files": 167,
+    "test_files": 188,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 60,
+      "file_count": 59,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -271,6 +271,17 @@
       "test_evidence": "strategy-pipeline tests/control_plane/test_afml_lineage.py; internal tests/test_retired_afml_lineage.py",
       "doc_evidence": "strategy-pipeline/docs/control-plane.md",
       "consumer_switch": "internal AFML lineage tests now import the public control-plane owner"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/contracts.py",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/train_eval_contracts.py",
+      "status": "complete",
+      "owner_commit": "6dd0de84e3639d233e6b71a8820b198b117cc22f",
+      "internal_commit": "7513bd72c9ac8162670fabb0439c7d66062f979a",
+      "test_evidence": "alpha-research train-eval contract tests; internal tests/test_retired_train_eval_contract_facade.py",
+      "doc_evidence": "alpha-research/docs/README.md",
+      "consumer_switch": "internal train-eval contract tests now import alpha_research.train_eval_contracts"
     }
   ],
   "partial_code_migrations": [

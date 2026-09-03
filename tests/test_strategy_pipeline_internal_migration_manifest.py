@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 168,
-        "test_files": 187,
+        "python_source_files": 167,
+        "test_files": 188,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 168
+    assert sum(group["file_count"] for group in groups) == 167
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -134,6 +134,24 @@ def test_afml_lineage_migration_records_public_owner() -> None:
     assert migration["owner_commit"] == "e15d463cde0512e5cbf9cc24b95f09f6c9c898ea"
     assert migration["internal_commit"] == "e4f75b92c031e4e634d40f8581e614b0cf572633"
     assert migration["status"] == "complete"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
+def test_train_eval_contract_facade_migration_records_alpha_owner() -> None:
+    payload = _load_manifest()
+    migration = next(
+        item
+        for item in payload["completed_code_migrations"]
+        if item["source_path"] == "src/strategy_pipeline_internal/pipeline/contracts.py"
+    )
+
+    assert migration["owner_repo"] == "alpha-research"
+    assert migration["target_path"] == "src/alpha_research/train_eval_contracts.py"
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "6dd0de84e3639d233e6b71a8820b198b117cc22f"
+    assert migration["internal_commit"] == "7513bd72c9ac8162670fabb0439c7d66062f979a"
     assert migration["test_evidence"]
     assert migration["doc_evidence"]
     assert migration["consumer_switch"]
