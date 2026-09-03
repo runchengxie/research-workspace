@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `5cb4f61bda260a3a31e13908858d7cc5bd52ae2c`
+> source_commit: `19e5924b72e7ebd83aa79c6a054c885f9aa3b8ff`
 > last_verified: 2026-09-03
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "5cb4f61bda260a3a31e13908858d7cc5bd52ae2c",
+  "source_commit": "19e5924b72e7ebd83aa79c6a054c885f9aa3b8ff",
   "inventory": {
-    "python_source_files": 148,
+    "python_source_files": 147,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 69,
+      "file_count": 68,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -465,6 +465,13 @@
       "internal_commit": "5cb4f61bda260a3a31e13908858d7cc5bd52ae2c",
       "test_evidence": "internal DailyWatch20 publication, pipeline, lifecycle, recovery, and safety tests; internal full test suite; import boundary check",
       "rationale": "The re-export shell had no unique implementation. Pipeline and publication consumers now use the split publish API directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_publication_inputs.py",
+      "status": "complete",
+      "internal_commit": "19e5924b72e7ebd83aa79c6a054c885f9aa3b8ff",
+      "test_evidence": "internal tests/test_daily_watch20_minute.py; internal publication safety tests; internal full test suite; import boundary check",
+      "rationale": "The re-export shell had no unique implementation. Publication validation and minute evidence consumers now use the split API and core modules directly."
     }
   ],
   "completed_boundary_cleanups": [
