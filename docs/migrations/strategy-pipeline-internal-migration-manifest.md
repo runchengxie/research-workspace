@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `6efa17cfb58dc0a67cc07fd3c46540baafb486f1`
+> source_commit: `ba7b4a2b86822506a95f5d67971d92db19bb8637`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "6efa17cfb58dc0a67cc07fd3c46540baafb486f1",
+    "source_commit": "ba7b4a2b86822506a95f5d67971d92db19bb8637",
   "inventory": {
-    "python_source_files": 120,
+    "python_source_files": 119,
     "test_files": 209,
     "script_files": 34,
     "config_files": 18,
@@ -49,7 +49,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",
-      "file_count": 9,
+      "file_count": 8,
       "owner_repo": "quant-execution-engine",
       "target_path": "src/quant_execution_engine/liveops",
       "status": "planned",
@@ -183,6 +183,17 @@
       "test_evidence": "strategy-research tests/test_refresh.py; internal tests/test_cli_style_factor_refresh.py and full test suite",
       "doc_evidence": "strategy-research/docs/style-factor-refresh.md; internal docs/internal/data-ops-boundary-inventory.md",
       "consumer_switch": "internal style-factors CLI now imports style_factors.refresh, the internal bridge and its owner tests were deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/allocation_reference.py",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/allocation_reference.py",
+      "status": "complete",
+      "owner_commit": "8a6d836110f81678415d7eb02ec8a7e8e156655c",
+      "internal_commit": "ba7b4a2b86822506a95f5d67971d92db19bb8637",
+      "test_evidence": "portfolio-backtester tests/test_allocation_reference.py; internal tests/test_retired_allocation_reference.py and allocation regression tests",
+      "doc_evidence": "portfolio-backtester/docs/reference/allocation-reference.md; portfolio-backtester/docs/README.md",
+      "consumer_switch": "internal allocation core now imports portfolio_backtester.allocation_reference, the internal implementation and tests were deleted"
     },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
