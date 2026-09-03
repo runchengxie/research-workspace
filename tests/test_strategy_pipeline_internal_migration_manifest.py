@@ -84,6 +84,19 @@ def test_daily_watch20_research_documents_record_strategy_app_owner() -> None:
         assert document["test_evidence"]
 
 
+def test_cross_repository_playbooks_record_workspace_owner() -> None:
+    payload = _load_manifest()
+    documents = {
+        document["source_path"]: document
+        for document in payload["planned_documents"]
+    }
+    for source_path in {"docs/playbooks/a-share-baseline.md", "docs/strategy-catalog.md"}:
+        document = documents[source_path]
+        assert document["owner_repo"] == "research-workspace"
+        assert document["status"] == "planned"
+        assert document["rationale"]
+
+
 def test_style_replica_migrations_record_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = payload["completed_code_migrations"]
