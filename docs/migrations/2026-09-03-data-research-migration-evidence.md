@@ -37,4 +37,15 @@ internal 的以下 planned 文档已有对应 owner 页面，workspace 清单已
 
 - internal `data_interface.py` 仍是 active consumer，必须等所有 pipeline 调用切换到 owner-native API 后才能删除。
 - `legacy_rqdata_runtime.py` 仍被历史 liveops 测试覆盖，需在执行交接切片中移入归档并移除 active CLI 引用。
-- `alpha-research` 的 AFML、研究协议和证据文档仍属于后续研究证据切片，不能因为数据平台迁移完成而提前标记完成。
+- `alpha-research` 的 AFML、研究协议和证据实现已经有 owner 归属，但 internal 的运行侧编排入口仍需在后续切片收敛。
+
+## Alpha research 证据
+
+核对确认 `alpha-research` 已有对应的 owner 实现和文档入口。internal 的 AFML lineage 说明对应
+`docs/concepts/afml-methodology.md` 与 `docs/reference/signal-artifacts.md`，研究协议说明对应
+`docs/concepts/feature-research-protocol.md` 与 `docs/concepts/overfitting-controls.md`。
+对应测试为 `tests/test_afml_methodology.py`、`tests/test_signal_artifact.py`、
+`tests/test_feature_evidence.py` 和 `tests/test_promotion_gate.py`。
+
+这两份文档已在迁移清单标记为 `complete`。`strategy_pipeline_internal.afml_evidence` 的运行侧
+编排仍未删除，后续要在执行交接切片中确认其输出由 owner API 消费，再移除 internal 入口。
