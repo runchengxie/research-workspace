@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `d8cd956b53000b578d950795726b98d83283c660`
+> source_commit: `a99764837b2cc2c377715c13ad5efa3452a20da7`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "d8cd956b53000b578d950795726b98d83283c660",
+    "source_commit": "a99764837b2cc2c377715c13ad5efa3452a20da7",
   "inventory": {
-    "python_source_files": 123,
-    "test_files": 207,
+    "python_source_files": 122,
+    "test_files": 208,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -117,6 +117,17 @@
       "test_evidence": "strategy-pipeline tests/test_e2_promotion_receipt.py; internal tests/test_e2_promotion_receipt.py and tests/test_retired_e2_promotion_receipt.py",
       "doc_evidence": "strategy-pipeline/docs/e2-promotion-receipt.md; workspace docs/runbooks/a-share-long-window-evidence.md",
       "consumer_switch": "internal E2 evidence tests now import strategy_pipeline.e2_promotion_receipt, the internal module was deleted, and the workspace submodule points to the public commit"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/research_evidence.py",
+      "owner_repo": "research-workspace",
+      "target_path": "src/research_contracts/research_run_manifest_writer.py",
+      "status": "complete",
+      "owner_commit": "6cd93d4372ff19a912732bd0f92ba7d9ceb2b883",
+      "internal_commit": "a99764837b2cc2c377715c13ad5efa3452a20da7",
+      "test_evidence": "workspace tests/test_research_run_manifest_writer.py and tests/test_research_run_manifest.py; internal tests/test_research_evidence.py and tests/test_retired_research_evidence.py",
+      "doc_evidence": "workspace docs/artifact-contracts.yml and docs/contracts.md",
+      "consumer_switch": "internal research evidence tests now import research_contracts, the internal writer was deleted, and the workspace contract package owns manifest creation"
     },
     {
       "source_path": "src/strategy_pipeline_internal/identity.py",
