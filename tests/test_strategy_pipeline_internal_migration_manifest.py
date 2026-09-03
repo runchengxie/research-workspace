@@ -53,9 +53,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
 
 def test_policy_snapshot_migration_records_strategy_app_owner() -> None:
     payload = _load_manifest()
-    migrations = {
-        item["source_path"]: item for item in payload["completed_code_migrations"]
-    }
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
     migration = migrations["src/strategy_pipeline_internal/daily_watch20_policy_snapshot.py"]
 
     assert migration["owner_repo"] == "strategy-app"
@@ -70,9 +68,7 @@ def test_policy_snapshot_migration_records_strategy_app_owner() -> None:
 
 def test_identity_migration_records_public_owner_and_retirement() -> None:
     payload = _load_manifest()
-    migrations = {
-        item["source_path"]: item for item in payload["completed_code_migrations"]
-    }
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
     migration = migrations["src/strategy_pipeline_internal/identity.py"]
 
     assert migration["owner_repo"] == "strategy-pipeline"
@@ -87,9 +83,7 @@ def test_identity_migration_records_public_owner_and_retirement() -> None:
 
 def test_weekly_analysis_migration_records_strategy_research_owner() -> None:
     payload = _load_manifest()
-    migrations = {
-        item["source_path"]: item for item in payload["completed_code_migrations"]
-    }
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
     migration = migrations["src/strategy_pipeline_internal/weekly_analysis_artifacts.py"]
 
     assert migration["owner_repo"] == "strategy-research"
@@ -104,9 +98,7 @@ def test_weekly_analysis_migration_records_strategy_research_owner() -> None:
 
 def test_news_heat_export_migration_records_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
-    migrations = {
-        item["source_path"]: item for item in payload["completed_code_migrations"]
-    }
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
     migration = migrations["src/strategy_pipeline_internal/daily_watch20_news_heat_export.py"]
 
     assert migration["owner_repo"] == "strategy-app"
@@ -121,9 +113,7 @@ def test_news_heat_export_migration_records_owner_and_consumer_switch() -> None:
 
 def test_minute_feature_migration_records_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
-    migrations = {
-        item["source_path"]: item for item in payload["completed_code_migrations"]
-    }
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
     migration = migrations["src/strategy_pipeline_internal/daily_watch20_minute.py"]
 
     assert migration["owner_repo"] == "strategy-app"
@@ -153,10 +143,7 @@ def test_planned_document_inventory_has_target_and_no_duplicate_source() -> None
 
 def test_daily_watch20_research_documents_record_strategy_app_owner() -> None:
     payload = _load_manifest()
-    documents = {
-        document["source_path"]: document
-        for document in payload["planned_documents"]
-    }
+    documents = {document["source_path"]: document for document in payload["planned_documents"]}
     expected = {
         "docs/research/daily-watch20-live-readiness-20260714.md",
         "docs/research/incumbent-challenger-evidence-v2.md",
@@ -171,10 +158,7 @@ def test_daily_watch20_research_documents_record_strategy_app_owner() -> None:
 
 def test_cross_repository_playbooks_record_workspace_owner() -> None:
     payload = _load_manifest()
-    documents = {
-        document["source_path"]: document
-        for document in payload["planned_documents"]
-    }
+    documents = {document["source_path"]: document for document in payload["planned_documents"]}
     baseline = documents["docs/playbooks/a-share-baseline.md"]
     assert baseline["owner_repo"] == "research-workspace"
     assert baseline["status"] == "complete"
@@ -391,17 +375,13 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert context_builder["test_evidence"]
     assert context_builder["rationale"]
 
-    panel_load_steps = facades[
-        "src/strategy_pipeline_internal/pipeline/panel_load_steps.py"
-    ]
+    panel_load_steps = facades["src/strategy_pipeline_internal/pipeline/panel_load_steps.py"]
     assert panel_load_steps["status"] == "complete"
     assert panel_load_steps["internal_commit"] == "2f9f5c144ee218cc99fbac8fbe973831b3cac2a9"
     assert panel_load_steps["test_evidence"]
     assert panel_load_steps["rationale"]
 
-    external_signals = facades[
-        "src/strategy_pipeline_internal/pipeline/external_signals.py"
-    ]
+    external_signals = facades["src/strategy_pipeline_internal/pipeline/external_signals.py"]
     assert external_signals["status"] == "complete"
     assert external_signals["internal_commit"] == "77519f89828a72fc3141e5aacb60bd2f9a06ddc5"
     assert external_signals["test_evidence"]
@@ -463,9 +443,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert hotsector_support["test_evidence"]
     assert hotsector_support["rationale"]
 
-    hotsector_plans = facades[
-        "src/strategy_pipeline_internal/hotsector_deepseek_v4_month_plans.py"
-    ]
+    hotsector_plans = facades["src/strategy_pipeline_internal/hotsector_deepseek_v4_month_plans.py"]
     assert hotsector_plans["status"] == "complete"
     assert hotsector_plans["internal_commit"] == "510bd117337919309c565999d1d9260f286988b3"
     assert hotsector_plans["test_evidence"]
@@ -487,25 +465,19 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert hotsector_backtest["test_evidence"]
     assert hotsector_backtest["rationale"]
 
-    hotsector_campaign = facades[
-        "src/strategy_pipeline_internal/hotsector_deepseek_campaign.py"
-    ]
+    hotsector_campaign = facades["src/strategy_pipeline_internal/hotsector_deepseek_campaign.py"]
     assert hotsector_campaign["status"] == "complete"
     assert hotsector_campaign["internal_commit"] == "f8fffa5172af7640784f5fb8cb6f6a5ba70c88b1"
     assert hotsector_campaign["test_evidence"]
     assert hotsector_campaign["rationale"]
 
-    daily_watch20_ablation = facades[
-        "src/strategy_pipeline_internal/daily_watch20_ablation.py"
-    ]
+    daily_watch20_ablation = facades["src/strategy_pipeline_internal/daily_watch20_ablation.py"]
     assert daily_watch20_ablation["status"] == "complete"
     assert daily_watch20_ablation["internal_commit"] == "58068cd719022559822d93ba9b105b5c37020bae"
     assert daily_watch20_ablation["test_evidence"]
     assert daily_watch20_ablation["rationale"]
 
-    package_runs = facades[
-        "src/strategy_pipeline_internal/release_tools/package_runs.py"
-    ]
+    package_runs = facades["src/strategy_pipeline_internal/release_tools/package_runs.py"]
     assert package_runs["status"] == "complete"
     assert package_runs["internal_commit"] == "b38f69f3168412c1df0aee2abc65568f93a14bf6"
     assert package_runs["test_evidence"]
@@ -519,9 +491,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert slow_minute_campaign["test_evidence"]
     assert slow_minute_campaign["rationale"]
 
-    minute_campaign = facades[
-        "src/strategy_pipeline_internal/daily_watch20_minute_campaign.py"
-    ]
+    minute_campaign = facades["src/strategy_pipeline_internal/daily_watch20_minute_campaign.py"]
     assert minute_campaign["status"] == "complete"
     assert minute_campaign["internal_commit"] == "a198c155a5cc59ca04e0d7b1bcfd5f0ba48980d4"
     assert minute_campaign["test_evidence"]
@@ -535,9 +505,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     assert minute_campaign_inputs["test_evidence"]
     assert minute_campaign_inputs["rationale"]
 
-    market_shadow = facades[
-        "src/strategy_pipeline_internal/daily_watch20_market_shadow.py"
-    ]
+    market_shadow = facades["src/strategy_pipeline_internal/daily_watch20_market_shadow.py"]
     assert market_shadow["status"] == "complete"
     assert market_shadow["internal_commit"] == "8be7c39894bcbb338b981a6868aee97f0d4dbc11"
     assert market_shadow["test_evidence"]
@@ -554,9 +522,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
 
 def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
     payload = _load_manifest()
-    cleanups = {
-        item["source_path"]: item for item in payload["completed_boundary_cleanups"]
-    }
+    cleanups = {item["source_path"]: item for item in payload["completed_boundary_cleanups"]}
     cleanup = cleanups["src/strategy_pipeline_internal/pipeline/research_ops/__init__.py"]
 
     assert cleanup["status"] == "complete"
