@@ -1,0 +1,65 @@
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST = ROOT / "docs" / "migrations" / "strategy-pipeline-internal-migration-manifest.md"
+VALID_STATUSES = {"complete", "private", "planned", "archive"}
+REQUIRED_RECORD_FIELDS = {"source_path", "owner_repo", "target_path", "status"}
+
+
+def _load_manifest() -> dict[str, object]:
+    text = MANIFEST.read_text(encoding="utf-8")
+    start = text.index("```json") + len("```json")
+    end = text.index("```", start)
+    return json.loads(text[start:end])
+
+
+def test_manifest_has_verified_inventory_baseline() -> None:
+    payload = _load_manifest()
+    assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
+    assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
+    inventory = payload["inventory"]
+    assert inventory == {
+        "python_source_files": 194,
+        "test_files": 180,
+        "script_files": 34,
+        "config_files": 21,
+        "ownership_document_files": 114,
+        "ownership_document_status_counts": {
+            "complete": 8,
+            "private": 58,
+            "planned": 16,
+            "archive": 32,
+        },
+    }
+
+
+def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
+    payload = _load_manifest()
+    groups = payload["module_groups"]
+    assert isinstance(groups, list)
+    assert sum(group["file_count"] for group in groups) == 194
+    assert len({group["source_path"] for group in groups}) == len(groups)
+
+    for group in groups:
+        assert REQUIRED_RECORD_FIELDS <= group.keys()
+        assert group["status"] in VALID_STATUSES
+        assert group["owner_repo"] != "strategy-pipeline-internal"
+        assert group["test_evidence"]
+        assert group["doc_evidence"]
+        assert group["removal_condition"]
+
+
+def test_planned_documents_have_target_and_no_duplicate_source() -> None:
+    payload = _load_manifest()
+    documents = payload["planned_documents"]
+    assert isinstance(documents, list)
+    assert len(documents) == 16
+    assert len({document["source_path"] for document in documents}) == 16
+
+    for document in documents:
+        assert REQUIRED_RECORD_FIELDS <= document.keys()
+        assert document["status"] == "planned"
+        assert document["owner_repo"] != "strategy-pipeline-internal"
