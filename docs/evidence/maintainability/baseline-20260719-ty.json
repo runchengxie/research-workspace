@@ -1704,8 +1704,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 390,
-      "python_loc": 86090,
+      "python_file_count": 402,
+      "python_loc": 86862,
       "hk_related_file_count": 2,
       "hotspot_counts": {
         "large_files": 29,
@@ -2186,6 +2186,7 @@
         "scripts/dev/check_c901_debt.py",
         "scripts/dev/config_lifecycle.py",
         "scripts/dev/data_ops_boundary.py",
+        "scripts/dev/history_publication_audit.py",
         "scripts/dev/import_boundary.py",
         "scripts/dev/import_boundary_debt.json",
         "scripts/dev/import_boundary_policy.json",
@@ -2195,6 +2196,7 @@
         "scripts/dev/public_dependency_registry.json",
         "scripts/dev/public_readiness.py",
         "scripts/dev/public_readiness_debt.json",
+        "scripts/dev/public_surface_export.py",
         "scripts/dev/run_tests.sh",
         "scripts/dev/split_smoke.py",
         "scripts/dev/test_impact.py",
