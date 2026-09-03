@@ -65,6 +65,10 @@ git -C /home/richard/code/production/research-workspace/current submodule update
 `production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
 共享虚拟环境只清理没有被保留 release 引用的指纹目录。
 
+更新检查和 promotion 使用同一个 fetch 入口。配置的 Git remote 失败时，会针对 GitHub
+仓库依次尝试 GitHub CLI 提供的认证 HTTPS、SSH 和普通 HTTPS。fallback 仍然只更新本地
+remote-tracking ref，不会修改 remote 配置。所有方式失败时会汇总错误并停止流程。
+
 现有 release 的实体 `.venv` 可以用以下命令分批迁移。默认每次最多处理 2 个非 current
 环境，先 dry-run 再执行：
 
