@@ -9,7 +9,7 @@
 internal 的 `legacy_rqdata_runtime.py` 已删除，不会复制到公共仓库。
 RQData 客户端初始化、历史本地 RQData 文件读取、调整价格兼容补丁和 HK 历史符号转换均已退出 pipeline。
 
-当前核对的 internal main 为 `8af4c527`。公共 `strategy-pipeline` main 为 `c2a13e75`，公共仓库没有
+当前核对的 internal main 为 `05c1b7b0`。公共 `strategy-pipeline` main 为 `c2a13e75`，公共仓库没有
 `strategy_pipeline.legacy_rqdata_runtime` 模块。
 
 ## 当前 active 引用和已完成收口
