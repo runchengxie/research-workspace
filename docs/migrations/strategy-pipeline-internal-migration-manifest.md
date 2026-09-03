@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `7b88da25606d042bcf31fafc37769c350182c1a7`
+> source_commit: `5a4aa78c51ae6910de28f2804130b45b1d8dfd19`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-    "source_commit": "7b88da25606d042bcf31fafc37769c350182c1a7",
+    "source_commit": "5a4aa78c51ae6910de28f2804130b45b1d8dfd19",
   "inventory": {
-    "python_source_files": 127,
+    "python_source_files": 126,
     "test_files": 201,
     "script_files": 34,
     "config_files": 18,
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 48,
+      "file_count": 47,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/identity.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/identity.py",
+      "status": "complete",
+      "owner_commit": "6571c9cc110c98c26e0ac209eac45f3c91fd24d0",
+      "internal_commit": "5a4aa78c51ae6910de28f2804130b45b1d8dfd19",
+      "test_evidence": "strategy-pipeline tests/control_plane/test_identity.py; internal tests/test_retired_identity.py and CLI/liveops regression tests",
+      "doc_evidence": "strategy-pipeline/docs/control-plane.md",
+      "consumer_switch": "internal target-source consumers now import strategy_pipeline.identity and the internal module was deleted"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_news_heat_export.py",
       "owner_repo": "strategy-app",

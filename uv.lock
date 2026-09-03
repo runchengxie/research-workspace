@@ -1186,7 +1186,7 @@ wheels = [
 [[package]]
 name = "strategy-pipeline"
 version = "0.1.0"
-source = { git = "https://github.com/runchengxie/strategy-pipeline.git#708e25cd4dc381f38631af9899118399f2cc1045" }
+source = { git = "https://github.com/runchengxie/strategy-pipeline.git#6571c9cc110c98c26e0ac209eac45f3c91fd24d0" }
 
 [[package]]
 name = "tabulate"
