@@ -14,7 +14,7 @@
     },
     "portfolio-backtester": {
       "canonical_package": "portfolio_backtester",
-      "commit": "750b8219c71db875088739d0df46117770a7e278",
+      "commit": "f19e5fcc90110642965e4c201c5c1f76f8581765",
       "legacy_source_tree_allowed": false,
       "pr": 55,
       "version": "0.4.0"
