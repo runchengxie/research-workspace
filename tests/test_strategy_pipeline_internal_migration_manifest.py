@@ -63,6 +63,18 @@ def test_release_tools_are_archive_only() -> None:
     assert "no active consumer" in group["removal_condition"]
 
 
+def test_research_commands_are_archive_only() -> None:
+    payload = _load_manifest()
+    group = next(
+        item
+        for item in payload["module_groups"]
+        if item["source_path"] == "src/strategy_pipeline_internal/commands"
+    )
+
+    assert group["status"] == "archive"
+    assert "no active consumer" in group["removal_condition"]
+
+
 def test_policy_snapshot_migration_records_strategy_app_owner() -> None:
     payload = _load_manifest()
     migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
