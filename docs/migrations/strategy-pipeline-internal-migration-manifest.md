@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e9a878f5e3ae91cc026d0032e3f5ecd5e8598e16`
+> source_commit: `d3f45b2836e2b47f71db68f7d8e6a2c7241128a1`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "e9a878f5e3ae91cc026d0032e3f5ecd5e8598e16",
+  "source_commit": "d3f45b2836e2b47f71db68f7d8e6a2c7241128a1",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1139,6 +1139,17 @@
       "test_evidence": "strategy-pipeline runtime, quality, artifact, summary, and evaluation tests: 12 passed; internal runtime, quality, validation, and namespace tests passed",
       "doc_evidence": "strategy-pipeline/docs/runtime-helpers.md; strategy-pipeline PR #15",
       "consumer_switch": "internal context builder, runner, and config consumers now import public runtime helpers through a compatibility facade"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/data_interface.py",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/research_data_interface.py",
+      "status": "complete",
+      "owner_commit": "fdda91891e371538588e5c2facb087a2ee546546",
+      "internal_commit": "d3f45b2836e2b47f71db68f7d8e6a2c7241128a1",
+      "test_evidence": "market-data-platform tests/test_research_data_interface.py: 8 passed; internal data-interface, TuShare interface, provider-fundamentals, and file-build tests: 18 passed",
+      "doc_evidence": "market-data-platform/docs/research-data-interface.md; market-data-platform PR #114",
+      "consumer_switch": "internal DataInterface now subclasses the market-data-platform adapter and preserves the historical import and test seams"
     }
   ],
   "partial_code_migrations": [
