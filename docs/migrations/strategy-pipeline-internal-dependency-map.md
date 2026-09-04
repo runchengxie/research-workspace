@@ -50,6 +50,10 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 中迁入 `alpha_research.metrics`。`config_eval` 继续负责把配置组装成 pipeline runtime settings，
 alpha owner 负责通用评估参数的结构化规范化。
 
+`config_eval` 中的 signal direction、permutation test 和 walk-forward permutation 参数校验
+也已在 internal PR #222 中迁入 `alpha_research.evaluation_config`。pipeline 只保留与自身
+backtest 编排相关的组合逻辑。
+
 ## 目标关系
 
 ```text
