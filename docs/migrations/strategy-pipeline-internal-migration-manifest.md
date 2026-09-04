@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `64663169e39e8178f990562beca991081ea618a2`
+> source_commit: `da98c64c350c22e310119b3e57ffd9187c7a59d1`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "64663169e39e8178f990562beca991081ea618a2",
+  "source_commit": "da98c64c350c22e310119b3e57ffd9187c7a59d1",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1014,11 +1014,22 @@
       "owner_repo": "strategy-app",
       "target_path": "src/strategy_app/hotsector/hotsector_ai_shadow.py; src/strategy_app/hotsector/hotsector_ai_shadow_observation.py",
       "status": "complete",
-      "owner_commit": "d964c7f097624b615198cf5d8fe2ce007a2f3d89",
+      "owner_commit": "cf46dd277ed45231b6ff29a3e48ef2d847ab98d5",
       "internal_commit": "64663169e39e8178f990562beca991081ea618a2",
       "test_evidence": "strategy-app tests/test_hotsector_ai_shadow.py: 17 passed; internal compatibility and owner-import regression tests",
       "doc_evidence": "strategy-app/docs/hotsector-ai-shadow.md",
       "consumer_switch": "internal Hotsector AI shadow modules and research CLI now delegate to strategy-app owner modules"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_long_horizon_buffer_resources.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/daily_watch20_long_horizon_buffer_resources.py",
+      "status": "complete",
+      "owner_commit": "d964c7f097624b615198cf5d8fe2ce007a2f3d89",
+      "internal_commit": "da98c64c350c22e310119b3e57ffd9187c7a59d1",
+      "test_evidence": "strategy-app tests/test_daily_watch20_long_horizon_buffer_resources.py: 3 passed; internal tests/test_daily_watch20_long_horizon_buffer.py: 12 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-long-horizon-buffer-resources.md",
+      "consumer_switch": "internal long-horizon IO and tests now import the strategy-app resource planner, while the historical module remains a compatibility wrapper"
     }
   ],
   "partial_code_migrations": [
