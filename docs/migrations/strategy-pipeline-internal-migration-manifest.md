@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `db79ed086d686e6b14079421611bfe7a56cb1d79`
+> source_commit: `a45dd6c8dc72e61ed1faa4ad30426f3744643c15`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-      "source_commit": "db79ed086d686e6b14079421611bfe7a56cb1d79",
+      "source_commit": "a45dd6c8dc72e61ed1faa4ad30426f3744643c15",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1334,6 +1334,18 @@
       "test_evidence": "portfolio-backtester tests/test_allocation_selection.py: 4 passed; internal tests/test_holdings_live.py, tests/test_export_targets.py, and tests/test_alloc.py: 21 passed",
       "doc_evidence": "portfolio-backtester allocation selection API docstring; workspace migration manifest",
       "consumer_switch": "internal holdings now delegates latest-entry selection, including the explicit future-entry live handoff case, to portfolio-backtester"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/alloc_core.py::allocation_orchestration",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/allocation_service.py::build_equal_weight_allocation",
+      "status": "complete",
+      "owner_commit": "750b8219c71db875088739d0df46117770a7e278",
+      "internal_commit": "ef2b48b7ab35ece243561e33191f2d1cc530c2bd",
+      "migration_pr": "portfolio-backtester PR #82; strategy-pipeline-internal PR #293",
+      "test_evidence": "portfolio-backtester allocation service, selection, reference, and share allocation tests: 17 passed; internal alloc, CLI, holdings, and target export regressions: 28 passed",
+      "doc_evidence": "portfolio-backtester allocation service API docstring; workspace migration manifest",
+      "consumer_switch": "internal alloc_core now retains CLI and run-context adaptation while portfolio-backtester owns selection, reference joining, and round-lot allocation orchestration"
     }
   ],
   "partial_code_migrations": [],
