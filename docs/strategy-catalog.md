@@ -23,7 +23,7 @@
 | `strategy run --config default` | 运行当前 A 股默认配置 | 运行目录、摘要和持仓 |
 | `strategy summarize` | 汇总已有运行目录 | 只读取已有产物 |
 | `strategy init-config` | 生成配置起点 | 不运行研究或回测 |
-| `strategy export-targets` | 导出执行目标 | `targets.json` 和 lineage 文件 |
+| `strategy-pipeline export-targets` | 导出执行目标 | `targets.json` 和 lineage 文件 |
 
 可配置流程可以组合信号、组合和回测设置，不绑定固定策略名称。运行入口的完整参数和配置说明以
 `strategy-pipeline` 当前文档及工作区锁定版本为准。
@@ -53,7 +53,7 @@ A 股是工作区当前研究主线。`default` 是日频价格、日频估值�
 strategy holdings --help
 strategy snapshot --help
 strategy alloc --help
-strategy export-targets --help
+strategy-pipeline export-targets --help
 ```
 
 这些命令只负责文件和运行控制，不连接券商。`quant-execution-engine` 负责预演、风控、券商适配、下单和审计。

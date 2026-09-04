@@ -131,7 +131,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 - 特征工程、训练与评估。
 - 历史回测、基准对比和研究证据管理。
 - 当前持仓、快照和执行前资金 / 手数分配输出。
-- 使用 `strategy export-targets` 导出执行引擎可读取的 `targets.json`，并保留审计附属文件。
+- 使用 `strategy-pipeline export-targets` 导出执行引擎可读取的 `targets.json`，并保留审计附属文件。
 
 ### 3. 锁定可复现组合
 
@@ -141,7 +141,7 @@ A 股就绪度分成 `baseline_reproducible`、`complete_pit_research_data`、
 
 ### 当前接入程度
 
-研究侧可以通过 `strategy export-targets` 将 `positions_by_rebalance.csv`、`positions_current*.csv` 或已保存持仓导出为标准 `targets.json`。导出器会拒绝空头持仓、非法权重和隐式杠杆，并把运行编号、输入文件、时间口径和质量检查信息写入审计附属文件。
+研究侧先由 owner adapter 生成通用 `holdings.json`，再通过 `strategy-pipeline export-targets` 导出标准 `targets.json`。导出器会拒绝空头持仓、非法权重和隐式杠杆，并把运行编号、输入文件和目标哈希写入审计附属文件。
 
 执行引擎已经作为固定子模块纳入工作区。当前已用真实研究导出文件验证了解析逻辑、
 离线调仓计划和目标列表以外持仓的清仓处理。非 USD 报价资产需要先配置汇率并换算至
@@ -163,7 +163,7 @@ USD 估值。A 股基础 dry-run 仍需显式配置 CNY 汇率。
 | 门槛 | 当前状态 |
 | --- | --- |
 | 目标持仓文件 | 已落地：研究侧输出 `quant-execution-engine.targets/v2` 格式的 `targets.json` |
-| 导出能力 | 已落地：`strategy export-targets` 输出目标文件和审计附属文件 |
+| 导出能力 | 已落地：`strategy-pipeline export-targets` 输出目标文件和审计附属文件 |
 | 输入验证 | 已落地：执行侧可读取真实导出文件，港股和 A 股目标可生成基础计划，缺少汇率时会阻断非 USD 调仓 |
 | 联调证据 | 部分落地：已具备解析和离线计划验证，仍需模拟盘端到端验证记录 |
 | 实盘门禁 | 实盘下单仍要求执行引擎独立启用、执行前检查和人工监督 |
