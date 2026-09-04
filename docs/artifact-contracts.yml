@@ -198,6 +198,12 @@
           "module": "quant_execution_engine.targets",
           "path": "src/quant_execution_engine/targets.py",
           "role": "canonical_parser"
+        },
+        {
+          "repo": "quant-execution-engine",
+          "module": "quant_execution_engine.targets.write_targets_json",
+          "path": "src/quant_execution_engine/targets.py",
+          "role": "canonical_writer"
         }
       ],
       "required_fields": [
@@ -211,7 +217,7 @@
           "target_quantity"
         ]
       ],
-      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The producer writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
+      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The producer delegates canonical targets.json serialization to quant-execution-engine and writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
     },
     {
       "artifact": "research-run.manifest.json",
