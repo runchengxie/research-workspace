@@ -12,6 +12,7 @@
 | --- | --- |
 | 冻结日期 | 2026-09-05 |
 | internal 最后可用提交 | `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7` |
+| internal 冻结 tag | `retirement-freeze-20260905`，指向 `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7` |
 | production workspace release | `cbfc754d85a42d6cf916bb69f5b09f841cbf2f26` |
 | production public pipeline | `5f7f8681608019987d995ed1ae8602468c1c0d32` |
 | production 回滚点 | `9b50e2ef9a533faad624b1f7e525ccc174ccbfe7` |
@@ -37,4 +38,3 @@
 下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
 
 正式下线前还需要创建冻结 tag、只读归档和恢复演练记录，并由 workspace 与 internal 的最终退役 PR 分别完成合并。
-
