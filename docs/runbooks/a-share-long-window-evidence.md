@@ -236,11 +236,11 @@ canonical source 的 lifecycle check 以及 profile check 指向对应 receipt�
 1. 新建 `docs/evidence/a-share-readiness-evidence-<YYYYMMDD>.json`，把 `research_run_dir`、
    `targets_file`、`targets_lineage_file` 指向新 run 目录，`research_profile.configured_start_date`
    更新为 `20150101`。
-2. 用 `strategy export-targets` 生成交接文件：
+2. 由 owner adapter 生成 `holdings.json` 后，用公共 pipeline 生成交接文件：
 
 ```bash
-strategy export-targets \
-  --run-dir artifacts/runs/<run_dir> \
+strategy-pipeline export-targets \
+  --holdings artifacts/runs/<run_dir>/holdings.json \
   --out artifacts/reports/<tag>/targets.json \
   --lineage-out artifacts/reports/<tag>/targets.json.lineage.json
 ```

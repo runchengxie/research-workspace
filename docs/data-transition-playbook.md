@@ -121,7 +121,7 @@ portfolio-backtester
   消费信号和行情，产出回测、capacity、positions_current*.csv
 strategy-pipeline
   编排研究流程，产出 summary.json、config.used.yml
-  通过 strategy export-targets 生成 targets.json 和 targets.json.lineage.json
+  通过 strategy-pipeline export-targets 生成 targets.json 和 targets.json.lineage.json
 quant-execution-engine
   读取 targets.json，完成 CN local dry-run 证据
 ```
@@ -237,7 +237,7 @@ strategy run --config configs/presets/a_share_pit.yml
 
 ## 4. 执行 dry-run 证据
 
-`strategy export-targets` 导出的 A 股 `targets.json` 用于研究到执行的文件交接。进入执行
+`strategy-pipeline export-targets` 导出的 A 股 `targets.json` 用于研究到执行的文件交接。进入执行
 dry-run 前必须显式配置 CNY 到 USD 汇率，缺失汇率时执行侧应阻断。
 
 ```bash
