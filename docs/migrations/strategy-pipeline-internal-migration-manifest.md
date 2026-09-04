@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `883acb1b847123cff184c06dfed50610c662e865`
+> source_commit: `74179c2225256d29e539b05e549219275b170313`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "883acb1b847123cff184c06dfed50610c662e865",
+  "source_commit": "74179c2225256d29e539b05e549219275b170313",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -997,6 +997,17 @@
       "test_evidence": "alpha-research promotion gate threshold tests; internal tests/test_retired_promotion_gate_facades.py",
       "doc_evidence": "alpha-research/docs/README.md",
       "consumer_switch": "internal promotion threshold consumers now resolve through alpha_research"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_backtest_api.py; src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_backtest_core.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/hotsector/hotsector_deepseek_v4_month_backtest_api.py; src/strategy_app/hotsector/hotsector_deepseek_v4_month_backtest_core.py",
+      "status": "complete",
+      "owner_commit": "811bd97664e1b6e76cabb0774ce01447cfb5cc46",
+      "internal_commit": "74179c2225256d29e539b05e549219275b170313",
+      "test_evidence": "strategy-app V4-month backtest tests: 2 passed; internal V4-month backtest validation and regression tests: 24 passed",
+      "doc_evidence": "strategy-app/docs/hotsector-deepseek-v4-month-backtest.md",
+      "consumer_switch": "internal V4-month backtest modules now provide compatibility imports and all backtest callers use strategy-app owner modules"
     }
   ],
   "partial_code_migrations": [
