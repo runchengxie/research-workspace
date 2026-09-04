@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `d24d81c37d4288043f10a827c9e7016bcbe59adf`
+> source_commit: `23ff8450b4b7987fb7225338af3c30ee8538ff60`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "d24d81c37d4288043f10a827c9e7016bcbe59adf",
+  "source_commit": "23ff8450b4b7987fb7225338af3c30ee8538ff60",
   "inventory": {
     "python_source_files": 96,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_ensure_execution_daily_fields",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/execution_fields.py::ensure_execution_daily_fields",
+      "status": "complete",
+      "owner_commit": "c80f3e797712e5ab55c60e41e2cbec0d3a035804",
+      "internal_commit": "23ff8450b4b7987fb7225338af3c30ee8538ff60",
+      "test_evidence": "market-data-platform tests/test_execution_fields.py; internal tests/test_pipeline_validation.py, tests/test_migrated_evaluation_config_normalizers.py, and tests/test_pipeline_leakage_warning.py",
+      "doc_evidence": "market-data-platform execution field API; internal data operations boundary",
+      "consumer_switch": "pipeline config_backtest now delegates RQData execution field expansion to market-data-platform"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_warn_if_purge_too_small",
       "owner_repo": "alpha-research",

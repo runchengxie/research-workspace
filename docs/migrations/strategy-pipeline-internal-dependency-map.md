@@ -74,6 +74,10 @@ portfolio-backtester 维护执行配置的构建和规范化。
 `alpha_research.evaluation_config`。评估参数的通用校验和提示由 alpha owner 维护，pipeline
 只保留 RQData 执行字段补全逻辑。
 
+`pipeline/stats.py` 中的 RQData 执行字段补全已在 internal PR #228 迁入
+`market_data_platform.execution_fields`。数据提供方字段映射和默认字段扩展由数据平台维护，
+pipeline 只负责提交执行所需的标准列集合。
+
 ## 目标关系
 
 ```text
