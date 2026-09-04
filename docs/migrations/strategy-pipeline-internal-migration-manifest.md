@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `85f03abafa164ee3a8e9431706b4caefeef76f1f`
+> source_commit: `458574545455663765b80744e501c6aa21db8e7f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "85f03abafa164ee3a8e9431706b4caefeef76f1f",
+  "source_commit": "458574545455663765b80744e501c6aa21db8e7f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1329,6 +1329,17 @@
       "test_evidence": "strategy-app tests/test_daily_watch20_long_horizon_buffer_io.py: 2 passed; internal tests/test_daily_watch20_long_horizon_buffer.py: 12 passed",
       "doc_evidence": "strategy-app/docs/daily-watch20-long-horizon-buffer-io.md; strategy-app PR #98",
       "consumer_switch": "internal long-horizon runner and regression tests now import the strategy-app IO owner, while the historical module remains a compatibility wrapper"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_pipeline.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/pipeline.py",
+      "status": "complete",
+      "owner_commit": "6f9653f",
+      "internal_commit": "458574545455663765b80744e501c6aa21db8e7f",
+      "test_evidence": "strategy-app tests/test_daily_watch20_pipeline.py: 2 passed; internal DailyWatch20 pipeline, lifecycle, policy, publication safety, ablation, market shadow, and fundamental shadow tests: 161 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-pipeline.md; strategy-app PR #99",
+      "consumer_switch": "internal research scripts, ablation APIs, and DailyWatch20 regression tests now import the strategy-app pipeline owner, while the historical module remains a compatibility facade"
     }
   ],
   "completed_boundary_cleanups": [
