@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `cc7efcd0b1ac825339c6be31b6567be47eea268f`
+> source_commit: `85f03abafa164ee3a8e9431706b4caefeef76f1f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "cc7efcd0b1ac825339c6be31b6567be47eea268f",
+  "source_commit": "85f03abafa164ee3a8e9431706b4caefeef76f1f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1318,6 +1318,17 @@
       "internal_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
       "test_evidence": "internal tests/test_retired_daily_watch20_application_policy.py; internal tests/test_standalone_strategy_app_extraction.py; import boundary check",
       "rationale": "The module had no active runtime callers. Its research policy and publication currentness inputs already belong to their respective owner packages, so the unused composition facade was retired instead of creating a reverse dependency from strategy-app to strategy-pipeline."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_long_horizon_buffer_io.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/daily_watch20_long_horizon_buffer_io.py",
+      "status": "complete",
+      "owner_commit": "a5e29a1",
+      "internal_commit": "85f03abafa164ee3a8e9431706b4caefeef76f1f",
+      "test_evidence": "strategy-app tests/test_daily_watch20_long_horizon_buffer_io.py: 2 passed; internal tests/test_daily_watch20_long_horizon_buffer.py: 12 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-long-horizon-buffer-io.md; strategy-app PR #98",
+      "consumer_switch": "internal long-horizon runner and regression tests now import the strategy-app IO owner, while the historical module remains a compatibility wrapper"
     }
   ],
   "completed_boundary_cleanups": [
