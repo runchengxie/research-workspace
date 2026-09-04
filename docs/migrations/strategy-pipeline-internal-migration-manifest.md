@@ -1537,6 +1537,18 @@
       "test_evidence": "alpha-research tests/test_evaluation_config.py: 9 passed; internal tests/test_migrated_evaluation_config_normalizers.py: 8 passed",
       "doc_evidence": "alpha-research/docs/concepts/feature-research-protocol.md",
       "consumer_switch": "internal evaluation config now delegates bucket IC normalization to alpha-research and no longer owns the implementation"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/eval.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/eval.py",
+      "status": "complete",
+      "owner_commit": "1f602a9",
+      "internal_commit": "bc5d809",
+      "migration_pr": "strategy-pipeline PR #11; strategy-pipeline-internal PR #253",
+      "test_evidence": "strategy-pipeline evaluation orchestration tests; internal tests/test_pipeline_position_postprocess.py and namespace retirement checks",
+      "doc_evidence": "strategy-pipeline/docs/pipeline-overview.md",
+      "consumer_switch": "internal evaluation callers now import the public strategy-pipeline evaluator, while the historical module retains only compatibility imports"
     }
   ],
   "completed_boundary_cleanups": [
