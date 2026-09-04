@@ -1,0 +1,39 @@
+{
+  "schema_version": "strategy_pipeline_internal_retirement_cycle.v1",
+  "audit_date": "2026-09-05",
+  "maintenance_cycle": 1,
+  "maintenance_cycles_required": 2,
+  "internal_repository": "runchengxie/strategy-pipeline-internal",
+  "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
+  "freeze_tag": "retirement-freeze-20260905-r1",
+  "freeze_tag_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
+  "freeze_archive_tar_sha256": "c2e412b85c34dc354668bf62db97f3fca43c045f3b7ffae943ad7a9b5315d17d",
+  "recovery_drill": {
+    "archive_extracted": true,
+    "readme_present": true,
+    "internal_source_tree_present": true
+  },
+  "active_consumer_audit": {
+    "workspace_internal_import_files": 0,
+    "public_pipeline_internal_import_files": 0,
+    "strategy_research_active_external_consumers": 0,
+    "workspace_historical_or_boundary_references": 2,
+    "workspace_historical_or_boundary_reference_paths": [
+      "scripts/import_boundary_rules.yml",
+      "src/research_contracts/artifact_contracts.py"
+    ]
+  },
+  "production": {
+    "workspace_release": "e322894a3d530959314dbd1a97eb9722f40b53da",
+    "public_pipeline_commit": "5f7f8681608019987d995ed1ae8602468c1c0d32",
+    "public_pipeline_gitlink_verified": true
+  },
+  "public_clean_room": {
+    "commit": "5f7f8681608019987d995ed1ae8602468c1c0d32",
+    "uv_sync_locked": "passed",
+    "pytest": "55 passed",
+    "active_internal_imports": 0
+  },
+  "conclusion": "no active consumer found; keep internal as a private read-only recovery reference",
+  "next_action": "repeat the same audit in maintenance cycle 2 before formal retirement review"
+}
