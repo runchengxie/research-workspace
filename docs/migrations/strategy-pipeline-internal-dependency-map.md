@@ -85,6 +85,10 @@ recency 诊断接口，剩余消费者已直接导入 owner API。
 `market_data_platform.industry_history`。数据平台维护行业标签的日期有效性和证券列归一化，
 pipeline 只负责加载数据、筛选列和合并面板。
 
+`pipeline/fundamentals_overlay.py` 中 daily-clean provider overlay 的字段筛选已在 internal
+PR #231 迁入 `market_data_platform.provider_overlay`。数据平台维护字段选择规则，pipeline
+继续负责 provider overlay 的加载和面板合并。
+
 ## 目标关系
 
 ```text
