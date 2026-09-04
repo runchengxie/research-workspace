@@ -36,6 +36,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `pipeline/owner_ports.py` 已在 internal PR #217 中迁入公共 `strategy-pipeline.control_plane.ports`。协议、适配器和运行回执属于无领域知识的控制面，internal 的 pipeline runner 已切换到公共版本。
 
+`pipeline/research_ops/trial_registry.py` 已在 internal PR #218 中迁入 `strategy-research` 的 `strategy_research.trial_registry`。实验结果索引归研究实验 owner 维护，internal 只保留 CLI 编排。
+
 ## 目标关系
 
 ```text

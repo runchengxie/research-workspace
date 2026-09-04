@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `f66bda6f066aa9df6adaa6b4a8407c6395561f7a`
+> source_commit: `2818bf2421bc4e3a1c453b0669ce8aca966bb58c`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,9 +12,9 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "f66bda6f066aa9df6adaa6b4a8407c6395561f7a",
+  "source_commit": "2818bf2421bc4e3a1c453b0669ce8aca966bb58c",
   "inventory": {
-    "python_source_files": 102,
+    "python_source_files": 101,
     "test_files": 224,
     "script_files": 34,
     "config_files": 18,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 38,
+      "file_count": 37,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -117,6 +117,17 @@
       "test_evidence": "strategy-pipeline tests/control_plane/test_owner_ports.py; internal tests/test_migrated_owner_ports.py and pipeline runtime tests",
       "doc_evidence": "strategy-pipeline/docs/control-plane.md; workspace dependency map",
       "consumer_switch": "internal pipeline APIs and runner adapters now import strategy_pipeline.control_plane.ports, the internal owner_ports module was deleted, and the public dependency is locked to the owner commit"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/trial_registry.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/trial_registry.py",
+      "status": "complete",
+      "owner_commit": "478ac23583784e6c6080b3a14f16c98f4c623aae",
+      "internal_commit": "2818bf2421bc4e3a1c453b0669ce8aca966bb58c",
+      "test_evidence": "strategy-research tests/test_trial_registry_migration.py; strategy-research full test suite; internal trial registry and CLI tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md; internal docs/internal/data-ops-boundary-inventory.md and docs/internal/strategy-pipeline-transition.md",
+      "consumer_switch": "internal research CLI now imports strategy_research.trial_registry, the internal implementation was deleted, and the workspace strategy-research gitlink points to the owner commit"
     },
     {
       "source_path": "src/strategy_pipeline_internal/e2_promotion_receipt.py",
