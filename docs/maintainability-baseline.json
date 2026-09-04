@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 146,
-      "python_loc": 24988,
+      "python_loc": 24999,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -1960,8 +1960,8 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 52,
-      "python_loc": 6610,
+      "python_file_count": 54,
+      "python_loc": 6853,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,

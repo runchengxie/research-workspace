@@ -2,8 +2,8 @@
 
 本页只说明顶层工作区中跨模块交接的文件约定。各子项目内部格式、业务参数和完整命令说明，仍以各自 README 和 docs 为准。
 
-文档中的 `strategy-pipeline-internal` 指私有编排 distribution。历史 artifact producer 标识中的
-`strategy-pipeline` 是兼容字段值，表示同一私有 pipeline 生产方，不代表公共控制面仓库。
+公共 `strategy-pipeline` 负责通用运行控制和标准目标文件导出。策略研究、组合构造、数据供给和券商执行
+仍由对应 owner 模块负责。
 
 ## 顶层可以依赖什么
 
@@ -29,13 +29,13 @@
 | `metadata/current_assets/a_share_current.json` | `market-data-platform` | 下游研究或数据消费者 | A 股当前可用数据清单 |
 | `metadata/dataset_registry.csv` | `market-data-platform` | 人工审计、研究系统 | 已发布数据资产索引 |
 | 版本化数据资产目录 | 数据维护模块 | 研究系统 | 实际数据资产 |
-| `summary.json` | `strategy-pipeline-internal` | 人工审计、后续导出 | 私有 pipeline 研究运行摘要 |
+| `summary.json` | `strategy-pipeline` | 人工审计、后续导出 | 运行摘要 |
 | `signals.parquet`、`signals.meta.json` | `alpha-research` | 评估、组合构造、回测、导出前审计 | 权威打分信号产物和 metadata |
 | `factor_diagnostics_summary.json` | `alpha-research` | 人工审计、顶层 optional evidence | top features 的稳定性、风格暴露、市值段、行业、中性化后信息系数（IC）和冗余画像摘要 |
 | `strategy_outputs/style-factors/<name>/` | `style_factor_attribution.py` → `style_factors` | 策略研究 | 最多 15 个全市场代理因子多空日收益、逐年/年初至今分解、相关性矩阵、策略归因 JSON 和逐年策略归因 CSV |
-| `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | `strategy export-targets` | 回测持仓和已保存的目标持仓候选 |
-| `targets.json` | `strategy export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
-| `targets.json.lineage.json` | `strategy export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
+| `positions_by_rebalance.csv`、`positions_current*.csv` | `portfolio-backtester` | owner adapter | 回测持仓和已保存的目标持仓候选 |
+| `targets.json` | `strategy-pipeline export-targets` | `quant-execution-engine` | 标准格式的执行目标输入 |
+| `targets.json.lineage.json` | `strategy-pipeline export-targets` | 审计、复现 | 记录输入、配置和运行信息的审计文件 |
 | `strategy_outputs/watchlist20/latest/watchlist_20.csv`、`watchlist_20.json` | `strategy watchlist20 run` | `market-intel` 晨报 | 内部严格 A4/B16（DailyWatch20 内部两袖：A 袖 4 只、B 袖 16 只）的 20 股研究 artifact。JSON companion 必须与 CSV 的股票、袖、排名和权重一致，执行以 CSV 为准。客户 renderer 统一展示 20 股且不暴露内部袖、分数或权重 |
 | `strategy_outputs/watchlist20/latest/selection_receipt.json` | `strategy watchlist20 run` | `market-intel` 晨报准入与审计 | 记录日期、模型、分钟特征、构造门禁、lineage 和 artifact 哈希 |
 | `strategy_inputs/watchlist20/news_heat/latest/` | `market-intel news-heat-export` | `strategy watchlist20 run` | 严格 source date 的稀疏热点正样本。股票未出现表示热度未知，不代表零热度 |
@@ -65,7 +65,7 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 
 `src/research_contracts` 已提供 v2 写入辅助层：`attach_artifact_envelope_v2`、`canonical_json_sha256`、`file_sha256` 和 `ProducerIdentity`/`LineageInput` 类型，并有契约测试覆盖写入与校验往返。
 
-生产方已经覆盖信号、持仓和执行目标三类产物。`alpha-research` 的 `write_signal_artifact` 与 `StyleReplicaSignalGenerator.write` 分别在 `signals.meta.json` 和 `signals_style_replica.meta.json` 写入 `artifact_envelope` 键。`portfolio-backtester` 的 `write_positions_by_rebalance_artifact` 在 companion `positions_by_rebalance.meta.json` 写入同一键。两个 owner 仓库均以 git subdirectory 依赖接入 `research-contracts`。`strategy export-targets` 在 `targets.json.lineage.json` 写入同一 `research.artifact-envelope.v2` envelope，并以实际写出的 `targets.json` 计算 content SHA-256。上述产物均已进入 `adopted_by`，当前 `adoption_pending` 为空。现有 v1 artifact 和 reader 保持有效，读取方继续兼容未携带 envelope 的 v1 metadata。envelope 只作为附加键写入对应 metadata 或 lineage sidecar。
+生产方已经覆盖信号、持仓和执行目标三类产物。`alpha-research` 的 `write_signal_artifact` 与 `StyleReplicaSignalGenerator.write` 分别在 `signals.meta.json` 和 `signals_style_replica.meta.json` 写入 `artifact_envelope` 键。`portfolio-backtester` 的 `write_positions_by_rebalance_artifact` 在 companion `positions_by_rebalance.meta.json` 写入同一键。两个 owner 仓库均以 git subdirectory 依赖接入 `research-contracts`。`strategy-pipeline export-targets` 在 `targets.json.lineage.json` 写入同一 `research.artifact-envelope.v2` envelope，并以实际写出的 `targets.json` 计算 content SHA-256。上述产物均已进入 `adopted_by`，当前 `adoption_pending` 为空。现有 v1 artifact 和 reader 保持有效，读取方继续兼容未携带 envelope 的 v1 metadata。envelope 只作为附加键写入对应 metadata 或 lineage sidecar。
 
 | Artifact | 契约 | Owner | 代码入口 | 最小稳定字段 |
 | --- | --- | --- | --- | --- |
@@ -73,9 +73,9 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 | `signals.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `signal_artifact_summary` | 契约 name、schema version、文件路径、行数、required columns、`artifact_envelope` |
 | `positions_by_rebalance.csv` | `portfolio_backtester.positions_by_rebalance` | `portfolio-backtester` | `portfolio_backtester.contracts` | `rebalance_date`、`symbol`、`weight`。常见字段包括 `entry_date`、`side`、`signal`、`rank` |
 | `positions_by_rebalance.meta.json` | `portfolio_backtester.positions_by_rebalance` envelope | `portfolio-backtester` | `portfolio_backtester.positions_artifact` | contract、schema version、文件路径、行数、required columns、`artifact_envelope` |
-| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline-internal` 导出 | `quant_execution_engine.targets`、`strategy export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity`，且二者恰好存在一个 |
+| `targets.json` | `quant-execution-engine.targets/v2` | `quant-execution-engine` 解析，`strategy-pipeline` 导出 | `quant_execution_engine.targets`、`strategy-pipeline export-targets` | `targets[]`，每项包含 `symbol`、`market` 和 `target_weight` 或 `target_quantity`，且二者恰好存在一个 |
 | `research-run.manifest.json` | `research.backtest-run.v1` | `research-workspace` 生成 | `research_contracts.research_run_manifest_writer`、`research_contracts.research_run_manifest` | 根运行 lineage、证据等级、研究时钟和 artifact hash |
-| `targets.json.lineage.json` | target export lineage | `research_contracts.target_lineage`（workspace） | `strategy export-targets` | run id、输入持仓文件、配置、质量检查、导出时间和 `artifact_envelope` |
+| `targets.json.lineage.json` | target export lineage | `research_contracts.target_lineage`（workspace） | `strategy-pipeline export-targets` | run id、输入持仓文件、配置、质量检查、导出时间和 lineage hash |
 | `signals_style_replica.parquet` | `alpha_research.signals`（style_replica variant） | `alpha-research` | `alpha_research.style_replica.signal_generator` | 在 `signals.parquet` 基础上附加 `score_a`、`score_b`、`leg`、`theme`、`industry`、`selected_reason` |
 | `signals_style_replica.meta.json` | `alpha_research.signals metadata` | `alpha-research` | `StyleReplicaSignalGenerator.write` | 契约 name、schema version、model_version、config（a/b slots、theme quotas）、`artifact_envelope` |
 | `watchlist_20.csv` | `daily_watch20.selection.v1` | `strategy-pipeline` | `strategy_pipeline.daily_watch20_publish` | `source_date`、`signal_date`、沪深 `symbol`、`sleeve`、袖内 `rank`、四类分数、解释、模型和 feature-set 身份 |
@@ -83,15 +83,15 @@ envelope 不包含数据加载、路径解析、模型训练或组合计算 help
 
 `signals.parquet` 的 canonical owner 仍是 `alpha-research`，但 `market-intel/hot-sector-screener`
 也可以作为外部 producer 生成同一 `alpha_research.signals` 契约的每日热点候选信号。该外部信号只表示
-候选池排序。是否构造成组合由 `strategy-pipeline-internal` 的 `external_signals` / `hotsector_overlay`
-显式处理，是否导出执行目标由 `strategy export-targets` 显式处理。
+候选池排序。是否构造成组合由策略应用的 `external_signals` / `hotsector_overlay`
+显式处理，是否导出执行目标由 `strategy-pipeline export-targets` 显式处理。
 外部热点信号可携带 `daily_confirm_score`、`confidence_score`、`confidence_label`
 等可选解释列。这些列不属于最小稳定契约。默认 `hotsector_overlay` 仍使用等权 Top-K，
 需要比较信号加权组合时显式使用 `hotsector_signal_weighted_overlay`。
 
-DailyWatch20（每日观察的 20 只 A 股名单，由 strategy-pipeline-internal 产出给 market-intel）是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、默认
+DailyWatch20（每日观察的 20 只 A 股名单，由策略应用产出给 market-intel）是独立的晨报研究 artifact。`alpha-research` 拥有 XGBRanker、默认
 50%/30%/20% 权重的 1/3/5 日时间点（PIT）标签和
-feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，`strategy-pipeline-internal` 负责读取已发布数据、
+feature 实现，`portfolio-backtester` 拥有 A4/B16 约束选择，公共 pipeline 负责读取已发布数据、
 同日完整性门禁、增量分钟缓存、周期重训/每日打分、滚动样本外（OOS）消融和原子发布。`market-intel`
 生产严格时点化热点输入，并分别生成客户统一 20 股展示和内部审计展示。
 MVP 的 `eligible_for_live=false`，不会生成
@@ -118,7 +118,7 @@ A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。�
   `normalized_fundamentals`、`pit_fundamentals` current-contract key 和 registry row。
 - 行业 overlay：申万/中信行业最好保留历史变更。只有当前行业标签时，只适合当前截面说明。历史回测应使用历史行业标签。
 - A 股深度交易规则：T+1、ST、停牌、涨跌停、新股上市 N 日和不同板块涨跌幅可作为研究侧过滤/标记。真实成交约束仍由执行系统和券商接口验证。
-- 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据。真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。`strategy export-targets` 可以把 `.SH`、`.SZ`、`.BJ`、`.XSHG`、`.XSHE` A 股后缀映射为 `market: CN`，并保留或标准化执行目标里的交易所后缀。券商后端的中国大陆市场真实报单能力以执行仓库的券商证据为准。
+- 真实券商 CN 能力：当前工作区只要求 `targets.json` 解析和基础 dry-run 证据。真实账户权限、券商接口、港股通或 A 股账户能力必须单独验证。`strategy-pipeline export-targets` 可以把 `.SH`、`.SZ`、`.BJ`、`.XSHG`、`.XSHE` A 股后缀映射为 `market: CN`。券商后端的中国大陆市场真实报单能力以执行仓库的券商证据为准。
 
 扩大 A 股下载范围前，先按 [data-transition-playbook.md](data-transition-playbook.md) 完成 `DATA_PLATFORM_ROOT`、current 契约、registry、`daily_clean` 质量门禁和 `default` smoke 验证。`default_next` 作为同一 A 股路径的兼容别名保留。旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容 alias 说明，新流程的权威入口是 `metadata/current_assets/a_share_current.json`。
 
@@ -153,27 +153,27 @@ $DATA_PLATFORM_ROOT/
 
 ## 研究到执行交接
 
-研究系统通过 `strategy export-targets` 生成标准格式的 `targets.json`：
+研究系统通过 `strategy-pipeline export-targets` 生成标准格式的 `targets.json`：
 
 ```text
 signals.parquet
   -> portfolio_backtester.contracts.StrategySpec
-  -> positions_by_rebalance.csv / strategy-pipeline-internal 已保存持仓
-  -> strategy export-targets
+  -> owner 产出的 holdings.json
+  -> strategy-pipeline export-targets
   -> targets.json
   -> quant-execution-engine 预演 / 模拟盘 / 实盘门禁流程
 ```
 
 约定：
 
-- `strategy export-targets` 只生成目标文件和审计附属文件。
+- `strategy-pipeline export-targets` 只生成目标文件和审计附属文件。
 - 导出命令不连接券商、不预演订单、不提交订单。
 - `qexec rebalance <targets.json>` 负责券商连接、执行前检查、模拟盘和实盘门禁。
 - 顶层脚本不得默认追加 `--execute`，也不得绕过 `QEXEC_ENABLE_LIVE=1` 等执行系统门禁。
 
 ## 研究诊断证据
 
-`alpha-research` 的诊断逻辑可以在 `strategy-pipeline-internal` 编排的每次 run 后输出 `factor_diagnostics_*` 画像产物。顶层仓库只把这类报告当作人工审计和 optional evidence，不直接导入研究仓库内部实现，也不让执行仓库重新解释因子。
+`alpha-research` 的诊断逻辑可以在公共 pipeline 编排的每次 run 后输出 `factor_diagnostics_*` 画像产物。顶层仓库只把这类报告当作人工审计和 optional evidence，不直接导入研究仓库内部实现，也不让执行仓库重新解释因子。
 
 可选 evidence 示例见 [`evidence/a-share-factor-diagnostics-20260621.json`](evidence/a-share-factor-diagnostics-20260621.json)。第一阶段该 evidence 不属于 `production_strategy_evidence` 硬门禁。稳定后再评估是否合并进 feature evidence 或 promotion gate。
 

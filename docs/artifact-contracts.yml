@@ -188,9 +188,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.liveops.export_targets",
-          "path": "src/strategy_pipeline_internal/liveops/export_targets.py",
+          "repo": "strategy-pipeline",
+          "module": "strategy_pipeline.control_plane.targets",
+          "path": "src/strategy_pipeline/control_plane/targets.py",
           "role": "producer"
         },
         {
@@ -217,7 +217,7 @@
           "target_quantity"
         ]
       ],
-      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The producer delegates canonical targets.json serialization to quant-execution-engine and writes the research.artifact-envelope.v2 envelope into the targets.json.lineage.json sidecar, with content_sha256 hashing the written targets.json."
+      "notes": "Research may export target holdings, but broker connection, dry-run planning, paper/live gates, and order audit stay inside quant-execution-engine. Each target entry defines exactly one of target_weight or target_quantity. The public strategy-pipeline producer writes targets.json and the research.artifact-envelope.v2 envelope into its lineage sidecar."
     },
     {
       "artifact": "research-run.manifest.json",
