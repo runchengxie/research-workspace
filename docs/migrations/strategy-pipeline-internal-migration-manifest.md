@@ -1108,6 +1108,17 @@
       "internal_commit": "8dcf457f9bb442c2b517effbcedbcd35f7143bff",
       "test_evidence": "market-data-platform tests/test_market_specs.py; internal tests/test_historical_hk_symbol_owner.py",
       "remains_active": "legacy_rqdata_runtime.py was deleted in internal PR #143 after its remaining callers were removed"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_artifacts.py; src/strategy_pipeline_internal/pipeline/diagnostic_artifacts.py; src/strategy_pipeline_internal/pipeline/support.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/output_artifacts.py; src/strategy_pipeline/pipeline/diagnostic_artifacts.py; src/strategy_pipeline/pipeline/support.py",
+      "status": "partial",
+      "owner_commit": "70e0ff62bbb28b4c4b42286867e874e6d7dd779d",
+      "internal_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
+      "test_evidence": "strategy-pipeline output-artifacts, output-summary, and evaluation tests: 8 passed",
+      "doc_evidence": "strategy-pipeline/docs/output-artifacts.md; strategy-pipeline PR #13",
+      "remains_active": "internal output persistence and supporting pipeline consumers still use the historical implementation. Switch those consumers and run the internal regression suite before marking complete."
     }
   ],
   "retired_internal_facades": [
