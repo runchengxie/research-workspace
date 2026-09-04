@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `122837c0209e127564578fad83bee6fb08b30b98`
+> source_commit: `ef2b353e6a13879d474b11ba456c04f3e36519b0`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "122837c0209e127564578fad83bee6fb08b30b98",
+  "source_commit": "ef2b353e6a13879d474b11ba456c04f3e36519b0",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1194,6 +1194,17 @@
       "test_evidence": "strategy-pipeline tests/test_cli_helpers.py: 2 passed; internal CLI core, entrypoint, research, liveops, style-factor, and namespace regression tests passed",
       "doc_evidence": "strategy-pipeline/docs/cli-helpers.md; strategy-pipeline PR #20",
       "consumer_switch": "internal CLI common helpers now import the public implementations, while quota formatting and private config loading remain internal"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/common.py::augment_quota_entry, augment_quota_payload, format_quota_entry, format_quota_pretty",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/quota_rendering.py",
+      "status": "complete",
+      "owner_commit": "8591073962c1ceb7441d5fa85bed4d5e970f41b2",
+      "internal_commit": "ef2b353e6a13879d474b11ba456c04f3e36519b0",
+      "test_evidence": "market-data-platform tests/test_quota_rendering.py: 2 passed; internal CLI core, entrypoint, research, liveops, style-factor, and namespace regression tests passed",
+      "doc_evidence": "market-data-platform/docs/quota-rendering.md; market-data-platform PR #115",
+      "consumer_switch": "internal quota display helpers now import the market-data-platform owner implementation"
     }
   ],
   "partial_code_migrations": [
