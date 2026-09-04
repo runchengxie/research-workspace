@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `2818bf2421bc4e3a1c453b0669ce8aca966bb58c`
+> source_commit: `7e0047e786785e2431a6fcb2576d22ac362e0803`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "2818bf2421bc4e3a1c453b0669ce8aca966bb58c",
+  "source_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
   "inventory": {
-    "python_source_files": 101,
-    "test_files": 224,
+    "python_source_files": 95,
+    "test_files": 225,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 37,
+      "file_count": 31,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -128,6 +128,72 @@
       "test_evidence": "strategy-research tests/test_trial_registry_migration.py; strategy-research full test suite; internal trial registry and CLI tests",
       "doc_evidence": "strategy-research/docs/trial-ledger.md; internal docs/internal/data-ops-boundary-inventory.md and docs/internal/strategy-pipeline-transition.md",
       "consumer_switch": "internal research CLI now imports strategy_research.trial_registry, the internal implementation was deleted, and the workspace strategy-research gitlink points to the owner commit"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/_summarize_runs_api.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/api.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research tests/test_summarize_runs.py and related summarize-runs tests; internal CLI, sweep, tune, release, and migration tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md; internal docs/internal/strategy-pipeline-transition.md",
+      "consumer_switch": "internal research CLI and orchestration callers now import strategy_research.summarize_runs.api, and the internal API module was deleted"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/_summarize_runs_core.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/core.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research tests/test_summarize_runs.py and provenance tests; internal summarize-runs regression tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md",
+      "consumer_switch": "the core summarization implementation is now maintained under strategy_research.summarize_runs.core"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/summarize_runs_args.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/args.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research summarize-runs CLI tests; internal research CLI tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md",
+      "consumer_switch": "the summarize-runs argument parser is now owned by strategy_research.summarize_runs.args"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/summarize_runs_common.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/common.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research summarize-runs, provenance, and scoring tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md",
+      "consumer_switch": "shared run-summary parsing helpers are now imported only through the strategy-research implementation package"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/summarize_runs_provenance.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/provenance.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research tests/test_summarize_runs_provenance.py; internal provenance regression tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md",
+      "consumer_switch": "run input provenance enrichment is now maintained by strategy_research.summarize_runs.provenance"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/summarize_runs_scoring.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/summarize_runs/scoring.py",
+      "status": "complete",
+      "owner_commit": "0c1c280975353ea52efff491c270c3d062460d57",
+      "internal_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+      "test_evidence": "strategy-research tests/test_summarize_runs_scoring.py; internal scoring and summarize-runs tests",
+      "doc_evidence": "strategy-research/docs/trial-ledger.md",
+      "consumer_switch": "run comparison flags and DSR scoring are now maintained by strategy_research.summarize_runs.scoring"
     },
     {
       "source_path": "src/strategy_pipeline_internal/e2_promotion_receipt.py",
