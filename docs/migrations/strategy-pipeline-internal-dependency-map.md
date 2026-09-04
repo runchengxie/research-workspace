@@ -32,6 +32,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 根包 `__init__.py` 和 `liveops/__init__.py` 也已在 internal PR #215 中退役。根包和 liveops 子模块继续通过原有路径加载，workspace 不依赖这些初始化 facade。
 
+`commands/tune/__init__.py` 已在 internal PR #216 中退役。调参 CLI 和 runner 直接使用 `parser`、`report`、`spec` 实现模块，原有调参子模块路径继续可用。
+
 ## 目标关系
 
 ```text

@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `80a53406128b0cf0e817cb7cb43dbee5c88ea199`
+> source_commit: `52ad0e5b7c35b368ac52e2b22b4d245a6f56f508`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "80a53406128b0cf0e817cb7cb43dbee5c88ea199",
+  "source_commit": "52ad0e5b7c35b368ac52e2b22b4d245a6f56f508",
   "inventory": {
-    "python_source_files": 105,
-    "test_files": 221,
+    "python_source_files": 104,
+    "test_files": 222,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -39,7 +39,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/commands",
-      "file_count": 10,
+      "file_count": 9,
       "owner_repo": "research-workspace",
       "target_path": "scripts and workspace entrypoints",
       "status": "private",
@@ -594,6 +594,13 @@
     }
   ],
   "retired_internal_facades": [
+    {
+      "source_path": "src/strategy_pipeline_internal/commands/tune/__init__.py",
+      "status": "complete",
+      "internal_commit": "52ad0e5b7c35b368ac52e2b22b4d245a6f56f508",
+      "test_evidence": "internal tests/test_retired_tune_package_facade.py; internal tuning and research CLI tests",
+      "rationale": "The package file only re-exported parser, report, and spec helpers. The CLI and runner now import those implementation modules directly, while the tune submodule paths remain available."
+    },
     {
       "source_path": "src/strategy_pipeline_internal/__init__.py",
       "status": "complete",
