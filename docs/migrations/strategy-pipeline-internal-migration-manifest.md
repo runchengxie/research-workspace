@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `bc5d8093cfe75e25d0ae7c6e046bc6b4f09acf87`
+> source_commit: `5b3adcdaab8066233cf8733a6d48e0843de50389`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "bc5d8093cfe75e25d0ae7c6e046bc6b4f09acf87",
+  "source_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1085,6 +1085,17 @@
       "test_evidence": "strategy-pipeline tests/test_pipeline_eval.py: 1 passed; internal execution-calendar, namespace, position-postprocess, and pipeline-runtime tests: 125 passed",
       "doc_evidence": "strategy-pipeline/docs/evaluation.md; strategy-pipeline PR #11",
       "consumer_switch": "internal runner, final-OOS stage, and evaluation regression consumers now import the public strategy-pipeline evaluation owner, while the historical module remains a narrow compatibility facade"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_summary_sections.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
+      "status": "complete",
+      "owner_commit": "d7fb15c3527a752d6c80f0daae712f9e45f2a652",
+      "internal_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
+      "test_evidence": "strategy-pipeline tests/test_pipeline_output_summary_sections.py and test_pipeline_eval.py: 2 passed; internal pipeline-runtime, output-summary-metadata, and namespace tests: 120 passed",
+      "doc_evidence": "strategy-pipeline/docs/output-summary.md; strategy-pipeline PR #12",
+      "consumer_switch": "internal output persistence now imports the public run-summary assembler, while the historical module remains a narrow compatibility facade"
     }
   ],
   "partial_code_migrations": [
