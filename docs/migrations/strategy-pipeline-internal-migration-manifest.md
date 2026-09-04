@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7`
+> source_commit: `44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7",
+    "source_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
   "inventory": {
-    "python_source_files": 93,
-    "test_files": 236,
+    "python_source_files": 88,
+    "test_files": 237,
     "script_files": 29,
     "config_files": 21,
     "ownership_document_files": 114,
@@ -1092,10 +1092,10 @@
       "target_path": "src/strategy_pipeline/pipeline/output_summary_sections.py",
       "status": "complete",
       "owner_commit": "d7fb15c3527a752d6c80f0daae712f9e45f2a652",
-      "internal_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
+      "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
       "test_evidence": "strategy-pipeline tests/test_pipeline_output_summary_sections.py and test_pipeline_eval.py: 2 passed; internal pipeline-runtime, output-summary-metadata, and namespace tests: 120 passed",
       "doc_evidence": "strategy-pipeline/docs/output-summary.md; strategy-pipeline PR #12",
-      "consumer_switch": "internal output persistence now imports the public run-summary assembler, while the historical module remains a narrow compatibility facade"
+      "consumer_switch": "internal output persistence imports the public run-summary assembler and the historical facade has been removed"
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/output_artifacts.py; src/strategy_pipeline_internal/pipeline/diagnostic_artifacts.py; src/strategy_pipeline_internal/pipeline/support.py",
@@ -1124,10 +1124,10 @@
       "target_path": "src/strategy_pipeline/pipeline/quality.py",
       "status": "complete",
       "owner_commit": "5416e2f20b4023ef7c2ed619690832ca5829ec67",
-      "internal_commit": "29bf6675c11d10a23bf196a3ac71a63fc197b683",
+      "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
       "test_evidence": "strategy-pipeline quality, artifact, summary, and evaluation tests: 10 passed; internal quality, protocol, export-target, snapshot, validation, and namespace tests: passed",
       "doc_evidence": "strategy-pipeline/docs/quality-gates.md; strategy-pipeline PR #14",
-      "consumer_switch": "internal runner, preflight, external-signal, and liveops consumers now import the public quality-gate owner through a compatibility facade"
+      "consumer_switch": "internal liveops and protocol consumers import the public quality-gate owner directly and the historical facade has been removed"
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/runtime.py",
@@ -1135,10 +1135,10 @@
       "target_path": "src/strategy_pipeline/pipeline/runtime.py",
       "status": "complete",
       "owner_commit": "93207ce0e36ab9469d839ac56d3080bf1cf99d6a",
-      "internal_commit": "e670f1f6e2141f14c2a5d4e0d7604c62424bc07f",
+      "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
       "test_evidence": "strategy-pipeline runtime, quality, artifact, summary, and evaluation tests: 12 passed; internal runtime, quality, validation, and namespace tests passed",
       "doc_evidence": "strategy-pipeline/docs/runtime-helpers.md; strategy-pipeline PR #15",
-      "consumer_switch": "internal context builder, runner, and config consumers now import public runtime helpers through a compatibility facade"
+      "consumer_switch": "all known internal consumers of public runtime helpers have moved off the historical facade"
     },
     {
       "source_path": "src/strategy_pipeline_internal/data_interface.py",
@@ -1168,10 +1168,10 @@
       "target_path": "src/strategy_pipeline/cli_evidence.py",
       "status": "complete",
       "owner_commit": "48b5a97b711a60a943c6c2ace7c0dbd1a2a75aa8",
-      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
       "test_evidence": "strategy-pipeline tests/test_cli_evidence_protocol.py; internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
       "doc_evidence": "strategy-pipeline/docs/evidence-protocol-cli.md; strategy-pipeline PR #19",
-      "consumer_switch": "internal AFML evidence CLI now delegates argument handling and execution to the public command handler"
+      "consumer_switch": "the AFML evidence CLI uses the public command handler directly and the historical facade has been removed"
     },
     {
       "source_path": "src/strategy_pipeline_internal/cli/protocol.py",
@@ -1179,10 +1179,10 @@
       "target_path": "src/strategy_pipeline/cli_protocol.py",
       "status": "complete",
       "owner_commit": "48b5a97b711a60a943c6c2ace7c0dbd1a2a75aa8",
-      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "internal_commit": "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3",
       "test_evidence": "strategy-pipeline tests/test_cli_evidence_protocol.py; internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
       "doc_evidence": "strategy-pipeline/docs/evidence-protocol-cli.md; strategy-pipeline PR #19",
-      "consumer_switch": "internal research-protocol CLI now delegates manifest initialization and evaluation to the public command handler"
+      "consumer_switch": "the research-protocol CLI uses the public command handler directly and the historical facade has been removed"
     },
     {
       "source_path": "src/strategy_pipeline_internal/cli/common.py::format_bytes, render_pct_bar, coerce_float, append_arg, append_repeat_args, append_bool_switch, append_passthrough",
