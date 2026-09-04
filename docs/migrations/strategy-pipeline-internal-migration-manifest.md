@@ -52,20 +52,20 @@
       "file_count": 4,
       "owner_repo": "quant-execution-engine",
       "target_path": "src/quant_execution_engine/liveops",
-      "status": "planned",
-      "test_evidence": "execution audit and run smoke tests",
-      "doc_evidence": "execution and operational runbook",
-      "removal_condition": "execution engine owns liveops and audit entrypoints"
+      "status": "archive",
+      "test_evidence": "production contract smoke; owner consumer audit; internal liveops regression tests",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-runtime-archive-audit.md; retirement-freeze-20260905-r1",
+      "removal_condition": "retain only in the frozen recovery reference while no active consumer exists"
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
       "file_count": 29,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
-      "status": "planned",
-      "test_evidence": "public clean-room control-plane tests",
-      "doc_evidence": "strategy-pipeline public API docs",
-      "removal_condition": "remaining pipeline modules contain no domain knowledge"
+      "status": "archive",
+      "test_evidence": "public clean-room control-plane tests; production contract smoke; internal consumer audit",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-runtime-archive-audit.md; public strategy-pipeline API docs",
+      "removal_condition": "retain only in the frozen recovery reference while no active consumer exists"
     },
     {
       "source_path": "src/strategy_pipeline_internal/release_tools",

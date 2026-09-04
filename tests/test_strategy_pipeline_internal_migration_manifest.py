@@ -87,6 +87,25 @@ def test_internal_cli_is_archive_only() -> None:
     assert "no active consumer" in group["removal_condition"]
 
 
+def test_internal_pipeline_and_liveops_are_archive_only() -> None:
+    payload = _load_manifest()
+    groups = {
+        item["source_path"]: item
+        for item in payload["module_groups"]
+        if item["source_path"]
+        in {
+            "src/strategy_pipeline_internal/pipeline",
+            "src/strategy_pipeline_internal/liveops",
+        }
+    }
+
+    assert set(groups) == {
+        "src/strategy_pipeline_internal/pipeline",
+        "src/strategy_pipeline_internal/liveops",
+    }
+    assert all(item["status"] == "archive" for item in groups.values())
+
+
 def test_policy_snapshot_migration_records_strategy_app_owner() -> None:
     payload = _load_manifest()
     migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
