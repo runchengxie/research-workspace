@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a7927998b0cbef4fc1e00b89038c457195ad0a60`
+> source_commit: `122837c0209e127564578fad83bee6fb08b30b98`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+  "source_commit": "122837c0209e127564578fad83bee6fb08b30b98",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1183,6 +1183,17 @@
       "test_evidence": "strategy-pipeline tests/test_cli_evidence_protocol.py; internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
       "doc_evidence": "strategy-pipeline/docs/evidence-protocol-cli.md; strategy-pipeline PR #19",
       "consumer_switch": "internal research-protocol CLI now delegates manifest initialization and evaluation to the public command handler"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/common.py::format_bytes, render_pct_bar, coerce_float, append_arg, append_repeat_args, append_bool_switch, append_passthrough",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/cli_helpers.py",
+      "status": "complete",
+      "owner_commit": "060557b14b168b62f72fb4fdc63835e2df86e5bf",
+      "internal_commit": "122837c0209e127564578fad83bee6fb08b30b98",
+      "test_evidence": "strategy-pipeline tests/test_cli_helpers.py: 2 passed; internal CLI core, entrypoint, research, liveops, style-factor, and namespace regression tests passed",
+      "doc_evidence": "strategy-pipeline/docs/cli-helpers.md; strategy-pipeline PR #20",
+      "consumer_switch": "internal CLI common helpers now import the public implementations, while quota formatting and private config loading remain internal"
     }
   ],
   "partial_code_migrations": [
