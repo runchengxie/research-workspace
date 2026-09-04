@@ -30,6 +30,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `commands/__init__.py` 和 `release_tools/__init__.py` 只提供空包入口，已在 internal PR #214 中退役。对应的命令和发布工具子模块继续保留原有导入路径，因此这次清理不会改变运行入口。
 
+根包 `__init__.py` 和 `liveops/__init__.py` 也已在 internal PR #215 中退役。根包和 liveops 子模块继续通过原有路径加载，workspace 不依赖这些初始化 facade。
+
 ## 目标关系
 
 ```text

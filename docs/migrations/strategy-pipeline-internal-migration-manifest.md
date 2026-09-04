@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `4da45c7d64168d1bd51f609592111ab189b17a0a`
+> source_commit: `80a53406128b0cf0e817cb7cb43dbee5c88ea199`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "4da45c7d64168d1bd51f609592111ab189b17a0a",
+  "source_commit": "80a53406128b0cf0e817cb7cb43dbee5c88ea199",
   "inventory": {
-    "python_source_files": 107,
-    "test_files": 220,
+    "python_source_files": 105,
+    "test_files": 221,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -49,7 +49,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",
-      "file_count": 5,
+      "file_count": 4,
       "owner_repo": "quant-execution-engine",
       "target_path": "src/quant_execution_engine/liveops",
       "status": "planned",
@@ -79,7 +79,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",
-      "file_count": 40,
+      "file_count": 39,
       "owner_repo": "strategy-app",
       "target_path": "owner-specific modules recorded in the next slice manifest",
       "status": "private",
@@ -594,6 +594,20 @@
     }
   ],
   "retired_internal_facades": [
+    {
+      "source_path": "src/strategy_pipeline_internal/__init__.py",
+      "status": "complete",
+      "internal_commit": "80a53406128b0cf0e817cb7cb43dbee5c88ea199",
+      "test_evidence": "internal tests/test_retired_root_liveops_package_facades.py; namespace and import boundary tests",
+      "rationale": "The root package file contained only a module docstring. Python namespace-package imports preserve submodule access without package initialization logic."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/__init__.py",
+      "status": "complete",
+      "internal_commit": "80a53406128b0cf0e817cb7cb43dbee5c88ea199",
+      "test_evidence": "internal tests/test_retired_root_liveops_package_facades.py; liveops CLI, target export, holdings, and snapshot tests",
+      "rationale": "The package file only re-exported liveops submodules. Those submodules remain importable through their original paths without package initialization code."
+    },
     {
       "source_path": "src/strategy_pipeline_internal/commands/__init__.py",
       "status": "complete",
