@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `0dc8015ead94a0a125d7c417ba183d3ba82d0baa`
+> source_commit: `dc9cbb6549d24f53a50290147652505c6300ce6f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "0dc8015ead94a0a125d7c417ba183d3ba82d0baa",
+  "source_commit": "dc9cbb6549d24f53a50290147652505c6300ce6f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1515,6 +1515,17 @@
       "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
       "test_evidence": "internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
       "rationale": "The internal module now re-exports the public research protocol command handler and retains the historical import path."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/panel_join_support.py::Parquet and CSV file I/O helpers",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/standardize/parquet.py",
+      "status": "complete",
+      "owner_commit": "4c6ca92ae656d9e5d649513ef079f926c444bdb9",
+      "internal_commit": "dc9cbb6549d24f53a50290147652505c6300ce6f",
+      "test_evidence": "market-data-platform tests/test_research_parquet_io.py: 3 passed; internal panel join, file build, file-derived, CLI research, CLI core, impact, and pipeline E2E tests: 58 passed",
+      "doc_evidence": "market-data-platform/docs/research-parquet-io.md; market-data-platform PR #116",
+      "consumer_switch": "internal panel join loading now delegates schema inspection, column selection, Hive partition handling, and Parquet fallback reads to market-data-platform"
     }
   ],
   "completed_boundary_cleanups": [
