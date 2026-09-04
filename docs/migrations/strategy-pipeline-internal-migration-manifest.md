@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `fd1d70319d08951f145dfc48793ec1f3c414a057`
+> source_commit: `0dc8015ead94a0a125d7c417ba183d3ba82d0baa`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "fd1d70319d08951f145dfc48793ec1f3c414a057",
+  "source_commit": "0dc8015ead94a0a125d7c417ba183d3ba82d0baa",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1216,6 +1216,17 @@
       "test_evidence": "portfolio-backtester tests/test_grid_support.py: 3 passed; internal CLI research, CLI core, test-impact, and pipeline E2E tests passed",
       "doc_evidence": "portfolio-backtester/docs/grid-support.md; portfolio-backtester PR #77",
       "consumer_switch": "internal grid command now delegates path, run-name, date-list, and rebalance-date parsing to portfolio-backtester"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/commands/run_grid_common.py::_init_row, _write_grid_rows",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/grid_support.py",
+      "status": "complete",
+      "owner_commit": "38d113782fc23b2bf3a8391f4a05e5114ebc2694",
+      "internal_commit": "0dc8015ead94a0a125d7c417ba183d3ba82d0baa",
+      "test_evidence": "portfolio-backtester tests/test_grid_support.py: 4 passed; internal CLI research, CLI core, test-impact, and pipeline E2E tests passed",
+      "doc_evidence": "portfolio-backtester/docs/grid-support.md; portfolio-backtester PR #78",
+      "consumer_switch": "internal grid common module now delegates result-row initialization and stable CSV writing to portfolio-backtester"
     }
   ],
   "partial_code_migrations": [
