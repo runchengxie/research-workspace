@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `7e0047e786785e2431a6fcb2576d22ac362e0803`
+> source_commit: `4ca785a33bca556bf46b2989b54e02aadaddd6f2`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "7e0047e786785e2431a6fcb2576d22ac362e0803",
+  "source_commit": "4ca785a33bca556bf46b2989b54e02aadaddd6f2",
   "inventory": {
     "python_source_files": 95,
     "test_files": 225,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/export_targets.py::_execution_symbol",
+      "owner_repo": "quant-execution-engine",
+      "target_path": "src/quant_execution_engine/targets.py::normalize_execution_symbol",
+      "status": "complete",
+      "owner_commit": "608ff9cb1820d43464017763191730abe4257d4e",
+      "internal_commit": "4ca785a33bca556bf46b2989b54e02aadaddd6f2",
+      "test_evidence": "quant-execution-engine tests/unit/test_targets_contract.py; internal tests/test_export_targets.py, tests/test_cli_liveops.py, and tests/test_migrated_execution_symbol.py",
+      "doc_evidence": "internal docs/internal/data-ops-boundary-inventory.md and docs/internal/strategy-pipeline-transition.md; quant-execution-engine target contract",
+      "consumer_switch": "internal target export now lazily delegates broker-facing symbol normalization to quant-execution-engine while retaining holdings selection, target serialization, and lineage orchestration"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/owner_ports.py",
       "owner_repo": "strategy-pipeline",
