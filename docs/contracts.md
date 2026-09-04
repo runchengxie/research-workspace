@@ -103,7 +103,7 @@ MVP 的 `eligible_for_live=false`，不会生成
 
 ## A 股资产状态
 
-A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧迁移候选入口是 `strategy-pipeline-internal` 的 `strategy run --config default_next` / `configs/presets/default_next.yml`，但在没有更高权限数据源或券商账户资源前，顶层约定只把下列能力视为可稳定交接：
+A 股正式数据入口使用 `metadata/current_assets/a_share_current.json`。研究侧运行入口正在迁移到各 owner 仓库，当前顶层约定只把下列能力视为可稳定交接：
 
 - TuShare 5000 积分账户可覆盖的 raw/clean 日线类资产：`stock_basic`、`trade_cal`、`daily`、`adj_factor`、`daily_basic`、`stk_limit`，以及由这些输入生成的 `daily_clean`。
 - `daily_clean` 可以包含复权价格、估值字段、涨跌停标记、ST 标记、停牌或零成交标记、上市天数和板块粗分类。发布前先执行 `marketdata tushare validate-a-share-daily-clean ... --profile baseline --out <report.json>`，研究就绪度检查再执行带交易日历的 `--profile research`。当前 ST 标记来自 latest instruments 快照，说明时应标注为最新快照口径。
