@@ -21,7 +21,7 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 102,
+        "python_source_files": 101,
         "test_files": 224,
         "script_files": 34,
         "config_files": 18,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 102
+    assert sum(group["file_count"] for group in groups) == 101
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -91,6 +91,21 @@ def test_owner_ports_migration_records_public_control_plane_owner() -> None:
     assert migration["status"] == "complete"
     assert migration["owner_commit"] == "96b1381a0c098c239938400334abb0e6a1b5a752"
     assert migration["internal_commit"] == "f66bda6f066aa9df6adaa6b4a8407c6395561f7a"
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
+def test_trial_registry_migration_records_strategy_research_owner() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    migration = migrations["src/strategy_pipeline_internal/pipeline/research_ops/trial_registry.py"]
+
+    assert migration["owner_repo"] == "strategy-research"
+    assert migration["target_path"] == "src/strategy_research/trial_registry.py"
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "478ac23583784e6c6080b3a14f16c98f4c623aae"
+    assert migration["internal_commit"] == "2818bf2421bc4e3a1c453b0669ce8aca966bb58c"
     assert migration["test_evidence"]
     assert migration["doc_evidence"]
     assert migration["consumer_switch"]
