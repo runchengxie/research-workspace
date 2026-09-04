@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `458574545455663765b80744e501c6aa21db8e7f`
+> source_commit: `bc5d8093cfe75e25d0ae7c6e046bc6b4f09acf87`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "458574545455663765b80744e501c6aa21db8e7f",
+  "source_commit": "bc5d8093cfe75e25d0ae7c6e046bc6b4f09acf87",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1074,6 +1074,17 @@
       "test_evidence": "strategy-app tests/test_daily_watch20_pipeline.py: 2 passed; internal DailyWatch20 pipeline, lifecycle, policy, publication safety, ablation, market shadow, and fundamental shadow tests: 161 passed",
       "doc_evidence": "strategy-app/docs/daily-watch20-pipeline.md; strategy-app PR #99",
       "consumer_switch": "internal research scripts, ablation APIs, and DailyWatch20 regression tests now import the strategy-app pipeline owner, while the historical module remains a compatibility facade"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/eval.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/eval.py",
+      "status": "complete",
+      "owner_commit": "d422145",
+      "internal_commit": "bc5d8093cfe75e25d0ae7c6e046bc6b4f09acf87",
+      "test_evidence": "strategy-pipeline tests/test_pipeline_eval.py: 1 passed; internal execution-calendar, namespace, position-postprocess, and pipeline-runtime tests: 125 passed",
+      "doc_evidence": "strategy-pipeline/docs/evaluation.md; strategy-pipeline PR #11",
+      "consumer_switch": "internal runner, final-OOS stage, and evaluation regression consumers now import the public strategy-pipeline evaluation owner, while the historical module remains a narrow compatibility facade"
     }
   ],
   "partial_code_migrations": [
