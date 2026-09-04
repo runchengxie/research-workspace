@@ -43,6 +43,24 @@ def test_second_retirement_maintenance_cycle_is_ready_for_formal_review() -> Non
     assert evidence["public_clean_room"]["pytest"] == "55 passed"
 
     record = RECORD.read_text(encoding="utf-8")
-    assert "> status: ready-for-retirement" in record
+    assert "> status: retired" in record
     assert "维护周期计数为 2/2" in record
     assert "maintenance cycle 2 evidence" in record
+
+
+def test_final_retirement_evidence_records_private_archive_and_recovery() -> None:
+    evidence_path = (
+        ROOT / "docs" / "evidence" / "strategy-pipeline-internal-retirement-final-20260905.json"
+    )
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    assert evidence["internal_visibility"] == "private"
+    assert evidence["internal_archived"] is True
+    assert evidence["maintenance_cycles"] == "2/2"
+    assert evidence["active_external_consumers"] == 0
+    assert evidence["last_recoverable_commit"] == "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3"
+    assert evidence["freeze_tag"] == "retirement-freeze-20260905-r1"
+
+    record = RECORD.read_text(encoding="utf-8")
+    assert "> status: retired" in record
+    assert "GitHub 仓库已确认保持私有并进入 archived 状态" in record
+    assert "internal retirement final evidence" in record

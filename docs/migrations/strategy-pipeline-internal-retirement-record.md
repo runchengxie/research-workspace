@@ -1,10 +1,10 @@
 # strategy-pipeline-internal 退役记录
 
-> status: ready-for-retirement
+> status: retired
 > owner: research-workspace
 > audit_date: 2026-09-05
 
-本记录已完成 internal 冻结后的第 2 个维护周期记录。它记录当前证据和最后的下线动作，正式退役仍需完成仓库归档操作。
+本记录已完成 internal 冻结后的第 2 个维护周期记录和最终下线动作。internal 已进入私有只读归档状态。
 
 ## 冻结与版本
 
@@ -12,6 +12,7 @@
 | --- | --- |
 | 冻结日期 | 2026-09-05 |
 | internal 最后可用提交 | `44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3` |
+| internal 最终退役提交 | `decd1b43b31c63fbb47a129fb872a93838a1cd36` |
 | internal 冻结 tag | `retirement-freeze-20260905-r1`，指向 `44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3` |
 | production workspace release | `e322894a3d530959314dbd1a97eb9722f40b53da` |
 | production public pipeline | `5f7f8681608019987d995ed1ae8602468c1c0d32` |
@@ -88,4 +89,6 @@ internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁�
 
 下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
 
-现在可以进入正式退役动作：合并 internal 最终退役 PR，确认私有仓库进入只读归档状态，并保留冻结 tag 和本记录作为恢复入口。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
+正式退役动作已完成：internal 最终退役 PR 已合并，GitHub 仓库已确认保持私有并进入 archived 状态。冻结 tag 和本记录继续作为恢复入口。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
+
+最终归档证据见[internal retirement final evidence](../evidence/strategy-pipeline-internal-retirement-final-20260905.json)。
