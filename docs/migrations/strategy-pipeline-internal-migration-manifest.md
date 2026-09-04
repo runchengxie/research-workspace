@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `dc9cbb6549d24f53a50290147652505c6300ce6f`
+> source_commit: `e28541810a31dbea93b3289c77507ab53f80bce1`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "dc9cbb6549d24f53a50290147652505c6300ce6f",
+  "source_commit": "e28541810a31dbea93b3289c77507ab53f80bce1",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1227,21 +1227,20 @@
       "test_evidence": "portfolio-backtester tests/test_grid_support.py: 4 passed; internal CLI research, CLI core, test-impact, and pipeline E2E tests passed",
       "doc_evidence": "portfolio-backtester/docs/grid-support.md; portfolio-backtester PR #78",
       "consumer_switch": "internal grid common module now delegates result-row initialization and stable CSV writing to portfolio-backtester"
-    }
-  ],
-  "partial_code_migrations": [
+    },
     {
       "source_path": "src/strategy_pipeline_internal/config_utils.py",
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/config.py",
-      "status": "partial",
-      "owner_commit": "5422c3094c0a238366a5ca792012d41ca0f102ac",
-      "internal_commit": "e9a878f5e3ae91cc026d0032e3f5ecd5e8598e16",
-      "test_evidence": "strategy-pipeline configuration, runtime, quality, artifact, summary, and evaluation tests: 16 passed; internal configuration, CLI, data-interface, external-signal, and quality regression tests passed",
-      "doc_evidence": "strategy-pipeline/docs/configuration.md; strategy-pipeline PR #16 and #17",
-      "remains_active": "internal retains strategy-specific aliases, preset discovery, private research config references, and the private compatibility normalizer"
+      "status": "complete",
+      "owner_commit": "25843f243900da63dff74725dd2e8dd4a894eeb8",
+      "internal_commit": "e28541810a31dbea93b3289c77507ab53f80bce1",
+      "test_evidence": "strategy-pipeline tests/test_config.py: 5 passed; internal configuration, CLI, linear sweep, external signal, and data-interface tests: 49 passed",
+      "doc_evidence": "strategy-pipeline/docs/configuration.md; strategy-pipeline PR #21",
+      "consumer_switch": "internal config_utils now delegates generic YAML loading, extends resolution, aliases, and normalization to strategy-pipeline, retaining only private path discovery and workspace preset routing"
     }
   ],
+  "partial_code_migrations": [],
   "retired_internal_facades": [
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/stats.py",
