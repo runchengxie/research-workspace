@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source: internal `pyproject.toml`、源码导入和当前 submodule 关系
-> last_verified: 2026-09-04
+> last_verified: 2026-09-05
 
 ## 当前关系
 
