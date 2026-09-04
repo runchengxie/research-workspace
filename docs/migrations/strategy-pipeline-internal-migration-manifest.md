@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `f128215e45087b9ed8e57f237232b993c0b676ec`
+> source_commit: `1664025fd137decf6141bdb609310907edea18e2`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "f128215e45087b9ed8e57f237232b993c0b676ec",
+  "source_commit": "1664025fd137decf6141bdb609310907edea18e2",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1250,6 +1250,18 @@
       "test_evidence": "strategy-pipeline clean-room control-plane tests: 21 passed; strategy-research tests/test_run_metadata.py: 2 passed; market-data-platform contract matching and loader tests: 4 passed, path-kind tests: 2 passed, configured-root tests: 2 passed, path tests: 14 passed, describe-input-path test: 1 passed; internal output metadata, provenance, contract matching, input path, manifest, loader, migrated path-kind, configured-root, and input-description regression tests passed",
       "doc_evidence": "strategy-pipeline/docs/pipeline-overview.md; strategy-research/docs/run-artifacts.md; market-data-platform/docs/contracts.md",
       "consumer_switch": "internal generic metadata writing, provenance aggregation, current-contract path handling, and input path description now delegate to strategy-pipeline, strategy-research, and market-data-platform"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output.py::_maybe_generate_afml_evidence",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/afml_evidence.py::maybe_generate_run_afml_evidence",
+      "status": "complete",
+      "owner_commit": "d6cde0bc4aa8770dab18d38df4dfd80ac852e808",
+      "internal_commit": "1664025fd137decf6141bdb609310907edea18e2",
+      "migration_pr": "portfolio-backtester PR #79; strategy-pipeline-internal PR #282",
+      "test_evidence": "portfolio-backtester tests/test_afml_evidence.py: 3 passed; internal migrated AFML output-hook test passed",
+      "doc_evidence": "portfolio-backtester/docs/concepts/afml-sizing-and-risk.md",
+      "consumer_switch": "internal pipeline output now passes portfolio-backtester.maybe_generate_run_afml_evidence directly to the public output writer"
     }
   ],
   "partial_code_migrations": [],
