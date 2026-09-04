@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `0cb1ea711d79460acbbd2ac01ea775209ddbfaa6`
+> source_commit: `3f45f8dbb3bb563afd9134be079f14c5665e2b3e`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "0cb1ea711d79460acbbd2ac01ea775209ddbfaa6",
+  "source_commit": "3f45f8dbb3bb563afd9134be079f14c5665e2b3e",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1274,6 +1274,18 @@
       "test_evidence": "portfolio-backtester tests/test_promotion_sidecar.py: 2 passed; internal migrated promotion configuration test passed",
       "doc_evidence": "portfolio-backtester/src/portfolio_backtester/promotion_sidecar.py API docstring",
       "consumer_switch": "internal output orchestration now calls portfolio_backtester.promotion_sidecar_config_from_pipeline_config directly"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_orchestration.py::_build_diagnostic_extras",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/pipeline/output_diagnostics.py::build_output_diagnostic_extras",
+      "status": "complete",
+      "owner_commit": "442f38d08881d15aac130b5d1de01dc1d5bac9cd",
+      "internal_commit": "3f45f8dbb3bb563afd9134be079f14c5665e2b3e",
+      "migration_pr": "strategy-app PR #100; strategy-pipeline-internal PR #284",
+      "test_evidence": "strategy-app tests/test_output_diagnostics.py passed; internal migrated output-diagnostics test passed with locked dependencies",
+      "doc_evidence": "strategy-app/docs/output-diagnostics.md",
+      "consumer_switch": "internal output orchestration now delegates cross-owner diagnostic composition to strategy-app"
     }
   ],
   "partial_code_migrations": [],
