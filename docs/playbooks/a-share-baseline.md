@@ -91,7 +91,9 @@ execution:
 研究结果通过流水线导出标准目标文件：
 
 ```bash
-strategy export-targets
+strategy-pipeline export-targets \
+  --holdings artifacts/holdings.json \
+  --out artifacts/targets.json
 ```
 
 导出结果至少包括 `targets.json` 和对应的 lineage 文件。先在
