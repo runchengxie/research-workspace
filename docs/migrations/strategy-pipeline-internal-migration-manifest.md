@@ -14,8 +14,8 @@
   "source_repository": "runchengxie/strategy-pipeline-internal",
   "source_commit": "50321e59887dc850ed19fa7b455f77f5617d901b",
   "inventory": {
-    "python_source_files": 95,
-    "test_files": 225,
+    "python_source_files": 96,
+    "test_files": 226,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
