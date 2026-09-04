@@ -206,7 +206,7 @@ import direction、source layout 与跨仓 private API 门禁均已通过。`wor
 | 外部框架 | [framework-integration-ledger.yml](framework-integration-ledger.yml) | 各适配器的机器可读状态和退出条件 |
 | 跨仓库产物 | [artifact-contracts.yml](artifact-contracts.yml) | artifact owner、producer、consumer 和 envelope 字段 |
 | 维护性 | [maintainability-refactor-roadmap.yml](maintainability-refactor-roadmap.yml) | 大文件、长函数、复杂度热点和预算棘轮 |
-| 维护性审计（strategy-pipeline-internal） | [maintenance-audit-20260719.md](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/internal/maintenance-audit-20260719.md) | 编排仓审计快照和后续优先级 |
+| 维护性审计（strategy-pipeline-internal） | [strategy-pipeline-internal 迁移清单](migrations/strategy-pipeline-internal-migration-manifest.md)、[退役迁移设计](superpowers/specs/2026-09-03-strategy-pipeline-internal-retirement-design.md) | 迁移期间的历史审计和退役依据 |
 | 维护性审计（market-data-platform） | [maintenance-audit.md](../market-data-platform/docs/maintenance-audit.md) | 数据平台审计快照和下一轮优先级 |
 | 策略证据 | [strategy-evidence-gate.md](strategy-evidence-gate.md) | 生命周期对应的强制证据集合 |
 | A 股数据与研究 | [data-transition-playbook.md](data-transition-playbook.md) | current asset 和长窗口研究入口 |
