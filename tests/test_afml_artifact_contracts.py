@@ -49,6 +49,26 @@ def test_generated_evidence_keeps_algorithm_and_producer_ownership_separate() ->
         assert roles == {"canonical_implementation", "artifact_producer"}
 
 
+def test_migrated_artifact_contracts_do_not_retain_internal_entrypoints() -> None:
+    payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    records = {record["artifact"]: record for record in payload["artifacts"]}
+
+    for artifact in (
+        "signals.parquet",
+        "watchlist_20.csv",
+        "selection_receipt.json",
+        "sizing_receipt.json",
+        "strategy_risk_report.json",
+        "hrp_receipt.json",
+        "afml_evidence_fragment.json",
+        "research_protocol_report.json",
+    ):
+        assert all(
+            entrypoint["repo"] != "strategy-pipeline-internal"
+            for entrypoint in records[artifact]["entrypoints"]
+        )
+
+
 def test_research_protocol_is_evidence_not_order_input() -> None:
     payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
     records = {record["artifact"]: record for record in payload["artifacts"]}

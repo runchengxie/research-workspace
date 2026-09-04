@@ -76,12 +76,6 @@
           "module": "alpha_research.signal_artifact",
           "path": "src/alpha_research/signal_artifact.py",
           "role": "canonical_implementation"
-        },
-        {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.contracts.signals",
-          "path": "src/strategy_pipeline_internal/contracts/signals.py",
-          "role": "orchestration_schema_helper"
         }
       ],
       "required_fields": [
@@ -271,9 +265,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.daily_watch20_publish",
-          "path": "src/strategy_pipeline_internal/daily_watch20_publish.py",
+          "repo": "strategy-app",
+          "module": "strategy_app.daily_watch20.pipeline_publication",
+          "path": "src/strategy_app/daily_watch20/pipeline_publication.py",
           "role": "canonical_producer"
         }
       ],
@@ -311,9 +305,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.daily_watch20_publish",
-          "path": "src/strategy_pipeline_internal/daily_watch20_publish.py",
+          "repo": "strategy-app",
+          "module": "strategy_app.daily_watch20.pipeline_publication",
+          "path": "src/strategy_app/daily_watch20/pipeline_publication.py",
           "role": "canonical_producer"
         }
       ],
@@ -498,9 +492,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.afml_evidence",
-          "path": "src/strategy_pipeline_internal/afml_evidence.py",
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.afml_evidence",
+          "path": "src/portfolio_backtester/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -537,9 +531,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.afml_evidence",
-          "path": "src/strategy_pipeline_internal/afml_evidence.py",
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.afml_evidence",
+          "path": "src/portfolio_backtester/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -579,9 +573,9 @@
           "role": "canonical_implementation"
         },
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.afml_evidence",
-          "path": "src/strategy_pipeline_internal/afml_evidence.py",
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.afml_evidence",
+          "path": "src/portfolio_backtester/afml_evidence.py",
           "role": "artifact_producer"
         }
       ],
@@ -612,9 +606,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.afml_evidence",
-          "path": "src/strategy_pipeline_internal/afml_evidence.py",
+          "repo": "portfolio-backtester",
+          "module": "portfolio_backtester.afml_evidence",
+          "path": "src/portfolio_backtester/afml_evidence.py",
           "role": "canonical_implementation"
         }
       ],
@@ -640,9 +634,9 @@
       ],
       "entrypoints": [
         {
-          "repo": "strategy-pipeline-internal",
-          "module": "strategy_pipeline_internal.research_protocols",
-          "path": "src/strategy_pipeline_internal/research_protocols.py",
+          "repo": "alpha-research",
+          "module": "alpha_research.research_protocols",
+          "path": "src/alpha_research/research_protocols.py",
           "role": "canonical_implementation"
         }
       ],
