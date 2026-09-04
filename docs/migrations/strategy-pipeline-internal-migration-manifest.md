@@ -42,10 +42,10 @@
       "file_count": 9,
       "owner_repo": "research-workspace",
       "target_path": "scripts and workspace entrypoints",
-      "status": "private",
-      "test_evidence": "workspace command and pre-push smoke tests",
-      "doc_evidence": "workspace maintenance and bootstrap docs",
-      "removal_condition": "all commands have owner-native replacements"
+      "status": "archive",
+      "test_evidence": "internal tests/test_run_grid.py, tests/test_tune.py and tests/test_cli_research.py; cross-repository consumer audit",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-research-commands-archive-audit.md; retirement-freeze-20260905-r1",
+      "removal_condition": "retain only in the frozen recovery reference while no active consumer exists"
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",
