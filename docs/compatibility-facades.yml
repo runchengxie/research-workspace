@@ -324,6 +324,35 @@
       ],
       "consumer_audit": "manual_review_required before removal",
       "status": "active_compatibility"
+    },
+    {
+      "paths": [
+        "market-data-platform/src/market_data_platform/ingest/tushare/minute.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_build_part01.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_build_part02.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_build_part03.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_fusion.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_fusion_part01.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_fusion_part02.py",
+        "market-data-platform/src/market_data_platform/providers/a_share_minute_fusion_part03.py",
+        "market-data-platform/src/market_data_platform/providers/tushare_a_share_clean.py",
+        "market-data-platform/src/market_data_platform/providers/tushare_a_share_clean_part01.py",
+        "market-data-platform/src/market_data_platform/providers/tushare_a_share_clean_part02.py",
+        "market-data-platform/src/market_data_platform/providers/tushare_a_share_daily_schema.py",
+        "market-data-platform/src/market_data_platform/standardize/fusion/a_share_minute/__init__.py"
+      ],
+      "owner_repo": "market-data-platform",
+      "kind": "module_facade",
+      "replacement": "market_data_platform.providers 的拆分实现模块",
+      "current_consumers": "保留现有导入路径和拆分模块之间的兼容调用",
+      "removal_condition": "完成下游导入审计并连续两个发布周期确认替代路径稳定后移除",
+      "rollback_path": "从上一版 market-data-platform 发布标签恢复兼容模块",
+      "focused_tests": [
+        "market-data-platform 相关 provider 测试",
+        "market-data-platform import smoke"
+      ],
+      "consumer_audit": "manual_review_required before removal",
+      "status": "active_compatibility"
     }
   ]
 }

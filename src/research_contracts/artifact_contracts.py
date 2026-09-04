@@ -24,6 +24,8 @@ KNOWN_REPOS = frozenset(
         "strategy-pipeline",
         "strategy-pipeline-internal",
         "quant-execution-engine",
+        "research-workspace",
+        "strategy-app",
     }
 )
 
@@ -119,9 +121,14 @@ def _entrypoint_issues(root: Path, artifact: str, entrypoints: object) -> list[s
         elif (
             repo in KNOWN_REPOS
             and repo != "strategy-pipeline-internal"
-            and not (root / repo / path).is_file()
+            and not (
+                (root / path).is_file()
+                if repo == "research-workspace"
+                else (root / repo / path).is_file()
+            )
         ):
-            issues.append(f"{artifact}: missing entrypoint path {repo}/{path}")
+            location = path if repo == "research-workspace" else f"{repo}/{path}"
+            issues.append(f"{artifact}: missing entrypoint path {location}")
     return issues
 
 
