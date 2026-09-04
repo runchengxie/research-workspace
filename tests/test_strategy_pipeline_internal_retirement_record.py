@@ -26,6 +26,23 @@ def test_first_retirement_maintenance_cycle_has_recovery_and_consumer_evidence()
     assert evidence["public_clean_room"]["pytest"] == "55 passed"
 
     record = RECORD.read_text(encoding="utf-8")
-    assert "> status: maintenance-cycle-1" in record
     assert "maintenance cycle 1 evidence" in record
-    assert "维护周期计数为 1/2" in record
+    assert "维护周期计数为 2/2" in record
+
+
+def test_second_retirement_maintenance_cycle_is_ready_for_formal_review() -> None:
+    evidence_path = (
+        ROOT / "docs" / "evidence" / "strategy-pipeline-internal-retirement-cycle-2-20260905.json"
+    )
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    assert evidence["maintenance_cycle"] == 2
+    assert evidence["maintenance_cycles_required"] == 2
+    assert evidence["conclusion"].startswith("second consecutive audit")
+    assert evidence["next_action"].startswith("merge the final internal retirement PR")
+    assert evidence["recovery_drill"]["archive_extracted"] is True
+    assert evidence["public_clean_room"]["pytest"] == "55 passed"
+
+    record = RECORD.read_text(encoding="utf-8")
+    assert "> status: ready-for-retirement" in record
+    assert "维护周期计数为 2/2" in record
+    assert "maintenance cycle 2 evidence" in record

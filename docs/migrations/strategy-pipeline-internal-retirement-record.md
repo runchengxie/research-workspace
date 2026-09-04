@@ -1,10 +1,10 @@
 # strategy-pipeline-internal 退役记录
 
-> status: maintenance-cycle-1
+> status: ready-for-retirement
 > owner: research-workspace
 > audit_date: 2026-09-05
 
-本记录建立 internal 冻结后的第 1 个维护周期记录。它记录当前证据和未完成事项，不能替代正式下线评审。
+本记录已完成 internal 冻结后的第 2 个维护周期记录。它记录当前证据和最后的下线动作，正式退役仍需完成仓库归档操作。
 
 ## 冻结与版本
 
@@ -29,7 +29,7 @@
 ## 仍未完成的事项
 
 1. 各模块组的迁移或归档判断已经完成。策略专属 root modules 保留在私有 owner 和冻结的 internal 恢复参考中，不进入公共 pipeline。公共控制面 facade 已在 internal PR #297 中删除，CLI、release tools、研究 commands、pipeline 和 liveops 已完成 archive-only 审计。
-2. 维护周期计数为 1/2。本周期没有发现 active consumer，仍需完成第 2 个维护周期后才能进入正式下线评审。
+2. 维护周期计数为 2/2。两个连续周期均没有发现 active consumer，已满足正式下线评审的消费者观察条件。
 
 ## 2026-09-05 production readiness audit
 
@@ -59,6 +59,19 @@
 
 详细机器可读证据见[maintenance cycle 1 evidence](../evidence/strategy-pipeline-internal-retirement-cycle-1-20260905.json)。
 
+## 2026-09-05 maintenance cycle 2 audit
+
+第 2 个维护周期重新执行了 public clean-room、active consumer 和冻结归档恢复检查：
+
+- public `strategy-pipeline` 从 GitHub main 的 `5f7f868` 全新克隆，`uv sync --locked --all-groups` 通过。
+- public pipeline 测试 55 项通过，active internal import 扫描为 0。
+- workspace remote main 的 active internal import 扫描为 0，剩余 2 处字符串仍是边界拒绝规则和历史 artifact registry。
+- production release `e322894a` 的 `strategy-pipeline` gitlink 仍为 `5f7f868`。
+- `retirement-freeze-20260905-r1` 归档再次解压成功，README 和 internal 源码目录均存在，归档 tar SHA-256 未变化。
+- internal 仓库当前仍为私有、未归档状态，等待最终退役 PR 合并后执行只读归档。
+
+详细机器可读证据见[maintenance cycle 2 evidence](../evidence/strategy-pipeline-internal-retirement-cycle-2-20260905.json)。
+
 release tools 的 archive-only 结论和恢复要求见[release tools 归档审计](2026-09-05-internal-release-tools-archive-audit.md)。
 
 研究 commands 的 archive-only 结论和恢复要求见[研究命令归档审计](2026-09-05-internal-research-commands-archive-audit.md)。
@@ -75,4 +88,4 @@ internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁�
 
 下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
 
-正式下线前还需要完成第 2 个维护周期、最终只读归档确认和退役 PR。第 1 个周期的只读归档与恢复演练记录已经完成。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
+现在可以进入正式退役动作：合并 internal 最终退役 PR，确认私有仓库进入只读归档状态，并保留冻结 tag 和本记录作为恢复入口。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
