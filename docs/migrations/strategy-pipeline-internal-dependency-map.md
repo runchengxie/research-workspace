@@ -66,6 +66,10 @@ owner 负责这些通用评估配置的解析和校验。
 迁入 `portfolio_backtester.backtest_config`。执行模型构建、执行模拟配置和数据字段检查仍由
 pipeline 保留，portfolio-backtester 维护组合回测参数的语义和规范化。
 
+`config_backtest.py` 中的执行模型和执行模拟配置解析已在 internal PR #226 迁入
+`portfolio_backtester.execution_config`。pipeline 继续负责根据返回的价格列需求检查数据资产，
+portfolio-backtester 维护执行配置的构建和规范化。
+
 ## 目标关系
 
 ```text
