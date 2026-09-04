@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `b39bfb936e4b7ff2ccab435d14e549c3f6671167`
+> source_commit: `5fe406520f3433f9d499b9990dd48c8d04b498ff`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "b39bfb936e4b7ff2ccab435d14e549c3f6671167",
+  "source_commit": "5fe406520f3433f9d499b9990dd48c8d04b498ff",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1246,13 +1246,13 @@
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/pipeline/output.py::write_run_metadata",
       "status": "partial",
-      "owner_commit": "330d597827d66f9aa4d2064592164064f37b3353",
-      "internal_commit": "b39bfb936e4b7ff2ccab435d14e549c3f6671167",
-      "migration_pr": "strategy-pipeline PR #22; strategy-pipeline-internal PR #271",
-      "test_evidence": "strategy-pipeline tests/test_output_metadata_writer.py: 1 passed; internal tests/test_migrated_output_metadata_writer.py and tests/test_output_summary_metadata.py: 5 passed",
-      "doc_evidence": "strategy-pipeline/docs/pipeline-overview.md",
-      "consumer_switch": "internal generic summary, config, latest-pointer, and provenance aggregation now delegates to strategy-pipeline and strategy-research",
-      "remaining_work": "Move or redesign the remaining build_inputs_lock path, manifest, and current-contract resolution before marking the module complete."
+      "owner_commit": "330d597827d66f9aa4d2064592164064f37b3353; 7c0a02794640880c3178814e8a018b182c6a500e",
+      "internal_commit": "5fe406520f3433f9d499b9990dd48c8d04b498ff",
+      "migration_pr": "strategy-pipeline PR #22; strategy-research PR #94; market-data-platform PR #117; strategy-pipeline-internal PR #271, #272, #273",
+      "test_evidence": "strategy-pipeline clean-room control-plane tests: 21 passed; strategy-research tests/test_run_metadata.py: 2 passed; market-data-platform tests/test_contract_input_matching.py: 2 passed; internal output metadata and provenance regression tests: 10 passed",
+      "doc_evidence": "strategy-pipeline/docs/pipeline-overview.md; strategy-research/docs/run-artifacts.md; market-data-platform/docs/contracts.md",
+      "consumer_switch": "internal generic metadata writing, provenance aggregation, and current-contract path matching now delegate to strategy-pipeline, strategy-research, and market-data-platform",
+      "remaining_work": "Move or redesign the remaining build_inputs_lock path, configured input resolution, manifest loading, and current-contract loading before marking the module complete."
     }
   ],
   "retired_internal_facades": [
