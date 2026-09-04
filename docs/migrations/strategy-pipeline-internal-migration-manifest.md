@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `1664025fd137decf6141bdb609310907edea18e2`
+> source_commit: `0cb1ea711d79460acbbd2ac01ea775209ddbfaa6`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "1664025fd137decf6141bdb609310907edea18e2",
+  "source_commit": "0cb1ea711d79460acbbd2ac01ea775209ddbfaa6",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1262,6 +1262,18 @@
       "test_evidence": "portfolio-backtester tests/test_afml_evidence.py: 3 passed; internal migrated AFML output-hook test passed",
       "doc_evidence": "portfolio-backtester/docs/concepts/afml-sizing-and-risk.md",
       "consumer_switch": "internal pipeline output now passes portfolio-backtester.maybe_generate_run_afml_evidence directly to the public output writer"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_orchestration.py::_promotion_sidecar_config",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/promotion_sidecar.py::promotion_sidecar_config_from_pipeline_config",
+      "status": "complete",
+      "owner_commit": "48944e721827fb0aa0ae6dbbb65f6ffbba052fe1",
+      "internal_commit": "0cb1ea711d79460acbbd2ac01ea775209ddbfaa6",
+      "migration_pr": "portfolio-backtester PR #80; strategy-pipeline-internal PR #283",
+      "test_evidence": "portfolio-backtester tests/test_promotion_sidecar.py: 2 passed; internal migrated promotion configuration test passed",
+      "doc_evidence": "portfolio-backtester/src/portfolio_backtester/promotion_sidecar.py API docstring",
+      "consumer_switch": "internal output orchestration now calls portfolio_backtester.promotion_sidecar_config_from_pipeline_config directly"
     }
   ],
   "partial_code_migrations": [],
