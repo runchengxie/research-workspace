@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `b626a05484711d911f10ab94f32d8a2511884815`
+> source_commit: `23e30d9eb2d48e97a366931a94ac9f767879e808`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "b626a05484711d911f10ab94f32d8a2511884815",
+  "source_commit": "23e30d9eb2d48e97a366931a94ac9f767879e808",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_campaign_core.py; src/strategy_pipeline_internal/_hotsector_deepseek_campaign_api.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/hotsector/hotsector_deepseek_campaign_core.py; hotsector_deepseek_campaign_api.py",
+      "status": "complete",
+      "owner_commit": "8cb31eab7937061d0fe183bdecd79260bc2b47b4",
+      "internal_commit": "23e30d9eb2d48e97a366931a94ac9f767879e808",
+      "test_evidence": "strategy-app tests/test_hotsector_deepseek_campaign_runner.py: 7 passed; internal V4-month and documentation entrypoint tests",
+      "doc_evidence": "strategy-app/docs/hotsector-deepseek-campaign-runner.md",
+      "consumer_switch": "internal campaign runner paths now delegate to strategy-app compatibility wrappers, and the complete runner regression suite is owned by strategy-app"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_campaign_support_api.py; src/strategy_pipeline_internal/_hotsector_deepseek_campaign_support_core.py",
       "owner_repo": "strategy-app",
