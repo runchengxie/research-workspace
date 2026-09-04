@@ -61,12 +61,12 @@ strategy-pipeline export-targets --help
 
 ## 当前迁移状态
 
-workspace 正在逐步移除对 `strategy-pipeline-internal` 的依赖。当前清单记录每个 internal 模块的 owner、
-替代路径、测试、文档和删除条件：
+`strategy-pipeline-internal` 已冻结，正在按清单完成退役迁移。文档迁移项已经完成，代码清单仍记录每个
+internal 模块的 owner、替代路径、测试和删除条件：
 
 [strategy-pipeline-internal 迁移清单](migrations/strategy-pipeline-internal-migration-manifest.md)
 
-在清单中的替代入口和验证证据全部完成前，不能把 internal 描述成已经冻结或正式下线。
+在清单中的替代入口和验证证据全部完成前，internal 不能正式下线。
 
 ## 相关入口
 
