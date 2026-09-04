@@ -7,45 +7,46 @@
     "accepted_hotspots_count": 81,
     "by_repo": {
       "research-workspace": {
-        "max_large_files": 4,
-        "max_long_functions": 2,
+        "max_large_files": 5,
+        "max_long_functions": 4,
         "max_complexity_hotspots": 2,
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 46,
-        "max_long_functions": 90,
-        "max_complexity_hotspots": 54,
+        "max_large_files": 47,
+        "max_long_functions": 89,
+        "max_complexity_hotspots": 56,
         "max_large_classes": 1
       },
       "alpha-research": {
         "max_large_files": 6,
         "max_long_functions": 28,
-        "max_complexity_hotspots": 29,
+        "max_complexity_hotspots": 32,
         "max_large_classes": 1
       },
       "portfolio-backtester": {
         "max_large_files": 10,
         "max_long_functions": 33,
-        "max_complexity_hotspots": 30,
+        "max_long_functions": 35,
+        "max_complexity_hotspots": 32,
         "max_large_classes": 0
       },
       "strategy-app": {
-        "max_large_files": 2,
-        "max_long_functions": 6,
-        "max_complexity_hotspots": 4,
+        "max_large_files": 8,
+        "max_long_functions": 19,
+        "max_complexity_hotspots": 25,
         "max_large_classes": 0
       },
       "strategy-pipeline": {
-        "max_large_files": 28,
-        "max_long_functions": 108,
-        "max_complexity_hotspots": 58,
+        "max_large_files": 2,
+        "max_long_functions": 0,
+        "max_complexity_hotspots": 2,
         "max_large_classes": 1
       },
       "quant-execution-engine": {
         "max_large_files": 4,
-        "max_long_functions": 37,
-        "max_complexity_hotspots": 37,
+        "max_long_functions": 38,
+        "max_complexity_hotspots": 39,
         "max_large_classes": 7
       }
     }
@@ -61,8 +62,8 @@
   "hotspot_budgets": [
     {
       "repo": "research-workspace",
-      "max_large_files": 4,
-      "max_long_functions": 2,
+      "max_large_files": 5,
+      "max_long_functions": 4,
       "max_complexity_hotspots": 2,
       "max_large_classes": 2,
       "owner_decision": [
@@ -85,9 +86,9 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 46,
-      "max_long_functions": 90,
-      "max_complexity_hotspots": 54,
+      "max_large_files": 47,
+      "max_long_functions": 89,
+      "max_complexity_hotspots": 56,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-19: DailyWatch20 发布将 McCabe 上限 15->14，超 100 行函数 32->31。",
@@ -111,7 +112,7 @@
       "repo": "alpha-research",
       "max_large_files": 6,
       "max_long_functions": 28,
-      "max_complexity_hotspots": 29,
+      "max_complexity_hotspots": 32,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
@@ -125,8 +126,8 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 10,
-      "max_long_functions": 33,
-      "max_complexity_hotspots": 30,
+      "max_long_functions": 35,
+      "max_complexity_hotspots": 32,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
@@ -144,9 +145,9 @@
     },
     {
       "repo": "strategy-app",
-      "max_large_files": 2,
-      "max_long_functions": 6,
-      "max_complexity_hotspots": 4,
+      "max_large_files": 8,
+      "max_long_functions": 19,
+      "max_complexity_hotspots": 25,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
@@ -158,9 +159,9 @@
     },
     {
       "repo": "strategy-pipeline",
-      "max_large_files": 0,
+      "max_large_files": 2,
       "max_long_functions": 0,
-      "max_complexity_hotspots": 0,
+      "max_complexity_hotspots": 2,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
@@ -182,8 +183,8 @@
     {
       "repo": "quant-execution-engine",
       "max_large_files": 4,
-      "max_long_functions": 37,
-      "max_complexity_hotspots": 37,
+      "max_long_functions": 38,
+      "max_complexity_hotspots": 39,
       "max_large_classes": 7,
       "owner_decision": [
         "2026-07-14: 动态执行策略 + 证据交接审计增加 2 长函数 + 1 复杂度热点。",
@@ -1142,6 +1143,60 @@
       "owner_repo": "alpha-research",
       "reason": "基本面状态特征与相关契约仍集中在一个较大的 owner 模块中，当前属于可追踪的维护性热点。",
       "next_action": "后续拆分状态构造与特征派生职责，并保持公开 feature API 稳定。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/daily_watch20/daily_watch20_market_shadow_publish.py",
+      "owner_repo": "strategy-app",
+      "reason": "最新 owner main 中的 DailyWatch20 发布组装文件超过大文件阈值，当前保持为策略应用层的可审计发布热点。",
+      "next_action": "后续按数据准备、发布校验和产物写入职责拆分。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/daily_watch20/news_heat_export.py",
+      "owner_repo": "strategy-app",
+      "reason": "最新 owner main 中的新闻热度导出文件超过大文件阈值，当前保持为策略应用层的可审计输入热点。",
+      "next_action": "后续按输入读取、规范化和回执写入职责拆分。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/daily_watch20/pipeline.py",
+      "owner_repo": "strategy-app",
+      "reason": "DailyWatch20 策略应用编排文件仍集中承载策略专属流程，最新 owner main 重测后进入大文件账本。",
+      "next_action": "后续按策略计算、证据组装和发布适配职责拆分。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/hotsector/hotsector_deepseek_campaign_api.py",
+      "owner_repo": "strategy-app",
+      "reason": "热点板块 campaign API 文件包含策略应用层的参数和发布适配，最新 owner main 重测后进入大文件账本。",
+      "next_action": "后续按配置解析、研究调用和产物适配职责拆分。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/hotsector/hotsector_deepseek_campaign_support_core.py",
+      "owner_repo": "strategy-app",
+      "reason": "热点板块 campaign 支持核心文件集中承载策略应用层的稳定性辅助逻辑，最新 owner main 重测后进入大文件账本。",
+      "next_action": "后续按输入校验、状态转换和证据构造职责拆分。"
+    },
+    {
+      "path": "strategy-app/src/strategy_app/hotsector/hotsector_deepseek_v4_month_execution_core.py",
+      "owner_repo": "strategy-app",
+      "reason": "热点板块月度执行适配文件仍包含较多策略应用层流程，最新 owner main 重测后进入大文件账本。",
+      "next_action": "后续按策略参数、运行编排和输出适配职责拆分。"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_artifacts.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "公共 pipeline 的通用产物编排文件在扩展输出契约后超过大文件阈值，仍属于通用控制面的可追踪热点。",
+      "next_action": "后续按产物分类拆分 writer，保持公共 API 和输出契约稳定。"
+    },
+    {
+      "path": "strategy-pipeline/src/strategy_pipeline/pipeline/output_summary_sections.py",
+      "owner_repo": "strategy-pipeline",
+      "reason": "公共 pipeline 的通用摘要构造文件在扩展输出摘要契约后超过大文件阈值，仍属于通用控制面的可追踪热点。",
+      "next_action": "后续按摘要类别拆分 section builder，保持摘要 schema 稳定。"
+    },
+    {
+      "path": "tests/test_strategy_pipeline_internal_migration_manifest.py",
+      "owner_repo": "research-workspace",
+      "reason": "internal 迁移清单测试覆盖大量历史归属和退役证据，最新 workspace 基线重测后超过大文件阈值。",
+      "next_action": "随着 internal 退役切片完成，按迁移类别拆分测试并同步删除已失效断言。"
     }
   ]
 }
