@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `2a49df45f23bcd31eea76696ffc60c6ac7b982e9`
+> source_commit: `cb1e100837627579ac02cc6cfeb056e80788e820`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "2a49df45f23bcd31eea76696ffc60c6ac7b982e9",
+  "source_commit": "cb1e100837627579ac02cc6cfeb056e80788e820",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_pipeline_inputs.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/pipeline_inputs.py",
+      "status": "complete",
+      "owner_commit": "ea1b9c69261c436e1af5898f05f55157f8fe73da",
+      "internal_commit": "cb1e100837627579ac02cc6cfeb056e80788e820",
+      "test_evidence": "strategy-app tests/test_pipeline_inputs.py; internal tests/test_daily_watch20_publication_safety.py; internal tests/test_daily_watch20_pipeline.py",
+      "doc_evidence": "strategy-app/docs/daily-watch20-publication-window.md; strategy-app DailyWatch20 input planning API",
+      "consumer_switch": "internal DailyWatch20 input planning imports now delegate date resolution, overlay roots, and minute asset construction to strategy-app"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_publication_window.py",
       "owner_repo": "strategy-app",
