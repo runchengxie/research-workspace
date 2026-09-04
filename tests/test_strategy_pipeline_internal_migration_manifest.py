@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 110,
-        "test_files": 218,
+        "python_source_files": 109,
+        "test_files": 219,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 110
+    assert sum(group["file_count"] for group in groups) == 109
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -678,6 +678,6 @@ def test_completed_boundary_cleanups_are_recorded_with_evidence() -> None:
     cleanup = cleanups["src/strategy_pipeline_internal/pipeline/research_ops/__init__.py"]
 
     assert cleanup["status"] == "complete"
-    assert cleanup["internal_commit"] == "cd5d9e0411a97242d71eabc971824d79024cbdd9"
+    assert cleanup["internal_commit"] == "2ba256df7f50f5457a78c8f1d34eb7691cbd122c"
     assert cleanup["test_evidence"]
     assert cleanup["consumer_switch"]

@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `1b235b8fa865e2309bd042617a5e43458e2d7d36`
+> source_commit: `2ba256df7f50f5457a78c8f1d34eb7691cbd122c`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "1b235b8fa865e2309bd042617a5e43458e2d7d36",
+  "source_commit": "2ba256df7f50f5457a78c8f1d34eb7691cbd122c",
   "inventory": {
-    "python_source_files": 110,
-    "test_files": 218,
+    "python_source_files": 109,
+    "test_files": 219,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -29,7 +29,7 @@
   "module_groups": [
     {
       "source_path": "src/strategy_pipeline_internal/cli",
-      "file_count": 5,
+      "file_count": 7,
       "owner_repo": "research-workspace",
       "target_path": "workspace entrypoints and owner-native commands",
       "status": "private",
@@ -49,7 +49,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/liveops",
-      "file_count": 4,
+      "file_count": 5,
       "owner_repo": "quant-execution-engine",
       "target_path": "src/quant_execution_engine/liveops",
       "status": "planned",
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 44,
+      "file_count": 40,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -809,9 +809,9 @@
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/research_ops/__init__.py",
       "status": "complete",
-      "internal_commit": "cd5d9e0411a97242d71eabc971824d79024cbdd9",
-      "test_evidence": "internal tests/test_retired_promotion_gate_facades.py; internal full test suite; import boundary check",
-      "consumer_switch": "promotion-gate config and CLI tests now import alpha_research.promotion_gate directly"
+      "internal_commit": "2ba256df7f50f5457a78c8f1d34eb7691cbd122c",
+      "test_evidence": "internal tests/test_retired_research_ops_init.py; trial registry and research CLI tests; import boundary check",
+      "consumer_switch": "research ops consumers now load trial_registry as a direct submodule without the package facade"
     }
   ]
 }
