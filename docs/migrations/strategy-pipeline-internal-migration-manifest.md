@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `3f45f8dbb3bb563afd9134be079f14c5665e2b3e`
+> source_commit: `902499d53fa9823db3a407cf2a91409649e47d53`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "3f45f8dbb3bb563afd9134be079f14c5665e2b3e",
+  "source_commit": "902499d53fa9823db3a407cf2a91409649e47d53",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1286,6 +1286,18 @@
       "test_evidence": "strategy-app tests/test_output_diagnostics.py passed; internal migrated output-diagnostics test passed with locked dependencies",
       "doc_evidence": "strategy-app/docs/output-diagnostics.md",
       "consumer_switch": "internal output orchestration now delegates cross-owner diagnostic composition to strategy-app"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/export_targets.py::_output_path",
+      "owner_repo": "quant-execution-engine",
+      "target_path": "src/quant_execution_engine/targets.py::resolve_target_output_path",
+      "status": "complete",
+      "owner_commit": "316f083f4903f9af7b5e4ff82de5b2f15253271f",
+      "internal_commit": "902499d53fa9823db3a407cf2a91409649e47d53",
+      "migration_pr": "quant-execution-engine PR #26; strategy-pipeline-internal PR #285",
+      "test_evidence": "quant-execution-engine target contract tests; internal tests/test_migrated_target_output_path.py",
+      "doc_evidence": "quant-execution-engine target contract documentation",
+      "consumer_switch": "internal liveops target export now delegates target and lineage output path resolution to quant-execution-engine"
     }
   ],
   "partial_code_migrations": [],
