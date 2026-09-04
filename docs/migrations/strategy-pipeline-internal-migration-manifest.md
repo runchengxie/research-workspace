@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `6d0aa2012a64915a0178404eb7e8b2df0be9df18`
+> source_commit: `5ddcadcc5b53c02f33581c427dd8f9226ff67828`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "6d0aa2012a64915a0178404eb7e8b2df0be9df18",
+  "source_commit": "5ddcadcc5b53c02f33581c427dd8f9226ff67828",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1246,13 +1246,13 @@
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/pipeline/output.py::write_run_metadata",
       "status": "partial",
-      "owner_commit": "330d597827d66f9aa4d2064592164064f37b3353; 7c0a02794640880c3178814e8a018b182c6a500e; dfd76252b1d3ca7a74272d361edd99ebcdb1249e; b4add3b3d49906b3416f819359a15375c6616dc6; a5c3bb25d9387056113f6e289538e32ecdeefa8f",
-      "internal_commit": "6d0aa2012a64915a0178404eb7e8b2df0be9df18",
-      "migration_pr": "strategy-pipeline PR #22; strategy-research PR #94; market-data-platform PR #117, #118, #119, #120; strategy-pipeline-internal PR #271, #272, #273, #274, #275, #276, #277, #278",
-      "test_evidence": "strategy-pipeline clean-room control-plane tests: 21 passed; strategy-research tests/test_run_metadata.py: 2 passed; market-data-platform contract matching and loader tests: 4 passed, path-kind tests: 2 passed, configured-root tests: 2 passed; existing internal output metadata, provenance, contract matching, input path, manifest, loader, and migrated path-kind regressions: 21 passed; configured-root targeted regression: 5 passed",
+      "owner_commit": "330d597827d66f9aa4d2064592164064f37b3353; 7c0a02794640880c3178814e8a018b182c6a500e; dfd76252b1d3ca7a74272d361edd99ebcdb1249e; b4add3b3d49906b3416f819359a15375c6616dc6; a5c3bb25d9387056113f6e289538e32ecdeefa8f; 85280accc7c4ea7066431089e18f134cd7d7b829",
+      "internal_commit": "5ddcadcc5b53c02f33581c427dd8f9226ff67828",
+      "migration_pr": "strategy-pipeline PR #22; strategy-research PR #94; market-data-platform PR #117, #118, #119, #120, #121; strategy-pipeline-internal PR #271, #272, #273, #274, #275, #276, #277, #278, #279",
+      "test_evidence": "strategy-pipeline clean-room control-plane tests: 21 passed; strategy-research tests/test_run_metadata.py: 2 passed; market-data-platform contract matching and loader tests: 4 passed, path-kind tests: 2 passed, configured-root tests: 2 passed, path tests: 14 passed; existing internal output metadata, provenance, contract matching, input path, manifest, loader, and migrated path-kind regressions: 21 passed; configured-root targeted regression: 5 passed; migrated contract-path delegation test: 1 passed",
       "doc_evidence": "strategy-pipeline/docs/pipeline-overview.md; strategy-research/docs/run-artifacts.md; market-data-platform/docs/contracts.md",
       "consumer_switch": "internal generic metadata writing, provenance aggregation, and current-contract path matching now delegate to strategy-pipeline, strategy-research, and market-data-platform",
-      "remaining_work": "Move or redesign the remaining market-specific contract path compatibility and input-resolution entry assembly before marking the module complete."
+      "remaining_work": "Move or redesign the remaining input-resolution entry assembly before marking the module complete."
     }
   ],
   "retired_internal_facades": [
