@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `a45dd6c8dc72e61ed1faa4ad30426f3744643c15`
+> source_commit: `b445ddbe5f3bf545939cef6300706e1226d0206b`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-      "source_commit": "a45dd6c8dc72e61ed1faa4ad30426f3744643c15",
+      "source_commit": "b445ddbe5f3bf545939cef6300706e1226d0206b",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1346,6 +1346,18 @@
       "test_evidence": "portfolio-backtester allocation service, selection, reference, and share allocation tests: 17 passed; internal alloc, CLI, holdings, and target export regressions: 28 passed",
       "doc_evidence": "portfolio-backtester allocation service API docstring; workspace migration manifest",
       "consumer_switch": "internal alloc_core now retains CLI and run-context adaptation while portfolio-backtester owns selection, reference joining, and round-lot allocation orchestration"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/holdings.py::_normalize_selection_symbols",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/symbols.py::normalize_saved_holdings_symbols",
+      "status": "complete",
+      "owner_commit": "51e583197986f8b22be1305b6bfd4a093cf4f32d",
+      "internal_commit": "8c96ec5",
+      "migration_pr": "market-data-platform PR #124; strategy-pipeline-internal PR #294",
+      "test_evidence": "market-data-platform tests/test_symbol_alias.py: 10 passed; internal holdings, error, and liveops CLI tests passed",
+      "doc_evidence": "market-data-platform symbols API docstring; workspace migration manifest",
+      "consumer_switch": "internal holdings now delegates provider-column canonicalization and historical Hong Kong symbol normalization while retaining side/rank defaults and output ordering"
     }
   ],
   "partial_code_migrations": [],
