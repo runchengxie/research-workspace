@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `b445ddbe5f3bf545939cef6300706e1226d0206b`
+> source_commit: `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,12 +12,12 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-      "source_commit": "b445ddbe5f3bf545939cef6300706e1226d0206b",
+  "source_commit": "a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7",
   "inventory": {
-    "python_source_files": 95,
-    "test_files": 226,
-    "script_files": 34,
-    "config_files": 18,
+    "python_source_files": 93,
+    "test_files": 236,
+    "script_files": 29,
+    "config_files": 21,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
         "complete": 16,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 31,
+      "file_count": 29,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
