@@ -13,7 +13,7 @@
 | 冻结日期 | 2026-09-05 |
 | internal 最后可用提交 | `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7` |
 | internal 冻结 tag | `retirement-freeze-20260905`，指向 `a7513976ca19bb097c18dc7b33ceb1cf4ff5e0a7` |
-| production workspace release | `cbfc754d85a42d6cf916bb69f5b09f841cbf2f26` |
+| production workspace release | `e322894a3d530959314dbd1a97eb9722f40b53da` |
 | production public pipeline | `5f7f8681608019987d995ed1ae8602468c1c0d32` |
 | production 回滚点 | `9b50e2ef9a533faad624b1f7e525ccc174ccbfe7` |
 | 迁移候选版本组合 | `e29e1887`，见 `docs/version-matrix.md` |
@@ -30,20 +30,22 @@
 
 1. internal 中的兼容 facade、CLI、commands、release tools 和剩余编排文件仍需逐项完成 owner 证据。
 2. internal 的完整类型检查仍有历史诊断，需要在最终退役前决定修复、归档或记录豁免。
-3. 迁移候选版本组合尚未替换 production release，需完成 workspace 全量回归和生产 smoke 后再提升。
-4. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
+3. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
 
 ## 2026-09-05 production readiness audit
 
-本轮基于 workspace `github/main` 的 `0724d9414c972cfab9c576c63bad68bb8c1b3289` 执行检查：
+本轮基于 workspace `github/main` 的 `e322894a3d530959314dbd1a97eb9722f40b53da` 执行检查：
 
 - `check-production-updates.sh` 已确认 workspace 有待提升版本，market-intel 无待提升版本。
-- `promote-production.sh --dry-run` 已完成版本解析和 submodule 计划生成，没有切换 `current`。
+- `promote-production.sh --dry-run` 已完成版本解析和 submodule 计划生成。
+- `promote-production.sh` 已完成正式 promotion，`current` 已切换到 `e322894a3d530959314dbd1a97eb9722f40b53da`。
 - workspace 迁移、生产维护和 release 管理相关测试共 51 项通过。
-- 生产维护测试中另有 1 项因主机剩余空间约 4.0 GiB 低于脚本要求的 5.0 GiB 而停止。这是主机容量门禁，不能视为代码回归通过。
-- owner 仓库的完整回归尚未在本轮审计中完成，因此候选版本组合仍不能提升为 production release。
+- production release 根目录 clean，8 个 submodule 均已初始化并与 release 中的 gitlink 一致。
+- workspace doctor 结果为 0 errors、3 个既有 warning，contract smoke 结果为 0 errors、0 warnings。
+- public pipeline CLI smoke 已通过。
+- 首次测试曾因主机剩余空间低于 5 GiB 触发门禁，随后空间恢复到约 454 GiB，正式 promotion 已成功完成。
 
-本轮结论：公共 pipeline 已具备当前 production release 所需的独立运行条件，workspace 仍需在容量门禁满足后完成 owner 全量回归、正式 promotion、生产 dry-run 与 smoke，随后才能开始两个维护周期的 internal 退役观察。
+本轮结论：公共 pipeline 已完成 production cutover，并在无 internal checkout、安装包或私有凭证的 production release 中通过运行时检查。下一阶段集中处理 internal 剩余 owner 证据、历史类型诊断和两个维护周期的退役观察。
 
 ## 下次审计要求
 
