@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `1ff1e110da6f12f0f9527bcc52802c79016da457`
+> source_commit: `e681e8e4d49fe5c591a3d36b88ce0bb30ec0992f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "1ff1e110da6f12f0f9527bcc52802c79016da457",
+  "source_commit": "e681e8e4d49fe5c591a3d36b88ce0bb30ec0992f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/_daily_watch20_publish_api.py; src/strategy_pipeline_internal/daily_watch20_pipeline_publication.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/publish_api.py; src/strategy_app/daily_watch20/pipeline_publication.py",
+      "status": "complete",
+      "owner_commit": "fcebf5eaf2b443d8f6e329cd3a4a6d4d60750975",
+      "internal_commit": "e681e8e4d49fe5c591a3d36b88ce0bb30ec0992f",
+      "test_evidence": "strategy-app tests/test_daily_watch20_publication_orchestration.py; internal publication edge-guard tests; workspace migration contract tests",
+      "doc_evidence": "strategy-app/docs/daily-watch20-publication-orchestration.md",
+      "consumer_switch": "daily_watch20_pipeline now imports the owner publication adapter directly, while historical publication paths remain compatibility wrappers"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/daily_watch20_live_inputs.py",
       "owner_repo": "strategy-app",
