@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `4ca785a33bca556bf46b2989b54e02aadaddd6f2`
+> source_commit: `8673357cdcd511ca211bd793476c7f311c4e82cd`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "4ca785a33bca556bf46b2989b54e02aadaddd6f2",
+  "source_commit": "8673357cdcd511ca211bd793476c7f311c4e82cd",
   "inventory": {
     "python_source_files": 95,
     "test_files": 225,
@@ -107,6 +107,28 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_normalize_window_months",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/metrics.py::normalize_window_months",
+      "status": "complete",
+      "owner_commit": "8cafa8ec9749c63e1326e5784a6d25b03ef788df",
+      "internal_commit": "8673357cdcd511ca211bd793476c7f311c4e82cd",
+      "test_evidence": "alpha-research tests/test_metrics.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation metrics API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "config_eval now imports the alpha-owned rolling-window normalizer and the duplicate pipeline stats helper was removed"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_normalize_bucket_schemes",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/metrics.py::normalize_bucket_schemes",
+      "status": "complete",
+      "owner_commit": "8cafa8ec9749c63e1326e5784a6d25b03ef788df",
+      "internal_commit": "8673357cdcd511ca211bd793476c7f311c4e82cd",
+      "test_evidence": "alpha-research tests/test_metrics.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation metrics API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "config_eval now imports the alpha-owned bucket-IC scheme normalizer and the duplicate pipeline stats helper was removed"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/liveops/export_targets.py::_execution_symbol",
       "owner_repo": "quant-execution-engine",

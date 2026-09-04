@@ -46,6 +46,10 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 选择持仓、写出 target 文件和 lineage，执行引擎维护 broker-facing symbol 规则。该依赖采用
 惰性导入，保持仅查看 CLI 帮助时不加载执行引擎。
 
+`pipeline.stats` 中的 rolling-window 与 bucket-IC scheme 配置规范化已在 internal PR #221
+中迁入 `alpha_research.metrics`。`config_eval` 继续负责把配置组装成 pipeline runtime settings，
+alpha owner 负责通用评估参数的结构化规范化。
+
 ## 目标关系
 
 ```text
