@@ -4,7 +4,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "docs" / "evidence" / "strategy-pipeline-internal-retirement-cycle-1-20260905.json"
+EVIDENCE = (
+    ROOT / "docs" / "evidence" / "strategy-pipeline-internal-retirement-cycle-1-20260905.json"
+)
 RECORD = ROOT / "docs" / "migrations" / "strategy-pipeline-internal-retirement-record.md"
 
 
