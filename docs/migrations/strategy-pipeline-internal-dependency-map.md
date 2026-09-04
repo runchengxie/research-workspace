@@ -54,6 +54,10 @@ alpha owner 负责通用评估参数的结构化规范化。
 也已在 internal PR #222 中迁入 `alpha_research.evaluation_config`。pipeline 只保留与自身
 backtest 编排相关的组合逻辑。
 
+`eval.score_postprocess` 的配置规范化已在 internal PR #223 中迁入同一
+`alpha_research.evaluation_config` 模块。pipeline 继续消费规范化结果，不再维护 score
+postprocess 参数校验的重复实现。
+
 ## 目标关系
 
 ```text
