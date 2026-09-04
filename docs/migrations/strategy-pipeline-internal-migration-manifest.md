@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `902499d53fa9823db3a407cf2a91409649e47d53`
+> source_commit: `d200bfd5e1a1c12a30da0306bcdd88679d3e07ff`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "902499d53fa9823db3a407cf2a91409649e47d53",
+  "source_commit": "d200bfd5e1a1c12a30da0306bcdd88679d3e07ff",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1298,6 +1298,18 @@
       "test_evidence": "quant-execution-engine target contract tests; internal tests/test_migrated_target_output_path.py",
       "doc_evidence": "quant-execution-engine target contract documentation",
       "consumer_switch": "internal liveops target export now delegates target and lineage output path resolution to quant-execution-engine"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/export_targets.py::_apply_target_pruning",
+      "owner_repo": "quant-execution-engine",
+      "target_path": "src/quant_execution_engine/targets.py::prune_target_weights",
+      "status": "complete",
+      "owner_commit": "37a41b9a800625ef90a8b7866d8843d407b785ec",
+      "internal_commit": "d200bfd5e1a1c12a30da0306bcdd88679d3e07ff",
+      "migration_pr": "quant-execution-engine PR #27; strategy-pipeline-internal PR #286",
+      "test_evidence": "quant-execution-engine tests/unit/test_targets_contract.py: 12 passed; internal tests/test_migrated_target_output_path.py; export-targets integration blocked by historical public pipeline compatibility path",
+      "doc_evidence": "quant-execution-engine targets API docstring",
+      "consumer_switch": "internal export-targets keeps only the pandas and CLI adapter while execution-target pruning is owned by quant-execution-engine"
     }
   ],
   "partial_code_migrations": [],

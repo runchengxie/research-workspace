@@ -313,6 +313,28 @@ def test_target_output_path_migration_records_execution_owner() -> None:
     assert migration["consumer_switch"]
 
 
+def test_target_pruning_migration_records_execution_owner() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    migration = migrations[
+        "src/strategy_pipeline_internal/liveops/export_targets.py::_apply_target_pruning"
+    ]
+
+    assert migration["owner_repo"] == "quant-execution-engine"
+    assert migration["target_path"] == (
+        "src/quant_execution_engine/targets.py::prune_target_weights"
+    )
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "37a41b9a800625ef90a8b7866d8843d407b785ec"
+    assert migration["internal_commit"] == "d200bfd5e1a1c12a30da0306bcdd88679d3e07ff"
+    assert migration["migration_pr"] == (
+        "quant-execution-engine PR #27; strategy-pipeline-internal PR #286"
+    )
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
 def test_minute_feature_migration_records_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
