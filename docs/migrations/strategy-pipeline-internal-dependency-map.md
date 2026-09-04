@@ -62,6 +62,10 @@ rolling、recency、final OOS 和 artifact 输出配置的规范化已在 intern
 同一 `alpha_research.evaluation_config` 模块。pipeline 只负责组合评估运行时设置，alpha
 owner 负责这些通用评估配置的解析和校验。
 
+`pipeline/config_backtest.py` 中与数据提供方无关的基础回测配置解析已在 internal PR #225
+迁入 `portfolio_backtester.backtest_config`。执行模型构建、执行模拟配置和数据字段检查仍由
+pipeline 保留，portfolio-backtester 维护组合回测参数的语义和规范化。
+
 ## 目标关系
 
 ```text
