@@ -32,10 +32,10 @@
       "file_count": 7,
       "owner_repo": "research-workspace",
       "target_path": "workspace entrypoints and owner-native commands",
-      "status": "private",
-      "test_evidence": "workspace CLI smoke is the migration gate",
-      "doc_evidence": "docs/cli.md and workspace bootstrap docs",
-      "removal_condition": "no active workspace command invokes internal CLI"
+      "status": "archive",
+      "test_evidence": "internal CLI tests; workspace contract smoke; cross-repository consumer audit",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-cli-archive-audit.md; retirement-freeze-20260905-r1",
+      "removal_condition": "retain only in the frozen recovery reference while no active consumer exists"
     },
     {
       "source_path": "src/strategy_pipeline_internal/commands",
