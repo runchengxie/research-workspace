@@ -1052,6 +1052,28 @@
       "test_evidence": "strategy-app and internal DailyWatch20 market shadow publication tests: 6 passed",
       "doc_evidence": "strategy-app/docs/daily-watch20-market-shadow-publication.md",
       "consumer_switch": "internal candidate OOS orchestration and publication tests now use the strategy-app owner publisher"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_long_horizon_buffer_io.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/daily_watch20_long_horizon_buffer_io.py",
+      "status": "complete",
+      "owner_commit": "a5e29a1",
+      "internal_commit": "85f03abafa164ee3a8e9431706b4caefeef76f1f",
+      "test_evidence": "strategy-app tests/test_daily_watch20_long_horizon_buffer_io.py: 2 passed; internal tests/test_daily_watch20_long_horizon_buffer.py: 12 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-long-horizon-buffer-io.md; strategy-app PR #98",
+      "consumer_switch": "internal long-horizon runner and regression tests now import the strategy-app IO owner, while the historical module remains a compatibility wrapper"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_pipeline.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/pipeline.py",
+      "status": "complete",
+      "owner_commit": "6f9653f",
+      "internal_commit": "458574545455663765b80744e501c6aa21db8e7f",
+      "test_evidence": "strategy-app tests/test_daily_watch20_pipeline.py: 2 passed; internal DailyWatch20 pipeline, lifecycle, policy, publication safety, ablation, market shadow, and fundamental shadow tests: 161 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-pipeline.md; strategy-app PR #99",
+      "consumer_switch": "internal research scripts, ablation APIs, and DailyWatch20 regression tests now import the strategy-app pipeline owner, while the historical module remains a compatibility facade"
     }
   ],
   "partial_code_migrations": [
@@ -1318,28 +1340,6 @@
       "internal_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
       "test_evidence": "internal tests/test_retired_daily_watch20_application_policy.py; internal tests/test_standalone_strategy_app_extraction.py; import boundary check",
       "rationale": "The module had no active runtime callers. Its research policy and publication currentness inputs already belong to their respective owner packages, so the unused composition facade was retired instead of creating a reverse dependency from strategy-app to strategy-pipeline."
-    },
-    {
-      "source_path": "src/strategy_pipeline_internal/daily_watch20_long_horizon_buffer_io.py",
-      "owner_repo": "strategy-app",
-      "target_path": "src/strategy_app/daily_watch20/daily_watch20_long_horizon_buffer_io.py",
-      "status": "complete",
-      "owner_commit": "a5e29a1",
-      "internal_commit": "85f03abafa164ee3a8e9431706b4caefeef76f1f",
-      "test_evidence": "strategy-app tests/test_daily_watch20_long_horizon_buffer_io.py: 2 passed; internal tests/test_daily_watch20_long_horizon_buffer.py: 12 passed",
-      "doc_evidence": "strategy-app/docs/daily-watch20-long-horizon-buffer-io.md; strategy-app PR #98",
-      "consumer_switch": "internal long-horizon runner and regression tests now import the strategy-app IO owner, while the historical module remains a compatibility wrapper"
-    },
-    {
-      "source_path": "src/strategy_pipeline_internal/daily_watch20_pipeline.py",
-      "owner_repo": "strategy-app",
-      "target_path": "src/strategy_app/daily_watch20/pipeline.py",
-      "status": "complete",
-      "owner_commit": "6f9653f",
-      "internal_commit": "458574545455663765b80744e501c6aa21db8e7f",
-      "test_evidence": "strategy-app tests/test_daily_watch20_pipeline.py: 2 passed; internal DailyWatch20 pipeline, lifecycle, policy, publication safety, ablation, market shadow, and fundamental shadow tests: 161 passed",
-      "doc_evidence": "strategy-app/docs/daily-watch20-pipeline.md; strategy-app PR #99",
-      "consumer_switch": "internal research scripts, ablation APIs, and DailyWatch20 regression tests now import the strategy-app pipeline owner, while the historical module remains a compatibility facade"
     }
   ],
   "completed_boundary_cleanups": [
