@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `4b4e89af93570e5586e182518a5667a4dd0c7fef`
+> source_commit: `8b498ce71f47762584061bf0b8caeeb009c48e9b`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "4b4e89af93570e5586e182518a5667a4dd0c7fef",
+  "source_commit": "8b498ce71f47762584061bf0b8caeeb009c48e9b",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/e2_evidence.py",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/e2_evidence.py",
+      "status": "complete",
+      "owner_commit": "1038c093dd1008ef06d6b11c12b1e4af82f37987",
+      "internal_commit": "8b498ce71f47762584061bf0b8caeeb009c48e9b",
+      "test_evidence": "strategy-research tests/test_e2_evidence.py; internal tests/test_e2_evidence.py; internal tests/test_e2_promotion_receipt.py",
+      "doc_evidence": "strategy-research/docs/evidence-profiles.md; internal docs/evidence/a-share-final-oos-top800-20260824.md",
+      "consumer_switch": "internal e2_evidence now delegates benchmark and turnover-cost evidence builders and CLI to strategy-research"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/research_run.py::ArtifactRef, ValidationSection, ResearchRun, ResearchWorkspace",
       "owner_repo": "strategy-research",
