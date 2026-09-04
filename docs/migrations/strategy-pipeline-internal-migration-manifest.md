@@ -112,10 +112,10 @@
       "owner_repo": "strategy-research",
       "target_path": "src/strategy_research/run_artifacts.py",
       "status": "complete",
-      "owner_commit": "7b9a37778f64df103e2b9a5f99da00daf9769bb3",
+      "owner_commit": "6f63aeb662c0c7674bdcb28b0e7d48a76bf092bd",
       "internal_commit": "4b4e89af93570e5586e182518a5667a4dd0c7fef",
       "test_evidence": "strategy-research tests/test_run_artifacts.py; internal tests/test_research_run_bundle.py",
-      "doc_evidence": "strategy-research run artifact reader API",
+      "doc_evidence": "strategy-research/docs/run-artifacts.md; strategy-research PR #46",
       "consumer_switch": "internal research_run now delegates artifact reading and validation to strategy-research while retaining target export in the execution compatibility layer"
     },
     {
