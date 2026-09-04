@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `1b8f745d2cddfc9c825569377d26b91149cf5ddb`
+> source_commit: `cc7efcd0b1ac825339c6be31b6567be47eea268f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "1b8f745d2cddfc9c825569377d26b91149cf5ddb",
+  "source_commit": "cc7efcd0b1ac825339c6be31b6567be47eea268f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1041,6 +1041,17 @@
       "test_evidence": "strategy-app and internal DailyWatch20 ablation publication regression tests: 19 passed",
       "doc_evidence": "strategy-app/docs/daily-watch20-ablation-publication.md",
       "consumer_switch": "internal ablation API, publisher, postprocessor, and regression tests now resolve through strategy-app owner modules"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_market_shadow_publish.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/daily_watch20_market_shadow_publish.py",
+      "status": "complete",
+      "owner_commit": "c927767382e575aa257fd2885db772bb3f421de2",
+      "internal_commit": "cc7efcd0b1ac825339c6be31b6567be47eea268f",
+      "test_evidence": "strategy-app and internal DailyWatch20 market shadow publication tests: 6 passed",
+      "doc_evidence": "strategy-app/docs/daily-watch20-market-shadow-publication.md",
+      "consumer_switch": "internal candidate OOS orchestration and publication tests now use the strategy-app owner publisher"
     }
   ],
   "partial_code_migrations": [
