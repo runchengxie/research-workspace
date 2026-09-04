@@ -293,6 +293,26 @@ def test_output_context_migration_records_public_owner() -> None:
     assert migration["consumer_switch"]
 
 
+def test_target_output_path_migration_records_execution_owner() -> None:
+    payload = _load_manifest()
+    migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
+    migration = migrations["src/strategy_pipeline_internal/liveops/export_targets.py::_output_path"]
+
+    assert migration["owner_repo"] == "quant-execution-engine"
+    assert migration["target_path"] == (
+        "src/quant_execution_engine/targets.py::resolve_target_output_path"
+    )
+    assert migration["status"] == "complete"
+    assert migration["owner_commit"] == "316f083f4903f9af7b5e4ff82de5b2f15253271f"
+    assert migration["internal_commit"] == "902499d53fa9823db3a407cf2a91409649e47d53"
+    assert migration["migration_pr"] == (
+        "quant-execution-engine PR #26; strategy-pipeline-internal PR #285"
+    )
+    assert migration["test_evidence"]
+    assert migration["doc_evidence"]
+    assert migration["consumer_switch"]
+
+
 def test_minute_feature_migration_records_owner_and_consumer_switch() -> None:
     payload = _load_manifest()
     migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
