@@ -34,6 +34,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `commands/tune/__init__.py` 已在 internal PR #216 中退役。调参 CLI 和 runner 直接使用 `parser`、`report`、`spec` 实现模块，原有调参子模块路径继续可用。
 
+`pipeline/owner_ports.py` 已在 internal PR #217 中迁入公共 `strategy-pipeline.control_plane.ports`。协议、适配器和运行回执属于无领域知识的控制面，internal 的 pipeline runner 已切换到公共版本。
+
 ## 目标关系
 
 ```text

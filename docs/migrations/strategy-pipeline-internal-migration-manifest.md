@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `52ad0e5b7c35b368ac52e2b22b4d245a6f56f508`
+> source_commit: `f66bda6f066aa9df6adaa6b4a8407c6395561f7a`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "52ad0e5b7c35b368ac52e2b22b4d245a6f56f508",
+  "source_commit": "f66bda6f066aa9df6adaa6b4a8407c6395561f7a",
   "inventory": {
-    "python_source_files": 104,
-    "test_files": 222,
+    "python_source_files": 103,
+    "test_files": 223,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 40,
+      "file_count": 39,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/owner_ports.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/control_plane/ports.py",
+      "status": "complete",
+      "owner_commit": "96b1381a0c098c239938400334abb0e6a1b5a752",
+      "internal_commit": "f66bda6f066aa9df6adaa6b4a8407c6395561f7a",
+      "test_evidence": "strategy-pipeline tests/control_plane/test_owner_ports.py; internal tests/test_migrated_owner_ports.py and pipeline runtime tests",
+      "doc_evidence": "strategy-pipeline/docs/control-plane.md; workspace dependency map",
+      "consumer_switch": "internal pipeline APIs and runner adapters now import strategy_pipeline.control_plane.ports, the internal owner_ports module was deleted, and the public dependency is locked to the owner commit"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/e2_promotion_receipt.py",
       "owner_repo": "strategy-pipeline",
