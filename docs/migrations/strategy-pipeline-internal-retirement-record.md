@@ -33,6 +33,18 @@
 3. 迁移候选版本组合尚未替换 production release，需完成 workspace 全量回归和生产 smoke 后再提升。
 4. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
 
+## 2026-09-05 production readiness audit
+
+本轮基于 workspace `github/main` 的 `0724d9414c972cfab9c576c63bad68bb8c1b3289` 执行检查：
+
+- `check-production-updates.sh` 已确认 workspace 有待提升版本，market-intel 无待提升版本。
+- `promote-production.sh --dry-run` 已完成版本解析和 submodule 计划生成，没有切换 `current`。
+- workspace 迁移、生产维护和 release 管理相关测试共 51 项通过。
+- 生产维护测试中另有 1 项因主机剩余空间约 4.0 GiB 低于脚本要求的 5.0 GiB 而停止。这是主机容量门禁，不能视为代码回归通过。
+- owner 仓库的完整回归尚未在本轮审计中完成，因此候选版本组合仍不能提升为 production release。
+
+本轮结论：公共 pipeline 已具备当前 production release 所需的独立运行条件，workspace 仍需在容量门禁满足后完成 owner 全量回归、正式 promotion、生产 dry-run 与 smoke，随后才能开始两个维护周期的 internal 退役观察。
+
 ## 下次审计要求
 
 下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
