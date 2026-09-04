@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e681e8e4d49fe5c591a3d36b88ce0bb30ec0992f`
+> source_commit: `b626a05484711d911f10ab94f32d8a2511884815`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "e681e8e4d49fe5c591a3d36b88ce0bb30ec0992f",
+  "source_commit": "b626a05484711d911f10ab94f32d8a2511884815",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_campaign_support_api.py; src/strategy_pipeline_internal/_hotsector_deepseek_campaign_support_core.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/hotsector/hotsector_deepseek_campaign_support_api.py; hotsector_deepseek_campaign_support_core.py",
+      "status": "complete",
+      "owner_commit": "2ea44ce7dc9f5462fcb929b0b0ea01242237c452",
+      "internal_commit": "b626a05484711d911f10ab94f32d8a2511884815",
+      "test_evidence": "strategy-app tests/test_hotsector_deepseek_campaign_support.py; internal Hotsector DeepSeek campaign and V4-month regression tests",
+      "doc_evidence": "strategy-app/docs/hotsector-deepseek-campaign-support.md",
+      "consumer_switch": "Hotsector campaign and V4-month consumers now import serialization, file-integrity, and ledger helpers from strategy-app, while historical paths remain compatibility wrappers"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/_daily_watch20_publish_api.py; src/strategy_pipeline_internal/daily_watch20_pipeline_publication.py",
       "owner_repo": "strategy-app",
