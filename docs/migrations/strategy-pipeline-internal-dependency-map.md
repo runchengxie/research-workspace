@@ -28,6 +28,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `pipeline/output_summary.py` 已确认只是兼容 facade。输出模块现在直接调用 summary sections 和 metadata 实现，internal 不再保留这层重复入口。
 
+`commands/__init__.py` 和 `release_tools/__init__.py` 只提供空包入口，已在 internal PR #214 中退役。对应的命令和发布工具子模块继续保留原有导入路径，因此这次清理不会改变运行入口。
+
 ## 目标关系
 
 ```text

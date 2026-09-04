@@ -21,8 +21,8 @@ def test_manifest_has_verified_inventory_baseline() -> None:
     assert payload["schema_version"] == "strategy_pipeline_internal_migration.v1"
     assert payload["source_repository"] == "runchengxie/strategy-pipeline-internal"
     assert payload["inventory"] == {
-        "python_source_files": 109,
-        "test_files": 219,
+        "python_source_files": 107,
+        "test_files": 220,
         "script_files": 34,
         "config_files": 18,
         "ownership_document_files": 114,
@@ -39,7 +39,7 @@ def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
     payload = _load_manifest()
     groups = payload["module_groups"]
     assert isinstance(groups, list)
-    assert sum(group["file_count"] for group in groups) == 109
+    assert sum(group["file_count"] for group in groups) == 107
     assert len({group["source_path"] for group in groups}) == len(groups)
 
     for group in groups:
@@ -515,6 +515,16 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
     payload = _load_manifest()
     facades = {item["source_path"]: item for item in payload["retired_internal_facades"]}
     facade = facades["src/strategy_pipeline_internal/pipeline/panel_enrichment.py"]
+
+    for source_path in (
+        "src/strategy_pipeline_internal/commands/__init__.py",
+        "src/strategy_pipeline_internal/release_tools/__init__.py",
+    ):
+        empty_package_facade = facades[source_path]
+        assert empty_package_facade["status"] == "complete"
+        assert empty_package_facade["internal_commit"] == "4da45c7d64168d1bd51f609592111ab189b17a0a"
+        assert empty_package_facade["test_evidence"]
+        assert empty_package_facade["rationale"]
 
     assert facade["status"] == "complete"
     assert facade["internal_commit"] == "2d6d132f0588001dcbd244000af52109603050c8"

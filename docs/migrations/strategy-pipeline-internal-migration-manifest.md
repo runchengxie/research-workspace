@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `2ba256df7f50f5457a78c8f1d34eb7691cbd122c`
+> source_commit: `4da45c7d64168d1bd51f609592111ab189b17a0a`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "2ba256df7f50f5457a78c8f1d34eb7691cbd122c",
+  "source_commit": "4da45c7d64168d1bd51f609592111ab189b17a0a",
   "inventory": {
-    "python_source_files": 109,
-    "test_files": 219,
+    "python_source_files": 107,
+    "test_files": 220,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -39,7 +39,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/commands",
-      "file_count": 11,
+      "file_count": 10,
       "owner_repo": "research-workspace",
       "target_path": "scripts and workspace entrypoints",
       "status": "private",
@@ -69,7 +69,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/release_tools",
-      "file_count": 6,
+      "file_count": 5,
       "owner_repo": "research-workspace",
       "target_path": "scripts and release governance",
       "status": "private",
@@ -594,6 +594,20 @@
     }
   ],
   "retired_internal_facades": [
+    {
+      "source_path": "src/strategy_pipeline_internal/commands/__init__.py",
+      "status": "complete",
+      "internal_commit": "4da45c7d64168d1bd51f609592111ab189b17a0a",
+      "test_evidence": "internal tests/test_retired_empty_package_facades.py; command and CLI regression tests; import boundary check",
+      "rationale": "The package file contained only a comment and no initialization or public implementation. Command submodules remain importable through their original paths."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/release_tools/__init__.py",
+      "status": "complete",
+      "internal_commit": "4da45c7d64168d1bd51f609592111ab189b17a0a",
+      "test_evidence": "internal tests/test_retired_empty_package_facades.py; release and CLI regression tests; import boundary check",
+      "rationale": "The package file contained only a docstring and __all__. Release submodules remain importable through their original paths without package initialization logic."
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/panel_enrichment.py",
       "status": "complete",
