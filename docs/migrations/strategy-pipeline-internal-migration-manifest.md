@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `ef2b353e6a13879d474b11ba456c04f3e36519b0`
+> source_commit: `fd1d70319d08951f145dfc48793ec1f3c414a057`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "ef2b353e6a13879d474b11ba456c04f3e36519b0",
+  "source_commit": "fd1d70319d08951f145dfc48793ec1f3c414a057",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1205,6 +1205,17 @@
       "test_evidence": "market-data-platform tests/test_quota_rendering.py: 2 passed; internal CLI core, entrypoint, research, liveops, style-factor, and namespace regression tests passed",
       "doc_evidence": "market-data-platform/docs/quota-rendering.md; market-data-platform PR #115",
       "consumer_switch": "internal quota display helpers now import the market-data-platform owner implementation"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/commands/run_grid_common.py::_resolve_output_path, _safe_run_name, _parse_date_list, _resolve_rebalance_dates",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/grid_support.py",
+      "status": "complete",
+      "owner_commit": "29a08d639c3b12bb5f3d966644a44a150cbb167e",
+      "internal_commit": "fd1d70319d08951f145dfc48793ec1f3c414a057",
+      "test_evidence": "portfolio-backtester tests/test_grid_support.py: 3 passed; internal CLI research, CLI core, test-impact, and pipeline E2E tests passed",
+      "doc_evidence": "portfolio-backtester/docs/grid-support.md; portfolio-backtester PR #77",
+      "consumer_switch": "internal grid command now delegates path, run-name, date-list, and rebalance-date parsing to portfolio-backtester"
     }
   ],
   "partial_code_migrations": [
