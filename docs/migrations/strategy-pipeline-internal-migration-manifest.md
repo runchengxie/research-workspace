@@ -1107,9 +1107,7 @@
       "test_evidence": "strategy-pipeline output-artifacts, output-summary, and evaluation tests: 8 passed; internal output-artifacts, diagnostics, runtime, and namespace tests: 129 passed",
       "doc_evidence": "strategy-pipeline/docs/output-artifacts.md; strategy-pipeline PR #13",
       "consumer_switch": "internal output persistence now imports public artifact writers, diagnostic tests import the public diagnostic owner, and the duplicated internal implementations were deleted"
-    }
-  ],
-  "partial_code_migrations": [
+    },
     {
       "source_path": "src/strategy_pipeline_internal/legacy_rqdata_runtime.py::normalize_legacy_symbol_for_market",
       "owner_repo": "market-data-platform",
@@ -1118,8 +1116,10 @@
       "owner_commit": "f8506e996a9076e14d3031a378554e0ea262581e",
       "internal_commit": "8dcf457f9bb442c2b517effbcedbcd35f7143bff",
       "test_evidence": "market-data-platform tests/test_market_specs.py; internal tests/test_historical_hk_symbol_owner.py",
-      "remains_active": "legacy_rqdata_runtime.py was deleted in internal PR #143 after its remaining callers were removed"
+      "consumer_switch": "legacy_rqdata_runtime.py was deleted in internal PR #143 after its remaining callers were removed"
     }
+  ],
+  "partial_code_migrations": [
   ],
   "retired_internal_facades": [
     {
