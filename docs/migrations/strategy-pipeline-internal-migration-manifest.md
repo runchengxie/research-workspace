@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `994971292bd3eb3e7d8d25c73affe69611c951c2`
+> source_commit: `1ff1e110da6f12f0f9527bcc52802c79016da457`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "994971292bd3eb3e7d8d25c73affe69611c951c2",
+  "source_commit": "1ff1e110da6f12f0f9527bcc52802c79016da457",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/daily_watch20_live_inputs.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/daily_watch20/live_input_adapter.py",
+      "status": "complete",
+      "owner_commit": "e67cb8cc55b93a25ae8654c350e7c178b7784f2f",
+      "internal_commit": "1ff1e110da6f12f0f9527bcc52802c79016da457",
+      "test_evidence": "strategy-app tests/test_daily_watch20_live_input_adapter.py; internal DailyWatch20 publication safety and tier tests",
+      "doc_evidence": "strategy-app/docs/daily-watch20-live-input-adapter.md",
+      "consumer_switch": "daily_watch20_pipeline now imports the owner adapter directly, while the historical module path remains a compatibility wrapper"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/_daily_watch20_publication_inputs_core.py; src/strategy_pipeline_internal/_daily_watch20_publication_inputs_api.py; src/strategy_pipeline_internal/_daily_watch20_publication_validation_api.py; src/strategy_pipeline_internal/_daily_watch20_publish_core.py; src/strategy_pipeline_internal/_daily_watch20_freshness_core.py; src/strategy_pipeline_internal/_daily_watch20_freshness_api.py",
       "owner_repo": "strategy-app",
