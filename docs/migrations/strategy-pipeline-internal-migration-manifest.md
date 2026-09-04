@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `8d4473f20e1cf9b1b67a1d546fd4c8d86eb06d54`
+> source_commit: `f760ceb1a5b2bb86555eef79621f84f0aa610fa1`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "8d4473f20e1cf9b1b67a1d546fd4c8d86eb06d54",
+  "source_commit": "f760ceb1a5b2bb86555eef79621f84f0aa610fa1",
   "inventory": {
     "python_source_files": 95,
     "test_files": 225,
@@ -107,6 +107,50 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_rolling_windows",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_rolling_windows",
+      "status": "complete",
+      "owner_commit": "3437f18ed41b5f219a686866917e9bd5be755fa2",
+      "internal_commit": "f760ceb1a5b2bb86555eef79621f84f0aa610fa1",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline config_eval now delegates rolling-window normalization to alpha-research"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_recency",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_recency_settings",
+      "status": "complete",
+      "owner_commit": "3437f18ed41b5f219a686866917e9bd5be755fa2",
+      "internal_commit": "f760ceb1a5b2bb86555eef79621f84f0aa610fa1",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline config_eval now delegates recency-window normalization to alpha-research"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_final_oos",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_final_oos",
+      "status": "complete",
+      "owner_commit": "3437f18ed41b5f219a686866917e9bd5be755fa2",
+      "internal_commit": "f760ceb1a5b2bb86555eef79621f84f0aa610fa1",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline config_eval now delegates final-OOS settings normalization to alpha-research"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_artifact_settings",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_artifact_settings",
+      "status": "complete",
+      "owner_commit": "3437f18ed41b5f219a686866917e9bd5be755fa2",
+      "internal_commit": "f760ceb1a5b2bb86555eef79621f84f0aa610fa1",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline config_eval now delegates artifact-output settings normalization to alpha-research"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_score_postprocess",
       "owner_repo": "alpha-research",

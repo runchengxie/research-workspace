@@ -58,6 +58,10 @@ backtest 编排相关的组合逻辑。
 `alpha_research.evaluation_config` 模块。pipeline 继续消费规范化结果，不再维护 score
 postprocess 参数校验的重复实现。
 
+rolling、recency、final OOS 和 artifact 输出配置的规范化已在 internal PR #224 中迁入
+同一 `alpha_research.evaluation_config` 模块。pipeline 只负责组合评估运行时设置，alpha
+owner 负责这些通用评估配置的解析和校验。
+
 ## 目标关系
 
 ```text
