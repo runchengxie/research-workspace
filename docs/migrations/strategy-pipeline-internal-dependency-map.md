@@ -38,6 +38,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `pipeline/research_ops/trial_registry.py` 已在 internal PR #218 中迁入 `strategy-research` 的 `strategy_research.trial_registry`。实验结果索引归研究实验 owner 维护，internal 只保留 CLI 编排。
 
+`pipeline/research_ops/summarize_runs_*` 已在 internal PR #219 中整体迁入 `strategy-research` 的 `strategy_research.summarize_runs`。实验结果汇总、provenance 和评分与 trial registry 统一由研究实验仓维护，internal 只保留调用方。
+
 ## 目标关系
 
 ```text
