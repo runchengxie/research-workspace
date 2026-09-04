@@ -3,17 +3,17 @@
 ## 结论
 
 2026-09-05，`research-workspace` 已将 production 的 `current` 指针切换到
-`9b50e2ef9a533faad624b1f7e525ccc174ccbfe7`。这个版本使用公共
+`cbfc754d85a42d6cf916bb69f5b09f841cbf2f26`。这个版本使用公共
 `strategy-pipeline`，不需要 `strategy-pipeline-internal` checkout、安装包或私有凭证。
 
 ## 发布组合
 
 | 组件 | production 提交 |
 | --- | --- |
-| `research-workspace` | `9b50e2ef9a533faad624b1f7e525ccc174ccbfe7` |
-| `strategy-pipeline` | `1c1da3b243dffd89a496aeda5849e3ec8ca0c3b5` |
+| `research-workspace` | `cbfc754d85a42d6cf916bb69f5b09f841cbf2f26` |
+| `strategy-pipeline` | `5f7f8681608019987d995ed1ae8602468c1c0d32` |
 | `market-data-platform` | `51e583197986f8b22be1305b6bfd4a093cf4f32d` |
-| `portfolio-backtester` | `750b8219c71db875088739d0df46117770a7e278` |
+| `portfolio-backtester` | `f19e5fcc90110642965e4c201c5c1f76f8581765` |
 | `quant-execution-engine` | `18db8b9bbc20cf0febc5811c3d1b889aad4a6303` |
 | `strategy-app` | `442f38d08881d15aac130b5d1de01dc1d5bac9cd` |
 | `alpha-research` | `1a424e513c35cd5c732f1a9f51c67ac2e68e3e2a` |
@@ -28,6 +28,7 @@ production 共享环境位于 `/home/richard/code/production/shared/venvs/`，�
 - 公共历史敏感信息审计：`outcome=direct-public-safe`，`findings=[]`
 - 公共控制面测试：21 passed
 - production CLI 帮助 smoke：通过
+- production 公共 `export-targets` 合成 fixture：`2 passed`
 - workspace 完整门禁：根测试 420 passed，研究层 391 passed
 - workspace quality、边界、架构、doctor、契约、策略证据和敏感信息检查：通过
 
@@ -36,12 +37,12 @@ production 共享环境位于 `/home/richard/code/production/shared/venvs/`，�
 ## 回滚
 
 上一个已保留的 workspace release 是：
-`5e73f98b70ffc6af495016f335b943bcbbc50918`。
+`9b50e2ef9a533faad624b1f7e525ccc174ccbfe7`。
 
 回滚时将 `current` 原子切回该 release，并重新确认子模块状态：
 
 ```bash
-ln -sfn releases/5e73f98b70ffc6af495016f335b943bcbbc50918 \
+ln -sfn releases/9b50e2ef9a533faad624b1f7e525ccc174ccbfe7 \
   /home/richard/code/production/research-workspace/current
 git -C /home/richard/code/production/research-workspace/current \
   submodule update --init --recursive
