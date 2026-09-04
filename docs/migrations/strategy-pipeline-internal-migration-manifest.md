@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `e28541810a31dbea93b3289c77507ab53f80bce1`
+> source_commit: `d3d7b82b3f2ad1ded0defc46d737f246c0db5643`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "e28541810a31dbea93b3289c77507ab53f80bce1",
+  "source_commit": "d3d7b82b3f2ad1ded0defc46d737f246c0db5643",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1525,6 +1525,18 @@
       "test_evidence": "market-data-platform tests/test_research_parquet_io.py: 3 passed; internal panel join, file build, file-derived, CLI research, CLI core, impact, and pipeline E2E tests: 58 passed",
       "doc_evidence": "market-data-platform/docs/research-parquet-io.md; market-data-platform PR #116",
       "consumer_switch": "internal panel join loading now delegates schema inspection, column selection, Hive partition handling, and Parquet fallback reads to market-data-platform"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_bucket_ic",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_bucket_ic",
+      "status": "complete",
+      "owner_commit": "1a424e513c35cd5c732f1a9f51c67ac2e68e3e2a",
+      "internal_commit": "d3d7b82b3f2ad1ded0defc46d737f246c0db5643",
+      "migration_pr": "alpha-research PR #72; strategy-pipeline-internal PR #270",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py: 9 passed; internal tests/test_migrated_evaluation_config_normalizers.py: 8 passed",
+      "doc_evidence": "alpha-research/docs/concepts/feature-research-protocol.md",
+      "consumer_switch": "internal evaluation config now delegates bucket IC normalization to alpha-research and no longer owns the implementation"
     }
   ],
   "completed_boundary_cleanups": [
