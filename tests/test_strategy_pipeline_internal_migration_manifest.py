@@ -557,8 +557,7 @@ def test_retired_internal_facades_are_recorded_with_evidence() -> None:
         assert empty_package_facade["status"] == "complete"
         expected_commit = (
             "52ad0e5b7c35b368ac52e2b22b4d245a6f56f508"
-            if source_path
-            == "src/strategy_pipeline_internal/commands/tune/__init__.py"
+            if source_path == "src/strategy_pipeline_internal/commands/tune/__init__.py"
             else "80a53406128b0cf0e817cb7cb43dbee5c88ea199"
             if source_path
             in {
