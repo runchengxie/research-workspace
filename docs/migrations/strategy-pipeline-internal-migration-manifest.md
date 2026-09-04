@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `50321e59887dc850ed19fa7b455f77f5617d901b`
+> source_commit: `223d3072a270092ebbc88464c3592d178826496d`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "50321e59887dc850ed19fa7b455f77f5617d901b",
+  "source_commit": "223d3072a270092ebbc88464c3592d178826496d",
   "inventory": {
     "python_source_files": 96,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_backtest.py::_resolve_backtest_execution_settings",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/execution_config.py::resolve_execution_settings",
+      "status": "complete",
+      "owner_commit": "f24e0c561c279d6a6c7d1b4baea86ce8b1d6164d",
+      "internal_commit": "223d3072a270092ebbc88464c3592d178826496d",
+      "test_evidence": "portfolio-backtester tests/test_execution_config.py; internal tests/test_pipeline_validation.py, tests/test_execution_calendar.py, and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "portfolio-backtester execution configuration API; internal pipeline data-field checks",
+      "consumer_switch": "internal config_backtest now delegates execution model and simulation configuration while retaining provider field checks"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/config_backtest.py::_resolve_backtest_base_settings",
       "owner_repo": "portfolio-backtester",
