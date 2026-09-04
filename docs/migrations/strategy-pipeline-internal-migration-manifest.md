@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `8b498ce71f47762584061bf0b8caeeb009c48e9b`
+> source_commit: `8fe74ab88b6754fbe4d109feab0fa1d91900b9f7`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "8b498ce71f47762584061bf0b8caeeb009c48e9b",
+  "source_commit": "8fe74ab88b6754fbe4d109feab0fa1d91900b9f7",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/hotsector_challenger_campaign.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/hotsector/hotsector_challenger_campaign.py",
+      "status": "complete",
+      "owner_commit": "6f8eeca7a5c80f1aee1f58ecda91e19004e66d6b",
+      "internal_commit": "8fe74ab88b6754fbe4d109feab0fa1d91900b9f7",
+      "test_evidence": "strategy-app tests/test_hotsector_challenger_campaign.py; internal tests/test_hotsector_challenger_campaign.py",
+      "doc_evidence": "strategy-app/docs/hotsector-challenger-campaign.md",
+      "consumer_switch": "internal hotsector challenger imports now delegate to strategy-app while preserving the research script compatibility surface"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/e2_evidence.py",
       "owner_repo": "strategy-research",
