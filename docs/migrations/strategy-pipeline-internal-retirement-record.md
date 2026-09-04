@@ -27,10 +27,11 @@
 - owner 仓库中的历史来源标记、schema 身份和迁移清单引用继续保留，用于溯源和兼容读取。
 - public `strategy-pipeline` 的源码树不包含 `strategy_pipeline_internal`。
 
-## 仍未完成的事项
+## 退役结论
 
 1. 各模块组的迁移或归档判断已经完成。策略专属 root modules 保留在私有 owner 和冻结的 internal 恢复参考中，不进入公共 pipeline。公共控制面 facade 已在 internal PR #297 中删除，CLI、release tools、研究 commands、pipeline 和 liveops 已完成 archive-only 审计。
-2. 维护周期计数为 2/2。两个连续周期均没有发现 active consumer，已满足正式下线评审的消费者观察条件。
+2. 维护周期计数为 2/2。两个连续周期均没有发现 active consumer。
+3. internal 最终退役 PR #298 已合并，GitHub 仓库已保持私有并进入 archived 状态。
 
 ## 2026-09-05 production readiness audit
 
@@ -69,7 +70,7 @@
 - workspace remote main 的 active internal import 扫描为 0，剩余 2 处字符串仍是边界拒绝规则和历史 artifact registry。
 - production release `e322894a` 的 `strategy-pipeline` gitlink 仍为 `5f7f868`。
 - `retirement-freeze-20260905-r1` 归档再次解压成功，README 和 internal 源码目录均存在，归档 tar SHA-256 未变化。
-- internal 仓库当前仍为私有、未归档状态，等待最终退役 PR 合并后执行只读归档。
+- 本周期审计结束时 internal 仍为私有、未归档状态，随后已完成最终退役 PR 和只读归档。
 
 详细机器可读证据见[maintenance cycle 2 evidence](../evidence/strategy-pipeline-internal-retirement-cycle-2-20260905.json)。
 
@@ -85,9 +86,9 @@ pipeline 和 liveops 的 archive-only 结论和恢复要求见[runtime 归档审
 
 internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁免，详见[类型检查审计](2026-09-05-internal-typecheck-audit.md)。该豁免不影响 production release，也不改变 internal 冻结状态。
 
-## 下次审计要求
+## 退役后的维护规则
 
-下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
+日常维护不再修改 internal。需要历史复核时，只能从冻结 tag 恢复，并记录恢复原因、使用范围和结果。若出现新的 active 需求，应在对应 owner 仓库建立新的实现、测试、配置和文档证据，不能重新启用 internal 作为 workspace 运行入口。
 
 正式退役动作已完成：internal 最终退役 PR 已合并，GitHub 仓库已确认保持私有并进入 archived 状态。冻结 tag 和本记录继续作为恢复入口。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
 
