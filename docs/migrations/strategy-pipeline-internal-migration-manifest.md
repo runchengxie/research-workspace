@@ -81,11 +81,11 @@
       "source_path": "src/strategy_pipeline_internal/root_modules",
       "file_count": 39,
       "owner_repo": "strategy-app",
-      "target_path": "owner-specific modules recorded in the next slice manifest",
-      "status": "private",
-      "test_evidence": "per-module tests required before status changes",
-      "doc_evidence": "per-module owner documentation required before status changes",
-      "removal_condition": "every active root module has a unique owner and migrated test"
+      "target_path": "private owner repositories; frozen internal recovery reference",
+      "status": "archive",
+      "test_evidence": "strategy-app owner evidence; internal root-module regression tests; cross-repository consumer audit",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-root-modules-archive-audit.md; retirement-freeze-20260905-r1",
+      "removal_condition": "retain only in the frozen private recovery reference while no active consumer exists"
     }
   ],
   "planned_documents": [

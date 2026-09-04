@@ -28,7 +28,7 @@
 
 ## 仍未完成的事项
 
-1. internal 中剩余的策略专属 root modules 仍需逐项完成 owner 证据。公共控制面 facade 已在 internal PR #297 中删除，CLI、release tools、研究 commands、pipeline 和 liveops 已完成 archive-only 审计。
+1. 各模块组的迁移或归档判断已经完成。策略专属 root modules 保留在私有 owner 和冻结的 internal 恢复参考中，不进入公共 pipeline。公共控制面 facade 已在 internal PR #297 中删除，CLI、release tools、研究 commands、pipeline 和 liveops 已完成 archive-only 审计。
 2. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
 
 ## 2026-09-05 production readiness audit
@@ -53,6 +53,8 @@ release tools 的 archive-only 结论和恢复要求见[release tools 归档审�
 internal CLI 的 archive-only 结论和恢复要求见[CLI 归档审计](2026-09-05-internal-cli-archive-audit.md)。
 
 pipeline 和 liveops 的 archive-only 结论和恢复要求见[runtime 归档审计](2026-09-05-internal-runtime-archive-audit.md)。
+
+策略专属 root modules 的私有归档边界、owner 和恢复要求见[root modules 归档审计](2026-09-05-internal-root-modules-archive-audit.md)。
 
 internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁免，详见[类型检查审计](2026-09-05-internal-typecheck-audit.md)。该豁免不影响 production release，也不改变 internal 冻结状态。
 

@@ -106,6 +106,20 @@ def test_internal_pipeline_and_liveops_are_archive_only() -> None:
     assert all(item["status"] == "archive" for item in groups.values())
 
 
+def test_strategy_root_modules_are_private_archive_only() -> None:
+    payload = _load_manifest()
+    group = next(
+        item
+        for item in payload["module_groups"]
+        if item["source_path"] == "src/strategy_pipeline_internal/root_modules"
+    )
+
+    assert group["owner_repo"] == "strategy-app"
+    assert group["status"] == "archive"
+    assert "frozen private recovery reference" in group["removal_condition"]
+    assert "root-modules-archive-audit.md" in group["doc_evidence"]
+
+
 def test_policy_snapshot_migration_records_strategy_app_owner() -> None:
     payload = _load_manifest()
     migrations = {item["source_path"]: item for item in payload["completed_code_migrations"]}
