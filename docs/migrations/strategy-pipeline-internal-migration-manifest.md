@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `cc0824e8b5f991dbb7781b8637414d69ff956409`
+> source_commit: `1b235b8fa865e2309bd042617a5e43458e2d7d36`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,10 +12,10 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "cc0824e8b5f991dbb7781b8637414d69ff956409",
+  "source_commit": "1b235b8fa865e2309bd042617a5e43458e2d7d36",
   "inventory": {
-    "python_source_files": 111,
-    "test_files": 217,
+    "python_source_files": 110,
+    "test_files": 218,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 45,
+      "file_count": 44,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
@@ -635,6 +635,13 @@
       "internal_commit": "311592c8a0d12ee586a39ec54800065c0b72ae98",
       "test_evidence": "internal tests/test_retired_runner_facade.py; internal runner tests; import boundary check",
       "rationale": "The runner module was a compatibility shell around the split runner API and core. Package and CLI consumers now use the API module directly."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_summary.py",
+      "status": "complete",
+      "internal_commit": "1b235b8fa865e2309bd042617a5e43458e2d7d36",
+      "test_evidence": "internal tests/test_retired_output_summary_facade.py; pipeline output and summary regression tests; import boundary check",
+      "rationale": "The module only re-exported the already split summary sections and metadata implementations. Output consumers now import those modules directly, so the redundant facade was retired."
     },
     {
       "source_path": "src/strategy_pipeline_internal/commands/linear_sweep.py",
