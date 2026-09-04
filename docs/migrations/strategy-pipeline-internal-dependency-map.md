@@ -26,6 +26,8 @@ internal 当前同时承担策略应用、研究证据、数据接口、组合�
 
 `pipeline/output_context.py` 已归入公共 `strategy-pipeline.control_plane.output_context`，internal 输出编排只消费公共上下文接口。
 
+`pipeline/output_summary.py` 已确认只是兼容 facade。输出模块现在直接调用 summary sections 和 metadata 实现，internal 不再保留这层重复入口。
+
 ## 目标关系
 
 ```text
