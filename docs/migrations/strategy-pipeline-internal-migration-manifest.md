@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `5b3adcdaab8066233cf8733a6d48e0843de50389`
+> source_commit: `22652ea93b01d3541fd47c668020047f8edfcdbf`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
+  "source_commit": "22652ea93b01d3541fd47c668020047f8edfcdbf",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1096,6 +1096,17 @@
       "test_evidence": "strategy-pipeline tests/test_pipeline_output_summary_sections.py and test_pipeline_eval.py: 2 passed; internal pipeline-runtime, output-summary-metadata, and namespace tests: 120 passed",
       "doc_evidence": "strategy-pipeline/docs/output-summary.md; strategy-pipeline PR #12",
       "consumer_switch": "internal output persistence now imports the public run-summary assembler, while the historical module remains a narrow compatibility facade"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output_artifacts.py; src/strategy_pipeline_internal/pipeline/diagnostic_artifacts.py; src/strategy_pipeline_internal/pipeline/support.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/output_artifacts.py; src/strategy_pipeline/pipeline/diagnostic_artifacts.py; src/strategy_pipeline/pipeline/support.py",
+      "status": "complete",
+      "owner_commit": "70e0ff62bbb28b4c4b42286867e874e6d7dd779d",
+      "internal_commit": "22652ea93b01d3541fd47c668020047f8edfcdbf",
+      "test_evidence": "strategy-pipeline output-artifacts, output-summary, and evaluation tests: 8 passed; internal output-artifacts, diagnostics, runtime, and namespace tests: 129 passed",
+      "doc_evidence": "strategy-pipeline/docs/output-artifacts.md; strategy-pipeline PR #13",
+      "consumer_switch": "internal output persistence now imports public artifact writers, diagnostic tests import the public diagnostic owner, and the duplicated internal implementations were deleted"
     }
   ],
   "partial_code_migrations": [
@@ -1108,17 +1119,6 @@
       "internal_commit": "8dcf457f9bb442c2b517effbcedbcd35f7143bff",
       "test_evidence": "market-data-platform tests/test_market_specs.py; internal tests/test_historical_hk_symbol_owner.py",
       "remains_active": "legacy_rqdata_runtime.py was deleted in internal PR #143 after its remaining callers were removed"
-    },
-    {
-      "source_path": "src/strategy_pipeline_internal/pipeline/output_artifacts.py; src/strategy_pipeline_internal/pipeline/diagnostic_artifacts.py; src/strategy_pipeline_internal/pipeline/support.py",
-      "owner_repo": "strategy-pipeline",
-      "target_path": "src/strategy_pipeline/pipeline/output_artifacts.py; src/strategy_pipeline/pipeline/diagnostic_artifacts.py; src/strategy_pipeline/pipeline/support.py",
-      "status": "partial",
-      "owner_commit": "70e0ff62bbb28b4c4b42286867e874e6d7dd779d",
-      "internal_commit": "5b3adcdaab8066233cf8733a6d48e0843de50389",
-      "test_evidence": "strategy-pipeline output-artifacts, output-summary, and evaluation tests: 8 passed",
-      "doc_evidence": "strategy-pipeline/docs/output-artifacts.md; strategy-pipeline PR #13",
-      "remains_active": "internal output persistence and supporting pipeline consumers still use the historical implementation. Switch those consumers and run the internal regression suite before marking complete."
     }
   ],
   "retired_internal_facades": [
