@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `f282b3d68c0023e814eff75085f6d86e33a8a4a2`
+> source_commit: `761a4fc725f131f5f4be1c3aa2b28b7faf8e307d`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "f282b3d68c0023e814eff75085f6d86e33a8a4a2",
+  "source_commit": "761a4fc725f131f5f4be1c3aa2b28b7faf8e307d",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1428,6 +1428,13 @@
       "internal_commit": "e405209db006989bdd7288ebd324e845d822e5b7",
       "test_evidence": "internal tests/test_retired_daily_watch20_application_policy.py; internal tests/test_standalone_strategy_app_extraction.py; import boundary check",
       "rationale": "The module had no active runtime callers. Its research policy and publication currentness inputs already belong to their respective owner packages, so the unused composition facade was retired instead of creating a reverse dependency from strategy-app to strategy-pipeline."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/support.py",
+      "status": "complete",
+      "internal_commit": "761a4fc725f131f5f4be1c3aa2b28b7faf8e307d",
+      "test_evidence": "internal panel-join, symbol-alias, historical-symbol-owner, validation, external-signal, and runtime tests: 53 passed; public support implementation already covered by strategy-pipeline migration tests",
+      "rationale": "The internal file duplicated the public support implementation. It is now a compatibility facade that resolves historical helper names from strategy-pipeline.pipeline.support."
     }
   ],
   "completed_boundary_cleanups": [
