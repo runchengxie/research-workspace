@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `3f8e435dbfdf062fe99505173dcaf8e46df55c3b`
+> source_commit: `4eb6a68d4126bcb7c5bc97e73c279a8403f186ca`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "3f8e435dbfdf062fe99505173dcaf8e46df55c3b",
+  "source_commit": "4eb6a68d4126bcb7c5bc97e73c279a8403f186ca",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/fundamentals_overlay.py::_daily_clean_overlay_frame",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/provider_overlay.py::select_daily_clean_overlay_columns",
+      "status": "complete",
+      "owner_commit": "5b0979790e1167c62a7d18cdf89b7adb06e7dd69",
+      "internal_commit": "4eb6a68d4126bcb7c5bc97e73c279a8403f186ca",
+      "test_evidence": "market-data-platform tests/test_provider_overlay.py; internal tests/test_pipeline_validation.py, tests/test_panel_join_support.py, and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "market-data-platform provider overlay API; internal data operations boundary",
+      "consumer_switch": "fundamentals overlay now delegates daily-clean provider valuation column selection to market-data-platform"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/industry_enrichment.py::_expand_effective_industry_to_panel_dates",
       "owner_repo": "market-data-platform",
