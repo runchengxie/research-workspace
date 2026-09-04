@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `ea1f860191231294fee71e13ead4e6f0703443e7`
+> source_commit: `b7f2935496956db2ebb62daad920f1ef04611fc6`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "ea1f860191231294fee71e13ead4e6f0703443e7",
+      "source_commit": "b7f2935496956db2ebb62daad920f1ef04611fc6",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1310,6 +1310,18 @@
       "test_evidence": "quant-execution-engine tests/unit/test_targets_contract.py: 12 passed; internal tests/test_migrated_target_output_path.py; export-targets integration blocked by historical public pipeline compatibility path",
       "doc_evidence": "quant-execution-engine targets API docstring",
       "consumer_switch": "internal export-targets keeps only the pandas and CLI adapter while execution-target pruning is owned by quant-execution-engine"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/export_targets.py::targets_json_writer",
+      "owner_repo": "quant-execution-engine",
+      "target_path": "src/quant_execution_engine/targets.py::write_targets_json",
+      "status": "complete",
+      "owner_commit": "18db8b9bbc20cf0febc5811c3d1b889aad4a6303",
+      "internal_commit": "b7f2935496956db2ebb62daad920f1ef04611fc6",
+      "migration_pr": "quant-execution-engine PR #28; strategy-pipeline-internal PR #291",
+      "test_evidence": "quant-execution-engine full unit and integration suite; internal tests/test_export_targets.py, tests/test_cli_liveops.py, and tests/test_migrated_execution_symbol.py: 20 passed",
+      "doc_evidence": "quant-execution-engine targets contract documentation; workspace artifact contract",
+      "consumer_switch": "internal export-targets now delegates canonical targets.json serialization to quant-execution-engine while retaining holdings selection and lineage orchestration"
     }
   ],
   "partial_code_migrations": [],

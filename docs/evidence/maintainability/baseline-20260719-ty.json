@@ -2016,7 +2016,7 @@
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
       "python_file_count": 142,
-      "python_loc": 30460,
+      "python_loc": 30463,
       "hk_related_file_count": 15,
       "hotspot_counts": {
         "large_files": 4,
