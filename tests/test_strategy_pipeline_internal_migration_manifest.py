@@ -27,9 +27,9 @@ def test_manifest_has_verified_inventory_baseline() -> None:
         "config_files": 18,
         "ownership_document_files": 114,
         "ownership_document_status_counts": {
-            "complete": 14,
+            "complete": 16,
             "private": 58,
-            "planned": 10,
+            "planned": 8,
             "archive": 32,
         },
     }
@@ -338,11 +338,11 @@ def test_daily_watch20_research_documents_record_strategy_app_owner() -> None:
         assert document["test_evidence"]
 
 
-def test_cross_repository_playbooks_record_workspace_owner() -> None:
+def test_cross_repository_playbooks_record_current_owner() -> None:
     payload = _load_manifest()
     documents = {document["source_path"]: document for document in payload["planned_documents"]}
     baseline = documents["docs/playbooks/a-share-baseline.md"]
-    assert baseline["owner_repo"] == "research-workspace"
+    assert baseline["owner_repo"] == "strategy-app"
     assert baseline["status"] == "complete"
     assert baseline["test_evidence"]
 
