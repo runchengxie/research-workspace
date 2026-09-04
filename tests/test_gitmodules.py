@@ -31,6 +31,15 @@ class GitmodulesTest(unittest.TestCase):
             url = parser.get(section, "url")
             self.assertTrue(url.startswith("https://"), section)
 
+    def test_strategy_pipeline_submodule_uses_public_repository(self) -> None:
+        parser = configparser.ConfigParser()
+        parser.read(ROOT / ".gitmodules", encoding="utf-8")
+
+        self.assertEqual(
+            parser.get('submodule "strategy-pipeline"', "url"),
+            "https://github.com/runchengxie/strategy-pipeline.git",
+        )
+
     def test_readme_mentions_each_submodule(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         for path in EXPECTED_PATHS:
