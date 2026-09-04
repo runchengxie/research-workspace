@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `84f8f7dbeefb0813ffeea9af1675f5899ec7f27a`
+> source_commit: `883acb1b847123cff184c06dfed50610c662e865`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "84f8f7dbeefb0813ffeea9af1675f5899ec7f27a",
+  "source_commit": "883acb1b847123cff184c06dfed50610c662e865",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_execution_api.py; src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_execution_core.py; src/strategy_pipeline_internal/hotsector_deepseek_v4_month_execution_support.py",
+      "owner_repo": "strategy-app",
+      "target_path": "src/strategy_app/hotsector/hotsector_deepseek_v4_month_execution_api.py; hotsector_deepseek_v4_month_execution_core.py; hotsector_deepseek_v4_month_execution_support.py",
+      "status": "complete",
+      "owner_commit": "82457420b400c13f4b0d819015a2b6a75af2fd42",
+      "internal_commit": "883acb1b847123cff184c06dfed50610c662e865",
+      "test_evidence": "strategy-app owner execution tests; internal V4-month execution, backtest, and analysis tests: 29 passed",
+      "doc_evidence": "strategy-app/docs/hotsector-deepseek-v4-month-execution.md",
+      "consumer_switch": "internal execution and backtest callers now import strategy-app execution modules, while historical paths remain compatibility wrappers"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_plans_core.py; src/strategy_pipeline_internal/_hotsector_deepseek_v4_month_plans_api.py",
       "owner_repo": "strategy-app",
