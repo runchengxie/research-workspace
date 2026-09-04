@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `29bf6675c11d10a23bf196a3ac71a63fc197b683`
+> source_commit: `e670f1f6e2141f14c2a5d4e0d7604c62424bc07f`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "29bf6675c11d10a23bf196a3ac71a63fc197b683",
+  "source_commit": "e670f1f6e2141f14c2a5d4e0d7604c62424bc07f",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1128,6 +1128,17 @@
       "test_evidence": "strategy-pipeline quality, artifact, summary, and evaluation tests: 10 passed; internal quality, protocol, export-target, snapshot, validation, and namespace tests: passed",
       "doc_evidence": "strategy-pipeline/docs/quality-gates.md; strategy-pipeline PR #14",
       "consumer_switch": "internal runner, preflight, external-signal, and liveops consumers now import the public quality-gate owner through a compatibility facade"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/runtime.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/runtime.py",
+      "status": "complete",
+      "owner_commit": "93207ce0e36ab9469d839ac56d3080bf1cf99d6a",
+      "internal_commit": "e670f1f6e2141f14c2a5d4e0d7604c62424bc07f",
+      "test_evidence": "strategy-pipeline runtime, quality, artifact, summary, and evaluation tests: 12 passed; internal runtime, quality, validation, and namespace tests passed",
+      "doc_evidence": "strategy-pipeline/docs/runtime-helpers.md; strategy-pipeline PR #15",
+      "consumer_switch": "internal context builder, runner, and config consumers now import public runtime helpers through a compatibility facade"
     }
   ],
   "partial_code_migrations": [
