@@ -1142,6 +1142,17 @@
     }
   ],
   "partial_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/config_utils.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/config.py",
+      "status": "partial",
+      "owner_commit": "c0c01286b8b02cff6df09b395ad84cb92bbb81b9",
+      "internal_commit": "8a0d05e4ffe3acf587c4bb5f0b4d8984b346e9b7",
+      "test_evidence": "strategy-pipeline configuration, runtime, quality, artifact, summary, and evaluation tests: 15 passed",
+      "doc_evidence": "strategy-pipeline/docs/configuration.md; strategy-pipeline PR #16",
+      "remains_active": "internal retains strategy-specific aliases, preset discovery, private research config references, and callers that still import config_utils"
+    }
   ],
   "retired_internal_facades": [
     {
