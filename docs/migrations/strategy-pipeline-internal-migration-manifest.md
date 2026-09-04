@@ -72,10 +72,10 @@
       "file_count": 5,
       "owner_repo": "research-workspace",
       "target_path": "scripts and release governance",
-      "status": "private",
-      "test_evidence": "release gate and version matrix tests",
-      "doc_evidence": "release checklist and version matrix",
-      "removal_condition": "workspace release tooling no longer imports internal"
+      "status": "archive",
+      "test_evidence": "internal tests/test_run_release_scripts.py; cross-repository consumer audit",
+      "doc_evidence": "docs/migrations/2026-09-05-internal-release-tools-archive-audit.md; retirement-freeze-20260905-r1",
+      "removal_condition": "retain only in the frozen recovery reference while no active consumer exists"
     },
     {
       "source_path": "src/strategy_pipeline_internal/root_modules",

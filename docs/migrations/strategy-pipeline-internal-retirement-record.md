@@ -28,7 +28,7 @@
 
 ## 仍未完成的事项
 
-1. internal 中剩余的 CLI、commands、release tools 和编排文件仍需逐项完成 owner 证据。公共控制面 facade 已在 internal PR #297 中删除。
+1. internal 中剩余的 CLI、commands 和编排文件仍需逐项完成 owner 证据。公共控制面 facade 已在 internal PR #297 中删除，release tools 已完成 archive-only 审计。
 2. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
 
 ## 2026-09-05 production readiness audit
@@ -45,6 +45,8 @@
 - 首次测试曾因主机剩余空间低于 5 GiB 触发门禁，随后空间恢复到约 454 GiB，正式 promotion 已成功完成。
 
 本轮结论：公共 pipeline 已完成 production cutover，并在无 internal checkout、安装包或私有凭证的 production release 中通过运行时检查。internal PR #297 已删除 5 个公共控制面兼容 facade。下一阶段集中处理 internal 剩余 owner 证据和两个维护周期的退役观察。
+
+release tools 的 archive-only 结论和恢复要求见[release tools 归档审计](2026-09-05-internal-release-tools-archive-audit.md)。
 
 internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁免，详见[类型检查审计](2026-09-05-internal-typecheck-audit.md)。该豁免不影响 production release，也不改变 internal 冻结状态。
 
