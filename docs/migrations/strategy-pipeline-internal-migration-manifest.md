@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `223d3072a270092ebbc88464c3592d178826496d`
+> source_commit: `d24d81c37d4288043f10a827c9e7016bcbe59adf`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "223d3072a270092ebbc88464c3592d178826496d",
+  "source_commit": "d24d81c37d4288043f10a827c9e7016bcbe59adf",
   "inventory": {
     "python_source_files": 96,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_warn_if_purge_too_small",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::warn_if_purge_too_small",
+      "status": "complete",
+      "owner_commit": "58e4eced77a71eb45a0b21ab76b74d1b509887a7",
+      "internal_commit": "d24d81c37d4288043f10a827c9e7016bcbe59adf",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_leakage_warning.py, tests/test_pipeline_validation.py, and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline runtime now delegates the generic purge-window leakage warning to alpha-research"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/config_backtest.py::_resolve_backtest_execution_settings",
       "owner_repo": "portfolio-backtester",
