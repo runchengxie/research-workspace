@@ -1,10 +1,10 @@
 # strategy-pipeline-internal 退役记录
 
-> status: pre-retirement-baseline
+> status: maintenance-cycle-1
 > owner: research-workspace
 > audit_date: 2026-09-05
 
-本记录建立 internal 冻结后的第 0 个维护周期基线。它记录当前证据和未完成事项，不能替代正式下线评审。
+本记录建立 internal 冻结后的第 1 个维护周期记录。它记录当前证据和未完成事项，不能替代正式下线评审。
 
 ## 冻结与版本
 
@@ -29,7 +29,7 @@
 ## 仍未完成的事项
 
 1. 各模块组的迁移或归档判断已经完成。策略专属 root modules 保留在私有 owner 和冻结的 internal 恢复参考中，不进入公共 pipeline。公共控制面 facade 已在 internal PR #297 中删除，CLI、release tools、研究 commands、pipeline 和 liveops 已完成 archive-only 审计。
-2. 维护周期计数为 0/2。连续两个周期均确认无 active consumer 后，才能进入正式下线评审。
+2. 维护周期计数为 1/2。本周期没有发现 active consumer，仍需完成第 2 个维护周期后才能进入正式下线评审。
 
 ## 2026-09-05 production readiness audit
 
@@ -45,6 +45,19 @@
 - 首次测试曾因主机剩余空间低于 5 GiB 触发门禁，随后空间恢复到约 454 GiB，正式 promotion 已成功完成。
 
 本轮结论：公共 pipeline 已完成 production cutover，并在无 internal checkout、安装包或私有凭证的 production release 中通过运行时检查。internal PR #297 已删除 5 个公共控制面兼容 facade。下一阶段集中处理 internal 剩余 owner 证据和两个维护周期的退役观察。
+
+## 2026-09-05 maintenance cycle 1 audit
+
+本周期重新核对了冻结版本、公共仓库和 production gitlink，并完成恢复演练：
+
+- `retirement-freeze-20260905-r1` 解压到临时目录成功，README 和 `src/strategy_pipeline_internal` 目录均存在。
+- 冻结归档 tar 的 SHA-256 为 `c2e412b85c34dc354668bf62db97f3fca43c045f3f7ffae943ad7a9b5315d17d`。
+- workspace active import 扫描为 0，public pipeline active import 扫描为 0。
+- workspace 中剩余的 2 处 internal 字符串只用于 import 边界拒绝规则和历史 artifact registry，不构成 active consumer。
+- public `strategy-pipeline` clean-room 安装通过，55 项测试通过。
+- production release `e322894a` 的 `strategy-pipeline` gitlink 仍为 public 提交 `5f7f868`。
+
+详细机器可读证据见[maintenance cycle 1 evidence](../evidence/strategy-pipeline-internal-retirement-cycle-1-20260905.json)。
 
 release tools 的 archive-only 结论和恢复要求见[release tools 归档审计](2026-09-05-internal-release-tools-archive-audit.md)。
 
@@ -62,4 +75,4 @@ internal 类型检查的 15 个历史诊断已完成分类并记录为归档豁�
 
 下次审计需要重新运行 workspace、public pipeline 和各 owner 的完整门禁，检查生产入口、安装依赖、CI、配置、active 文档和消费者搜索，并把结果追加到本记录。若发现新的 active consumer，维护周期计数归零。
 
-正式下线前还需要完成只读归档和恢复演练记录，并由 workspace 与 internal 的最终退役 PR 分别完成合并。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
+正式下线前还需要完成第 2 个维护周期、最终只读归档确认和退役 PR。第 1 个周期的只读归档与恢复演练记录已经完成。原冻结 tag 保留作为历史基线，`retirement-freeze-20260905-r1` 覆盖最后一次公共 facade 退役。
