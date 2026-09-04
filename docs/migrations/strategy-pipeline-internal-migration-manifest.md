@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `d3f45b2836e2b47f71db68f7d8e6a2c7241128a1`
+> source_commit: `f282b3d68c0023e814eff75085f6d86e33a8a4a2`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "d3f45b2836e2b47f71db68f7d8e6a2c7241128a1",
+  "source_commit": "f282b3d68c0023e814eff75085f6d86e33a8a4a2",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1150,6 +1150,17 @@
       "test_evidence": "market-data-platform tests/test_research_data_interface.py: 8 passed; internal data-interface, TuShare interface, provider-fundamentals, and file-build tests: 18 passed",
       "doc_evidence": "market-data-platform/docs/research-data-interface.md; market-data-platform PR #114",
       "consumer_switch": "internal DataInterface now subclasses the market-data-platform adapter and preserves the historical import and test seams"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/output.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/pipeline/output.py",
+      "status": "complete",
+      "owner_commit": "157ea08897893d4bfc0bcb0fe88563594073f04c",
+      "internal_commit": "f282b3d68c0023e814eff75085f6d86e33a8a4a2",
+      "test_evidence": "strategy-pipeline tests/test_pipeline_output.py: 2 passed; internal quality, runtime, validation, external-signal, snapshot, and export-target tests: 63 passed",
+      "doc_evidence": "strategy-pipeline/docs/output-orchestration.md; strategy-pipeline PR #18",
+      "consumer_switch": "internal output persistence now delegates lifecycle ordering to the public orchestrator and injects only private evidence, summary, and metadata callbacks"
     }
   ],
   "partial_code_migrations": [
