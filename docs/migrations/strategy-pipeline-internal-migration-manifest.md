@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `4eb6a68d4126bcb7c5bc97e73c279a8403f186ca`
+> source_commit: `4b4e89af93570e5586e182518a5667a4dd0c7fef`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "4eb6a68d4126bcb7c5bc97e73c279a8403f186ca",
+  "source_commit": "4b4e89af93570e5586e182518a5667a4dd0c7fef",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/research_run.py::ArtifactRef, ValidationSection, ResearchRun, ResearchWorkspace",
+      "owner_repo": "strategy-research",
+      "target_path": "src/strategy_research/run_artifacts.py",
+      "status": "complete",
+      "owner_commit": "7b9a37778f64df103e2b9a5f99da00daf9769bb3",
+      "internal_commit": "4b4e89af93570e5586e182518a5667a4dd0c7fef",
+      "test_evidence": "strategy-research tests/test_run_artifacts.py; internal tests/test_research_run_bundle.py",
+      "doc_evidence": "strategy-research run artifact reader API",
+      "consumer_switch": "internal research_run now delegates artifact reading and validation to strategy-research while retaining target export in the execution compatibility layer"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/fundamentals_overlay.py::_daily_clean_overlay_frame",
       "owner_repo": "market-data-platform",
