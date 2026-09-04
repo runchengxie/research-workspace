@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `b7f2935496956db2ebb62daad920f1ef04611fc6`
+> source_commit: `db79ed086d686e6b14079421611bfe7a56cb1d79`
 > last_verified: 2026-09-05
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-      "source_commit": "b7f2935496956db2ebb62daad920f1ef04611fc6",
+      "source_commit": "db79ed086d686e6b14079421611bfe7a56cb1d79",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1322,6 +1322,18 @@
       "test_evidence": "quant-execution-engine full unit and integration suite; internal tests/test_export_targets.py, tests/test_cli_liveops.py, and tests/test_migrated_execution_symbol.py: 20 passed",
       "doc_evidence": "quant-execution-engine targets contract documentation; workspace artifact contract",
       "consumer_switch": "internal export-targets now delegates canonical targets.json serialization to quant-execution-engine while retaining holdings selection and lineage orchestration"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/liveops/holdings.py::_select_latest_holdings",
+      "owner_repo": "portfolio-backtester",
+      "target_path": "src/portfolio_backtester/allocation_selection.py::select_latest_holdings",
+      "status": "complete",
+      "owner_commit": "16a380d5c1a3d16475e8110fea94b625f3442816",
+      "internal_commit": "db79ed086d686e6b14079421611bfe7a56cb1d79",
+      "migration_pr": "portfolio-backtester PR #81; strategy-pipeline-internal PR #292",
+      "test_evidence": "portfolio-backtester tests/test_allocation_selection.py: 4 passed; internal tests/test_holdings_live.py, tests/test_export_targets.py, and tests/test_alloc.py: 21 passed",
+      "doc_evidence": "portfolio-backtester allocation selection API docstring; workspace migration manifest",
+      "consumer_switch": "internal holdings now delegates latest-entry selection, including the explicit future-entry live handoff case, to portfolio-backtester"
     }
   ],
   "partial_code_migrations": [],
