@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `d9ca3f4c02d619fff7f16b44bdbb75e9f116ab01`
+> source_commit: `8d4473f20e1cf9b1b67a1d546fd4c8d86eb06d54`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "d9ca3f4c02d619fff7f16b44bdbb75e9f116ab01",
+  "source_commit": "8d4473f20e1cf9b1b67a1d546fd4c8d86eb06d54",
   "inventory": {
     "python_source_files": 95,
     "test_files": 225,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_score_postprocess",
+      "owner_repo": "alpha-research",
+      "target_path": "src/alpha_research/evaluation_config.py::normalize_score_postprocess",
+      "status": "complete",
+      "owner_commit": "41038b1c17ae683618ead694ee27d339f22173f2",
+      "internal_commit": "8d4473f20e1cf9b1b67a1d546fd4c8d86eb06d54",
+      "test_evidence": "alpha-research tests/test_evaluation_config.py; internal tests/test_pipeline_validation.py and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "alpha-research evaluation_config API; internal docs/internal/alpha-backtesting-boundaries.md",
+      "consumer_switch": "pipeline config_eval now delegates score postprocess validation to alpha-research"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/config_eval.py::_normalize_signal_settings",
       "owner_repo": "alpha-research",
