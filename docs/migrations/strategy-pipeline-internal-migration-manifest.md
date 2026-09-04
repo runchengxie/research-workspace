@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `761a4fc725f131f5f4be1c3aa2b28b7faf8e307d`
+> source_commit: `a7927998b0cbef4fc1e00b89038c457195ad0a60`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "761a4fc725f131f5f4be1c3aa2b28b7faf8e307d",
+  "source_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
   "inventory": {
     "python_source_files": 95,
     "test_files": 226,
@@ -1161,6 +1161,28 @@
       "test_evidence": "strategy-pipeline tests/test_pipeline_output.py: 2 passed; internal quality, runtime, validation, external-signal, snapshot, and export-target tests: 63 passed",
       "doc_evidence": "strategy-pipeline/docs/output-orchestration.md; strategy-pipeline PR #18",
       "consumer_switch": "internal output persistence now delegates lifecycle ordering to the public orchestrator and injects only private evidence, summary, and metadata callbacks"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/evidence.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/cli_evidence.py",
+      "status": "complete",
+      "owner_commit": "48b5a97b711a60a943c6c2ace7c0dbd1a2a75aa8",
+      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "test_evidence": "strategy-pipeline tests/test_cli_evidence_protocol.py; internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
+      "doc_evidence": "strategy-pipeline/docs/evidence-protocol-cli.md; strategy-pipeline PR #19",
+      "consumer_switch": "internal AFML evidence CLI now delegates argument handling and execution to the public command handler"
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/protocol.py",
+      "owner_repo": "strategy-pipeline",
+      "target_path": "src/strategy_pipeline/cli_protocol.py",
+      "status": "complete",
+      "owner_commit": "48b5a97b711a60a943c6c2ace7c0dbd1a2a75aa8",
+      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "test_evidence": "strategy-pipeline tests/test_cli_evidence_protocol.py; internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
+      "doc_evidence": "strategy-pipeline/docs/evidence-protocol-cli.md; strategy-pipeline PR #19",
+      "consumer_switch": "internal research-protocol CLI now delegates manifest initialization and evaluation to the public command handler"
     }
   ],
   "partial_code_migrations": [
@@ -1435,6 +1457,20 @@
       "internal_commit": "761a4fc725f131f5f4be1c3aa2b28b7faf8e307d",
       "test_evidence": "internal panel-join, symbol-alias, historical-symbol-owner, validation, external-signal, and runtime tests: 53 passed; public support implementation already covered by strategy-pipeline migration tests",
       "rationale": "The internal file duplicated the public support implementation. It is now a compatibility facade that resolves historical helper names from strategy-pipeline.pipeline.support."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/evidence.py",
+      "status": "complete",
+      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "test_evidence": "internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
+      "rationale": "The internal module now re-exports the public AFML evidence command handler and retains the historical import path."
+    },
+    {
+      "source_path": "src/strategy_pipeline_internal/cli/protocol.py",
+      "status": "complete",
+      "internal_commit": "a7927998b0cbef4fc1e00b89038c457195ad0a60",
+      "test_evidence": "internal CLI, protocol, namespace, and strategy-pipeline regression tests passed",
+      "rationale": "The internal module now re-exports the public research protocol command handler and retains the historical import path."
     }
   ],
   "completed_boundary_cleanups": [
