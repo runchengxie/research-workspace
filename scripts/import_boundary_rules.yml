@@ -144,12 +144,12 @@ boundary_rules:
   - portfolio_backtester
   max_allowed: 0
 - identifier: strategy-app:no-control-plane-imports
-  description: strategy-app contains strategy-specific pure computation and must not import
-    the strategy-pipeline control plane
+  description: strategy-app may consume the public strategy-pipeline control plane but must not
+    import private pipeline internals
   repo: strategy-app
   source: src/strategy_app
   forbidden:
-  - strategy_pipeline
+  - strategy_pipeline_internal
   max_allowed: 0
 - identifier: strategy-app:no-execution-runtime-imports
   description: strategy-app freezes strategy policy and must not import broker execution runtime
