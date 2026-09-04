@@ -70,6 +70,10 @@ pipeline 保留，portfolio-backtester 维护组合回测参数的语义和规�
 `portfolio_backtester.execution_config`。pipeline 继续负责根据返回的价格列需求检查数据资产，
 portfolio-backtester 维护执行配置的构建和规范化。
 
+`pipeline/stats.py` 中的 purge-window 泄漏提示已在 internal PR #227 迁入
+`alpha_research.evaluation_config`。评估参数的通用校验和提示由 alpha owner 维护，pipeline
+只保留 RQData 执行字段补全逻辑。
+
 ## 目标关系
 
 ```text
