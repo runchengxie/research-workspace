@@ -95,7 +95,6 @@
 | `quant-execution-engine` | [../quant-execution-engine/docs/](../quant-execution-engine/docs/) | 实盘执行引擎与指令路由 |
 | `strategy-app` | [../strategy-app/docs/](../strategy-app/docs/) | 应用目录、迁移栈与质量门禁 |
 | `strategy-pipeline` | [../strategy-pipeline/docs/](../strategy-pipeline/docs/) | 策略流水线、产出与发布 |
-| `strategy-pipeline-internal` | [GitHub 私有仓库](https://github.com/runchengxie/strategy-pipeline-internal) | 私有研究编排、`strategy` CLI、运行目录和目标导出 |
 | `strategy-research` | [../strategy-research/README.md](../strategy-research/README.md) | 策略目录、实验、证据与生命周期 |
 
 如某子模块暂无 `docs/README` 索引，可直接浏览其 `docs/` 目录。

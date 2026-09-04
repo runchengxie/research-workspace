@@ -146,3 +146,14 @@ def test_documented_submodule_profiles_exist() -> None:
     ]
     assert documented
     assert invalid == []
+
+
+def test_active_navigation_does_not_use_internal_as_an_entrypoint() -> None:
+    navigation_docs = (
+        ROOT / "docs" / "README.md",
+        ROOT / "docs" / "platform-workflow.md",
+        ROOT / "docs" / "strategy-catalog.md",
+    )
+    forbidden = "https://github.com/runchengxie/strategy-pipeline-internal"
+
+    assert all(forbidden not in path.read_text(encoding="utf-8") for path in navigation_docs)

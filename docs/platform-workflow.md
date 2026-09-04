@@ -182,9 +182,9 @@ USD 估值。A 股基础 dry-run 仍需显式配置 CNY 汇率。
 | 主题 | 文档 |
 | --- | --- |
 | 数据控制面与迁移顺序 | [`market-data-platform/docs/README.md`](../market-data-platform/docs/README.md) |
-| 策略研究主流程 | [`strategy-pipeline-internal/docs/pipeline-overview.md`](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/pipeline-overview.md)、[`strategy-pipeline-internal/docs/market-lifecycle.md`](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/market-lifecycle.md) |
-| A 股迁移候选 | [`strategy-pipeline-internal/docs/playbooks/a-share-baseline.md`](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/playbooks/a-share-baseline.md) |
-| 共享中国香港市场数据边界 | [`strategy-pipeline-internal/docs/concepts/shared-hk-data-platform.md`](https://github.com/runchengxie/strategy-pipeline-internal/blob/main/docs/concepts/shared-hk-data-platform.md) |
+| 策略研究主流程 | [`strategy-research/README.md`](../strategy-research/README.md)、[`strategy-app/docs/research/README.md`](../strategy-app/docs/research/README.md)、[`strategy-pipeline/docs/control-plane.md`](../strategy-pipeline/docs/control-plane.md) |
+| A 股研究基线 | [`strategy-app/docs/playbooks/a-share-baseline.md`](../strategy-app/docs/playbooks/a-share-baseline.md) |
+| 共享中国香港市场数据边界 | [`market-data-platform/docs/operations/hk-archive-restore.md`](../market-data-platform/docs/operations/hk-archive-restore.md) |
 | 盘口资产处理工作流 | [`market-data-platform/README.md`](../market-data-platform/README.md) |
 | 独立研究应用 | [`strategy-app/README.md`](../strategy-app/README.md) |
 | 策略身份与生命周期 | [`strategy-research/README.md`](../strategy-research/README.md) |
