@@ -78,6 +78,10 @@ portfolio-backtester 维护执行配置的构建和规范化。
 `market_data_platform.execution_fields`。数据提供方字段映射和默认字段扩展由数据平台维护，
 pipeline 只负责提交执行所需的标准列集合。
 
+`pipeline/industry_enrichment.py` 中的有效期行业标签展开已在 internal PR #229 迁入
+`market_data_platform.industry_history`。数据平台维护行业标签的日期有效性和证券列归一化，
+pipeline 只负责加载数据、筛选列和合并面板。
+
 ## 目标关系
 
 ```text

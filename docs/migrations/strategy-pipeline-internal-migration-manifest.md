@@ -3,7 +3,7 @@
 > status: active
 > owner: workspace
 > source_of_truth: yes
-> source_commit: `23ff8450b4b7987fb7225338af3c30ee8538ff60`
+> source_commit: `0704f4c85a61efdb6ea519eca05d9c00be216761`
 > last_verified: 2026-09-04
 
 这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
@@ -12,7 +12,7 @@
 {
   "schema_version": "strategy_pipeline_internal_migration.v1",
   "source_repository": "runchengxie/strategy-pipeline-internal",
-  "source_commit": "23ff8450b4b7987fb7225338af3c30ee8538ff60",
+  "source_commit": "0704f4c85a61efdb6ea519eca05d9c00be216761",
   "inventory": {
     "python_source_files": 96,
     "test_files": 226,
@@ -107,6 +107,17 @@
     {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
   ],
   "completed_code_migrations": [
+    {
+      "source_path": "src/strategy_pipeline_internal/pipeline/industry_enrichment.py::_expand_effective_industry_to_panel_dates",
+      "owner_repo": "market-data-platform",
+      "target_path": "src/market_data_platform/industry_history.py::expand_effective_industry_to_panel_dates",
+      "status": "complete",
+      "owner_commit": "87f543de635c10e1874edb620cb67a76e2905262",
+      "internal_commit": "0704f4c85a61efdb6ea519eca05d9c00be216761",
+      "test_evidence": "market-data-platform tests/test_industry_history.py; internal tests/test_pipeline_validation.py, tests/test_pipeline_filters_industry.py, tests/test_panel_join_support.py, and tests/test_migrated_evaluation_config_normalizers.py",
+      "doc_evidence": "market-data-platform/docs/concepts/historical-industry-labels.md",
+      "consumer_switch": "pipeline industry enrichment now delegates effective-date label expansion to market-data-platform"
+    },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline/stats.py::_ensure_execution_daily_fields",
       "owner_repo": "market-data-platform",
