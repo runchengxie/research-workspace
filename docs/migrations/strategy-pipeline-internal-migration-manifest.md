@@ -1014,7 +1014,7 @@
       "owner_repo": "strategy-app",
       "target_path": "src/strategy_app/hotsector/hotsector_ai_shadow.py; src/strategy_app/hotsector/hotsector_ai_shadow_observation.py",
       "status": "complete",
-      "owner_commit": "cf46dd277ed45231b6ff29a3e48ef2d847ab98d5",
+      "owner_commit": "a6c2a813b8b5fbd75117b1fc2c1c592086254004",
       "internal_commit": "64663169e39e8178f990562beca991081ea618a2",
       "test_evidence": "strategy-app tests/test_hotsector_ai_shadow.py: 17 passed; internal compatibility and owner-import regression tests",
       "doc_evidence": "strategy-app/docs/hotsector-ai-shadow.md",
