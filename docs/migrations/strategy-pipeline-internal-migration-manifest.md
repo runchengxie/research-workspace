@@ -14,8 +14,8 @@
   "source_repository": "runchengxie/strategy-pipeline-internal",
   "source_commit": "f66bda6f066aa9df6adaa6b4a8407c6395561f7a",
   "inventory": {
-    "python_source_files": 103,
-    "test_files": 223,
+    "python_source_files": 102,
+    "test_files": 224,
     "script_files": 34,
     "config_files": 18,
     "ownership_document_files": 114,
@@ -59,7 +59,7 @@
     },
     {
       "source_path": "src/strategy_pipeline_internal/pipeline",
-      "file_count": 39,
+      "file_count": 38,
       "owner_repo": "strategy-pipeline",
       "target_path": "src/strategy_pipeline/control_plane",
       "status": "planned",
