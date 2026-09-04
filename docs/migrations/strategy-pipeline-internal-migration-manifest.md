@@ -20,9 +20,9 @@
     "config_files": 18,
     "ownership_document_files": 114,
     "ownership_document_status_counts": {
-        "complete": 14,
+        "complete": 16,
       "private": 58,
-        "planned": 10,
+        "planned": 8,
       "archive": 32
     }
   },
@@ -95,12 +95,12 @@
     {"source_path": "docs/concepts/pit-coverage.md", "owner_repo": "market-data-platform", "target_path": "docs/a-share-fundamentals.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_tushare_a_share_fundamentals.py; tests/test_current_path_audit.py"},
     {"source_path": "docs/concepts/research-protocols.md", "owner_repo": "alpha-research", "target_path": "docs/concepts/feature-research-protocol.md; docs/concepts/overfitting-controls.md", "status": "complete", "test_evidence": "tests/test_feature_evidence.py; tests/test_promotion_gate.py"},
     {"source_path": "docs/concepts/shared-hk-data-platform.md", "owner_repo": "market-data-platform", "target_path": "docs/operations/hk-archive-restore.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_quality_governance.py; tests/test_dataset_contracts.py"},
-    {"source_path": "docs/playbooks/a-share-baseline.md", "owner_repo": "research-workspace", "target_path": "docs/playbooks/a-share-baseline.md", "status": "complete", "test_evidence": "tests/test_a_share_baseline_playbook.py", "doc_evidence": "docs/playbooks/a-share-baseline.md", "migration_pr": "pending"},
-    {"source_path": "docs/playbooks/hk-selected.md", "owner_repo": "strategy-app", "target_path": "docs/playbooks/hk-selected.md", "status": "planned"},
+    {"source_path": "docs/playbooks/a-share-baseline.md", "owner_repo": "strategy-app", "target_path": "docs/playbooks/a-share-baseline.md", "status": "complete", "test_evidence": "tests/test_a_share_baseline_playbook.py", "doc_evidence": "strategy-app/docs/playbooks/a-share-baseline.md; strategy-app PR #73", "migration_pr": "strategy-app PR #73"},
+    {"source_path": "docs/playbooks/hk-selected.md", "owner_repo": "strategy-app", "target_path": "docs/playbooks/hk-selected.md", "status": "complete", "test_evidence": "strategy-app docs index", "doc_evidence": "strategy-app/docs/playbooks/hk-selected.md; strategy-app PR #73", "migration_pr": "strategy-app PR #73"},
     {"source_path": "docs/providers.md", "owner_repo": "market-data-platform", "target_path": "docs/integrations.md; docs/operations/credentials.md", "status": "complete", "test_evidence": "tests/test_data_providers_cache.py; tests/test_cli_dependency_boundaries.py"},
     {"source_path": "docs/reference/outputs/full-reference.md", "owner_repo": "research-workspace", "target_path": "docs/reference/outputs/full-reference.md", "status": "planned"},
     {"source_path": "docs/reference/outputs/platform-assets.md", "owner_repo": "market-data-platform", "target_path": "docs/contracts.md; docs/data-warehouse.md", "status": "complete", "test_evidence": "tests/test_paths.py; tests/test_data_warehouse.py"},
-    {"source_path": "docs/research/README.md", "owner_repo": "strategy-app", "target_path": "docs/research/README.md", "status": "planned"},
+    {"source_path": "docs/research/README.md", "owner_repo": "strategy-app", "target_path": "docs/research/README.md", "status": "complete", "test_evidence": "strategy-app docs index", "doc_evidence": "strategy-app/docs/research/README.md; strategy-app PR #65", "migration_pr": "strategy-app PR #65"},
     {"source_path": "docs/research/daily-watch20-live-readiness-20260714.md", "owner_repo": "strategy-app", "target_path": "docs/research/daily-watch20-live-readiness-20260714.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/incumbent-challenger-evidence-v2.md", "owner_repo": "strategy-app", "target_path": "docs/research/incumbent-challenger-evidence-v2.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/next-open-to-high-audit.md", "owner_repo": "strategy-app", "target_path": "docs/research/next-open-to-high-audit.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
