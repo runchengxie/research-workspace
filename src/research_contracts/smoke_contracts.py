@@ -181,13 +181,16 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     )
     if strategy_pipeline is None:
         results.append(
-            _skip("strategy export-targets help", "strategy-pipeline CLI is unavailable")
+            _skip(
+                "strategy-pipeline export-targets help",
+                "public strategy-pipeline CLI is unavailable",
+            )
         )
     else:
         base, env = strategy_pipeline
         results.append(
             _run(
-                "strategy export-targets help",
+                "strategy-pipeline export-targets help",
                 [*base, "export-targets", "--help"],
                 env=env,
                 timeout=timeout,
