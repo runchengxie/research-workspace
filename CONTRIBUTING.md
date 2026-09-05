@@ -83,7 +83,7 @@
    python scripts/run_quality_checks.py --profile hard
    python scripts/workspace_doctor.py
    python src/research_contracts/smoke_contracts.py
-   uv run --project strategy-pipeline --extra dev python -m pytest tests -q
+   python scripts/run_workspace_tests.py
    ```
 
 3. 提交并推送功能分支。

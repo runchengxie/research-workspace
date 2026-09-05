@@ -74,10 +74,11 @@ python scripts/cleanup_merged_branches.py \
 
 本顶层仓库是 public 仓库，`.github/workflows/contracts.yml` 会在相关拉取请求、手动触发和每周计划任务中运行无需私有子模块的公开检查。完整跨仓检查仍由本地 `pre-push` 和发布流程负责。各子模块的当前自动化状态见 [质量治理](docs/quality-governance.md)。
 
-根项目的集成测试使用 `strategy-pipeline` 环境：
+根项目的集成测试使用工作区测试 runner。它会初始化检查源码树，并按工作区边界准备
+`PYTHONPATH`，不要直接用 `strategy-pipeline` 环境收集顶层测试：
 
 ```bash
-uv run --project strategy-pipeline --extra dev python -m pytest tests -q
+python scripts/run_workspace_tests.py
 ```
 
 ## 命令行入口

@@ -102,9 +102,7 @@ $DATA_PLATFORM_ROOT/
 ```bash
 python scripts/workspace_doctor.py
 python src/research_contracts/smoke_contracts.py
-uv run --project strategy-pipeline --extra dev \
-  --with 'matplotlib>=3.8' --with 'tabulate>=0.9' \
-  python -m pytest tests -q
+python scripts/run_workspace_tests.py
 python scripts/run_quality_checks.py --profile hard
 ```
 
