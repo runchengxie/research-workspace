@@ -530,6 +530,16 @@
       "removal_condition": "remove only after research spec validation moves into an experiment gate and no release checklist calls this script for two release reviews"
     },
     {
+      "path": "scripts/cleanup_merged_branches.py",
+      "owner": "research-workspace",
+      "purpose": "Confirm merged GitHub pull requests before deleting eligible local feature branches from the remote",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "remote branch references only when --yes is supplied",
+      "external_dependencies": "git, GitHub CLI authentication, and GitHub API access",
+      "removal_condition": "remove only after merged-branch cleanup moves to an equivalent guarded command and no contributor documentation calls this script for two release reviews"
+    },
+    {
       "path": "scripts/run_pre_push_checks.py",
       "owner": "research-workspace",
       "purpose": "Run the complete quality gate owned by the repository currently being pushed",
