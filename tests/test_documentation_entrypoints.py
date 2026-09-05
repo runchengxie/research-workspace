@@ -116,6 +116,22 @@ def test_local_hook_installation_is_in_bootstrap_and_maintenance_docs() -> None:
     assert "git push --no-verify" in maintenance
 
 
+def test_root_integration_tests_use_workspace_runner() -> None:
+    docs = (
+        ROOT / "README.md",
+        ROOT / "AGENTS.md",
+        ROOT / "CONTRIBUTING.md",
+        ROOT / "docs" / "bootstrap.md",
+        ROOT / "docs" / "workspace-maintenance.md",
+    )
+    stale_command = "uv run --project strategy-pipeline --extra dev python -m pytest tests -q"
+
+    for path in docs:
+        text = path.read_text(encoding="utf-8")
+        assert "python scripts/run_workspace_tests.py" in text
+        assert stale_command not in text
+
+
 def test_removed_mypy_is_not_delegated() -> None:
     manifest = (ROOT / "scripts" / "submodule_checks.json").read_text(encoding="utf-8").lower()
     maintenance = (ROOT / "docs" / "workspace-maintenance.md").read_text(encoding="utf-8").lower()

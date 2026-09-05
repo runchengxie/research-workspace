@@ -44,7 +44,7 @@ git push
 | --- | --- |
 | 工作区状态 | `python scripts/workspace_doctor.py` |
 | 契约冒烟 | `python src/research_contracts/smoke_contracts.py` |
-| 顶层测试 | `uv run --project strategy-pipeline --extra dev python -m pytest tests -q` |
+| 顶层测试 | `python scripts/run_workspace_tests.py` |
 | 硬质量门禁 | `python scripts/run_quality_checks.py --profile hard` |
 | 跨仓库导入边界 | `python scripts/workspace_import_boundaries.py --check` |
 
