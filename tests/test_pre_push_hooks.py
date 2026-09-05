@@ -303,6 +303,23 @@ def test_destination_issue_allows_deleting_feature_branches() -> None:
         )
 
 
+def test_push_ref_policy_allows_deleting_feature_branch_without_local_object(
+    tmp_path: Path,
+) -> None:
+    repository = tmp_path / "repo"
+    _init_repo(repository)
+    head = _commit_file(repository)
+    zeros = "0" * len(head)
+
+    issues = run_pre_push_checks.pushed_ref_issues(
+        repository,
+        (_pushed_ref("(delete)", zeros, "refs/heads/fix/thing", head),),
+        expected_head=head,
+    )
+
+    assert issues == []
+
+
 def test_destination_issue_forbids_deleting_main_and_tag() -> None:
     head = "a" * 40
     zeros = "0" * 40

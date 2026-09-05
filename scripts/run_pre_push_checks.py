@@ -290,6 +290,8 @@ def _pushed_ref_issue(
         return "inconsistent deletion marker"
     if destination_issue := _destination_issue(pushed_ref):
         return destination_issue
+    if pushed_ref.is_deletion:
+        return None
     peeled = _peel_commit(repository, pushed_ref.local_oid, peeled_commits)
     if peeled is None:
         return "local object does not peel to a commit"
