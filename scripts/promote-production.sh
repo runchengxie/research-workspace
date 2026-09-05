@@ -3,6 +3,7 @@ set -euo pipefail
 
 PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
 KEEP_RELEASES="${PRODUCTION_KEEP_RELEASES:-5}"
+KEEP_VENVS="${PRODUCTION_KEEP_VENVS:-2}"
 SHARED_VENV_ROOT="${PRODUCTION_SHARED_VENV_ROOT:-$PRODUCTION_ROOT/shared/venvs}"
 LOCK_FILE="$PRODUCTION_ROOT/.promotion.lock"
 DRY_RUN=0
@@ -171,7 +172,7 @@ prepare_release() {
 
 prune_releases() {
   local name=$1 source=$2 base=$3
-  local args=(--base "$base" --keep "$KEEP_RELEASES" --source "$source" --shared-root "$SHARED_VENV_ROOT")
+  local args=(--base "$base" --keep "$KEEP_RELEASES" --keep-venvs "$KEEP_VENVS" --source "$source" --shared-root "$SHARED_VENV_ROOT")
   (( DRY_RUN )) && args+=(--dry-run)
   bash "$(dirname "$0")/prune-production-releases.sh" "${args[@]}"
 }

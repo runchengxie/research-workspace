@@ -63,7 +63,16 @@ git -C /home/richard/code/production/research-workspace/current submodule update
 
 旧 release 在 promotion 成功后按保留策略自动清理。每周的
 `production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
-共享虚拟环境只清理没有被保留 release 引用的指纹目录。
+默认保留最近 5 个 release，但共享虚拟环境默认只保留当前 release 和最新的一个回滚
+release 使用的环境。可通过 `PRODUCTION_KEEP_VENVS` 或 `--keep-venvs` 调整，最小值为 2。
+更老 release 仍保留代码、锁文件和 manifest，需要回滚时由 promotion 或维护流程按锁文件重建环境。
+
+查看虚拟环境清理计划：
+
+```bash
+bash /home/richard/code/research-workspace/scripts/maintain-production.sh \
+  --repo all --keep-venvs 2 --dry-run
+```
 
 更新检查和 promotion 使用同一个 fetch 入口。配置的 Git remote 失败时，会针对 GitHub
 仓库依次尝试 GitHub CLI 提供的认证 HTTPS、SSH 和普通 HTTPS。fallback 仍然只更新本地
