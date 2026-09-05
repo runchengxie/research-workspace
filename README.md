@@ -58,6 +58,20 @@ python scripts/run_pre_push_checks.py --repository "$PWD" --dry-run
 
 本地 `pre-push` 是完整质量门禁。远端 CI 按仓库可见性管理：public 仓库默认启用 GitHub Actions，private 仓库默认关闭。private 仓库如需启用远端 CI，应在对应仓库说明原因、检查范围和资源成本。
 
+已合并的临时分支可以使用显式清理命令。命令会先通过 `gh` 确认对应 PR 已合并，
+只有同时提供 `--yes` 才会执行远程删除，`main`、tag 和未合并分支不会被删除：
+
+```bash
+python scripts/cleanup_merged_branches.py \
+  --repo runchengxie/research-workspace \
+  --branch fix/example \
+  --dry-run
+python scripts/cleanup_merged_branches.py \
+  --repo runchengxie/research-workspace \
+  --branch fix/example \
+  --yes
+```
+
 本顶层仓库是 public 仓库，`.github/workflows/contracts.yml` 会在相关拉取请求、手动触发和每周计划任务中运行无需私有子模块的公开检查。完整跨仓检查仍由本地 `pre-push` 和发布流程负责。各子模块的当前自动化状态见 [质量治理](docs/quality-governance.md)。
 
 根项目的集成测试使用 `strategy-pipeline` 环境：

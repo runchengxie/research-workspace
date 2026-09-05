@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 147,
-      "python_loc": 25199,
+      "python_file_count": 149,
+      "python_loc": 25431,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -27,7 +27,7 @@
         },
         {
           "path": "tests/test_pre_push_hooks.py",
-          "loc": 660,
+          "loc": 684,
           "hk_related": false
         },
         {
@@ -178,6 +178,7 @@
         "scripts/build_platform_publication.py",
         "scripts/check-production-updates.sh",
         "scripts/check.sh",
+        "scripts/cleanup_merged_branches.py",
         "scripts/count_loc.sh",
         "scripts/data_path_audit.py",
         "scripts/dead_code_advisory.py",

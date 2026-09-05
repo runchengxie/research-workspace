@@ -290,7 +290,37 @@ def test_destination_issue_rejects_unprefixed_branch() -> None:
     assert "refs/heads/{feat,fix,hotfix,chore,release}/*" in issue
 
 
-def test_destination_issue_forbids_deleting_main_and_feature_and_tag() -> None:
+def test_destination_issue_allows_deleting_feature_branches() -> None:
+    head = "a" * 40
+    zeros = "0" * 40
+
+    for prefix in ("feat", "fix", "hotfix", "chore", "release"):
+        assert (
+            run_pre_push_checks._destination_issue(
+                _pushed_ref("(delete)", zeros, f"refs/heads/{prefix}/thing", head)
+            )
+            is None
+        )
+
+
+def test_push_ref_policy_allows_deleting_feature_branch_without_local_object(
+    tmp_path: Path,
+) -> None:
+    repository = tmp_path / "repo"
+    _init_repo(repository)
+    head = _commit_file(repository)
+    zeros = "0" * len(head)
+
+    issues = run_pre_push_checks.pushed_ref_issues(
+        repository,
+        (_pushed_ref("(delete)", zeros, "refs/heads/fix/thing", head),),
+        expected_head=head,
+    )
+
+    assert issues == []
+
+
+def test_destination_issue_forbids_deleting_main_and_tag() -> None:
     head = "a" * 40
     zeros = "0" * 40
 
@@ -298,12 +328,6 @@ def test_destination_issue_forbids_deleting_main_and_feature_and_tag() -> None:
         _pushed_ref("(delete)", zeros, "refs/heads/main", head)
     )
     assert main_del == "deleting remote main is forbidden"
-
-    feat_del = run_pre_push_checks._destination_issue(
-        _pushed_ref("(delete)", zeros, "refs/heads/feat/thing", head)
-    )
-    assert feat_del is not None
-    assert "deleting remote branch refs/heads/feat/thing is forbidden" in feat_del
 
     tag_del = run_pre_push_checks._destination_issue(
         _pushed_ref("(delete)", zeros, "refs/tags/v1", head)
