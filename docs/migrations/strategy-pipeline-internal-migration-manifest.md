@@ -1,12 +1,12 @@
 # strategy-pipeline-internal 迁移清单
 
-> status: active
+> status: retired
 > owner: workspace
 > source_of_truth: yes
 > source_commit: `44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3`
 > last_verified: 2026-09-05
 
-这份清单记录 internal 当前 main 的迁移起点。模块记录按职责分组，文件数量来自 Git tree。文档记录保留逐文件的迁移判断，后续每个切片合并后更新 `status`、目标路径和证据字段。
+这份清单记录 internal 冻结提交的迁移起点。模块记录按职责分组，文件数量来自 Git tree。当前 active 代码和文档目标已经完成 owner 迁移；仍保留的模块均明确标记为 private 或 archive，不能作为当前运行入口。
 
 ```json
 {
@@ -24,7 +24,12 @@
       "private": 58,
         "planned": 8,
       "archive": 32
-    }
+    },
+    "migration_status_counts": {
+      "complete": 16,
+      "planned": 0
+    },
+    "ownership_counts_note": "ownership_document_status_counts is the frozen source-repository classification; migration_status_counts is the workspace closeout result"
   },
   "module_groups": [
     {
@@ -91,7 +96,7 @@
   "planned_documents": [
     {"source_path": "docs/concepts/afml-lineage.md", "owner_repo": "alpha-research", "target_path": "docs/concepts/afml-methodology.md; docs/reference/signal-artifacts.md", "status": "complete", "test_evidence": "tests/test_afml_methodology.py; tests/test_signal_artifact.py"},
     {"source_path": "docs/concepts/data-sources.md", "owner_repo": "market-data-platform", "target_path": "docs/contracts.md; docs/operations/a-share-tushare.md", "status": "complete", "test_evidence": "tests/test_tushare_platform_assets.py; tests/test_data_providers_cache.py"},
-    {"source_path": "docs/concepts/metric-ownership.md", "owner_repo": "research-workspace", "target_path": "docs/metric-ownership.md", "status": "complete", "test_evidence": "tests/test_metric_ownership_document.py", "doc_evidence": "docs/metric-ownership.md", "migration_pr": "pending"},
+    {"source_path": "docs/concepts/metric-ownership.md", "owner_repo": "research-workspace", "target_path": "docs/metric-ownership.md", "status": "complete", "test_evidence": "tests/test_metric_ownership_document.py", "doc_evidence": "docs/metric-ownership.md"},
     {"source_path": "docs/concepts/pit-coverage.md", "owner_repo": "market-data-platform", "target_path": "docs/a-share-fundamentals.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_tushare_a_share_fundamentals.py; tests/test_current_path_audit.py"},
     {"source_path": "docs/concepts/research-protocols.md", "owner_repo": "alpha-research", "target_path": "docs/concepts/feature-research-protocol.md; docs/concepts/overfitting-controls.md", "status": "complete", "test_evidence": "tests/test_feature_evidence.py; tests/test_promotion_gate.py"},
     {"source_path": "docs/concepts/shared-hk-data-platform.md", "owner_repo": "market-data-platform", "target_path": "docs/operations/hk-archive-restore.md; docs/contracts.md", "status": "complete", "test_evidence": "tests/test_quality_governance.py; tests/test_dataset_contracts.py"},
@@ -104,7 +109,7 @@
     {"source_path": "docs/research/daily-watch20-live-readiness-20260714.md", "owner_repo": "strategy-app", "target_path": "docs/research/daily-watch20-live-readiness-20260714.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/incumbent-challenger-evidence-v2.md", "owner_repo": "strategy-app", "target_path": "docs/research/incumbent-challenger-evidence-v2.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
     {"source_path": "docs/research/next-open-to-high-audit.md", "owner_repo": "strategy-app", "target_path": "docs/research/next-open-to-high-audit.md", "status": "complete", "test_evidence": "strategy-app PR #65; strategy-app docs/research/README.md"},
-    {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md", "migration_pr": "pending"}
+    {"source_path": "docs/strategy-catalog.md", "owner_repo": "research-workspace", "target_path": "docs/strategy-catalog.md", "status": "complete", "test_evidence": "tests/test_strategy_catalog_document.py", "doc_evidence": "docs/strategy-catalog.md"}
   ],
   "completed_code_migrations": [
     {

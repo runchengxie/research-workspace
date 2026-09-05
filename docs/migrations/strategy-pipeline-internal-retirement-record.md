@@ -48,6 +48,10 @@
 
 本轮结论：公共 pipeline 已完成 production cutover，并在无 internal checkout、安装包或私有凭证的 production release 中通过运行时检查。internal PR #297 已删除 5 个公共控制面兼容 facade。下一阶段集中处理 internal 剩余 owner 证据和两个维护周期的退役观察。
 
+## 2026-09-05 closeout consistency audit
+
+本地工作区复核发现，记录中的 production workspace release `e322894a3d530959314dbd1a97eb9722f40b53da` 当前未出现在本机 `production/research-workspace/releases/`，而 `production/research-workspace/current` 实际指向 `deb89a3bd17c7c479fac35e8d844016bdbbec915`。复核时 `github/main` 为 `c2bb62ffd33fde0224e8871ede004953e80fb809`，可作为下一次 promotion 候选。因此本记录保留历史 promotion 声明，但将生产指针一致性列为独立 promotion follow-up；在完成授权 promotion 前，不把本地生产状态视为已与记录一致。
+
 ## 2026-09-05 maintenance cycle 1 audit
 
 本周期重新核对了冻结版本、公共仓库和 production gitlink，并完成恢复演练：

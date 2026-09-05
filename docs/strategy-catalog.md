@@ -61,12 +61,12 @@ strategy-pipeline export-targets --help
 
 ## 当前迁移状态
 
-`strategy-pipeline-internal` 已冻结，正在按清单完成退役迁移。文档迁移项已经完成，代码清单仍记录每个
-internal 模块的 owner、替代路径、测试和删除条件：
+`strategy-pipeline-internal` 已完成 active 代码和文档迁移，并进入私有只读归档。代码清单继续记录每个
+internal 模块的 owner、替代路径、测试和 archive-only 删除条件：
 
 [strategy-pipeline-internal 迁移清单](migrations/strategy-pipeline-internal-migration-manifest.md)
 
-在清单中的替代入口和验证证据全部完成前，internal 不能正式下线。
+冻结 tag 仅用于历史恢复和溯源，不再作为 workspace 或生产运行入口。
 
 ## 相关入口
 

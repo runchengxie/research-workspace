@@ -32,7 +32,28 @@ def test_manifest_has_verified_inventory_baseline() -> None:
             "planned": 8,
             "archive": 32,
         },
+        "migration_status_counts": {
+            "complete": 16,
+            "planned": 0,
+        },
+        "ownership_counts_note": (
+            "ownership_document_status_counts is the frozen source-repository classification; "
+            "migration_status_counts is the workspace closeout result"
+        ),
     }
+
+
+def test_manifest_records_retired_migration_and_completed_document_targets() -> None:
+    payload = _load_manifest()
+    assert MANIFEST.read_text(encoding="utf-8").splitlines()[2] == "> status: retired"
+    assert payload["inventory"]["migration_status_counts"] == {
+        "complete": 16,
+        "planned": 0,
+    }
+    documents = payload["planned_documents"]
+    assert len(documents) == 16
+    assert all(item["status"] == "complete" for item in documents)
+    assert all(item.get("migration_pr") != "pending" for item in documents)
 
 
 def test_module_groups_have_unique_active_ownership_and_evidence() -> None:
