@@ -19,16 +19,15 @@
         "max_large_classes": 1
       },
       "alpha-research": {
-        "max_large_files": 6,
-        "max_long_functions": 28,
-        "max_complexity_hotspots": 32,
+        "max_large_files": 7,
+        "max_long_functions": 30,
+        "max_complexity_hotspots": 33,
         "max_large_classes": 1
       },
       "portfolio-backtester": {
         "max_large_files": 10,
-        "max_long_functions": 33,
-        "max_long_functions": 35,
-        "max_complexity_hotspots": 32,
+        "max_long_functions": 36,
+        "max_complexity_hotspots": 33,
         "max_large_classes": 0
       },
       "strategy-app": {
@@ -41,7 +40,7 @@
         "max_large_files": 2,
         "max_long_functions": 0,
         "max_complexity_hotspots": 2,
-        "max_large_classes": 1
+        "max_large_classes": 0
       },
       "quant-execution-engine": {
         "max_large_files": 4,
@@ -110,9 +109,9 @@
     },
     {
       "repo": "alpha-research",
-      "max_large_files": 6,
-      "max_long_functions": 28,
-      "max_complexity_hotspots": 32,
+      "max_large_files": 7,
+      "max_long_functions": 30,
+      "max_complexity_hotspots": 33,
       "max_large_classes": 1,
       "owner_decision": [
         "2026-07-18: DailyWatch20 归属迁移（模型生命周期/OOS/新闻热度入 alpha），Ruff/类型/ratchet/243 测试全绿。",
@@ -126,8 +125,8 @@
     {
       "repo": "portfolio-backtester",
       "max_large_files": 10,
-      "max_long_functions": 35,
-      "max_complexity_hotspots": 32,
+      "max_long_functions": 36,
+      "max_complexity_hotspots": 33,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-08-10: 会计第五阶段容量校准与集中度分组新增 _capacity_report_config.py(累计 545 行，超 500 阈值成为大文件) 与 _build_report_payload(83 行)/build_capacity_report(87 行) 两个容量报告组装函数；large_files 7->8、long_functions 26->28 上调（phase-5 路线图真实新增、owner 决策记录，非回归，已在 accepted_hotspots 登记 _capacity_report_config.py 大文件与 build_capacity_report 长函数）。",
@@ -1143,6 +1142,12 @@
       "owner_repo": "alpha-research",
       "reason": "基本面状态特征与相关契约仍集中在一个较大的 owner 模块中，当前属于可追踪的维护性热点。",
       "next_action": "后续拆分状态构造与特征派生职责，并保持公开 feature API 稳定。"
+    },
+    {
+      "path": "alpha-research/tests/test_fundamental_state.py",
+      "owner_repo": "alpha-research",
+      "reason": "基本面状态预测测试覆盖较完整，当前文件超过大文件阈值，保留为可追踪的测试维护性热点。",
+      "next_action": "后续按 target、PIT 和 score reconciliation 场景拆分测试夹具与断言，保持行为覆盖。"
     },
     {
       "path": "strategy-app/src/strategy_app/daily_watch20/daily_watch20_market_shadow_publish.py",

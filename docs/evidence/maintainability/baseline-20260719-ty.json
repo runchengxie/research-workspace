@@ -775,19 +775,19 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 235,
-      "python_loc": 42979,
+      "python_file_count": 241,
+      "python_loc": 43501,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 6,
-        "long_functions": 28,
-        "complexity_hotspots": 32,
+        "large_files": 7,
+        "long_functions": 30,
+        "complexity_hotspots": 33,
         "large_classes": 1
       },
       "large_files": [
         {
           "path": "src/alpha_research/fundamental_state.py",
-          "loc": 742,
+          "loc": 745,
           "hk_related": false
         },
         {
@@ -813,6 +813,11 @@
         {
           "path": "src/alpha_research/_walk_forward_core.py",
           "loc": 508,
+          "hk_related": false
+        },
+        {
+          "path": "tests/test_fundamental_state.py",
+          "loc": 500,
           "hk_related": false
         }
       ],
@@ -890,6 +895,12 @@
           "complexity": 11
         },
         {
+          "path": "src/alpha_research/matched_rank_models.py",
+          "name": "fit_matched_rank_models",
+          "line_count": 93,
+          "complexity": 19
+        },
+        {
           "path": "src/alpha_research/_feature_evidence_importance.py",
           "name": "factor_ic_report",
           "line_count": 91,
@@ -956,16 +967,10 @@
           "complexity": 22
         },
         {
-          "path": "src/alpha_research/_promotion_gate_record.py",
-          "name": "flatten_promotion_record",
-          "line_count": 82,
-          "complexity": 10
-        },
-        {
-          "path": "src/alpha_research/_train_eval_stage_eval.py",
-          "name": "_run_cv_and_fit_model",
-          "line_count": 82,
-          "complexity": 7
+          "path": "src/alpha_research/risk_model.py",
+          "name": "build_factor_risk_model",
+          "line_count": 83,
+          "complexity": 14
         }
       ],
       "complexity_hotspots": [
@@ -1033,6 +1038,12 @@
           "path": "src/alpha_research/dynamic_signal_ensemble_calibration.py",
           "name": "calibrate_signal_directions",
           "line_count": 70,
+          "complexity": 19
+        },
+        {
+          "path": "src/alpha_research/matched_rank_models.py",
+          "name": "fit_matched_rank_models",
+          "line_count": 93,
           "complexity": 19
         },
         {
@@ -1112,12 +1123,6 @@
           "name": "build_annual_fundamental_target_panel",
           "line_count": 87,
           "complexity": 16
-        },
-        {
-          "path": "src/alpha_research/metrics.py",
-          "name": "normalize_bucket_schemes",
-          "line_count": 38,
-          "complexity": 16
         }
       ],
       "large_classes": [
@@ -1171,13 +1176,13 @@
     {
       "repo": "portfolio-backtester",
       "root": "portfolio-backtester",
-      "python_file_count": 251,
-      "python_loc": 49794,
+      "python_file_count": 261,
+      "python_loc": 50561,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 10,
-        "long_functions": 35,
-        "complexity_hotspots": 32,
+        "long_functions": 36,
+        "complexity_hotspots": 33,
         "large_classes": 0
       },
       "large_files": [
@@ -1336,6 +1341,12 @@
           "complexity": 12
         },
         {
+          "path": "src/portfolio_backtester/target_close_replay.py",
+          "name": "replay_close_targets",
+          "line_count": 92,
+          "complexity": 16
+        },
+        {
           "path": "src/portfolio_backtester/_construction_grid_eval.py",
           "name": "_init_row",
           "line_count": 91,
@@ -1376,12 +1387,6 @@
           "name": "build_capacity_report",
           "line_count": 88,
           "complexity": 10
-        },
-        {
-          "path": "src/portfolio_backtester/backtest_config.py",
-          "name": "resolve_backtest_base_settings",
-          "line_count": 88,
-          "complexity": 4
         }
       ],
       "complexity_hotspots": [
@@ -1524,15 +1529,15 @@
           "complexity": 16
         },
         {
+          "path": "src/portfolio_backtester/target_close_replay.py",
+          "name": "replay_close_targets",
+          "line_count": 92,
+          "complexity": 16
+        },
+        {
           "path": "src/portfolio_backtester/_capacity_report_config.py",
           "name": "_evaluate_row",
           "line_count": 40,
-          "complexity": 15
-        },
-        {
-          "path": "src/portfolio_backtester/_evaluation_positions.py",
-          "name": "_record_period_execution_sim",
-          "line_count": 104,
           "complexity": 15
         }
       ],
