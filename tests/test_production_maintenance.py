@@ -22,7 +22,17 @@ def test_maintenance_dry_run_is_safe_and_checks_both_apps(tmp_path: Path) -> Non
     make_app(tmp_path, "market-intel")
 
     result = subprocess.run(
-        ["bash", str(SCRIPT), "--production-root", str(tmp_path), "--dry-run", "--keep", "2"],
+        [
+            "bash",
+            str(SCRIPT),
+            "--production-root",
+            str(tmp_path),
+            "--dry-run",
+            "--keep",
+            "2",
+            "--min-free-gb",
+            "0",
+        ],
         text=True,
         capture_output=True,
         check=False,
