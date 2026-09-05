@@ -52,6 +52,10 @@
 
 本地工作区复核发现，记录中的 production workspace release `e322894a3d530959314dbd1a97eb9722f40b53da` 当前未出现在本机 `production/research-workspace/releases/`，而 `production/research-workspace/current` 实际指向 `deb89a3bd17c7c479fac35e8d844016bdbbec915`。复核时 `github/main` 为 `c2bb62ffd33fde0224e8871ede004953e80fb809`，可作为下一次 promotion 候选。因此本记录保留历史 promotion 声明，但将生产指针一致性列为独立 promotion follow-up；在完成授权 promotion 前，不把本地生产状态视为已与记录一致。
 
+## 2026-09-05 production promotion resolution
+
+已将 closeout commit 合并到 `github/main` 的 `d31f007223d009a16f76368161536e4be5a51d89`，并完成正式 promotion。当前 `production/research-workspace/current` 已指向同一 release，release 根目录和 submodule gitlink 校验通过，公共 `strategy-pipeline` gitlink 为 `5f7f8681608019987d995ed1ae8602468c1c0d32`。此前 closeout consistency audit 中记录的生产指针不一致已解决。
+
 ## 2026-09-05 maintenance cycle 1 audit
 
 本周期重新核对了冻结版本、公共仓库和 production gitlink，并完成恢复演练：
