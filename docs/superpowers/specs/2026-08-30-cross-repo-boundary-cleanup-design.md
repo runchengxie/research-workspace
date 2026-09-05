@@ -11,7 +11,7 @@ The workspace has already completed several ownership migrations, but a small se
 
 1. `alpha-research` and `portfolio-backtester` both implement nearly identical `freshness_overlay` score adjustment logic.
 2. `alpha-research` and `portfolio-backtester` both carry nearly identical benchmarking helpers.
-3. repository-local maintainability wrappers and some tests remain similar, although the stable scanner algorithm has already been extracted to the existing `research-dev-metrics` package.
+3. repository-local maintainability wrappers and some tests remain similar, although the stable scanner algorithm has already been extracted to the existing `research-code-quality` package.
 4. StyleReplica still has transitional mixed ownership. ADR-0007 defines the target split, but existing code intentionally remains partially compatible while the migration is incomplete.
 5. `strategy-research/src/style_factors/` contains reusable runtime capabilities that cross the documented owner boundaries, including portfolio replay preparation, execution diagnostics, data loaders, signal/backtest helpers, and a `portfolio_backtester_adapter.py` that performs more than thin adaptation.
 6. the superproject now tracks eight submodules, including `strategy-research`, while `ARCHITECTURE.md` still describes seven submodules and an earlier non-submodule state.
@@ -27,7 +27,7 @@ This change series will:
 - keep compatibility entry points where removal would create unnecessary breakage and where compatibility does not violate dependency direction;
 - complete the highest-value parts of the ADR-0007 StyleReplica split without a big-bang rewrite;
 - reduce `strategy-research` to research-specific orchestration, evidence, experiments, reports, and thin adapters where reusable capabilities already have an owner repository;
-- preserve the existing roles of `research-contracts` and `research-dev-metrics` rather than inventing replacement shared layers;
+- preserve the existing roles of `research-contracts` and `research-code-quality` rather than inventing replacement shared layers;
 - update the superproject's architecture documentation and gitlinks only after owner repositories have merged their changes;
 - add regression coverage so the same duplicate/ownership drift is harder to reintroduce.
 
@@ -37,7 +37,7 @@ This series will not:
 
 - introduce a new shared `common-utils` repository solely to remove small amounts of boilerplate;
 - place research algorithms in `research-contracts`, whose existing scope is lightweight artifact/schema/hash/lineage contracts rather than research logic;
-- replace `research-dev-metrics`, which already owns the stable cross-repository maintainability scanner algorithm;
+- replace `research-code-quality`, which already owns the stable cross-repository maintainability scanner algorithm;
 - mechanically move every research experiment into a domain repository;
 - require all affected repositories to merge simultaneously;
 - remove compatibility APIs before consumers have migrated when a safe facade is possible;
@@ -84,7 +84,7 @@ Each PR should alter one ownership boundary or one supporting concern. Cross-rep
 | strategy thesis, lifecycle, evidence, research decisions, experiment orchestration | `strategy-research` | superproject navigation and research workflows | no second owner implementation of reusable alpha/portfolio/data capabilities |
 | run orchestration, runtime directories, external calls, gates, publication | `strategy-pipeline` | operational entry points | no duplicate owner contracts |
 | artifact envelope/schema/hash/lineage contracts | `research-contracts` in `research-workspace` | producer/consumer repositories | remains algorithm-free |
-| stable cross-repository maintainability scanning | `research-dev-metrics` | repository-local governance wrappers | local budgets and repo-specific fields stay local |
+| stable cross-repository maintainability scanning | `research-code-quality` | repository-local governance wrappers | local budgets and repo-specific fields stay local |
 
 ## 6. Change set A: freshness overlay ownership
 
@@ -171,11 +171,11 @@ The audit will first determine whether these helpers are runtime API, repository
 
 ### Maintainability tooling
 
-The stable scanner algorithm is already centralized in `research-dev-metrics`; current repository-local `maintainability_metrics.py` files intentionally keep local ratchet budgets, local metric fields, and local CLI formatting.
+The stable scanner algorithm is already centralized in `research-code-quality`; current repository-local `maintainability_metrics.py` files intentionally keep local ratchet budgets, local metric fields, and local CLI formatting.
 
 Therefore this series will not mechanically merge those wrappers. It will only:
 
-- verify that remaining cross-repository-identical logic is already delegated to `research-dev-metrics`;
+- verify that remaining cross-repository-identical logic is already delegated to `research-code-quality`;
 - remove or reduce truly redundant wrapper/test code only where doing so preserves standalone repository checks;
 - keep repository-specific budgets and governance values local.
 
@@ -254,5 +254,5 @@ This cleanup is complete when:
 - `ARCHITECTURE.md` matches the eight-submodule reality;
 - the final superproject gitlinks point to merged owner commits;
 - targeted boundary/duplicate tests prevent the fixed drift patterns from being reintroduced;
-- existing `research-contracts` and `research-dev-metrics` boundaries remain intact;
+- existing `research-contracts` and `research-code-quality` boundaries remain intact;
 - any intentionally deferred extraction debt is explicitly recorded with an owner and deletion/migration condition.
