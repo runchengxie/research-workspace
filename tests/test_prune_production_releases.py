@@ -121,3 +121,61 @@ def test_prune_handles_current_nested_shared_venv_layout(tmp_path: Path) -> None
     assert result.returncode == 0
     assert referenced.is_dir()
     assert not orphan.exists()
+
+
+def test_prune_keeps_current_and_newest_rollback_environments(tmp_path: Path) -> None:
+    base = make_release_tree(tmp_path, ["r1", "r2", "r3", "r4"], "r2")
+    shared = tmp_path / "shared" / "venvs" / "strategy-pipeline"
+    current = shared / "current"
+    rollback = shared / "rollback"
+    old = shared / "old"
+    current.mkdir(parents=True)
+    rollback.mkdir()
+    old.mkdir()
+    os.symlink(current, base / "releases" / "r2" / ".venv")
+    os.symlink(rollback, base / "releases" / "r4" / ".venv")
+    os.symlink(old, base / "releases" / "r3" / ".venv")
+
+    result = run_prune(
+        base,
+        "--keep",
+        "4",
+        "--keep-venvs",
+        "2",
+        "--shared-root",
+        str(tmp_path / "shared"),
+    )
+
+    assert result.returncode == 0
+    assert current.is_dir()
+    assert rollback.is_dir()
+    assert not old.exists()
+
+
+def test_prune_venv_dry_run_does_not_remove_old_environment(tmp_path: Path) -> None:
+    base = make_release_tree(tmp_path, ["r1", "r2", "r3"], "r2")
+    shared = tmp_path / "shared" / "venvs" / "strategy-pipeline"
+    current = shared / "current"
+    rollback = shared / "rollback"
+    old = shared / "old"
+    current.mkdir(parents=True)
+    rollback.mkdir()
+    old.mkdir()
+    os.symlink(current, base / "releases" / "r2" / ".venv")
+    os.symlink(rollback, base / "releases" / "r3" / ".venv")
+    os.symlink(old, base / "releases" / "r1" / ".venv")
+
+    result = run_prune(
+        base,
+        "--keep",
+        "3",
+        "--keep-venvs",
+        "2",
+        "--shared-root",
+        str(tmp_path / "shared"),
+        "--dry-run",
+    )
+
+    assert result.returncode == 0
+    assert "unreferenced shared environment" in result.stdout
+    assert old.is_dir()
