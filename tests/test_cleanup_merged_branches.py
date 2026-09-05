@@ -30,10 +30,21 @@ def test_validate_branch_name_rejects_unprotected_or_malformed_names(branch: str
 
 
 def test_parse_merged_prs_returns_numbers() -> None:
-    payload = '[{"number": 76, "mergedAt": "2026-09-05T09:45:12Z"}]'
-    assert cleanup.parse_merged_prs(payload) == (76,)
+    payload = (
+        '[{"number": 76, "mergedAt": "2026-09-05T09:45:12Z", '
+        '"headRefName": "fix/model", "headRefOid": "abc", '
+        '"headRepository": {"nameWithOwner": "owner/repo"}}]'
+    )
+    assert cleanup.parse_merged_prs(
+        payload, repo="owner/repo", branch="fix/model", head_oid="abc"
+    ) == (76,)
 
 
 def test_parse_merged_prs_rejects_unmerged_or_invalid_payload() -> None:
     with pytest.raises(ValueError, match="merged PR"):
-        cleanup.parse_merged_prs('[{"number": 76, "mergedAt": null}]')
+        cleanup.parse_merged_prs(
+            '[{"number": 76, "mergedAt": null}]',
+            repo="owner/repo",
+            branch="fix/model",
+            head_oid="abc",
+        )

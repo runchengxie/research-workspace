@@ -20,7 +20,7 @@ def validate_branch_name(branch: str) -> str:
     return branch
 
 
-def parse_merged_prs(payload: str) -> tuple[int, ...]:
+def parse_merged_prs(payload: str, *, repo: str, branch: str, head_oid: str) -> tuple[int, ...]:
     try:
         records = json.loads(payload)
     except json.JSONDecodeError as exc:
@@ -31,17 +31,52 @@ def parse_merged_prs(payload: str) -> tuple[int, ...]:
     for record in records:
         if not isinstance(record, dict) or not isinstance(record.get("number"), int):
             raise ValueError("gh returned an invalid pull-request record")
-        if record.get("mergedAt"):
+        head_repository = record.get("headRepository")
+        if (
+            record.get("mergedAt")
+            and record.get("headRefName") == branch
+            and record.get("headRefOid") == head_oid
+            and isinstance(head_repository, dict)
+            and head_repository.get("nameWithOwner") == repo
+        ):
             numbers.append(record["number"])
     if not numbers:
         raise ValueError("no merged PR was found for this branch")
     return tuple(numbers)
 
 
+def github_repo(remote_url: str) -> str:
+    normalized = remote_url.removesuffix(".git").rstrip("/")
+    if normalized.startswith("git@github.com:"):
+        return normalized.removeprefix("git@github.com:")
+    prefix = "https://github.com/"
+    if normalized.startswith(prefix):
+        return normalized.removeprefix(prefix)
+    raise ValueError(f"remote is not a GitHub repository: {remote_url}")
+
+
+def remote_repository(remote: str, *, runner: CommandRunner) -> str:
+    result = runner(("git", "remote", "get-url", remote))
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or f"cannot resolve remote {remote!r}")
+    return github_repo(result.stdout.strip())
+
+
+def remote_branch_oid(remote: str, branch: str, *, runner: CommandRunner) -> str:
+    result = runner(("git", "ls-remote", "--heads", remote, branch))
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "cannot resolve remote branch")
+    lines = result.stdout.strip().splitlines()
+    if not lines:
+        raise ValueError(f"remote branch does not exist: {remote}/{branch}")
+    return lines[0].split()[0]
+
+
 def merged_pr_numbers(
     repo: str,
     branch: str,
     *,
+    head_oid: str,
     runner: CommandRunner = lambda command: subprocess.run(
         command, capture_output=True, text=True, check=False
     ),
@@ -58,13 +93,13 @@ def merged_pr_numbers(
             "--head",
             branch,
             "--json",
-            "number,mergedAt",
+            "number,mergedAt,headRefName,headRefOid,headRepository",
         )
     )
     if result.returncode != 0:
         detail = result.stderr.strip() or result.stdout.strip() or "gh pr list failed"
         raise RuntimeError(detail)
-    return parse_merged_prs(result.stdout)
+    return parse_merged_prs(result.stdout, repo=repo, branch=branch, head_oid=head_oid)
 
 
 def cleanup_branch(
@@ -79,7 +114,10 @@ def cleanup_branch(
     ),
 ) -> tuple[int, ...]:
     validate_branch_name(branch)
-    numbers = merged_pr_numbers(repo, branch, runner=runner)
+    if remote_repository(remote, runner=runner) != repo:
+        raise ValueError(f"remote {remote!r} does not point to GitHub repository {repo!r}")
+    head_oid = remote_branch_oid(remote, branch, runner=runner)
+    numbers = merged_pr_numbers(repo, branch, head_oid=head_oid, runner=runner)
     command = ("git", "push", remote, "--delete", branch)
     if dry_run:
         print(f"would delete {remote}/{branch} after merged PR(s): {', '.join(map(str, numbers))}")
