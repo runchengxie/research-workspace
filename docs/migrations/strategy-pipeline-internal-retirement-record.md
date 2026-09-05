@@ -54,7 +54,7 @@
 
 ## 2026-09-05 production promotion resolution
 
-已将 closeout commit 合并到 `github/main` 的 `d31f007223d009a16f76368161536e4be5a51d89`，并完成正式 promotion。当前 `production/research-workspace/current` 已指向同一 release，release 根目录和 submodule gitlink 校验通过，公共 `strategy-pipeline` gitlink 为 `5f7f8681608019987d995ed1ae8602468c1c0d32`。此前 closeout consistency audit 中记录的生产指针不一致已解决。
+已将 closeout 变更合并到 `github/main` 并完成正式 promotion。当前 `production/research-workspace/current`、promotion manifest、release 根目录和 submodule gitlink 校验通过，公共 `strategy-pipeline` gitlink 为 `5f7f8681608019987d995ed1ae8602468c1c0d32`。此前 closeout consistency audit 中记录的生产指针不一致已解决。生产 commit 不再复制进同一份 evidence JSON，避免 evidence 修改造成自引用 hash 失效；runtime pointer 和 promotion manifest 是生产版本的权威来源。
 
 ## 2026-09-05 maintenance cycle 1 audit
 

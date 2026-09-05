@@ -10,13 +10,10 @@
   "freeze_tag": "retirement-freeze-20260905-r1",
   "maintenance_cycles": "2/2",
   "active_external_consumers": 0,
-  "production_workspace_release": "d31f007223d009a16f76368161536e4be5a51d89",
   "production_public_pipeline": "5f7f8681608019987d995ed1ae8602468c1c0d32",
-  "observed_local_production_workspace_release": "d31f007223d009a16f76368161536e4be5a51d89",
-  "observed_github_main_workspace_release": "d31f007223d009a16f76368161536e4be5a51d89",
-  "current_promotion_candidate": "d31f007223d009a16f76368161536e4be5a51d89",
-  "production_release_matches_observed_local_state": true,
-  "production_promotion_follow_up": "none; production/research-workspace/current points to the recorded release",
+  "production_pointer_reference": "production/research-workspace/current plus its promotion manifest",
+  "production_pointer_verified": true,
+  "production_promotion_follow_up": "none; the runtime pointer and manifest are authoritative",
   "recovery_entrypoint": "retirement-freeze-20260905-r1 plus docs/retirement-final-record.md",
   "public_disclosure_boundary": "private strategy implementation remains outside public strategy-pipeline"
 }

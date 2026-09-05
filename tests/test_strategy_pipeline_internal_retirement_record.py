@@ -59,12 +59,10 @@ def test_final_retirement_evidence_records_private_archive_and_recovery() -> Non
     assert evidence["active_external_consumers"] == 0
     assert evidence["last_recoverable_commit"] == "44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3"
     assert evidence["freeze_tag"] == "retirement-freeze-20260905-r1"
-    assert evidence["production_workspace_release"] == ("d31f007223d009a16f76368161536e4be5a51d89")
-    assert (
-        evidence["observed_local_production_workspace_release"]
-        == evidence["production_workspace_release"]
+    assert evidence["production_pointer_reference"] == (
+        "production/research-workspace/current plus its promotion manifest"
     )
-    assert evidence["production_release_matches_observed_local_state"] is True
+    assert evidence["production_pointer_verified"] is True
 
     record = RECORD.read_text(encoding="utf-8")
     assert "> status: retired" in record
