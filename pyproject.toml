@@ -3,19 +3,19 @@ name = "research-workspace"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-  "matplotlib>=3.8",
-  "numpy>=1.23",
+  "matplotlib>=3.11.1",
+  "numpy>=2.5.2",
   "pandas>=2.2",
   "pyarrow>=14",
   "pyyaml>=6.0",
-  "tabulate>=0.9",
+  "tabulate>=0.10.0",
   "strategy-pipeline @ git+https://github.com/runchengxie/strategy-pipeline.git",
 ]
 
 [dependency-groups]
 dev = [
-  "pip-audit>=2.7",
-  "pytest>=9.0.3",
+  "pip-audit>=2.10.1",
+  "pytest>=9.1.1",
   "pytest-cov>=5",
 ]
 
