@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 146,
-      "python_loc": 24999,
+      "python_file_count": 147,
+      "python_loc": 25141,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -22,7 +22,7 @@
       "large_files": [
         {
           "path": "tests/test_strategy_pipeline_internal_migration_manifest.py",
-          "loc": 779,
+          "loc": 848,
           "hk_related": false
         },
         {
@@ -776,7 +776,7 @@
       "repo": "alpha-research",
       "root": "alpha-research",
       "python_file_count": 233,
-      "python_loc": 42685,
+      "python_loc": 42684,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 6,
@@ -1581,7 +1581,7 @@
       "repo": "strategy-app",
       "root": "strategy-app",
       "python_file_count": 261,
-      "python_loc": 54170,
+      "python_loc": 54188,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
@@ -1597,7 +1597,7 @@
         },
         {
           "path": "src/strategy_app/hotsector/hotsector_deepseek_campaign_api.py",
-          "loc": 648,
+          "loc": 659,
           "hk_related": false
         },
         {
