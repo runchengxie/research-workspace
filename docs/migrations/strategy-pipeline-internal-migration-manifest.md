@@ -6,7 +6,7 @@
 > source_commit: `44fd1bae16f04f18c7fa5234c9f5f0860ae69ac3`
 > last_verified: 2026-09-05
 
-这份清单记录 internal 冻结提交的迁移起点。模块记录按职责分组，文件数量来自 Git tree。当前 active 代码和文档目标已经完成 owner 迁移；仍保留的模块均明确标记为 private 或 archive，不能作为当前运行入口。
+这份清单记录 internal 冻结提交的迁移起点。模块记录按职责分组，文件数量来自 Git tree。当前 active 代码和文档目标已经完成 owner 迁移。仍保留的模块均明确标记为 private 或 archive，不能作为当前运行入口。
 
 ```json
 {

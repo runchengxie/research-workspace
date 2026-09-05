@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 149,
-      "python_loc": 25431,
+      "python_loc": 25484,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -22,7 +22,7 @@
       "large_files": [
         {
           "path": "tests/test_strategy_pipeline_internal_migration_manifest.py",
-          "loc": 848,
+          "loc": 869,
           "hk_related": false
         },
         {
