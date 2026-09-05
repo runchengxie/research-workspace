@@ -61,7 +61,7 @@ ensure_project_venv() {
   )
   if [[ "$name" == market-data-platform ]]; then
     args+=(--extra dev --extra tushare)
-  elif [[ "$name" == strategy-pipeline ]]; then
+  elif [[ "$name" == strategy-pipeline || "$name" == strategy-research ]]; then
     args+=(--extra dev)
   fi
   bash "$SCRIPT_DIR/ensure-shared-production-venv.sh" "${args[@]}"
@@ -76,6 +76,10 @@ ensure_release_venvs() {
   if [[ -d "$release/strategy-pipeline" && -f "$release/strategy-pipeline/pyproject.toml" \
     && ! -x "$release/strategy-pipeline/.venv/bin/python" ]]; then
     ensure_project_venv "$release/strategy-pipeline" strategy-pipeline
+  fi
+  if [[ -d "$release/strategy-research" && -f "$release/strategy-research/pyproject.toml" \
+    && ! -x "$release/strategy-research/.venv/bin/python" ]]; then
+    ensure_project_venv "$release/strategy-research" strategy-research
   fi
 }
 
@@ -141,7 +145,7 @@ prepare_release() {
       run git -C "$release" submodule sync --recursive
       run git -C "$release" submodule update --init --recursive
       if (( ! DRY_RUN )); then
-        for project in market-data-platform strategy-pipeline; do
+        for project in market-data-platform strategy-pipeline strategy-research; do
           if [[ -f "$release/$project/pyproject.toml" ]]; then
             ensure_project_venv "$release/$project" "$project"
           fi
