@@ -11,7 +11,7 @@
       "repo": "research-workspace",
       "root": ".",
       "python_file_count": 147,
-      "python_loc": 25141,
+      "python_loc": 25199,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -242,8 +242,8 @@
     {
       "repo": "market-data-platform",
       "root": "market-data-platform",
-      "python_file_count": 412,
-      "python_loc": 103234,
+      "python_file_count": 421,
+      "python_loc": 105166,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 47,
@@ -293,6 +293,11 @@
           "hk_related": false
         },
         {
+          "path": "tests/test_a_share_minute_build.py",
+          "loc": 966,
+          "hk_related": false
+        },
+        {
           "path": "tests/test_cli_data_minutes.py",
           "loc": 957,
           "hk_related": false
@@ -305,11 +310,6 @@
         {
           "path": "src/market_data_platform/providers/public_etf_minute.py",
           "loc": 877,
-          "hk_related": false
-        },
-        {
-          "path": "tests/test_a_share_minute_build.py",
-          "loc": 859,
           "hk_related": false
         },
         {
@@ -775,8 +775,8 @@
     {
       "repo": "alpha-research",
       "root": "alpha-research",
-      "python_file_count": 233,
-      "python_loc": 42684,
+      "python_file_count": 235,
+      "python_loc": 42979,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 6,
@@ -787,7 +787,7 @@
       "large_files": [
         {
           "path": "src/alpha_research/fundamental_state.py",
-          "loc": 738,
+          "loc": 742,
           "hk_related": false
         },
         {

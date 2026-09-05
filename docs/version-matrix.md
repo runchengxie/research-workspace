@@ -23,6 +23,19 @@ git submodule update --init --recursive
 
 ## 已验证组合
 
+2026-09-05 的存储维护将 `deep-learning-tick-data-prediction` 更新到
+`9f22a99`（owner PR #136）。事件流训练下载按本次 seed 过滤，共享摘要继续保留，
+dry run 与正式运行使用同一下载命令。owner 完整门禁通过 597 项测试，
+另有 1 项跳过，覆盖率为 81.65%，PR CI 通过。
+
+本次将 market-data-platform 更新到 `a22ac04`（owner PR #126），alpha-research
+更新到 `b8fac12`（owner PR #75），同步版本记录并重新生成维护性清单。
+两个 owner 的函数拆分保持数据处理语义，全量类型检查已修复。market-data-platform
+测试通过 895 项，跳过 1 项。alpha-research 测试通过 436 项，跳过 4 项。
+检查阈值和债务预算保持不变。测试临时目录放在有足够空间的磁盘分区，避免受
+`/tmp` 的可用空间影响。本次只更新开发工作区组合，生产版本和定时任务保持不变。
+详细检查记录见 [存储维护版本更新证据](evidence/storage-consistency-20260905.md)。
+
 `framework-adapters-2026-07` 已标记为终止的历史候选。相关候选没有形成当前 owner-native
 `main` 上可验证的发布组合。历史清单见
 [framework-adapter-release.yml](framework-adapter-release.yml)，当前功能状态见

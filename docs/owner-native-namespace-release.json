@@ -7,7 +7,7 @@
   "packages": {
     "alpha-research": {
       "canonical_package": "alpha_research",
-      "commit": "ed85f26b9c2b99eccd650349cb361a9453660785",
+      "commit": "b8fac12b71187c3bf032b5d76c5556c030076785",
       "legacy_source_tree_allowed": false,
       "pr": 47,
       "version": "0.4.0"
