@@ -390,6 +390,10 @@ provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证�
 `docs/evidence/private-research-artifact-handoff-2026-09-06.md`。这证明通用 handoff 边界，
 但不替代正式 `watchlist_20.csv` / `selection_receipt.json` 生产链路。
 
+公共 staging 已新增 `quant-platform/research_contracts` 通用 publication primitives；该包只负责
+manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择。其验证结果为 `31 passed`
+和 Ruff clean，证据见 `docs/evidence/public-platform-staging-2026-09-06.md`。
+
 现有正式 publisher 的 DailyWatch20 publication contract、orchestration 和 validation 核心测试
 已通过 `13 passed`；这些测试仍运行在当前 `strategy-app` owner 上，不能替代 producer 迁移验证。
 

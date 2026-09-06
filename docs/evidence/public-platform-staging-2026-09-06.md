@@ -12,12 +12,12 @@ A separate local Git staging repository now exists at:
 /home/richard/code/.public-staging/quant-platform
 ```
 
-The repository contains the public portfolio/backtesting vertical slice and is committed at
-`c350847` (`chore: ignore generated public staging files`), with the feature slice in its parent
-commit `9b070b6`.
+The repository contains the public portfolio/backtesting vertical slice and generic publication
+primitives. It is committed at `29e114e` (`feat: add public publication bundle primitives`).
 
 It includes a public CI workflow, a public `portfolio-backtester` package slice, a versioned
-style-factor backtest contract, synthetic example data, and migration provenance.
+style-factor backtest contract, generic `research_contracts` publication helpers, synthetic example
+data, and migration provenance.
 
 ## Verification
 
@@ -28,7 +28,7 @@ uv run pytest -q
 uv run ruff check .
 ```
 
-Result: `29 passed`; Ruff reported `All checks passed!`.
+Result: `31 passed`; Ruff reported `All checks passed!`.
 
 A restricted-file scan found no credentials, environment files, raw parquet/feather data, secrets,
 or runtime artifact directories. No GitHub remote was created, nothing was pushed, and the
