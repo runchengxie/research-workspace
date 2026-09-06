@@ -38,3 +38,15 @@ This proves the repository boundary and publication mechanism. It does not yet r
 `watchlist_20.csv` / `selection_receipt.json` producer, which remains the orchestration layer until
 the private strategy logic is integrated into that runtime and the full DailyWatch20 contract is
 validated.
+
+The current formal publisher was also checked from the `strategy-app` source worktree:
+
+```bash
+uv run --extra dev python -m pytest \
+  tests/test_daily_watch20_publication_contracts.py \
+  tests/test_daily_watch20_publication_orchestration.py \
+  tests/test_daily_watch20_publication_validation_core.py -q
+```
+
+Result: `13 passed`. This validates the existing owner’s publication safeguards; it is not evidence
+that the formal producer has already moved to `quant-platform`.

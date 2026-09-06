@@ -390,6 +390,9 @@ provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证�
 `docs/evidence/private-research-artifact-handoff-2026-09-06.md`。这证明通用 handoff 边界，
 但不替代正式 `watchlist_20.csv` / `selection_receipt.json` 生产链路。
 
+现有正式 publisher 的 DailyWatch20 publication contract、orchestration 和 validation 核心测试
+已通过 `13 passed`；这些测试仍运行在当前 `strategy-app` owner 上，不能替代 producer 迁移验证。
+
 **Files:**
 - Create: 新仓库 `quant-research/README.md`
 - Create: 新仓库 `quant-research/AGENTS.md`
