@@ -22,7 +22,7 @@ The approved sequence and rollback triggers are recorded in
 ## Verified gates
 
 - Public platform staging at `b67618c`: scoped tests passed, Ruff clean and formatted; public CI green.
-- Private research staging at `40fa735`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included.
+- Private research staging at `b096329`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; CI now has an explicit private-dependency access gate.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
 - `market-intel` boundary: boundary `2 passed`; broader contract/freshness/recovery

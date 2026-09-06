@@ -32,7 +32,7 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "40fa73569589b3d116c1663bf6ec8ccc390ece0a",
+      "commit": "b0963298b4b9d65a73c64e5f3ab31608f388fbf9",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
       "scope": "private DailyWatch20 strategy vertical slice, formal publication adapter, and platform consumer pins",
