@@ -20,6 +20,7 @@
 | 了解当前研究交接 | [研究入口](research/README.md) |
 | 查找稳定术语和框架状态 | [参考资料](reference/README.md) |
 | 查看路线图和当前优先级 | [工作区路线图](roadmap.md) |
+| 运行 A 股基线 | [playbooks/a-share-baseline.md](playbooks/a-share-baseline.md) |
 | 查看策略身份、实验和生命周期 | [strategy-research README](../strategy-research/README.md) |
 
 ## 子模块入口
