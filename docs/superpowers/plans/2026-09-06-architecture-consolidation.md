@@ -465,9 +465,15 @@ def test_market_intel_does_not_import_private_research():
     assert boundary_documented("versioned artifact")
 ```
 
-- [ ] **Step 2: 补齐 artifact manifest**
+- [x] **Step 2: 补齐 artifact manifest**
 
-每份产物必须有 `artifact_type`、`schema_version`、`producer_commit`、`strategy_id`、`as_of`、`created_at`、`quality_status` 和 `source_manifest`。
+已完成字段分层和兼容性 crosswalk：通用 `research.platform-publication.v1` manifest 负责
+`schema_version`、`producer_commit`、`created_at`、相对路径、SHA-256、audience 和 consumers；
+`strategy_id`、`as_of`、`quality_status` 和 `source_manifest` 由每个 domain artifact 或其
+paired receipt 负责。DailyWatch20 的 `selection_receipt.json` 已包含质量、时间、模型、特征
+和 lineage 门禁。证据见
+`docs/evidence/publication-contract-field-crosswalk-2026-09-06.md`。这避免把策略语义和
+本地路径塞进可公开复用的 transport contract。
 
 - [x] **Step 3: 验证缺失、过期和不兼容版本 fail closed**
 
