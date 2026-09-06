@@ -8,7 +8,7 @@
 
 **Tech Stack:** Markdown、Git、GitHub PR、Shell、Python 文档审计脚本、现有文档风格测试和链接检查工具。
 
-**Spec:** [`docs/evidence/documentation-language-audit-2026-09-06.md`](../evidence/documentation-language-audit-2026-09-06.md)
+**规范：**[`docs/evidence/documentation-language-audit-2026-09-06.md`](../../evidence/documentation-language-audit-2026-09-06.md)
 
 ## Global Constraints
 

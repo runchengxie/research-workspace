@@ -10,8 +10,8 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 156,
-      "python_loc": 27131,
+      "python_file_count": 158,
+      "python_loc": 27300,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
@@ -187,6 +187,7 @@
       },
       "script_inventory": [
         "scripts/analyze_repository_coupling.py",
+        "scripts/audit_documentation_language.py",
         "scripts/benchmark_matrix_build.py",
         "scripts/build_platform_publication.py",
         "scripts/check-production-updates.sh",
