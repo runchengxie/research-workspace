@@ -15,7 +15,14 @@
       "train_window_dates": 100,
       "threads": 3
     },
-    "result": "passed"
+    "result": "passed",
+    "production_parameter_run": {
+      "history_calendar_days": 1100,
+      "train_window_dates": 504,
+      "selected_count": 20,
+      "result": "passed",
+      "publication_output": "isolated research namespace"
+    }
   },
   "platform": {
     "repository": "runchengxie/quant-platform",
@@ -31,11 +38,18 @@
     "live_eligibility": false,
     "real_same_input_comparison": "pending"
   },
+  "parity_observation": {
+    "daily_watch20_same_dates": true,
+    "daily_watch20_old_new_symbol_intersection": 14,
+    "daily_watch20_old_only_symbols": 6,
+    "daily_watch20_new_only_symbols": 6,
+    "reason_parity_not_approved": "old artifact receipt pins a different historical ths-hot input hash and snapshot minute than the currently available source"
+  },
   "gates": {
     "new_runtime_unit_tests": "passed",
     "new_runtime_lint": "passed",
     "market_intel_offline_tests": "passed",
-    "daily_watch20_production_parameter_parity": "pending",
+    "daily_watch20_production_parameter_parity": "blocked_on_frozen_input_recovery",
     "cashflow_old_new_shadow_comparison": "pending",
     "production_current_switch": "not_executed"
   }
