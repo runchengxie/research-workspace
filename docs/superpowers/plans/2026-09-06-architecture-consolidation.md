@@ -419,9 +419,10 @@ manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择�
 
 - [ ] **Step 4: 本地门禁和消费验证**
 
-已完成 adapter focused gate：`3 passed`、Ruff clean。adapter 现在直接接受正式 publisher 的
-`latest/watchlist_20.csv` / `latest/selection_receipt.json` 布局；完整消费验证仍待完成，原因是
-staging 中的旧 `portfolio-backtester` API pin 尚未与策略 slice 对齐。
+已完成 private focused gate：完整 copied suite `26 passed`，adapter `3 passed`、Ruff clean。
+adapter 现在直接接受正式 publisher 的 `latest/watchlist_20.csv` /
+`latest/selection_receipt.json` 布局；独立 `market-intel` contract/freshness/recovery gate 也已
+通过。仍待用真实生成运行产物完成一次端到端消费演练。
 
 ```bash
 uv run pytest
@@ -464,7 +465,7 @@ def test_market_intel_does_not_import_private_research():
 
 每份产物必须有 `artifact_type`、`schema_version`、`producer_commit`、`strategy_id`、`as_of`、`created_at`、`quality_status` 和 `source_manifest`。
 
-- [ ] **Step 3: 验证缺失、过期和不兼容版本 fail closed**
+- [x] **Step 3: 验证缺失、过期和不兼容版本 fail closed**
 
 ```bash
 cd /home/richard/code/market-intel

@@ -6,7 +6,7 @@
 The private staging repository `quant-research` is committed at
 `12f80ebb1bfa42820112a78be298b3dbefa74b92`. Its `scripts/export_publication.py` adapter depends on
 the public staging repository `quant-platform` at
-`95abd65a04b370e947728e46f91e173aa5165187`.
+`fb7ea0e539359b8e0a162066cd827eb55af64f2a`.
 
 The adapter accepts exactly these private projections from the formal publisher's `latest`
 directory:
@@ -24,5 +24,5 @@ uv run ruff check scripts tests/test_export_publication.py
 ```
 
 Result: `3 passed`; Ruff clean. This proves the target namespace and private-to-application handoff
-shape, including the formal `latest` layout, but it is not yet a full runtime migration because the
-copied private suite still has an older `portfolio-backtester` API pin.
+shape, including the formal `latest` layout. The full copied private suite also passes (`26 passed`)
+against the staged public platform and contract packages.

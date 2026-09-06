@@ -14,7 +14,7 @@ A local private Git repository now exists at:
 
 It contains one DailyWatch20 vertical slice extracted from the current
 `strategy-research` and `strategy-app` gitlinks. The staging repository is committed at
-`12f80eb` (`feat: export formal DailyWatch20 publication`).
+`e4ebde8` (`build: consume portfolio framework from platform`).
 
 The slice includes:
 
@@ -43,9 +43,7 @@ paths. Focused adapter verification passed (`3 passed`; Ruff clean). The formal 
 present in the staging slice, but the old `strategy-research` and `strategy-app` repositories
 remain authoritative and are the rollback source until the full runtime suite is aligned.
 
-The staging resolver now overrides alpha’s old Git URL with the public staging
-`research-contracts` package, restoring the expected `ArtifactEnvelopeV2` API. The full copied
-suite then reaches a second existing compatibility prerequisite: the resolved
-`portfolio-backtester` package lacks the `name_turnover` API required by the copied strategy slice.
-That dependency pin must be aligned before the full private suite can run; the focused adapter gate
-remains green and no tests were silently weakened.
+The staging resolver now consumes both `research-contracts` and the reusable portfolio framework
+from public `quant-platform`, restoring the expected `ArtifactEnvelopeV2` and `name_turnover` APIs.
+After a clean environment rebuild, the full copied private suite passed (`26 passed`), and the
+publication adapter passed (`3 passed`; Ruff clean).

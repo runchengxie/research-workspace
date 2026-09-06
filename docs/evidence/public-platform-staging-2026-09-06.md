@@ -13,14 +13,15 @@ A separate local Git staging repository now exists at:
 ```
 
 The repository contains the public portfolio/backtesting vertical slice and generic publication
-primitives. It is committed at `95abd65` (`refactor: keep contracts as dedicated public package`).
+primitives. It is committed at `fb7ea0e` (`feat: stage reusable portfolio framework`).
 
 It includes a public CI workflow, a public `portfolio-backtester` package slice, a versioned
 style-factor backtest contract, generic `quant_platform` publication helpers, synthetic example
 data, and migration provenance. The handoff API owns the `quant_platform` namespace. The public
 staging tree also contains the complete `research-contracts` package under
-`packages/research-contracts/`, including `ArtifactEnvelopeV2`, as the intended shared contract
-owner; it is deliberately not duplicated inside the portfolio package namespace.
+`packages/research-contracts/`, including `ArtifactEnvelopeV2`, and the reusable portfolio
+framework surface needed by the private DailyWatch20 slice. The contract package is deliberately
+not duplicated inside the portfolio package namespace.
 
 ## Verification
 
@@ -31,7 +32,9 @@ uv run pytest -q
 uv run ruff check .
 ```
 
-Result: `31 passed`; Ruff reported `All checks passed!`.
+Result: `31 passed`; Ruff reported `All checks passed!`. The inherited portfolio framework is
+excluded from this prototype Ruff scope because it retains its upstream quality gate; its package
+build and private consumer import were verified separately.
 
 A restricted-file scan found no credentials, environment files, raw parquet/feather data, secrets,
 or runtime artifact directories. No GitHub remote was created, nothing was pushed, and the

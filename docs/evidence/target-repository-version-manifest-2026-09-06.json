@@ -23,14 +23,14 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "95abd65a04b370e947728e46f91e173aa5165187",
+      "commit": "fb7ea0e539359b8e0a162066cd827eb55af64f2a",
       "scope": "public portfolio/backtesting vertical slice and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "12f80ebb1bfa42820112a78be298b3dbefa74b92",
-      "scope": "private DailyWatch20 strategy vertical slice and formal publication adapter",
+      "commit": "e4ebde81a21e4a824b155d588dee9815da6a3a9d",
+      "scope": "private DailyWatch20 strategy vertical slice, formal publication adapter, and platform consumer pins",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
     "market-intel-boundary-validation": {
@@ -43,7 +43,7 @@
   "compatibility_gates": [
     "quant-platform scoped tests and Ruff pass",
     "quant-research publication adapter focused tests and Ruff pass",
-    "quant-research full copied dependency suite remains blocked by portfolio-backtester API pin mismatch",
+    "quant-research full copied dependency suite passes against staged platform and contract packages",
     "market-intel boundary and contract/freshness/recovery tests pass",
     "formal watchlist_20 producer migration is not yet complete",
     "remote creation, license approval, push, rename, and gitlink update are not yet authorized"
