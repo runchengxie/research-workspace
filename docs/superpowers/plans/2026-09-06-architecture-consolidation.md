@@ -122,7 +122,7 @@ git commit -m "docs: add architecture consolidation baseline"
 ```bash
 python scripts/run_quality_checks.py --profile governance
 python scripts/workspace_doctor.py
-git add docs/governance/public-private-boundary-matrix.md docs/README.md
+git add docs/governance/public-private-boundary-matrix.md docs/README.md docs/superpowers/plans/2026-09-06-architecture-consolidation.md
 git commit -m "docs: define public and private boundaries"
 ```
 
