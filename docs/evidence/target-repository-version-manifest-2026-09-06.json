@@ -32,10 +32,10 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "59467567af92475af1dd77e2ed1eab9e1aeb9cad",
+      "commit": "5971d8b",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
-      "ci": "private research CI: success at 34020694892",
+      "ci": "private research CI: success at 34021009249",
       "scope": "private DailyWatch20 strategy vertical slice plus complete pinned market-data baseline transfer",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
@@ -50,7 +50,7 @@
   },
   "compatibility_gates": [
     "quant-platform full transferred portfolio suite plus public data core/quality: 599 tests, Ruff and ty pass; public CI green at 34020846558",
-    "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; selected contract/provider tests and private CI green at 34020694892",
+    "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; private consumers repinned to public bb4c9a3; selected contract/provider tests and private CI green at 34021009249",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
