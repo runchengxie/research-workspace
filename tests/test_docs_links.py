@@ -77,6 +77,19 @@ class DocsLinksTest(unittest.TestCase):
         self.assertIn("[../ARCHITECTURE.md](../ARCHITECTURE.md)", docs_index)
         self.assertIn("[../CONTRIBUTING.md](../CONTRIBUTING.md)", docs_index)
 
+    def test_superseded_document_template_defines_compatibility_shape(self) -> None:
+        template = (ROOT / "docs" / "templates" / "superseded-document.md").read_text(
+            encoding="utf-8"
+        )
+
+        for field in (
+            "> status: superseded",
+            "> source_of_truth: no",
+            "> superseded_by: <relative path>",
+        ):
+            self.assertIn(field, template)
+        self.assertIn("不再维护正文内容", template)
+
     def test_documentation_lifecycle_owner_template_covers_active_submodules(self) -> None:
         lifecycle = (ROOT / "docs" / "documentation-lifecycle.md").read_text(encoding="utf-8")
 

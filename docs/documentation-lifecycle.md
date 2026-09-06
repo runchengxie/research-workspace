@@ -16,6 +16,7 @@
 ```text
 > status: active | reference | archived | superseded
 > owner: workspace | strategy-research | market-data-platform | deep-learning-tick-data-prediction | alpha-research | portfolio-backtester | strategy-app | strategy-pipeline | quant-execution-engine
+> audience: human | agent | both
 > last_verified: YYYY-MM-DD
 > source_of_truth: yes | no
 > superseded_by: n/a | <relative path>
@@ -27,12 +28,12 @@
 | --- | --- |
 | `status` | `active` 是当前操作入口，`reference` 是稳定参考，`archived` 是历史记录，`superseded` 是兼容跳转页。 |
 | `owner` | 谁负责业务含义和后续更新。跨仓库页面写 `workspace`。 |
+| `audience` | 页面主要服务于人、编码代理或两者。 |
 | `last_verified` | 最近一次检查链接、契约名称和市场称谓的日期。 |
 | `source_of_truth` | 是否是当前权威入口。兼容页和历史记录通常写 `no`。 |
 | `superseded_by` | 被替代时写当前入口。未替代写 `n/a`。 |
 
-普通操作页不重复状态块。它们的生命周期统一记录在本页的入口表中，减少多页同步维护
-同一组字段。
+普通操作页不重复状态块。它们的生命周期由所属目录 README 导航，减少多页同步维护同一组字段。
 
 ## 活跃入口
 
@@ -86,5 +87,7 @@
 - 一次性交接、冻结说明、发布说明、历史复查和恢复演练进入 archive records。
 - 清单已记录的清单不在 Markdown 里重复维护长表。Markdown 只解释边界并链接清单。
 - 超过 300 行且需要人工持续维护的文档，应拆分、生成，或降级到 archive。
+- 迁移正文后，旧路径保留 `status: superseded` 的短指针，不保留第二份正文。
+- active 入口默认只链接分类 README 和当前权威页面，不平铺 evidence、archive、plans 和 specs。
 - 旧称 `metadata/current_assets/cn_current.json` 只用于历史兼容说明。当前 A 股权威契约
   是 `metadata/current_assets/a_share_current.json`。
