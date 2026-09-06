@@ -322,6 +322,12 @@ git commit -m "docs: measure strategy repository coupling"
 
 ### Task 7：用 `portfolio-backtester` 做 `quant-platform` 公共试点
 
+执行裁定（2026-09-06）：本任务只在当前 worktree 的普通目录 `quant-platform/` 中建立本地
+staging tree，不创建新 Git 仓库、不配置 remote、不 push 或发布，也不更新 workspace gitlink。
+由于普通目录不能承载独立仓库提交图，使用 `git fast-export` 对所选源码和测试做只读历史导出
+演练，并在 staging tree 记录来源 commit、导出摘要和逐文件哈希；真正建仓时再 fast-import。
+源仓当前 commit 没有 tag 且缺少 LICENSE，因此 tag 对比和公开发布保持阻塞，并在报告中记录。
+
 **Files:**
 - Create: 新仓库 `quant-platform/README.md`
 - Create: 新仓库 `quant-platform/AGENTS.md`
@@ -364,7 +370,8 @@ python src/research_contracts/smoke_contracts.py
 python scripts/run_workspace_tests.py
 ```
 
-**完成标准:** 有一个 public CI 迁移样板，旧仓仍可作为回滚源。
+**完成标准:** 有一个未发布的本地 public CI 迁移样板，旧仓仍可作为回滚源；远端建仓、
+fast-import、tag 和许可证确认不属于本地试点完成声明。
 
 ### Task 8：用一个真实策略做 `quant-research` 私有试点
 
