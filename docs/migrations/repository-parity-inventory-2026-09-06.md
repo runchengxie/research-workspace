@@ -5,7 +5,7 @@
 > authority: legacy submodules remain authoritative until each row reaches parity
 
 This inventory compares the current repositories with the target architecture.
-“Partial” means a validated migration slice exists; it does not mean the
+`Partial` means a validated migration slice exists; it does not mean the
 legacy repository can be retired.
 
 | Legacy repository | Target | Code | Tests/CI | Docs/config | Current migration state | Main missing work |

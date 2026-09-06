@@ -25,7 +25,7 @@ python scripts/context_manifest.py --task alpha
 
 ## Target repository routing
 
-迁移完成后，默认按目标仓库和 package 读取上下文，而不是把整个 monorepo 作为任务范围：
+迁移完成后，默认按目标仓库和 package 读取上下文，避免把整个 monorepo 作为任务范围：
 
 | 任务 | 默认目标范围 | 只有这些情况才扩大 |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ python scripts/context_manifest.py --task alpha
 | 报告、Dashboard、投递、freshness 和恢复 | `market-intel` | 修改研究 artifact 消费契约或跨应用运行流程 |
 | 版本组合、兼容性、集成 smoke test 和 release manifest | `research-workspace` | 仅在版本锁定、契约验证或发布流程变化时读取 owner package |
 
-目标仓库尚未全部成为远端事实来源时，旧 submodule 仍是实现权威；本表描述的是迁移目标和
+目标仓库尚未全部成为远端事实来源时，旧 submodule 仍是实现权威。本表描述的是迁移目标和
 AI 任务的最小上下文策略，不授权提前删除旧仓或扩大读取范围。
 
 | 区域 | 默认仓库 | 直接边界摘要 |

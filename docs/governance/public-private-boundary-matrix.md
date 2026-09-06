@@ -33,22 +33,22 @@
 
 | 路径 | 分类 | 边界说明 |
 | --- | --- | --- |
-| `docs/` | `INTEGRATION_ONLY` | 只记录跨仓库协作、契约、版本和发布治理；研究正文、运行配置和历史材料按下表处理 |
+| `docs/` | `INTEGRATION_ONLY` | 只记录跨仓库协作、契约、版本和发布治理。研究正文、运行配置和历史材料按下表处理 |
 | `docs/adr/` | `INTEGRATION_ONLY` | 记录稳定的架构决策、职责边界和跨模块约束 |
 | `docs/contracts/`、`docs/contracts.d/` | `INTEGRATION_ONLY` | 记录跨仓库文件格式、字段和兼容契约 |
 | `docs/governance/`、`docs/operations/` | `INTEGRATION_ONLY` | 记录质量、版本、维护、发布和工作区操作门禁 |
 | `docs/research/`、`docs/evidence/` | `PRIVATE_RESEARCH` | 研究笔记、实验证据和可推导策略 edge 的材料 |
-| `docs/archive/` | `PRIVATE_RESEARCH` | 历史研究、恢复材料和可能包含真实业务上下文的归档；除非另有审查，不作为公开内容 |
+| `docs/archive/` | `PRIVATE_RESEARCH` | 历史研究、恢复材料和可能包含真实业务上下文的归档。除非另有审查，不作为公开内容 |
 | `src/research_contracts/` | `INTEGRATION_ONLY` | 工作区级稳定契约和契约烟测，不承载真实策略或生产参数 |
-| `scripts/` | `INTEGRATION_ONLY` | 工作区 doctor、质量检查和跨仓库委托；脚本内若含 provider 或生产参数，按运行时规则处理 |
-| `.github/`、`.gitmodules` | `INTEGRATION_ONLY` | CI、仓库组合和版本锁定；不得包含凭证或私有服务地址 |
+| `scripts/` | `INTEGRATION_ONLY` | 工作区 doctor、质量检查和跨仓库委托。脚本内若含 provider 或生产参数，按运行时规则处理 |
+| `.github/`、`.gitmodules` | `INTEGRATION_ONLY` | CI、仓库组合和版本锁定。不得包含凭证或私有服务地址 |
 
 ## 独立应用
 
 | 路径 | 分类 | 边界说明 |
 | --- | --- | --- |
-| `market-intel`（外部独立应用） | `PRIVATE_RUNTIME` | 负责市场上下文、报告组装、Dashboard、投递、freshness、幂等和运行恢复；运行实现、provider、凭证和生产参数保持私有 |
-| `market-intel` 的跨仓库输入边界 | `INTEGRATION_ONLY` | 只消费公开 CLI 和版本化文件、receipt 或其他已记录 artifact；不得导入本工作区或其他 owner 的私有研究内部模块 |
+| `market-intel`（外部独立应用） | `PRIVATE_RUNTIME` | 负责市场上下文、报告组装、Dashboard、投递、freshness、幂等和运行恢复。运行实现、provider、凭证和生产参数保持私有 |
+| `market-intel` 的跨仓库输入边界 | `INTEGRATION_ONLY` | 只消费公开 CLI 和版本化文件、receipt 或其他已记录 artifact。不得导入本工作区或其他 owner 的私有研究内部模块 |
 
 ## Target repositories during migration
 
@@ -63,7 +63,7 @@
 
 | 路径 | 分类 | 边界说明 |
 | --- | --- | --- |
-| `market-data-platform/src/` | `PUBLIC_CORE` | 数据资产的通用生产、质量和读取机制；真实数据集、provider 和凭证另行保护 |
+| `market-data-platform/src/` | `PUBLIC_CORE` | 数据资产的通用生产、质量和读取机制。真实数据集、provider 和凭证另行保护 |
 | `market-data-platform/config/`、运行数据和缓存 | `PRIVATE_RUNTIME` | 数据源配置、生产参数、缓存和真实数据供应商信息 |
 | `deep-learning-tick-data-prediction/src/` | `PRIVATE_RESEARCH` | 事件流处理、标签、模型输入和评估可能暴露研究 edge |
 | `deep-learning-tick-data-prediction/configs/`、`legacy/` | `PRIVATE_RESEARCH` | 模型选择、实验配置、标签和历史研究实现，未逐项审查前按私有处理 |
@@ -71,7 +71,7 @@
 | `portfolio-backtester/src/` | `PUBLIC_CORE` | 通用组合、成本、容量、暴露和风险计算机制 |
 | `portfolio-backtester/config/`、回测产物 | `PRIVATE_RESEARCH` | 真实策略参数、样本、组合权重和研究结论 |
 | `strategy-research/src/`、`research/` | `PRIVATE_RESEARCH` | 策略身份、投资假设、生命周期、实验和证据导航 |
-| `strategy-app/src/` | `PUBLIC_CORE` | 不含策略 edge 的纯计算机制和稳定接口；策略规格与真实参数除外 |
+| `strategy-app/src/` | `PUBLIC_CORE` | 不含策略 edge 的纯计算机制和稳定接口。策略规格与真实参数除外 |
 | `strategy-pipeline/src/` | `PRIVATE_RUNTIME` | 编排、外部调用、运行目录、发布控制和 provider 适配可能暴露生产运行细节 |
 | `strategy-pipeline/config/`、`targets.json` 及运行产物 | `PRIVATE_RUNTIME` | 生产参数、数据路径、发布目标和执行交接内容 |
 | `quant-execution-engine/src/` | `PRIVATE_RUNTIME` | 风控、券商适配、订单执行、对账和审计运行时 |
@@ -79,8 +79,8 @@
 
 ## 例外与复核
 
-- 单个文件同时包含多类内容时，按更严格的分类处理；例如同时含通用机制和真实参数时，整体按 `PRIVATE_RESEARCH` 或 `PRIVATE_RUNTIME` 保护。
+- 单个文件同时包含多类内容时，按更严格的分类处理。例如同时含通用机制和真实参数时，整体按 `PRIVATE_RESEARCH` 或 `PRIVATE_RUNTIME` 保护。
 - `README`、契约字段和 API 文档可以公开，但不得通过默认值、示例数据、日志片段或路径泄露 edge。
 - 新增目录在完成审查前默认标记为 `PRIVATE_RESEARCH`，并在本矩阵补充路径、分类和依据。
-- `market-intel` 只能通过公开 CLI 和版本化 artifact 与本工作区交互，禁止直接 import 私有研究内部实现；若需要新数据，先增加公开契约或版本化产物。
+- `market-intel` 只能通过公开 CLI 和版本化 artifact 与本工作区交互，禁止直接 import 私有研究内部实现。若需要新数据，先增加公开契约或版本化产物。
 - 公开发布前应同时检查密钥、真实数据、provider 名称、标签、特征组合、模型选择、生产参数和交易审计信息。

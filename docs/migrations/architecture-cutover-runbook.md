@@ -87,7 +87,7 @@ production source of truth.
 
 ## Rollback window policy
 
-The migration uses a defined **14-calendar-day rollback window** beginning at
+The migration uses a defined 14-calendar-day rollback window beginning at
 the first production cutover (`T0`). This is a safety window, not permission to
 retire legacy repositories early.
 

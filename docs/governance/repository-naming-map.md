@@ -48,8 +48,8 @@ surfaces and are migrated independently.
 
 仓库名、Python namespace 和 CLI 是三个独立兼容面。本任务不改变：
 
-- `strategy_pipeline`、`strategy_app`、`ticknet` 及其导入路径；
-- `strategy`、`strategy-pipeline` 及其他现有 CLI 名称；
+- `strategy_pipeline`、`strategy_app`、`ticknet` 及其导入路径。
+- `strategy`、`strategy-pipeline` 及其他现有 CLI 名称。
 - `.gitmodules`、gitlink、远端 URL、生产目录和部署配置。
 
 namespace 或 CLI 的迁移必须另建任务，包含兼容期、消费者清单和回滚证据。
@@ -68,7 +68,7 @@ rg -n "strategy-research|strategy-app|strategy-pipeline|deep-learning-tick-data-
 | --- | --- | --- |
 | URL | GitHub 链接、文档链接、远端仓库地址 | 保留真实地址，不把候选名写入 URL |
 | 路径 | 子模块目录、源码路径、数据路径、运行目录 | 保留当前路径，避免破坏 gitlink 和生产读取 |
-| 文档 | README、ARCHITECTURE、治理、ADR、计划和归档 | 当前页增加迁移说明；其他事实不改写 |
+| 文档 | README、ARCHITECTURE、治理、ADR、计划和归档 | 当前页增加迁移说明。其他事实不改写 |
 | import | `strategy_pipeline`、`strategy_app`、`ticknet` 等 Python 引用 | 保留 namespace，另建迁移任务 |
 | CLI | `strategy`、`strategy-pipeline` 等命令及帮助文本 | 保留命令名和调用方式 |
 | 生产配置 | YAML、JSON、TOML、shell 脚本及发布/检查配置 | 保留配置键、路径和项目标识 |
@@ -82,6 +82,6 @@ rg -n "strategy-research|strategy-app|strategy-pipeline|deep-learning-tick-data-
 
 候选名不是当前别名，也不是可直接使用的替换字符串。任何后续仓库改名任务都必须：
 
-1. 更新本页的决定和迁移状态；
-2. 明确远端仓库、工作区目录、URL、gitlink、namespace、CLI 和生产配置的独立变更；
+1. 更新本页的决定和迁移状态。
+2. 明确远端仓库、工作区目录、URL、gitlink、namespace、CLI 和生产配置的独立变更。
 3. 保留历史名称的可追溯说明，并运行工作区治理、doctor 和相关消费者检查。

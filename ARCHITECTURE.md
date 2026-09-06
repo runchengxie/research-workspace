@@ -90,7 +90,7 @@ quant-execution-engine
 候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
 `strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
 `microstructure-models`。这些只是冻结的迁移字典，当前不改变 submodule 目录、远端名、
-gitlink、Python namespace 或 CLI；完整引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
+gitlink、Python namespace 或 CLI。完整引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
 
 ## 代码和数据边界
 
