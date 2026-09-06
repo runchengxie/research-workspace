@@ -47,6 +47,7 @@
 - [术语表](reference/README.md)
 - [文档写作与维护](documentation-style.md)
 - [文档生命周期](governance/README.md)
+- 指标归属：[metric-ownership.md](metric-ownership.md)
 
 阶段记录、冻结记录和历史证据从 [archive/README.md](archive/README.md) 进入。活跃文档不复制历史材料。
 
