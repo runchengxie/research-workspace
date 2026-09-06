@@ -18,7 +18,7 @@ has its own release and rollback evidence. The target mapping is recorded in
 
 ## Verified gates
 
-- Public platform staging: `31 passed`, Ruff clean.
+- Public platform staging at `a1de2f9b`: `31 passed`, Ruff clean and formatted.
 - Private research staging: `26 passed`; publication adapter `3 passed`, Ruff clean.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
@@ -26,6 +26,10 @@ has its own release and rollback evidence. The target mapping is recorded in
   contract/freshness/recovery gate `112 passed`.
 - Workspace thin-layer doctor tests: `23 passed`; doctor reports `0 errors`.
 - Architecture model tests: `7 passed`; architecture scan reports `0 errors`.
+- Contract smoke: all checks passed with `0 errors`, `0 warnings`.
+- Hard quality profile: all checks passed, including Ruff, format, ty, import
+  boundaries, ownership boundaries, architecture, capability registry, trial
+  ledger, and secret scan.
 
 ## AI context policy
 
