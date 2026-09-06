@@ -45,7 +45,8 @@
     "quant-research publication adapter focused tests and Ruff pass",
     "quant-research full copied dependency suite passes against staged platform and contract packages",
     "market-intel boundary and contract/freshness/recovery tests pass",
-    "formal watchlist_20 producer migration is not yet complete",
+    "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
+    "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
     "remote creation, license approval, push, rename, and gitlink update are not yet authorized"
   ]
 }

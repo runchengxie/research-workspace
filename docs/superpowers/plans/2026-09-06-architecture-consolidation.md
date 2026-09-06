@@ -386,9 +386,10 @@ provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证�
 `docs/evidence/private-research-staging-2026-09-06.md`。
 
 补充验证（2026-09-06）：已使用该 staging slice 生成一个 `research.platform-publication.v1`
-内部投影，并由 `market-intel` 验证 producer commit、audience、相对路径和 SHA-256。证据见
-`docs/evidence/private-research-artifact-handoff-2026-09-06.md`。这证明通用 handoff 边界，
-但不替代正式 `watchlist_20.csv` / `selection_receipt.json` 生产链路。
+内部投影，并由 `market-intel` 验证 producer commit、audience、相对路径和 SHA-256。随后又用
+正式 publisher 约定的 `latest/watchlist_20.csv` / `latest/selection_receipt.json` 布局完成了
+一次合成端到端 producer → contract → consumer 演练。证据见
+`docs/evidence/formal-daily-watch20-market-intel-handoff-2026-09-06.md`。
 
 公共 staging 已新增 `quant-platform` 命名空间下的通用 publication primitives；该包只负责
 manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择。其验证结果为 `31 passed`
@@ -417,12 +418,13 @@ manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择�
 禁止 `market-intel` 直接 import `quant-research`；私有 staging adapter 只依赖 public
 `quant_platform` API，并把带有 schema、producer commit 和 internal audience 的 artifact 交给它。
 
-- [ ] **Step 4: 本地门禁和消费验证**
+- [x] **Step 4: 本地门禁和消费验证**
 
 已完成 private focused gate：完整 copied suite `26 passed`，adapter `3 passed`、Ruff clean。
 adapter 现在直接接受正式 publisher 的 `latest/watchlist_20.csv` /
 `latest/selection_receipt.json` 布局；独立 `market-intel` contract/freshness/recovery gate 也已
-通过。仍待用真实生成运行产物完成一次端到端消费演练。
+通过。随后使用该正式布局的合成运行产物完成了端到端消费演练，验证了两个 artifact、producer
+commit、internal audience、相对路径和 SHA-256。
 
 ```bash
 uv run pytest
@@ -434,7 +436,9 @@ uv run pytest -k contract
 uv run a-share-daily doctor
 ```
 
-**完成标准:** 一个真实策略可以从私有研究仓生成版本化 artifact，并被 `market-intel` 消费，研究实现没有进入 public platform。
+**完成标准:** 一个真实策略的正式 publisher 输出布局可以从私有研究仓生成版本化 artifact，并
+被 `market-intel` 消费，研究实现没有进入 public platform。当前已在 staging-only 的合成
+运行产物上满足；生产数据发布和远端迁移仍是后续步骤。
 
 ## Phase 4：固定 market-intel 和 workspace 边界
 
