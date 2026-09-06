@@ -13,7 +13,7 @@ dependencies = ["numpy>=2.5.2", "pandas>=2.0"]
 portfolio-style-factor = "portfolio_backtester.style_factor_cli:main"
 
 [dependency-groups]
-dev = ["pytest>=9.0.3", "ruff>=0.8"]
+dev = ["jsonschema>=4.25", "pytest>=9.0.3", "ruff>=0.8"]
 
 [tool.setuptools]
 package-dir = {"" = "packages/portfolio-backtester/src"}

@@ -30,17 +30,84 @@ staging tree，不是独立仓库，没有 remote、push、发布、gitlink 或 
 ## Public CI 与依赖
 
 `.github/workflows/ci.yml` 使用 `uv sync --locked --all-groups`、Ruff 和 pytest。锁文件只解析
-PyPI/本地 staging package；运行时依赖仅 NumPy/Pandas，dev 依赖仅 pytest/Ruff，不包含 Git URL、
-workspace path source、私有包、provider、凭证或私有服务。
+PyPI/本地 staging package；运行时依赖仅 NumPy/Pandas，dev 依赖为 jsonschema/pytest/Ruff，
+不包含 Git URL、workspace path source、私有 index、私有包、provider、凭证或私有服务。
+Fix round 1 逐个解析 `uv.lock` 的 package source：除本包只允许 `editable = "."` 外，其余只允许
+`registry = "https://pypi.org/simple"`，并用负例证明 git、workspace/directory、私有 index 和
+unexpected editable source 会失败。
 
 ## 验证
 
-- TDD red：目标 package 缺失时 focused collection 以 `ModuleNotFoundError` 失败。
-- 源轨：`portfolio-backtester/.venv/bin/pytest tests/test_style_factors_backtest.py -q`。
-- 新轨：`uv run pytest tests/test_style_factors_backtest.py tests/test_style_factor_slice.py tests/test_public_distribution.py -q`。
-- 质量：`uv run ruff check .`。
-- CLI：对合成 CSV 生成 v1 JSON，并核对手算 long/short/long-short 与 cumulative return。
-- provenance：源/目标源码与测试分别做 SHA-256 对比；源 submodule 最终保持 clean。
+本报告的正确路径为
+`/home/richard/code/.worktrees/architecture-consolidation/.superpowers/sdd/2026-09-06-architecture-consolidation/task-7-report.md`。
+
+Fix round 1 TDD red（新增 validator 依赖前）：
+
+```text
+$ uv run pytest tests/test_public_distribution.py -q
+E   ModuleNotFoundError: No module named 'jsonschema'
+1 error in 0.08s
+exit 2
+```
+
+源轨 focused tests：
+
+```text
+$ .venv/bin/pytest tests/test_style_factors_backtest.py -q
+...............                                                          [100%]
+15 passed in 1.61s
+exit 0
+```
+
+新轨 focused tests：
+
+```text
+$ uv run pytest tests/test_style_factors_backtest.py tests/test_style_factor_slice.py tests/test_public_distribution.py -q
+............................                                             [100%]
+28 passed in 2.69s
+exit 0
+```
+
+依赖与 schema focused tests：
+
+```text
+$ uv run pytest tests/test_public_distribution.py -q
+..........                                                               [100%]
+10 passed in 1.35s
+exit 0
+```
+
+Ruff：
+
+```text
+$ uv run ruff check .
+All checks passed!
+exit 0
+```
+
+CLI 与真实 artifact Draft 2020-12 校验：
+
+```text
+$ uv run portfolio-style-factor --input examples/synthetic-style-factor.csv --output "$artifact_file" --signal size --quantiles 2
+[backtest] size ...
+$ uv run python - "$artifact_file"  # Draft202012Validator(schema).validate(artifact)
+Draft 2020-12 validation passed; observations=1; cumulative_return=0.02
+exit 0
+```
+
+`test_schema_rejects_additional_properties_and_type_drift` 对顶层额外字段、顶层错误类型和嵌套收益
+错误类型分别断言 `ValidationError`。`test_lock_source_policy_rejects_nonpublic_or_unexpected_sources`
+覆盖 git、workspace/directory、private index 和 unexpected editable source。provenance 仍通过源/目标
+SHA-256 对比；源 submodule 最终保持 clean。
+
+diff checks：
+
+```text
+$ git diff --check
+exit 0 (no output)
+$ git diff --cached --check
+exit 0 (no output)
+```
 
 按用户要求没有运行 workspace doctor、contract smoke、workspace tests 或其他 broad checks，且没有
 触碰任何 remote。
