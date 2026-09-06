@@ -23,11 +23,11 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "fb5612ca5537bf842c45c32c24a2c4a54b987e7a",
+      "commit": "507628e853144ae7810e6b5e18e224e89e2036d2",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success at fb5612c",
-      "scope": "public portfolio/backtesting vertical slice and generic publication primitives",
+      "ci": "public-ci: success at 34020081799",
+      "scope": "portfolio-backtester parity-complete baseline plus generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
@@ -48,7 +48,7 @@
     }
   },
   "compatibility_gates": [
-    "quant-platform scoped tests and Ruff pass; public CI green at b67618c",
+    "quant-platform full transferred portfolio suite: 586 tests, Ruff and ty pass; public CI green at 34020081799",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",

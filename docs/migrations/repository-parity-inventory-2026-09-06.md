@@ -1,6 +1,6 @@
 # Repository parity inventory
 
-> status: maintained audit; DailyWatch20 slice locally parity-complete
+> status: maintained audit; portfolio parity complete, remaining owners pending
 > verified: 2026-09-06
 > authority: legacy submodules remain authoritative until each row reaches parity
 
@@ -13,7 +13,7 @@ legacy repository can be retired.
 | `market-data-platform` | `quant-platform/data` + private providers | not migrated | legacy only | legacy only | not started | split reusable data mechanisms from providers, credentials, datasets, and runtime configuration |
 | `deep-learning-tick-data-prediction` | `quant-platform/microstructure` + `quant-research/microstructure` | not migrated | legacy only | legacy only | not started | separate generic event/model abstractions from proprietary labels, experiments, configs, and results |
 | `alpha-research` | `quant-platform/alpha` + private feature selections | not migrated | legacy only | legacy only | not started | classify reusable research machinery versus edge-bearing features, labels, and model choices |
-| `portfolio-backtester` | `quant-platform/portfolio` | partial | public staging green (`31 passed`) | public slice documented | validated vertical slice | transfer remaining portfolio modules, APIs, docs, and release compatibility |
+| `portfolio-backtester` | `quant-platform/portfolio` | complete for current legacy baseline | public CI green at `507628e` (`586 passed`) | full transferred docs/config/scripts | parity-complete public portfolio package | retain `91a4fa4` as rollback authority; do not retire legacy source yet |
 | `strategy-research` | `quant-research/registry` and `research` | DailyWatch20 parity complete locally | local full slice tests green (`122 passed`); remote CI dependency access pending | DailyWatch20 slice documented | DailyWatch20 slice migrated | transfer all remaining strategy identities, evidence, experiments, and lifecycle records |
 | `strategy-app` | `quant-research/strategies` | DailyWatch20 parity complete locally | local full slice tests green (`122 passed`); remote CI dependency access pending | DailyWatch20 slice documented | DailyWatch20 slice migrated | transfer remaining strategy logic, specs, tests, and runtime dependencies |
 | `strategy-pipeline` | `quant-platform/orchestration` + private adapters | partial | legacy and staged checks exist | publication boundary documented | generic handoff slice validated | transfer the full control plane, run manifests, publication, and compatibility behavior |
@@ -33,7 +33,7 @@ portion migrated; `pending` means no target parity has been established.
 | `market-data-platform` | 290 `src` files | 110 | 50 | `pyproject.toml`, `uv.lock`, provider/data config | 1 workflow | NumPy, PyYAML, research quality; private data/provider runtime | `quant-platform/data` pending; keep commit `0f1c4ce` |
 | `deep-learning-tick-data-prediction` | 99 | 88 | 59 | `pyproject.toml`, `uv.lock`, model/config corpus | 2 workflows | LightGBM, Torch, Polars, PyArrow, scikit-learn | microstructure split pending; keep commit `2dd4701` |
 | `alpha-research` | 155 | 84 | 33 | `pyproject.toml`, `uv.lock`, research-contract source pin | 3 workflows | NumPy, Pandas, XGBoost, research contracts | alpha split pending; keep commit `631ee15` |
-| `portfolio-backtester` | 163 | 97 | 40 | `pyproject.toml`, `uv.lock`, public package metadata | 2 workflows | NumPy, Pandas, PyArrow, XGBoost, research contracts | public style-factor slice; keep commit `91a4fa4` |
+| `portfolio-backtester` | 163 | 97 | 40 | `pyproject.toml`, `uv.lock`, public package metadata | public workflow green at `507628e` | NumPy, Pandas, PyArrow, SciPy, scikit-learn, XGBoost, research contracts, pinned public quality tooling | `quant-platform` commit `507628e`; keep legacy commit `91a4fa4` |
 | `strategy-research` | 65 `src` files plus research records | 94 | 37 | `pyproject.toml`, `uv.lock`, catalog/evidence/config records | 2 workflows | alpha, market data, portfolio, strategy app, contracts | DailyWatch20 local/remote parity; private rollback commit `087b5df` |
 | `strategy-app` | 186 `src` files | 78 | 50 | `pyproject.toml`, `uv.lock`, campaign specs/runtime config | 1 workflow | alpha, market data, portfolio, pipeline, scientific stack | DailyWatch20 local/remote parity; private rollback commit `f6f58bf` |
 | `strategy-pipeline` | 26 | 25 | 24 | `pyproject.toml`, `uv.lock`, run/publication configs | 2 workflows | alpha, market data, portfolio, NumPy, Pandas, YAML | generic publication slice only; keep commit `87175c6` |
@@ -46,9 +46,9 @@ portion migrated; `pending` means no target parity has been established.
 - The private DailyWatch20 slice is locally reproducible against the pinned
   public platform and private data dependency, but its GitHub Actions job needs
   approved read access to `market-data-platform`.
-- The public platform slice is intentionally not a complete replacement for
-  the eight legacy owners; its current release claim is limited to the staged
-  portfolio/publication capability.
+- The public platform is still not a complete replacement for the eight legacy
+  owners, but the portfolio-backtester baseline itself is now transferred with
+  source, tests, docs, scripts, dependency lock, and CI evidence.
 - The independent `market-intel` CI proves consumer packaging and boundary
   behavior, not that production data has been switched to the new producer.
 - Every pending row retains a concrete legacy commit so rollback does not rely
@@ -58,8 +58,8 @@ portion migrated; `pending` means no target parity has been established.
 
 The new repositories are published, but they are not yet full replacements:
 
-- `quant-platform` still needs an explicit licensing decision before being
-  described as an open-source release.
+- `quant-platform` has Apache-2.0 licensing for the public framework contents;
+  proprietary research remains outside this repository.
 - `quant-research` has no complete strategy-family parity audit yet.
 - `market-intel`'s boundary commit is pushed and remotely green, but production
   still consumes the legacy producer path.
