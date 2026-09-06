@@ -8,7 +8,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
-from jsonschema import Draft202012Validator
+from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import ValidationError
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,7 +68,7 @@ def test_cli_artifact_validates_against_draft_2020_12_schema(tmp_path: Path) -> 
             encoding="utf-8"
         )
     )
-    validator = Draft202012Validator(schema)
+    validator = Draft202012Validator(schema, format_checker=FormatChecker())
 
     validator.validate(_cli_artifact(tmp_path))
 
@@ -79,6 +79,7 @@ def test_cli_artifact_validates_against_draft_2020_12_schema(tmp_path: Path) -> 
         lambda artifact: artifact.update({"unexpected": True}),
         lambda artifact: artifact.update({"observations": "1"}),
         lambda artifact: artifact["returns"][0].update({"long_return": "0.01"}),
+        lambda artifact: artifact["returns"][0].update({"period_end": "not-a-date"}),
     ],
 )
 def test_schema_rejects_additional_properties_and_type_drift(
@@ -94,7 +95,7 @@ def test_schema_rejects_additional_properties_and_type_drift(
     mutation(artifact)
 
     with pytest.raises(ValidationError):
-        Draft202012Validator(schema).validate(artifact)
+        Draft202012Validator(schema, format_checker=FormatChecker()).validate(artifact)
 
 
 def test_lock_allows_only_pypi_and_the_project_editable_source() -> None:

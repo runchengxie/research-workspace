@@ -109,6 +109,57 @@ $ git diff --cached --check
 exit 0 (no output)
 ```
 
+### Fix round 2：日期 format 校验
+
+Draft 2020-12 validator 现在显式传入 `FormatChecker()`。真实 CLI artifact 继续通过；回归负例把
+`returns[0].period_end` 改为 `not-a-date` 并要求 `ValidationError`，防止 date format 退化为仅注解。
+
+TDD red（启用 FormatChecker 前）：
+
+```text
+$ uv run pytest tests/test_public_distribution.py::test_schema_rejects_additional_properties_and_type_drift -q
+...F                                                                     [100%]
+E       Failed: DID NOT RAISE ValidationError
+1 failed, 3 passed in 1.40s
+exit 1
+```
+
+prototype focused tests：
+
+```text
+$ uv run pytest tests/test_style_factors_backtest.py tests/test_style_factor_slice.py tests/test_public_distribution.py -q
+.............................                                            [100%]
+29 passed in 2.97s
+exit 0
+```
+
+Ruff：
+
+```text
+$ uv run ruff check .
+All checks passed!
+exit 0
+```
+
+CLI 与 FormatChecker validation：
+
+```text
+$ uv run portfolio-style-factor --input examples/synthetic-style-factor.csv --output "$artifact_file" --signal size --quantiles 2
+[backtest] size ...
+$ uv run python - "$artifact_file"  # Draft202012Validator(schema, format_checker=FormatChecker()).validate(artifact)
+Draft 2020-12 + FormatChecker validation passed; observations=1; cumulative_return=0.02
+exit 0
+```
+
+Fix round 2 diff checks：
+
+```text
+$ git diff --check
+exit 0 (no output)
+$ git diff --cached --check
+exit 0 (no output)
+```
+
 按用户要求没有运行 workspace doctor、contract smoke、workspace tests 或其他 broad checks，且没有
 触碰任何 remote。
 
