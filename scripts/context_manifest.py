@@ -22,6 +22,7 @@ class ContextManifest:
     """The bounded repositories and contracts needed for one work area."""
 
     area: str
+    target_repository: str
     repositories: tuple[str, ...]
     direct_consumers: tuple[str, ...]
     default_context: tuple[str, ...]
@@ -33,6 +34,7 @@ _COMMON_CONTEXT = ("AGENTS.md", "docs/governance/agent-context-boundaries.md")
 _MANIFESTS = {
     "data": ContextManifest(
         area="data",
+        target_repository="quant-platform/data",
         repositories=("market-data-platform",),
         direct_consumers=(
             "alpha-research",
@@ -57,6 +59,7 @@ _MANIFESTS = {
     ),
     "microstructure": ContextManifest(
         area="microstructure",
+        target_repository="quant-platform/microstructure",
         repositories=("deep-learning-tick-data-prediction",),
         direct_consumers=("alpha-research",),
         default_context=(*_COMMON_CONTEXT, "deep-learning-tick-data-prediction/AGENTS.md"),
@@ -74,6 +77,7 @@ _MANIFESTS = {
     ),
     "alpha": ContextManifest(
         area="alpha",
+        target_repository="quant-platform/alpha",
         repositories=("alpha-research",),
         direct_consumers=(
             "portfolio-backtester",
@@ -97,6 +101,7 @@ _MANIFESTS = {
     ),
     "portfolio": ContextManifest(
         area="portfolio",
+        target_repository="quant-platform/portfolio",
         repositories=("portfolio-backtester",),
         direct_consumers=("strategy-pipeline",),
         default_context=(*_COMMON_CONTEXT, "portfolio-backtester/AGENTS.md"),
@@ -117,6 +122,7 @@ _MANIFESTS = {
     ),
     "strategy": ContextManifest(
         area="strategy",
+        target_repository="quant-research",
         repositories=("strategy-research", "strategy-app"),
         direct_consumers=("strategy-pipeline",),
         default_context=(
@@ -135,6 +141,7 @@ _MANIFESTS = {
     ),
     "orchestration": ContextManifest(
         area="orchestration",
+        target_repository="quant-platform/orchestration",
         repositories=("strategy-pipeline",),
         direct_consumers=("strategy-research", "quant-execution-engine", "market-intel"),
         default_context=(*_COMMON_CONTEXT, "strategy-pipeline/AGENTS.md"),
@@ -161,6 +168,7 @@ _MANIFESTS = {
     ),
     "execution": ContextManifest(
         area="execution",
+        target_repository="quant-platform/execution",
         repositories=("quant-execution-engine",),
         direct_consumers=(),
         default_context=(*_COMMON_CONTEXT, "quant-execution-engine/AGENTS.md"),
@@ -177,6 +185,7 @@ _MANIFESTS = {
     ),
     "market-intel": ContextManifest(
         area="market-intel",
+        target_repository="market-intel",
         repositories=("market-intel",),
         direct_consumers=(),
         default_context=(*_COMMON_CONTEXT, "external checkout: market-intel/AGENTS.md"),
@@ -211,7 +220,9 @@ def build_manifest(area: str) -> ContextManifest:
 def render_manifest(manifest: ContextManifest) -> str:
     """Render the manifest as agent-readable Markdown."""
 
-    lines = [f"# Task context: {manifest.area}", "", "## Default context"]
+    lines = [f"# Task context: {manifest.area}", "", "## Target repository"]
+    lines.append(f"- `{manifest.target_repository}`")
+    lines.extend(("", "## Default context"))
     lines.extend(f"- `{path}`" for path in manifest.default_context)
     lines.extend(("", "## Repositories"))
     lines.extend(f"- `{repository}`" for repository in manifest.repositories)
