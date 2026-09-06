@@ -1,5 +1,25 @@
 # 架构边界
 
+> 当前状态：旧工作区处于 sunset 过渡期。下面的旧链路用于理解历史组成；新代码以 `quant-research` 和 `quant-platform` 为准。
+
+目标架构：
+
+```text
+market-data-platform / quant-platform
+              |
+              v
+       quant-research
+              |
+              | versioned research artifacts
+              v
+          market-intel
+              |
+              v
+       quant-platform / execution adapters
+```
+
+迁移矩阵和 agent 规则见 [`docs/migration/quant-repo-migration.md`](docs/migration/quant-repo-migration.md)。
+
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
 ```text
