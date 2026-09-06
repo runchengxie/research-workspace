@@ -1,0 +1,1607 @@
+{
+  "schema_version": 1,
+  "root": "/home/richard/code/.worktrees/docs-chinese-localization",
+  "document_count": 200,
+  "documents": [
+    {
+      "path": ".github/pull_request_template.md",
+      "category": "active",
+      "latin_characters": 78,
+      "han_characters": 236,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": ".superpowers/sdd/2026-09-06-architecture-consolidation/task-7-report.md",
+      "category": "active",
+      "latin_characters": 2825,
+      "han_characters": 556,
+      "code_lines": 49,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "AGENTS.md",
+      "category": "entry",
+      "latin_characters": 2902,
+      "han_characters": 2343,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "category": "active",
+      "latin_characters": 2067,
+      "han_characters": 1335,
+      "code_lines": 41,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "category": "active",
+      "latin_characters": 1567,
+      "han_characters": 1080,
+      "code_lines": 19,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "README.md",
+      "category": "entry",
+      "latin_characters": 1930,
+      "han_characters": 1214,
+      "code_lines": 21,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/README.md",
+      "category": "index",
+      "latin_characters": 1146,
+      "han_characters": 426,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0001-framework-integration-boundaries.md",
+      "category": "active",
+      "latin_characters": 1233,
+      "han_characters": 1271,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0002-owner-native-python-namespaces.md",
+      "category": "active",
+      "latin_characters": 655,
+      "han_characters": 307,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0003-research-application-ownership.md",
+      "category": "active",
+      "latin_characters": 629,
+      "han_characters": 575,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0004-standalone-research-apps-repository.md",
+      "category": "active",
+      "latin_characters": 787,
+      "han_characters": 423,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0005-qlib-alpha-research-backends.md",
+      "category": "active",
+      "latin_characters": 797,
+      "han_characters": 555,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md",
+      "category": "active",
+      "latin_characters": 422,
+      "han_characters": 554,
+      "code_lines": 7,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/0007-style-replica-ownership.md",
+      "category": "active",
+      "latin_characters": 797,
+      "han_characters": 837,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "category": "index",
+      "latin_characters": 368,
+      "han_characters": 137,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/afml-methodology-rollout.md",
+      "category": "active",
+      "latin_characters": 158,
+      "han_characters": 16,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/architecture/README.md",
+      "category": "index",
+      "latin_characters": 205,
+      "han_characters": 65,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/architecture-as-code.md",
+      "category": "active",
+      "latin_characters": 1320,
+      "han_characters": 448,
+      "code_lines": 5,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/architecture-split-closure-checklist.md",
+      "category": "active",
+      "latin_characters": 193,
+      "han_characters": 125,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/README.md",
+      "category": "index",
+      "latin_characters": 664,
+      "han_characters": 224,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/a-share-production-readiness.md",
+      "category": "archive",
+      "latin_characters": 645,
+      "han_characters": 187,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/active-metrics-migration.md",
+      "category": "archive",
+      "latin_characters": 257,
+      "han_characters": 273,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/code-health-audit.md",
+      "category": "archive",
+      "latin_characters": 2177,
+      "han_characters": 1832,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/code-size-review.md",
+      "category": "archive",
+      "latin_characters": 894,
+      "han_characters": 660,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/framework-adapter-release.md",
+      "category": "archive",
+      "latin_characters": 375,
+      "han_characters": 454,
+      "code_lines": 1,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/handoffs/handoff-20260721.md",
+      "category": "archive",
+      "latin_characters": 1098,
+      "han_characters": 623,
+      "code_lines": 6,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk/README.md",
+      "category": "index",
+      "latin_characters": 1417,
+      "han_characters": 763,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk/records/hk-cold-freeze-20260526.md",
+      "category": "archive",
+      "latin_characters": 557,
+      "han_characters": 294,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk/records/hk-cold-storage-20260601.md",
+      "category": "archive",
+      "latin_characters": 1612,
+      "han_characters": 441,
+      "code_lines": 38,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk/records/hk-research-cold-storage-20260601.md",
+      "category": "archive",
+      "latin_characters": 1437,
+      "han_characters": 405,
+      "code_lines": 25,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk/records/hk-research-freeze-20260601.md",
+      "category": "archive",
+      "latin_characters": 793,
+      "han_characters": 324,
+      "code_lines": 16,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk-legacy-surface-inventory.md",
+      "category": "archive",
+      "latin_characters": 786,
+      "han_characters": 304,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/hk-private-archive.md",
+      "category": "archive",
+      "latin_characters": 692,
+      "han_characters": 312,
+      "code_lines": 8,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/migration-handoff-20260605.md",
+      "category": "archive",
+      "latin_characters": 2212,
+      "han_characters": 699,
+      "code_lines": 40,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/archive/research/style_replica_legacy_workspace_smoke.md",
+      "category": "archive",
+      "latin_characters": 714,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/archive/submodule-refactor-plan.md",
+      "category": "archive",
+      "latin_characters": 1026,
+      "han_characters": 592,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/benchmark-matrix.md",
+      "category": "active",
+      "latin_characters": 140,
+      "han_characters": 17,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/bootstrap.md",
+      "category": "active",
+      "latin_characters": 1596,
+      "han_characters": 527,
+      "code_lines": 50,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/branch-worktree-retirement-audit.md",
+      "category": "active",
+      "latin_characters": 1998,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/contracts/README.md",
+      "category": "index",
+      "latin_characters": 377,
+      "han_characters": 132,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/contracts.d/afml-methodology.md",
+      "category": "active",
+      "latin_characters": 1603,
+      "han_characters": 321,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/contracts.d/research-evidence.md",
+      "category": "active",
+      "latin_characters": 811,
+      "han_characters": 312,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/contracts.md",
+      "category": "active",
+      "latin_characters": 6442,
+      "han_characters": 2912,
+      "code_lines": 22,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/data-lifecycle-terminology.md",
+      "category": "active",
+      "latin_characters": 411,
+      "han_characters": 867,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/data-path-breaking-change-register.md",
+      "category": "active",
+      "latin_characters": 1440,
+      "han_characters": 809,
+      "code_lines": 6,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/data-path-migration-map.md",
+      "category": "active",
+      "latin_characters": 1942,
+      "han_characters": 1243,
+      "code_lines": 3,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/data-quality-contracts.md",
+      "category": "active",
+      "latin_characters": 1062,
+      "han_characters": 520,
+      "code_lines": 13,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/data-transition-playbook.md",
+      "category": "active",
+      "latin_characters": 4354,
+      "han_characters": 1700,
+      "code_lines": 61,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/deep-learning-integration.md",
+      "category": "active",
+      "latin_characters": 429,
+      "han_characters": 386,
+      "code_lines": 10,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/deprecations.md",
+      "category": "active",
+      "latin_characters": 942,
+      "han_characters": 581,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/documentation-audit-20260902.md",
+      "category": "active",
+      "latin_characters": 408,
+      "han_characters": 523,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/documentation-consolidation.md",
+      "category": "active",
+      "latin_characters": 2410,
+      "han_characters": 1466,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/documentation-lifecycle.md",
+      "category": "active",
+      "latin_characters": 2351,
+      "han_characters": 672,
+      "code_lines": 6,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/documentation-style.md",
+      "category": "active",
+      "latin_characters": 392,
+      "han_characters": 850,
+      "code_lines": 6,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/980092-research-status-20260904.md",
+      "category": "evidence",
+      "latin_characters": 1041,
+      "han_characters": 2076,
+      "code_lines": 6,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/architecture-migration-baseline-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 9602,
+      "han_characters": 1393,
+      "code_lines": 36,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/architecture-migration-closure.md",
+      "category": "evidence",
+      "latin_characters": 3355,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/evidence/compatibility/2026-09-02-strategy-pipeline-alpha-facade-audit.md",
+      "category": "evidence",
+      "latin_characters": 3218,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/evidence/daily-watch20-parity-audit-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1572,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/evidence/formal-daily-watch20-market-intel-handoff-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1229,
+      "han_characters": 0,
+      "code_lines": 3,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/formal-daily-watch20-production-publication-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1193,
+      "han_characters": 0,
+      "code_lines": 2,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/market-intel-boundary-test-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 832,
+      "han_characters": 0,
+      "code_lines": 2,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/private-publication-adapter-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 982,
+      "han_characters": 0,
+      "code_lines": 2,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/private-research-artifact-handoff-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1432,
+      "han_characters": 0,
+      "code_lines": 11,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/private-research-staging-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1592,
+      "han_characters": 0,
+      "code_lines": 1,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/production-cutover-20260905.md",
+      "category": "evidence",
+      "latin_characters": 990,
+      "han_characters": 353,
+      "code_lines": 4,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/production-cutover-20260906.md",
+      "category": "evidence",
+      "latin_characters": 1219,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/evidence/public-platform-staging-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1522,
+      "han_characters": 0,
+      "code_lines": 3,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/evidence/publication-contract-field-crosswalk-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1636,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/evidence/storage-consistency-20260905.md",
+      "category": "evidence",
+      "latin_characters": 606,
+      "han_characters": 716,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/strategy-repository-change-coupling.md",
+      "category": "evidence",
+      "latin_characters": 58580,
+      "han_characters": 256,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/evidence/thin-integration-layer-check-2026-09-06.md",
+      "category": "evidence",
+      "latin_characters": 1124,
+      "han_characters": 0,
+      "code_lines": 8,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/execution-semantic-parity.md",
+      "category": "active",
+      "latin_characters": 642,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/framework-adoption-assessment.md",
+      "category": "active",
+      "latin_characters": 1024,
+      "han_characters": 1400,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/framework-support-matrix.md",
+      "category": "active",
+      "latin_characters": 2020,
+      "han_characters": 1614,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/glossary.md",
+      "category": "active",
+      "latin_characters": 1006,
+      "han_characters": 946,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/governance/README.md",
+      "category": "index",
+      "latin_characters": 245,
+      "han_characters": 64,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/governance/agent-context-boundaries.md",
+      "category": "active",
+      "latin_characters": 2215,
+      "han_characters": 1163,
+      "code_lines": 1,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/governance/public-private-boundary-matrix.md",
+      "category": "active",
+      "latin_characters": 1983,
+      "han_characters": 1234,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/governance/repository-naming-map.md",
+      "category": "active",
+      "latin_characters": 2432,
+      "han_characters": 630,
+      "code_lines": 1,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/governance/target-contract-ownership-map.md",
+      "category": "active",
+      "latin_characters": 2042,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/governance-index.md",
+      "category": "active",
+      "latin_characters": 616,
+      "han_characters": 726,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/hash-helper-ownership-audit.md",
+      "category": "active",
+      "latin_characters": 565,
+      "han_characters": 296,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/maintainability-governance.md",
+      "category": "active",
+      "latin_characters": 778,
+      "han_characters": 351,
+      "code_lines": 1,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/market-intel-owner-boundary.md",
+      "category": "active",
+      "latin_characters": 739,
+      "han_characters": 411,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/metric-ownership.md",
+      "category": "active",
+      "latin_characters": 575,
+      "han_characters": 313,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migration/quant-repo-migration.md",
+      "category": "active",
+      "latin_characters": 662,
+      "han_characters": 477,
+      "code_lines": 3,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-03-data-research-migration-evidence.md",
+      "category": "active",
+      "latin_characters": 2230,
+      "han_characters": 677,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-03-legacy-rqdata-audit.md",
+      "category": "active",
+      "latin_characters": 750,
+      "han_characters": 377,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-cli-archive-audit.md",
+      "category": "active",
+      "latin_characters": 350,
+      "han_characters": 152,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-release-tools-archive-audit.md",
+      "category": "active",
+      "latin_characters": 445,
+      "han_characters": 150,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-research-commands-archive-audit.md",
+      "category": "active",
+      "latin_characters": 528,
+      "han_characters": 152,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-root-modules-archive-audit.md",
+      "category": "active",
+      "latin_characters": 629,
+      "han_characters": 463,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-runtime-archive-audit.md",
+      "category": "active",
+      "latin_characters": 403,
+      "han_characters": 211,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/2026-09-05-internal-typecheck-audit.md",
+      "category": "active",
+      "latin_characters": 329,
+      "han_characters": 326,
+      "code_lines": 2,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/architecture-cutover-runbook.md",
+      "category": "active",
+      "latin_characters": 5088,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/migrations/repository-parity-inventory-2026-09-06.md",
+      "category": "active",
+      "latin_characters": 7607,
+      "han_characters": 0,
+      "code_lines": 5,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/migrations/strategy-pipeline-internal-dependency-map.md",
+      "category": "active",
+      "latin_characters": 2499,
+      "han_characters": 1142,
+      "code_lines": 35,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/strategy-pipeline-internal-migration-manifest.md",
+      "category": "active",
+      "latin_characters": 82831,
+      "han_characters": 184,
+      "code_lines": 1677,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/migrations/strategy-pipeline-internal-retirement-record.md",
+      "category": "active",
+      "latin_characters": 2774,
+      "han_characters": 1100,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/namespace-migration.md",
+      "category": "active",
+      "latin_characters": 419,
+      "han_characters": 230,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/noqa-clearing-plan.md",
+      "category": "active",
+      "latin_characters": 3498,
+      "han_characters": 3043,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/operations/README.md",
+      "category": "index",
+      "latin_characters": 184,
+      "han_characters": 57,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/platform-asset-registry.md",
+      "category": "active",
+      "latin_characters": 1022,
+      "han_characters": 0,
+      "code_lines": 5,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/platform-workflow.md",
+      "category": "active",
+      "latin_characters": 3623,
+      "han_characters": 2148,
+      "code_lines": 23,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/playbooks/a-share-baseline.md",
+      "category": "active",
+      "latin_characters": 1034,
+      "han_characters": 1018,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/production-update.md",
+      "category": "active",
+      "latin_characters": 1718,
+      "han_characters": 651,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/quality-governance.md",
+      "category": "active",
+      "latin_characters": 2310,
+      "han_characters": 1729,
+      "code_lines": 12,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/r3-facade-removal-plan.md",
+      "category": "active",
+      "latin_characters": 2757,
+      "han_characters": 547,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/reference/README.md",
+      "category": "index",
+      "latin_characters": 168,
+      "han_characters": 48,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/reference/outputs/full-reference.md",
+      "category": "active",
+      "latin_characters": 734,
+      "han_characters": 390,
+      "code_lines": 1,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/release-checklist.md",
+      "category": "active",
+      "latin_characters": 1181,
+      "han_characters": 483,
+      "code_lines": 4,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research/README.md",
+      "category": "index",
+      "latin_characters": 269,
+      "han_characters": 86,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research/afml-methodology-rollout.md",
+      "category": "active",
+      "latin_characters": 1395,
+      "han_characters": 433,
+      "code_lines": 22,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research/benchmark-matrix.md",
+      "category": "active",
+      "latin_characters": 791,
+      "han_characters": 517,
+      "code_lines": 18,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research/differential-backtest-2026-08-30.md",
+      "category": "active",
+      "latin_characters": 1111,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/research/research-capabilities.md",
+      "category": "active",
+      "latin_characters": 738,
+      "han_characters": 589,
+      "code_lines": 2,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research/ten_year_d11h5_layered_comparison_20260903.md",
+      "category": "active",
+      "latin_characters": 2373,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/research-capabilities.md",
+      "category": "active",
+      "latin_characters": 150,
+      "han_characters": 16,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research-decision-governance.md",
+      "category": "active",
+      "latin_characters": 2690,
+      "han_characters": 2173,
+      "code_lines": 26,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research-exploration-archive-20260831.md",
+      "category": "active",
+      "latin_characters": 1414,
+      "han_characters": 1168,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research-lifecycle-and-workspace-hygiene.md",
+      "category": "active",
+      "latin_characters": 1719,
+      "han_characters": 1839,
+      "code_lines": 40,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/research-spec.md",
+      "category": "active",
+      "latin_characters": 1352,
+      "han_characters": 887,
+      "code_lines": 9,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "category": "active",
+      "latin_characters": 11886,
+      "han_characters": 5696,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/runbooks/a-share-long-window-evidence.md",
+      "category": "active",
+      "latin_characters": 5564,
+      "han_characters": 1703,
+      "code_lines": 73,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/runbooks/e2-evidence-campaign.md",
+      "category": "active",
+      "latin_characters": 1050,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/runbooks/incumbent-challenger-v2-local-ide.md",
+      "category": "active",
+      "latin_characters": 5740,
+      "han_characters": 1538,
+      "code_lines": 128,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/strategy-boundary-refactor-roadmap.md",
+      "category": "active",
+      "latin_characters": 3274,
+      "han_characters": 2159,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/strategy-catalog.md",
+      "category": "active",
+      "latin_characters": 1033,
+      "han_characters": 847,
+      "code_lines": 4,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/strategy-evidence-gate.md",
+      "category": "active",
+      "latin_characters": 1708,
+      "han_characters": 1112,
+      "code_lines": 25,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/strategy-pipeline-boundary-findings-20260831.md",
+      "category": "active",
+      "latin_characters": 1072,
+      "han_characters": 644,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/strategy-satellites.md",
+      "category": "active",
+      "latin_characters": 788,
+      "han_characters": 474,
+      "code_lines": 11,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/style-factor-technical-reference.md",
+      "category": "active",
+      "latin_characters": 2650,
+      "han_characters": 1621,
+      "code_lines": 26,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/style-factors.md",
+      "category": "active",
+      "latin_characters": 695,
+      "han_characters": 2509,
+      "code_lines": 4,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/submodule-boundary-refactor-checklist.md",
+      "category": "active",
+      "latin_characters": 8222,
+      "han_characters": 2699,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-26-docs-tests-cleanup.md",
+      "category": "plan",
+      "latin_characters": 6898,
+      "han_characters": 156,
+      "code_lines": 31,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-26-robust-decision-research.md",
+      "category": "plan",
+      "latin_characters": 3227,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-26-small-cap-low-turnover-robustness.md",
+      "category": "plan",
+      "latin_characters": 3643,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-27-execution-evidence-followup.md",
+      "category": "plan",
+      "latin_characters": 3624,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-27-factor-execution-adapter.md",
+      "category": "plan",
+      "latin_characters": 5306,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-27-outcome-first-decision-research.md",
+      "category": "plan",
+      "latin_characters": 5852,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-context-data-core.md",
+      "category": "plan",
+      "latin_characters": 11376,
+      "han_characters": 0,
+      "code_lines": 60,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-context-official-energy.md",
+      "category": "plan",
+      "latin_characters": 7106,
+      "han_characters": 0,
+      "code_lines": 19,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-contextual-factors.md",
+      "category": "plan",
+      "latin_characters": 9510,
+      "han_characters": 0,
+      "code_lines": 19,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-deep-learning-integration.md",
+      "category": "plan",
+      "latin_characters": 1277,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-e2-closure.md",
+      "category": "plan",
+      "latin_characters": 3372,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-execution-registry-hash-e2-followups.md",
+      "category": "plan",
+      "latin_characters": 4956,
+      "han_characters": 0,
+      "code_lines": 3,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-macro-context-shadow.md",
+      "category": "plan",
+      "latin_characters": 10263,
+      "han_characters": 0,
+      "code_lines": 16,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-research-backtest-execution-boundaries.md",
+      "category": "plan",
+      "latin_characters": 955,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-research-followups.md",
+      "category": "plan",
+      "latin_characters": 2086,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-28-selective-execution-boundary-migration.md",
+      "category": "plan",
+      "latin_characters": 2501,
+      "han_characters": 4,
+      "code_lines": 0,
+      "language": "mixed"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-29-shibor-regime-exploration.md",
+      "category": "plan",
+      "latin_characters": 3231,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-29-strategy-research-extraction.md",
+      "category": "plan",
+      "latin_characters": 10421,
+      "han_characters": 0,
+      "code_lines": 5,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-30-execution-ledger-owner-cleanup.md",
+      "category": "plan",
+      "latin_characters": 3256,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-30-freshness-owner-cleanup.md",
+      "category": "plan",
+      "latin_characters": 8414,
+      "han_characters": 0,
+      "code_lines": 115,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-30-fundamental-family-shadow.md",
+      "category": "plan",
+      "latin_characters": 3156,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-30-portfolio-research-boundary-cleanup.md",
+      "category": "plan",
+      "latin_characters": 6447,
+      "han_characters": 0,
+      "code_lines": 20,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-boundary-refactor.md",
+      "category": "plan",
+      "latin_characters": 6976,
+      "han_characters": 263,
+      "code_lines": 2,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-branch-worktree-retirement.md",
+      "category": "plan",
+      "latin_characters": 2153,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-complete-data-layout-migration.md",
+      "category": "plan",
+      "latin_characters": 2520,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-implement-data-path-audit.md",
+      "category": "plan",
+      "latin_characters": 1197,
+      "han_characters": 207,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-map-legacy-data-paths.md",
+      "category": "plan",
+      "latin_characters": 1066,
+      "han_characters": 211,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-migrate-stable-strategy-data-layout.md",
+      "category": "plan",
+      "latin_characters": 2295,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-production-release-management.md",
+      "category": "plan",
+      "latin_characters": 2489,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-research-capability-registry.md",
+      "category": "plan",
+      "latin_characters": 10976,
+      "han_characters": 14,
+      "code_lines": 103,
+      "language": "mixed"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-unify-data-lifecycle-terminology.md",
+      "category": "plan",
+      "latin_characters": 1535,
+      "han_characters": 201,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-08-31-worktree-first-production-layout.md",
+      "category": "plan",
+      "latin_characters": 3087,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-01-fundamental-state-forecasting.md",
+      "category": "plan",
+      "latin_characters": 6211,
+      "han_characters": 0,
+      "code_lines": 38,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-01-workspace-architecture-as-code.md",
+      "category": "plan",
+      "latin_characters": 5732,
+      "han_characters": 0,
+      "code_lines": 15,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-cross-sectional-ml-research-governance.md",
+      "category": "plan",
+      "latin_characters": 4407,
+      "han_characters": 0,
+      "code_lines": 8,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-long-term-fundamental-v2.md",
+      "category": "plan",
+      "latin_characters": 4218,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-platform-asset-registry.md",
+      "category": "plan",
+      "latin_characters": 780,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-platform-publication-contract.md",
+      "category": "plan",
+      "latin_characters": 3792,
+      "han_characters": 0,
+      "code_lines": 13,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-public-research-boundary-and-ci.md",
+      "category": "plan",
+      "latin_characters": 4293,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-02-workspace-quality-ci-alignment.md",
+      "category": "plan",
+      "latin_characters": 2236,
+      "han_characters": 833,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-03-strategy-pipeline-internal-retirement.md",
+      "category": "plan",
+      "latin_characters": 6798,
+      "han_characters": 2542,
+      "code_lines": 2,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-03-ten-year-d11h5-layered-comparison.md",
+      "category": "plan",
+      "latin_characters": 3850,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-05-merged-branch-cleanup.md",
+      "category": "plan",
+      "latin_characters": 2474,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-05-strategy-pipeline-internal-closeout.md",
+      "category": "plan",
+      "latin_characters": 2959,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-06-architecture-consolidation.md",
+      "category": "plan",
+      "latin_characters": 12541,
+      "han_characters": 3035,
+      "code_lines": 123,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-06-complete-architecture-migration.md",
+      "category": "plan",
+      "latin_characters": 16637,
+      "han_characters": 0,
+      "code_lines": 22,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-06-dependency-and-workspace-gates.md",
+      "category": "plan",
+      "latin_characters": 3524,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/plans/2026-09-06-workspace-documentation-reorganization.md",
+      "category": "plan",
+      "latin_characters": 14728,
+      "han_characters": 0,
+      "code_lines": 10,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-26-robust-decision-research-design.md",
+      "category": "spec",
+      "latin_characters": 5345,
+      "han_characters": 0,
+      "code_lines": 18,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-27-outcome-first-decision-research-design.md",
+      "category": "spec",
+      "latin_characters": 2136,
+      "han_characters": 910,
+      "code_lines": 8,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-28-contextual-alpha-platform-design.md",
+      "category": "spec",
+      "latin_characters": 7452,
+      "han_characters": 3548,
+      "code_lines": 159,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-30-cross-repo-boundary-cleanup-design.md",
+      "category": "spec",
+      "latin_characters": 15037,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-30-fundamental-family-shadow-design.md",
+      "category": "spec",
+      "latin_characters": 8080,
+      "han_characters": 2804,
+      "code_lines": 38,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-08-31-research-capability-trial-ledger-design.md",
+      "category": "spec",
+      "latin_characters": 5720,
+      "han_characters": 2494,
+      "code_lines": 113,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-01-fundamental-state-forecasting-design.md",
+      "category": "spec",
+      "latin_characters": 1516,
+      "han_characters": 974,
+      "code_lines": 15,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-01-workspace-architecture-as-code-design.md",
+      "category": "spec",
+      "latin_characters": 4367,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-02-cross-sectional-ml-research-governance-design.md",
+      "category": "spec",
+      "latin_characters": 1341,
+      "han_characters": 1298,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-02-platform-asset-registry-design.md",
+      "category": "spec",
+      "latin_characters": 527,
+      "han_characters": 0,
+      "code_lines": 0,
+      "language": "english-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-02-platform-publication-and-research-platform-design.md",
+      "category": "spec",
+      "latin_characters": 6955,
+      "han_characters": 0,
+      "code_lines": 35,
+      "language": "code-heavy"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-03-strategy-pipeline-internal-retirement-design.md",
+      "category": "spec",
+      "latin_characters": 2040,
+      "han_characters": 1774,
+      "code_lines": 16,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/superpowers/specs/2026-09-06-workspace-documentation-information-architecture-design.md",
+      "category": "spec",
+      "latin_characters": 2100,
+      "han_characters": 2772,
+      "code_lines": 22,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/templates/superseded-document.md",
+      "category": "active",
+      "latin_characters": 114,
+      "han_characters": 37,
+      "code_lines": 0,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/version-matrix.md",
+      "category": "active",
+      "latin_characters": 4671,
+      "han_characters": 1950,
+      "code_lines": 3,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "docs/workspace-maintenance.md",
+      "category": "active",
+      "latin_characters": 1766,
+      "han_characters": 1027,
+      "code_lines": 21,
+      "language": "chinese-primary"
+    },
+    {
+      "path": "src/research_contracts/README.md",
+      "category": "index",
+      "latin_characters": 1995,
+      "han_characters": 526,
+      "code_lines": 46,
+      "language": "chinese-primary"
+    }
+  ]
+}
