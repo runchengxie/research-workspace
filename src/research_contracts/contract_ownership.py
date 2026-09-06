@@ -4,11 +4,20 @@ import json
 from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from .artifact_contracts import ContractValidationResult
 
 CONTRACT_OWNERSHIP_SCHEMA_VERSION = "contract_ownership.v1"
+_STRING_FIELDS = (
+    "name",
+    "schema",
+    "producer",
+    "versioning",
+    "compatibility",
+    "test_command",
+    "rollback",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -24,20 +33,16 @@ class ContractOwnership:
 
     @classmethod
     def from_mapping(cls, payload: Mapping[str, Any]) -> ContractOwnership:
-        consumers = payload.get("consumers")
+        consumers = cast(list[str], payload["consumers"])
         return cls(
-            name=str(payload.get("name", "")).strip(),
-            schema=str(payload.get("schema", "")).strip(),
-            producer=str(payload.get("producer", "")).strip(),
-            consumers=tuple(
-                value.strip() for value in consumers if isinstance(value, str) and value.strip()
-            )
-            if isinstance(consumers, list)
-            else (),
-            versioning=str(payload.get("versioning", "")).strip(),
-            compatibility=str(payload.get("compatibility", "")).strip(),
-            test_command=str(payload.get("test_command", "")).strip(),
-            rollback=str(payload.get("rollback", "")).strip(),
+            name=cast(str, payload["name"]).strip(),
+            schema=cast(str, payload["schema"]).strip(),
+            producer=cast(str, payload["producer"]).strip(),
+            consumers=tuple(value.strip() for value in consumers),
+            versioning=cast(str, payload["versioning"]).strip(),
+            compatibility=cast(str, payload["compatibility"]).strip(),
+            test_command=cast(str, payload["test_command"]).strip(),
+            rollback=cast(str, payload["rollback"]).strip(),
         )
 
 
@@ -48,14 +53,48 @@ def _load_payload(path: Path) -> Mapping[str, Any]:
     return payload
 
 
-def load_contract_ownership(path: Path) -> tuple[ContractOwnership, ...]:
-    payload = _load_payload(path)
+def _record_type_issues(record: object, record_index: int) -> list[str]:
+    prefix = f"contracts[{record_index}]"
+    if not isinstance(record, Mapping):
+        return [f"{prefix}: must be an object"]
+    issues: list[str] = []
+    for field in _STRING_FIELDS:
+        if not isinstance(record.get(field), str):
+            issues.append(f"{prefix}.{field}: must be a string")
+    consumers = record.get("consumers")
+    if not isinstance(consumers, list):
+        issues.append(f"{prefix}.consumers: must be a list")
+        return issues
+    for consumer_index, consumer in enumerate(consumers):
+        if not isinstance(consumer, str):
+            issues.append(f"{prefix}.consumers[{consumer_index}]: must be a string")
+    return issues
+
+
+def _ownership_type_issues(payload: Mapping[str, Any]) -> list[str]:
     records = payload.get("contracts")
     if not isinstance(records, list):
-        return ()
-    return tuple(
-        ContractOwnership.from_mapping(record) for record in records if isinstance(record, Mapping)
-    )
+        return ["contracts: must be a list"]
+    return [
+        issue
+        for record_index, record in enumerate(records)
+        for issue in _record_type_issues(record, record_index)
+    ]
+
+
+def _construct_contract_ownership(
+    payload: Mapping[str, Any],
+) -> tuple[ContractOwnership, ...]:
+    records = cast(list[Mapping[str, Any]], payload["contracts"])
+    return tuple(ContractOwnership.from_mapping(record) for record in records)
+
+
+def load_contract_ownership(path: Path) -> tuple[ContractOwnership, ...]:
+    payload = _load_payload(path)
+    issues = _ownership_type_issues(payload)
+    if issues:
+        raise ValueError("; ".join(issues))
+    return _construct_contract_ownership(payload)
 
 
 def _record_issues(item: ContractOwnership, seen: set[str]) -> list[str]:
@@ -120,13 +159,17 @@ def validate_contract_ownership(
 ) -> ContractValidationResult:
     try:
         payload = _load_payload(registry_path)
-        ownership = load_contract_ownership(registry_path)
     except (FileNotFoundError, json.JSONDecodeError, OSError, ValueError) as exc:
         return ContractValidationResult((str(exc),))
 
     issues: list[str] = []
     if payload.get("schema_version") != CONTRACT_OWNERSHIP_SCHEMA_VERSION:
         issues.append("unexpected contract ownership schema_version")
+    type_issues = _ownership_type_issues(payload)
+    if type_issues:
+        issues.extend(type_issues)
+        return ContractValidationResult(tuple(issues))
+    ownership = _construct_contract_ownership(payload)
     if not ownership:
         issues.append("contracts must be non-empty")
     seen: set[str] = set()

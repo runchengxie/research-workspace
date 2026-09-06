@@ -190,6 +190,7 @@ git commit -m "feat: add task-scoped agent context manifests"
 - Modify: `docs/contracts/README.md`
 - Create: `docs/contracts/contract-ownership.yml`
 - Modify: `docs/artifact-contracts.yml`
+- Modify: `docs/evidence/maintainability/baseline-20260719-ty.json`
 - Modify: `tests/test_artifact_contract_manifest.py`
 - Create: `tests/test_contract_ownership.py`
 - Modify: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
@@ -199,6 +200,9 @@ artifact 明细的权威 registry 和契约测试。新增 ownership registry �
 类型化输入的治理索引，由 `research_contracts` loader/validator 和现有 smoke 入口校验；两个 registry
 重叠的 artifact 必须校验 producer、schema 和 consumers 一致。该扩展只登记 metadata，不修改
 producer、consumer、artifact payload 或私有仓库行为。
+
+Fix round 1 裁定：严格类型校验新增的 validator 和测试属于 Task 4 Python surface，必须同步现有
+权威 maintainability baseline。该同步只更新生成统计，不改变治理阈值或其他仓库内容。
 
 - [ ] **Step 1: 登记至少这些 artifact**
 
@@ -227,6 +231,7 @@ cd /home/richard/code/market-intel && uv run pytest -k contract
 
 ```bash
 git add src/research_contracts docs/contracts docs/artifact-contracts.yml \
+  docs/evidence/maintainability/baseline-20260719-ty.json \
   tests/test_artifact_contract_manifest.py tests/test_contract_ownership.py \
   docs/superpowers/plans/2026-09-06-architecture-consolidation.md
 git commit -m "docs: register cross-repository artifact ownership"

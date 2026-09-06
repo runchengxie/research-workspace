@@ -152,10 +152,7 @@ def _contract_ownership_check(root: Path) -> SmokeResult:
 
 def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     root = root.resolve()
-    results: list[SmokeResult] = [
-        _artifact_contract_manifest_check(root),
-        _contract_ownership_check(root),
-    ]
+    results = [_artifact_contract_manifest_check(root), _contract_ownership_check(root)]
 
     marketdata = _command_for(
         root,
