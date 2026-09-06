@@ -10,7 +10,7 @@ legacy repository can be retired.
 
 | Legacy repository | Target | Code | Tests/CI | Docs/config | Current migration state | Main missing work |
 | --- | --- | --- | --- | --- | --- | --- |
-| `market-data-platform` | `quant-platform/data` + private providers | not migrated | legacy only | legacy only | not started | split reusable data mechanisms from providers, credentials, datasets, and runtime configuration |
+| `market-data-platform` | `quant-platform/data` + private providers | private baseline complete; public contract/core slice transferred | private transfer CI green at `34020694892`; public CI green at `34020595166` | 290 source files, 110 tests/fixtures, 50 docs, 44 scripts transferred privately | private baseline migrated; public-safe core validated | complete the remaining public data quality/interface split and consumer integration; keep providers private |
 | `deep-learning-tick-data-prediction` | `quant-platform/microstructure` + `quant-research/microstructure` | not migrated | legacy only | legacy only | not started | separate generic event/model abstractions from proprietary labels, experiments, configs, and results |
 | `alpha-research` | `quant-platform/alpha` + private feature selections | not migrated | legacy only | legacy only | not started | classify reusable research machinery versus edge-bearing features, labels, and model choices |
 | `portfolio-backtester` | `quant-platform/portfolio` | complete for current legacy baseline | public CI green at `507628e` (`586 passed`) | full transferred docs/config/scripts | parity-complete public portfolio package | retain `91a4fa4` as rollback authority; do not retire legacy source yet |
@@ -30,7 +30,7 @@ portion migrated; `pending` means no target parity has been established.
 
 | Repository | Code baseline | Tests baseline | Docs baseline | Config baseline | CI baseline | Runtime dependencies | Target evidence / rollback |
 | --- | ---: | ---: | ---: | --- | --- | --- | --- |
-| `market-data-platform` | 290 `src` files | 110 | 50 | `pyproject.toml`, `uv.lock`, provider/data config | 1 workflow | NumPy, PyYAML, research quality; private data/provider runtime | `quant-platform/data` pending; keep commit `0f1c4ce` |
+| `market-data-platform` | 290 `src` files | 110 | 50 | `pyproject.toml`, `uv.lock`, provider/data config | private transfer job green at `34020694892`; public core job green at `34020595166` | NumPy, PyYAML, DuckDB, Pandas, Polars, PyArrow, research quality; private data/provider runtime | private `quant-research` commit `5946756`; public `quant-platform` commit `52fafcc`; keep legacy `0f1c4ce` |
 | `deep-learning-tick-data-prediction` | 99 | 88 | 59 | `pyproject.toml`, `uv.lock`, model/config corpus | 2 workflows | LightGBM, Torch, Polars, PyArrow, scikit-learn | microstructure split pending; keep commit `2dd4701` |
 | `alpha-research` | 155 | 84 | 33 | `pyproject.toml`, `uv.lock`, research-contract source pin | 3 workflows | NumPy, Pandas, XGBoost, research contracts | alpha split pending; keep commit `631ee15` |
 | `portfolio-backtester` | 163 | 97 | 40 | `pyproject.toml`, `uv.lock`, public package metadata | public workflow green at `507628e` | NumPy, Pandas, PyArrow, SciPy, scikit-learn, XGBoost, research contracts, pinned public quality tooling | `quant-platform` commit `507628e`; keep legacy commit `91a4fa4` |
@@ -46,6 +46,9 @@ portion migrated; `pending` means no target parity has been established.
 - The private DailyWatch20 slice is locally reproducible against the pinned
   public platform and private data dependency, but its GitHub Actions job needs
   approved read access to `market-data-platform`.
+- The pinned market-data baseline is now present privately with its original
+  namespace. Public `quant-platform` contains only the credential-free,
+  deterministic contract/core subset and has a separate boundary test.
 - The public platform is still not a complete replacement for the eight legacy
   owners, but the portfolio-backtester baseline itself is now transferred with
   source, tests, docs, scripts, dependency lock, and CI evidence.

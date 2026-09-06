@@ -23,19 +23,20 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "507628e853144ae7810e6b5e18e224e89e2036d2",
+      "commit": "52fafcc",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success at 34020081799",
-      "scope": "portfolio-backtester parity-complete baseline plus generic publication primitives",
+      "ci": "public-ci: success at 34020595166",
+      "scope": "portfolio parity-complete baseline plus public market-data contracts/core and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "a77fb73309dab43e7566986d5c98fe32b257bc25",
+      "commit": "5946756",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
-      "scope": "private DailyWatch20 strategy vertical slice, formal publication adapter, and platform consumer pins",
+      "ci": "private research CI: success at 34020694892",
+      "scope": "private DailyWatch20 strategy vertical slice plus complete pinned market-data baseline transfer",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
     "market-intel-boundary-validation": {
@@ -48,7 +49,8 @@
     }
   },
   "compatibility_gates": [
-    "quant-platform full transferred portfolio suite: 586 tests, Ruff and ty pass; public CI green at 34020081799",
+    "quant-platform full transferred portfolio suite plus public data core: 589 tests, Ruff and ty pass; public CI green at 34020595166",
+    "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; selected contract/provider tests and private CI green at 34020694892",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",

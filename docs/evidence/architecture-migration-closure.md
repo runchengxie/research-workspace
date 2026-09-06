@@ -21,7 +21,8 @@ The approved sequence and rollback triggers are recorded in
 
 ## Verified gates
 
-- Public platform at `507628e`: Apache-2.0, full portfolio source/tests/docs/scripts/config transfer, `586 passed`, Ruff and ty clean; public CI green at `34020081799`.
+- Public platform at `52fafcc`: Apache-2.0, full portfolio transfer plus public data-contract/core slice, `589 passed`, Ruff and ty clean; public CI green at `34020595166`.
+- Private research at `5946756`: complete pinned market-data baseline transfer with 290 source files, 110 test/fixture files, 50 docs, and 44 scripts; private transfer CI green at `34020694892`.
 - Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
