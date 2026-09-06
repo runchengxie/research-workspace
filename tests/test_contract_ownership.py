@@ -198,3 +198,17 @@ def test_contract_ownership_rejects_non_string_consumer_values(tmp_path: Path) -
     assert result.issues == ("contracts[0].consumers[1]: must be a string",)
     with pytest.raises(ValueError, match=r"consumers\[1\]: must be a string"):
         contracts_package.load_contract_ownership(registry)
+
+
+def test_contract_ownership_rejects_blank_consumer_after_normalization(tmp_path: Path) -> None:
+    contracts_package = _load_contracts_package()
+    registry = tmp_path / "contract-ownership.yml"
+    record = _valid_record()
+    record["consumers"] = ["example-consumer", " \t "]
+    _write_registry(registry, record)
+
+    result = contracts_package.validate_contract_ownership(registry_path=registry)
+
+    assert result.issues == ("contracts[0].consumers[1]: must not be blank",)
+    with pytest.raises(ValueError, match=r"consumers\[1\]: must not be blank"):
+        contracts_package.load_contract_ownership(registry)

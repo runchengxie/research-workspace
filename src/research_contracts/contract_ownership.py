@@ -68,6 +68,8 @@ def _record_type_issues(record: object, record_index: int) -> list[str]:
     for consumer_index, consumer in enumerate(consumers):
         if not isinstance(consumer, str):
             issues.append(f"{prefix}.consumers[{consumer_index}]: must be a string")
+        elif not consumer.strip():
+            issues.append(f"{prefix}.consumers[{consumer_index}]: must not be blank")
     return issues
 
 
@@ -82,9 +84,7 @@ def _ownership_type_issues(payload: Mapping[str, Any]) -> list[str]:
     ]
 
 
-def _construct_contract_ownership(
-    payload: Mapping[str, Any],
-) -> tuple[ContractOwnership, ...]:
+def _construct_contract_ownership(payload: Mapping[str, Any]) -> tuple[ContractOwnership, ...]:
     records = cast(list[Mapping[str, Any]], payload["contracts"])
     return tuple(ContractOwnership.from_mapping(record) for record in records)
 
