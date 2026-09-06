@@ -1,6 +1,6 @@
 # Architecture cutover runbook
 
-> status: ready for review; no remote operation performed
+> status: target remotes initialized; consumer cutover still pending
 > scope: local staging → approved GitHub repositories
 
 This runbook is the final operational handoff for the repository consolidation.
@@ -32,18 +32,17 @@ Do not begin the remote cutover until all of these are true:
 - license, visibility, GitHub Actions, CODEOWNERS, and repository-owner
   decisions have been explicitly approved.
 
-The current evidence satisfies the technical preconditions, but does not by
-itself approve remote creation or publication.
+The technical preconditions are satisfied. The target `quant-platform` public
+and `quant-research` private repositories have now been created and pushed.
+The current workspace and legacy consumers have not yet been switched to use
+them as authoritative sources.
 
 ## Ordered cutover
 
-1. Create or reserve the `quant-platform` public repository. Push the
-   validated public staging history and enable its CI. Verify that no private
-   provider, credential, data, strategy configuration, or experiment result is
-   present before the first push.
-2. Create or reserve the `quant-research` private repository. Push the
-   validated private staging history and configure private CI, secrets, and
-   access controls.
+1. Keep the created `quant-platform` public repository protected by its green
+   CI and verify branch protection, ownership, and public-content review.
+2. Keep the created `quant-research` private repository access-controlled and
+   configure its private CI, secrets, and collaborators.
 3. Merge the validated `market-intel` boundary change to its approved remote
    branch. Keep the artifact consumer verifier enabled.
 4. Update `research-workspace`'s version manifest to the exact public,
@@ -80,6 +79,7 @@ release manifest:
 - old-name compatibility/redirect status;
 - rollback release identifiers and the date the rollback window closes.
 
-Until those fields are populated from real remotes, the architecture remains
-`staging-only` and the legacy submodules remain the authoritative rollback
-source.
+Until the workspace and all consumers are switched, the architecture remains
+in a transition state and the legacy submodules remain the authoritative
+rollback source. The new repositories are published targets, not yet the
+production source of truth.

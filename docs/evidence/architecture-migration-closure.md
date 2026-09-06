@@ -1,6 +1,6 @@
 # Architecture migration closure checklist
 
-> status: staging-only; remote migration not authorized
+> status: new target remotes initialized; consumer cutover pending
 > verified: 2026-09-06
 
 ## Target architecture
@@ -33,6 +33,9 @@ The approved sequence and rollback triggers are recorded in
 - Hard quality profile: all checks passed, including Ruff, format, ty, import
   boundaries, ownership boundaries, architecture, capability registry, trial
   ledger, and secret scan.
+- `quant-platform` and `quant-research` GitHub repositories were created and
+  pushed at their validated commits; `quant-platform` public CI completed
+  successfully.
 
 ## AI context policy
 
@@ -60,8 +63,8 @@ No production pointer, artifact, remote, or GitHub repository was modified.
 
 ## Intentionally pending
 
-- Remote creation or rename of `quant-platform` and `quant-research`.
-- Actual public/private repository cutover and old-submodule removal.
+- Actual workspace consumer cutover to the new remotes.
+- Repository rename/redirect decisions and old-submodule removal.
 - Full release-type gate on the final migrated repositories.
 
 These require an explicit publication/rename decision and are not implied by
