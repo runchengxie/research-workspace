@@ -34,10 +34,10 @@
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
     "market-intel-boundary-validation": {
-      "path": "/home/richard/code/market-intel/.worktrees/architecture-boundary",
-      "commit": "312efa2448ac58e6db9b76cf3b8d3b5130019537",
-      "scope": "artifact consumer boundary test",
-      "rollback": "Leave market-intel/main at c8f24a5 and remove the unmerged worktree branch."
+      "path": "/home/richard/code/market-intel",
+      "commit": "063994a66a5b4661179fe1f9fb67d0cb2d97d423",
+      "scope": "locally integrated artifact consumer boundary test",
+      "rollback": "Preserve unrelated working-tree changes, then return local market-intel to c8f24a5; do not push."
     }
   },
   "compatibility_gates": [

@@ -2,8 +2,8 @@
 
 > verified: 2026-09-06
 > repository: `market-intel`
-> branch: `feat/architecture-boundary`
-> commit: `312efa2`
+> branch: local `main`
+> commit: `063994a66a5b4661179fe1f9fb67d0cb2d97d423`
 
 ## Check
 
@@ -27,5 +27,11 @@ The test verifies that:
 - the boundary documentation requires versioned file artifacts and prohibits direct business-code
   imports across the research boundary.
 
-The commit is isolated in a `market-intel` worktree and has not been merged or pushed. The current
-`market-intel` main branch remains unchanged.
+The boundary commit was locally merged into `market-intel/main` as
+`063994a66a5b4661179fe1f9fb67d0cb2d97d423`. The local merge was validated without including the
+unrelated pre-existing working-tree changes. Nothing was pushed; the remote-tracking branch remains
+at `c8f24a5`.
+
+Rollback point: preserve the unrelated working-tree changes, then return the local branch to `c8f24a5`
+if the local integration needs to be abandoned. The boundary work itself is one merge commit with no
+remote side effects.

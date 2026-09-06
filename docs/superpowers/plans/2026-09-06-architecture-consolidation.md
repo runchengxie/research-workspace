@@ -444,9 +444,10 @@ uv run a-share-daily doctor
 
 ### Task 9：把 `market-intel` 固定为 artifact consumer
 
-执行进度（2026-09-06）：边界测试已在独立 `market-intel` worktree 的
-`feat/architecture-boundary` 分支完成并提交为 `312efa2`，测试结果为 `2 passed`。该提交尚未
-合并或 push；当前 `market-intel/main` 保持不变。目标 producer/consumer 关系见
+执行进度（2026-09-06）：边界测试先在独立 `market-intel` worktree 的
+`feat/architecture-boundary` 分支完成并提交为 `312efa2`，随后已在本地合并到
+`market-intel/main`，merge commit 为 `063994a6`。合并后的边界测试结果为 `2 passed`，目标
+producer/consumer 关系见
 `docs/governance/target-contract-ownership-map.md`，证据见
 `docs/evidence/market-intel-boundary-test-2026-09-06.md`。
 
@@ -483,9 +484,10 @@ uv run pytest tests/test_research_artifact_boundary.py -q
 uv run pytest -k "contract or freshness or recovery"
 ```
 
-- [ ] **Step 4: 先合并 market-intel，再更新 workspace**
+- [x] **Step 4: 先合并 market-intel，再更新 workspace**
 
-遵守先子仓库、后顶层工作区的顺序。
+已完成本地子仓库合并和顶层版本 manifest 更新，遵守先子仓库、后顶层工作区的顺序。未 push，
+remote-tracking branch 仍为旧版本；正式远端发布仍需单独授权。
 
 ### Task 10：把 `research-workspace` 减薄为集成层
 
