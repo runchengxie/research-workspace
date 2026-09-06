@@ -390,7 +390,7 @@ provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证�
 `docs/evidence/private-research-artifact-handoff-2026-09-06.md`。这证明通用 handoff 边界，
 但不替代正式 `watchlist_20.csv` / `selection_receipt.json` 生产链路。
 
-公共 staging 已新增 `quant-platform/research_contracts` 通用 publication primitives；该包只负责
+公共 staging 已新增 `quant-platform` 命名空间下的通用 publication primitives；该包只负责
 manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择。其验证结果为 `31 passed`
 和 Ruff clean，证据见 `docs/evidence/public-platform-staging-2026-09-06.md`。
 
@@ -412,11 +412,15 @@ manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择�
 
 真实 feature 组合、label、universe、模型选择、production config、provider 配置、实验结果和失败实验记录必须留在 private repo。
 
-- [ ] **Step 3: 只依赖 platform 稳定 API 和契约**
+- [x] **Step 3: 只依赖 platform 稳定 API 和契约**
 
-禁止 `market-intel` 直接 import `quant-research`；只把带有 schema 和 producer commit 的 artifact 交给它。
+禁止 `market-intel` 直接 import `quant-research`；私有 staging adapter 只依赖 public
+`quant_platform` API，并把带有 schema、producer commit 和 internal audience 的 artifact 交给它。
 
 - [ ] **Step 4: 本地门禁和消费验证**
+
+已完成 adapter focused gate：`2 passed`、Ruff clean。正式 `watchlist_20.csv` /
+`selection_receipt.json` producer 尚未迁入 staging，因此完整消费验证仍待完成。
 
 ```bash
 uv run pytest

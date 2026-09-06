@@ -13,11 +13,12 @@ A separate local Git staging repository now exists at:
 ```
 
 The repository contains the public portfolio/backtesting vertical slice and generic publication
-primitives. It is committed at `29e114e` (`feat: add public publication bundle primitives`).
+primitives. It is committed at `b9cde2e` (`feat: namespace public platform publication API`).
 
 It includes a public CI workflow, a public `portfolio-backtester` package slice, a versioned
-style-factor backtest contract, generic `research_contracts` publication helpers, synthetic example
-data, and migration provenance.
+style-factor backtest contract, generic `quant_platform` publication helpers, synthetic example
+data, and migration provenance. The handoff API owns the `quant_platform` namespace so it cannot
+shadow the richer `research_contracts` dependency used by private research packages.
 
 ## Verification
 
