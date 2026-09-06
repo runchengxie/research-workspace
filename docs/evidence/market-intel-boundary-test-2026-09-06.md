@@ -13,6 +13,14 @@ uv run pytest tests/test_research_artifact_boundary.py -q
 
 Result: `2 passed`.
 
+The broader consumer gate also passed:
+
+```bash
+uv run pytest -k "contract or freshness or recovery"
+```
+
+Result: `112 passed, 646 deselected`.
+
 The test verifies that:
 
 - Python source under `market-intel/src` does not import `quant_research`;
