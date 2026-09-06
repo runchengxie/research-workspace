@@ -70,6 +70,16 @@
       "removal_condition": "remove after task-scoped agent context is replaced by a maintained successor and no governance or contributor workflow calls this script"
     },
     {
+      "path": "scripts/audit_documentation_language.py",
+      "owner": "research-workspace",
+      "purpose": "Build a read-only language inventory for tracked Markdown documents and classify localization work",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested JSON inventory output",
+      "external_dependencies": "Python and a Git worktree",
+      "removal_condition": "remove after the repository-wide documentation localization audit is closed and no active documentation review calls this script"
+    },
+    {
       "path": "scripts/analyze_repository_coupling.py",
       "owner": "research-workspace",
       "purpose": "Measure cross-repository co-change, contract-change, and independent-release evidence for migration decisions",
