@@ -43,7 +43,9 @@ passed`; Ruff clean). The formal producer has not yet been moved into this stagi
 `strategy-research` and `strategy-app` repositories remain authoritative and are the rollback
 source.
 
-The copied alpha dependency set also exposes an existing compatibility prerequisite: the resolved
-`research-contracts` package is missing `ArtifactEnvelopeV2`, so the full copied private suite
-cannot run until its dependency pins are aligned. This is recorded as a migration gate rather than
-silently weakening the test scope.
+The staging resolver now overrides alpha’s old Git URL with the public staging
+`research-contracts` package, restoring the expected `ArtifactEnvelopeV2` API. The full copied
+suite then reaches a second existing compatibility prerequisite: the resolved
+`portfolio-backtester` package lacks the `name_turnover` API required by the copied strategy slice.
+That dependency pin must be aligned before the full private suite can run; the focused adapter gate
+remains green and no tests were silently weakened.

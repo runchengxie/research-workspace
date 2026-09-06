@@ -23,13 +23,13 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "b9cde2e0a4288ddfc0b5310b00b70a91d68e558e",
+      "commit": "d9fdcda8c05db4b2fb594cd22d512e7c03bf5999",
       "scope": "public portfolio/backtesting vertical slice and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "52cfcc2690dd13107f2082cb35f0b1021474ab9d",
+      "commit": "49acc88c313109b516984be7000fab1c48415707",
       "scope": "private DailyWatch20 strategy vertical slice and internal publication adapter",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
@@ -43,7 +43,7 @@
   "compatibility_gates": [
     "quant-platform scoped tests and Ruff pass",
     "quant-research publication adapter focused tests and Ruff pass",
-    "quant-research full copied dependency suite remains blocked by research-contracts API pin mismatch",
+    "quant-research full copied dependency suite remains blocked by portfolio-backtester API pin mismatch",
     "market-intel boundary and contract/freshness/recovery tests pass",
     "formal watchlist_20 producer migration is not yet complete",
     "remote creation, license approval, push, rename, and gitlink update are not yet authorized"
