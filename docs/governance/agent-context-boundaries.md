@@ -102,11 +102,12 @@ python scripts/context_manifest.py --task alpha
 
 ## 扩大范围的条件
 
-只有以下情况需要读取直接相邻区域：
+只有以下情况授权读取直接相邻区域：
 
-- 修改 artifact 字段、schema 版本、文件名、兼容策略或 envelope。
-- 修改生产方写入行为或消费方解析、校验行为。
-- 修改会改变跨仓最小测试命令的公开入口。
+- 修改公开 API 或其他稳定公开入口。
+- 修改跨仓 artifact、schema、字段、文件名、兼容策略或 envelope。
+- 下游测试失败，且失败证据指向跨仓依赖或契约。
+- 用户明确要求扩大上下文范围。
 
 仅修改一个 owner 仓的内部实现时，不读取间接消费方。`alpha` 任务不会因为
 `strategy-pipeline` 最终向 `market-intel` 发布产物，就默认读取 `market-intel`。

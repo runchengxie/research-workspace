@@ -88,3 +88,41 @@ def test_manifest_pytest_targets_exist() -> None:
                 missing.append(command[1])
 
     assert missing == []
+
+
+def test_direct_consumers_have_an_owned_contract_route() -> None:
+    context_manifest = load_context_manifest()
+
+    unsupported: dict[str, list[str]] = {}
+    for area in context_manifest.available_areas():
+        manifest = context_manifest.build_manifest(area)
+        routed_consumers = {
+            consumer
+            for route in manifest.contracts
+            if route.producer in manifest.repositories
+            for consumer in route.consumers
+        }
+        missing = sorted(set(manifest.direct_consumers) - routed_consumers)
+        if missing:
+            unsupported[area] = missing
+
+    assert unsupported == {}
+
+
+def test_data_alpha_and_portfolio_consumers_match_artifact_routes() -> None:
+    context_manifest = load_context_manifest()
+
+    data = context_manifest.build_manifest("data")
+    research_features = next(
+        route for route in data.contracts if route.contract == "research_features.parquet"
+    )
+
+    assert research_features.producer == "market-data-platform"
+    assert set(research_features.consumers) == {"alpha-research", "strategy-pipeline"}
+    assert set(context_manifest.build_manifest("alpha").direct_consumers) == {
+        "portfolio-backtester",
+        "strategy-pipeline",
+    }
+    assert context_manifest.build_manifest("portfolio").direct_consumers == (
+        "strategy-pipeline",
+    )

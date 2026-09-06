@@ -133,8 +133,11 @@ git commit -m "docs: define public and private boundaries"
 **Files:**
 - Modify: `AGENTS.md`
 - Create: `docs/governance/agent-context-boundaries.md`
+- Modify: `docs/governance/README.md`
+- Modify: `docs/evidence/maintainability/baseline-20260719-ty.json`
 - Create: `scripts/context_manifest.py`
 - Create: `tests/test_context_manifest.py`
+- Modify: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
 
 - [ ] **Step 1: 写失败测试**
 
@@ -168,7 +171,10 @@ def render_manifest(manifest: ContextManifest) -> str:
 pytest tests/test_context_manifest.py -q
 python scripts/context_manifest.py --task alpha
 python scripts/context_manifest.py --task strategy
-git add AGENTS.md docs/governance/agent-context-boundaries.md scripts/context_manifest.py tests/test_context_manifest.py
+git add AGENTS.md docs/governance/agent-context-boundaries.md docs/governance/README.md \
+  docs/evidence/maintainability/baseline-20260719-ty.json \
+  scripts/context_manifest.py tests/test_context_manifest.py \
+  docs/superpowers/plans/2026-09-06-architecture-consolidation.md
 git commit -m "feat: add task-scoped agent context manifests"
 ```
 

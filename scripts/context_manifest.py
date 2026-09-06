@@ -35,7 +35,6 @@ _MANIFESTS = {
         area="data",
         repositories=("market-data-platform",),
         direct_consumers=(
-            "deep-learning-tick-data-prediction",
             "alpha-research",
             "strategy-app",
             "strategy-pipeline",
@@ -51,7 +50,7 @@ _MANIFESTS = {
             ContractRoute(
                 producer="market-data-platform",
                 contract="research_features.parquet",
-                consumers=("alpha-research",),
+                consumers=("alpha-research", "strategy-pipeline"),
                 test_command="pytest market-data-platform/tests/test_research_features.py -q",
             ),
         ),
@@ -78,7 +77,6 @@ _MANIFESTS = {
         repositories=("alpha-research",),
         direct_consumers=(
             "portfolio-backtester",
-            "strategy-app",
             "strategy-pipeline",
         ),
         default_context=(*_COMMON_CONTEXT, "alpha-research/AGENTS.md"),
@@ -100,7 +98,7 @@ _MANIFESTS = {
     "portfolio": ContextManifest(
         area="portfolio",
         repositories=("portfolio-backtester",),
-        direct_consumers=("strategy-app", "strategy-pipeline"),
+        direct_consumers=("strategy-pipeline",),
         default_context=(*_COMMON_CONTEXT, "portfolio-backtester/AGENTS.md"),
         contracts=(
             ContractRoute(
@@ -172,7 +170,7 @@ _MANIFESTS = {
     "execution": ContextManifest(
         area="execution",
         repositories=("quant-execution-engine",),
-        direct_consumers=("operator",),
+        direct_consumers=(),
         default_context=(*_COMMON_CONTEXT, "quant-execution-engine/AGENTS.md"),
         contracts=(
             ContractRoute(
@@ -188,7 +186,7 @@ _MANIFESTS = {
     "market-intel": ContextManifest(
         area="market-intel",
         repositories=("market-intel",),
-        direct_consumers=("Dashboard", "Feishu", "human users"),
+        direct_consumers=(),
         default_context=(*_COMMON_CONTEXT, "market-intel/AGENTS.md"),
         contracts=(
             ContractRoute(

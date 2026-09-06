@@ -111,7 +111,9 @@ targets.json
 
 默认只读取命令输出的 `Default context` 和区域仓库。任务跨越 artifact 契约时，按输出的
 `Producer`、`Contract`、`Consumer` 和 `Test` 扩大范围。不要递归扫描全部仓库来推断依赖，
-也不要因为下游系统存在就把它加入默认上下文。职责、允许依赖、禁止依赖和局部测试说明见
+也不要因为下游系统存在就把它加入默认上下文。只有修改公开 API、修改跨仓 artifact 或
+schema、下游测试失败并指向跨仓依赖，或用户明确要求扩大范围时，才增加相邻区域。职责、
+允许依赖、禁止依赖和局部测试说明见
 [`docs/governance/agent-context-boundaries.md`](docs/governance/agent-context-boundaries.md)。
 
 文档正文按 `architecture/`、`concepts/`、`guides/`、`operations/`、`reference/`、`research/`、`governance/`、`archive/` 和 `evidence/` 的语义归类。移动正文后，旧路径保留短兼容指针，使用 `status: superseded` 和 `superseded_by`，不得保留重复正文。
