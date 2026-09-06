@@ -385,6 +385,11 @@ provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证�
 后续门禁，不能据此宣称迁移完成。证据见
 `docs/evidence/private-research-staging-2026-09-06.md`。
 
+补充验证（2026-09-06）：已使用该 staging slice 生成一个 `research.platform-publication.v1`
+内部投影，并由 `market-intel` 验证 producer commit、audience、相对路径和 SHA-256。证据见
+`docs/evidence/private-research-artifact-handoff-2026-09-06.md`。这证明通用 handoff 边界，
+但不替代正式 `watchlist_20.csv` / `selection_receipt.json` 生产链路。
+
 **Files:**
 - Create: 新仓库 `quant-research/README.md`
 - Create: 新仓库 `quant-research/AGENTS.md`

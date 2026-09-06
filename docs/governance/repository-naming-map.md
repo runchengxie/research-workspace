@@ -10,7 +10,29 @@
 本页冻结工作区仓库名的候选迁移关系。候选名只用于规划和后续协调，当前不改远端仓库名、
 本地目录、GitHub URL、gitlink、Python namespace、CLI、生产配置或历史事实。
 
-## 候选迁移关系
+## Target decision
+
+The target is not a one-for-one rename of every current submodule. The repository boundary is
+being consolidated around visibility, IP, and runtime ownership:
+
+| Current component | Target location | Target decision |
+| --- | --- | --- |
+| `market-data-platform` | `quant-platform/data` plus private provider/runtime configuration | Consolidate the reusable data surface; keep real providers and credentials private |
+| `deep-learning-tick-data-prediction` | `quant-platform/microstructure` plus `quant-research/microstructure/experiments` | Split generic model/data abstractions from proprietary labels, configs, and results |
+| `alpha-research` | `quant-platform/alpha` | Consolidate reusable research mechanisms; keep proprietary feature selections private |
+| `portfolio-backtester` | `quant-platform/portfolio` | Consolidate as a package while preserving its installable public API where useful |
+| `strategy-research` | `quant-research/registry` and `quant-research/research` | Rename conceptually to `quant-research`; it is broader than a registry |
+| `strategy-app` | `quant-research/strategies` | Absorb into the private strategy monorepo; retain `strategy_app` namespace initially |
+| `strategy-pipeline` | `quant-platform/orchestration` | Consolidate the reusable control plane and artifact publication surface |
+| `quant-execution-engine` | `quant-platform/execution` public interfaces plus private runtime adapters | Keep live broker, credentials, and audit runtime private during the public audit |
+| `market-intel` | `market-intel` | Remain an independent private application |
+| `research-workspace` | `research-workspace` | Remain a thin integration/release layer; do not become a second business owner |
+
+This target mapping is a migration decision, not permission to rename all remote repositories in one
+change. Remote names, URLs, Python namespaces, CLIs, and artifact schemas remain compatibility
+surfaces and are migrated independently.
+
+## Transitional candidate names
 
 | 当前仓库名 | 候选新名 | 当前决定 | 说明 |
 | --- | --- | --- | --- |
