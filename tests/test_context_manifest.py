@@ -140,9 +140,7 @@ def test_data_alpha_and_portfolio_consumers_match_artifact_routes() -> None:
         "portfolio-backtester",
         "strategy-pipeline",
     }
-    assert context_manifest.build_manifest("portfolio").direct_consumers == (
-        "strategy-pipeline",
-    )
+    assert context_manifest.build_manifest("portfolio").direct_consumers == ("strategy-pipeline",)
 
 
 def test_watchlist_route_matches_authoritative_registry() -> None:

@@ -6,7 +6,7 @@
 The private staging repository `quant-research` is committed at
 `e4ebde81a21e4a824b155d588dee9815da6a3a9d`. Its `scripts/export_publication.py` adapter depends on
 the public staging repository `quant-platform` at
-`fb7ea0e539359b8e0a162066cd827eb55af64f2a`.
+`a1de2f9b90285fcfa483d8ce174806463a04c92d`.
 
 The adapter accepts exactly these private projections from the formal publisher's `latest`
 directory:

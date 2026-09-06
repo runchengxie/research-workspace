@@ -63,7 +63,10 @@ def _module_command(root: Path, submodule: str, module: str) -> tuple[list[str],
     ]
     python = next((candidate for candidate in python_candidates if candidate.is_file()), None)
     if python is None:
-        raise FileNotFoundError(f"No virtualenv Python found for {submodule}")
+        # A checked-out submodule may not have its own environment. Prefer the
+        # current workspace interpreter over a same-named stale executable on
+        # PATH so the smoke test exercises the checked-out source tree.
+        python = Path(sys.executable)
     command = [str(python), "-m", module]
     env = dict(os.environ)
     source_root = repo / "src"
@@ -192,9 +195,18 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
                 )
             )
 
-    strategy_pipeline = _command_for(
-        root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
-    )
+    strategy_pipeline_root = root / "strategy-pipeline" / "src"
+    if strategy_pipeline_root.is_dir():
+        try:
+            strategy_pipeline = _module_command(root, "strategy-pipeline", "strategy_pipeline.cli")
+        except FileNotFoundError:
+            strategy_pipeline = _command_for(
+                root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
+            )
+    else:
+        strategy_pipeline = _command_for(
+            root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
+        )
     if strategy_pipeline is None:
         results.append(
             _skip(

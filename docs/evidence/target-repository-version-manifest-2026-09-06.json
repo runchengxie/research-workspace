@@ -23,7 +23,7 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "fb7ea0e539359b8e0a162066cd827eb55af64f2a",
+      "commit": "a1de2f9b90285fcfa483d8ce174806463a04c92d",
       "scope": "public portfolio/backtesting vertical slice and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },

@@ -13,7 +13,8 @@ A separate local Git staging repository now exists at:
 ```
 
 The repository contains the public portfolio/backtesting vertical slice and generic publication
-primitives. It is committed at `fb7ea0e` (`feat: stage reusable portfolio framework`).
+primitives. It is committed at `a1de2f9` (`style: format public distribution tests`), on top of the
+reusable portfolio framework staging commit.
 
 It includes a public CI workflow, a public `portfolio-backtester` package slice, a versioned
 style-factor backtest contract, generic `quant_platform` publication helpers, synthetic example

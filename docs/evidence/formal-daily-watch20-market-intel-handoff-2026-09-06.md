@@ -9,7 +9,7 @@ publish a remote artifact, change a `latest` pointer, or modify any remote.
 
 ## Versions
 
-- public `quant-platform`: `fb7ea0e539359b8e0a162066cd827eb55af64f2a`
+- public `quant-platform`: `a1de2f9b90285fcfa483d8ce174806463a04c92d`
 - private `quant-research`: `e4ebde81a21e4a824b155d588dee9815da6a3a9d`
 - `market-intel` consumer validation: `312efa2448ac58e6db9b76cf3b8d3b5130019537`
 
