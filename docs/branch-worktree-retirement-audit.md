@@ -1,13 +1,13 @@
-# Branch and Worktree Retirement Audit
+# 分支与 worktree 退役审计
 
 Date: 2026-08-31
 
-## Result
+## 结果
 
 The cleanup removed only state proven merged, superseded, empty, or orphaned with no code delta.
 Production release worktrees remain intentionally available for rollback.
 
-## Retired
+## 已退役
 
 - Closed and deleted the empty MDP follow-up PR #82 after rebasing showed its effective diff was
   already present on `market-data-platform/main`.
@@ -26,12 +26,12 @@ Production release worktrees remain intentionally available for rollback.
 - Moved the one-off `/home/richard/transfer/etf-minute-fetcher` staging directory to the desktop
   trash; it was not a Git repository and contained only an ETF minute-data import handoff.
 
-## Merged documentation
+## 已合并文档
 
 - Parent repository PR #283: capability registry and trial ledger design.
 - `market-intel` PR #116: worktree-first layout documentation.
 
-## Retained
+## 保留项
 
 - `alpha-research/fix/adopt-size-style-signal-owner` was extracted into the reusable
   size-style API and merged as PR #50; the parent gitlink is being synchronized separately.
@@ -40,7 +40,7 @@ Production release worktrees remain intentionally available for rollback.
   already present on the respective main branches; both branches were retired.
 - `portfolio-backtester/chore/sync-mdp-lazy-view` was also empty after comparison and was retired.
 
-## Follow-up
+## 后续事项
 
 The parent and market-intel main branches advanced after the production release was created. Production
 must be refreshed through the existing manual promotion command after reviewing those main changes; no

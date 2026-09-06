@@ -1,9 +1,9 @@
-# Architecture migration closure checklist
+# 架构迁移收尾检查清单
 
-> status: all staged parity slices validated; consumer cutover pending
-> verified: 2026-09-06
+> 状态：所有暂存迁移切片已验证，等待消费者切换
+> 核验日期：2026-09-06
 
-## Target architecture
+## 目标架构
 
 The intended end state is:
 
@@ -19,7 +19,7 @@ has its own release and rollback evidence. The target mapping is recorded in
 The approved sequence and rollback triggers are recorded in
 `docs/migrations/architecture-cutover-runbook.md`.
 
-## Verified gates
+## 已验证门禁
 
 - Public platform at `2ba7088`: Apache-2.0, portfolio/data/alpha/microstructure/orchestration/execution framework slices transferred; local full gate is `1146 passed, 3 skipped`, Ruff and format clean. Public GitHub Actions is green in run `34024056490`.
 - Private research at `5265b68`: alpha, microstructure, strategy families, and private execution runtime are transferred; legacy `alpha-research`/`strategy-pipeline` dependencies have been removed in favor of the consolidated framework. All six private transfer jobs are green in CI run `34024857688`.
@@ -42,14 +42,14 @@ The approved sequence and rollback triggers are recorded in
   pushed. Both public platform CI and private research CI completed
   successfully for the validated slice.
 
-## AI context policy
+## AI 上下文策略
 
 Agents default to the directly affected package and its local manifest. They
 expand to producer, contract, and consumer only for public API changes,
 artifact changes, downstream failures, or explicit cross-module work. The
 machine-readable routing is provided by `scripts/context_manifest.py`.
 
-## Rollback rehearsal
+## 回滚演练
 
 An isolated temporary release root exercised:
 
@@ -66,7 +66,7 @@ unchanged:
 
 No production pointer, artifact, remote, or GitHub repository was modified.
 
-## Intentionally pending
+## 明确待办
 
 - Actual workspace consumer cutover to the new remotes.
 - Repository rename/redirect decisions and old-submodule removal.

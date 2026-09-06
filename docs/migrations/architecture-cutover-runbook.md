@@ -1,14 +1,12 @@
-# Architecture cutover runbook
+# 架构切换运行手册
 
-> status: target gitlinks cut over locally; remote push and production T0 pending
-> scope: local staging → approved GitHub repositories
+> 状态：目标 gitlink 已在本地切换，远程推送和生产 T0 尚未开始
+> 范围：本地暂存仓库 → 已批准的 GitHub 仓库
 
-This runbook is the final operational handoff for the repository consolidation.
-The local staging repositories and compatibility gates are already validated;
-the commands below require an explicit decision to create, rename, push, or
-change remote repositories.
+本文是仓库整合的最终操作交接文档。
+本地暂存仓库和兼容性门禁已经完成验证。下面的命令涉及创建、重命名、推送或修改远程仓库，必须先取得明确决定。
 
-## Target layout
+## 目标布局
 
 | Target | Visibility | Contents | Source mapping |
 | --- | --- | --- | --- |
@@ -17,7 +15,7 @@ change remote repositories.
 | `market-intel` | private application | market context, report assembly, dashboards, delivery, freshness and recovery | existing independent repository; consumes versioned artifacts only |
 | `research-workspace` | integration-only | version manifest, compatibility checks, contract smoke tests, architecture/CI metadata and rollback pointers | existing superproject; legacy submodules remain until cutover gates pass |
 
-## Preconditions
+## 前置条件
 
 Do not begin the remote cutover until all of these are true:
 
@@ -32,13 +30,9 @@ Do not begin the remote cutover until all of these are true:
 - license, visibility, GitHub Actions, CODEOWNERS, and repository-owner
   decisions have been explicitly approved.
 
-The technical preconditions are satisfied. The target `quant-platform` public,
-`quant-research` private, and `market-intel` repositories have been created,
-pushed, and independently validated. The workspace branch now records their
-gitlinks while all legacy submodules remain available for rollback. Production
-T0 has not started until this workspace release is pushed and approved.
+技术前置条件已经满足。目标 `quant-platform` 公共仓库、`quant-research` 私有仓库和 `market-intel` 仓库均已创建、推送并独立验证。workspace 分支现在记录这些仓库的 gitlink，同时保留所有旧 submodule 以便回滚。在本 workspace 版本推送并获批前，生产 T0 不会开始。
 
-## Ordered cutover
+## 切换顺序
 
 1. Keep the created `quant-platform` public repository protected by its green
    CI and verify branch protection, ownership, and public-content review.
@@ -57,7 +51,7 @@ T0 has not started until this workspace release is pushed and approved.
    remove legacy submodules only after every consumer and production manifest
    has switched successfully.
 
-## Per-step rollback
+## 分阶段回滚
 
 | Failure | Rollback |
 | --- | --- |
@@ -68,7 +62,7 @@ T0 has not started until this workspace release is pushed and approved.
 | Production promotion failure | leave `current` unchanged; atomically restore the previous release directory |
 | Rename or redirect failure | keep the old repository name and compatibility pointer; retry only after CI and URL checks pass |
 
-## Completion evidence
+## 完成证据
 
 The cutover is complete only when the following are recorded in the workspace
 release manifest:
@@ -85,7 +79,7 @@ in a transition state and the legacy submodules remain the authoritative
 rollback source. The new repositories are published targets, not yet the
 production source of truth.
 
-## Rollback window policy
+## 回滚窗口策略
 
 The migration uses a defined 14-calendar-day rollback window beginning at
 the first production cutover (`T0`). This is a safety window, not permission to
