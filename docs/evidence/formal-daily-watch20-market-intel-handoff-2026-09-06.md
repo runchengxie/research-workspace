@@ -1,6 +1,6 @@
 # Formal DailyWatch20 to `market-intel` handoff evidence
 
-> status: staging-only
+> status: staging-only; current target commits validated
 > verified: 2026-09-06
 
 This is a synthetic, formal-shaped runtime handoff. It uses the production
@@ -9,9 +9,9 @@ publish a remote artifact, change a `latest` pointer, or modify any remote.
 
 ## Versions
 
-- public `quant-platform`: `a1de2f9b90285fcfa483d8ce174806463a04c92d`
-- private `quant-research`: `e4ebde81a21e4a824b155d588dee9815da6a3a9d`
-- `market-intel` consumer validation: `312efa2448ac58e6db9b76cf3b8d3b5130019537`
+- public `quant-platform`: `b67618ca243c7c3bfffd41720ae2b191a1c26378`
+- private `quant-research`: `40fa73569589b3d116c1663bf6ec8ccc390ece0a`
+- `market-intel` consumer validation: `83172a38c26f7f7811d46c48539fa04d48838123`
 
 ## Handoff
 
@@ -30,6 +30,15 @@ The consumer accepted:
 The verifier also confirmed the `runchengxie/quant-research` producer
 identity, producer commit, internal audience, bundle-relative paths, and
 SHA-256 hashes.
+
+The same rehearsal was rerun against these current commits after both target
+repositories were pushed. It accepted both approved artifacts:
+
+```text
+runchengxie/quant-research 40fa73569589b3d116c1663bf6ec8ccc390ece0a
+run-formal
+daily_watch20.watchlist_20, daily_watch20.selection_receipt
+```
 
 This closes the staging end-to-end producer → contract → consumer gate. It
 does not authorize remote repository creation, publication, renaming, or
