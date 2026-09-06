@@ -10,7 +10,7 @@ publish a remote artifact, change a `latest` pointer, or modify any remote.
 ## Versions
 
 - public `quant-platform`: `b67618ca243c7c3bfffd41720ae2b191a1c26378`
-- private `quant-research`: `b096329` (same parity code; explicit CI access gate added)
+- private `quant-research`: `a77fb73` (same parity code; private CI green)
 - `market-intel` consumer validation: `83172a38c26f7f7811d46c48539fa04d48838123`
 
 ## Handoff
@@ -35,7 +35,7 @@ The same rehearsal was rerun against these current commits after both target
 repositories were pushed. It accepted both approved artifacts:
 
 ```text
-runchengxie/quant-research b096329
+runchengxie/quant-research a77fb73
 run-formal
 daily_watch20.watchlist_20, daily_watch20.selection_receipt
 ```

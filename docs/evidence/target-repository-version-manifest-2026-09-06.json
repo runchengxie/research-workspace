@@ -32,7 +32,7 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "b0963298b4b9d65a73c64e5f3ab31608f388fbf9",
+      "commit": "a77fb73309dab43e7566986d5c98fe32b257bc25",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
       "scope": "private DailyWatch20 strategy vertical slice, formal publication adapter, and platform consumer pins",
@@ -49,7 +49,7 @@
   },
   "compatibility_gates": [
     "quant-platform scoped tests and Ruff pass; public CI green at b67618c",
-    "quant-research full DailyWatch20 parity suite passes locally: 122 tests; publication adapter included",
+    "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",

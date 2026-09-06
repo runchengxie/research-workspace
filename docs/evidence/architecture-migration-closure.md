@@ -22,7 +22,7 @@ The approved sequence and rollback triggers are recorded in
 ## Verified gates
 
 - Public platform staging at `b67618c`: scoped tests passed, Ruff clean and formatted; public CI green.
-- Private research staging at `b096329`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; CI now has an explicit private-dependency access gate.
+- Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
 - `market-intel` boundary: boundary `2 passed`; broader contract/freshness/recovery
@@ -34,9 +34,8 @@ The approved sequence and rollback triggers are recorded in
   boundaries, ownership boundaries, architecture, capability registry, trial
   ledger, and secret scan.
 - `quant-platform` and `quant-research` GitHub repositories were created and
-  pushed. `quant-platform` public CI completed successfully. `quant-research`
-  local parity is green, but remote CI remains blocked by access to the private
-  `market-data-platform` dependency.
+  pushed. Both public platform CI and private research CI completed
+  successfully for the validated slice.
 
 ## AI context policy
 
