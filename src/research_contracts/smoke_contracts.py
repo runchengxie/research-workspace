@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_MANIFEST = ROOT / "docs" / "artifact-contracts.yml"
 CONTRACT_DOC = ROOT / "docs" / "contracts.md"
+CONTRACT_OWNERSHIP = ROOT / "docs" / "contracts" / "contract-ownership.yml"
 
 
 @dataclass(frozen=True)
@@ -62,7 +63,10 @@ def _module_command(root: Path, submodule: str, module: str) -> tuple[list[str],
     ]
     python = next((candidate for candidate in python_candidates if candidate.is_file()), None)
     if python is None:
-        raise FileNotFoundError(f"No virtualenv Python found for {submodule}")
+        # A checked-out submodule may not have its own environment. Prefer the
+        # current workspace interpreter over a same-named stale executable on
+        # PATH so the smoke test exercises the checked-out source tree.
+        python = Path(sys.executable)
     command = [str(python), "-m", module]
     env = dict(os.environ)
     source_root = repo / "src"
@@ -134,9 +138,24 @@ def _artifact_contract_manifest_check(root: Path) -> SmokeResult:
     return SmokeResult("OK", "artifact contract manifest", "passed")
 
 
+def _contract_ownership_check(root: Path) -> SmokeResult:
+    contracts_src = ROOT / "src"
+    if str(contracts_src) not in sys.path:
+        sys.path.insert(0, str(contracts_src))
+    from research_contracts import validate_contract_ownership
+
+    result = validate_contract_ownership(
+        registry_path=root / CONTRACT_OWNERSHIP.relative_to(ROOT),
+        artifact_manifest_path=root / CONTRACT_MANIFEST.relative_to(ROOT),
+    )
+    if not result.ok:
+        return SmokeResult("ERROR", "contract ownership registry", "; ".join(result.issues))
+    return SmokeResult("OK", "contract ownership registry", "passed")
+
+
 def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     root = root.resolve()
-    results: list[SmokeResult] = [_artifact_contract_manifest_check(root)]
+    results = [_artifact_contract_manifest_check(root), _contract_ownership_check(root)]
 
     marketdata = _command_for(
         root,
@@ -176,9 +195,18 @@ def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
                 )
             )
 
-    strategy_pipeline = _command_for(
-        root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
-    )
+    strategy_pipeline_root = root / "strategy-pipeline" / "src"
+    if strategy_pipeline_root.is_dir():
+        try:
+            strategy_pipeline = _module_command(root, "strategy-pipeline", "strategy_pipeline.cli")
+        except FileNotFoundError:
+            strategy_pipeline = _command_for(
+                root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
+            )
+    else:
+        strategy_pipeline = _command_for(
+            root, "strategy-pipeline", "strategy-pipeline", "strategy_pipeline.cli"
+        )
     if strategy_pipeline is None:
         results.append(
             _skip(

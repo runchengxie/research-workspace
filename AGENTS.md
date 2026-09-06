@@ -30,6 +30,9 @@
 `pyproject.toml` 与 `tests/`，pre-push 会额外运行其 `research-layer-tests` 与
 `research-layer-quality` 门禁（见 `scripts/run_pre_push_checks.py`）。
 
+`quant-platform`、`quant-research` 和 `market-intel` 是迁移后的目标子模块。前两个由目标仓库
+各自维护，`market-intel` 只消费版本化 artifact，旧子模块在回滚窗口内继续保留。
+
 ## 仓库边界
 
 | 仓库 | 主要职责 |
@@ -112,6 +115,19 @@ targets.json
 ### 文档阅读顺序
 
 编码代理默认先读根目录 `README.md`，再读当前仓库 `docs/README.md`，然后只读取与任务直接相关的一个分类目录和目标页面。除非任务明确涉及历史、证据、设计或实施计划，否则不要递归读取 `archive/`、`evidence/`、`docs/superpowers/` 或子模块全部 Markdown。
+
+### 任务级上下文
+
+小任务开始前先选择一个工作区域，并运行 `python scripts/context_manifest.py --task <area>`。
+初始区域为 `data`、`microstructure`、`alpha`、`portfolio`、`strategy`、
+`orchestration`、`execution` 和 `market-intel`。
+
+默认只读取命令输出的 `Default context` 和区域仓库。任务跨越 artifact 契约时，按输出的
+`Producer`、`Contract`、`Consumer` 和 `Test` 扩大范围。不要递归扫描全部仓库来推断依赖，
+也不要因为下游系统存在就把它加入默认上下文。只有修改公开 API、修改跨仓 artifact 或
+schema、下游测试失败并指向跨仓依赖，或用户明确要求扩大范围时，才增加相邻区域。职责、
+允许依赖、禁止依赖和局部测试说明见
+[`docs/governance/agent-context-boundaries.md`](docs/governance/agent-context-boundaries.md)。
 
 文档正文按 `architecture/`、`concepts/`、`guides/`、`operations/`、`reference/`、`research/`、`governance/`、`archive/` 和 `evidence/` 的语义归类。移动正文后，旧路径保留短兼容指针，使用 `status: superseded` 和 `superseded_by`，不得保留重复正文。
 

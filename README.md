@@ -23,8 +23,18 @@
 | `quant-execution-engine/` | 目标解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层维护的跨仓库产物契约校验 |
 
-当前目标架构、迁移矩阵和新代码放置规则见[量化仓迁移说明](docs/migration/quant-repo-migration.md)。职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
+当前目标架构、迁移矩阵和新代码放置规则见[量化仓迁移说明](docs/migration/quant-repo-migration.md)。
+迁移后的目标入口同时作为子模块锁定：`quant-platform/` 提供公开通用框架，
+`quant-research/` 保存私有策略与研究，`market-intel/` 消费版本化产物并负责报告与投递。
+旧子模块在 14 天回滚窗口关闭前继续保留，不与目标入口混用为新的业务 owner。
+
+职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
+
+职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
 各自仓库的 README、`AGENTS.md` 和 `docs/` 为准。
+
+候选仓库命名及现有引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
+候选名当前不改变远端名称、gitlink、Python namespace、CLI、生产配置或历史记录。
 
 ## 数据与产物边界
 
@@ -116,6 +126,7 @@ bash scripts/promote-production.sh --repo all --dry-run
 
 - [文档总入口](docs/README.md)
 - [架构边界](ARCHITECTURE.md)
+- [仓库命名迁移字典](docs/governance/repository-naming-map.md)
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
 - [跨仓库文件契约](docs/contracts.md)

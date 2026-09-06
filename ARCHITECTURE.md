@@ -1,24 +1,32 @@
 # 架构边界
 
-> 当前状态：旧工作区处于 sunset 过渡期。下面的旧链路用于理解历史组成；新代码以 `quant-research` 和 `quant-platform` 为准。
+> 当前状态：旧工作区处于 sunset 过渡期。下面的旧链路用于理解历史组成。新代码以
+> `quant-platform` 和 `quant-research` 为准，迁移完成前按兼容性与回滚检查逐步切换。
 
-目标架构：
+## 目标仓库架构
+
+当前的八个子模块是迁移基线，长期目标是三个代码仓库和一个轻量集成层：
 
 ```text
-market-data-platform / quant-platform
-              |
-              v
-       quant-research
-              |
-              | versioned research artifacts
-              v
-          market-intel
-              |
-              v
-       quant-platform / execution adapters
+quant-platform       公开仓库
+  可复用的数据接口、研究工具、回测、契约、公开编排和执行能力
+
+quant-research       私有仓库
+  策略注册、策略专用逻辑、私有研究、实验、模型选择和私有配置
+
+market-intel         私有应用
+  报告、看板、投递、调度、数据新鲜度和故障恢复
+
+research-workspace   轻量集成层
+  版本清单、兼容性检查、契约冒烟测试和发布元数据
 ```
 
+迁移是渐进过程。每个生产者和消费者契约完成兼容性与回滚检查前，现有子模块仍保留为权威来源。
+仓库名称、Python 命名空间、命令行接口和产物 schema 属于不同的兼容性边界，不会一次性全部切换。
+
 迁移矩阵和 agent 规则见 [`docs/migration/quant-repo-migration.md`](docs/migration/quant-repo-migration.md)。
+首轮公开平台和私有研究迁移演练记录在 [`docs/evidence/public-platform-staging-2026-09-06.md`](docs/evidence/public-platform-staging-2026-09-06.md)
+和 [`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md)。
 
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
@@ -75,6 +83,11 @@ quant-execution-engine
 策略身份和生命周期由 `strategy-research` 维护。可执行应用由 `strategy-app` 维护。`strategy-pipeline` 负责数据提供方调用、操作控制、运行目录、原子发布和执行交接。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
 当前八个 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。版本由 `.gitmodules` 和各自 gitlink 锁定。
+
+候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
+`strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
+`microstructure-models`。这些只是冻结的迁移字典，当前不改变 submodule 目录、远端名、
+gitlink、Python namespace 或 CLI。完整引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
 
 ## 代码和数据边界
 

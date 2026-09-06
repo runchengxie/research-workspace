@@ -30,13 +30,22 @@ research-contracts = { git = "https://github.com/runchengxie/research-workspace.
 `research-contracts` 由 artifact producer 和顶层工作区消费：
 
 - 顶层工作区使用 `smoke_contracts.py` 校验 `docs/artifact-contracts.yml` 与
-  `docs/contracts.md` 的一致性。
+  `docs/contracts.md` 的一致性，并校验 `docs/contracts/contract-ownership.yml` 的 owner、consumer
+  和兼容策略完整性。ownership registry 与 artifact 明细清单的重叠项必须保持 schema、producer
+  和 consumers 一致。
 - 生产方（`alpha-research`、`portfolio-backtester`、`strategy-pipeline`）安装本包后，
   通过 `research_contracts` 公开 API 写入 `research.artifact-envelope.v2`。
 - 研究编排方可以使用 `research.clock.v1` 固化一次运行的信息可见、信号、决策、执行窗口和估值时点，
   并使用 `research.backtest-run.v1` 只引用数据、信号、组合结果和证据 artifact，而不复制业务大表。
 - 各仓库不得复制或重写 envelope、研究时钟、根运行清单、SHA-256 和 lineage 校验逻辑。需要扩展契约时，
   修改本包并更新锁定提交。
+
+## Ownership registry
+
+`load_contract_ownership` 读取 metadata-only 的跨仓契约索引，`validate_contract_ownership` 校验
+每项恰有一个 producer、至少一个 consumer，以及 `name`、`schema`、`versioning`、
+`compatibility`、`test_command` 和 `rollback`。该索引不保存 artifact payload、真实路径、凭证、
+provider 配置或策略参数。
 
 ## 研究时钟
 

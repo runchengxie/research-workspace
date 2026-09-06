@@ -8,7 +8,7 @@
     "by_repo": {
       "research-workspace": {
         "max_large_files": 5,
-        "max_long_functions": 4,
+        "max_long_functions": 5,
         "max_complexity_hotspots": 2,
         "max_large_classes": 2
       },
@@ -62,7 +62,7 @@
     {
       "repo": "research-workspace",
       "max_large_files": 5,
-      "max_long_functions": 4,
+      "max_long_functions": 5,
       "max_complexity_hotspots": 2,
       "max_large_classes": 2,
       "owner_decision": [

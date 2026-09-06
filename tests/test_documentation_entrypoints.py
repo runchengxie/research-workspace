@@ -32,6 +32,9 @@ EXPECTED_SUBMODULES = {
     "strategy-app",
     "strategy-pipeline",
     "quant-execution-engine",
+    "quant-platform",
+    "quant-research",
+    "market-intel",
 }
 
 
