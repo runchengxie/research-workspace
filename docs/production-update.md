@@ -71,9 +71,11 @@ The recorded evidence is
 This is not a production promotion record: the evidence contains successful
 reduced-window and production-parameter DailyWatch20 runs in an isolated
 research namespace, but parity is not approved because the available old
-artifact pins a different historical Ths-hot input hash/snapshot. The same-input
-cashflow comparison also remains pending. The `current` pointers were not
-changed, and cashflow remains ineligible for live delivery.
+artifact pins a different historical Ths-hot input hash/snapshot. The
+quant-research cashflow shadow also completed with a reconstructed PIT input
+and a quant-platform publication receipt, but same-input comparison remains
+pending because the strict revision-safe PIT gate is not passed. The `current`
+pointers were not changed, and cashflow remains ineligible for live delivery.
 
 旧 release 在 promotion 成功后按保留策略自动清理。每周的
 `production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
