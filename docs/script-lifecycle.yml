@@ -440,6 +440,16 @@
       "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
     },
     {
+      "path": "scripts/doctor_integration_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Verify the workspace remains a thin integration layer and has no root business-owner package",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none; stdlib-only",
+      "removal_condition": "remove only after target repository migration is complete and an equivalent integration-layer gate exists in the successor release workflow"
+    },
+    {
       "path": "scripts/doctor_submodule_checks.py",
       "owner": "research-workspace",
       "purpose": "Submodule initialization and cleanliness checks",

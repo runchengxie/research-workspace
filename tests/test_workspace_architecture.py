@@ -221,6 +221,16 @@ def test_version_graph_reports_invalid_pyproject_as_error(tmp_path: Path) -> Non
     assert graph["errors"][0].startswith("consumer: cannot parse pyproject.toml:")
 
 
+def test_current_model_records_target_repository_mapping() -> None:
+    model = workspace_architecture.load_model(ROOT)
+    targets = {component.identifier: component.target_repository for component in model.components}
+
+    assert targets["research-workspace"] == "research-workspace"
+    assert targets["research-contracts"] == "quant-platform/contracts"
+    assert targets["alpha-research"] == "quant-platform/alpha"
+    assert targets["strategy-research"] == "quant-research/registry"
+
+
 def test_runtime_import_cycle_is_reported(tmp_path: Path) -> None:
     model_path = _synthetic_model(tmp_path, cyclic=True)
     model = workspace_architecture.load_model(tmp_path, model_path=model_path)

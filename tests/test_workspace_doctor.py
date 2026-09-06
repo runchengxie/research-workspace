@@ -21,6 +21,8 @@ assert spec.loader is not None
 sys.modules[spec.name] = workspace_doctor
 spec.loader.exec_module(workspace_doctor)
 
+from doctor_integration_checks import check_integration_layer  # noqa: E402
+
 governance_spec = importlib.util.spec_from_file_location("workspace_governance", GOVERNANCE_SCRIPT)
 workspace_governance = importlib.util.module_from_spec(governance_spec)
 assert governance_spec.loader is not None
@@ -29,6 +31,20 @@ governance_spec.loader.exec_module(workspace_governance)
 
 
 class WorkspaceDoctorTest(unittest.TestCase):
+    def test_thin_integration_layer_has_target_documents_and_only_contract_source(self) -> None:
+        checks = check_integration_layer(ROOT)
+        self.assertTrue(checks)
+        self.assertTrue(all(check.severity == "OK" for check in checks))
+
+    def test_thin_integration_layer_rejects_business_source_in_root_src(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "src" / "strategy_app").mkdir(parents=True)
+            (root / "src" / "strategy_app" / "__init__.py").write_text("\n", encoding="utf-8")
+            checks = check_integration_layer(root)
+        self.assertTrue(any(check.severity == "ERROR" for check in checks))
+        self.assertTrue(any("strategy_app" in check.message for check in checks))
+
     def test_parse_gitmodules(self) -> None:
         submodules = workspace_doctor.parse_gitmodules(ROOT)
         self.assertEqual(

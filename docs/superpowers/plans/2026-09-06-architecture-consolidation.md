@@ -502,13 +502,18 @@ remote-tracking branch 仍为旧版本；正式远端发布仍需单独授权。
 - Modify: `tests/test_workspace_architecture.py`
 - Modify: 版本矩阵、release manifest 和相关文档
 
-- [ ] **Step 1: 只保留四项职责**
+- [x] **Step 1: 只保留四项职责**
 
-版本组合、契约验证、集成 smoke test、生产发布 manifest。策略身份归 research，报告实现归 market-intel。
+目标架构文档、public/private boundary matrix、命名映射和 contract ownership map 已明确：
+workspace 只负责版本组合、契约验证、集成 smoke test 和生产发布 manifest；策略身份归
+`quant-research`，报告实现归 `market-intel`。
 
-- [ ] **Step 2: 更新 doctor 和 architecture model**
+- [x] **Step 2: 更新 doctor 和 architecture model**
 
-检查 required repositories、commit manifest、契约版本兼容性和 market-intel 消费入口。
+`workspace_doctor` 现在检查 target architecture documents、version manifest 和 root `src/`
+不得出现业务 owner package；`architecture-model.yml` 为每个 legacy component 记录
+`target_repository`，并由 architecture tests 验证 `quant-platform` / `quant-research` 映射。
+当前 scanner 为 `0 errors`、`11 warnings`，warning 仅为既有 standalone pin 差异。
 
 - [ ] **Step 3: 迁移完成后才减少 submodule**
 
