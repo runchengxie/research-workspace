@@ -1,6 +1,6 @@
 # Architecture migration closure checklist
 
-> status: one parity slice validated; consumer cutover pending
+> status: all staged parity slices validated; consumer cutover pending
 > verified: 2026-09-06
 
 ## Target architecture
@@ -21,12 +21,12 @@ The approved sequence and rollback triggers are recorded in
 
 ## Verified gates
 
-- Public platform at `2ba7088`: Apache-2.0, portfolio/data/alpha/microstructure/orchestration/execution framework slices transferred; local full gate is `1146 passed, 3 skipped`, Ruff and format clean. Public GitHub Actions is queued as `34024056490`.
-- Private research at `4b9dd97`: alpha and microstructure baselines remain private, and legacy `alpha-research`/`strategy-pipeline` dependencies have been removed in favor of the consolidated framework. Private alpha and microstructure transfer gates are green in CI run `34023679429`.
+- Public platform at `2ba7088`: Apache-2.0, portfolio/data/alpha/microstructure/orchestration/execution framework slices transferred; local full gate is `1146 passed, 3 skipped`, Ruff and format clean. Public GitHub Actions is green in run `34024056490`.
+- Private research at `5265b68`: alpha, microstructure, strategy families, and private execution runtime are transferred; legacy `alpha-research`/`strategy-pipeline` dependencies have been removed in favor of the consolidated framework. All six private transfer jobs are green in CI run `34024857688`.
 - Public alpha scope intentionally excludes DailyWatch20/Hotsector strategy-specific modules and ownership/result documents; those remain in private research. Public alpha contains 135 source files, 70 tests, and 31 docs.
-- Public orchestration/execution foundations are transferred and covered by the public full suite. Private broker adapters, credentials, and live runtime still require a separate parity task.
+- Public orchestration/execution foundations and private broker/runtime code are transferred and covered by their scoped suites.
 - Public microstructure framework at `2ba7088` contains only generic event-stream/model/simulator machinery; its synthetic suite passes `45 tests`. Real-data coverage, labels, experiments, and results remain private.
-- Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
+- Private strategy-family source, tests, docs, research records, and runtime imports are transferred; import smoke, DailyWatch20 validation, and the strategy-family CI job are green in `34024857688`. Legacy standalone repository-root governance tests remain excluded where their assertions intentionally require the retired repository layout.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
 - `market-intel` boundary: boundary `2 passed`; broader contract/freshness/recovery
