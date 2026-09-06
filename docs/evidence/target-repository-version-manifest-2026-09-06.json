@@ -23,11 +23,11 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "5577ba0dd752e77b4755510f98eee682f4999374",
+      "commit": "2ba708896d24695c0127124ec6e9657a0732976d",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success at 34023595974; local full gate 1101 passed, 3 skipped",
-      "scope": "portfolio baseline plus public data core/quality, alpha framework, orchestration control plane, and execution interfaces",
+      "ci": "public-ci: queued at 34024056490; local full gate 1146 passed, 3 skipped",
+      "scope": "portfolio baseline plus public data core/quality, alpha framework, microstructure framework, orchestration control plane, and execution interfaces",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
@@ -49,7 +49,8 @@
     }
   },
   "compatibility_gates": [
-    "quant-platform public framework: local full gate 1101 passed, 3 skipped; Ruff and format pass; CI rerun pending at 5577ba0",
+    "quant-platform public framework: local full gate 1146 passed, 3 skipped; Ruff and format pass; public CI queued at 34024056490",
+    "quant-platform public microstructure framework: 26 source files, 10 tests, 3 docs; synthetic suite 45 passed",
     "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; private consumers repinned to public bb4c9a3; selected contract/provider tests and private CI green at 34021009249",
     "quant-platform public alpha framework: 135 source files, 70 tests, 31 docs; private edge modules remain in quant-research",
     "quant-research private alpha baseline: 155 source files and 84 tests; local alpha suite green; legacy alpha dependency removed",

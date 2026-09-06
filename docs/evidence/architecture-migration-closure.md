@@ -21,10 +21,11 @@ The approved sequence and rollback triggers are recorded in
 
 ## Verified gates
 
-- Public platform at `5577ba0`: Apache-2.0, portfolio/data/alpha/orchestration/execution framework slices transferred; local full gate is `1101 passed, 3 skipped`, Ruff and format clean. GitHub Actions is green at `34023595974`.
+- Public platform at `2ba7088`: Apache-2.0, portfolio/data/alpha/microstructure/orchestration/execution framework slices transferred; local full gate is `1146 passed, 3 skipped`, Ruff and format clean. Public GitHub Actions is queued as `34024056490`.
 - Private research at `4b9dd97`: alpha and microstructure baselines remain private, and legacy `alpha-research`/`strategy-pipeline` dependencies have been removed in favor of the consolidated framework. Private alpha and microstructure transfer gates are green in CI run `34023679429`.
 - Public alpha scope intentionally excludes DailyWatch20/Hotsector strategy-specific modules and ownership/result documents; those remain in private research. Public alpha contains 135 source files, 70 tests, and 31 docs.
 - Public orchestration/execution foundations are transferred and covered by the public full suite. Private broker adapters, credentials, and live runtime still require a separate parity task.
+- Public microstructure framework at `2ba7088` contains only generic event-stream/model/simulator machinery; its synthetic suite passes `45 tests`. Real-data coverage, labels, experiments, and results remain private.
 - Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
