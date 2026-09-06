@@ -99,6 +99,12 @@ targets.json
 - 文档中的命令、文件名和默认值必须能从代码或测试中核对
 - 外部框架能力以 `docs/framework-support-matrix.md` 为准，历史拉取请求和跳过的测试不能写成当前支持
 
+### 文档阅读顺序
+
+编码代理默认先读根目录 `README.md`，再读当前仓库 `docs/README.md`，然后只读取与任务直接相关的一个分类目录和目标页面。除非任务明确涉及历史、证据、设计或实施计划，否则不要递归读取 `archive/`、`evidence/`、`docs/superpowers/` 或子模块全部 Markdown。
+
+文档正文按 `architecture/`、`concepts/`、`guides/`、`operations/`、`reference/`、`research/`、`governance/`、`archive/` 和 `evidence/` 的语义归类。移动正文后，旧路径保留短兼容指针，使用 `status: superseded` 和 `superseded_by`，不得保留重复正文。
+
 文档润色不得顺手修改公开接口、路径、资产键或历史产物名称。
 
 ## GitHub Actions 策略

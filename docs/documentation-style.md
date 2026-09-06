@@ -28,6 +28,44 @@
 - ADR、计划、证据和 archive 保存历史背景。修正历史记录时应保留原始事实和日期。
 - 修改路径、命令、配置或输出契约时，同时检查代码、测试和相关文档。
 
+## 目录与生命周期
+
+文档按主要读者和维护责任归类。优先使用以下目录语义：
+
+- `architecture/`：边界、设计、ADR 索引和稳定架构参考
+- `concepts/`：当前概念、术语和方法说明
+- `guides/`：面向读者的使用和接入指南
+- `operations/`：安装、运行、检查、发布和故障处理
+- `reference/`：API、配置、字段、产物和兼容性参考
+- `research/`：当前研究问题、实验方法和结果入口
+- `governance/`：质量、所有权、生命周期和维护规则
+- `archive/`：历史记录、冻结材料和已结束迁移
+- `evidence/`：带日期、哈希或机器生成的证据
+
+入口文档使用短状态块：
+
+```text
+> status: active | reference | archived | superseded
+> owner: <repository or workspace>
+> audience: human | agent | both
+> last_verified: YYYY-MM-DD
+> source_of_truth: yes | no
+> superseded_by: n/a | <relative path>
+```
+
+正文迁移后，旧路径保留兼容指针。指针只包含范围说明、当前链接和 `superseded` 状态，不复制原正文，不进入推荐阅读路径。
+
+## AI 阅读顺序
+
+编码代理默认按以下顺序读取文档：
+
+1. 当前仓库根目录 `README.md`。
+2. 当前仓库 `docs/README.md`。
+3. 与任务直接相关的一个分类目录 README 和目标页面。
+4. 任务明确涉及历史、证据、设计或实施计划时，再读取对应生命周期目录。
+
+默认不递归读取全部 Markdown，也不把 `archive/`、`evidence/`、`superpowers/` 中的材料当作当前实现说明。
+
 ## 审阅清单
 
 提交文档改动前检查：
