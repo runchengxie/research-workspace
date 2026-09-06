@@ -1,6 +1,11 @@
 # 量化研发工作区
 
-`research-workspace` 用 Git 子模块锁定一组协同工作的量化研发仓库，维护跨仓库契约、
+> 迁移状态：sunset 过渡期
+>
+> 新的策略研究能力进入 `quant-research`，新的通用量化平台能力进入 `quant-platform`。
+> 本仓库暂时保留为历史复现、跨仓库版本锁定和迁移导航入口，不再承载新的核心实现。
+
+`research-workspace` 曾经用 Git 子模块锁定一组协同工作的量化研发仓库，维护跨仓库契约、
 版本组合、发布流程和轻量检查。大型数据、研究运行产物和交易审计记录位于仓库外的
 数据目录，当前数据入口见 `~/data/README.md`。
 
@@ -18,9 +23,12 @@
 | `quant-execution-engine/` | 目标解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层维护的跨仓库产物契约校验 |
 
+当前目标架构、迁移矩阵和新代码放置规则见[量化仓迁移说明](docs/migration/quant-repo-migration.md)。
 迁移后的目标入口同时作为子模块锁定：`quant-platform/` 提供公开通用框架，
 `quant-research/` 保存私有策略与研究，`market-intel/` 消费版本化产物并负责报告与投递。
 旧子模块在 14 天回滚窗口关闭前继续保留，不与目标入口混用为新的业务 owner。
+
+职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
 
 职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
 各自仓库的 README、`AGENTS.md` 和 `docs/` 为准。

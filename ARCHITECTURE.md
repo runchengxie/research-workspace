@@ -1,35 +1,32 @@
 # 架构边界
 
-## Target repository architecture
+> 当前状态：旧工作区处于 sunset 过渡期。下面的旧链路用于理解历史组成。新代码以
+> `quant-platform` 和 `quant-research` 为准，迁移完成前按兼容性与回滚检查逐步切换。
 
-The current eight submodules are a migration baseline, not the intended long-term repository
-shape. The target is three code repositories plus a thin integration layer:
+## 目标仓库架构
+
+当前的八个子模块是迁移基线，长期目标是三个代码仓库和一个轻量集成层：
 
 ```text
-quant-platform       public
-  reusable data interfaces, research utilities, backtesting, contracts,
-  public orchestration and execution capabilities
+quant-platform       公开仓库
+  可复用的数据接口、研究工具、回测、契约、公开编排和执行能力
 
-quant-research       private
-  strategy registry, strategy-specific logic, proprietary research,
-  experiments, model selection and private configuration
+quant-research       私有仓库
+  策略注册、策略专用逻辑、私有研究、实验、模型选择和私有配置
 
-market-intel         private application
-  reports, dashboards, delivery, scheduling, freshness and recovery
+market-intel         私有应用
+  报告、看板、投递、调度、数据新鲜度和故障恢复
 
-research-workspace   thin integration layer
-  version manifest, compatibility checks, contract smoke tests and release metadata
+research-workspace   轻量集成层
+  版本清单、兼容性检查、契约冒烟测试和发布元数据
 ```
 
-The migration is incremental. Until each producer/consumer contract has passed its compatibility
-and rollback checks, the existing submodules remain authoritative. Repository names, Python
-namespaces, CLIs and artifact schemas are separate compatibility surfaces and are not changed in
-one operation.
+迁移是渐进过程。每个生产者和消费者契约完成兼容性与回滚检查前，现有子模块仍保留为权威来源。
+仓库名称、Python 命名空间、命令行接口和产物 schema 属于不同的兼容性边界，不会一次性全部切换。
 
-The first public and private migration rehearsals are recorded in
-[`docs/evidence/public-platform-staging-2026-09-06.md`](docs/evidence/public-platform-staging-2026-09-06.md)
-and
-[`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md).
+迁移矩阵和 agent 规则见 [`docs/migration/quant-repo-migration.md`](docs/migration/quant-repo-migration.md)。
+首轮公开平台和私有研究迁移演练记录在 [`docs/evidence/public-platform-staging-2026-09-06.md`](docs/evidence/public-platform-staging-2026-09-06.md)
+和 [`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md)。
 
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
