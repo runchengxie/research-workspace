@@ -23,16 +23,16 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "52fafcc",
+      "commit": "bb4c9a30fe8a421b475c0fbcbad2316bfc84753b",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success at 34020595166",
-      "scope": "portfolio parity-complete baseline plus public market-data contracts/core and generic publication primitives",
+      "ci": "public-ci: success at 34020846558",
+      "scope": "portfolio parity-complete baseline plus public market-data contracts/core/quality and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "5946756",
+      "commit": "59467567af92475af1dd77e2ed1eab9e1aeb9cad",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
       "ci": "private research CI: success at 34020694892",
@@ -49,7 +49,7 @@
     }
   },
   "compatibility_gates": [
-    "quant-platform full transferred portfolio suite plus public data core: 589 tests, Ruff and ty pass; public CI green at 34020595166",
+    "quant-platform full transferred portfolio suite plus public data core/quality: 599 tests, Ruff and ty pass; public CI green at 34020846558",
     "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; selected contract/provider tests and private CI green at 34020694892",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
