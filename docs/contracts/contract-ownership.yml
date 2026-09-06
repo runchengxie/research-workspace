@@ -1,0 +1,95 @@
+{
+  "schema_version": "contract_ownership.v1",
+  "contracts": [
+    {
+      "name": "targets.json",
+      "schema": "quant-execution-engine.targets/v2",
+      "producer": "strategy-pipeline",
+      "consumers": ["quant-execution-engine"],
+      "versioning": "Schema major version is part of the contract name; each export carries immutable lineage.",
+      "compatibility": "Readers accept v2 targets with exactly one of target_weight or target_quantity per row.",
+      "test_command": "pytest strategy-pipeline/tests/control_plane/test_targets.py -q",
+      "rollback": "Restore the previous pipeline release and its immutable targets plus lineage sidecar."
+    },
+    {
+      "name": "research-run.manifest.json",
+      "schema": "research.backtest-run.v1",
+      "producer": "strategy-pipeline",
+      "consumers": ["strategy-research", "research-workspace"],
+      "versioning": "The schema identifier is versioned; manifests are immutable run snapshots.",
+      "compatibility": "Consumers validate v1 and resolve referenced artifacts without copying their payloads.",
+      "test_command": "pytest tests/test_research_run_manifest.py tests/test_research_run_manifest_writer.py -q",
+      "rollback": "Repoint the consumer to the prior immutable run manifest and referenced artifacts."
+    },
+    {
+      "name": "research context snapshot",
+      "schema": "cn_context.raw.seal.v1",
+      "producer": "market-data-platform",
+      "consumers": ["alpha-research", "strategy-pipeline"],
+      "versioning": "Every vintage is immutable and the seal schema carries its major version.",
+      "compatibility": "Consumers use sealed raw.bin, receipt.json, and manifest.seal.json without mutating a vintage.",
+      "test_command": "pytest market-data-platform/tests/test_context_snapshots_publish.py -q",
+      "rollback": "Select the prior sealed vintage; never overwrite or delete the rejected snapshot."
+    },
+    {
+      "name": "metadata/current_assets/a_share_current.json",
+      "schema": "market_data_platform.a_share_current.v1",
+      "producer": "market-data-platform",
+      "consumers": ["alpha-research", "strategy-app", "strategy-pipeline"],
+      "versioning": "contract.version remains 1 for compatible additions; asset revisions are selected by the current pointer.",
+      "compatibility": "Readers tolerate additive asset keys and retain the documented default_next alias.",
+      "test_command": "pytest market-data-platform/tests/test_current_contract_loader.py -q",
+      "rollback": "Atomically restore the previous current-contract pointer and leave versioned assets unchanged."
+    },
+    {
+      "name": "formal_predictions.parquet",
+      "schema": "ticknet.research.formal_prediction.v1",
+      "producer": "deep-learning-tick-data-prediction",
+      "consumers": ["alpha-research"],
+      "versioning": "Parquet metadata binds the dataset and target, universe, tradability, and suspension contracts.",
+      "compatibility": "Alpha ingestion requires all formal metadata and rejects changed contract values fail-closed.",
+      "test_command": "pytest deep-learning-tick-data-prediction/tests/test_research_prediction_contract.py -q",
+      "rollback": "Restore the prior immutable prediction file and its matching dataset fingerprint."
+    },
+    {
+      "name": "signals.parquet",
+      "schema": "alpha_research.signals",
+      "producer": "alpha-research",
+      "consumers": ["portfolio-backtester", "strategy-pipeline"],
+      "versioning": "schema_version is additive within v1; incompatible fields require a new major schema.",
+      "compatibility": "Consumers require the stable columns and ignore documented optional explanation columns.",
+      "test_command": "pytest alpha-research/tests/test_signal_artifact.py -q",
+      "rollback": "Restore the previous signal artifact and matching metadata/envelope pair."
+    },
+    {
+      "name": "backtest pricing frame",
+      "schema": "portfolio_backtester.backtest_pricing",
+      "producer": "market-data-platform",
+      "consumers": ["portfolio-backtester"],
+      "versioning": "The typed input contract has schema_version 1 and stable trade_date and symbol keys.",
+      "compatibility": "Additive columns are allowed; key and tradability semantics remain owner-validated.",
+      "test_command": "pytest portfolio-backtester/tests/test_contracts.py -q",
+      "rollback": "Pin the prior published pricing asset and rerun with the unchanged strategy specification."
+    },
+    {
+      "name": "watchlist_20.csv",
+      "schema": "daily_watch20.selection.v1",
+      "producer": "strategy-pipeline",
+      "consumers": ["market-intel"],
+      "versioning": "The v1 selection schema is stable and each publication is date-scoped and immutable.",
+      "compatibility": "market-intel renders only after the paired receipt passes and does not expose internal audit fields.",
+      "test_command": "pytest strategy-app/tests/test_daily_watch20_publication_contracts.py -q",
+      "rollback": "Keep the previous atomic latest publication active when the candidate fails validation."
+    },
+    {
+      "name": "selection_receipt.json",
+      "schema": "daily_watch20.selection.v1 receipt",
+      "producer": "strategy-pipeline",
+      "consumers": ["market-intel"],
+      "versioning": "Receipt schema follows the v1 selection contract and is published atomically with the watchlist.",
+      "compatibility": "Consumers fail closed on status, quality, freshness, lineage, or artifact-hash mismatch.",
+      "test_command": "cd \"$MARKET_INTEL_ROOT\" && uv run pytest -k contract",
+      "rollback": "Retain the prior complete publication directory and do not advance latest."
+    }
+  ]
+}

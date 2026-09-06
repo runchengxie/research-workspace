@@ -184,9 +184,21 @@ git commit -m "feat: add task-scoped agent context manifests"
 
 **Files:**
 - Modify: `src/research_contracts/README.md`
+- Modify: `src/research_contracts/__init__.py`
+- Create: `src/research_contracts/contract_ownership.py`
+- Modify: `src/research_contracts/smoke_contracts.py`
 - Modify: `docs/contracts/README.md`
 - Create: `docs/contracts/contract-ownership.yml`
-- Modify: 对应 schema 和契约测试
+- Modify: `docs/artifact-contracts.yml`
+- Modify: `tests/test_artifact_contract_manifest.py`
+- Create: `tests/test_contract_ownership.py`
+- Modify: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
+
+执行裁定：`docs/artifact-contracts.yml` 和 `tests/test_artifact_contract_manifest.py` 是现有跨仓
+artifact 明细的权威 registry 和契约测试。新增 ownership registry 作为覆盖文件 artifact 与
+类型化输入的治理索引，由 `research_contracts` loader/validator 和现有 smoke 入口校验；两个 registry
+重叠的 artifact 必须校验 producer、schema 和 consumers 一致。该扩展只登记 metadata，不修改
+producer、consumer、artifact payload 或私有仓库行为。
 
 - [ ] **Step 1: 登记至少这些 artifact**
 
@@ -214,7 +226,9 @@ cd /home/richard/code/market-intel && uv run pytest -k contract
 - [ ] **Step 4: 提交**
 
 ```bash
-git add src/research_contracts docs/contracts tests
+git add src/research_contracts docs/contracts docs/artifact-contracts.yml \
+  tests/test_artifact_contract_manifest.py tests/test_contract_ownership.py \
+  docs/superpowers/plans/2026-09-06-architecture-consolidation.md
 git commit -m "docs: register cross-repository artifact ownership"
 ```
 

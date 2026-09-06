@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_MANIFEST = ROOT / "docs" / "artifact-contracts.yml"
 CONTRACT_DOC = ROOT / "docs" / "contracts.md"
+CONTRACT_OWNERSHIP = ROOT / "docs" / "contracts" / "contract-ownership.yml"
 
 
 @dataclass(frozen=True)
@@ -134,9 +135,27 @@ def _artifact_contract_manifest_check(root: Path) -> SmokeResult:
     return SmokeResult("OK", "artifact contract manifest", "passed")
 
 
+def _contract_ownership_check(root: Path) -> SmokeResult:
+    contracts_src = ROOT / "src"
+    if str(contracts_src) not in sys.path:
+        sys.path.insert(0, str(contracts_src))
+    from research_contracts import validate_contract_ownership
+
+    result = validate_contract_ownership(
+        registry_path=root / CONTRACT_OWNERSHIP.relative_to(ROOT),
+        artifact_manifest_path=root / CONTRACT_MANIFEST.relative_to(ROOT),
+    )
+    if not result.ok:
+        return SmokeResult("ERROR", "contract ownership registry", "; ".join(result.issues))
+    return SmokeResult("OK", "contract ownership registry", "passed")
+
+
 def run_smoke(root: Path, timeout: int) -> list[SmokeResult]:
     root = root.resolve()
-    results: list[SmokeResult] = [_artifact_contract_manifest_check(root)]
+    results: list[SmokeResult] = [
+        _artifact_contract_manifest_check(root),
+        _contract_ownership_check(root),
+    ]
 
     marketdata = _command_for(
         root,
