@@ -34,7 +34,7 @@ def test_count_loc_discovers_all_initialized_submodules(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stderr
     calls = log.read_text(encoding="utf-8").splitlines()
-    assert len(calls) == 10  # 1 main repository + 8 submodules + 1 sum operation
+    assert len(calls) == 13  # 1 main repository + 11 submodules + 1 sum operation
     assert all("--list-file=" in call for call in calls[:-1])
     assert "--sum-reports" in calls[-1]
     assert "strategy-research" in result.stdout

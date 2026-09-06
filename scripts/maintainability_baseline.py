@@ -36,6 +36,9 @@ SUBMODULE_DIRS = {
     "strategy-app",
     "deep-learning-tick-data-prediction",
     "strategy-research",
+    "quant-platform",
+    "quant-research",
+    "market-intel",
 }
 EXCLUDED_PARTS = {
     ".git",

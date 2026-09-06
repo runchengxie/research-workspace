@@ -14,6 +14,9 @@ EXPECTED_ACTIVE_SUBMODULES = {
     "quant-execution-engine",
     "deep-learning-tick-data-prediction",
     "strategy-research",
+    "quant-platform",
+    "quant-research",
+    "market-intel",
 }
 REMOVED_ACTIVE_HK_SURFACES = (
     "demo/hk-public-demo-template-v1",

@@ -224,13 +224,13 @@
     "market-intel": {
       "path": "market-intel",
       "profiles": {
-        "smoke": [["uv", "run", "pytest", "-q", "tests/test_boundary_contract.py", "tests/test_platform_publication_consumer.py"]],
+        "smoke": [["uv", "run", "--locked", "pytest", "-q", "tests/test_boundary_contract.py", "tests/test_platform_publication_consumer.py"]],
         "lint": [
           ["uv", "lock", "--check"],
-          ["uv", "run", "ruff", "check", "."],
-          ["uv", "run", "ruff", "format", "--check", "."]
+          ["uv", "run", "--locked", "ruff", "check", "."],
+          ["uv", "run", "--locked", "ruff", "format", "--check", "."]
         ],
-        "test": [["uv", "run", "pytest", "-q"]],
+        "test": [["uv", "run", "--locked", "pytest", "-q"]],
         "type": [],
         "release_typecheck": [],
         "full": ["@lint", "@smoke", "@test"]

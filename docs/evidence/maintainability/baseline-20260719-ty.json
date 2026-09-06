@@ -10,12 +10,12 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 153,
-      "python_loc": 26317,
+      "python_file_count": 156,
+      "python_loc": 27131,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
-        "long_functions": 4,
+        "long_functions": 5,
         "complexity_hotspots": 2,
         "large_classes": 2
       },
@@ -70,6 +70,12 @@
           "name": "plan_commands",
           "line_count": 95,
           "complexity": 4
+        },
+        {
+          "path": "src/research_contracts/smoke_contracts.py",
+          "name": "run_smoke",
+          "line_count": 87,
+          "complexity": 8
         }
       ],
       "complexity_hotspots": [
@@ -90,13 +96,13 @@
         {
           "path": "tests/test_workspace_doctor.py",
           "name": "WorkspaceDoctorTest",
-          "line_count": 432,
-          "method_count": 21
+          "line_count": 449,
+          "method_count": 23
         },
         {
           "path": "tests/test_run_submodule_checks.py",
           "name": "RunSubmoduleChecksTest",
-          "line_count": 417,
+          "line_count": 423,
           "method_count": 11
         }
       ],
@@ -121,7 +127,10 @@
           "strategy-app",
           "deep-learning-tick-data-prediction",
           "demo",
-          "strategy-research"
+          "strategy-research",
+          "quant-platform",
+          "quant-research",
+          "market-intel"
         ],
         "ty_include": [
           "scripts/dead_code_advisory.py",
@@ -169,11 +178,15 @@
           "quant-execution-engine",
           "strategy-app",
           "strategy-pipeline",
-          "strategy-research"
+          "strategy-research",
+          "quant-platform",
+          "quant-research",
+          "market-intel"
         ],
         "mypy_present": false
       },
       "script_inventory": [
+        "scripts/analyze_repository_coupling.py",
         "scripts/benchmark_matrix_build.py",
         "scripts/build_platform_publication.py",
         "scripts/check-production-updates.sh",
@@ -194,6 +207,7 @@
         "scripts/doctor_git_checks.py",
         "scripts/doctor_hk_archive_checks.py",
         "scripts/doctor_hook_checks.py",
+        "scripts/doctor_integration_checks.py",
         "scripts/doctor_submodule_checks.py",
         "scripts/ensure-shared-production-venv.sh",
         "scripts/framework_adapter_evidence.py",
