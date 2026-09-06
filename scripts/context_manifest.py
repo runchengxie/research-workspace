@@ -131,14 +131,6 @@ _MANIFESTS = {
                 consumers=("strategy-app", "strategy-pipeline"),
                 test_command="pytest strategy-research/tests/test_root_layout.py -q",
             ),
-            ContractRoute(
-                producer="strategy-app",
-                contract="watchlist_20.csv",
-                consumers=("strategy-pipeline",),
-                test_command=(
-                    "pytest strategy-app/tests/test_daily_watch20_publication_contracts.py -q"
-                ),
-            ),
         ),
     ),
     "orchestration": ContextManifest(
@@ -187,7 +179,7 @@ _MANIFESTS = {
         area="market-intel",
         repositories=("market-intel",),
         direct_consumers=(),
-        default_context=(*_COMMON_CONTEXT, "market-intel/AGENTS.md"),
+        default_context=(*_COMMON_CONTEXT, "external checkout: market-intel/AGENTS.md"),
         contracts=(
             ContractRoute(
                 producer="strategy-pipeline",

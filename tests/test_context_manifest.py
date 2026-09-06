@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -90,6 +91,22 @@ def test_manifest_pytest_targets_exist() -> None:
     assert missing == []
 
 
+def test_default_context_paths_exist_or_use_an_external_marker() -> None:
+    context_manifest = load_context_manifest()
+
+    missing: list[str] = []
+    external: list[str] = []
+    for area in context_manifest.available_areas():
+        for context in context_manifest.build_manifest(area).default_context:
+            if context.startswith("external checkout: "):
+                external.append(context)
+            elif not (ROOT / context).is_file():
+                missing.append(context)
+
+    assert missing == []
+    assert external == ["external checkout: market-intel/AGENTS.md"]
+
+
 def test_direct_consumers_have_an_owned_contract_route() -> None:
     context_manifest = load_context_manifest()
 
@@ -126,3 +143,25 @@ def test_data_alpha_and_portfolio_consumers_match_artifact_routes() -> None:
     assert context_manifest.build_manifest("portfolio").direct_consumers == (
         "strategy-pipeline",
     )
+
+
+def test_watchlist_route_matches_authoritative_registry() -> None:
+    context_manifest = load_context_manifest()
+    registry = json.loads((ROOT / "docs" / "artifact-contracts.yml").read_text())
+    authoritative = next(
+        item for item in registry["artifacts"] if item["artifact"] == "watchlist_20.csv"
+    )
+    watchlist_routes = [
+        (area, route)
+        for area in context_manifest.available_areas()
+        for route in context_manifest.build_manifest(area).contracts
+        if route.contract == "watchlist_20.csv"
+    ]
+
+    assert len(watchlist_routes) == 2
+    assert {area for area, _route in watchlist_routes} == {"market-intel", "orchestration"}
+    for _area, route in watchlist_routes:
+        assert route.producer == authoritative["producer"]
+        assert list(route.consumers) == authoritative["consumers"]
+    orchestration = context_manifest.build_manifest("orchestration")
+    assert "market-intel" in orchestration.direct_consumers

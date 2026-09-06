@@ -73,9 +73,10 @@ python scripts/context_manifest.py --task alpha
   版本化 artifact，以及冻结的 JSON 规格。
 - 禁止依赖：从 `src/strategy_app` 导入 `strategy_pipeline`、复制通用能力、承担生产发布或
   保存 provider 与 broker 凭证。
-- 契约文件：`strategy-app/src/strategy_app/campaign_specs/*.json`、
-  `strategy-app/src/strategy_app/daily_watch20/pipeline_publication.py`、`watchlist_20.csv` 和
-  `selection_receipt.json`。
+- 契约文件：`strategy-app/src/strategy_app/campaign_specs/*.json` 和
+  `strategy-app/src/strategy_app/daily_watch20/pipeline_publication.py` 定义策略侧 payload 实现。
+  跨仓 `watchlist_20.csv` 和 `selection_receipt.json` 由 `strategy-pipeline` 作为契约 owner 和
+  producer。
 - 最小测试：
   `pytest strategy-app/tests/test_daily_watch20_publication_contracts.py -q`。
 
