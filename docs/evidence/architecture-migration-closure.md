@@ -5,19 +5,17 @@
 
 ## 目标架构
 
-The intended end state is:
+目标架构如下：
 
-> `quant-platform` provides reusable capability, `quant-research` preserves
-> strategy IP, `market-intel` presents and delivers results, and
-> `research-workspace` locks compatible versions.
+> `quant-platform` 提供可复用能力，`quant-research` 保存策略知识产权，
+> `market-intel` 展示并投递结果，`research-workspace` 锁定兼容的版本组合。
 
-The current repository names remain authoritative until each migration slice
-has its own release and rollback evidence. The target mapping is recorded in
-`docs/governance/repository-naming-map.md` and
-`docs/architecture-model.yml`.
+在每个迁移切片完成独立发布并取得回滚证据前，当前仓库名称仍作为事实来源。
+目标映射记录在 `docs/governance/repository-naming-map.md` 和
+`docs/architecture-model.yml` 中。
 
-The approved sequence and rollback triggers are recorded in
-`docs/migrations/architecture-cutover-runbook.md`.
+批准的迁移顺序和回滚触发条件记录在
+`docs/migrations/architecture-cutover-runbook.md` 中。
 
 ## 已验证门禁
 
@@ -51,26 +49,23 @@ machine-readable routing is provided by `scripts/context_manifest.py`.
 
 ## 回滚演练
 
-An isolated temporary release root exercised:
+在隔离的临时 release 根目录中完成了以下演练：
 
-1. failed validation leaves `current` pointing to the old release;
-2. a validated candidate is promoted through a temporary symlink and atomic
-   replace;
-3. the old release is restored through the same atomic mechanism.
+1. 校验失败时，`current` 仍指向旧版本。
+2. 通过临时符号链接和原子替换晋级通过校验的候选版本。
+3. 使用相同的原子机制恢复旧版本。
 
-The real production pointers were read before and after the rehearsal and were
-unchanged:
+演练前后读取了真实生产指针，结果保持不变：
 
 - `production/market-intel/current` → release `482cb31b...`
 - `production/research-workspace/current` → release `9267bbae...`
 
-No production pointer, artifact, remote, or GitHub repository was modified.
+演练没有修改生产指针、artifact、远端或 GitHub 仓库。
 
 ## 明确待办
 
-- Actual workspace consumer cutover to the new remotes.
-- Repository rename/redirect decisions and old-submodule removal.
-- Full release-type gate on the final migrated repositories.
+- 工作区消费者切换到新远端。
+- 仓库重命名、重定向和旧 submodule 移除决策。
+- 最终迁移仓库的完整 release-type 门禁。
 
-These require an explicit publication/rename decision and are not implied by
-the local staging evidence.
+这些工作需要明确的发布或重命名决策，现有本地暂存证据不代表它们已经完成。
