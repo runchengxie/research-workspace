@@ -47,7 +47,9 @@ class PairReport:
     contract_change_count: int
     release_independence_count: int
     recommended_action: str
+    recommendation_rationale: str
     evidence: tuple[str, ...]
+    independent_evidence: tuple[str, ...]
 
 
 def _require_string(value: Any, field: str) -> str:
@@ -116,20 +118,41 @@ def _is_contract_path(path: str) -> bool:
 
 
 def _joint_classification(commit: CommitMetadata, pair: tuple[str, str]) -> str:
+    if not set(pair).issubset(commit.complete_repositories):
+        return "unclassified"
     paths = commit.changes[pair[0]] + commit.changes[pair[1]]
     if any(_is_contract_path(path) for path in paths):
         return "contract"
-    if not set(pair).issubset(commit.complete_repositories):
-        return "unclassified"
     return "local"
 
 
 def _recommend(
     *, co_change_count: int, contract_change_count: int, release_independence_count: int
-) -> str:
+) -> tuple[str, str]:
     if co_change_count and contract_change_count * 2 >= co_change_count:
-        return "keep-separate-strengthen-contracts"
-    return "keep-separate"
+        return (
+            "keep-separate-strengthen-contracts",
+            f"{contract_change_count} of {co_change_count} joint updates are contract-related; "
+            f"{release_independence_count} independent updates were also observed",
+        )
+    if release_independence_count > co_change_count:
+        return (
+            "keep-separate",
+            f"{release_independence_count} independent updates outweigh "
+            f"{co_change_count} joint updates",
+        )
+    if co_change_count >= 3:
+        return (
+            "keep-separate-pending-merge-prerequisites",
+            f"{co_change_count} joint updates versus {release_independence_count} independent "
+            "updates indicate concentrated coupling, but Git metadata cannot prove atomic PR "
+            "changes or matching visibility",
+        )
+    return (
+        "keep-separate",
+        f"{co_change_count} joint updates do not establish sustained coupling; "
+        f"{release_independence_count} independent updates were observed",
+    )
 
 
 def analyze_metadata(metadata: CouplingMetadata) -> dict[tuple[str, str], PairReport]:
@@ -147,18 +170,26 @@ def analyze_metadata(metadata: CouplingMetadata) -> dict[tuple[str, str], PairRe
             f"{commit.commit[:12]} {commit.date} {classification} {commit.subject}"
             for commit, classification in zip(joint, classifications, strict=True)
         )
+        independent_evidence = tuple(
+            f"{commit.commit[:12]} {commit.date} independent "
+            f"{pair[0] if pair[0] in commit.changes else pair[1]} {commit.subject}"
+            for commit in independent
+        )
+        recommended_action, rationale = _recommend(
+            co_change_count=len(joint),
+            contract_change_count=contract_count,
+            release_independence_count=len(independent),
+        )
         report[pair] = PairReport(
             repositories=pair,
             period=metadata.period,
             co_change_count=len(joint),
             contract_change_count=contract_count,
             release_independence_count=len(independent),
-            recommended_action=_recommend(
-                co_change_count=len(joint),
-                contract_change_count=contract_count,
-                release_independence_count=len(independent),
-            ),
+            recommended_action=recommended_action,
+            recommendation_rationale=rationale,
             evidence=evidence,
+            independent_evidence=independent_evidence,
         )
     return report
 
@@ -287,7 +318,8 @@ def _escape_table(value: str) -> str:
 def render_markdown(report: Mapping[tuple[str, str], PairReport]) -> str:
     rows = []
     for pair in report.values():
-        evidence = "<br>".join(pair.evidence) if pair.evidence else "none"
+        all_evidence = pair.evidence + pair.independent_evidence
+        evidence = "<br>".join(all_evidence) if all_evidence else "none"
         rows.append(
             "| "
             + " | ".join(
@@ -298,6 +330,7 @@ def render_markdown(report: Mapping[tuple[str, str], PairReport]) -> str:
                     str(pair.contract_change_count),
                     str(pair.release_independence_count),
                     pair.recommended_action,
+                    pair.recommendation_rationale,
                     _escape_table(evidence),
                 )
             )
@@ -322,8 +355,9 @@ def render_markdown(report: Mapping[tuple[str, str], PairReport]) -> str:
             "## 结果",
             "",
             "| repositories | period | co_change_count | contract_change_count | "
-            "release_independence_count | recommended_action | evidence |",
-            "| --- | --- | ---: | ---: | ---: | --- | --- |",
+            "release_independence_count | recommended_action | recommendation_rationale | "
+            "evidence |",
+            "| --- | --- | ---: | ---: | ---: | --- | --- | --- |",
             *rows,
             "",
             "## 方法与边界",

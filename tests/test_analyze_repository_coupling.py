@@ -79,6 +79,55 @@ def test_contract_dominated_pair_strengthens_contracts_instead_of_merging() -> N
     )
 
 
+def test_partial_path_metadata_is_unclassified_even_when_available_side_is_contract() -> None:
+    metadata = coupling.CouplingMetadata(
+        repositories=("repository-a", "repository-b"),
+        period="12.months..HEAD",
+        commits=(
+            coupling.CommitMetadata(
+                commit="abc123",
+                date="2026-09-06",
+                subject="joint update with one unavailable object",
+                changes={
+                    "repository-a": ("contracts/catalog.json",),
+                    "repository-b": (),
+                },
+                complete_repositories=frozenset({"repository-a"}),
+            ),
+        ),
+    )
+
+    pair = coupling.analyze_metadata(metadata)[("repository-a", "repository-b")]
+
+    assert pair.contract_change_count == 0
+    assert pair.evidence == (
+        "abc123 2026-09-06 unclassified joint update with one unavailable object",
+    )
+
+
+def test_independent_releases_change_recommendation_and_rationale() -> None:
+    concentrated = coupling._recommend(
+        co_change_count=4,
+        contract_change_count=1,
+        release_independence_count=0,
+    )
+    independent = coupling._recommend(
+        co_change_count=4,
+        contract_change_count=1,
+        release_independence_count=5,
+    )
+
+    assert concentrated == (
+        "keep-separate-pending-merge-prerequisites",
+        "4 joint updates versus 0 independent updates indicate concentrated coupling, "
+        "but Git metadata cannot prove atomic PR changes or matching visibility",
+    )
+    assert independent == (
+        "keep-separate",
+        "5 independent updates outweigh 4 joint updates",
+    )
+
+
 def test_markdown_exposes_required_fields_and_method_limit() -> None:
     report = coupling.analyze_commits(fixtures("strategy-commits.json"))
 
@@ -96,6 +145,8 @@ def test_markdown_exposes_required_fields_and_method_limit() -> None:
         assert field in markdown
     assert "Git metadata" in markdown
     assert "visibility" in markdown
+    assert "5 independent updates outweigh 0 joint updates" in markdown
+    assert "6666666 2026-06-10 independent strategy-pipeline improve orchestration" in markdown
 
 
 def test_collect_git_metadata_reads_gitlinks_and_nested_changed_paths(
