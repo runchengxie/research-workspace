@@ -4,7 +4,7 @@
   "as_of_date": "20260906",
   "producer": {
     "repository": "runchengxie/quant-research",
-    "commit": "8e6d0d9783264a83483a1fa68707c867ddfb3d1b",
+    "commit": "9e60a7990789484a4a67e094b397f0259d42d75d",
     "runtime": "scripts/run_daily_watch20_runtime.py",
     "source_date": "20260828",
     "signal_date": "20260831",
@@ -41,7 +41,7 @@
     "signal_date": "20260831",
     "result": "passed",
     "pit_quality": "reconstructed",
-    "publication_receipt": "/home/richard/data/market-data-platform/research/cutover-20260906-cashflow/publication4/publications/20260831_bdb882ea716a17c4/receipt.json",
+    "publication_receipt": "/home/richard/data/market-data-platform/research/cutover-20260906-cashflow/publication5/publications/20260831_c6f21735da001556/receipt.json",
     "real_same_input_comparison": "pending"
   },
   "parity_observation": {
@@ -57,6 +57,7 @@
     "market_intel_offline_tests": "passed",
     "daily_watch20_production_parameter_parity": "blocked_on_frozen_input_recovery",
     "cashflow_old_new_shadow_comparison": "pending_same_input_artifact_recovery",
+    "strategy_app_pipeline_import_boundary": "passed",
     "production_current_switch": "not_executed"
   }
 }
