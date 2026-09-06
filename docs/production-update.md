@@ -70,12 +70,14 @@ The recorded evidence is
 
 This is not a production promotion record: the evidence contains successful
 reduced-window and production-parameter DailyWatch20 runs in an isolated
-research namespace, but parity is not approved because the available old
-artifact pins a different historical Ths-hot input hash/snapshot. The
-quant-research cashflow shadow also completed with a reconstructed PIT input
-and a quant-platform publication receipt, but same-input comparison remains
-pending because the strict revision-safe PIT gate is not passed. The `current`
-pointers were not changed, and cashflow remains ineligible for live delivery.
+research namespace. THS has now been sunset from the active DailyWatch20 path;
+the producer and pipeline default to the stable `all_market` candidate pool,
+and the no-THS shadow run published successfully. The old THS parity check is
+retired because its frozen input is unavailable and the source is no longer a
+supported runtime dependency. The quant-research cashflow shadow also
+completed with a reconstructed PIT input and a quant-platform publication
+receipt, but cashflow remains ineligible for live delivery. The `current`
+pointers were not changed.
 
 旧 release 在 promotion 成功后按保留策略自动清理。每周的
 `production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
