@@ -20,6 +20,9 @@
 `pyproject.toml` 与 `tests/`，pre-push 会额外运行其 `research-layer-tests` 与
 `research-layer-quality` 门禁（见 `scripts/run_pre_push_checks.py`）。
 
+`quant-platform`、`quant-research` 和 `market-intel` 是迁移后的目标子模块。前两个由目标仓库
+各自维护，`market-intel` 只消费版本化 artifact，旧子模块在回滚窗口内继续保留。
+
 ## 仓库边界
 
 | 仓库 | 主要职责 |

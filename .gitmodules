@@ -23,3 +23,12 @@
 	path = strategy-research
 	url = https://github.com/runchengxie/strategy-research.git
 	branch = main
+[submodule "quant-platform"]
+	path = quant-platform
+	url = https://github.com/runchengxie/quant-platform.git
+[submodule "quant-research"]
+	path = quant-research
+	url = https://github.com/runchengxie/quant-research.git
+[submodule "market-intel"]
+	path = market-intel
+	url = https://github.com/runchengxie/market-intel.git

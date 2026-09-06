@@ -16,6 +16,9 @@ EXPECTED_SUBMODULES = {
     "strategy-app",
     "deep-learning-tick-data-prediction",
     "strategy-research",
+    "quant-platform",
+    "quant-research",
+    "market-intel",
 }
 
 spec = importlib.util.spec_from_file_location("run_quality_checks", SCRIPT)
