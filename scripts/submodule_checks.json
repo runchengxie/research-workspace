@@ -190,6 +190,51 @@
         ],
         "full": ["@lint", "@smoke", "@type", "@test"]
       }
+    },
+    "quant-platform": {
+      "path": "quant-platform",
+      "profiles": {
+        "smoke": [["uv", "run", "--locked", "--all-groups", "python", "-c", "import portfolio_backtester; import research_contracts"]],
+        "lint": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--all-groups", "ruff", "check", "."],
+          ["uv", "run", "--locked", "--all-groups", "ruff", "format", "--check", "."]
+        ],
+        "test": [["uv", "run", "--locked", "--all-groups", "pytest"]],
+        "type": [["uv", "run", "--locked", "--all-groups", "ty", "check"]],
+        "release_typecheck": [["uv", "run", "--locked", "--all-groups", "ty", "check"]],
+        "full": ["@lint", "@smoke", "@type", "@test"]
+      }
+    },
+    "quant-research": {
+      "path": "quant-research",
+      "profiles": {
+        "smoke": [["uv", "run", "--locked", "--extra", "dev", "python", "-c", "import strategy_app; import strategy_research; import ticknet"]],
+        "lint": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "check", "src", "tests"],
+          ["uv", "run", "--locked", "--extra", "dev", "ruff", "format", "--check", "src", "tests"]
+        ],
+        "test": [["uv", "run", "--locked", "--extra", "dev", "pytest", "-q", "tests/alpha_research"]],
+        "type": [["uv", "run", "--locked", "--extra", "dev", "ty", "check", "src"]],
+        "release_typecheck": [["uv", "run", "--locked", "--extra", "dev", "ty", "check", "src"]],
+        "full": ["@lint", "@smoke", "@type", "@test"]
+      }
+    },
+    "market-intel": {
+      "path": "market-intel",
+      "profiles": {
+        "smoke": [["uv", "run", "pytest", "-q", "tests/test_boundary_contract.py", "tests/test_platform_publication_consumer.py"]],
+        "lint": [
+          ["uv", "lock", "--check"],
+          ["uv", "run", "ruff", "check", "."],
+          ["uv", "run", "ruff", "format", "--check", "."]
+        ],
+        "test": [["uv", "run", "pytest", "-q"]],
+        "type": [],
+        "release_typecheck": [],
+        "full": ["@lint", "@smoke", "@test"]
+      }
     }
   }
 }
