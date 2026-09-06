@@ -419,8 +419,9 @@ manifest、相对路径、SHA-256 和 bundle mechanics，不包含策略选择�
 
 - [ ] **Step 4: 本地门禁和消费验证**
 
-已完成 adapter focused gate：`2 passed`、Ruff clean。正式 `watchlist_20.csv` /
-`selection_receipt.json` producer 尚未迁入 staging，因此完整消费验证仍待完成。
+已完成 adapter focused gate：`3 passed`、Ruff clean。adapter 现在直接接受正式 publisher 的
+`latest/watchlist_20.csv` / `latest/selection_receipt.json` 布局；完整消费验证仍待完成，原因是
+staging 中的旧 `portfolio-backtester` API pin 尚未与策略 slice 对齐。
 
 ```bash
 uv run pytest

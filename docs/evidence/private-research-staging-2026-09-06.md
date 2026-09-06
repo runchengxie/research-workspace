@@ -14,7 +14,7 @@ A local private Git repository now exists at:
 
 It contains one DailyWatch20 vertical slice extracted from the current
 `strategy-research` and `strategy-app` gitlinks. The staging repository is committed at
-`52cfcc2` (`feat: add private publication adapter`).
+`12f80eb` (`feat: export formal DailyWatch20 publication`).
 
 The slice includes:
 
@@ -37,11 +37,11 @@ The slice includes:
 ## Remaining integration work
 
 The private staging repo now has a tested adapter that consumes the public `quant_platform`
-publication API. It requires `watchlist_20.csv` and `selection_receipt.json`, emits an internal
-manifest for `market-intel`, and excludes source paths. Focused adapter verification passed (`2
-passed`; Ruff clean). The formal producer has not yet been moved into this staging repo, so the old
-`strategy-research` and `strategy-app` repositories remain authoritative and are the rollback
-source.
+publication API. It consumes the formal publisher's `latest/watchlist_20.csv` and
+`latest/selection_receipt.json`, emits an internal manifest for `market-intel`, and excludes source
+paths. Focused adapter verification passed (`3 passed`; Ruff clean). The formal producer code is
+present in the staging slice, but the old `strategy-research` and `strategy-app` repositories
+remain authoritative and are the rollback source until the full runtime suite is aligned.
 
 The staging resolver now overrides alpha’s old Git URL with the public staging
 `research-contracts` package, restoring the expected `ArtifactEnvelopeV2` API. The full copied

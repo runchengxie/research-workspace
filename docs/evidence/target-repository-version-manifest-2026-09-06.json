@@ -29,8 +29,8 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "49acc88c313109b516984be7000fab1c48415707",
-      "scope": "private DailyWatch20 strategy vertical slice and internal publication adapter",
+      "commit": "12f80ebb1bfa42820112a78be298b3dbefa74b92",
+      "scope": "private DailyWatch20 strategy vertical slice and formal publication adapter",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f and strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2; discard local staging."
     },
     "market-intel-boundary-validation": {
