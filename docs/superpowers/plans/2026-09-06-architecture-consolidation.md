@@ -420,6 +420,12 @@ uv run a-share-daily doctor
 
 ### Task 9：把 `market-intel` 固定为 artifact consumer
 
+执行进度（2026-09-06）：边界测试已在独立 `market-intel` worktree 的
+`feat/architecture-boundary` 分支完成并提交为 `312efa2`，测试结果为 `2 passed`。该提交尚未
+合并或 push；当前 `market-intel/main` 保持不变。目标 producer/consumer 关系见
+`docs/governance/target-contract-ownership-map.md`，证据见
+`docs/evidence/market-intel-boundary-test-2026-09-06.md`。
+
 **Files:**
 - Modify: `market-intel/docs/boundary-contract.md`
 - Modify: `market-intel/docs/contracts.md`
@@ -427,7 +433,7 @@ uv run a-share-daily doctor
 - Create: `market-intel/tests/test_research_artifact_boundary.py`
 - Modify: `research-workspace/docs/contracts/contract-ownership.yml`
 
-- [ ] **Step 1: 写边界测试**
+- [x] **Step 1: 写边界测试**
 
 ```python
 def test_market_intel_does_not_import_private_research():
