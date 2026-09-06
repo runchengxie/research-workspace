@@ -6,7 +6,7 @@
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "72d2c45f0",
+    "commit": "f9131241ea1179116885f0b68392a63190a40b56",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
@@ -59,7 +59,7 @@
     "quant-research strategy-family transfer, migrated strategy-research and strategy-app suites, and DailyWatch20 validation are green in private CI at 34028848394",
     "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
-    "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
-    "target gitlinks are validated locally and pushed on the architecture-consolidation branch; production T0 remains pending"
+    "formal DailyWatch20 production publication verified at /home/richard/data/market-data-platform/published/platform_publications/daily_watch20/20260906_production_migration_2b51d33; market-intel accepted both real artifacts and their SHA-256 hashes",
+    "target gitlinks are merged to research-workspace/main at f9131241ea1179116885f0b68392a63190a40b56; production T0 remains pending"
   ]
 }
