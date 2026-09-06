@@ -1,6 +1,6 @@
 # Architecture cutover runbook
 
-> status: target remotes initialized; consumer cutover still pending
+> status: one end-to-end staging slice validated; consumer cutover still pending
 > scope: local staging → approved GitHub repositories
 
 This runbook is the final operational handoff for the repository consolidation.
@@ -21,8 +21,8 @@ change remote repositories.
 
 Do not begin the remote cutover until all of these are true:
 
-- public staging tests and Ruff pass (`31 passed`);
-- private staging tests pass (`26 passed`, adapter `3 passed`);
+- public staging tests and Ruff pass; public CI is green;
+- private DailyWatch20 parity suite passes locally (`122 passed`);
 - formal DailyWatch20 publication is accepted by `market-intel`;
 - `market-intel` boundary and consumer gates pass (`2` boundary tests,
   `112` broader consumer tests);
@@ -83,3 +83,27 @@ Until the workspace and all consumers are switched, the architecture remains
 in a transition state and the legacy submodules remain the authoritative
 rollback source. The new repositories are published targets, not yet the
 production source of truth.
+
+## Rollback window policy
+
+The migration uses a defined **14-calendar-day rollback window** beginning at
+the first production cutover (`T0`). This is a safety window, not permission to
+retire legacy repositories early.
+
+During the window:
+
+- every old repository, legacy gitlink, previous production release, and
+  previous artifact manifest remains reachable and unchanged;
+- the active and previous target manifests are recorded with exact commits;
+- daily consumer, freshness, publication, and delivery smoke checks are
+  recorded;
+- any contract mismatch, missing artifact, unexplained output drift, failed
+  recovery, or unavailable rollback source immediately reopens the old release;
+- no repository is deleted, archived, renamed, or made inaccessible.
+
+The window closes only after 14 calendar days with no rollback trigger, two
+successful scheduled production cycles, a successful rollback rehearsal from
+the recorded manifest, and explicit confirmation that licensing, CI access,
+consumer validation, and production ownership are complete. The close record
+must name the previous release, target release, window start/end timestamps,
+checks performed, and the person approving closure.
