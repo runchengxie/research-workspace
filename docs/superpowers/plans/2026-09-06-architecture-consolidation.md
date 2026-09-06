@@ -99,6 +99,11 @@ git commit -m "docs: add architecture consolidation baseline"
 **Files:**
 - Create: `docs/governance/public-private-boundary-matrix.md`
 - Modify: `docs/README.md`
+- Modify: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
+
+本计划的 Task 2 验证命令已按执行时的可用 profile 规则修正：将不受支持的
+`python scripts/run_quality_checks.py --profile docs` 更正为现有的
+`python scripts/run_quality_checks.py --profile governance`。该修正是授权的执行裁定，保留实际执行命令。
 
 - [ ] **Step 1: 分类每个关键目录**
 
