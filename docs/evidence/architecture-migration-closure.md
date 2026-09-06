@@ -16,6 +16,9 @@ has its own release and rollback evidence. The target mapping is recorded in
 `docs/governance/repository-naming-map.md` and
 `docs/architecture-model.yml`.
 
+The approved sequence and rollback triggers are recorded in
+`docs/migrations/architecture-cutover-runbook.md`.
+
 ## Verified gates
 
 - Public platform staging at `a1de2f9b`: `31 passed`, Ruff clean and formatted.
