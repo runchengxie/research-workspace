@@ -1,5 +1,10 @@
 # 版本矩阵
 
+本次架构迁移的 staging 组合见
+[目标仓库版本 manifest](evidence/target-repository-version-manifest-2026-09-06.json)。该 manifest
+不是生产版本，也不改变 Git 子模块指针；它记录 public/private staging 的可回滚提交和当前
+尚未完成的正式 artifact producer gate。
+
 本页记录工作区版本组合。真正锁定版本的是 Git 子模块指针。本页只保存当前检出状态和人工验证结论。
 
 ## 当前检出状态

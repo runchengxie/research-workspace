@@ -1,0 +1,50 @@
+{
+  "schema_version": "architecture.target-version-manifest.v1",
+  "generated_at": "2026-09-06",
+  "status": "staging-only",
+  "publishable": false,
+  "remote_repositories_created": false,
+  "workspace": {
+    "repository": "research-workspace",
+    "commit": "1cf5d43c441faef984dc4d1e883db53c1ad54488",
+    "integration_role": "version combination, contract checks, smoke tests, and release metadata"
+  },
+  "current_sources": {
+    "alpha-research": "631ee150d5125917baebbbb31a673696d1d29230",
+    "deep-learning-tick-data-prediction": "2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203",
+    "market-data-platform": "0f1c4ce2554ad4961a8f130ce953b5d18ea52a0d",
+    "portfolio-backtester": "91a4fa4f1d57c074c991546c381a3d90a3b6adfb",
+    "quant-execution-engine": "2f0675a4b8946ff4134194e7dd12dc1169fd2be4",
+    "strategy-app": "f6f58bf7bbd623318189ab4ab7acf49b331be4a2",
+    "strategy-pipeline": "87175c67531f0be29f78aeb078046708dbf38ee4",
+    "strategy-research": "087b5dfdabed70a629ff6ed44fc52609fe966c5f",
+    "market-intel-main": "c8f24a5"
+  },
+  "staging_targets": {
+    "quant-platform": {
+      "path": "/home/richard/code/.public-staging/quant-platform",
+      "commit": "c350847f5394c02945d10c6178d55b9ad45f4bbd",
+      "scope": "public portfolio/backtesting vertical slice",
+      "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c0745a... and discard the local staging repository."
+    },
+    "quant-research": {
+      "path": "/home/richard/code/.private-staging/quant-research",
+      "commit": "63ed835f1628d50ade66892ed9b425df3dd875fb",
+      "scope": "private DailyWatch20 strategy vertical slice",
+      "rollback": "Keep strategy-research at 087b5df... and strategy-app at f6f58bf...; discard local staging."
+    },
+    "market-intel-boundary-validation": {
+      "path": "/home/richard/code/market-intel/.worktrees/architecture-boundary",
+      "commit": "312efa2448ac58e6db9b76cf3b8d3b5130019537",
+      "scope": "artifact consumer boundary test",
+      "rollback": "Leave market-intel/main at c8f24a5 and remove the unmerged worktree branch."
+    }
+  },
+  "compatibility_gates": [
+    "quant-platform scoped tests and Ruff pass",
+    "quant-research source, JSON, and Python compile checks pass",
+    "market-intel boundary and contract/freshness/recovery tests pass",
+    "formal watchlist_20 producer migration is not yet complete",
+    "remote creation, license approval, push, rename, and gitlink update are not yet authorized"
+  ]
+}
