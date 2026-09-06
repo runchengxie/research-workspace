@@ -573,17 +573,23 @@ rg -n "strategy-research|strategy-pipeline|deep-learning-tick-data-prediction" .
 - Modify: `market-intel/README.md`
 - Create: `docs/evidence/architecture-migration-closure.md`
 
-- [ ] **Step 1: 更新最终架构说明**
+- [x] **Step 1: 更新最终架构说明**
 
-明确一句话：`platform 提供能力，research 保存研究 IP，market-intel 展示和投递，workspace 锁定可工作的版本组合`。
+已在 `ARCHITECTURE.md` 和 closure evidence 明确：`quant-platform` 提供能力，
+`quant-research` 保存研究 IP，`market-intel` 展示和投递，`research-workspace` 锁定可工作的
+版本组合。
 
-- [ ] **Step 2: 记录 AI 上下文策略**
+- [x] **Step 2: 记录 AI 上下文策略**
 
-默认按 package/任务 manifest 读取；只有公共 API、artifact contract、下游失败或用户明确要求时才扩大到 producer/consumer。
+已由 `docs/governance/agent-context-boundaries.md`、`scripts/context_manifest.py` 和
+closure evidence 记录：默认按 package/任务 manifest 读取；只有公共 API、artifact contract、
+下游失败或用户明确要求时才扩大到 producer/consumer。
 
-- [ ] **Step 3: 演练 artifact 和 production manifest 回滚**
+- [x] **Step 3: 演练 artifact 和 production manifest 回滚**
 
-确认旧版本仍可被 `market-intel` 消费，且 `/home/richard/code/production/current` 不会被失败发布切换。
+已完成 artifact consumer handoff 和隔离 temporary release-root 原子切换/失败保留/回滚演练；
+真实 `production/market-intel/current` 与 `production/research-workspace/current` 在前后检查中
+保持不变。证据见 `docs/evidence/architecture-migration-closure.md`。
 
 - [ ] **Step 4: 运行最终门禁**
 
