@@ -23,7 +23,7 @@ being consolidated around visibility, IP, and runtime ownership:
 | `portfolio-backtester` | `quant-platform/portfolio` | Consolidate as a package while preserving its installable public API where useful |
 | `strategy-research` | `quant-research/registry` and `quant-research/research` | Rename conceptually to `quant-research`; it is broader than a registry |
 | `strategy-app` | `quant-research/strategies` | Absorb into the private strategy monorepo; retain `strategy_app` namespace initially |
-| `strategy-pipeline` | `quant-platform/orchestration` | Consolidate the reusable control plane and artifact publication surface |
+| `strategy-pipeline` | `quant-platform/orchestration` plus private strategy adapters in `quant-research` | Consolidate generic run control, manifest, and publication mechanics; keep DailyWatch20 selection/policy adapters private |
 | `quant-execution-engine` | `quant-platform/execution` public interfaces plus private runtime adapters | Keep live broker, credentials, and audit runtime private during the public audit |
 | `market-intel` | `market-intel` | Remain an independent private application |
 | `research-workspace` | `research-workspace` | Remain a thin integration/release layer; do not become a second business owner |
