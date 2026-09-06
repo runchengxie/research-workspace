@@ -23,20 +23,20 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "bb4c9a30fe8a421b475c0fbcbad2316bfc84753b",
+      "commit": "5577ba0dd752e77b4755510f98eee682f4999374",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success at 34020846558",
-      "scope": "portfolio parity-complete baseline plus public market-data contracts/core/quality and generic publication primitives",
+      "ci": "public-ci: success at 34023595974; local full gate 1101 passed, 3 skipped",
+      "scope": "portfolio baseline plus public data core/quality, alpha framework, orchestration control plane, and execution interfaces",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "e5e702c",
+      "commit": "4b9dd97b76c3325a7e6a09119bce282d32f81399",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
-      "ci": "private research CI: success at 34021009249",
-      "scope": "private DailyWatch20 strategy vertical slice plus complete pinned market-data, alpha-research, and microstructure baseline transfers",
+      "ci": "private research CI: latest migrated type-warning fix pushed; rerun pending",
+      "scope": "private strategy vertical slice plus market-data, alpha, microstructure, and private runtime dependency migration",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f, strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2, alpha-research at 631ee150d5125917baebbbb31a673696d1d29230, and deep-learning-tick-data-prediction at 2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203; discard local staging."
     },
     "market-intel-boundary-validation": {
@@ -49,10 +49,12 @@
     }
   },
   "compatibility_gates": [
-    "quant-platform full transferred portfolio suite plus public data core/quality: 599 tests, Ruff and ty pass; public CI green at 34020846558",
+    "quant-platform public framework: local full gate 1101 passed, 3 skipped; Ruff and format pass; CI rerun pending at 5577ba0",
     "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; private consumers repinned to public bb4c9a3; selected contract/provider tests and private CI green at 34021009249",
-    "quant-research private alpha-research transfer: 155 source files, 84 tests, 33 docs, 4 scripts; local alpha suite green at 84 passed; dedicated remote alpha-transfer result pending",
+    "quant-platform public alpha framework: 135 source files, 70 tests, 31 docs; private edge modules remain in quant-research",
+    "quant-research private alpha baseline: 155 source files and 84 tests; local alpha suite green; legacy alpha dependency removed",
     "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local microstructure suite green; dedicated remote microstructure-transfer result pending",
+    "quant-platform orchestration/execution public foundation: orchestration 27 source files and execution 67 source files; full public suite includes both",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
