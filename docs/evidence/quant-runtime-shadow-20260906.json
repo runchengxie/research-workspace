@@ -1,0 +1,42 @@
+{
+  "schema_version": "quant.runtime_cutover.evidence.v1",
+  "status": "shadow_smoke_passed_parity_pending",
+  "as_of_date": "20260906",
+  "producer": {
+    "repository": "runchengxie/quant-research",
+    "commit": "8e6d0d9783264a83483a1fa68707c867ddfb3d1b",
+    "runtime": "scripts/run_daily_watch20_runtime.py",
+    "source_date": "20260828",
+    "signal_date": "20260831",
+    "selected_count": 20,
+    "publication_tier": "research",
+    "smoke_parameters": {
+      "history_calendar_days": 300,
+      "train_window_dates": 100,
+      "threads": 3
+    },
+    "result": "passed"
+  },
+  "platform": {
+    "repository": "runchengxie/quant-platform",
+    "commit": "9f7793f449ada47854a7f8b67d303931945c5794",
+    "import_verified_from": "packages/orchestration/src/strategy_pipeline"
+  },
+  "consumer": {
+    "repository": "runchengxie/market-intel",
+    "commit": "4767f20fe6d13534ae6684626ebbc7ba6550154c",
+    "result": "daily_watch20_producer_routes_to_quant_research"
+  },
+  "cashflow": {
+    "live_eligibility": false,
+    "real_same_input_comparison": "pending"
+  },
+  "gates": {
+    "new_runtime_unit_tests": "passed",
+    "new_runtime_lint": "passed",
+    "market_intel_offline_tests": "passed",
+    "daily_watch20_production_parameter_parity": "pending",
+    "cashflow_old_new_shadow_comparison": "pending",
+    "production_current_switch": "not_executed"
+  }
+}
