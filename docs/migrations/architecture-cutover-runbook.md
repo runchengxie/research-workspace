@@ -1,6 +1,6 @@
 # Architecture cutover runbook
 
-> status: one end-to-end staging slice validated; consumer cutover still pending
+> status: target gitlinks cut over locally; remote push and production T0 pending
 > scope: local staging → approved GitHub repositories
 
 This runbook is the final operational handoff for the repository consolidation.
@@ -32,10 +32,11 @@ Do not begin the remote cutover until all of these are true:
 - license, visibility, GitHub Actions, CODEOWNERS, and repository-owner
   decisions have been explicitly approved.
 
-The technical preconditions are satisfied. The target `quant-platform` public
-and `quant-research` private repositories have now been created and pushed.
-The current workspace and legacy consumers have not yet been switched to use
-them as authoritative sources.
+The technical preconditions are satisfied. The target `quant-platform` public,
+`quant-research` private, and `market-intel` repositories have been created,
+pushed, and independently validated. The workspace branch now records their
+gitlinks while all legacy submodules remain available for rollback. Production
+T0 has not started until this workspace release is pushed and approved.
 
 ## Ordered cutover
 

@@ -18,6 +18,10 @@
 | `quant-execution-engine/` | 目标解析、预演、风控、券商执行和审计 |
 | `src/research_contracts/` | 顶层维护的跨仓库产物契约校验 |
 
+迁移后的目标入口同时作为子模块锁定：`quant-platform/` 提供公开通用框架，
+`quant-research/` 保存私有策略与研究，`market-intel/` 消费版本化产物并负责报告与投递。
+旧子模块在 14 天回滚窗口关闭前继续保留，不与目标入口混用为新的业务 owner。
+
 职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
 各自仓库的 README、`AGENTS.md` 和 `docs/` 为准。
 

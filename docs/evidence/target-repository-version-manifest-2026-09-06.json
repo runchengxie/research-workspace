@@ -1,12 +1,12 @@
 {
   "schema_version": "architecture.target-version-manifest.v1",
   "generated_at": "2026-09-06",
-  "status": "all-staged-parity-validated; consumer-cutover-pending",
+  "status": "target-pointers-cut-over-locally; remote-push-and-production-window-pending",
   "publishable": false,
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "2a7d04a55fd852cd46cb1477ee7edb3aa6c230ae",
+    "commit": "79da034d5",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
@@ -60,6 +60,6 @@
     "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
-    "remote creation, license approval, push, rename, and gitlink update are not yet authorized"
+    "target gitlinks are validated locally; research-workspace remote push and production T0 remain pending"
   ]
 }
