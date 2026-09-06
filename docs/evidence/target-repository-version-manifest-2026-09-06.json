@@ -1,12 +1,12 @@
 {
   "schema_version": "architecture.target-version-manifest.v1",
   "generated_at": "2026-09-06",
-  "status": "pre-t0-candidate-pushed; production-t0-and-rollback-window-pending",
-  "publishable": false,
+  "status": "t0-active; rollback-window-open",
+  "publishable": true,
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "f9131241ea1179116885f0b68392a63190a40b56",
+    "commit": "b58831bcfaead16cdd3cafa08dd28139ba6e696f",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
@@ -60,6 +60,7 @@
     "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal DailyWatch20 production publication verified at /home/richard/data/market-data-platform/published/platform_publications/daily_watch20/20260906_production_migration_2b51d33; market-intel accepted both real artifacts and their SHA-256 hashes",
-    "target gitlinks are merged to research-workspace/main at f9131241ea1179116885f0b68392a63190a40b56; production T0 remains pending"
+    "target gitlinks are active in production at b58831bcfaead16cdd3cafa08dd28139ba6e696f; T0=2026-09-06T19:30:33+08:00 and rollback window closes 2026-09-20T19:30:33+08:00",
+    "previous production releases remain reachable: research-workspace=9267bbae5b03c092cc62b59d1d38f8e8158c5b55 and market-intel=482cb31b5c1d8ac1681cebd28e96a31d808d12a0"
   ]
 }
