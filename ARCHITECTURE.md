@@ -56,6 +56,11 @@ quant-execution-engine
 
 当前八个 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。版本由 `.gitmodules` 和各自 gitlink 锁定。
 
+候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
+`strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
+`microstructure-models`。这些只是冻结的迁移字典，当前不改变 submodule 目录、远端名、
+gitlink、Python namespace 或 CLI；完整引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
+
 ## 代码和数据边界
 
 - 活跃代码服务当前 A 股数据与研究主线，以及多市场共用的执行契约。

@@ -21,6 +21,9 @@
 职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
 各自仓库的 README、`AGENTS.md` 和 `docs/` 为准。
 
+候选仓库命名及现有引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
+候选名当前不改变远端名称、gitlink、Python namespace、CLI、生产配置或历史记录。
+
 ## 数据与产物边界
 
 - 大型市场数据、研究产物、缓存、运行凭证和交易审计日志放在 `~/data` 或专用生产目录。
@@ -111,6 +114,7 @@ bash scripts/promote-production.sh --repo all --dry-run
 
 - [文档总入口](docs/README.md)
 - [架构边界](ARCHITECTURE.md)
+- [仓库命名迁移字典](docs/governance/repository-naming-map.md)
 - [新机器初始化](docs/bootstrap.md)
 - [平台工作流](docs/platform-workflow.md)
 - [跨仓库文件契约](docs/contracts.md)
