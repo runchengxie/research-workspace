@@ -26,7 +26,9 @@ and rollback checks, the existing submodules remain authoritative. Repository na
 namespaces, CLIs and artifact schemas are separate compatibility surfaces and are not changed in
 one operation.
 
-The first private migration rehearsal is recorded in
+The first public and private migration rehearsals are recorded in
+[`docs/evidence/public-platform-staging-2026-09-06.md`](docs/evidence/public-platform-staging-2026-09-06.md)
+and
 [`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md).
 
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：

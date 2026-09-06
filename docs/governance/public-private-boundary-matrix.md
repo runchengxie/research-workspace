@@ -54,7 +54,7 @@
 
 | Target repository | Default classification | Intended contents | Current status |
 | --- | --- | --- | --- |
-| `quant-platform` | `PUBLIC_CORE` | Reusable mechanisms, stable contracts, public examples and CI | Local public vertical slice staged; remote creation not yet authorized |
+| `quant-platform` | `PUBLIC_CORE` | Reusable mechanisms, stable contracts, public examples and CI | Separate local Git staging repository created; remote creation not yet authorized |
 | `quant-research` | `PRIVATE_RESEARCH` | Strategy identity, proprietary logic, experiments, evidence and private configuration | DailyWatch20 local staging repository created; old submodules remain authoritative |
 | `market-intel` | `PRIVATE_RUNTIME` | Report, dashboard, delivery and operational application | Existing independent repository remains authoritative |
 | `research-workspace` | `INTEGRATION_ONLY` | Version combinations, contract checks, integration smoke tests and release manifests | Existing repository remains authoritative during migration |

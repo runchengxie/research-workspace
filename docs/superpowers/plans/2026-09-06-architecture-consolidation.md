@@ -322,10 +322,12 @@ git commit -m "docs: measure strategy repository coupling"
 
 ### Task 7：用 `portfolio-backtester` 做 `quant-platform` 公共试点
 
-执行裁定（2026-09-06）：本任务只在当前 worktree 的普通目录 `quant-platform/` 中建立本地
-staging tree，不创建新 Git 仓库、不配置 remote、不 push 或发布，也不更新 workspace gitlink。
-由于普通目录不能承载独立仓库提交图，使用 `git fast-export` 对所选源码和测试做只读历史导出
-演练，并在 staging tree 记录来源 commit、导出摘要和逐文件哈希；真正建仓时再 fast-import。
+执行裁定（2026-09-06）：先在当前 worktree 的普通目录 `quant-platform/` 中建立本地
+staging tree，再复制为 `/home/richard/code/.public-staging/quant-platform` 独立本地 Git
+staging repository；不配置 remote、不 push 或发布，也不更新 workspace gitlink。普通目录阶段
+使用 `git fast-export` 对所选源码和测试做只读历史导出演练，并在 staging tree 记录来源 commit、
+导出摘要和逐文件哈希；外部 staging repository 只承载当前已验证的迁移切片。真正建仓时仍需
+单独完成 clean-root、许可证和 fast-import/release 审查。
 源仓当前 commit 没有 tag 且缺少 LICENSE，因此 tag 对比和公开发布保持阻塞，并在报告中记录。
 
 **Files:**
