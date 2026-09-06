@@ -6,7 +6,7 @@
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "4163177c7",
+    "commit": "72d2c45f0",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
@@ -32,10 +32,10 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "5265b68061c22c35a3a9f53872bf7805e8a89dd2",
+      "commit": "bc7e79329cd116c6db2192619043c875cbdc0ea9",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
-      "ci": "private research CI: success at 34024857688",
+      "ci": "private research CI: success at 34026941515",
       "scope": "private strategy vertical slice plus market-data, alpha, microstructure, and private runtime dependency migration",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f, strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2, alpha-research at 631ee150d5125917baebbbb31a673696d1d29230, and deep-learning-tick-data-prediction at 2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203; discard local staging."
     },
@@ -56,10 +56,10 @@
     "quant-research private alpha baseline: 155 source files and 84 tests; local alpha suite green; legacy alpha dependency removed",
     "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local and remote microstructure-transfer gates green at 34024857688",
     "quant-platform orchestration/execution public foundation: orchestration 27 source files and execution 67 source files; full public suite includes both",
-    "quant-research strategy-family transfer and DailyWatch20 validation are green in private CI at 34024857688",
+    "quant-research strategy-family transfer, migrated strategy-research suite, and DailyWatch20 validation are green in private CI at 34026941515",
     "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
-    "target gitlinks are validated locally; research-workspace remote push and production T0 remain pending"
+    "target gitlinks are validated locally and pushed on the architecture-consolidation branch; production T0 remains pending"
   ]
 }
