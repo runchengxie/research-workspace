@@ -1,5 +1,34 @@
 # 架构边界
 
+## Target repository architecture
+
+The current eight submodules are a migration baseline, not the intended long-term repository
+shape. The target is three code repositories plus a thin integration layer:
+
+```text
+quant-platform       public
+  reusable data interfaces, research utilities, backtesting, contracts,
+  public orchestration and execution capabilities
+
+quant-research       private
+  strategy registry, strategy-specific logic, proprietary research,
+  experiments, model selection and private configuration
+
+market-intel         private application
+  reports, dashboards, delivery, scheduling, freshness and recovery
+
+research-workspace   thin integration layer
+  version manifest, compatibility checks, contract smoke tests and release metadata
+```
+
+The migration is incremental. Until each producer/consumer contract has passed its compatibility
+and rollback checks, the existing submodules remain authoritative. Repository names, Python
+namespaces, CLIs and artifact schemas are separate compatibility surfaces and are not changed in
+one operation.
+
+The first private migration rehearsal is recorded in
+[`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md).
+
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
 ```text

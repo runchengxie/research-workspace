@@ -50,6 +50,15 @@
 | `market-intel`（外部独立应用） | `PRIVATE_RUNTIME` | 负责市场上下文、报告组装、Dashboard、投递、freshness、幂等和运行恢复；运行实现、provider、凭证和生产参数保持私有 |
 | `market-intel` 的跨仓库输入边界 | `INTEGRATION_ONLY` | 只消费公开 CLI 和版本化文件、receipt 或其他已记录 artifact；不得导入本工作区或其他 owner 的私有研究内部模块 |
 
+## Target repositories during migration
+
+| Target repository | Default classification | Intended contents | Current status |
+| --- | --- | --- | --- |
+| `quant-platform` | `PUBLIC_CORE` | Reusable mechanisms, stable contracts, public examples and CI | Local public vertical slice staged; remote creation not yet authorized |
+| `quant-research` | `PRIVATE_RESEARCH` | Strategy identity, proprietary logic, experiments, evidence and private configuration | DailyWatch20 local staging repository created; old submodules remain authoritative |
+| `market-intel` | `PRIVATE_RUNTIME` | Report, dashboard, delivery and operational application | Existing independent repository remains authoritative |
+| `research-workspace` | `INTEGRATION_ONLY` | Version combinations, contract checks, integration smoke tests and release manifests | Existing repository remains authoritative during migration |
+
 ## 子仓库关键目录
 
 | 路径 | 分类 | 边界说明 |

@@ -61,7 +61,7 @@ research-workspace   public / 薄集成层
 - Create: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
 - Create: `docs/evidence/architecture-migration-baseline-2026-09-06.md`
 
-- [ ] **Step 1: 创建 worktree**
+- [x] **Step 1: 创建 worktree**
 
 ```bash
 cd /home/richard/code/research-workspace
@@ -69,7 +69,7 @@ git fetch github
 git worktree add /home/richard/code/.worktrees/architecture-consolidation -b feat/architecture-consolidation github/main
 ```
 
-- [ ] **Step 2: 记录版本和 dirty 状态**
+- [x] **Step 2: 记录版本和 dirty 状态**
 
 ```bash
 cd /home/richard/code/.worktrees/architecture-consolidation
@@ -79,11 +79,11 @@ python scripts/workspace_doctor.py
 python src/research_contracts/smoke_contracts.py
 ```
 
-- [ ] **Step 3: 建立基线表**
+- [x] **Step 3: 建立基线表**
 
 记录每个仓库的：当前 commit、remote、public/private、owner、入口命令、生产方、消费方、真实数据/凭证情况和回滚方式。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 python scripts/run_workspace_tests.py
@@ -105,11 +105,11 @@ git commit -m "docs: add architecture consolidation baseline"
 `python scripts/run_quality_checks.py --profile docs` 更正为现有的
 `python scripts/run_quality_checks.py --profile governance`。该修正是授权的执行裁定，保留实际执行命令。
 
-- [ ] **Step 1: 分类每个关键目录**
+- [x] **Step 1: 分类每个关键目录**
 
 每项标记为 `PUBLIC_CORE`、`PRIVATE_RESEARCH`、`PRIVATE_RUNTIME` 或 `INTEGRATION_ONLY`。无法确认的内容暂按 `PRIVATE_RESEARCH` 处理。
 
-- [ ] **Step 2: 固定判定规则**
+- [x] **Step 2: 固定判定规则**
 
 ```text
 公开后只暴露机制、不暴露 edge → PUBLIC_CORE
@@ -117,7 +117,7 @@ git commit -m "docs: add architecture consolidation baseline"
 只负责锁版本、契约、集成检查 → INTEGRATION_ONLY
 ```
 
-- [ ] **Step 3: 验证并提交**
+- [x] **Step 3: 验证并提交**
 
 ```bash
 python scripts/run_quality_checks.py --profile governance
@@ -139,7 +139,7 @@ git commit -m "docs: define public and private boundaries"
 - Create: `tests/test_context_manifest.py`
 - Modify: `docs/superpowers/plans/2026-09-06-architecture-consolidation.md`
 
-- [ ] **Step 1: 写失败测试**
+- [x] **Step 1: 写失败测试**
 
 ```python
 def test_alpha_manifest_includes_direct_contracts():
@@ -149,7 +149,7 @@ def test_alpha_manifest_includes_direct_contracts():
     assert "market-intel" not in result.default_context
 ```
 
-- [ ] **Step 2: 实现最小接口**
+- [x] **Step 2: 实现最小接口**
 
 ```python
 def build_manifest(area: str) -> ContextManifest:
@@ -161,11 +161,11 @@ def render_manifest(manifest: ContextManifest) -> str:
 
 初始区域为 `data`、`microstructure`、`alpha`、`portfolio`、`strategy`、`orchestration`、`execution`、`market-intel`。映射必须来自显式配置，不递归读取全仓库。
 
-- [ ] **Step 3: 补充各区域局部说明**
+- [x] **Step 3: 补充各区域局部说明**
 
 为 `alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`market-intel` 写清职责、允许依赖、禁止依赖、契约文件和最小测试命令。
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```bash
 pytest tests/test_context_manifest.py -q
@@ -204,15 +204,15 @@ producer、consumer、artifact payload 或私有仓库行为。
 Fix round 1 裁定：严格类型校验新增的 validator 和测试属于 Task 4 Python surface，必须同步现有
 权威 maintainability baseline。该同步只更新生成统计，不改变治理阈值或其他仓库内容。
 
-- [ ] **Step 1: 登记至少这些 artifact**
+- [x] **Step 1: 登记至少这些 artifact**
 
 `targets.json`、研究 snapshot、A 股当前资产清单、L2/alpha 信号产物、回测输入、`market-intel` 消费的正式策略产物。
 
-- [ ] **Step 2: 为每项登记字段**
+- [x] **Step 2: 为每项登记字段**
 
 `name`、`schema`、`producer`、`consumers`、`versioning`、`compatibility`、`test_command`、`rollback`。
 
-- [ ] **Step 3: 添加完整性测试并验证**
+- [x] **Step 3: 添加完整性测试并验证**
 
 ```python
 def test_every_contract_has_one_producer_and_consumer():
@@ -227,7 +227,7 @@ python scripts/run_workspace_tests.py
 cd /home/richard/code/market-intel && uv run pytest -k contract
 ```
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add src/research_contracts docs/contracts docs/artifact-contracts.yml \
@@ -246,7 +246,7 @@ git commit -m "docs: register cross-repository artifact ownership"
 - Modify: `README.md`
 - Modify: `ARCHITECTURE.md`
 
-- [ ] **Step 1: 固定候选名但不改远端**
+- [x] **Step 1: 固定候选名但不改远端**
 
 ```text
 strategy-research → strategy-registry
@@ -257,11 +257,11 @@ deep-learning-tick-data-prediction → microstructure-models
 
 `alpha-research`、`portfolio-backtester`、`quant-execution-engine`、`market-intel` 暂不改名。
 
-- [ ] **Step 2: 明确不同时改 namespace 和 CLI**
+- [x] **Step 2: 明确不同时改 namespace 和 CLI**
 
 仓库名变化不等于 Python namespace 或 CLI 变化。先保留 `strategy_pipeline`、`strategy_app`、`ticknet`，namespace/CLI 迁移另建任务。
 
-- [ ] **Step 3: 搜索引用并分类**
+- [x] **Step 3: 搜索引用并分类**
 
 ```bash
 rg -n "strategy-research|strategy-app|strategy-pipeline|deep-learning-tick-data-prediction" .
@@ -269,7 +269,7 @@ rg -n "strategy-research|strategy-app|strategy-pipeline|deep-learning-tick-data-
 
 结果分成 URL、路径、文档、import、CLI、生产配置和历史记录；历史记录只加迁移说明，不改写事实。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add docs/governance/repository-naming-map.md README.md ARCHITECTURE.md
@@ -287,11 +287,11 @@ git commit -m "docs: define repository naming migration map"
 执行裁定：示例测试通过 `fixtures("strategy-commits.json")` 读取确定性输入，因此测试 fixture
 属于 Task 6 的必要文件。该文件只保存合成 Git 元数据，不保存研究数据、凭证或仓库内容。
 
-- [ ] **Step 1: 定义输出字段**
+- [x] **Step 1: 定义输出字段**
 
 `repositories`、`period`、`co_change_count`、`contract_change_count`、`release_independence_count`、`recommended_action`、`evidence`。
 
-- [ ] **Step 2: 写解析器测试并实现**
+- [x] **Step 2: 写解析器测试并实现**
 
 ```python
 def test_report_separates_contract_and_local_changes():
@@ -307,11 +307,11 @@ python scripts/analyze_repository_coupling.py \
 pytest tests/test_analyze_repository_coupling.py -q
 ```
 
-- [ ] **Step 3: 按证据决策**
+- [x] **Step 3: 按证据决策**
 
 若共同变更主要是稳定 artifact 契约，继续独立仓并强化契约；若大量变更需要同一 PR 原子修改且公开性一致，才进入真实合并试点。
 
-- [ ] **Step 4: 提交**
+- [x] **Step 4: 提交**
 
 ```bash
 git add scripts/analyze_repository_coupling.py tests/test_analyze_repository_coupling.py docs/evidence/strategy-repository-change-coupling.md
@@ -335,15 +335,15 @@ staging tree，不创建新 Git 仓库、不配置 remote、不 push 或发布�
 - Create: 新仓库 `quant-platform/contracts/`
 - Create: 新仓库 `quant-platform/.github/workflows/ci.yml`
 
-- [ ] **Step 1: 只迁移一个 vertical slice**
+- [x] **Step 1: 只迁移一个 vertical slice**
 
 先迁移公共回测能力、一个最小 artifact contract 和合成示例数据，不同时搬 data、alpha、orchestration、execution。
 
-- [ ] **Step 2: 保留历史和 namespace**
+- [x] **Step 2: 保留历史和 namespace**
 
 使用历史保留迁移工具；迁移后用旧仓 tag 对比文件、测试、许可证和公开 API。Python namespace 暂不改变。
 
-- [ ] **Step 3: 配置无私有依赖的 public CI**
+- [x] **Step 3: 配置无私有依赖的 public CI**
 
 ```yaml
 name: public-ci
@@ -358,11 +358,11 @@ jobs:
       - run: uv run pytest
 ```
 
-- [ ] **Step 4: 双轨验证**
+- [x] **Step 4: 双轨验证**
 
 旧仓和新仓运行同一组契约、回归和示例测试；比较公开 API、artifact schema、CLI 和报告结果。
 
-- [ ] **Step 5: 通过后才更新 workspace**
+- [x] **Step 5: 通过后才更新 workspace**
 
 ```bash
 python scripts/workspace_doctor.py
@@ -375,6 +375,14 @@ fast-import、tag 和许可证确认不属于本地试点完成声明。
 
 ### Task 8：用一个真实策略做 `quant-research` 私有试点
 
+执行裁定（2026-09-06）：先在 `/home/richard/code/.private-staging/quant-research` 建立本地
+私有 Git staging tree，不创建 GitHub remote、不 push、不更新 workspace gitlink。选择
+`DailyWatch20` 作为纵切面，保留现有 `strategy_app.daily_watch20` namespace，并记录
+`strategy-research` 与 `strategy-app` 的源 commit。该试点已完成 source slice、私有目录、
+provenance 和 rollback 记录；artifact 导出、`market-intel` 消费验证和远端私有仓创建仍是
+后续门禁，不能据此宣称迁移完成。证据见
+`docs/evidence/private-research-staging-2026-09-06.md`。
+
 **Files:**
 - Create: 新仓库 `quant-research/README.md`
 - Create: 新仓库 `quant-research/AGENTS.md`
@@ -382,11 +390,11 @@ fast-import、tag 和许可证确认不属于本地试点完成声明。
 - Create: 新仓库 `quant-research/registry/`
 - Create: 新仓库 `quant-research/experiments/`
 
-- [ ] **Step 1: 迁移一个完整策略纵切面**
+- [x] **Step 1: 迁移一个完整策略纵切面（本地 staging）**
 
 一起迁移 registry、策略逻辑、配置、实验索引和一个可审计 artifact，不先搬整个 `strategy-research`。
 
-- [ ] **Step 2: 固定私有目录**
+- [x] **Step 2: 固定私有目录（本地 staging）**
 
 真实 feature 组合、label、universe、模型选择、production config、provider 配置、实验结果和失败实验记录必须留在 private repo。
 
