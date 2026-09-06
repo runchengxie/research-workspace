@@ -115,7 +115,7 @@ git commit -m "docs: add architecture consolidation baseline"
 - [ ] **Step 3: 验证并提交**
 
 ```bash
-python scripts/run_quality_checks.py --profile docs
+python scripts/run_quality_checks.py --profile governance
 python scripts/workspace_doctor.py
 git add docs/governance/public-private-boundary-matrix.md docs/README.md
 git commit -m "docs: define public and private boundaries"

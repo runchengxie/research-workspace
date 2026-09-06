@@ -43,6 +43,13 @@
 | `scripts/` | `INTEGRATION_ONLY` | 工作区 doctor、质量检查和跨仓库委托；脚本内若含 provider 或生产参数，按运行时规则处理 |
 | `.github/`、`.gitmodules` | `INTEGRATION_ONLY` | CI、仓库组合和版本锁定；不得包含凭证或私有服务地址 |
 
+## 独立应用
+
+| 路径 | 分类 | 边界说明 |
+| --- | --- | --- |
+| `market-intel`（外部独立应用） | `PRIVATE_RUNTIME` | 负责市场上下文、报告组装、Dashboard、投递、freshness、幂等和运行恢复；运行实现、provider、凭证和生产参数保持私有 |
+| `market-intel` 的跨仓库输入边界 | `INTEGRATION_ONLY` | 只消费公开 CLI 和版本化文件、receipt 或其他已记录 artifact；不得导入本工作区或其他 owner 的私有研究内部模块 |
+
 ## 子仓库关键目录
 
 | 路径 | 分类 | 边界说明 |
@@ -66,4 +73,5 @@
 - 单个文件同时包含多类内容时，按更严格的分类处理；例如同时含通用机制和真实参数时，整体按 `PRIVATE_RESEARCH` 或 `PRIVATE_RUNTIME` 保护。
 - `README`、契约字段和 API 文档可以公开，但不得通过默认值、示例数据、日志片段或路径泄露 edge。
 - 新增目录在完成审查前默认标记为 `PRIVATE_RESEARCH`，并在本矩阵补充路径、分类和依据。
+- `market-intel` 只能通过公开 CLI 和版本化 artifact 与本工作区交互，禁止直接 import 私有研究内部实现；若需要新数据，先增加公开契约或版本化产物。
 - 公开发布前应同时检查密钥、真实数据、provider 名称、标签、特征组合、模型选择、生产参数和交易审计信息。
