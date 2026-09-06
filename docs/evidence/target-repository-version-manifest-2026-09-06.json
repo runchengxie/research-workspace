@@ -1,12 +1,12 @@
 {
   "schema_version": "architecture.target-version-manifest.v1",
   "generated_at": "2026-09-06",
-  "status": "remote-initialized; consumer-cutover-pending",
+  "status": "parity-slice-validated; consumer-cutover-pending",
   "publishable": false,
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "1cf5d43c441faef984dc4d1e883db53c1ad54488",
+    "commit": "2a7d04a55fd852cd46cb1477ee7edb3aa6c230ae",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
@@ -23,7 +23,7 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "a1de2f9b90285fcfa483d8ce174806463a04c92d",
+      "commit": "b67618ca243c7c3bfffd41720ae2b191a1c26378",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
       "ci": "public-ci: success",
@@ -32,7 +32,7 @@
     },
     "quant-research": {
       "path": "/home/richard/code/.private-staging/quant-research",
-      "commit": "e4ebde81a21e4a824b155d588dee9815da6a3a9d",
+      "commit": "40fa73569589b3d116c1663bf6ec8ccc390ece0a",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
       "scope": "private DailyWatch20 strategy vertical slice, formal publication adapter, and platform consumer pins",
@@ -40,18 +40,17 @@
     },
     "market-intel-boundary-validation": {
       "path": "/home/richard/code/market-intel",
-      "commit": "063994a66a5b4661179fe1f9fb67d0cb2d97d423",
+      "commit": "83172a38c26f7f7811d46c48539fa04d48838123",
       "remote": "https://github.com/runchengxie/market-intel.git",
-      "remote_commit": "c8f24a544cdab620080ef45c3c1f174bd4fb94aa",
-      "scope": "locally integrated artifact consumer boundary test",
-      "rollback": "Preserve unrelated working-tree changes, then return local market-intel to c8f24a5; do not push."
+      "remote_commit": "83172a38c26f7f7811d46c48539fa04d48838123",
+      "scope": "artifact consumer boundary test, pushed and green on Python 3.11-3.13",
+      "rollback": "Preserve unrelated working-tree changes; revert the boundary commits if the consumer validation must be withdrawn."
     }
   },
   "compatibility_gates": [
-    "quant-platform scoped tests and Ruff pass",
-    "quant-research publication adapter focused tests and Ruff pass",
-    "quant-research full copied dependency suite passes against staged platform and contract packages",
-    "market-intel boundary and contract/freshness/recovery tests pass",
+    "quant-platform scoped tests and Ruff pass; public CI green at b67618c",
+    "quant-research full DailyWatch20 parity suite passes locally: 122 tests; publication adapter included",
+    "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
     "remote creation, license approval, push, rename, and gitlink update are not yet authorized"

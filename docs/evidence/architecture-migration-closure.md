@@ -1,6 +1,6 @@
 # Architecture migration closure checklist
 
-> status: new target remotes initialized; consumer cutover pending
+> status: one parity slice validated; consumer cutover pending
 > verified: 2026-09-06
 
 ## Target architecture
@@ -21,12 +21,12 @@ The approved sequence and rollback triggers are recorded in
 
 ## Verified gates
 
-- Public platform staging at `a1de2f9b`: `31 passed`, Ruff clean and formatted.
-- Private research staging: `26 passed`; publication adapter `3 passed`, Ruff clean.
+- Public platform staging at `b67618c`: scoped tests passed, Ruff clean and formatted; public CI green.
+- Private research staging at `40fa735`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
-- Locally integrated `market-intel` boundary: boundary `2 passed`; broader
-  contract/freshness/recovery gate `112 passed`.
+- `market-intel` boundary: boundary `2 passed`; broader contract/freshness/recovery
+  gate `112 passed`; public CI green on Python 3.11–3.13 at `83172a3`.
 - Workspace thin-layer doctor tests: `23 passed`; doctor reports `0 errors`.
 - Architecture model tests: `7 passed`; architecture scan reports `0 errors`.
 - Contract smoke: all checks passed with `0 errors`, `0 warnings`.
@@ -34,8 +34,9 @@ The approved sequence and rollback triggers are recorded in
   boundaries, ownership boundaries, architecture, capability registry, trial
   ledger, and secret scan.
 - `quant-platform` and `quant-research` GitHub repositories were created and
-  pushed at their validated commits; `quant-platform` public CI completed
-  successfully.
+  pushed. `quant-platform` public CI completed successfully. `quant-research`
+  local parity is green, but remote CI remains blocked by access to the private
+  `market-data-platform` dependency.
 
 ## AI context policy
 
