@@ -21,7 +21,7 @@ The approved sequence and rollback triggers are recorded in
 
 ## Verified gates
 
-- Public platform staging at `b67618c`: scoped tests passed, Ruff clean and formatted; public CI green.
+- Public platform staging at `fb5612c`: Apache-2.0 added, scoped tests `31 passed`, Ruff clean and formatted; public CI green.
 - Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.

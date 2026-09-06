@@ -23,10 +23,10 @@
   "staging_targets": {
     "quant-platform": {
       "path": "/home/richard/code/.public-staging/quant-platform",
-      "commit": "b67618ca243c7c3bfffd41720ae2b191a1c26378",
+      "commit": "fb5612ca5537bf842c45c32c24a2c4a54b987e7a",
       "remote": "https://github.com/runchengxie/quant-platform.git",
       "visibility": "public",
-      "ci": "public-ci: success",
+      "ci": "public-ci: success at fb5612c",
       "scope": "public portfolio/backtesting vertical slice and generic publication primitives",
       "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
     },
