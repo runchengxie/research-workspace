@@ -23,6 +23,7 @@ The approved sequence and rollback triggers are recorded in
 
 - Public platform at `bb4c9a3`: Apache-2.0, full portfolio transfer plus public data-contract/core/quality slice, `599 passed`, Ruff and ty clean; public CI green at `34020846558`.
 - Private research at `6350f67`: complete pinned market-data baseline plus alpha-research baseline transfer; alpha adds 155 source files, 84 tests, 33 docs, and 4 scripts. Local alpha parity is green (`84 passed`); the dedicated remote `alpha-transfer` result is pending. Private consumers remain repinned to public `quant-platform@bb4c9a3`.
+- Private research at `e5e702c`: complete pinned microstructure baseline transfer; adds 99 source files, 88 tests, 59 docs, 16 scripts, and 39 configs. Local microstructure parity is green; the dedicated remote `microstructure-transfer` result is pending. Public extraction remains a separate review gate.
 - Private research staging at `a77fb73`: complete DailyWatch20 parity suite `122 passed` locally; publication adapter included; private CI green after validating private dependency access.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
