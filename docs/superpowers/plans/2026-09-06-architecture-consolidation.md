@@ -282,6 +282,10 @@ git commit -m "docs: define repository naming migration map"
 - Create: `docs/evidence/strategy-repository-change-coupling.md`
 - Create: `scripts/analyze_repository_coupling.py`
 - Create: `tests/test_analyze_repository_coupling.py`
+- Create: `tests/fixtures/strategy-commits.json`
+
+执行裁定：示例测试通过 `fixtures("strategy-commits.json")` 读取确定性输入，因此测试 fixture
+属于 Task 6 的必要文件。该文件只保存合成 Git 元数据，不保存研究数据、凭证或仓库内容。
 
 - [ ] **Step 1: 定义输出字段**
 
