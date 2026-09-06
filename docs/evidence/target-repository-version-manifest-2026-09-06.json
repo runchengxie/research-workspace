@@ -35,7 +35,7 @@
       "commit": "4b9dd97b76c3325a7e6a09119bce282d32f81399",
       "remote": "https://github.com/runchengxie/quant-research.git",
       "visibility": "private",
-      "ci": "private research CI: latest migrated type-warning fix pushed; rerun pending",
+      "ci": "private research CI: success at 34023679429",
       "scope": "private strategy vertical slice plus market-data, alpha, microstructure, and private runtime dependency migration",
       "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f, strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2, alpha-research at 631ee150d5125917baebbbb31a673696d1d29230, and deep-learning-tick-data-prediction at 2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203; discard local staging."
     },
@@ -53,7 +53,7 @@
     "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; private consumers repinned to public bb4c9a3; selected contract/provider tests and private CI green at 34021009249",
     "quant-platform public alpha framework: 135 source files, 70 tests, 31 docs; private edge modules remain in quant-research",
     "quant-research private alpha baseline: 155 source files and 84 tests; local alpha suite green; legacy alpha dependency removed",
-    "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local microstructure suite green; dedicated remote microstructure-transfer result pending",
+    "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local and remote microstructure-transfer gates green at 34023679429",
     "quant-platform orchestration/execution public foundation: orchestration 27 source files and execution 67 source files; full public suite includes both",
     "quant-research full DailyWatch20 parity suite passes locally: 122 tests; private CI green at a77fb73",
     "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
