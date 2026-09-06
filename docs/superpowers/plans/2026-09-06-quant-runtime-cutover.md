@@ -19,6 +19,45 @@
 - FMP and other external-network tests must be opt-in and never part of the offline full suite.
 - Existing production releases and rollback manifests must remain intact.
 
+### Task 0: Import the existing cashflow delivery slice into the migration branch
+
+**Files:**
+- Source: `/home/richard/code/market-intel/src/a_share_daily/cashflow_delivery.py`
+- Source: `/home/richard/code/market-intel/src/a_share_daily/cashflow_portfolio_render.py`
+- Source: `/home/richard/code/market-intel/src/a_share_daily/cashflow_status_notify.py`
+- Source: `/home/richard/code/market-intel/scripts/run_cashflow_shadow.sh`
+- Source: `/home/richard/code/market-intel/scripts/systemd/cashflow-feishu-shadow.service`
+- Source: `/home/richard/code/market-intel/scripts/systemd/cashflow-feishu-shadow.timer`
+- Source: `/home/richard/code/market-intel/docs/cashflow-feishu-shadow.md`
+- Source: `/home/richard/code/market-intel/tests/test_cashflow_delivery.py`
+- Source: `/home/richard/code/market-intel/tests/test_cashflow_portfolio_render.py`
+- Source: `/home/richard/code/market-intel/tests/test_cashflow_shadow_script.py`
+- Source: `/home/richard/code/market-intel/tests/test_cashflow_status_notify.py`
+- Modify: `src/a_share_daily/cli.py` in market-intel
+- Modify: `scripts/setup_cron.sh` in market-intel
+- Modify: `tests/test_a_share_daily_cli.py` in market-intel
+
+**Interfaces:**
+- Consumes: the user's existing uncommitted cashflow slice from the market-intel main checkout.
+- Produces: the same cashflow delivery behavior on the isolated `origin/main` branch, with no source files removed from the user's main checkout.
+
+- [ ] **Step 1: Reapply the tracked CLI and scheduler diffs with `apply_patch` and add the listed new files**
+
+Use the existing main-checkout diff as the source of truth. Preserve all cashflow validation, explicit test-chat confirmation, dry-run defaults, and systemd unit contents exactly while applying the files to the isolated worktree.
+
+- [ ] **Step 2: Run the imported cashflow tests**
+
+Run: `uv run pytest tests/test_cashflow_delivery.py tests/test_cashflow_portfolio_render.py tests/test_cashflow_shadow_script.py tests/test_cashflow_status_notify.py tests/test_a_share_daily_cli.py -q`
+
+Expected: PASS without network access.
+
+- [ ] **Step 3: Commit the imported slice**
+
+```bash
+git add src/a_share_daily/cli.py src/a_share_daily/cashflow_delivery.py src/a_share_daily/cashflow_portfolio_render.py src/a_share_daily/cashflow_status_notify.py scripts/run_cashflow_shadow.sh scripts/setup_cron.sh scripts/systemd/cashflow-feishu-shadow.service scripts/systemd/cashflow-feishu-shadow.timer docs/cashflow-feishu-shadow.md tests/test_a_share_daily_cli.py tests/test_cashflow_delivery.py tests/test_cashflow_portfolio_render.py tests/test_cashflow_shadow_script.py tests/test_cashflow_status_notify.py
+git commit -m "feat: preserve cashflow shadow delivery slice"
+```
+
 ### Task 1: Establish isolated repository worktrees and migration manifest
 
 **Files:**
