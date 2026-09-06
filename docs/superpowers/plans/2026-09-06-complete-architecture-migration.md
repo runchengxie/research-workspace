@@ -322,19 +322,19 @@ The remaining gaps are not yet complete: portfolio tests/docs, data, alpha, micr
 - Consumes: `quant-research/scripts/export_publication.py` output and `quant-platform` contract package.
 - Produces: a reproducible consumer fixture and receipt containing producer repository, producer commit, run ID, artifact IDs, hashes, and schema versions.
 
-- [ ] **Step 1: Add a production-shaped fixture**
+- [x] **Step 1: Add a production-shaped fixture**
 
   Store only synthetic `watchlist_20.csv`, `selection_receipt.json`, and the publication manifest. Do not store real data or private paths.
 
-- [ ] **Step 2: Validate both internal artifacts**
+- [x] **Step 2: Validate both internal artifacts**
 
   Assert consumer selection, internal-audience opt-in, path confinement, and SHA-256 verification.
 
-- [ ] **Step 3: Run remote consumer CI**
+- [x] **Step 3: Run remote consumer CI**
 
   Confirm all supported Python versions pass and record the run ID in the evidence document.
 
-- [ ] **Step 4: Validate delivery behavior**
+- [x] **Step 4: Validate delivery behavior**
 
   Run the existing freshness/recovery/delivery smoke tests against the synthetic bundle and verify that a missing or tampered artifact fails closed.
 

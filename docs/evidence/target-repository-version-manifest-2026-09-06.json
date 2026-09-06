@@ -41,10 +41,10 @@
     },
     "market-intel-boundary-validation": {
       "path": "/home/richard/code/market-intel",
-      "commit": "83172a38c26f7f7811d46c48539fa04d48838123",
+      "commit": "89a35d97ca73f2533c74b487d16c785fab80d10e",
       "remote": "https://github.com/runchengxie/market-intel.git",
-      "remote_commit": "83172a38c26f7f7811d46c48539fa04d48838123",
-      "scope": "artifact consumer boundary test, pushed and green on Python 3.11-3.13",
+      "remote_commit": "89a35d97ca73f2533c74b487d16c785fab80d10e",
+      "scope": "artifact consumer boundary plus synthetic production-shaped DailyWatch20 handoff fixture",
       "rollback": "Preserve unrelated working-tree changes; revert the boundary commits if the consumer validation must be withdrawn."
     }
   },
@@ -57,7 +57,7 @@
     "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local and remote microstructure-transfer gates green at 34024857688",
     "quant-platform orchestration/execution public foundation: orchestration 27 source files and execution 67 source files; full public suite includes both",
     "quant-research strategy-family transfer and DailyWatch20 validation are green in private CI at 34024857688",
-    "market-intel boundary and contract/freshness/recovery tests pass; public CI green at 83172a3",
+    "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
     "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
     "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
     "remote creation, license approval, push, rename, and gitlink update are not yet authorized"

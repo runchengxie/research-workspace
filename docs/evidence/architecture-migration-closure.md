@@ -29,8 +29,9 @@ The approved sequence and rollback triggers are recorded in
 - Private strategy-family source, tests, docs, research records, and runtime imports are transferred; import smoke, DailyWatch20 validation, and the strategy-family CI job are green in `34024857688`. Legacy standalone repository-root governance tests remain excluded where their assertions intentionally require the retired repository layout.
 - Formal-shaped DailyWatch20 producer → publication contract → `market-intel`
   consumer handoff: passed for both approved artifacts.
-- `market-intel` boundary: boundary `2 passed`; broader contract/freshness/recovery
-  gate `112 passed`; public CI green on Python 3.11–3.13 at `83172a3`.
+- `market-intel` boundary and production-shaped handoff tests pass; synthetic
+  DailyWatch20 fixture is pushed at `89a35d9`; CI run `34025080421` is green
+  on Python 3.11–3.13.
 - Workspace thin-layer doctor tests: `23 passed`; doctor reports `0 errors`.
 - Architecture model tests: `7 passed`; architecture scan reports `0 errors`.
 - Contract smoke: all checks passed with `0 errors`, `0 warnings`.
