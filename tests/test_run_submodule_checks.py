@@ -344,6 +344,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--locked", "--extra", "dev", "ty", "check")
             ],
             "strategy-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "quant-platform": [("uv", "run", "--locked", "--all-groups", "ty", "check")],
+            "quant-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check", "src")],
+            "market-intel": [],
         }
         expected_release = {
             "alpha-research": [("scripts/dev/run_tests.sh", "typecheck-release")],
@@ -367,6 +370,9 @@ class RunSubmoduleChecksTest(unittest.TestCase):
                 ("uv", "run", "--locked", "--extra", "dev", "ty", "check")
             ],
             "strategy-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check")],
+            "quant-platform": [("uv", "run", "--locked", "--all-groups", "ty", "check")],
+            "quant-research": [("uv", "run", "--locked", "--extra", "dev", "ty", "check", "src")],
+            "market-intel": [],
         }
 
         for name in sorted(configs):

@@ -1,0 +1,61 @@
+{
+  "period": "2025-09-06..2026-09-06",
+  "repositories": [
+    "strategy-research",
+    "strategy-app",
+    "strategy-pipeline"
+  ],
+  "commits": [
+    {
+      "commit": "1111111",
+      "date": "2026-01-10",
+      "subject": "update strategy catalog contract",
+      "changes": {
+        "strategy-research": ["catalog.json"],
+        "strategy-app": ["src/strategy_app/contracts/catalog.py"]
+      }
+    },
+    {
+      "commit": "2222222",
+      "date": "2026-02-10",
+      "subject": "align publication schema",
+      "changes": {
+        "strategy-research": ["research/strategies/sample/README.md"],
+        "strategy-app": ["schemas/publication.schema.json"]
+      }
+    },
+    {
+      "commit": "3333333",
+      "date": "2026-03-10",
+      "subject": "refresh local documentation",
+      "changes": {
+        "strategy-research": ["docs/review.md"],
+        "strategy-app": ["docs/application.md"]
+      }
+    },
+    {
+      "commit": "4444444",
+      "date": "2026-04-10",
+      "subject": "advance research evidence",
+      "changes": {
+        "strategy-research": ["research/evidence/summary.md"]
+      }
+    },
+    {
+      "commit": "5555555",
+      "date": "2026-05-10",
+      "subject": "refactor strategy calculation",
+      "changes": {
+        "strategy-app": ["src/strategy_app/calculation.py"]
+      }
+    },
+    {
+      "commit": "6666666",
+      "date": "2026-06-10",
+      "subject": "improve orchestration",
+      "changes": {
+        "strategy-pipeline": ["src/strategy_pipeline/runner.py"]
+      }
+    }
+  ]
+}

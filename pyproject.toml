@@ -39,6 +39,9 @@ extend-exclude = [
   "deep-learning-tick-data-prediction",
   "demo",
   "strategy-research",
+  "quant-platform",
+  "quant-research",
+  "market-intel",
 ]
 
 [tool.ruff.lint]
@@ -102,4 +105,7 @@ exclude = [
   "strategy-app",
   "strategy-pipeline",
   "strategy-research",
+  "quant-platform",
+  "quant-research",
+  "market-intel",
 ]

@@ -1,5 +1,36 @@
 # 架构边界
 
+## Target repository architecture
+
+The current eight submodules are a migration baseline, not the intended long-term repository
+shape. The target is three code repositories plus a thin integration layer:
+
+```text
+quant-platform       public
+  reusable data interfaces, research utilities, backtesting, contracts,
+  public orchestration and execution capabilities
+
+quant-research       private
+  strategy registry, strategy-specific logic, proprietary research,
+  experiments, model selection and private configuration
+
+market-intel         private application
+  reports, dashboards, delivery, scheduling, freshness and recovery
+
+research-workspace   thin integration layer
+  version manifest, compatibility checks, contract smoke tests and release metadata
+```
+
+The migration is incremental. Until each producer/consumer contract has passed its compatibility
+and rollback checks, the existing submodules remain authoritative. Repository names, Python
+namespaces, CLIs and artifact schemas are separate compatibility surfaces and are not changed in
+one operation.
+
+The first public and private migration rehearsals are recorded in
+[`docs/evidence/public-platform-staging-2026-09-06.md`](docs/evidence/public-platform-staging-2026-09-06.md)
+and
+[`docs/evidence/private-research-staging-2026-09-06.md`](docs/evidence/private-research-staging-2026-09-06.md).
+
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
 ```text
@@ -55,6 +86,11 @@ quant-execution-engine
 策略身份和生命周期由 `strategy-research` 维护。可执行应用由 `strategy-app` 维护。`strategy-pipeline` 负责数据提供方调用、操作控制、运行目录、原子发布和执行交接。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
 当前八个 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。版本由 `.gitmodules` 和各自 gitlink 锁定。
+
+候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
+`strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
+`microstructure-models`。这些只是冻结的迁移字典，当前不改变 submodule 目录、远端名、
+gitlink、Python namespace 或 CLI。完整引用分类见[仓库命名迁移字典](docs/governance/repository-naming-map.md)。
 
 ## 代码和数据边界
 

@@ -19,6 +19,12 @@ from .artifact_envelope import (
     attach_artifact_envelope_v2,
     read_artifact_envelope,
 )
+from .contract_ownership import (
+    CONTRACT_OWNERSHIP_SCHEMA_VERSION,
+    ContractOwnership,
+    load_contract_ownership,
+    validate_contract_ownership,
+)
 from .file_receipts import (
     FILE_RECEIPT_SCHEMA_VERSION,
     FileReceipt,
@@ -59,6 +65,7 @@ __all__ = [
     "ARTIFACT_ENVELOPE_KEY",
     "ARTIFACT_ENVELOPE_SCHEMA_VERSION",
     "CORE_ARTIFACTS",
+    "CONTRACT_OWNERSHIP_SCHEMA_VERSION",
     "FILE_RECEIPT_SCHEMA_VERSION",
     "KNOWN_REPOS",
     "PLATFORM_PUBLICATION_SCHEMA_VERSION",
@@ -70,6 +77,7 @@ __all__ = [
     "ArtifactEnvelopeV2",
     "ArtifactRef",
     "ContractValidationResult",
+    "ContractOwnership",
     "FileReceipt",
     "LegacyArtifactMetadata",
     "LineageInput",
@@ -89,9 +97,11 @@ __all__ = [
     "file_receipt_payload",
     "file_sha256",
     "load_artifact_contract_manifest",
+    "load_contract_ownership",
     "load_platform_publication_manifest",
     "read_artifact_envelope",
     "validate_artifact_contract_manifest",
+    "validate_contract_ownership",
     "validate_file_receipts",
     "validate_research_run_manifest",
     "validate_research_clock",

@@ -1,0 +1,65 @@
+{
+  "schema_version": "architecture.target-version-manifest.v1",
+  "generated_at": "2026-09-06",
+  "status": "pre-t0-candidate-pushed; production-t0-and-rollback-window-pending",
+  "publishable": false,
+  "remote_repositories_created": true,
+  "workspace": {
+    "repository": "research-workspace",
+    "commit": "72d2c45f0",
+    "integration_role": "version combination, contract checks, smoke tests, and release metadata"
+  },
+  "current_sources": {
+    "alpha-research": "631ee150d5125917baebbbb31a673696d1d29230",
+    "deep-learning-tick-data-prediction": "2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203",
+    "market-data-platform": "0f1c4ce2554ad4961a8f130ce953b5d18ea52a0d",
+    "portfolio-backtester": "91a4fa4f1d57c074c991546c381a3d90a3b6adfb",
+    "quant-execution-engine": "2f0675a4b8946ff4134194e7dd12dc1169fd2be4",
+    "strategy-app": "f6f58bf7bbd623318189ab4ab7acf49b331be4a2",
+    "strategy-pipeline": "87175c67531f0be29f78aeb078046708dbf38ee4",
+    "strategy-research": "087b5dfdabed70a629ff6ed44fc52609fe966c5f",
+    "market-intel-main": "c8f24a544cdab620080ef45c3c1f174bd4fb94aa"
+  },
+  "staging_targets": {
+    "quant-platform": {
+      "path": "/home/richard/code/.public-staging/quant-platform",
+      "commit": "2ba708896d24695c0127124ec6e9657a0732976d",
+      "remote": "https://github.com/runchengxie/quant-platform.git",
+      "visibility": "public",
+      "ci": "public-ci: queued at 34024056490; local full gate 1146 passed, 3 skipped",
+      "scope": "portfolio baseline plus public data core/quality, alpha framework, microstructure framework, orchestration control plane, and execution interfaces",
+      "rollback": "Keep portfolio-backtester at 91a4fa4f1d57c074c991546c381a3d90a3b6adfb and discard the local staging repository."
+    },
+    "quant-research": {
+      "path": "/home/richard/code/.private-staging/quant-research",
+      "commit": "2b51d332464895d71c08ec78d08d0c2a722313db",
+      "remote": "https://github.com/runchengxie/quant-research.git",
+      "visibility": "private",
+      "ci": "private research CI: success at 34028848394",
+      "scope": "private strategy vertical slice plus market-data, alpha, microstructure, and private runtime dependency migration",
+      "rollback": "Keep strategy-research at 087b5dfdabed70a629ff6ed44fc52609fe966c5f, strategy-app at f6f58bf7bbd623318189ab4ab7acf49b331be4a2, alpha-research at 631ee150d5125917baebbbb31a673696d1d29230, and deep-learning-tick-data-prediction at 2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203; discard local staging."
+    },
+    "market-intel-boundary-validation": {
+      "path": "/home/richard/code/market-intel",
+      "commit": "89a35d97ca73f2533c74b487d16c785fab80d10e",
+      "remote": "https://github.com/runchengxie/market-intel.git",
+      "remote_commit": "89a35d97ca73f2533c74b487d16c785fab80d10e",
+      "scope": "artifact consumer boundary plus synthetic production-shaped DailyWatch20 handoff fixture",
+      "rollback": "Preserve unrelated working-tree changes; revert the boundary commits if the consumer validation must be withdrawn."
+    }
+  },
+  "compatibility_gates": [
+    "quant-platform public framework: local full gate 1146 passed, 3 skipped; Ruff and format pass; public CI green at 34024056490",
+    "quant-platform public microstructure framework: 26 source files, 10 tests, 3 docs; synthetic suite 45 passed",
+    "quant-research private market-data transfer: 290 source files, 110 test/fixture files, 50 docs, 44 scripts; private consumers repinned to public bb4c9a3; selected contract/provider tests and private CI green at 34021009249",
+    "quant-platform public alpha framework: 135 source files, 70 tests, 31 docs; private edge modules remain in quant-research",
+    "quant-research private alpha baseline: 155 source files and 84 tests; local alpha suite green; legacy alpha dependency removed",
+    "quant-research private microstructure transfer: 99 source files, 88 tests, 59 docs, 16 scripts, 39 configs; local and remote microstructure-transfer gates green at 34024857688",
+    "quant-platform orchestration/execution public foundation: orchestration 27 source files and execution 67 source files; full public suite includes both",
+    "quant-research strategy-family transfer, migrated strategy-research and strategy-app suites, and DailyWatch20 validation are green in private CI at 34028848394",
+    "market-intel boundary and contract/freshness/recovery tests pass; synthetic DailyWatch20 fixture committed at 89a35d9; remote CI green at 34025080421",
+    "formal-shaped DailyWatch20 publication bundle passes the market-intel consumer verifier end to end",
+    "formal watchlist_20 production data migration is not yet complete; staging handoff is verified",
+    "target gitlinks are validated locally and pushed on the architecture-consolidation branch; production T0 remains pending"
+  ]
+}

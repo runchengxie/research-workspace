@@ -15,6 +15,9 @@
 | `strategy-app` | lockfile、Ruff、格式、`ty`、pytest、维护性棘轮和隔离构建 | 依赖审计 | 冻结合同和研究应用结果 |
 | `strategy-pipeline` | 仓库脚本中的 lint、format、`ty`、pytest 和边界检查 | 依赖审计 | 长窗口研究、编排和目标文件导出 |
 | `quant-execution-engine` | Ruff、格式、`ty`、快速 pytest 和维护性检查 | 集成、端到端测试和依赖审计 | 券商凭证、模拟盘、实盘和对账 |
+| `quant-platform` | public CI、Ruff、格式、类型检查和完整测试 | 私有数据与策略 | 通用公开框架和契约 |
+| `quant-research` | private CI、迁移分层测试和策略族检查 | 生产数据与券商演练 | 私有研究、策略和证据 |
+| `market-intel` | public CI、消费者契约、freshness 和投递测试 | 真实投递与凭证 | artifact 消费、报告和运行保障 |
 
 ## 顶层命令
 

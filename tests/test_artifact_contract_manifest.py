@@ -173,6 +173,8 @@ def test_contract_smoke_includes_manifest_check() -> None:
 
     assert results[0].name == "artifact contract manifest"
     assert results[0].severity == "OK"
+    assert results[1].name == "contract ownership registry"
+    assert results[1].severity == "OK"
     target_smoke = next(
         result for result in results if result.name == "strategy-pipeline export-targets help"
     )

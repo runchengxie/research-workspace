@@ -12,7 +12,8 @@
       "consumption_rule": "Producers install research-contracts from the research-workspace git subdirectory pinned to an immutable main commit. No repository may vendor a copy of the envelope schema or hash/lineage validation logic."
     },
     "owner_rule": "The owning module defines the canonical runtime implementation; the local research-contracts package validates shared envelopes and file handoffs.",
-    "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals."
+    "workspace_rule": "The workspace may validate manifest and file handoff contracts, but must not import submodule runtime internals.",
+    "ownership_registry": "contracts/contract-ownership.yml"
   },
   "artifact_envelope": {
     "schema_version": "research.artifact-envelope.v2",

@@ -43,6 +43,7 @@
 - [贡献流程](../CONTRIBUTING.md)
 - [跨仓库文件契约](contracts/README.md)
 - [质量治理](governance/README.md)
+- [Public / Private 内容边界矩阵](governance/public-private-boundary-matrix.md)
 - [版本矩阵](governance/README.md)
 - [工作区维护](operations/README.md)
 - [术语表](reference/README.md)

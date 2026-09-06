@@ -22,6 +22,7 @@ class Component:
     package_roots: tuple[str, ...]
     source_roots: tuple[str, ...]
     runtime_cycle_check: bool
+    target_repository: str
 
 
 @dataclass(frozen=True)
@@ -68,6 +69,7 @@ def _component_from_mapping(path: Path, raw: Mapping[str, Any]) -> Component:
         package_roots=strings(raw.get("package_roots")),
         source_roots=strings(raw.get("source_roots")),
         runtime_cycle_check=bool(raw.get("runtime_cycle_check", True)),
+        target_repository=str(raw.get("target_repository", identifier)).strip() or identifier,
     )
 
 

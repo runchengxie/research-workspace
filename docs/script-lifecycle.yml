@@ -60,6 +60,26 @@
       "removal_condition": "remove after the data-path migration audit is closed and no active migration or release workflow calls this script"
     },
     {
+      "path": "scripts/context_manifest.py",
+      "owner": "research-workspace",
+      "purpose": "Render bounded repository, contract, consumer, and test context for one agent task",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "stdout only",
+      "external_dependencies": "Python",
+      "removal_condition": "remove after task-scoped agent context is replaced by a maintained successor and no governance or contributor workflow calls this script"
+    },
+    {
+      "path": "scripts/analyze_repository_coupling.py",
+      "owner": "research-workspace",
+      "purpose": "Measure cross-repository co-change, contract-change, and independent-release evidence for migration decisions",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested Markdown evidence output",
+      "external_dependencies": "Python and Git metadata from the workspace and initialized submodules",
+      "removal_condition": "remove after repository consolidation decisions are closed and no active migration review calls this script"
+    },
+    {
       "path": "scripts/count_loc.sh",
       "owner": "research-workspace",
       "purpose": "Count tracked source lines in the superproject and initialized submodules",
@@ -418,6 +438,16 @@
       "writes_files": "none; imported by workspace_doctor.py",
       "external_dependencies": "none",
       "removal_condition": "remove only after workspace doctor checks move to a successor module and no CI/release checklist calls this validation path for two release reviews"
+    },
+    {
+      "path": "scripts/doctor_integration_checks.py",
+      "owner": "research-workspace",
+      "purpose": "Verify the workspace remains a thin integration layer and has no root business-owner package",
+      "lifecycle": "dev",
+      "safe_to_run_locally": true,
+      "writes_files": "none; imported by workspace_doctor.py",
+      "external_dependencies": "none; stdlib-only",
+      "removal_condition": "remove only after target repository migration is complete and an equivalent integration-layer gate exists in the successor release workflow"
     },
     {
       "path": "scripts/doctor_submodule_checks.py",
