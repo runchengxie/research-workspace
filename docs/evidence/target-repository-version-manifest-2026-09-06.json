@@ -1,12 +1,12 @@
 {
   "schema_version": "architecture.target-version-manifest.v1",
   "generated_at": "2026-09-06",
-  "status": "target-pointers-cut-over-locally; remote-push-and-production-window-pending",
+  "status": "pre-t0-candidate-pushed; production-t0-and-rollback-window-pending",
   "publishable": false,
   "remote_repositories_created": true,
   "workspace": {
     "repository": "research-workspace",
-    "commit": "79da034d5",
+    "commit": "4163177c7",
     "integration_role": "version combination, contract checks, smoke tests, and release metadata"
   },
   "current_sources": {
