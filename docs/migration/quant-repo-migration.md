@@ -41,7 +41,7 @@ market-intel    -> 报告、看板、消息交付和运营入口
 ## 迁移期阅读顺序
 
 1. 先读本页，确认模块归属。
-2. 再读 [`quant-research` README](../../../.private-staging/quant-research/README.md) 或 [`quant-platform` README](../../../.public-staging/quant-platform/README.md)。
+2. 再读 [`quant-research` README](https://github.com/runchengxie/quant-research#readme) 或 [`quant-platform` README](https://github.com/runchengxie/quant-platform#readme)。
 3. 进入目标仓库的 `docs/` 阅读技术细节、开发命令和质量门禁。
 4. 只有需要复现旧结果时，才回到本工作区或旧 submodule。
 
