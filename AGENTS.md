@@ -7,7 +7,7 @@
 - 私有策略、因子、机器学习、实验和研究证据进入 `quant-research`。
 - 通用数据接口、回测、组合构造、风险、执行模拟和公共 contracts 进入 `quant-platform`。
 - 本仓库只维护迁移导航、历史复现、跨仓库版本锁定和仍未完成迁移的兼容边界。
-- 修改旧 submodule 时，必须先确认该改动是历史复现或迁移兼容；新的业务能力应在目标 quant 仓库实现。
+- 修改旧 submodule 时，必须先确认该改动是历史复现或迁移兼容。新的业务能力应在目标 quant 仓库实现。
 - 详细映射见 `docs/migration/quant-repo-migration.md`。
 
 本文件说明顶层工作区的协作规则。子仓库内部改动仍以各自的 `AGENTS.md` 为准。
