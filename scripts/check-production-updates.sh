@@ -2,6 +2,7 @@
 set -euo pipefail
 
 PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
+MARKET_INTEL_SOURCE="${MARKET_INTEL_SOURCE:-/home/richard/code/quant/quant-intel-platform}"
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 
 check_repo() {
@@ -18,4 +19,4 @@ check_repo() {
 }
 
 check_repo research-workspace /home/richard/code/research-workspace "$PRODUCTION_ROOT/research-workspace" github main
-check_repo market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel" origin main
+check_repo market-intel "$MARKET_INTEL_SOURCE" "$PRODUCTION_ROOT/market-intel" origin main

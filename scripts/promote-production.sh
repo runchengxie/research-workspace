@@ -2,6 +2,7 @@
 set -euo pipefail
 
 PRODUCTION_ROOT="${PRODUCTION_ROOT:-/home/richard/code/production}"
+MARKET_INTEL_SOURCE="${MARKET_INTEL_SOURCE:-/home/richard/code/quant/quant-intel-platform}"
 KEEP_RELEASES="${PRODUCTION_KEEP_RELEASES:-5}"
 KEEP_VENVS="${PRODUCTION_KEEP_VENVS:-2}"
 SHARED_VENV_ROOT="${PRODUCTION_SHARED_VENV_ROOT:-$PRODUCTION_ROOT/shared/venvs}"
@@ -196,11 +197,11 @@ if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == research-workspace ]]; then
   prune_releases research-workspace /home/richard/code/research-workspace "$PRODUCTION_ROOT/research-workspace"
 fi
 if [[ "$REPO_FILTER" == all || "$REPO_FILTER" == market-intel ]]; then
-  prepare_release market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel" origin main
+  prepare_release market-intel "$MARKET_INTEL_SOURCE" "$PRODUCTION_ROOT/market-intel" origin main
   if (( ! DRY_RUN )); then
     sync_hermes_market_intel_workdir
   fi
-  prune_releases market-intel /home/richard/code/market-intel "$PRODUCTION_ROOT/market-intel"
+  prune_releases market-intel "$MARKET_INTEL_SOURCE" "$PRODUCTION_ROOT/market-intel"
 fi
 
 printf '\nproduction manifest:\n'
