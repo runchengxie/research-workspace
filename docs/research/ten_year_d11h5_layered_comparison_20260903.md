@@ -1,77 +1,51 @@
-# Ten-year D11-H5 layered comparison — 2026-09-03
+# 十年 D11-H5 分层比较：2026-09-03
 
-## Status
+## 状态
 
-Research-only. No production promotion.
+仅用于研究，不推动生产发布。
 
-The first historical file named `historical_scores_D11_20.parquet` under
-`daily_watch20_historical_backfill_2015_20260902` was rejected as an input for
-this comparison. Its 2026 scores matched the DailyWatch20 raw score exactly,
-and its monthly rank correlation with DailyWatch20 was effectively one. It is
-retained as historical evidence, but is not used below.
+`daily_watch20_historical_backfill_2015_20260902` 下最初名为 `historical_scores_D11_20.parquet` 的历史文件未被本次比较采用。它在 2026 年的分数与 DailyWatch20 原始分数完全一致，月度排名相关性也接近 1。该文件作为历史证据保留，但不参与以下分析。
 
-## Correct D11-H5 ladder
+## 正确的 D11-H5 阶梯
 
-The replacement ladder is under
-`ten_year_d11h5_20260903/d11_ladder_true_120d/`.
+替代阶梯位于 `ten_year_d11h5_20260903/d11_ladder_true_120d/`。
 
-- 1,878,400 rows across 2,348 trading dates;
-- 2017-01-03 through 2026-09-02;
-- exactly 800 rows per date and zero duplicate `(trade_date, symbol)` keys;
-- limit-aware D11-D20 incremental-return target;
-- 504-date training window and strict label-end OOS rule;
-- 120-session rolling refit blocks for this long diagnostic.
+- 共 1,878,400 行，覆盖 2,348 个交易日。
+- 日期范围为 2017-01-03 至 2026-09-02。
+- 每个日期恰好 800 行，`(trade_date, symbol)` 没有重复键。
+- 使用考虑涨跌停限制的 D11-D20 增量收益目标。
+- 使用 504 个日期的训练窗口和严格的标签结束时间样本外规则。
+- 为完成长期诊断，使用 120 个交易日的滚动重新拟合区块。
 
-This is approximately 9.7 years of D11 score coverage, but the common
-fundamental comparison begins on 2018-03-30 because the fundamental ladder has
-fewer than 20 eligible names before that date. The 120-session refit cadence is
-strictly OOS, but differs from the current 40-session production/shadow
-cadence; this is therefore a historical research diagnostic, not a production
-replica.
+这套数据大约覆盖 9.7 年的 D11 分数，但共同基本面比较从 2018-03-30 开始，因为在此之前基本面阶梯中符合条件的标的少于 20 个。120 个交易日的重新拟合节奏严格遵守样本外规则，但与当前生产或 shadow 使用的 40 个交易日节奏不同。因此，这是一项历史研究诊断，不能视为生产策略复刻。
 
-On the overlapping 2026 monthly dates, the correct D11 score had rank
-correlation around 0.65–0.68 with DailyWatch20 and Top20 overlap of 3–8 names,
-confirming that it is not the same signal.
+在 2026 年重叠的月度日期上，正确的 D11 分数与 DailyWatch20 的排名相关性约为 0.65–0.68，Top20 重叠数量为 3–8 只，说明两者并非同一个信号。
 
-## Common-condition replay
+## 统一条件回放
 
-Artifact: `ten_year_d11h5_20260903/unified_monthly_replay_true_d11/`.
+产物：`ten_year_d11h5_20260903/unified_monthly_replay_true_d11/`
 
-All arms use the same 103 monthly formation dates from 2018-03-30 through
-2026-09-01, the same stock-date intersection, Top20, one-session execution
-shift, incumbent buffer of 15, 25bp transaction cost, close pricing, and 5th
-percentile amount liquidity floor.
+所有分支使用相同的 103 个月度建仓日期，范围为 2018-03-30 至 2026-09-01，使用相同的股票和日期交集、Top20、延迟一个交易日执行、15 只存量持仓缓冲、25 个基点交易成本、收盘价，以及成交金额第 5 百分位流动性下限。
 
-| Arm | Total return | Annualized return | Sharpe | Max drawdown | Avg turnover |
+| 分支 | 总收益 | 年化收益 | 夏普比率 | 最大回撤 | 平均换手率 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Fundamental only | -15.75% | -2.09% | 0.037 | -39.99% | 0.203 |
-| DailyWatch20 only | -54.55% | -9.27% | -0.152 | -74.88% | 0.514 |
-| D11-H5 only | -37.83% | -5.69% | -0.017 | -60.80% | 0.487 |
-| Fundamental + DailyWatch20 | -38.48% | -5.82% | -0.156 | -55.75% | 0.253 |
-| Fundamental + D11-H5 | -37.53% | -5.64% | -0.125 | -50.72% | 0.246 |
-| DailyWatch20 + D11-H5 | -40.69% | -6.24% | -0.051 | -66.00% | 0.455 |
-| Three-way | -35.34% | -5.24% | -0.114 | -51.65% | 0.233 |
+| 仅基本面 | -15.75% | -2.09% | 0.037 | -39.99% | 0.203 |
+| 仅 DailyWatch20 | -54.55% | -9.27% | -0.152 | -74.88% | 0.514 |
+| 仅 D11-H5 | -37.83% | -5.69% | -0.017 | -60.80% | 0.487 |
+| 基本面加 DailyWatch20 | -38.48% | -5.82% | -0.156 | -55.75% | 0.253 |
+| 基本面加 D11-H5 | -37.53% | -5.64% | -0.125 | -50.72% | 0.246 |
+| DailyWatch20 加 D11-H5 | -40.69% | -6.24% | -0.051 | -66.00% | 0.455 |
+| 三者融合 | -35.34% | -5.24% | -0.114 | -51.65% | 0.233 |
 
-The common-period result does not support production promotion. The
-fundamental arm is the least bad of these long-window arms, while D11-H5 is
-meaningfully different from DailyWatch20 but does not improve the fundamental
-blend enough to produce a positive result. The result is diagnostic, not proof
-that either the fundamental thesis or D11-H5 is permanently invalid.
+共同区间的结果不支持生产发布。在这些长期分支中，基本面分支的表现相对最好。D11-H5 与 DailyWatch20 存在明显差异，但加入基本面后仍不足以得到正收益。这一结果用于诊断，不能据此断定基本面假设或 D11-H5 永久无效。
 
-## Remaining limitations
+## 剩余限制
 
-1. The common replay has only 102 realized holding periods after the first
-   formation; it is not a substitute for future live maturity.
-2. The historical D11 ladder uses a 120-session refit block for tractability;
-   an exact 40-session historical replay remains a separate robustness check.
-3. The fundamental ladder is sparse before 2018-03-30, so the strict common
-   comparison cannot claim a full 2016–2026 four-way sample.
-4. Industry-neutral and size-neutral variants were not folded into this one
-   common table; they remain follow-up diagnostics.
+1. 首次建仓后，共同回放只有 102 个已实现持有期，不能替代未来的成熟期观察。
+2. 为控制计算量，历史 D11 阶梯使用 120 个交易日的重新拟合区块。精确的 40 个交易日历史回放仍需作为单独的稳健性检查。
+3. 2018-03-30 以前的基本面阶梯较为稀疏，因此严格共同比较不能声称覆盖完整的 2016–2026 四路样本。
+4. 行业中性和规模中性版本没有纳入这张共同条件表，仍属于后续诊断项目。
 
-## Reproduction
+## 复现
 
-The model-frame builder is
-`tools/ten_year_d11h5/build_historical_model_frame.py`; the common replay
-runner is `tools/ten_year_d11h5/run_unified_monthly_replay.py`. Both write
-research-only artifacts and do not modify published strategy state.
+模型帧构建器为 `tools/ten_year_d11h5/build_historical_model_frame.py`，共同回放运行器为 `tools/ten_year_d11h5/run_unified_monthly_replay.py`。二者只写入研究产物，不修改已发布的策略状态。
