@@ -1,18 +1,11 @@
-# StyleReplica legacy workspace smoke test
+# StyleReplica 旧工作区 smoke 测试
 
-The former `tests/test_style_replica.py` was a pre-owner-boundary integration
-test. It imported the removed `alpha_research.style_replica` portfolio surface
-(`StyleReplicaPortfolioConfig`, theme quotas, and position construction), so it
-could no longer run after StyleReplica was split across its owner repositories.
+旧的 `tests/test_style_replica.py` 是职责边界建立前的集成测试。它导入已经移除的 `alpha_research.style_replica` 组合接口（`StyleReplicaPortfolioConfig`、主题配额和仓位构造），StyleReplica 拆分到各所有者仓库后，该测试已经无法继续运行。
 
-Coverage is now maintained by the owner-native tests:
+当前覆盖由所有者仓库中的原生测试维护：
 
-- `alpha-research/tests/test_style_replica_signal_generator.py` covers signal
-  generation and factor behavior.
-- `strategy-pipeline/tests/test_style_replica_output_ownership.py` covers the
-  pipeline output boundary.
-- `portfolio-backtester` owns portfolio construction and execution behavior.
+- `alpha-research/tests/test_style_replica_signal_generator.py` 覆盖信号生成和因子行为。
+- `strategy-pipeline/tests/test_style_replica_output_ownership.py` 覆盖 pipeline 输出边界。
+- `portfolio-backtester` 负责组合构造和执行行为。
 
-The legacy test is intentionally removed from the active workspace suite; the
-current APIs must not be regressed merely to preserve this obsolete import
-surface.
+该旧测试已从当前工作区测试套件中有意移除。不能为了保留已经废弃的导入接口而让当前 API 回退。
