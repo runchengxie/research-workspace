@@ -13,7 +13,7 @@
 
 | 目录 | 职责 |
 | --- | --- |
-| `market-data-platform/` | 采集、检查、发布和读取市场数据 |
+| `market-data-platform/` | `quant-market-data-platform` 的迁移期挂载：采集、检查、发布和读取市场数据 |
 | `deep-learning-tick-data-prediction/` | L2 事件流清洁审计、模型训练和预测产物 |
 | `alpha-research/` | 特征、模型、稳健性诊断和信号产物 |
 | `portfolio-backtester/` | 组合构造、回测、成本、换手、容量和风险分析 |
@@ -25,7 +25,8 @@
 
 当前目标架构、迁移矩阵和新代码放置规则见[量化仓迁移说明](docs/migration/quant-repo-migration.md)。
 迁移后的目标入口同时作为子模块锁定：`quant-platform/` 提供公开通用框架，
-`quant-research/` 保存私有策略与研究，`market-intel/` 消费版本化产物并负责报告与投递。
+`quant-research/` 保存私有策略与研究，`market-data-platform/` 挂载独立的
+`quant-market-data-platform`，`market-intel/` 挂载 `quant-intel-platform` 并消费版本化产物、负责报告与投递。
 旧子模块在 14 天回滚窗口关闭前继续保留，不与目标入口混用为新的业务 owner。
 
 职责边界见 [架构说明](ARCHITECTURE.md)。子模块的内部实现、依赖、参数和完整命令以
