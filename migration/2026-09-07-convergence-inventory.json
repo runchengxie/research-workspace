@@ -257,10 +257,13 @@
         "remote": "https://github.com/runchengxie/strategy-research.git"
       },
       "targets": ["quant-research:strategy_research", "quant-research:research", "quant-research:registry"],
-      "status": "TRANSFER_REQUIRED",
+      "status": "REVIEW_REQUIRED",
       "ownership_decision": "quant_research_private_owner",
-      "decision_evidence": "quant-research/migration/provenance.json",
-      "parity_evidence": ["quant-research/migration/provenance.json"],
+      "decision_evidence": "quant-research/migration/strategy-research-current-parity-20260907.json",
+      "parity_evidence": [
+        "quant-research/migration/strategy-research-current-parity-20260907.json",
+        "quant-research/migration/strategy-family-parity.json"
+      ],
       "rollback": {
         "required": true,
         "source_gitlink": "strategy-research",
