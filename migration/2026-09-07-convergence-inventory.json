@@ -54,10 +54,18 @@
     },
     "current_source_parity_audits": {
       "strategy-research_to_quant-research": {
-        "exact_path_matches": 507,
-        "exact_hash_matches": 286,
-        "old_paths_absent": 169,
-        "old_symbol_names_absent_globally": 5,
+        "exact_path_matches": 510,
+        "exact_hash_matches": 289,
+        "old_paths_absent": 166,
+        "old_symbol_names_absent_globally": 0,
+        "target_commit": "0d9af526339a77067185e5439233aff60504e4f2",
+        "classification": {
+          "research_assets_transferred": 4,
+          "tests_transferred_or_relocated": 130,
+          "documentation_relocated": 38,
+          "unresolved_source_symbols": 0,
+          "remaining_gate": "owner approval, clean recursive checkout, and 14-day rollback validation"
+        },
         "method": "scripts/migration_parity_audit.py against current source and target trees"
       },
       "strategy-app_to_quant-research": {
@@ -134,7 +142,8 @@
     "blocked_items": [
       "quant-platform/migration/provenance.json remains local-staging-only",
       "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled",
-      "quant-research/migration/strategy-family-parity.json is anchored at 087b5dfd while the current strategy-research gitlink is 11090d85; current-source parity is still required"
+      "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, clean recursive checkout, and 14-day rollback validation",
+      "target branches contain local commits not yet pushed or merged"
     ]
   },
   "components": [
