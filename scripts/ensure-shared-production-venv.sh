@@ -6,7 +6,7 @@ NAME=""
 SHARED_ROOT=""
 UV_BIN=uv
 EXTRAS=()
-GROUPS=()
+DEP_GROUPS=()
 MIGRATE_EXISTING=0
 
 usage() {
@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
     --shared-root) shift; [[ $# -gt 0 ]] || { usage; exit 2; }; SHARED_ROOT=$1 ;;
     --uv) shift; [[ $# -gt 0 ]] || { usage; exit 2; }; UV_BIN=$1 ;;
     --extra) shift; [[ $# -gt 0 ]] || { usage; exit 2; }; EXTRAS+=("$1") ;;
-    --group) shift; [[ $# -gt 0 ]] || { usage; exit 2; }; GROUPS+=("$1") ;;
+    --group) shift; [[ $# -gt 0 ]] || { usage; exit 2; }; DEP_GROUPS+=("$1") ;;
     --migrate-existing) MIGRATE_EXISTING=1 ;;
     *) usage; exit 2 ;;
   esac
@@ -103,7 +103,7 @@ uv_args=(sync --locked --no-editable)
 for extra in "${EXTRAS[@]}"; do
   uv_args+=(--extra "$extra")
 done
-for group in "${GROUPS[@]}"; do
+for group in "${DEP_GROUPS[@]}"; do
   uv_args+=(--group "$group")
 done
 (
