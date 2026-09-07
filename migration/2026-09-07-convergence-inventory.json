@@ -26,7 +26,8 @@
     },
     "blocked_items": [
       "quant-platform/migration/provenance.json remains local-staging-only",
-      "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled"
+      "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled",
+      "quant-research/migration/strategy-family-parity.json is anchored at 087b5dfd while the current strategy-research gitlink is 11090d85; current-source parity is still required"
     ]
   },
   "components": [

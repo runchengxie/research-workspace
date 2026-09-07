@@ -90,6 +90,36 @@
       "removal_condition": "remove after repository consolidation decisions are closed and no active migration review calls this script"
     },
     {
+      "path": "scripts/compare_runtime_shadow.py",
+      "owner": "research-workspace",
+      "purpose": "Compare target runtime shadow outputs with the legacy workspace outputs during the convergence window",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested comparison report",
+      "external_dependencies": "Python, initialized target repositories, and versioned runtime artifacts",
+      "removal_condition": "remove after target runtime cutover has passed the 14-day observation window and no release or migration review calls this script"
+    },
+    {
+      "path": "scripts/migration_parity_audit.py",
+      "owner": "research-workspace",
+      "purpose": "Audit source and target file-level migration parity, exclusions, and recorded commit provenance",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested parity report",
+      "external_dependencies": "Python, Git metadata, and initialized source/target repositories",
+      "removal_condition": "remove after every component reaches a terminal migration status and the final convergence evidence is archived"
+    },
+    {
+      "path": "scripts/run_cashflow_shadow.py",
+      "owner": "research-workspace",
+      "purpose": "Run the cashflow research shadow workflow and produce readiness evidence during migration",
+      "lifecycle": "migration",
+      "safe_to_run_locally": true,
+      "writes_files": "the explicitly requested shadow output and readiness evidence",
+      "external_dependencies": "Python, DATA_PLATFORM_ROOT, quant-research research assets, and quant-platform contracts",
+      "removal_condition": "remove after the cashflow producer is owned by quant-research or quant-platform, its replacement passes the observation window, and no active workflow calls this script"
+    },
+    {
       "path": "scripts/count_loc.sh",
       "owner": "research-workspace",
       "purpose": "Count tracked source lines in the superproject and initialized submodules",
