@@ -10,13 +10,13 @@
     {
       "repo": "research-workspace",
       "root": ".",
-      "python_file_count": 158,
-      "python_loc": 27300,
+      "python_file_count": 168,
+      "python_loc": 28970,
       "hk_related_file_count": 3,
       "hotspot_counts": {
         "large_files": 5,
-        "long_functions": 5,
-        "complexity_hotspots": 2,
+        "long_functions": 6,
+        "complexity_hotspots": 4,
         "large_classes": 2
       },
       "large_files": [
@@ -47,6 +47,12 @@
         }
       ],
       "long_functions": [
+        {
+          "path": "scripts/run_cashflow_shadow.py",
+          "name": "orchestrate_cashflow_shadow",
+          "line_count": 228,
+          "complexity": 28
+        },
         {
           "path": "tests/test_strategy_pipeline_internal_migration_manifest.py",
           "name": "test_retired_internal_facades_are_recorded_with_evidence",
@@ -79,6 +85,18 @@
         }
       ],
       "complexity_hotspots": [
+        {
+          "path": "scripts/run_cashflow_shadow.py",
+          "name": "orchestrate_cashflow_shadow",
+          "line_count": 228,
+          "complexity": 28
+        },
+        {
+          "path": "scripts/migration_parity_audit.py",
+          "name": "compare_inventories",
+          "line_count": 40,
+          "complexity": 16
+        },
         {
           "path": "src/research_contracts/asset_registry.py",
           "name": "topological_order",
@@ -193,6 +211,7 @@
         "scripts/check-production-updates.sh",
         "scripts/check.sh",
         "scripts/cleanup_merged_branches.py",
+        "scripts/compare_runtime_shadow.py",
         "scripts/context_manifest.py",
         "scripts/count_loc.sh",
         "scripts/data_path_audit.py",
@@ -222,6 +241,7 @@
         "scripts/maintain-production.sh",
         "scripts/maintainability_baseline.py",
         "scripts/migrate-production-venvs.sh",
+        "scripts/migration_parity_audit.py",
         "scripts/namespace_contracts.py",
         "scripts/ownership_boundary_rules.yml",
         "scripts/package_d11_h5_repro.py",
@@ -229,6 +249,7 @@
         "scripts/promote-production.sh",
         "scripts/prune-production-releases.sh",
         "scripts/research_spec_check.py",
+        "scripts/run_cashflow_shadow.py",
         "scripts/run_pre_push_checks.py",
         "scripts/run_quality_checks.py",
         "scripts/run_research_layer_lint.py",
@@ -260,10 +281,10 @@
       "repo": "market-data-platform",
       "root": "market-data-platform",
       "python_file_count": 421,
-      "python_loc": 105166,
+      "python_loc": 105243,
       "hk_related_file_count": 0,
       "hotspot_counts": {
-        "large_files": 47,
+        "large_files": 48,
         "long_functions": 89,
         "complexity_hotspots": 56,
         "large_classes": 1
@@ -1602,13 +1623,13 @@
     {
       "repo": "strategy-app",
       "root": "strategy-app",
-      "python_file_count": 261,
-      "python_loc": 54188,
+      "python_file_count": 279,
+      "python_loc": 56573,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 8,
-        "long_functions": 19,
-        "complexity_hotspots": 25,
+        "long_functions": 22,
+        "complexity_hotspots": 26,
         "large_classes": 0
       },
       "large_files": [
@@ -1727,6 +1748,12 @@
           "complexity": 6
         },
         {
+          "path": "src/strategy_app/cashflow/runner.py",
+          "name": "build_cashflow_targets",
+          "line_count": 88,
+          "complexity": 11
+        },
+        {
           "path": "src/strategy_app/hotsector/hotsector_deepseek_v4_month_backtest_api.py",
           "name": "run_v4_month_backtest",
           "line_count": 87,
@@ -1745,6 +1772,12 @@
           "complexity": 5
         },
         {
+          "path": "src/strategy_app/cashflow/scheduler.py",
+          "name": "run_shadow",
+          "line_count": 84,
+          "complexity": 13
+        },
+        {
           "path": "src/strategy_app/daily_watch20/_daily_watch20_market_shadow_api.py",
           "name": "_receipt",
           "line_count": 82,
@@ -1755,6 +1788,12 @@
           "name": "_publish_ablation",
           "line_count": 81,
           "complexity": 5
+        },
+        {
+          "path": "src/strategy_app/cashflow/executable.py",
+          "name": "build_executable_cashflow_portfolio",
+          "line_count": 80,
+          "complexity": 8
         },
         {
           "path": "src/strategy_app/daily_watch20/daily_watch20_fundamental_contract.py",
@@ -1855,6 +1894,12 @@
           "complexity": 18
         },
         {
+          "path": "src/strategy_app/cashflow/scheduler.py",
+          "name": "validate_features_receipt",
+          "line_count": 44,
+          "complexity": 17
+        },
+        {
           "path": "src/strategy_app/daily_watch20/daily_watch20_ablation_publish.py",
           "name": "_json_ready",
           "line_count": 22,
@@ -1913,12 +1958,6 @@
           "name": "validate_cell_evidence",
           "line_count": 46,
           "complexity": 16
-        },
-        {
-          "path": "src/strategy_app/hotsector/_deepseek_stability_metrics.py",
-          "name": "_design_diagnostics",
-          "line_count": 42,
-          "complexity": 15
         }
       ],
       "large_classes": [],
@@ -1982,13 +2021,13 @@
     {
       "repo": "strategy-pipeline",
       "root": "strategy-pipeline",
-      "python_file_count": 54,
-      "python_loc": 6853,
+      "python_file_count": 56,
+      "python_loc": 7273,
       "hk_related_file_count": 0,
       "hotspot_counts": {
         "large_files": 2,
         "long_functions": 0,
-        "complexity_hotspots": 2,
+        "complexity_hotspots": 3,
         "large_classes": 0
       },
       "large_files": [
@@ -2010,6 +2049,12 @@
           "name": "_build_final_oos_section",
           "line_count": 44,
           "complexity": 18
+        },
+        {
+          "path": "src/strategy_pipeline/cashflow_publication.py",
+          "name": "_validate_readiness",
+          "line_count": 27,
+          "complexity": 17
         },
         {
           "path": "src/strategy_pipeline/pipeline/quality.py",
@@ -2038,7 +2083,7 @@
       "repo": "quant-execution-engine",
       "root": "quant-execution-engine",
       "python_file_count": 142,
-      "python_loc": 30464,
+      "python_loc": 30465,
       "hk_related_file_count": 15,
       "hotspot_counts": {
         "large_files": 4,

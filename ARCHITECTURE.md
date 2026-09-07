@@ -84,9 +84,9 @@ quant-execution-engine -> quant-platform
 
 工作区 2.0 已删除旧共享命名空间、旧命令行别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 
-迁移完成前，策略身份和生命周期的历史来源是 `strategy-research`，可执行应用的历史来源是 `strategy-app`；目标权威归 `quant-research`。公共编排、运行目录、原子发布和执行交接归 `quant-platform`，策略专属编排仍归 `quant-research`。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
+迁移完成前，策略身份和生命周期的历史来源是 `strategy-research`，可执行应用的历史来源是 `strategy-app`。目标权威归 `quant-research`。公共编排、运行目录、原子发布和执行交接归 `quant-platform`，策略专属编排仍归 `quant-research`。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
-当前旧迁移来源 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`；目标 submodule 为 `quant-platform`、`quant-research` 和当前以 `market-intel/` 挂载的 `quant-intel-platform`。`market-data-platform/` 的远端已指向 `quant-market-data-platform`。版本由 `.gitmodules` 和各自 gitlink 锁定。
+当前旧迁移来源 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。目标 submodule 为 `quant-platform`、`quant-research` 和当前以 `market-intel/` 挂载的 `quant-intel-platform`。`market-data-platform/` 的远端已指向 `quant-market-data-platform`。版本由 `.gitmodules` 和各自 gitlink 锁定。
 
 候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
 `strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
@@ -105,7 +105,7 @@ gitlink、Python namespace 或 CLI。完整引用分类见[仓库命名迁移字
 
 ## 数据质量与 PIT 边界
 
-- `quant-market-data-platform` 负责不可变原始数据、数据语义契约、可复用质量检查、时间点与版本来源追踪、数据质量凭证和权威发布；迁移期兼容入口仍是 `market-data-platform/`。
+- `quant-market-data-platform` 负责不可变原始数据、数据语义契约、可复用质量检查、时间点与版本来源追踪、数据质量凭证和权威发布。迁移期兼容入口仍是 `market-data-platform/`。
 - `deep-learning-tick-data-prediction` 负责事件流、模型输入、标签与泄漏检查、交易所特定回放诊断和模型评估。模型仓不能静默覆盖数据平台给出的可用性状态。
 - `quant-platform`、`quant-research` 及尚未退役的旧来源在平台数据证据之上增加研究、组合与策略生命周期门禁，不重复定义原始数据清洗规则。
 - `research_only` 与 `quarantine` 必须保持显式状态，跨仓交接时不能折叠成普通可用数据。

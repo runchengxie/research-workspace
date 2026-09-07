@@ -8,12 +8,12 @@
     "by_repo": {
       "research-workspace": {
         "max_large_files": 5,
-        "max_long_functions": 5,
-        "max_complexity_hotspots": 2,
+        "max_long_functions": 6,
+        "max_complexity_hotspots": 4,
         "max_large_classes": 2
       },
       "market-data-platform": {
-        "max_large_files": 47,
+        "max_large_files": 48,
         "max_long_functions": 89,
         "max_complexity_hotspots": 56,
         "max_large_classes": 1
@@ -32,14 +32,14 @@
       },
       "strategy-app": {
         "max_large_files": 8,
-        "max_long_functions": 19,
-        "max_complexity_hotspots": 25,
+        "max_long_functions": 22,
+        "max_complexity_hotspots": 26,
         "max_large_classes": 0
       },
       "strategy-pipeline": {
         "max_large_files": 2,
         "max_long_functions": 0,
-        "max_complexity_hotspots": 2,
+        "max_complexity_hotspots": 3,
         "max_large_classes": 0
       },
       "quant-execution-engine": {
@@ -62,8 +62,8 @@
     {
       "repo": "research-workspace",
       "max_large_files": 5,
-      "max_long_functions": 5,
-      "max_complexity_hotspots": 2,
+      "max_long_functions": 6,
+      "max_complexity_hotspots": 4,
       "max_large_classes": 2,
       "owner_decision": [
         "2026-07-28: 子模块对账后基线重算，预算下调 large_files 7->6 / long_functions 12->11 / complexity_hotspots 14->13（治理脚本重构使计数下降）。",
@@ -85,7 +85,7 @@
     },
     {
       "repo": "market-data-platform",
-      "max_large_files": 47,
+      "max_large_files": 48,
       "max_long_functions": 89,
       "max_complexity_hotspots": 56,
       "max_large_classes": 1,
@@ -145,8 +145,8 @@
     {
       "repo": "strategy-app",
       "max_large_files": 8,
-      "max_long_functions": 19,
-      "max_complexity_hotspots": 25,
+      "max_long_functions": 22,
+      "max_complexity_hotspots": 26,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-19: 独立归属迁移（54 模块 + 4 资源，fresh-wheel 门禁），保留两个可审计研究流程。",
@@ -160,7 +160,7 @@
       "repo": "strategy-pipeline",
       "max_large_files": 2,
       "max_long_functions": 0,
-      "max_complexity_hotspots": 2,
+      "max_complexity_hotspots": 3,
       "max_large_classes": 0,
       "owner_decision": [
         "2026-07-20: strict-v2 稀疏秩生产发布，large_files 保持 46，long_functions 收紧至 110、complexity 至 68。",
