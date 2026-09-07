@@ -24,6 +24,29 @@
       "pending_commit": "b0adf07",
       "focused_result_after_fix": "1 passed"
     },
+    "current_source_parity_audits": {
+      "strategy-research_to_quant-research": {
+        "exact_path_matches": 507,
+        "exact_hash_matches": 286,
+        "old_paths_absent": 169,
+        "old_symbol_names_absent_globally": 5,
+        "method": "scripts/migration_parity_audit.py against current source and target trees"
+      },
+      "strategy-app_to_quant-research": {
+        "exact_path_matches": 239,
+        "exact_hash_matches": 219,
+        "old_paths_absent": 89,
+        "old_symbol_names_absent_globally": 16,
+        "method": "scripts/migration_parity_audit.py against current source and target trees"
+      },
+      "portfolio-backtester_to_quant-platform": {
+        "exact_path_matches": 136,
+        "exact_hash_matches": 112,
+        "old_paths_absent": 163,
+        "old_symbol_names_absent_globally": 1,
+        "method": "scripts/migration_parity_audit.py against current source and target trees"
+      }
+    },
     "blocked_items": [
       "quant-platform/migration/provenance.json remains local-staging-only",
       "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled",
