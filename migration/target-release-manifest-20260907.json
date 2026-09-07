@@ -1,7 +1,7 @@
 {
   "schema_version": "quant.workspace.target_release.v1",
-  "observed_at": "2026-09-07T20:45:00+08:00",
-  "status": "candidate_not_promoted",
+  "observed_at": "2026-09-07T20:38:48+08:00",
+  "status": "promoted_observation_window",
   "rollback_window_days": 14,
   "targets": {
     "quant-platform": {
@@ -43,7 +43,16 @@
     "rollback_action": "restore the prior research-workspace release and its production current symlink before changing any legacy gitlink"
   },
   "production": {
-    "current_switch": false,
+    "current_switch": true,
+    "promoted_at": "2026-09-07T20:38:48+08:00",
+    "promoted_release": "aa91e261252498ee8b0c367a8bc56ade445846ab",
+    "previous_current": "dd70f7088f116a768caa073177271a1f3dc86dec",
+    "observation_window": {
+      "starts_at": "2026-09-07T20:38:48+08:00",
+      "ends_at": "2026-09-21T20:38:48+08:00",
+      "legacy_submodules_retained": true,
+      "retirement_review_after": "2026-09-21T20:38:48+08:00"
+    },
     "promotion_command": "bash scripts/promote-production.sh --repo research-workspace --dry-run",
     "required_before_switch": [
       "merge or explicitly authorize each target branch",

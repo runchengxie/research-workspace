@@ -2,12 +2,12 @@ import json
 from pathlib import Path
 
 
-def test_target_release_manifest_is_candidate_and_rollback_complete() -> None:
+def test_target_release_manifest_is_promoted_and_rollback_complete() -> None:
     payload = json.loads(
         (Path(__file__).parents[1] / "migration/target-release-manifest-20260907.json").read_text()
     )
     assert payload["schema_version"] == "quant.workspace.target_release.v1"
-    assert payload["status"] == "candidate_not_promoted"
+    assert payload["status"] == "promoted_observation_window"
     assert payload["rollback_window_days"] == 14
     assert payload["rollback"]["legacy_workspace_commit"]
     assert payload["rollback"]["legacy_submodule_commits"]
@@ -15,4 +15,7 @@ def test_target_release_manifest_is_candidate_and_rollback_complete() -> None:
     assert payload["targets"]["quant-research"]["commit"]
     assert payload["targets"]["quant-market-data-platform"]["commit"]
     assert payload["targets"]["quant-intel-platform"]["commit"]
-    assert payload["production"]["current_switch"] is False
+    assert payload["production"]["current_switch"] is True
+    assert payload["production"]["promoted_release"]
+    assert payload["production"]["previous_current"] == payload["rollback"]["legacy_workspace_commit"]
+    assert payload["production"]["observation_window"]["legacy_submodules_retained"] is True
