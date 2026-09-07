@@ -1,0 +1,55 @@
+{
+  "schema_version": "quant.workspace.target_release.v1",
+  "observed_at": "2026-09-07T20:30:00+08:00",
+  "status": "candidate_not_promoted",
+  "rollback_window_days": 14,
+  "targets": {
+    "quant-platform": {
+      "repository": "runchengxie/quant-platform",
+      "commit": "1437503b24873753550df50ee1f103622b773b08",
+      "validation": "1166 passed, 3 skipped, 8 warnings; Ruff check and format passed"
+    },
+    "quant-research": {
+      "repository": "runchengxie/quant-research",
+      "commit": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
+      "validation": "full pytest reached 100% with no failures; quality baseline and ratchet passed"
+    },
+    "quant-market-data-platform": {
+      "repository": "runchengxie/quant-market-data-platform",
+      "commit": "150d2614f9d2129ab2d39ece62916e8f66ca57e8",
+      "validation": "898 passed, 1 skipped"
+    },
+    "quant-intel-platform": {
+      "repository": "runchengxie/quant-intel-platform",
+      "commit": "63729604b730d97d89ac5a05b99050f62ce718dc",
+      "validation": "revision observed in clean market-intel submodule"
+    }
+  },
+  "rollback": {
+    "legacy_workspace_commit": "dd70f7088f116a768caa073177271a1f3dc86dec",
+    "legacy_submodule_commits": {
+      "market-data-platform": "2e98440890e7af85da394731be55ded720dfd4aa",
+      "deep-learning-tick-data-prediction": "a56f2a08a9ba9f0062aaac0b98f1cd86ee5602f1",
+      "alpha-research": "e5b040b57b76b1d4d153ecefdd04ddcc27a772fc",
+      "portfolio-backtester": "2df06a14441f43a85b3b4d5c999be3759239e4ab",
+      "strategy-research": "11090d85d67000d8565514951d2fdaa70ab5afce",
+      "strategy-app": "252bfdcb168d14d4648a697129ddb898bb513e02",
+      "strategy-pipeline": "752898f66670c9ecc19afff49211677af38eeec9",
+      "quant-execution-engine": "cb3cf100c49f1210f2006ef6435cacc49e8ede20",
+      "quant-platform": "f8684828c872fda3890befafb2f4311caff138a0",
+      "quant-research": "09ff06ec8c23fb1af0b9ed2524a9a2600736218a",
+      "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
+    },
+    "rollback_action": "restore the prior research-workspace release and its production current symlink before changing any legacy gitlink"
+  },
+  "production": {
+    "current_switch": false,
+    "promotion_command": "bash scripts/promote-production.sh --repo research-workspace --dry-run",
+    "required_before_switch": [
+      "merge or explicitly authorize each target branch",
+      "resolve portfolio provenance/license decision",
+      "run no-side-effect promotion rehearsal",
+      "record consumer compatibility and approval"
+    ]
+  }
+}

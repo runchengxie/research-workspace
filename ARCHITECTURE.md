@@ -1,11 +1,12 @@
 # 架构边界
 
 > 当前状态：旧工作区处于 sunset 过渡期。下面的旧链路用于理解历史组成。新代码以
-> `quant-platform` 和 `quant-research` 为准，迁移完成前按兼容性与回滚检查逐步切换。
+> `quant-platform`、`quant-research`、`quant-market-data-platform` 和
+> `quant-intel-platform` 为准，迁移完成前按兼容性与回滚检查逐步切换。
 
 ## 目标仓库架构
 
-当前的八个子模块是迁移基线，长期目标是三个代码仓库和一个轻量集成层：
+当前同时存在旧的八个迁移来源和新的目标子模块。长期目标是四个职责明确的目标仓库和一个轻量集成层：
 
 ```text
 quant-platform       公开仓库
@@ -14,7 +15,10 @@ quant-platform       公开仓库
 quant-research       私有仓库
   策略注册、策略专用逻辑、私有研究、实验、模型选择和私有配置
 
-market-intel         私有应用
+quant-market-data-platform  独立数据平台
+  provider、数据生产、质量治理、版本和 published asset
+
+quant-intel-platform  私有应用
   报告、看板、投递、调度、数据新鲜度和故障恢复
 
 research-workspace   轻量集成层
@@ -31,35 +35,35 @@ research-workspace   轻量集成层
 本工作区把策略知识与运行时代码分开，通过公开 API 和文件产物连接数据、研究、回测、编排和执行：
 
 ```text
-strategy-research
+strategy-research -> quant-research
   维护策略身份、投资假设、生命周期和证据导航
         |
         v
-market-data-platform
+market-data-platform -> quant-market-data-platform
   发布数据资产
         |
         v
-deep-learning-tick-data-prediction
+deep-learning-tick-data-prediction -> quant-platform / quant-research
   L2 事件流清洁审计、模型和预测产物
         |
         v
-alpha-research
+alpha-research -> quant-platform / quant-research
   生成特征、模型评估和信号产物
         |
         v
-portfolio-backtester
+portfolio-backtester -> quant-platform
   构造组合并评估成本、容量和风险
         |
         v
-strategy-app
+strategy-app -> quant-research
   把策略规格转成纯计算，组合各职责仓公开 API 并返回数据帧和报告
         |
         v
-strategy-pipeline
+strategy-pipeline -> quant-platform / quant-research
   编排研究流程并导出 targets.json
         |
         v
-quant-execution-engine
+quant-execution-engine -> quant-platform
   解析 targets.json，执行预演、风控和受控交易
 ```
 
@@ -67,22 +71,22 @@ quant-execution-engine
 
 各子仓库维护自己的主要 Python 命名空间：
 
-- `market_data_platform.*` 归 `market-data-platform`
+- `market_data_platform.*` 迁移后归 `quant-market-data-platform`（当前仍由 `market-data-platform/` 挂载）
 - `ticknet.*` 归 `deep-learning-tick-data-prediction`
 - `alpha_research.*` 归 `alpha-research`
 - `portfolio_backtester.*` 归 `portfolio-backtester`
 - `style_factors.*` 表现层归 `strategy-research`
 - `strategy_app.*` 归 `strategy-app`
-- `strategy_pipeline.*` 归 `strategy-pipeline`
-- `quant_execution_engine.*` 归 `quant-execution-engine`
+- `strategy_pipeline.*` 迁移后按公共编排/策略专属逻辑分别归 `quant-platform` / `quant-research`
+- `quant_execution_engine.*` 迁移后归 `quant-platform`
 
 风格因子计算内核位于 `alpha_research.style_factors`，分位回测内核位于 `portfolio_backtester.style_factors_backtest`，研究表现层位于 `strategy-research/style_factors`，可使用 `python -m style_factors` 调用。
 
 工作区 2.0 已删除旧共享命名空间、旧命令行别名和环境变量回退。策略编排的权威命令为 `strategy` 和 `strategy-pipeline`。命名迁移记录见 [ADR-0002](docs/adr/0002-owner-native-python-namespaces.md)。
 
-策略身份和生命周期由 `strategy-research` 维护。可执行应用由 `strategy-app` 维护。`strategy-pipeline` 负责数据提供方调用、操作控制、运行目录、原子发布和执行交接。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
+迁移完成前，策略身份和生命周期的历史来源是 `strategy-research`，可执行应用的历史来源是 `strategy-app`。目标权威归 `quant-research`。公共编排、运行目录、原子发布和执行交接归 `quant-platform`，策略专属编排仍归 `quant-research`。详细边界见 [ADR-0006](docs/adr/0006-strategy-knowledge-and-runtime-boundaries.md)。
 
-当前八个 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。版本由 `.gitmodules` 和各自 gitlink 锁定。
+当前旧迁移来源 submodule 为 `market-data-platform`、`deep-learning-tick-data-prediction`、`alpha-research`、`portfolio-backtester`、`strategy-research`、`strategy-app`、`strategy-pipeline`、`quant-execution-engine`。目标 submodule 为 `quant-platform`、`quant-research` 和当前以 `market-intel/` 挂载的 `quant-intel-platform`。`market-data-platform/` 的远端已指向 `quant-market-data-platform`。版本由 `.gitmodules` 和各自 gitlink 锁定。
 
 候选仓库名为 `strategy-research` → `strategy-registry`、`strategy-app` → `strategy-logic`、
 `strategy-pipeline` → `strategy-orchestrator`、`deep-learning-tick-data-prediction` →
@@ -101,9 +105,9 @@ gitlink、Python namespace 或 CLI。完整引用分类见[仓库命名迁移字
 
 ## 数据质量与 PIT 边界
 
-- `market-data-platform` 负责不可变原始数据、数据语义契约、可复用质量检查、时间点与版本来源追踪、数据质量凭证和权威发布。
+- `quant-market-data-platform` 负责不可变原始数据、数据语义契约、可复用质量检查、时间点与版本来源追踪、数据质量凭证和权威发布。迁移期兼容入口仍是 `market-data-platform/`。
 - `deep-learning-tick-data-prediction` 负责事件流、模型输入、标签与泄漏检查、交易所特定回放诊断和模型评估。模型仓不能静默覆盖数据平台给出的可用性状态。
-- `alpha-research`、`portfolio-backtester` 与 `strategy-research` 在平台数据证据之上增加研究、组合与策略生命周期门禁，不重复定义原始数据清洗规则。
+- `quant-platform`、`quant-research` 及尚未退役的旧来源在平台数据证据之上增加研究、组合与策略生命周期门禁，不重复定义原始数据清洗规则。
 - `research_only` 与 `quarantine` 必须保持显式状态，跨仓交接时不能折叠成普通可用数据。
 
 完整约定见 [跨仓库数据质量契约](docs/data-quality-contracts.md)。
