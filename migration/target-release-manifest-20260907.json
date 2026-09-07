@@ -6,8 +6,8 @@
   "targets": {
     "quant-platform": {
       "repository": "runchengxie/quant-platform",
-      "commit": "f8684828c872fda3890befafb2f4311caff138a0",
-      "validation": "1162 passed, 3 skipped; Ruff check and format passed"
+      "commit": "5d2a4d9b4d24e91a7c8d101106071a1b985049fe",
+      "validation": "1166 passed, 3 skipped, 8 warnings; Ruff check and format passed"
     },
     "quant-research": {
       "repository": "runchengxie/quant-research",
