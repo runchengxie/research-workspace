@@ -1,38 +1,38 @@
-# Execution Cash-Ledger Ownership Cleanup Implementation Plan
+# 执行现金台账归属清理实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans. Use TDD for each owner API.
+> 面向智能体执行者：必须使用 `superpowers:subagent-driven-development`（推荐）或 `superpowers:executing-plans`。每个 owner API 都使用 TDD。
 
-**Goal:** Move generic settlement of historical execution fills into `portfolio-backtester` while preserving the strategy-research VWAP-receipt convenience API as a thin facade.
+目标：将历史执行成交的通用结算逻辑移动到 `portfolio-backtester`，同时将 strategy-research 的 VWAP 凭证便捷 API 保留为薄兼容门面。
 
-**Architecture:** `portfolio-backtester` owns broker-independent portfolio accounting and execution replay. The reusable `settle_execution_fills` function therefore becomes a public portfolio API. `strategy-research` keeps `settle_vwap_replay` because selecting one research capital path from VWAP receipts is research-specific orchestration; it delegates settlement to the portfolio owner. No live broker/order-state logic moves into portfolio.
+架构：`portfolio-backtester` 负责与券商无关的组合会计和执行回放。因此，可复用的 `settle_execution_fills` 函数成为公开组合 API。`strategy-research` 保留 `settle_vwap_replay`，因为从 VWAP 凭证中选择一条研究资金路径属于研究专属编排，结算则委托给组合 owner。实时券商和订单状态逻辑不进入组合仓库。
 
-**Spec:** `docs/superpowers/specs/2026-08-30-cross-repo-boundary-cleanup-design.md`, ownership matrix and strategy-research cleanup sections.
+规格：`docs/superpowers/specs/2026-08-30-cross-repo-boundary-cleanup-design.md`、归属矩阵和 strategy-research 清理章节。
 
-## Task 1: Define the portfolio owner contract with tests
+## 任务 1：通过测试定义组合 owner 契约
 
-**Repository:** `runchengxie/portfolio-backtester`
+仓库：`runchengxie/portfolio-backtester`
 
-**Files:**
+文件：
 - Add: `tests/test_execution_ledger.py`
 - Modify: `tests/test_package_smoke.py`
 
-- [ ] Port the existing strategy-research settlement tests before production code:
-  - fees + round lots + next-day sale;
-  - same-day buy cannot be sold under A-share T+1;
-  - insufficient cash blocks buys;
-  - invalid initial capital fails closed.
-- [ ] Add package-smoke expectations for module `portfolio_backtester.execution_ledger` and top-level `settle_execution_fills`.
-- [ ] Run focused tests and verify RED because the module/public API does not exist on `main`.
+- [ ] 在生产代码前迁移现有 strategy-research 结算测试：
+  - 费用、整手和次日卖出。
+  - A 股 T+1 下当日买入不能卖出。
+  - 现金不足时阻止买入。
+  - 初始资金无效时失败关闭。
+- [ ] 增加 package smoke 预期，检查 `portfolio_backtester.execution_ledger` 模块和顶层 `settle_execution_fills`。
+- [ ] 运行针对性测试，确认由于 `main` 尚不存在模块和公开 API，测试处于 RED 状态。
 
-## Task 2: Implement the portfolio owner minimally
+## 任务 2：以最小范围实现组合 owner
 
-**Repository:** `runchengxie/portfolio-backtester`
+仓库：`runchengxie/portfolio-backtester`
 
-**Files:**
+文件：
 - Add: `src/portfolio_backtester/execution_ledger.py`
 - Modify: `src/portfolio_backtester/__init__.py`
 
-- [ ] Move the current generic `settle_execution_fills` semantics without changing the fill/mark column contract:
+- [ ] 在不改变成交和标记列契约的前提下迁移当前通用 `settle_execution_fills` 语义：
   - input columns `trade_date`, `instrument_id`, `side`, `filled_notional`, `average_fill_price`;
   - marks `trade_date`, `instrument_id`, `price`;
   - sell proceeds can fund same-day buys;
@@ -41,34 +41,34 @@
   - sells may use odd lots but cannot exceed opening inventory;
   - configurable buy/sell fee and stamp-tax bps;
   - output daily cash, holdings value, NAV, blocked shares/notional and fees.
-- [ ] Do not move research-specific `settle_vwap_replay` into portfolio.
-- [ ] Export `settle_execution_fills` at package root.
-- [ ] Run focused tests and package smoke; expected GREEN.
-- [ ] Run the repository's normal lint/format/typecheck/full/maintainability gates in a complete checkout before Ready/Merge.
+- [ ] 不要将研究专属的 `settle_vwap_replay` 移入组合仓库。
+- [ ] 在包根导出 `settle_execution_fills`。
+- [ ] 运行针对性测试和 package smoke，预期为 GREEN。
+- [ ] 在完整检出目录中运行仓库常规 lint、格式、类型检查、完整测试和可维护性门禁，再进入 Ready 或 Merge。
 
-## Task 3: Thin the strategy-research ledger facade
+## 任务 3：精简 strategy-research 台账门面
 
-**Repository:** `runchengxie/strategy-research`
+仓库：`runchengxie/strategy-research`
 
-**Dependency:** portfolio provider PR merges first.
+依赖：先合并 portfolio provider PR。
 
-**Files:**
+文件：
 - Modify: `src/style_factors/execution_cash_ledger.py`
 - Modify: `tests/test_execution_cash_ledger.py`
 - Add: `tests/test_execution_ledger_boundary.py`
 - Modify: `pyproject.toml`
 - Regenerate: `uv.lock`
 
-- [ ] Add RED boundary test requiring import/delegation to public `portfolio_backtester.settle_execution_fills` and forbidding a local implementation body.
-- [ ] Keep the existing research import path `style_factors.execution_cash_ledger.settle_execution_fills` as a compatibility facade that delegates to portfolio.
-- [ ] Keep `settle_vwap_replay` local; it filters the research VWAP receipt table by `capital` then calls the delegated owner settlement API.
-- [ ] Update portfolio dependency pin to the merged provider commit and regenerate `uv.lock`.
-- [ ] Existing behavior tests must continue passing unchanged.
+- [ ] 增加 RED 边界测试，要求导入并委托给公开的 `portfolio_backtester.settle_execution_fills`，并禁止本地保留实现主体。
+- [ ] 保留现有研究导入路径 `style_factors.execution_cash_ledger.settle_execution_fills` 作为委托给组合仓库的兼容门面。
+- [ ] 保持 `settle_vwap_replay` 在本地。它按 `capital` 过滤研究 VWAP 凭证表，再调用委托的 owner 结算 API。
+- [ ] 将组合依赖固定到已合并的 provider 提交，并重新生成 `uv.lock`。
+- [ ] 现有行为测试必须保持不变并继续通过。
 
-## Completion Criteria
+## 完成标准
 
-- [ ] One canonical implementation of generic historical fill settlement exists in `portfolio-backtester`.
-- [ ] Strategy-research preserves its old imports without retaining the accounting algorithm.
-- [ ] `settle_vwap_replay` stays research-owned and delegates.
-- [ ] No live broker/execution-engine responsibility moves into portfolio.
-- [ ] Provider-first pin uses a default-branch-reachable commit before consumer PR becomes Ready.
+- [ ] 通用历史成交结算在 `portfolio-backtester` 中只有一份规范实现。
+- [ ] strategy-research 保留旧导入路径，但不再保留会计算法。
+- [ ] `settle_vwap_replay` 继续由研究仓库负责，并委托给 owner。
+- [ ] 实时券商和 execution-engine 职责不进入组合仓库。
+- [ ] 消费者 PR 进入 Ready 前，provider-first 固定版本必须指向默认分支可访问的提交。
