@@ -1,51 +1,51 @@
-# Stable Strategy Data Layout Migration Implementation Plan
+# 稳定策略数据布局迁移实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 面向智能体执行者：必须使用 `superpowers:subagent-driven-development`（推荐）或 `superpowers:executing-plans`，按任务逐项执行本计划。步骤使用复选框（`- [ ]`）跟踪。
 
-**Goal:** Move the three stable strategy data namespaces into canonical `published/` locations while preserving their existing paths as reversible compatibility aliases.
+目标：将三个稳定策略数据命名空间移动到规范的 `published/` 位置，同时保留现有路径作为可逆的兼容别名。
 
-**Architecture:** The canonical directories become the physical owners of the data. Existing `strategy_outputs/...` and `strategy_inputs/...` paths remain symlinks during the observation period, so current production readers and writers continue to work without a breaking change. A migration receipt records the source, target, hashes, aliases, and rollback procedure; no production release is changed in this task.
+架构：规范目录成为数据的物理 owner。观察期间，现有 `strategy_outputs/...` 和 `strategy_inputs/...` 路径继续作为符号链接，使当前生产读写方无需破坏性变更即可继续工作。迁移凭证记录源路径、目标路径、哈希、别名和回滚步骤。本任务不修改生产发布。
 
-**Tech Stack:** Git, POSIX symlinks, JSON receipts, Markdown contracts, existing Python data-path audit.
+技术栈：Git、POSIX 符号链接、JSON 凭证、Markdown 契约和现有 Python 数据路径审计。
 
-**Spec:** `docs/data-path-breaking-change-register.md` and `docs/data-lifecycle-terminology.md`
+规格：`docs/data-path-breaking-change-register.md` 和 `docs/data-lifecycle-terminology.md`
 
-## Global Constraints
+## 全局约束
 
-- Keep `market-intel` and `strategy-pipeline` production code unchanged in this migration.
-- Do not delete the old paths; retain them as compatibility aliases.
-- Do not change any `latest` target or production release alias.
-- Record pre/post file inventories and SHA-256 digests in a receipt outside Git.
-- A later code-default cutover requires a complete shadow cycle, dry-run, contract checks, and two observation cycles.
+- 本次迁移保持 `market-intel` 和 `strategy-pipeline` 生产代码不变。
+- 不删除旧路径，将其保留为兼容别名。
+- 不改变任何 `latest` 目标或生产发布别名。
+- 在 Git 之外的凭证中记录迁移前后的文件清单和 SHA-256 摘要。
+- 后续代码默认值切换必须先完成一次完整影子周期、dry-run、契约检查和两个观察周期。
 
-### Task 1: Extend the migration contract
+### 任务 1：扩展迁移契约
 
-**Files:**
+文件：
 - Modify: `docs/data-path-breaking-change-register.md`
 - Modify: `docs/data-path-migration-map.md`
 
-- [x] Add the canonical target paths and explicitly describe the old paths as compatibility aliases.
-- [x] Document rollback as replacing the alias with the recorded original directory only after stopping producers.
-- [x] Add the observation gates and state that this task does not promote production code.
+- [x] 增加规范目标路径，并明确说明旧路径是兼容别名。
+- [x] 记录回滚步骤，只有停止生产方后，才用记录的原始目录替换别名。
+- [x] 增加观察门禁，并说明本任务不晋升生产代码。
 
-### Task 2: Verify the migration receipt
+### 任务 2：验证迁移凭证
 
 **Files:**
 - Create outside Git: `/home/richard/data/market-data-platform/metadata/lifecycle/migrations/stable-strategy-layout-20260831.json`
 
-- [x] Record source and target paths, source/target file counts, byte totals, per-tree file-list SHA-256, current alias targets, and `deletion_authorized: false`.
-- [x] Re-run the read-only data-path audit after the migration and record its output path.
+- [x] 记录源路径和目标路径、源和目标文件数量、字节总数、每棵目录树的文件列表 SHA-256、当前别名目标以及 `deletion_authorized: false`。
+- [x] 迁移后重新运行只读数据路径审计，并记录输出路径。
 
-### Task 3: Validate compatibility
+### 任务 3：验证兼容性
 
 **Files:**
 - Test: existing `tests/test_data_path_audit.py`
 
-- [x] Run the data-path audit tests.
-- [x] Resolve each old alias and verify it reaches the same `latest` and receipt files as the canonical target.
-- [x] Verify the parent repository is clean and the production release directories remain untouched.
+- [x] 运行数据路径审计测试。
+- [x] 解析每个旧别名，确认它与规范目标访问相同的 `latest` 和凭证文件。
+- [x] 确认父仓库干净，生产发布目录未被修改。
 
-### Task 4: Commit and submit for review
+### 任务 4：提交并发起评审
 
-- [ ] Commit the documentation changes on `feat/migrate-stable-strategy-data-layout`.
-- [ ] Push the branch and open a PR; do not merge or promote production in this task.
+- [ ] 在 `feat/migrate-stable-strategy-data-layout` 上提交文档改动。
+- [ ] 推送分支并创建 PR。本任务不要合并，也不要晋升生产。
