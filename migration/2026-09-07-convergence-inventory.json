@@ -266,7 +266,7 @@
       "legacy": "strategy-research",
       "source": {
         "path": "strategy-research",
-        "head": "11090d85d67000d8565514951d2fdaa70ab5afce",
+        "head": "66565cd92d66b012bbf9558a6e571fc32a89e72",
         "remote": "https://github.com/runchengxie/strategy-research.git"
       },
       "targets": ["quant-research:strategy_research", "quant-research:research", "quant-research:registry"],
