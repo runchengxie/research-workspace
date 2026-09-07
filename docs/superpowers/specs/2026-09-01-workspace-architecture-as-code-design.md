@@ -1,49 +1,49 @@
-# Workspace Architecture-as-Code Design
+# 工作区架构即代码设计
 
-## Goal
+## 目标
 
-Add one machine-readable workspace component registry and one scanner that projects the existing authoritative dependency, artifact, and version sources into inspectable architecture graphs. The scanner must detect structural drift without redefining research algorithms, artifact schemas, or submodule-local dependency pins.
+新增一个机器可读的工作区组件注册表和一个扫描器，将现有的依赖、产物和版本权威来源汇总为可检查的架构图。扫描器用于发现结构漂移，不重新定义研究算法、产物 schema 或子仓库本地的依赖固定版本。
 
-## Context
+## 背景
 
-The workspace already has strong architecture governance, but the relevant facts live in several places:
+工作区已经建立了较完整的架构治理机制，但相关事实分散在多个位置：
 
-- `scripts/import_boundary_rules.yml` owns forbidden Python import directions.
-- `docs/artifact-contracts.yml` owns cross-repository artifact producer/consumer contracts.
-- Git submodule gitlinks own the verified workspace revisions of subrepositories.
-- the superproject `HEAD` owns the workspace revision of root Git-subdirectory packages such as `research-contracts`.
-- each subrepository `pyproject.toml` may pin different Git revisions for standalone reproducibility.
+- `scripts/import_boundary_rules.yml` 负责禁止的 Python 导入方向。
+- `docs/artifact-contracts.yml` 负责跨仓库产物的生产者和消费者契约。
+- Git 子模块的 gitlink 负责记录子仓库在工作区中经过验证的版本。
+- 上层仓库的 `HEAD` 负责记录根目录 Git 子目录包（例如 `research-contracts`）在工作区中的版本。
+- 每个子仓库的 `pyproject.toml` 可以为独立运行场景固定不同的 Git revision。
 
-Those sources are useful independently, but they do not currently produce one combined view of the architecture. This makes it easy to miss artifact-only dependencies, version-resolution divergence, or component coverage gaps.
+这些来源各自有用，但目前还不能生成一份合并后的架构视图。因此，产物依赖、版本解析差异和组件覆盖缺口容易被遗漏。
 
-## Design
+## 设计
 
-### Component registry
+### 组件注册表
 
-Add `docs/architecture-model.yml` as the small component identity registry. It defines only facts that are not already owned elsewhere:
+新增 `docs/architecture-model.yml`，作为轻量的组件身份注册表。它只定义其他文件没有负责的事实：
 
-- component identifier;
-- repository path;
-- architectural plane/role;
-- Python source roots and package roots;
-- whether the component participates in runtime cycle checks.
+- 组件标识符
+- 仓库路径
+- 架构平面和角色
+- Python 源代码根目录和包根目录
+- 组件是否参与运行时环检查
 
-The registry deliberately does **not** duplicate forbidden import rules or artifact field schemas. The existing import-boundary and artifact-contract manifests remain authoritative for those concerns.
+注册表不会重复定义禁止导入规则或产物字段 schema。`import-boundary` 和 `artifact-contracts` 清单仍分别负责这些内容。
 
-### Scanner
+### 扫描器
 
-Add `scripts/workspace_architecture.py` with four projections, implemented through focused helper modules:
+新增 `scripts/workspace_architecture.py`，通过聚焦的辅助模块实现四种投影：
 
-1. **Import graph**: parse Python source with the standard-library AST and resolve first-party package roots to workspace components. Edges are component-to-component imports with source evidence.
-2. **Call graph**: conservatively record direct calls through imported first-party symbols or module aliases. Dynamic dispatch and runtime reflection are intentionally omitted and the report labels this graph as conservative.
-3. **Artifact graph**: read `docs/artifact-contracts.yml` and project producer/consumer relationships through artifact nodes.
-4. **Version graph**: read subrepository revisions from workspace gitlinks, root Git-subdirectory package revisions from superproject `HEAD`, and compare them with repository-local `[tool.uv.sources]` Git `rev` pins. Differences are reported as `standalone_pin_differences`, not hard failures, because repository-local pins intentionally support standalone environments.
+1. 导入图：使用标准库 AST 解析 Python 源码，将一方包根解析到工作区组件。边表示组件之间的导入关系，并附带源码证据。
+2. 调用图：保守记录通过已导入的一方符号或模块别名发起的直接调用。动态分派和运行时反射不纳入扫描，报告会标明这是一份保守的调用图。
+3. 产物图：读取 `docs/artifact-contracts.yml`，通过产物节点展示生产者和消费者之间的关系。
+4. 版本图：读取工作区 gitlink 中的子仓库版本、上层仓库 `HEAD` 中的根目录 Git 子目录包版本，并与仓库本地 `[tool.uv.sources]` 中的 Git `rev` 固定值比较。差异会报告为 `standalone_pin_differences`，不会直接判定失败，因为仓库本地固定值目前用于支持独立复现环境。
 
-The scanner also validates registry coverage, unknown artifact producers/consumers, duplicate package roots, runtime import cycles, and parseability of present component `pyproject.toml` files.
+扫描器还会检查注册表覆盖范围、未知的产物生产者或消费者、重复的包根目录、运行时组件导入环，以及现有组件 `pyproject.toml` 是否可解析。
 
-### Output
+### 输出
 
-`python scripts/workspace_architecture.py --out-dir <dir>` writes:
+运行 `python scripts/workspace_architecture.py --out-dir <dir>` 会生成：
 
 - `import_graph.json`
 - `call_graph.json`
@@ -51,35 +51,35 @@ The scanner also validates registry coverage, unknown artifact producers/consume
 - `version_graph.json`
 - `report.md`
 
-`python scripts/workspace_architecture.py --check` performs validation and exits non-zero only for structural architecture issues. Standalone-vs-workspace revision differences remain warnings until the workspace defines an explicit unified-resolution policy.
+运行 `python scripts/workspace_architecture.py --check` 会执行校验。只有发现结构性架构问题时才返回非零状态码。工作区版本与独立运行版本的差异仍属于警告，除非工作区后续定义了明确的统一解析策略。
 
-### Quality integration
+### 质量检查集成
 
-The existing `architecture` quality profile will run the scanner in `--check` mode after the current import and ownership boundary checks. This makes the new view additive rather than replacing proven governance in the same PR.
+现有的 `architecture` 质量配置会在当前导入边界和 owner 边界检查之后，以 `--check` 模式运行扫描器。这样可以在同一个改动中增加新的架构视图，同时保留已经验证过的治理检查。
 
-## Error handling
+## 错误处理
 
-- Missing optional submodule source roots are reported as warnings so the scanner remains useful in partial source snapshots; existing workspace doctor/submodule checks continue to own submodule initialization enforcement.
-- Invalid registry shape, duplicate Python package ownership, unknown artifact component references, runtime component import cycles, and parse failures in present component `pyproject.toml` files are errors.
-- Missing Git metadata disables workspace revision comparison with a warning rather than crashing, so source archives remain readable.
-- Workspace-vs-standalone revision differences are warnings because the two modes currently serve different reproducibility use cases.
+- 缺失的可选子模块源目录报告为警告，使扫描器在不完整源码快照中仍然可用。现有的工作区 doctor 和子模块检查继续负责强制初始化子模块。
+- 注册表格式无效、Python 包归属重复、产物组件引用未知、组件之间存在运行时导入环，以及当前存在的组件 `pyproject.toml` 无法解析，都属于错误。
+- 缺少 Git 元数据时，工作区版本比较会被禁用并报告警告，不会让源码归档无法读取。
+- 工作区版本与独立运行版本存在差异时报告警告，因为这两种模式目前服务于不同的可复现需求。
 
-## Testing
+## 测试
 
-Tests use temporary synthetic workspaces so they do not depend on current submodule implementation details. They cover:
+测试使用临时生成的合成工作区，不依赖当前子模块的实现细节。覆盖以下场景：
 
-- component-level import edge discovery;
-- conservative direct-call edge discovery;
-- artifact producer/consumer projection;
-- runtime cycle detection;
-- root Git-subdirectory package revision resolution through superproject `HEAD`;
-- standalone package pin differences remaining warnings;
-- invalid component `pyproject.toml` files becoming version-graph errors;
-- quality-profile inclusion of the architecture scanner.
+- 发现组件级别的导入边
+- 发现保守的直接调用边
+- 投影产物生产者和消费者关系
+- 检测运行时环
+- 通过上层仓库 `HEAD` 解析根目录 Git 子目录包版本
+- 将独立包版本差异保留为警告
+- 将无效的组件 `pyproject.toml` 判定为版本图错误
+- 验证质量配置包含架构扫描器
 
-## Non-goals
+## 非目标
 
-- No full Python runtime call graph. Reflection, dependency injection, monkeypatching, subprocess calls, and generated imports cannot be made complete with a lightweight static scanner.
-- No automatic rewriting of subrepository `uv.lock` or Git pins.
-- No replacement of `import_boundary_rules.yml` or `artifact-contracts.yml` in this change.
-- No new network service or architecture database.
+- 不构建完整的 Python 运行时调用图。反射、依赖注入、猴子补丁、子进程调用和生成式导入无法通过轻量静态扫描完整覆盖。
+- 不自动改写子仓库的 `uv.lock` 或 Git 固定版本。
+- 不替换 `import_boundary_rules.yml` 或 `artifact-contracts.yml`。
+- 不新增网络服务或架构数据库。
