@@ -9,9 +9,9 @@
     "role": "integration_layer_and_rollback_source"
   },
   "candidate_composition": {
-      "workspace_commit": "69d4e9fdc",
+      "workspace_commit": "d3149bf4000182a86bcc3f9a3d50e2cb18f3ad64",
     "target_gitlinks": {
-      "quant-platform": "1437503b24873753550df50ee1f103622b773b08",
+      "quant-platform": "80d8b76853a619fdb6978ccdb1fae5bdd534672d",
       "quant-research": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
       "market-data-platform": "150d2614f9d2129ab2d39ece62916e8f66ca57e8",
       "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
@@ -42,8 +42,8 @@
     "quant_market_data_platform": {
       "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q",
       "result_before_fix": "897 passed, 1 skipped, 1 failed",
-      "pending_commit": "b0adf07",
-      "focused_result_after_fix": "1 passed"
+      "pending_commit": null,
+      "focused_result_after_fix": "898 passed, 1 skipped"
     },
     "target_runtime_reference_scan": {
       "scope": [
@@ -112,10 +112,10 @@
         "target_commit": "f8684828c872fda3890befafb2f4311caff138a0",
         "source_license_files_found": [],
         "target_public_files_hash_verified": 2,
-        "target_provenance_status": "local-staging-only",
+        "target_provenance_status": "publicly-excluded-private-target-required",
         "decision": "PUBLICLY_EXCLUDED_PRIVATE_TARGET_REQUIRED",
-        "owner": "quant-platform owner pending independent provenance/license approval",
-        "next_action": "obtain source license/history authorization or move the affected slice to an explicitly private target before public release"
+        "owner": "quant-platform owner",
+        "next_action": "create and authorize the private target before any future re-publication"
       },
       "alpha-research_to_quant-platform": {
         "exact_path_matches": 14,
@@ -175,9 +175,9 @@
       }
     },
     "blocked_items": [
-      "quant-platform/migration/provenance.json remains local-staging-only",
-      "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, target branch integration, full quality-debt closure, and 14-day rollback validation",
-      "target branches contain local commits not yet pushed or merged"
+      "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, full quality-debt closure, and 14-day rollback validation",
+      "publicly excluded portfolio slice has no private target yet",
+      "production promotion rehearsal and consumer approval are still pending"
     ]
   },
   "components": [

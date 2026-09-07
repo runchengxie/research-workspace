@@ -1,13 +1,13 @@
 {
   "schema_version": "quant.workspace.target_release.v1",
-  "observed_at": "2026-09-07T20:30:00+08:00",
+  "observed_at": "2026-09-07T20:45:00+08:00",
   "status": "candidate_not_promoted",
   "rollback_window_days": 14,
   "targets": {
     "quant-platform": {
       "repository": "runchengxie/quant-platform",
-      "commit": "1437503b24873753550df50ee1f103622b773b08",
-      "validation": "1166 passed, 3 skipped, 8 warnings; Ruff check and format passed"
+      "commit": "80d8b76853a619fdb6978ccdb1fae5bdd534672d",
+      "validation": "1142 passed, 3 skipped, 8 warnings; Ruff check and format passed; unlicensed style-factor slice excluded"
     },
     "quant-research": {
       "repository": "runchengxie/quant-research",
@@ -47,9 +47,16 @@
     "promotion_command": "bash scripts/promote-production.sh --repo research-workspace --dry-run",
     "required_before_switch": [
       "merge or explicitly authorize each target branch",
-      "resolve portfolio provenance/license decision",
       "run no-side-effect promotion rehearsal",
       "record consumer compatibility and approval"
-    ]
+    ],
+    "portfolio_provenance_decision": {
+      "status": "publicly_excluded_private_target_required",
+      "decision": "approved_for_public_exclusion",
+      "scope": "two staged style-factor files and their public CLI/schema/example/test surface",
+      "evidence": "quant-platform/config/migration/provenance.json",
+      "private_target": "portfolio-backtester-private",
+      "private_target_status": "not_created"
+    }
   }
 }
