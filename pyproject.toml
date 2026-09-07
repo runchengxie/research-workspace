@@ -6,7 +6,7 @@ dependencies = [
   "matplotlib>=3.11.1",
   "numpy>=2.5.2",
   "pandas>=2.2",
-  "pyarrow>=14",
+  "pyarrow>=25.0.1",
   "pyyaml>=6.0",
   "tabulate>=0.10.0",
   "strategy-pipeline @ git+https://github.com/runchengxie/strategy-pipeline.git",
