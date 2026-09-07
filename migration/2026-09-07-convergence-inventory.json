@@ -45,6 +45,62 @@
         "old_paths_absent": 163,
         "old_symbol_names_absent_globally": 1,
         "method": "scripts/migration_parity_audit.py against current source and target trees"
+      },
+      "alpha-research_to_quant-platform": {
+        "exact_path_matches": 14,
+        "exact_hash_matches": 0,
+        "old_paths_absent": 261,
+        "old_symbol_names_absent_globally": 287,
+        "interpretation": "public extraction uses a package layout and requires manifest-based classification"
+      },
+      "alpha-research_to_quant-research": {
+        "exact_path_matches": 160,
+        "exact_hash_matches": 132,
+        "old_paths_absent": 115,
+        "old_symbol_names_absent_globally": 1,
+        "interpretation": "private edge is substantially present but current-source classification remains required"
+      },
+      "quant-execution-engine_to_quant-platform": {
+        "exact_path_matches": 7,
+        "exact_hash_matches": 0,
+        "old_paths_absent": 168,
+        "old_symbol_names_absent_globally": 622,
+        "interpretation": "public extraction uses packages/execution and requires API-level parity evidence"
+      },
+      "quant-execution-engine_to_quant-research": {
+        "exact_path_matches": 105,
+        "exact_hash_matches": 81,
+        "old_paths_absent": 70,
+        "old_symbol_names_absent_globally": 123,
+        "interpretation": "private runtime is substantially present but path and symbol classification remains required"
+      },
+      "deep-learning-tick-data-prediction_to_quant-platform": {
+        "exact_path_matches": 4,
+        "exact_hash_matches": 0,
+        "old_paths_absent": 270,
+        "old_symbol_names_absent_globally": 1467,
+        "interpretation": "public extraction uses packages/microstructure and intentionally excludes private data/research assets"
+      },
+      "deep-learning-tick-data-prediction_to_quant-research": {
+        "exact_path_matches": 187,
+        "exact_hash_matches": 129,
+        "old_paths_absent": 87,
+        "old_symbol_names_absent_globally": 0,
+        "interpretation": "private ticknet edge is substantially present; absent paths need explicit exclusion or transfer classification"
+      },
+      "strategy-pipeline_to_quant-platform": {
+        "exact_path_matches": 6,
+        "exact_hash_matches": 1,
+        "old_paths_absent": 77,
+        "old_symbol_names_absent_globally": 0,
+        "interpretation": "public orchestration is relocated under packages/orchestration"
+      },
+      "strategy-pipeline_to_quant-research": {
+        "exact_path_matches": 3,
+        "exact_hash_matches": 0,
+        "old_paths_absent": 80,
+        "old_symbol_names_absent_globally": 321,
+        "interpretation": "private adapters require separate classification from public control-plane code"
       }
     },
     "blocked_items": [
