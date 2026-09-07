@@ -60,7 +60,9 @@ ensure_project_venv() {
     --name "$name"
     --shared-root "$PRODUCTION_ROOT/shared/venvs"
   )
-  if [[ "$name" == market-data-platform ]]; then
+  if [[ "$name" == market-intel ]]; then
+    args+=(--group dev)
+  elif [[ "$name" == market-data-platform ]]; then
     args+=(--extra dev --extra tushare)
   elif [[ "$name" == strategy-pipeline || "$name" == strategy-research || "$name" == quant-research ]]; then
     args+=(--extra dev)
