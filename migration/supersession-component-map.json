@@ -1,7 +1,7 @@
 {
   "version": 1,
   "components": [
-    {"legacy": "market-data-platform", "targets": ["quant-platform:public-data", "quant-research:market_data_platform"], "status": "REVIEW_REQUIRED"},
+    {"legacy": "market-data-platform", "targets": ["quant-market-data-platform"], "status": "REVIEW_REQUIRED", "ownership_decision": "independent_quant_market_data_platform", "decision_evidence": "docs/migration/quant-repo-migration.md#旧模块映射"},
     {"legacy": "deep-learning-tick-data-prediction", "targets": ["quant-platform:microstructure-public", "quant-research:ticknet"], "status": "REVIEW_REQUIRED"},
     {"legacy": "alpha-research", "targets": ["quant-platform:alpha-public", "quant-research:alpha_research"], "status": "REVIEW_REQUIRED"},
     {"legacy": "portfolio-backtester", "targets": ["quant-platform:portfolio-backtester"], "status": "REVIEW_REQUIRED"},

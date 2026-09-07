@@ -1,0 +1,188 @@
+{
+  "schema_version": "quant.workspace.convergence_inventory.v1",
+  "observed_at": "2026-09-07T17:11:49+08:00",
+  "workspace": {
+    "repository": "research-workspace",
+    "head": "dd70f7088f116a768caa073177271a1f3dc86dec",
+    "branch": "main",
+    "working_tree": "clean",
+    "role": "integration_layer_and_rollback_source"
+  },
+  "rollback_window_days": 14,
+  "components": [
+    {
+      "legacy": "market-data-platform",
+      "source": {
+        "path": "market-data-platform",
+        "head": "2e98440890e7af85da394731be55ded720dfd4aa",
+        "remote": "https://github.com/runchengxie/quant-market-data-platform.git"
+      },
+      "targets": ["quant-market-data-platform"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "independent_quant_market_data_platform",
+      "decision_evidence": "docs/migration/quant-repo-migration.md#旧模块映射",
+      "parity_evidence": [
+        "quant-research/migration/market-data-parity.json",
+        "quant-platform/migration/alpha-public-parity.json"
+      ],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "market-data-platform",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "deep-learning-tick-data-prediction",
+      "source": {
+        "path": "deep-learning-tick-data-prediction",
+        "head": "a56f2a08a9ba9f0062aaac0b98f1cd86ee5602f1",
+        "remote": "https://github.com/runchengxie/deep-learning-tick-data-prediction.git"
+      },
+      "targets": ["quant-platform:packages/microstructure", "quant-research:src/ticknet"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "split_public_private",
+      "decision_evidence": "quant-platform/migration/microstructure-public-parity.json",
+      "parity_evidence": [
+        "quant-platform/migration/microstructure-public-parity.json",
+        "quant-research/migration/microstructure-parity.json"
+      ],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "deep-learning-tick-data-prediction",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "alpha-research",
+      "source": {
+        "path": "alpha-research",
+        "head": "e5b040b57b76b1d4d153ecefdd04ddcc27a772fc",
+        "remote": "https://github.com/runchengxie/alpha-research.git"
+      },
+      "targets": ["quant-platform:packages/alpha", "quant-research:src/alpha_research"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "split_public_private",
+      "decision_evidence": "quant-platform/migration/alpha-public-parity.json",
+      "parity_evidence": [
+        "quant-platform/migration/alpha-public-parity.json",
+        "quant-research/migration/alpha-research-parity.json"
+      ],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "alpha-research",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "portfolio-backtester",
+      "source": {
+        "path": "portfolio-backtester",
+        "head": "2df06a14441f43a85b3b4d5c999be3759239e4ab",
+        "remote": "https://github.com/runchengxie/portfolio-backtester.git"
+      },
+      "targets": ["quant-platform:packages/portfolio-backtester"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "quant_platform_public_foundation",
+      "decision_evidence": "quant-platform/migration/provenance.json",
+      "parity_evidence": ["quant-platform/migration/provenance.json"],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "portfolio-backtester",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "strategy-research",
+      "source": {
+        "path": "strategy-research",
+        "head": "11090d85d67000d8565514951d2fdaa70ab5afce",
+        "remote": "https://github.com/runchengxie/strategy-research.git"
+      },
+      "targets": ["quant-research:strategy_research", "quant-research:research", "quant-research:registry"],
+      "status": "TRANSFER_REQUIRED",
+      "ownership_decision": "quant_research_private_owner",
+      "decision_evidence": "quant-research/migration/provenance.json",
+      "parity_evidence": ["quant-research/migration/provenance.json"],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "strategy-research",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "strategy-app",
+      "source": {
+        "path": "strategy-app",
+        "head": "252bfdcb168d14d4648a697129ddb898bb513e02",
+        "remote": "https://github.com/runchengxie/strategy-app.git"
+      },
+      "targets": ["quant-research:src/strategy_app"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "quant_research_private_owner",
+      "decision_evidence": "quant-research/migration/provenance.json",
+      "parity_evidence": ["quant-research/migration/provenance.json"],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "strategy-app",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "strategy-pipeline",
+      "source": {
+        "path": "strategy-pipeline",
+        "head": "752898f66670c9ecc19afff49211677af38eeec9",
+        "remote": "https://github.com/runchengxie/strategy-pipeline.git"
+      },
+      "targets": ["quant-platform:packages/orchestration", "quant-research:private adapters"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "split_public_private",
+      "decision_evidence": "quant-platform/migration/orchestration-parity.json",
+      "parity_evidence": ["quant-platform/migration/orchestration-parity.json"],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "strategy-pipeline",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "quant-execution-engine",
+      "source": {
+        "path": "quant-execution-engine",
+        "head": "cb3cf100c49f1210f2006ef6435cacc49e8ede20",
+        "remote": "https://github.com/runchengxie/quant-execution-engine.git"
+      },
+      "targets": ["quant-platform:packages/execution", "quant-research:src/quant_execution_engine"],
+      "status": "REVIEW_REQUIRED",
+      "ownership_decision": "split_public_private",
+      "decision_evidence": "quant-platform/migration/execution-parity.json",
+      "parity_evidence": [
+        "quant-platform/migration/execution-parity.json",
+        "quant-research/migration/execution-private-parity.json"
+      ],
+      "rollback": {
+        "required": true,
+        "source_gitlink": "quant-execution-engine",
+        "target_release_required": true
+      }
+    },
+    {
+      "legacy": "research-workspace-root",
+      "source": {
+        "path": ".",
+        "head": "dd70f7088f116a768caa073177271a1f3dc86dec",
+        "remote": "https://github.com/runchengxie/research-workspace.git"
+      },
+      "targets": ["research-workspace:integration-layer"],
+      "status": "RETAIN_IN_WORKSPACE",
+      "ownership_decision": "retain_in_workspace",
+      "decision_evidence": "research-workspace/ARCHITECTURE.md#目标仓库架构",
+      "parity_evidence": ["research-workspace/docs/migration/quant-repo-migration.md"],
+      "rollback": {
+        "required": true,
+        "source_gitlink": null,
+        "target_release_required": false
+      }
+    }
+  ]
+}
