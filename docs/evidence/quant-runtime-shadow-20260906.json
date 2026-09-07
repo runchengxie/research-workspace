@@ -1,0 +1,71 @@
+{
+  "schema_version": "quant.runtime_cutover.evidence.v1",
+  "status": "cashflow_and_daily_watch20_no_ths_shadow_passed",
+  "as_of_date": "20260906",
+  "producer": {
+    "repository": "runchengxie/quant-research",
+    "commit": "4e81a4849d3f631c7a8e8d28092ceb6582e69d40",
+    "runtime": "scripts/run_daily_watch20_runtime.py",
+    "source_date": "20260828",
+    "signal_date": "20260831",
+    "selected_count": 20,
+    "publication_tier": "research",
+    "smoke_parameters": {
+      "history_calendar_days": 300,
+      "train_window_dates": 100,
+      "threads": 3
+    },
+    "result": "passed",
+    "candidate_pool_mode": "all_market",
+    "ths_hot": {
+      "status": "sunset",
+      "active_runtime_dependency": false,
+      "reason": "THS source instability; the producer now uses the stable all-market pool"
+    },
+    "production_parameter_run": {
+      "history_calendar_days": 1100,
+      "train_window_dates": 504,
+      "selected_count": 20,
+      "result": "passed",
+      "publication_output": "isolated research namespace"
+    }
+  },
+  "platform": {
+    "repository": "runchengxie/quant-platform",
+    "commit": "39d49698496e744be6c84296d64550ec3f6ada23",
+    "import_verified_from": "packages/orchestration/src/strategy_pipeline"
+  },
+  "consumer": {
+    "repository": "runchengxie/market-intel",
+    "commit": "4767f20fe6d13534ae6684626ebbc7ba6550154c",
+    "result": "daily_watch20_producer_routes_to_quant_research"
+  },
+  "cashflow": {
+    "live_eligibility": false,
+    "runtime": "scripts/run_runtime_shadow.py",
+    "source_date": "20260828",
+    "signal_date": "20260831",
+    "result": "passed",
+    "pit_quality": "reconstructed",
+    "publication_receipt": "/home/richard/data/market-data-platform/research/cutover-20260906-cashflow/publication5/publications/20260831_c6f21735da001556/receipt.json",
+    "real_same_input_comparison": "pending"
+  },
+  "parity_observation": {
+    "daily_watch20_same_dates": true,
+    "daily_watch20_old_new_symbol_intersection": 14,
+    "daily_watch20_old_only_symbols": 6,
+    "daily_watch20_new_only_symbols": 6,
+    "reason_parity_not_approved": "legacy THS input is unavailable and the THS source has been sunset; the old THS comparison is retired rather than treated as a live cutover gate",
+    "daily_watch20_no_ths_shadow": "passed",
+    "daily_watch20_legacy_ths_parity": "retired_due_to_source_sunset"
+  },
+  "gates": {
+    "new_runtime_unit_tests": "passed",
+    "new_runtime_lint": "passed",
+    "market_intel_offline_tests": "passed",
+    "daily_watch20_production_parameter_parity": "retired_due_to_ths_sunset",
+    "cashflow_old_new_shadow_comparison": "pending_same_input_artifact_recovery",
+    "strategy_app_pipeline_import_boundary": "passed",
+    "production_current_switch": "not_executed"
+  }
+}

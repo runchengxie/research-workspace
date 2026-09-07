@@ -61,6 +61,24 @@ git -C /home/richard/code/production/research-workspace/current submodule update
 
 `research-production-update-check.timer` 只负责定期 fetch 并把新版本写入 systemd journal。它不会自动切换 `current`。发现更新后，由人工或 agent 审核，再执行 promotion。
 
+## 2026-09-06 quant runtime cutover
+
+The migration branches now route the DailyWatch20 producer through
+`quant-research` and the cashflow shadow publication through `quant-platform`.
+The recorded evidence is
+`docs/evidence/quant-runtime-shadow-20260906.json`.
+
+This is not a production promotion record: the evidence contains successful
+reduced-window and production-parameter DailyWatch20 runs in an isolated
+research namespace. THS has now been sunset from the active DailyWatch20 path;
+the producer and pipeline default to the stable `all_market` candidate pool,
+and the no-THS shadow run published successfully. The old THS parity check is
+retired because its frozen input is unavailable and the source is no longer a
+supported runtime dependency. The quant-research cashflow shadow also
+completed with a reconstructed PIT input and a quant-platform publication
+receipt, but cashflow remains ineligible for live delivery. The `current`
+pointers were not changed.
+
 旧 release 在 promotion 成功后按保留策略自动清理。每周的
 `production-maintenance.timer` 还会执行一次同样的清理，作为没有新 promotion 时的兜底。
 默认保留最近 5 个 release，但共享虚拟环境默认只保留当前 release 和最新的一个回滚
