@@ -9,6 +9,26 @@
     "role": "integration_layer_and_rollback_source"
   },
   "rollback_window_days": 14,
+  "verification": {
+    "quant_platform_public_parity": {
+      "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q tests/alpha tests/execution tests/microstructure tests/orchestration",
+      "result": "548 passed, 3 skipped"
+    },
+    "quant_research_private_parity": {
+      "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q tests/alpha_research tests/strategy_app tests/strategy_research tests/quant_execution_engine",
+      "result": "passed; focused maintainability test 3 passed"
+    },
+    "quant_market_data_platform": {
+      "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q",
+      "result_before_fix": "897 passed, 1 skipped, 1 failed",
+      "pending_commit": "b0adf07",
+      "focused_result_after_fix": "1 passed"
+    },
+    "blocked_items": [
+      "quant-platform/migration/provenance.json remains local-staging-only",
+      "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled"
+    ]
+  },
   "components": [
     {
       "legacy": "market-data-platform",
