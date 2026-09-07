@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-
 ROOT = Path(__file__).parents[1]
 ALLOWED_STATUSES = {
     "TRANSFER_REQUIRED",
@@ -16,12 +15,8 @@ ALLOWED_STATUSES = {
 
 
 def test_convergence_inventory_covers_every_component_with_evidence_and_rollback():
-    inventory = json.loads(
-        (ROOT / "migration/2026-09-07-convergence-inventory.json").read_text()
-    )
-    component_map = json.loads(
-        (ROOT / "migration/supersession-component-map.json").read_text()
-    )
+    inventory = json.loads((ROOT / "migration/2026-09-07-convergence-inventory.json").read_text())
+    component_map = json.loads((ROOT / "migration/supersession-component-map.json").read_text())
 
     components = inventory["components"]
     assert {entry["legacy"] for entry in components} == {
@@ -36,9 +31,7 @@ def test_convergence_inventory_covers_every_component_with_evidence_and_rollback
 
 
 def test_convergence_inventory_resolves_market_data_owner_conflict():
-    inventory = json.loads(
-        (ROOT / "migration/2026-09-07-convergence-inventory.json").read_text()
-    )
+    inventory = json.loads((ROOT / "migration/2026-09-07-convergence-inventory.json").read_text())
     market_data = next(
         entry for entry in inventory["components"] if entry["legacy"] == "market-data-platform"
     )
