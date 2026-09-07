@@ -1,138 +1,102 @@
-# Factor Execution Adapter Implementation Plan
+# 因子执行适配器实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 面向智能体的执行说明：建议使用 `superpowers:subagent-driven-development` 或 `superpowers:executing-plans`，逐项执行本计划。使用复选框跟踪进度。
 
-**Goal:** Make the small-cap low-turnover experiment produce a standard `portfolio-backtester` positions artifact and provide a tested execution entry point without changing signal construction.
+目标：让小市值低换手实验生成标准的 `portfolio-backtester` 持仓产物，并提供经过测试的执行入口，同时保持信号构造不变。
 
-**Architecture:** Keep data preparation, candidate ranking, eligibility, and buffered target construction in `strategy-research`. Add a thin adapter that normalizes those targets into the `positions_by_rebalance` contract, then call the owner package's execution API from a dedicated research helper. The first implementation will preserve the existing runner and add a parallel, testable path so historical outputs are not silently changed.
+架构：数据准备、候选排名、资格判断和缓冲目标构造保留在 `strategy-research`。新增轻量适配器，将这些目标标准化为 `positions_by_rebalance` 契约，再通过专用研究辅助函数调用所属仓库的执行 API。第一版保留现有运行器，同时增加一条可并行测试的路径，避免历史输出被静默改变。
 
-**Tech Stack:** Python 3.13, pandas, pytest, uv, `portfolio_backtester`.
+技术栈：Python 3.13、pandas、pytest、uv、`portfolio_backtester`。
 
-**Spec:** User request to reuse `research-workspace/portfolio-backtester` for the small-cap low-turnover backtest.
+规格依据：用户提出的复用 `research-workspace/portfolio-backtester` 进行小市值低换手回测的需求。
 
-## Global Constraints
+## 全局约束
 
-- Do not modify signal definitions, candidate eligibility, target count, buffer count, or historical output semantics in this first migration.
-- Use the `portfolio_backtester.positions_by_rebalance` contract and owner package APIs rather than importing adjacent source paths at runtime.
-- Add tests before production code and verify the expected failure before implementation.
-- Do not add generated artifacts, credentials, or local absolute paths to tracked files.
+- 本次迁移不修改信号定义、候选资格、目标数量、缓冲数量或历史输出语义。
+- 使用 `portfolio_backtester.positions_by_rebalance` 契约和所属仓库的公开 API，不在运行时导入相邻源代码路径。
+- 先写测试，再写生产代码，并在实现前确认预期的失败结果。
+- 不将生成产物、凭证或本机绝对路径加入跟踪文件。
 
----
+## 任务 1：修复并验证本地依赖环境
 
-### Task 1: Repair and verify the local dependency environment
+文件：
 
-**Files:**
-- Modify: `strategy-research/uv.lock` only if lock validation proves it stale
-- Test: existing `strategy-research/tests/test_small_cap_low_turnover_exploration.py`
+- 仅在锁文件确实过期时修改：`strategy-research/uv.lock`
+- 测试：现有 `strategy-research/tests/test_small_cap_low_turnover_exploration.py`
 
-**Interfaces:**
-- Consumes: local path dependency declared in `strategy-research/pyproject.toml`
-- Produces: a reproducible environment that imports the current `ExecutionSimConfig`
+接口：
 
-- [x] **Step 1: Run the failing test baseline**
+- 输入：`strategy-research/pyproject.toml` 声明的本地路径依赖。
+- 输出：能够导入当前 `ExecutionSimConfig` 的可复现环境。
 
-Run `uv run --project strategy-research --extra dev python -m pytest strategy-research/tests/test_small_cap_low_turnover_exploration.py -q` from the workspace root.
+- [x] 步骤 1：运行失败测试基线。命令为 `uv run --project strategy-research --extra dev python -m pytest strategy-research/tests/test_small_cap_low_turnover_exploration.py -q`，预期 26 个通过、3 个失败，失败原因是缺少 `liquidity_notional_multiplier` 构造字段。
+- [x] 步骤 2：重新安装本地所属仓库包，运行 `uv sync --project strategy-research --locked --reinstall-package portfolio-backtester`。
+- [x] 步骤 3：验证导入的接口，打印 `portfolio_backtester.__file__`，并断言 `ExecutionSimConfig.__dataclass_fields__` 包含 `liquidity_notional_multiplier`。
+- [x] 步骤 4：再次运行专项测试文件。三个构造失败应消失，新增失败必须作为真实行为不一致单独调查。
 
-Expected: 26 passed and 3 failures caused by the missing `liquidity_notional_multiplier` constructor field.
+## 任务 2：定义标准持仓适配器
 
-- [x] **Step 2: Reinstall the local owner package**
+文件：
 
-Run `uv sync --project strategy-research --locked --reinstall-package portfolio-backtester`.
+- 创建：`strategy-research/style_factors/portfolio_backtester_adapter.py`
+- 测试：`strategy-research/tests/test_portfolio_backtester_adapter.py`
 
-- [x] **Step 3: Verify the imported interface**
+接口：
 
-Run a Python probe that prints `portfolio_backtester.__file__` and asserts `liquidity_notional_multiplier` is present in `ExecutionSimConfig.__dataclass_fields__`.
+- 输入：带缓冲的目标映射，或包含 `rebalance_date`、`entry_date`、`symbol` 和目标权重或名义金额的目标表。
+- 输出：`to_positions_by_rebalance(targets, portfolio_value) -> pd.DataFrame`，列包括 `rebalance_date`、`entry_date`、`symbol` 和 `weight`。
 
-- [x] **Step 4: Run the focused test file again**
+- [x] 步骤 1：编写覆盖目标标准化、确定性排序、同一调仓日重复标的拒绝和空输入行为的失败测试。
+- [x] 步骤 2：运行适配器测试，确认预期的缺少导入失败。
+- [x] 步骤 3：实现最小适配器。校验必需列，标准化日期，接受 `weight` 或 `target_weight`，拒绝重复的 `(rebalance_date, symbol)` 行，保留明确的现金缺口，稳定排序，并调用所属仓库的契约校验器。
+- [x] 步骤 4：运行适配器测试，确认全部通过。
 
-Expected: the three constructor failures are gone. Any new failure is a real behavioral mismatch and must be investigated separately.
+## 任务 3：增加经过测试的所属仓库执行辅助函数
 
-### Task 2: Define the standard positions adapter
+文件：
 
-**Files:**
-- Create: `strategy-research/style_factors/portfolio_backtester_adapter.py`
-- Test: `strategy-research/tests/test_portfolio_backtester_adapter.py`
+- 修改：`strategy-research/style_factors/portfolio_backtester_adapter.py`
+- 测试：`strategy-research/tests/test_portfolio_backtester_adapter.py`
 
-**Interfaces:**
-- Consumes: buffered target mappings or a target frame with `rebalance_date`, `entry_date`, `symbol`, and target weight/notional data.
-- Produces: `to_positions_by_rebalance(targets, portfolio_value) -> pd.DataFrame` with columns `rebalance_date`, `entry_date`, `symbol`, and `weight`.
+接口：
 
-- [x] **Step 1: Write failing tests**
+- 输入：标准持仓表、价格表和执行配置。
+- 输出：`CanonicalBacktestResult` 或 `NativePositionReplayBackend` 返回的所属仓库执行结果。
 
-Cover target normalization, deterministic ordering, duplicate symbol rejection within a rebalance, and empty input behavior.
+- [x] 步骤 1：使用两个标的和多个日期的价格表编写失败的合成执行测试，断言辅助函数返回每日净值、订单和成交，并包含预期的标的和日期。
+- [x] 步骤 2：运行测试，确认失败原因是缺少辅助函数。
+- [x] 步骤 3：实现轻量辅助函数，构造所属仓库后端请求，将配置创建放在适配器外部，避免 `portfolio-backtester` 导入 `strategy_research` 内部实现。
+- [x] 步骤 4：运行合成执行测试，确认当前 worktree 环境安装的所属仓库源码可以通过测试。
 
-- [x] **Step 2: Run the adapter tests and confirm the expected missing-import failure**
+## 任务 4：增加并行研究入口
 
-Run `uv run --project strategy-research --extra dev python -m pytest strategy-research/tests/test_portfolio_backtester_adapter.py -q`.
+文件：
 
-- [x] **Step 3: Implement the minimal adapter**
+- 修改：`strategy-research/experiments/style_factors/small_cap_low_turnover_exploration_20260826.py`
+- 测试：`strategy-research/tests/test_small_cap_low_turnover_exploration.py`
 
-Validate required columns, normalize dates, accept either `weight` or `target_weight`, reject duplicate `(rebalance_date, symbol)` rows, preserve explicit cash shortfall, sort deterministically, and call the owner contract validator.
+接口：
 
-- [x] **Step 4: Run adapter tests**
+- 输入：现有 `formation_targets` 和价格数据。
+- 输出：可选的所属仓库引擎执行结果，同时保留用于比较的旧矩阵。
 
-Expected: all adapter tests pass.
+- [x] 步骤 1：增加集成层失败测试，确认合成的缓冲目标可以经过适配器和所属仓库执行辅助函数，同时不改变现有信号面板。
+- [x] 步骤 2：实现最小的并行入口，增加默认不写出产物的可选辅助函数或命令行参数，不替换历史运行路径。
+- [x] 步骤 3：运行专项集成测试。
+- [x] 步骤 4：运行完整的 `strategy-research` 测试套件，命令为 `uv run --project strategy-research --extra dev python -m pytest strategy-research/tests -q`。
 
-### Task 3: Add a tested owner-package execution helper
+## 任务 5：记录迁移边界和验证回执
 
-**Files:**
-- Modify: `strategy-research/style_factors/portfolio_backtester_adapter.py`
-- Test: `strategy-research/tests/test_portfolio_backtester_adapter.py`
+文件：
 
-**Interfaces:**
-- Consumes: standard positions frame, pricing frame, execution configuration.
-- Produces: a `CanonicalBacktestResult` or owner execution result from `NativePositionReplayBackend`.
+- 修改：`strategy-research/experiments/style_factors/small-cap-low-turnover-exploration-20260826.md`
+- 如果新入口面向用户，再修改：`strategy-research/README.md`
 
-- [x] **Step 1: Write a failing synthetic execution test**
+接口：
 
-Use a small two-symbol, multi-date pricing frame and assert the helper returns daily NAV plus orders/fills with the expected symbols and dates.
+- 输入：经过验证的测试和执行结果。
+- 输出：说明哪条路径为规范路径、哪条路径仅用于比较，以及冲击或滑点是否真正生效的文档。
 
-- [x] **Step 2: Run the test and confirm the failure identifies the missing helper**
-
-- [x] **Step 3: Implement the thin helper**
-
-Construct the owner backend request, keep configuration creation outside the adapter, and avoid importing `strategy_research` internals into `portfolio-backtester`.
-
-- [x] **Step 4: Run the synthetic execution test**
-
-Expected: pass with the current owner package source installed in the worktree environment.
-
-### Task 4: Wire a parallel research entry point
-
-**Files:**
-- Modify: `strategy-research/experiments/style_factors/small_cap_low_turnover_exploration_20260826.py`
-- Test: `strategy-research/tests/test_small_cap_low_turnover_exploration.py`
-
-**Interfaces:**
-- Consumes: existing `formation_targets` and pricing data.
-- Produces: an optional owner-engine execution result while retaining the legacy matrices for comparison.
-
-- [x] **Step 1: Add a failing integration-level test**
-
-Assert that a synthetic buffered target can be passed through the adapter and owner execution helper without changing the existing signal panel.
-
-- [x] **Step 2: Implement the smallest parallel hook**
-
-Add an opt-in helper or CLI flag that writes no output by default and does not replace the historical runner path.
-
-- [x] **Step 3: Run the focused integration tests**
-
-- [x] **Step 4: Run the complete strategy-research test suite**
-
-Run `uv run --project strategy-research --extra dev python -m pytest strategy-research/tests -q`.
-
-### Task 5: Document migration boundary and verification receipt
-
-**Files:**
-- Modify: `strategy-research/experiments/style_factors/small-cap-low-turnover-exploration-20260826.md`
-- Modify: `strategy-research/README.md` if the new entry point is user-facing
-
-**Interfaces:**
-- Consumes: verified test and execution results.
-- Produces: documentation stating which path is canonical, which path is comparison-only, and whether impact/slippage is actually active.
-
-- [x] **Step 1: Update documentation from verified behavior only**
-
-- [x] **Step 2: Run relevant documentation/path checks and the full focused test suite**
-
-- [x] **Step 3: Review the diff and report any remaining migration gaps**
+- [x] 步骤 1：只根据已验证行为更新文档。
+- [x] 步骤 2：运行相关文档和路径检查，以及完整专项测试套件。
+- [x] 步骤 3：检查差异并记录剩余迁移缺口。
