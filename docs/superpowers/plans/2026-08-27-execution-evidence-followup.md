@@ -1,78 +1,81 @@
-# Execution Evidence Follow-up Implementation Plan
+# 执行证据后续工作实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 面向智能体的执行说明：建议使用 `superpowers:subagent-driven-development` 或 `superpowers:executing-plans`，逐项执行本计划。使用复选框跟踪进度。
 
-**Goal:** Make the small-cap × low-turnover exploration compare strategies and execution paths using the same constrained ledger, with explicit impact and delayed-fill evidence.
+目标：让小市值与低换手研究在同一套受约束账本下比较策略和执行路径，并明确记录冲击成本和延迟成交证据。
 
-**Architecture:** Keep signal construction in `strategy-research`. Extend the existing execution adapter and owner backend so the same slippage model can flow through native ledger replay, reconciliation, and capacity tests. Add research-only attribution and double-sort outputs; do not change signal definitions or promote a canonical backend until the evidence is comparable.
+架构：信号构造保留在 `strategy-research`。扩展现有执行适配器和所属仓库后端，使同一套滑点模型能够贯穿原生账本回放、对账和容量测试。增加仅用于研究的归因和双重排序输出。在证据具有可比性前，不修改信号定义，也不指定统一的权威后端。
 
-**Tech Stack:** Python 3.13, pandas, NumPy, pytest, portfolio-backtester.
+技术栈：Python 3.13、pandas、NumPy、pytest、`portfolio-backtester`。
 
-**Spec:** The five follow-up objectives in the user request: propagate impact, attribute delayed fills, compare three arms, run size × turnover double-sort, and assess owner-ledger canonicalization.
+规格依据：用户需求中的五项后续目标：传递冲击成本、归因延迟成交、比较三个分支、运行规模与换手双重排序，以及评估所属仓库账本是否可以统一为权威实现。
 
-## Global Constraints
+## 全局约束
 
-- Preserve existing signal definitions, eligibility rules, target count, buffer count, and default zero-impact historical outputs.
-- Use the public owner execution contract; do not import private implementation modules across repositories.
-- Keep all new research outputs deterministic and write tests before production code.
-- Do not select parameters from the already-inspected 2024–2026 holdout.
+- 保持现有信号定义、资格规则、目标数量、缓冲数量，以及历史数据默认的零冲击输出。
+- 使用所属仓库的公开执行契约，不跨仓库导入私有实现模块。
+- 保证所有新增研究输出可确定复现，并在生产代码前先写测试。
+- 不能从已经检查过的 2024–2026 年留出期选择参数。
 
----
+## 任务 1：将滑点传递到所属仓库账本和所有账本矩阵
 
-### Task 1: Propagate slippage through owner ledger and all ledger matrices
+文件：
 
-**Files:**
-- Modify: `portfolio-backtester/src/portfolio_backtester/backends/native.py`
-- Modify: `strategy-research/style_factors/portfolio_backtester_adapter.py`
-- Modify: `strategy-research/experiments/style_factors/small_cap_low_turnover_exploration_20260826.py`
-- Test: owner backend and strategy exploration tests
+- 修改：`portfolio-backtester/src/portfolio_backtester/backends/native.py`
+- 修改：`strategy-research/style_factors/portfolio_backtester_adapter.py`
+- 修改：`strategy-research/experiments/style_factors/small_cap_low_turnover_exploration_20260826.py`
+- 测试：所属仓库后端和策略研究测试
 
-- [x] Add failing tests for passing a slippage model through `NativePositionReplayRequest`, and for nonzero impact appearing in reconciliation and capacity outputs.
-- [x] Implement the request field and forward it to adjusted-NAV execution.
-- [x] Thread `impact_bps` through reconciliation and capacity ladder while preserving the default `0.0` behavior.
-- [x] Run focused and full tests.
+- [x] 为通过 `NativePositionReplayRequest` 传递滑点模型，以及让非零冲击出现在对账和容量输出中增加失败测试。
+- [x] 增加请求字段，并将其传递到调整后净值执行流程。
+- [x] 将 `impact_bps` 传递到对账和容量阶梯，同时保留默认的 `0.0` 行为。
+- [x] 运行专项测试和完整测试。
 
-### Task 2: Add delayed-fill opportunity-cost attribution
+## 任务 2：增加延迟成交的机会成本归因
 
-**Files:**
-- Create or modify: `strategy-research/style_factors/portfolio_backtester_adapter.py`
-- Test: `strategy-research/tests/test_portfolio_backtester_adapter.py`
-- Modify: exploration runner and report output
+文件：
 
-- [x] Add a failing synthetic test covering requested quantity, filled quantity, fill delay, reference return during delay, temporary impact, and unfilled quantity.
-- [x] Implement a pure attribution helper over orders, fills, and pricing frames.
-- [x] Emit aggregate attribution columns in ledger outputs and a detailed CSV when the runner is used.
-- [x] Verify no attribution is reported as alpha; label it execution-path evidence.
+- 创建或修改：`strategy-research/style_factors/portfolio_backtester_adapter.py`
+- 测试：`strategy-research/tests/test_portfolio_backtester_adapter.py`
+- 修改：实验运行器和报告输出
 
-### Task 3: Compare composite, small-cap-only, and large-cap control on one ledger
+- [x] 增加合成测试，覆盖请求数量、成交数量、成交延迟、延迟期间参考收益、临时冲击和未成交数量。
+- [x] 实现基于订单、成交和定价表的纯归因辅助函数。
+- [x] 在账本输出中生成汇总归因列，运行器启用时额外生成明细 CSV。
+- [x] 确认归因结果不被报告为 Alpha，并标记为执行路径证据。
 
-**Files:**
-- Modify: exploration runner and report
-- Test: exploration tests
+## 任务 3：在同一账本中比较复合信号、小市值信号和大市值控制组
 
-- [x] Add failing assertions that the constrained comparison contains all three arms with identical execution configuration and impact metadata.
-- [x] Reuse existing target construction for the three signal columns and add ledger rows rather than a second simulator.
-- [x] Add incremental return columns versus the two controls.
-- [x] Run the focused suite.
+文件：
 
-### Task 4: Add the size × turnover double-sort research output
+- 修改：实验运行器和报告
+- 测试：实验测试
 
-**Files:**
-- Create: `strategy-research/style_factors/size_turnover_double_sort.py`
-- Create: corresponding tests
-- Modify: exploration runner and report
+- [x] 增加失败断言，确认受约束比较包含三个分支，并且执行配置和冲击元数据相同。
+- [x] 复用现有目标构造流程，为三个信号列增加账本记录，不再使用第二套模拟器。
+- [x] 增加相对于两个控制组的增量收益列。
+- [x] 运行专项测试。
 
-- [x] Add failing tests for 5×5 bucket assignment, within-size turnover ordering, and missing-data handling.
-- [x] Implement deterministic bucket assignment using formation-date cross-sections and return a long-form 25-cell table.
-- [x] Add the output to the exploration artifacts without changing the production candidate signal.
-- [x] Run tests and validate monotonicity diagnostics.
+## 任务 4：增加规模与换手双重排序研究输出
 
-### Task 5: Decide owner backend status from evidence
+文件：
 
-**Files:**
-- Modify: exploration report and metadata
-- Test: adapter and integration tests
+- 创建：`strategy-research/style_factors/size_turnover_double_sort.py`
+- 创建：对应测试
+- 修改：实验运行器和报告
 
-- [x] Add a capability receipt showing whether owner ledger output has daily NAV, orders, fills, partial fills, slippage, and matching periods.
-- [x] Keep owner ledger as comparison-only until Tasks 1–3 agree on dates, exit semantics, cash, and cost accounting.
-- [x] Document the explicit promotion criteria and remaining gaps.
+- [x] 为 5×5 分桶、规模组内换手排序和缺失数据处理增加失败测试。
+- [x] 使用建仓日截面实现确定性的分桶，并返回长表形式的 25 个单元格。
+- [x] 将输出增加到实验产物中，不改变生产候选信号。
+- [x] 运行测试并验证单调性诊断。
+
+## 任务 5：根据证据确定所属仓库后端状态
+
+文件：
+
+- 修改：实验报告和元数据
+- 测试：适配器和集成测试
+
+- [x] 增加能力回执，记录所属仓库账本输出是否包含每日净值、订单、成交、部分成交、滑点和匹配期间。
+- [x] 在任务 1 至任务 3 的日期、退出语义、现金和成本核算达成一致前，将所属仓库账本保留为仅用于比较的实现。
+- [x] 记录明确的准入标准和剩余缺口。
