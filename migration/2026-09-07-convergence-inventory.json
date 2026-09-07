@@ -10,6 +10,11 @@
   },
   "rollback_window_days": 14,
   "verification": {
+    "recursive_checkout": {
+      "command": "git submodule status --recursive && git submodule foreach --recursive 'git status --porcelain=v1 --branch'",
+      "result": "all 11 submodules initialized; no submodule worktree changes in the main workspace",
+      "scope_note": "the separate execution worktree had an interrupted clone and is not used as checkout evidence"
+    },
     "quant_platform_public_parity": {
       "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q tests/alpha tests/execution tests/microstructure tests/orchestration",
       "result": "548 passed, 3 skipped",
@@ -147,8 +152,7 @@
     },
     "blocked_items": [
       "quant-platform/migration/provenance.json remains local-staging-only",
-      "full recursive workspace checkout was not completed because the portfolio-backtester remote clone stalled",
-      "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, clean recursive checkout, and 14-day rollback validation",
+      "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, target branch integration, full quality-debt closure, and 14-day rollback validation",
       "target branches contain local commits not yet pushed or merged"
     ]
   },
