@@ -1,47 +1,34 @@
-# DailyWatch20 parity audit — 2026-09-06
+# DailyWatch20 一致性审计 — 2026-09-06
 
-Status: **not yet cutover-ready**
+状态：**尚未具备切换条件**
 
-This audit compares the first `quant-research` migration slice with the pinned
-source commits recorded in `quant-research/migration/provenance.json`.
+本审计将 `quant-research` 的第一批迁移内容与 `quant-research/migration/provenance.json` 记录的固定源提交进行比较。
 
-## Result
+## 结果
 
-The implementation source and regression suite are now complete for the
-selected DailyWatch20 package:
+选定的 DailyWatch20 软件包已经完成实现源码和回归测试：
 
-- `strategy-app` source: 104 DailyWatch20 modules and the campaign specification
-- `quant-research`: the same 104 modules and campaign specification, plus the
-  six shared `strategy_app` package modules required by the slice
+- `strategy-app` 源代码：104 个 DailyWatch20 模块和活动规格。
+- `quant-research`：相同的 104 个模块和活动规格，以及该迁移切片所需的 6 个共享 `strategy_app` 包模块。
 
-The implementation parity is now complete. Remaining gates concern dependency
-ownership, independent CI, and consumer/cutover validation.
+实现一致性已经完成。剩余门禁涉及依赖归属、独立 CI 以及消费者和切换验证。
 
-| Area | Source baseline | Target | Status |
+| 项目 | 源基线 | 目标 | 状态 |
 |---|---:|---:|---|
-| Strategy implementation modules | 104 | 104 | complete |
-| Campaign specification | 1 | 1 | complete |
-| Direct regression tests | 32 | 32 | complete |
-| Strategy-app documentation | 10 | 10 | complete |
-| Strategy-research evidence/configuration | 11 related files | 11 | complete |
-| Packaging/dependency declaration | legacy package | target package | requires reconciliation |
-| CI workflow | none in source | target workflow added | first remote run pending |
+| 策略实现模块 | 104 | 104 | 完成 |
+| 活动规格 | 1 | 1 | 完成 |
+| 直接回归测试 | 32 | 32 | 完成 |
+| strategy-app 文档 | 10 | 10 | 完成 |
+| strategy-research 证据和配置 | 11 个相关文件 | 11 | 完成 |
+| 打包和依赖声明 | 旧包 | 目标包 | 需要协调 |
+| CI 工作流 | 源仓库没有 | 已增加目标工作流 | 等待首次远端运行 |
 
-## Remaining release gates
+## 剩余发布门禁
 
-### Dependencies and runtime
+### 依赖和运行时
 
-The target package still declares legacy package names and a legacy
-`strategy-pipeline` Git dependency. Before cutover, replace these with the
-intended target package boundaries or explicitly document why each dependency
-remains external. The private CI workflow now installs the target package and
-runs the full DailyWatch20 suite plus the publication-adapter test; its first
-remote run is still required.
+目标包仍然声明旧包名称和旧的 `strategy-pipeline` Git 依赖。切换前，应将这些依赖替换为目标边界，或明确记录它们继续作为外部依赖的原因。私有 CI 工作流现在会安装目标包，运行完整 DailyWatch20 测试集和发布适配器测试，但仍需要完成首次远端运行。
 
-## Cutover decision
+## 切换决定
 
-Do not update `research-workspace` gitlinks or retire the legacy repositories
-yet. The old `strategy-app` and `strategy-research` commits remain the
-authoritative rollback sources until all items above are restored, tests pass,
-the private publication handoff is revalidated, and the production manifest has
-a tested rollback path.
+暂时不要更新 `research-workspace` gitlink，也不要退役旧仓库。在上述事项全部恢复、测试通过、私有发布交接重新验证并为生产清单建立经过测试的回滚路径前，旧的 `strategy-app` 和 `strategy-research` 提交仍是权威回滚来源。
