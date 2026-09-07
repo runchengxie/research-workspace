@@ -17,7 +17,8 @@
       "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
     },
     "legacy_gitlinks_retained": true,
-    "workspace_doctor": "errors=0, warnings=6",
+    "workspace_doctor": "errors=0, warnings=5",
+    "pre_push_hooks": "all 12 managed repositories installed and passed --check",
     "status": "candidate_not_promoted"
   },
   "rollback_window_days": 14,
