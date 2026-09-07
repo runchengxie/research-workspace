@@ -1,11 +1,11 @@
-# Platform Asset Registry Design
+# 平台资产注册表设计
 
-## Goal
+## 目标
 
-Represent the logical cross-repository data/research/publication graph without introducing a nested superproject or another orchestration control plane.
+表示跨仓库的数据、研究和发布逻辑关系图，不新增嵌套顶层仓库，也不新增另一套编排控制面。
 
-## Design
+## 设计
 
-A `PlatformAssetDefinition` owns identity, owner repository, output schema, internal dependencies, external inputs, consumers, and a small freshness policy. `PlatformAssetRegistry` validates missing dependencies and cycles and yields a deterministic topological order.
+`PlatformAssetDefinition` 负责记录资产身份、owner 仓库、输出模式、内部依赖、外部输入、消费者和简化的新鲜度策略。`PlatformAssetRegistry` 校验缺失依赖和循环，并生成确定性的拓扑顺序。
 
-The registry describes what depends on what. It does not execute assets, clone repositories, schedule jobs, or replace existing owner-specific quality gates.
+注册表描述依赖关系。它不执行资产、不克隆仓库、不调度任务，也不替代现有的 owner 专属质量门禁。
