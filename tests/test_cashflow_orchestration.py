@@ -172,9 +172,7 @@ def test_orchestration_stops_at_readiness_failure(tmp_path: Path) -> None:
 
 
 def test_orchestration_can_continue_with_reconstructed_pit_research_flag(tmp_path: Path) -> None:
-    config = CashflowShadowConfig(
-        **{**_config(tmp_path).__dict__, "allow_reconstructed_pit": True}
-    )
+    config = CashflowShadowConfig(**{**_config(tmp_path).__dict__, "allow_reconstructed_pit": True})
     calls: list[list[str]] = []
 
     def fake_run(command: list[str], **_: object) -> subprocess.CompletedProcess[str]:

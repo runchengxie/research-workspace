@@ -169,9 +169,7 @@ def test_build_readiness_receipt_rejects_tampered_source_artifact(tmp_path) -> N
     source = tmp_path / "source.csv"
     source.write_text("version-one\n", encoding="utf-8")
     payload = _payload()
-    payload["source_artifacts"] = [
-        {"path": "source.csv", "sha256": "a" * 64}
-    ]
+    payload["source_artifacts"] = [{"path": "source.csv", "sha256": "a" * 64}]
     evidence.write_text(json.dumps(payload), encoding="utf-8")
 
     readiness = build_cashflow_readiness_payload(evidence, root=tmp_path)

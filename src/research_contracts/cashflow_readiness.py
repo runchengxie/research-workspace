@@ -67,9 +67,10 @@ def _evidence_attestation_passes(payload: Mapping[str, Any]) -> bool:
     if not isinstance(attestation, Mapping):
         return False
     digest = str(attestation.get("bundle_sha256") or "")
-    return attestation.get("status") == "verified" and re.fullmatch(
-        r"[0-9a-f]{64}", digest
-    ) is not None
+    return (
+        attestation.get("status") == "verified"
+        and re.fullmatch(r"[0-9a-f]{64}", digest) is not None
+    )
 
 
 def evaluate_cashflow_readiness(
@@ -118,9 +119,7 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _source_artifacts_pass(
-    bundle: Mapping[str, Any], *, root: Path
-) -> tuple[bool, list[str]]:
+def _source_artifacts_pass(bundle: Mapping[str, Any], *, root: Path) -> tuple[bool, list[str]]:
     declared = bundle.get("source_artifacts")
     if declared is None:
         return True, []
@@ -155,9 +154,7 @@ def _runtime_evidence_bundle(
         raise ValueError("cashflow evidence bundle requires a checks mapping")
     effective_checks = {str(name): dict(value) for name, value in checks.items()}
     effective_source_artifacts = [
-        dict(item)
-        for item in bundle.get("source_artifacts", [])
-        if isinstance(item, Mapping)
+        dict(item) for item in bundle.get("source_artifacts", []) if isinstance(item, Mapping)
     ]
     if pit_audit_path is None:
         return {

@@ -212,9 +212,8 @@ def orchestrate_cashflow_shadow(
     )
     readiness_output = _json_stdout(readiness_process)
     if (
-        (readiness_process.returncode != 0 or not readiness_output.get("eligible_for_gray_push"))
-        and not config.allow_reconstructed_pit
-    ):
+        readiness_process.returncode != 0 or not readiness_output.get("eligible_for_gray_push")
+    ) and not config.allow_reconstructed_pit:
         observation_process = _run_stage(
             scheduler_command,
             runner=run_command,
@@ -289,7 +288,7 @@ def orchestrate_cashflow_shadow(
             str(readiness),
             "--output-root",
             str(publication_root),
-            *( ["--allow-reconstructed-pit"] if config.allow_reconstructed_pit else [] ),
+            *(["--allow-reconstructed-pit"] if config.allow_reconstructed_pit else []),
         ],
         runner=run_command,
         cwd=strategy_pipeline,
