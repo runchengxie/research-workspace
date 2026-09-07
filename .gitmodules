@@ -3,7 +3,7 @@
  url = https://github.com/runchengxie/strategy-pipeline.git
 [submodule "market-data-platform"]
 	path = market-data-platform
-	url = https://github.com/runchengxie/market-data-platform.git
+	url = https://github.com/runchengxie/quant-market-data-platform.git
 [submodule "quant-execution-engine"]
 	path = quant-execution-engine
 	url = https://github.com/runchengxie/quant-execution-engine.git
@@ -31,4 +31,4 @@
 	url = https://github.com/runchengxie/quant-research.git
 [submodule "market-intel"]
 	path = market-intel
-	url = https://github.com/runchengxie/market-intel.git
+	url = https://github.com/runchengxie/quant-intel-platform.git
