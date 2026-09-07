@@ -21,7 +21,7 @@ components:
     runtime_cycle_check: true
   - id: market-data-platform
     repo_path: market-data-platform
-    target_repository: quant-platform/data
+    target_repository: quant-market-data-platform
     plane: data
     role: canonical-data-owner
     package_roots:

@@ -6,7 +6,7 @@
 
 | Legacy area | Target owner | Status | Evidence or action |
 | --- | --- | --- | --- |
-| `market-data-platform` | `quant-platform` public data plus `quant-research` private data | `REVIEW_REQUIRED` | Private parity manifest claims 290 source and 110 test files; public manifest excludes providers, credentials, raw data, and production configuration. |
+| `market-data-platform` | `quant-market-data-platform` | `REVIEW_REQUIRED` | Independent owner is fixed in `migration/supersession-component-map.json`; the `quant-research` copy is compatibility-only and pending removal after consumer repinning and rollback observation. |
 | `deep-learning-tick-data-prediction` | `quant-platform` public microstructure plus `quant-research` private `ticknet` | `REVIEW_REQUIRED` | Private parity manifest claims 99 source, 88 test, 59 documentation, 16 script, and 39 config files. |
 | `alpha-research` | `quant-platform` public alpha plus `quant-research` private alpha | `REVIEW_REQUIRED` | Private parity manifest claims exact source, test, documentation, and script counts; public target is framework-only. |
 | `portfolio-backtester` | `quant-platform` | `REVIEW_REQUIRED` | Public migration is a published slice; verify all remaining backtest, portfolio, cost, capacity, risk, and reporting APIs. |

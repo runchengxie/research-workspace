@@ -1,6 +1,6 @@
 # Repository parity inventory
 
-> status: maintained audit; portfolio parity complete, remaining owners pending
+> status: historical audit snapshot; superseded by `migration/2026-09-07-convergence-inventory.json`
 > verified: 2026-09-06
 > authority: legacy submodules remain authoritative until each row reaches parity
 
@@ -10,7 +10,7 @@ legacy repository can be retired.
 
 | Legacy repository | Target | Code | Tests/CI | Docs/config | Current migration state | Main missing work |
 | --- | --- | --- | --- | --- | --- | --- |
-| `market-data-platform` | `quant-platform/data` + private providers | private baseline complete; public contract/core/quality slice transferred | private transfer CI green at `34021009249`; public CI green at `34020846558` | 290 source files, 110 tests/fixtures, 50 docs, 44 scripts transferred privately | private baseline migrated and private consumers repinned; public-safe core and deterministic quality tools validated | complete consumer integration before cutover; keep providers private |
+| `market-data-platform` | `quant-market-data-platform` | independent owner selected; `quant-research` copy explicitly compatibility-only | target package and workspace candidate validated locally | historical private-copy counts remain in `quant-research/migration/market-data-parity.json` | canonical data ownership unified at the independent target; compatibility copy remains during transition | repin consumers, complete 14-day rollback observation, then remove duplicate copy and legacy gitlink |
 | `deep-learning-tick-data-prediction` | `quant-platform/microstructure` + `quant-research/microstructure` | private baseline plus public generic framework transferred | private CI green at `34023679429`; public CI queued at `34024056490` | private 99 source files/88 tests/59 docs; public 26 source files/10 tests/3 docs | public synthetic suite `45 passed`; private research corpus preserved | finish public CI confirmation and keep real-data labels, experiments, configs, and results private |
 | `alpha-research` | `quant-platform/alpha` + private feature selections | public framework and private edge split transferred | public local full suite includes 70 alpha tests; private alpha suite `84 passed` | public 135 source files/31 docs; private baseline retains 155 source files and 84 tests | public edge review completed; CI rerun pending | preserve private DailyWatch20/Hotsector modules and finish private strategy-family audit |
 | `portfolio-backtester` | `quant-platform/portfolio` | complete for current legacy baseline | public CI green at `507628e` (`586 passed`) | full transferred docs/config/scripts | parity-complete public portfolio package | retain `91a4fa4` as rollback authority; do not retire legacy source yet |

@@ -17,7 +17,7 @@ being consolidated around visibility, IP, and runtime ownership:
 
 | Current component | Target location | Target decision |
 | --- | --- | --- |
-| `market-data-platform` | `quant-platform/data` plus private provider/runtime configuration | Consolidate the reusable data surface; keep real providers and credentials private |
+| `market-data-platform` | `quant-market-data-platform` | Keep the complete data control plane, providers, credentials boundary, and published-asset ownership in one independent repository |
 | `deep-learning-tick-data-prediction` | `quant-platform/microstructure` plus `quant-research/microstructure/experiments` | Split generic model/data abstractions from proprietary labels, configs, and results |
 | `alpha-research` | `quant-platform/alpha` | Consolidate reusable research mechanisms; keep proprietary feature selections private |
 | `portfolio-backtester` | `quant-platform/portfolio` | Consolidate as a package while preserving its installable public API where useful |
