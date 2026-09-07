@@ -149,14 +149,14 @@ def compare_inventories(old: dict[str, Any], new: list[dict[str, Any]]) -> dict[
     return {
         "old_summary": old["summary"],
         "new_summary": {
-            key: sum(inventory["summary"][key] for inventory in new)
-            for key in old["summary"]
+            key: sum(inventory["summary"][key] for inventory in new) for key in old["summary"]
         },
         "exact_path_matches": sorted(set(old_by_path) & set(new_by_path)),
         "old_paths_absent": sorted(set(old_by_path) - set(new_by_path)),
         "new_paths_not_in_old": sorted(set(new_by_path) - set(old_by_path)),
         "exact_hash_matches": sorted(
-            path for path in set(old_by_path) & set(new_by_path)
+            path
+            for path in set(old_by_path) & set(new_by_path)
             if old_by_path[path]["sha256"] == new_by_path[path]["sha256"]
         ),
         "basename_candidates": sorted(old_names & new_names),

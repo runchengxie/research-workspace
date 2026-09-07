@@ -6,7 +6,9 @@ from migration_parity_audit import build_inventory, collect_python_symbols, comp
 def test_inventory_excludes_generated_directories_and_counts_loc(tmp_path: Path):
     (tmp_path / "src").mkdir()
     (tmp_path / ".venv").mkdir()
-    (tmp_path / "src" / "sample.py").write_text("class Example:\n\n    def run(self):\n        return 1\n", encoding="utf-8")
+    (tmp_path / "src" / "sample.py").write_text(
+        "class Example:\n\n    def run(self):\n        return 1\n", encoding="utf-8"
+    )
     (tmp_path / "src" / "guide.md").write_text("# Guide\n\nText\n", encoding="utf-8")
     (tmp_path / ".venv" / "ignored.py").write_text("ignored = True\n", encoding="utf-8")
 
