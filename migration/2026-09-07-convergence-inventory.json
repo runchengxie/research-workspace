@@ -9,7 +9,7 @@
     "role": "integration_layer_and_rollback_source"
   },
   "candidate_composition": {
-    "workspace_commit": "b7cbf894d73daefe5c2d15e7577054fd6923db8b",
+      "workspace_commit": "69d4e9fdc",
     "target_gitlinks": {
       "quant-platform": "f8684828c872fda3890befafb2f4311caff138a0",
       "quant-research": "b8b3fd9390f83e6291aee2bc38f34dfbe5430c93",
