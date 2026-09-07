@@ -11,7 +11,7 @@
     },
     "quant-research": {
       "repository": "runchengxie/quant-research",
-      "commit": "8dda56cce5dabe6b5fa7af6ce43f32c9ee668e6c",
+      "commit": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
       "validation": "full pytest reached 100% with no failures; quality baseline and ratchet passed"
     },
     "quant-market-data-platform": {

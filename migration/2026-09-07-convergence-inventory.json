@@ -12,7 +12,7 @@
       "workspace_commit": "69d4e9fdc",
     "target_gitlinks": {
       "quant-platform": "1437503b24873753550df50ee1f103622b773b08",
-      "quant-research": "8dda56cce5dabe6b5fa7af6ce43f32c9ee668e6c",
+      "quant-research": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
       "market-data-platform": "150d2614f9d2129ab2d39ece62916e8f66ca57e8",
       "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
     },
@@ -79,7 +79,7 @@
         "exact_hash_matches": 289,
         "old_paths_absent": 166,
         "old_symbol_names_absent_globally": 0,
-        "target_commit": "8dda56cce5dabe6b5fa7af6ce43f32c9ee668e6c",
+        "target_commit": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
         "classification": {
           "research_assets_transferred": 4,
           "tests_transferred_or_relocated": 130,
