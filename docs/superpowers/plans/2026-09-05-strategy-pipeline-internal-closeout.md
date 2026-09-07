@@ -1,65 +1,65 @@
-# strategy-pipeline-internal Migration Closeout Implementation Plan
+# strategy-pipeline-internal 迁移收尾实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> 面向智能体执行者：必须使用 `superpowers:executing-plans`，按任务逐项执行本计划。
 
-**Goal:** Reconcile the migration manifest, documentation ownership evidence, and production-readiness record so the repository states only what the current workspace can verify.
+目标：协调迁移清单、文档归属证据和生产就绪记录，使仓库只陈述当前工作区能够验证的事实。
 
-**Architecture:** Treat the frozen internal repository as an archive/recovery source, while treating the owner repositories and public `strategy-pipeline` as the active implementation surface. Close repository-local metadata inconsistencies, preserve historical evidence, and leave the production pointer unchanged until a separately authorized promotion is available.
+架构：将冻结的内部仓库作为归档和恢复来源，将 owner 仓库和公开 `strategy-pipeline` 作为当前实现面。关闭仓库内元数据不一致，保留历史证据，在获得单独授权的晋升前保持生产指针不变。
 
-**Tech Stack:** Markdown, JSON, Python/pytest, Git worktrees, existing workspace release scripts.
+技术栈：Markdown、JSON、Python/pytest、Git worktree 和现有工作区发布脚本。
 
-**Spec:** `docs/migrations/strategy-pipeline-internal-retirement-record.md` and `docs/evidence/strategy-pipeline-internal-retirement-final-20260905.json`.
+规格：`docs/migrations/strategy-pipeline-internal-retirement-record.md` 和 `docs/evidence/strategy-pipeline-internal-retirement-final-20260905.json`。
 
-## Global Constraints
+## 全局约束
 
-- Do not copy private strategy implementation into public `strategy-pipeline`.
-- Preserve the frozen internal tag and historical source commit as recovery references.
-- Do not change `/home/richard/code/production/research-workspace/current` without an explicit production promotion decision.
-- Every status claim must be backed by a fresh command or an existing checked-in evidence file.
+- 不要将私有策略实现复制到公开 `strategy-pipeline`。
+- 保留冻结的内部标签和历史源提交，作为恢复引用。
+- 没有明确的生产晋升决定，不要修改 `/home/richard/code/production/research-workspace/current`。
+- 每项状态声明都必须由最新命令或已提交的证据文件支持。
 
 ---
 
-### Task 1: Close the workspace migration manifest
+### 任务 1：关闭工作区迁移清单
 
-**Files:**
+文件：
 - Modify: `docs/migrations/strategy-pipeline-internal-migration-manifest.md`
 - Test: `tests/test_strategy_pipeline_internal_migration_manifest.py`
 
-- [x] Change the manifest header from `status: active` to `status: retired`.
-- [x] Add separate closeout counts while preserving the frozen source ownership classification.
-- [x] Remove the two stale `migration_pr: pending` values for `docs/metric-ownership.md` and `docs/strategy-catalog.md`.
-- [x] Add a note that the source repository ownership manifest is frozen historical evidence.
-- [x] Run the focused migration-manifest test and confirm it passes.
+- [x] 将清单头部从 `status: active` 改为 `status: retired`。
+- [x] 在保留冻结源归属分类的同时增加独立收尾计数。
+- [x] 删除 `docs/metric-ownership.md` 和 `docs/strategy-catalog.md` 中过时的两处 `migration_pr: pending`。
+- [x] 增加说明，标记源仓库归属清单为冻结的历史证据。
+- [x] 运行针对性的迁移清单测试并确认通过。
 
-### Task 2: Clarify current documentation status
+### 任务 2：澄清当前文档状态
 
-**Files:**
+文件：
 - Modify: `docs/strategy-catalog.md`
 - Modify: `docs/migrations/strategy-pipeline-internal-retirement-record.md`
 - Modify: `docs/evidence/strategy-pipeline-internal-retirement-final-20260905.json`
 - Test: `tests/test_strategy_pipeline_internal_retirement_record.py`
 
-- [x] Replace wording that says the migration is still in progress with wording that distinguishes active migration completion from archive-only retention.
-- [x] Record the locally observed production pointer separately from the historical claimed release and mark the mismatch as a promotion follow-up.
-- [x] Add machine-readable fields for the observed local production workspace release and release-match status.
-- [x] Run the focused retirement-record test and confirm it passes.
+- [x] 替换声称迁移仍在进行的表述，区分当前迁移完成和仅归档保留。
+- [x] 将本地观测到的生产指针与历史声称的发布版本分开记录，并将不一致标记为晋升后续事项。
+- [x] 增加机器可读字段，记录观测到的本地生产工作区版本和发布匹配状态。
+- [x] 运行针对性的退役记录测试并确认通过。
 
-### Task 3: Verify all active surfaces and release readiness
+### 任务 3：验证所有当前实现面和发布就绪状态
 
 **Files:**
 - No source changes expected.
 
-- [x] Run the focused workspace migration/retirement tests: 45 passed.
-- [x] Run the public `strategy-pipeline` tests: 55 passed.
-- [x] Re-run the owner-target existence check: 113 code migrations and 16 documentation targets, 0 missing.
-- [x] Run the production promotion dry-run and confirm the actual current pointer.
-- [x] Confirm that no active import or runtime path references `strategy_pipeline_internal`.
+- [x] 运行工作区迁移和退役针对性测试：45 个通过。
+- [x] 运行公开 `strategy-pipeline` 测试：55 个通过。
+- [x] 重新运行 owner 目标存在性检查：113 个代码迁移和 16 个文档目标，缺失数为 0。
+- [x] 运行生产晋升 dry-run，并确认实际的当前指针。
+- [x] 确认没有当前导入或运行时路径引用 `strategy_pipeline_internal`。
 
-### Task 4: Review and hand off production promotion
+### 任务 4：评审并交接生产晋升
 
 **Files:**
 - No automatic production symlink change.
 
-- [x] Inspect the final diff and verify no production directory was modified.
-- [x] Report the exact promotion command and current/target release identities.
-- [ ] Leave the goal open until the production pointer is reconciled after explicit promotion approval.
+- [x] 检查最终差异，确认没有修改生产目录。
+- [x] 报告准确的晋升命令和当前或目标发布身份。
+- [ ] 在获得明确晋升批准并协调生产指针前，保持目标开放。

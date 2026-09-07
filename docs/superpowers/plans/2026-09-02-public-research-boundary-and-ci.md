@@ -1,85 +1,85 @@
-# Public Research Boundary and CI Policy Implementation Plan
+# 公开研究边界和 CI 策略实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> 面向智能体执行者：必须使用 `superpowers:subagent-driven-development`（推荐）或 `superpowers:executing-plans`，按任务逐项执行本计划。步骤使用复选框（`- [ ]`）跟踪。
 
-**Goal:** Make the public/private repository policy consistent, prepare `alpha-research` and the public portion of `strategy-research` for independent GitHub Actions checks, and keep production data operations and private strategy assets out of public repositories.
+目标：统一公开和私有仓库策略，为 `alpha-research` 和 `strategy-research` 的公开部分准备独立 GitHub Actions 检查，并将生产数据操作和私有策略资产留在公开仓库之外。
 
-**Architecture:** Keep `market-data-platform` and `strategy-pipeline` private. Make `alpha-research` public-ready by removing its mandatory private data-platform installation path from the public test surface. Keep reusable research infrastructure in `strategy-research` and move personal strategy assets into a separate private repository only after an explicit file manifest and consumer audit. Public CI must run without private credentials or real data.
+架构：保持 `market-data-platform` 和 `strategy-pipeline` 为私有仓库。移除 `alpha-research` 公开测试路径对私有数据平台安装的强制要求，使其具备公开条件。`strategy-research` 保留可复用研究基础设施，只有在完成明确的文件清单和消费者审计后，才将个人策略资产移动到独立私有仓库。公开 CI 必须不依赖私有凭证和真实数据。
 
-**Tech Stack:** GitHub repository visibility, Git submodules, Python, `uv`, pytest, Ruff, `ty`, Markdown, GitHub Actions.
+技术栈：GitHub 仓库可见性、Git 子模块、Python、`uv`、pytest、Ruff、`ty`、Markdown 和 GitHub Actions。
 
-**Spec:** `docs/quality-governance.md`, each repository's `AGENTS.md`, and the file-level classification recorded during this audit.
+规格：`docs/quality-governance.md`、各仓库的 `AGENTS.md`，以及本次审计记录的文件级分类。
 
-## Global Constraints
+## 全局约束
 
-- Public repositories default to enabled GitHub Actions.
-- Private repositories default to disabled GitHub Actions.
-- Private repository exceptions must document reason, scope, and resource cost.
-- Public CI must not require private repository credentials, real data assets, or production paths.
-- Do not move or delete the concurrent uncommitted change in `strategy-research/research/experiments/long_term_fundamental_v2/run_quarterly_research.py`.
-- Do not change repository visibility until the public-readiness checks pass.
+- 公开仓库默认启用 GitHub Actions。
+- 私有仓库默认关闭 GitHub Actions。
+- 私有仓库例外必须记录原因、范围和资源成本。
+- 公开 CI 不得要求私有仓库凭证、真实数据资产或生产路径。
+- 不要移动或删除 `strategy-research/research/experiments/long_term_fundamental_v2/run_quarterly_research.py` 中并行存在的未提交改动。
+- 公开就绪检查通过前，不要修改仓库可见性。
 
-### Task 1: Align repository documentation with the CI policy
+### 任务 1：使仓库文档与 CI 策略一致
 
-**Files:**
+文件：
 - Modify: root `AGENTS.md`, `README.md`, and `docs/quality-governance.md`
 - Modify: each repository `AGENTS.md`, README, or quality/testing document where the policy is missing
 - Test: existing documentation and policy tests in each repository
 
-- [ ] Add the same three-rule policy to every active repository's maintainer documentation.
-- [ ] Record the current visibility and current workflow status separately.
-- [ ] Replace stale root statements claiming that all Actions are disabled.
-- [ ] Add a repository visibility matrix with the five private repositories and their documented reason for remaining private.
-- [ ] Run each repository's documentation and policy tests.
-- [ ] Commit policy documentation separately from code changes.
+- [ ] 将同一套三条规则加入每个当前仓库的维护文档。
+- [ ] 分别记录当前可见性和当前工作流状态。
+- [ ] 替换声称所有 Actions 都已关闭的过时根文档表述。
+- [ ] 增加仓库可见性矩阵，记录五个私有仓库及其保持私有的原因。
+- [ ] 运行每个仓库的文档和策略测试。
+- [ ] 将策略文档与代码改动分开提交。
 
-### Task 2: Finalize the `alpha-research` public boundary
+### 任务 2：确定 `alpha-research` 的公开边界
 
-**Files:**
+文件：
 - Modify: `alpha-research/pyproject.toml`, dependency source configuration, and CI/test entrypoints
 - Test: `alpha-research/tests` and public-install smoke test
 
-- [ ] Identify imports that require `market-data-platform` at runtime.
-- [ ] Move provider-specific functionality behind an optional extra or a narrow adapter boundary.
-- [ ] Make the default public test and lint profile installable without private repositories.
-- [ ] Keep fixture-based tests deterministic and offline.
-- [ ] Resolve or explicitly scope the existing `ty` diagnostics before enabling public CI.
-- [ ] Run locked install, Ruff, format, `ty`, pytest, and dependency audit in a clean public-style environment.
+- [ ] 识别运行时需要 `market-data-platform` 的导入。
+- [ ] 将供应商专属功能放到可选依赖或窄适配器边界之后。
+- [ ] 确保默认公开测试和 lint 配置无需私有仓库即可安装。
+- [ ] 保持 fixture 测试确定性且离线运行。
+- [ ] 启用公开 CI 前解决现有 `ty` 诊断，或明确限定其范围。
+- [ ] 在公开风格的干净环境中运行锁定安装、Ruff、格式检查、`ty`、pytest 和依赖审计。
 
-### Task 3: Freeze the `strategy-research` public/private file manifest
+### 任务 3：冻结 `strategy-research` 的公开和私有文件清单
 
 **Files:**
 - Create: a file-level public/private manifest in the private research boundary documentation
 - Review: `research/experiments/**`, `research/cases/**`, `research/evidence/**`, `research/ledgers/**`, `src/**`, `tests/**`, `tools/**`, and `docs/**`
 - Test: path and import-boundary tests
 
-- [ ] Mark reusable framework code, schemas, tests, and sanitized specifications as public.
-- [ ] Mark personal strategy logic, judgments, evidence, results, and production-adjacent scripts as private candidates.
-- [ ] Search public candidates for credentials, absolute local paths, real data identifiers, and private dependency pins.
-- [ ] Audit consumers before moving any file.
-- [ ] Create `strategy-research-private` only if the private manifest contains a stable, non-trivial asset set.
-- [ ] Keep public code independent from the private repository.
+- [ ] 将可复用框架代码、模式、测试和脱敏规格标记为公开。
+- [ ] 将个人策略逻辑、判断、证据、结果和接近生产的脚本标记为私有候选。
+- [ ] 搜索公开候选文件中的凭证、绝对本地路径、真实数据标识和私有依赖固定版本。
+- [ ] 移动文件前审计消费者。
+- [ ] 只有私有清单包含稳定且有实际规模的资产集时，才创建 `strategy-research-private`。
+- [ ] 保持公开代码不依赖私有仓库。
 
-### Task 4: Clean public CI and path dependencies
+### 任务 4：清理公开 CI 和路径依赖
 
 **Files:**
 - Modify: public repository workflow files
 - Modify: public-facing package dependency declarations and path defaults
 - Test: CI workflow syntax, clean checkout install, and offline test suite
 
-- [ ] Enable lightweight PR CI for public repositories only after their clean-checkout tests pass.
-- [ ] Keep private repositories without workflows unless an exception is documented.
-- [ ] Replace personal absolute paths with environment variables or fixture-relative defaults.
-- [ ] Ensure no workflow accesses private repositories or secrets on fork pull requests.
+- [ ] 公开仓库的干净检出测试通过后，才启用轻量 PR CI。
+- [ ] 私有仓库保持没有工作流，除非记录了例外原因。
+- [ ] 使用环境变量或相对于 fixture 的默认值替换个人绝对路径。
+- [ ] 确保 fork PR 的工作流不访问私有仓库或密钥。
 
-### Task 5: Change visibility and verify remote behavior
+### 任务 5：修改可见性并验证远端行为
 
 **Files:**
 - Repository settings for `alpha-research` and, if Task 3 passes, `strategy-research`
 - Modify: root submodule pins and CI policy matrix
 
-- [ ] Change visibility only after all public-readiness checks pass.
-- [ ] Confirm public Actions workflows run successfully on the default branch.
-- [ ] Confirm root submodule pins resolve from public repositories.
-- [ ] Run the root workspace contract checks and record remaining unrelated failures.
-- [ ] Update the final visibility matrix and document any deferred repository.
+- [ ] 所有公开就绪检查通过后，才修改仓库可见性。
+- [ ] 确认公开 Actions 工作流在默认分支成功运行。
+- [ ] 确认根仓库子模块固定版本可以从公开仓库解析。
+- [ ] 运行顶层工作区契约检查，并记录剩余的无关失败。
+- [ ] 更新最终可见性矩阵，并记录任何延期处理的仓库。
