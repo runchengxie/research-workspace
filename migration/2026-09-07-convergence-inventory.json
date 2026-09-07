@@ -11,7 +11,7 @@
   "candidate_composition": {
       "workspace_commit": "d3149bf4000182a86bcc3f9a3d50e2cb18f3ad64",
     "target_gitlinks": {
-      "quant-platform": "80d8b76853a619fdb6978ccdb1fae5bdd534672d",
+      "quant-platform": "62d4a254409cd3111fc90083a892308fa598c98c",
       "quant-research": "83730b266cc72e4598abfbf4bd01bdc200c5f052",
       "market-data-platform": "150d2614f9d2129ab2d39ece62916e8f66ca57e8",
       "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
