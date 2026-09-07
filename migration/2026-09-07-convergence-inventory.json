@@ -24,6 +24,34 @@
       "pending_commit": "b0adf07",
       "focused_result_after_fix": "1 passed"
     },
+    "target_runtime_reference_scan": {
+      "scope": [
+        "quant-platform/pyproject.toml",
+        "quant-platform/src",
+        "quant-platform/scripts",
+        "quant-research/pyproject.toml",
+        "quant-research/src",
+        "quant-research/scripts",
+        "quant-market-data-platform/pyproject.toml",
+        "quant-market-data-platform/src",
+        "quant-market-data-platform/scripts",
+        "quant-intel-platform/pyproject.toml",
+        "quant-intel-platform/src",
+        "quant-intel-platform/scripts"
+      ],
+      "patterns": [
+        "research-workspace",
+        "strategy-research",
+        "market-data-platform",
+        "portfolio-backtester",
+        "alpha-research",
+        "quant-execution-engine",
+        "strategy-pipeline",
+        "deep-learning-tick-data-prediction"
+      ],
+      "result": "no direct legacy repository references found in target runtime/source manifests",
+      "interpretation": "absence of textual references is only a runtime-boundary check; it does not prove file, API, semantic, or provenance parity"
+    },
     "current_source_parity_audits": {
       "strategy-research_to_quant-research": {
         "exact_path_matches": 507,
