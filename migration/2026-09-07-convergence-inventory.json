@@ -12,7 +12,10 @@
   "verification": {
     "quant_platform_public_parity": {
       "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q tests/alpha tests/execution tests/microstructure tests/orchestration",
-      "result": "548 passed, 3 skipped"
+      "result": "548 passed, 3 skipped",
+      "full_target_result": "1162 passed, 3 skipped",
+      "ruff_check": "passed",
+      "ruff_format": "297 files already formatted"
     },
     "quant_research_private_parity": {
       "command": "PATH=.venv/bin:$PATH .venv/bin/python -m pytest -q tests/alpha_research tests/strategy_app tests/strategy_research tests/quant_execution_engine",
@@ -58,13 +61,16 @@
         "exact_hash_matches": 289,
         "old_paths_absent": 166,
         "old_symbol_names_absent_globally": 0,
-        "target_commit": "0d9af526339a77067185e5439233aff60504e4f2",
+        "target_commit": "5d4036c10ffbe6d703cb21299e3bd9dae7258106",
         "classification": {
           "research_assets_transferred": 4,
           "tests_transferred_or_relocated": 130,
           "documentation_relocated": 38,
           "unresolved_source_symbols": 0,
-          "remaining_gate": "owner approval, clean recursive checkout, and 14-day rollback validation"
+          "remaining_gate": "owner approval, clean recursive checkout, full target quality-debt closure, and 14-day rollback validation",
+          "target_full_pytest": "passed to 100% with no failures",
+          "changed_file_quality": "ruff check passed; ruff format check passed",
+          "full_quality_gate": "not green: 1601 Ruff diagnostics, 182 format deviations, 1034 ty diagnostics"
         },
         "method": "scripts/migration_parity_audit.py against current source and target trees"
       },
