@@ -71,3 +71,17 @@ def test_promotion_does_not_recheck_generated_venv_links_as_source_changes() -> 
 
     assert "local commit release current tmp fresh=0" in script
     assert '(( fresh )) || assert_clean "$release"' in script
+
+
+def test_promotion_dry_run_does_not_execute_submodule_operations() -> None:
+    script = PROMOTE_SCRIPT.read_text(encoding="utf-8")
+
+    assert 'if (( DRY_RUN )); then' in script
+    assert 'run git -C "$release" submodule sync --recursive' in script
+    assert 'run git -C "$release" submodule update --init --recursive' in script
+
+
+def test_promotion_dry_run_handles_a_fresh_production_root() -> None:
+    script = PROMOTE_SCRIPT.read_text(encoding="utf-8")
+
+    assert 'if [[ ! -d "$base/releases" && $DRY_RUN -eq 1 ]]; then' in script

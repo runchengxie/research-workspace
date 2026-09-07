@@ -149,9 +149,12 @@ prepare_release() {
     fresh=1
     run git -C "$source" worktree add --detach "$release" "$commit"
     if [[ "$name" == research-workspace ]]; then
-      run git -C "$release" submodule sync --recursive
-      run git -C "$release" submodule update --init --recursive
-      if (( ! DRY_RUN )); then
+      if (( DRY_RUN )); then
+        run git -C "$release" submodule sync --recursive
+        run git -C "$release" submodule update --init --recursive
+      else
+        git -C "$release" submodule sync --recursive
+        git -C "$release" submodule update --init --recursive
         for project in market-data-platform strategy-pipeline strategy-research quant-research; do
           if [[ -f "$release/$project/pyproject.toml" ]]; then
             ensure_project_venv "$release/$project" "$project"
@@ -183,6 +186,10 @@ prepare_release() {
 
 prune_releases() {
   local name=$1 source=$2 base=$3
+  if [[ ! -d "$base/releases" && $DRY_RUN -eq 1 ]]; then
+    printf '[%s] no existing releases directory; prune skipped in dry-run\n' "$name"
+    return 0
+  fi
   local args=(--base "$base" --keep "$KEEP_RELEASES" --keep-venvs "$KEEP_VENVS" --source "$source" --shared-root "$SHARED_VENV_ROOT")
   (( DRY_RUN )) && args+=(--dry-run)
   bash "$(dirname "$0")/prune-production-releases.sh" "${args[@]}"
