@@ -2,14 +2,14 @@
   "version": 1,
   "components": [
     {"legacy": "market-data-platform", "targets": ["quant-market-data-platform"], "status": "REVIEW_REQUIRED", "ownership_decision": "independent_quant_market_data_platform", "decision_evidence": "docs/migration/quant-repo-migration.md#旧模块映射"},
-    {"legacy": "deep-learning-tick-data-prediction", "targets": ["quant-platform:microstructure-public", "quant-research:ticknet"], "status": "REVIEW_REQUIRED"},
-    {"legacy": "alpha-research", "targets": ["quant-platform:alpha-public", "quant-research:alpha_research"], "status": "REVIEW_REQUIRED"},
+    {"legacy": "deep-learning-tick-data-prediction", "targets": ["quant-platform:microstructure-public", "quant-research:ticknet"], "status": "REVIEW_REQUIRED", "ownership_decision": "quant-platform-public-microstructure_quant-research-private-ticknet", "decision_evidence": "quant-platform/migration/microstructure-public-parity.json; quant-research/migration/microstructure-parity.json"},
+    {"legacy": "alpha-research", "targets": ["quant-platform:alpha-public", "quant-research:alpha_research"], "status": "REVIEW_REQUIRED", "ownership_decision": "quant-platform-public-alpha_quant-research-private-alpha", "decision_evidence": "quant-platform/migration/alpha-public-parity.json; quant-research/migration/alpha-research-parity.json"},
     {"legacy": "portfolio-backtester", "targets": ["quant-platform:portfolio-backtester"], "status": "PUBLICLY_EXCLUDED_PRIVATE_TARGET_REQUIRED", "ownership_decision": "quant_platform_owner_pending_provenance_approval", "decision_evidence": "quant-platform/migration/provenance.json"},
     {"legacy": "strategy-research", "targets": ["quant-research:strategy_research", "quant-research:research", "quant-research:registry"], "status": "REVIEW_REQUIRED", "ownership_decision": "quant_research_private_owner", "decision_evidence": "quant-research/migration/strategy-research-current-parity-20260907.json"},
-    {"legacy": "strategy-app", "targets": ["quant-research:strategy_app"], "status": "REVIEW_REQUIRED"},
-    {"legacy": "strategy-pipeline", "targets": ["quant-platform:strategy_pipeline", "quant-research:private adapters"], "status": "REVIEW_REQUIRED", "ownership_decision": "split_public_control_plane_private_strategy_adapters"},
-    {"legacy": "quant-execution-engine", "targets": ["quant-platform:execution-public", "quant-research:quant_execution_engine"], "status": "REVIEW_REQUIRED"},
-    {"legacy": "research-workspace-root", "targets": ["research-workspace:integration-layer"], "status": "RETAIN_IN_WORKSPACE"}
+    {"legacy": "strategy-app", "targets": ["quant-research:strategy_app"], "status": "REVIEW_REQUIRED", "ownership_decision": "quant_research_private_owner", "decision_evidence": "quant-research/migration/strategy-family-parity.json"},
+    {"legacy": "strategy-pipeline", "targets": ["quant-platform:strategy_pipeline", "quant-research:private adapters"], "status": "REVIEW_REQUIRED", "ownership_decision": "split_public_control_plane_private_strategy_adapters", "decision_evidence": "quant-platform/migration/orchestration-parity.json; quant-research/migration/strategy-family-parity.json"},
+    {"legacy": "quant-execution-engine", "targets": ["quant-platform:execution-public", "quant-research:quant_execution_engine"], "status": "REVIEW_REQUIRED", "ownership_decision": "quant-platform-public-execution_quant-research-private-adapters", "decision_evidence": "quant-platform/migration/execution-parity.json; quant-research/migration/execution-private-parity.json"},
+    {"legacy": "research-workspace-root", "targets": ["research-workspace:integration-layer"], "status": "RETAIN_IN_WORKSPACE", "ownership_decision": "research_workspace_integration_and_rollback_owner", "decision_evidence": "migration/target-release-manifest-20260907.json"}
   ],
   "statuses": [
     "TRANSFER_REQUIRED",
