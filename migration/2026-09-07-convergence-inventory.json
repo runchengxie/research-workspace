@@ -66,7 +66,7 @@
         "exact_hash_matches": 289,
         "old_paths_absent": 166,
         "old_symbol_names_absent_globally": 0,
-        "target_commit": "5d4036c10ffbe6d703cb21299e3bd9dae7258106",
+        "target_commit": "b8b3fd9390f83e6291aee2bc38f34dfbe5430c93",
         "classification": {
           "research_assets_transferred": 4,
           "tests_transferred_or_relocated": 130,
@@ -75,7 +75,8 @@
           "remaining_gate": "owner approval, clean recursive checkout, full target quality-debt closure, and 14-day rollback validation",
           "target_full_pytest": "passed to 100% with no failures",
           "changed_file_quality": "ruff check passed; ruff format check passed",
-          "full_quality_gate": "not green: 1601 Ruff diagnostics, 182 format deviations, 1034 ty diagnostics"
+          "full_quality_gate": "raw full-repository diagnostics remain tracked debt: 1601 Ruff, 182 format deviations, 1034 ty",
+          "quality_baseline_gate": "passed: baseline_issues=[]; ratchet_issues=[]"
         },
         "method": "scripts/migration_parity_audit.py against current source and target trees"
       },
