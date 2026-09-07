@@ -10,6 +10,7 @@ EXPECTED_STRATEGIES = {
     "hotsector",
     "style_replica_a80_b20",
     "d11_h5_shadow",
+    "cashflow_quality_top50_v1",
     "dividend_growth_momentum",
     "next_open_to_high",
     "macro_context_shadow_v1",
