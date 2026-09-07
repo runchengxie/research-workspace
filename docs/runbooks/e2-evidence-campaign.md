@@ -1,11 +1,11 @@
-# E2 Evidence Campaign
+# E2 证据活动
 
-E2 is a production-readiness audit for a selected strategy candidate. It is not a strategy definition and it does not turn a diagnostic run into a promotion decision.
+E2 是针对候选策略的生产就绪度审计。它不定义策略，也不会把诊断运行自动变成晋级决策。
 
-The 2026-08-28 campaign status is recorded in `docs/evidence/e2-execution-evidence-20260828.json`. It references the local diagnostic run `a_share_e2_promotion_candidate_20260825_20260826_001524_ab70c882` and records its observed metrics and limitations.
+2026-08-28 的活动状态记录在 `docs/evidence/e2-execution-evidence-20260828.json`。该文件引用本地诊断运行 `a_share_e2_promotion_candidate_20260825_20260826_001524_ab70c882`，并记录观测指标和限制。
 
-The run is intentionally marked `diagnostic`. Its outputs are under ignored local artifacts, A-share lot, T+1, price-limit, and listing-status rules were inactive, and broker execution was disabled. These facts prevent a canonical promotion receipt.
+该运行有意标记为 `diagnostic`。输出位于被忽略的本地产物目录，A 股手数、T+1、价格涨跌停和上市状态规则当时未启用，券商执行也已关闭。这些事实使它无法生成标准晋级回执。
 
-The E2 candidate configuration now explicitly enables 100-share round lots, T+1, price limits, and listing-status enforcement. The execution adapter consumes the configured input column names and fails closed when an enabled input is missing.
+当前 E2 候选配置已经明确启用 100 股整手、T+1、价格涨跌停和上市状态检查。执行适配器使用配置中的输入列名，启用的输入缺失时以 fail-closed 方式失败。
 
-Before promotion review, rerun the selected candidate with a pricing panel that contains `is_limit_up`, `is_limit_down`, and `listing_status`, persist the compact evidence inventory, materialize `strategy_promotion_evidence.v2`, and validate every declared lineage path. A failed or incomplete dimension must remain visible in `limitations`; enabling a rule in YAML is not evidence that a historical run consumed it.
+晋级评审前，使用包含 `is_limit_up`、`is_limit_down` 和 `listing_status` 的价格面板重新运行候选策略，保存精简证据清单，生成 `strategy_promotion_evidence.v2`，并校验所有声明的血缘路径。失败或不完整的维度必须继续记录在 `limitations` 中。YAML 中启用规则，不代表历史运行实际使用过该规则。
