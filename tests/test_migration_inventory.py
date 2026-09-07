@@ -31,6 +31,8 @@ def test_convergence_inventory_covers_every_component_with_evidence_and_rollback
     assert all(entry["source"]["head"] for entry in components)
     assert all(entry["parity_evidence"] for entry in components)
     assert all(entry["rollback"]["required"] for entry in components)
+    assert all(entry.get("ownership_decision") for entry in component_map["components"])
+    assert all(entry.get("decision_evidence") for entry in component_map["components"])
 
 
 def test_convergence_inventory_resolves_market_data_owner_conflict():
