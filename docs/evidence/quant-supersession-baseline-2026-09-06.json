@@ -1,0 +1,33 @@
+{
+  "date": "2026-09-06",
+  "workspace": {
+    "path": "/home/richard/code/research-workspace",
+    "head": "f2ffa950b",
+    "status": "dirty",
+    "submodules": {
+      "alpha-research": "631ee150d5125917baebbbb31a673696d1d29230",
+      "deep-learning-tick-data-prediction": "2dd47012487c6fcdb66ef3ca4d4fbf7ca585d203",
+      "market-data-platform": "0f1c4ce2554ad4961a8f130ce953b5d18ea52a0d",
+      "portfolio-backtester": "91a4fa4f1d57c074c991546c381a3d90a3b6adfb",
+      "quant-execution-engine": "2f0675a4b8946ff4134194e7dd12dc1169fd2be4",
+      "strategy-app": "f6f58bf7bbd623318189ab4ab7acf49b331be4a2",
+      "strategy-pipeline": "87175c67531f0be29f78aeb078046708dbf38ee4",
+      "strategy-research": "fe8ebff9061eea4588612d91d40252aa3e39ea58"
+    }
+  },
+  "targets": {
+    "quant-platform": {
+      "path": "/home/richard/code/.public-staging/quant-platform",
+      "head": "2ba7088"
+    },
+    "quant-research": {
+      "path": "/home/richard/code/.private-staging/quant-research",
+      "head": "2b51d33"
+    }
+  },
+  "comparison_rules": {
+    "included": ["Python", "Markdown"],
+    "excluded_directories": [".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache", "build", "dist", "outputs", "data", "artifacts", "node_modules", "site", "published", ".worktrees"],
+    "warning": "LOC and basename matches do not prove behavioral parity; review symbols and tests by component."
+  }
+}
