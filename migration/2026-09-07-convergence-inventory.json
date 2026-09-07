@@ -94,6 +94,16 @@
         "old_symbol_names_absent_globally": 1,
         "method": "scripts/migration_parity_audit.py against current source and target trees"
       },
+      "portfolio_provenance_review": {
+        "source_commit": "2df06a14441f43a85b3b4d5c999be3759239e4ab",
+        "target_commit": "f8684828c872fda3890befafb2f4311caff138a0",
+        "source_license_files_found": [],
+        "target_public_files_hash_verified": 2,
+        "target_provenance_status": "local-staging-only",
+        "decision": "PUBLICLY_EXCLUDED_PRIVATE_TARGET_REQUIRED",
+        "owner": "quant-platform owner pending independent provenance/license approval",
+        "next_action": "obtain source license/history authorization or move the affected slice to an explicitly private target before public release"
+      },
       "alpha-research_to_quant-platform": {
         "exact_path_matches": 14,
         "exact_hash_matches": 0,
@@ -229,8 +239,8 @@
         "remote": "https://github.com/runchengxie/portfolio-backtester.git"
       },
       "targets": ["quant-platform:packages/portfolio-backtester"],
-      "status": "REVIEW_REQUIRED",
-      "ownership_decision": "quant_platform_public_foundation",
+      "status": "PUBLICLY_EXCLUDED_PRIVATE_TARGET_REQUIRED",
+      "ownership_decision": "quant_platform_owner_pending_provenance_approval",
       "decision_evidence": "quant-platform/migration/provenance.json",
       "parity_evidence": ["quant-platform/migration/provenance.json"],
       "rollback": {
