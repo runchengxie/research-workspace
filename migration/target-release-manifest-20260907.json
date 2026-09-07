@@ -66,6 +66,19 @@
       "evidence": "quant-platform/config/migration/provenance.json",
       "private_target": "portfolio-backtester-private",
       "private_target_status": "not_created"
+    },
+    "consumer_compatibility_and_approval": {
+      "status": "verified_for_observation_window",
+      "evidence": {
+        "workspace_doctor": "errors=0, warnings=4 after production checkout",
+        "contract_smoke": "errors=0, warnings=0",
+        "workspace_tests": "512 passed",
+        "strategy_research_tests": "537 passed",
+        "recursive_submodule_checkout": "passed for all 11 submodules",
+        "production_current": "releases/aa91e261252498ee8b0c367a8bc56ade445846ab"
+      },
+      "approval": "user-confirmed target promotion and public portfolio exclusion",
+      "legacy_retirement": "deferred until observation_window.ends_at"
     }
   }
 }

@@ -176,8 +176,8 @@
     },
   "blocked_items": [
       "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, full quality-debt closure, and 14-day rollback validation",
-      "publicly excluded portfolio slice has no private target yet",
-      "production promotion rehearsal and consumer approval are still pending"
+      "publicly excluded portfolio slice has no private target yet; private migration is deferred",
+      "legacy retirement remains deferred until the 14-day observation window closes"
     ]
   },
   "components": [
