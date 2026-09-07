@@ -8,6 +8,18 @@
     "working_tree": "clean",
     "role": "integration_layer_and_rollback_source"
   },
+  "candidate_composition": {
+    "workspace_commit": "b7cbf894d73daefe5c2d15e7577054fd6923db8b",
+    "target_gitlinks": {
+      "quant-platform": "f8684828c872fda3890befafb2f4311caff138a0",
+      "quant-research": "b8b3fd9390f83e6291aee2bc38f34dfbe5430c93",
+      "market-data-platform": "b0adf07beb28e294fa5e67ab0af48505279e7d43",
+      "market-intel": "63729604b730d97d89ac5a05b99050f62ce718dc"
+    },
+    "legacy_gitlinks_retained": true,
+    "workspace_doctor": "errors=0, warnings=6",
+    "status": "candidate_not_promoted"
+  },
   "rollback_window_days": 14,
   "verification": {
     "recursive_checkout": {
