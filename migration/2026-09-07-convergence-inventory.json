@@ -19,7 +19,7 @@
     "legacy_gitlinks_retained": true,
     "workspace_doctor": "errors=0, warnings=5",
     "pre_push_hooks": "all 12 managed repositories installed and passed --check",
-    "status": "candidate_not_promoted"
+    "status": "promoted_observation_window"
   },
   "rollback_window_days": 14,
   "verification": {
@@ -174,7 +174,7 @@
         "interpretation": "private adapters require separate classification from public control-plane code"
       }
     },
-    "blocked_items": [
+  "blocked_items": [
       "quant-research current-source parity is classified and locally verified; legacy retirement still requires owner approval, full quality-debt closure, and 14-day rollback validation",
       "publicly excluded portfolio slice has no private target yet",
       "production promotion rehearsal and consumer approval are still pending"
