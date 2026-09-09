@@ -53,6 +53,8 @@
 
 回测仓库已增加显式的飞书预览适配器 `research.experiments.daily_feishu10.message_preview.parse_message_preview`。它只接受标题、消息创建时间和编号股票行，强制要求恰好 10 只，输出等权 selections，并在 DataFrame metadata 标记 `provenance=message_derived`；它不绕过 canonical basket/receipt 校验。用真实 2026-09-09 09:17 消息跑通后，确认解析结果为 10 只、DailyWatch family 7 / Cashflow 3，生效日 2026-09-14。
 
+回测仓库同时提供 `write_replay_artifacts`，会输出逐股票 observations、逐信号日 signal_days、指标 JSON 和带 SHA-256 的 manifest，便于首个真实结算日保存可审计结果。
+
 另发现 `/home/richard/data/quant/market-data-platform/research/index_replication/cashflow_three_weekly_20260909_v1..v6` 下存在 Cashflow 3 组件历史回放，以及多处 DailyWatch20 单策略/控制组回放。它们可以用于组件诊断，但没有最终飞书10股的组合身份、同日来源配额、basket hash 或投递证明，因此不纳入本次10股组合收益，也不作为最终组合的 PIT 替代样本。
 
 ## 回测所需最小输入
