@@ -4,6 +4,8 @@
 结果目录：`/home/richard/data/quant/daily_feishu10_theoretical_proxy/20260909`  
 证据等级：`message_derived_proxy`，不是生产组合回测
 
+> 该报告是仅使用 DailyWatch20 前10的早期基线，已被同日生成的[三策略合成理论回测](daily-feishu10-theoretical-composite-20260909.md) supersede；保留它只用于比较“单 sleeve”与“4/3/3 合成”的差异。
+
 ## 代理定义
 
 由于历史上没有最终 `Weekly Client Basket 10` 的 canonical basket 和 receipt，本次构造一个可复现的理论代理：
