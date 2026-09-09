@@ -29,12 +29,15 @@
 - `/home/richard/code/production`
 - `/home/richard/code/research-workspace/market-intel/state`
 - `/home/richard/code/research-workspace/market-intel/out`
+- `/home/richard/data/quant`
 
-已发现历史 DailyWatch20、D11-H5 和旧 AI stock picker 投递回执，但没有发现 `weekly_client_basket/YYYYMMDD/{basket.json,receipt.json}` 或等价的最终 10 股快照产物。
+已发现历史 DailyWatch20、D11-H5 和旧 AI stock picker 投递回执，以及 Cashflow 研究回放和 Cashflow shadow publication receipt，但没有发现 `weekly_client_basket/YYYYMMDD/{basket.json,receipt.json}` 或等价的最终 10 股快照产物。
 
 当前 `quant-intel-platform/out` 中可见的 `weekly` 相关文件只有 `weekly_recap.meta.json`，不属于 10 股组合快照。
 
-用户配置目录 `/home/richard/.config/market-intel` 中没有发现独立的 `cashflow-shadow.env`；因此无法从当前配置推导 Cashflow shadow 的外部输出根目录。配置文件中存在 API/市场数据相关文件，但本盘点不读取凭证内容。
+用户配置目录 `/home/richard/.config/market-intel` 中没有发现独立的 `cashflow-shadow.env`；`/home/richard/.config/quant` 中也没有发现 `WEEKLY_BASKET_*` 运行配置，因此无法从当前配置推导 weekly basket 或 Cashflow shadow 的完整外部输出根目录。配置文件中存在 API/市场数据相关文件，但本盘点不读取凭证内容。
+
+用户级 systemd 当前可见的是 DailyWatch20 producer/prewarm/freshness timer，没有启用中的 `weekly-client-basket.timer`。部署仓库虽然有对应的 bridge 和 service template，但它们不能证明历史 10 股快照已经生成或发送。
 
 ## 回测所需最小输入
 
