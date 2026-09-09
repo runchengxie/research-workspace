@@ -55,6 +55,8 @@
 
 回测仓库同时提供 `write_replay_artifacts`，会输出逐股票 observations、逐信号日 signal_days、指标 JSON 和带 SHA-256 的 manifest，便于首个真实结算日保存可审计结果。
 
+分析器的 `coverage_policy` 已显式支持 `renormalize` 与 `fail_closed` 两种口径；遇到不可执行成分时可以并列导出诊断收益和严格可执行收益，不会将缺失成分静默填为零收益。
+
 另发现 `/home/richard/data/quant/market-data-platform/research/index_replication/cashflow_three_weekly_20260909_v1..v6` 下存在 Cashflow 3 组件历史回放，以及多处 DailyWatch20 单策略/控制组回放。它们可以用于组件诊断，但没有最终飞书10股的组合身份、同日来源配额、basket hash 或投递证明，因此不纳入本次10股组合收益，也不作为最终组合的 PIT 替代样本。
 
 ## 回测所需最小输入
