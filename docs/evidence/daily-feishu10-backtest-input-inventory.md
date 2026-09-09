@@ -8,7 +8,7 @@
 
 因此，本次回测必须评价最终生成并推进到飞书的 10 股快照，不能直接把 Cashflow Top50、DailyWatch20 或 D11-H5 的单独回测结果当作 10 股组合结果。
 
-当前状态：`blocked_pending_runtime_artifacts`
+当前状态：`ready_for_forward_observation_not_historical_replay`
 
 ## 已确认的契约
 
@@ -39,6 +39,16 @@
 
 用户级 systemd 当前可见的是 DailyWatch20 producer/prewarm/freshness timer，没有启用中的 `weekly-client-basket.timer`。部署仓库虽然有对应的 bridge 和 service template，但它们不能证明历史 10 股快照已经生成或发送。
 
+## 飞书消息来源观测
+
+通过飞书用户身份只读搜索 `Weekly Client Basket`，发现 2026-09-09 09:12 和 09:17 的两条私聊机器人预览消息，内容一致，均对应 `2026-09-14` 的冻结周组合。可解析出以下 10 只股票：
+
+- DailyWatch family：688110.SH、002837.SZ、600118.SH、300475.SZ、688037.SH、300476.SZ、688627.SH。
+- Cashflow：603173.SH、002071.SZ、601083.SH。
+- Microcap：本次无有效 artifact，因此实际配额为 7/3/0，而不是设计默认的 4/3/3。
+
+消息来源是飞书 `post`，发送方为 `凯川智能分析AI`；目前没有在消息中发现对应的 canonical `basket.json`、`receipt.json` 或 delivery receipt。该记录可以作为真实灰度推进的观测样本，但暂时只能标记为 `message_derived`，不能替代 canonical artifact，也不能产生历史收益结论。由于组合生效日是 2026-09-14，当前行情最多覆盖到 2026-09-09，尚无可结算的前向收益。
+
 ## 回测所需最小输入
 
 要把状态改为 `ready_for_gray_replay`，至少需要：
@@ -51,4 +61,4 @@
 
 ## 当前行动
 
-在真实 basket artifact 被定位或补齐前，不生成收益结论。下一步应检查生产运行目录、定时任务环境文件和外部 artifact 根目录；如果确认没有保存历史 10 股快照，则先补一个从当前运行起点开始的不可变回测归档，再等待足够的前向观测样本。
+在真实 basket artifact 被定位或补齐前，不生成历史收益结论。当前已把 2026-09-14 消息样本纳入待结算队列；下一步应将消息解析结果与行情快照、投递回执一起固化为不可变观测记录，并从 2026-09-15 起按下一交易日开盘执行口径结算 1/3/5/10 个交易日收益。若能补齐历史 canonical artifact，再追加历史样本外回放。
