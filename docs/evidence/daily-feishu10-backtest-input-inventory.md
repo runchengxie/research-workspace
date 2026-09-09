@@ -51,6 +51,8 @@
 
 对这 10 只股票做行情可执行性预检时，2026-09-09 数据覆盖 9/10；`002071.SZ` 的历史行情最后日期为 2021-05-06，不能证明它在 2026-09-14 可交易。因此首个样本还需要在生效日前通过 instrument snapshot/交易状态再次校验。回测实现应将其标记为不可执行，不得静默当作正常零收益；组合口径需要明确选择 fail-closed，或暴露缺失权重并对可用成分重归一化。
 
+回测仓库已增加显式的飞书预览适配器 `research.experiments.daily_feishu10.message_preview.parse_message_preview`。它只接受标题、消息创建时间和编号股票行，强制要求恰好 10 只，输出等权 selections，并在 DataFrame metadata 标记 `provenance=message_derived`；它不绕过 canonical basket/receipt 校验。用真实 2026-09-09 09:17 消息跑通后，确认解析结果为 10 只、DailyWatch family 7 / Cashflow 3，生效日 2026-09-14。
+
 ## 回测所需最小输入
 
 要把状态改为 `ready_for_gray_replay`，至少需要：
