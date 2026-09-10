@@ -49,4 +49,6 @@
 
 这版比“DailyWatch20 前10”更接近你记忆中的真实三策略合成框架，但仍是理论 proxy：没有使用最终飞书 `basket.json`、receipt 或 delivery receipt，也没有历史 D11-H5、历史 microcap 正式 shadow artifact 的完整逐周链路。因此结果只能用来判断回测方法和量级，不能证明当前灰度组合 alpha，也不能改变 live eligibility。
 
+补充：过去三年跨度的长期代理结果见 [daily-feishu10-theoretical-3y-composite-20260910.md](daily-feishu10-theoretical-3y-composite-20260910.md)。长期结果同样只有9个季度 DailyWatch 研究快照，不能替代真正的日频历史回放。
+
 下一步应优先把每日/周度最终组合输出保存为 canonical artifact；一旦有多个真实组合样本，可直接用同一套 T 日收盘、T+1 开盘回放替换本 proxy 输入。
