@@ -7,7 +7,7 @@ dependencies = [
   "numpy>=2.5.2",
   "pandas>=2.2",
   "pyarrow>=14",
-  "pyyaml>=6.0",
+  "pyyaml>=6.0.3",
   "tabulate>=0.10.0",
   "strategy-pipeline @ git+https://github.com/runchengxie/strategy-pipeline.git",
 ]
