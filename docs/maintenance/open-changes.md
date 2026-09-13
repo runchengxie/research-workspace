@@ -58,3 +58,17 @@
 3. stash 不作为长期保存形式。有价值内容转为命名分支或 patch 归档。
 4. 研究内容、生产调度和 submodule gitlink 分开提交、分开 review。
 5. 只有 main 中已合并且通过发布门禁的不可变 commit 才能进入 production。
+
+## 2026-09-13 全量分支盘点
+
+以下 clean worktree 仍有未合并提交，保留在本地供 owner 决策，不自动删除：
+
+- quant-intel-deploy：`docs/correct-v014-shadow-evidence`、`chore/pin-public-v0.1.4`、`feat/scheduler-boundaries-public`、`fix/style-factor-owner-pythonpath`、`docs/record-v014-evening-shadow`、`docs/record-v014-shadow-cycles`、`docs/record-v014-shadow-rehearsal`、`fix/watchdog-contract`。
+- quant-intel-platform：`fix/agent-rules-20260909`、`feat/weekly-basket-editorial`、`feat/delivery-idempotency-public`、`chore/public-platform-decoupling`、`docs/quant-production-parity-public`、`test/report-manifest-parity-public`。
+- quant-research：`feat/all-market-hotlist-research`、`feat/cashflow-family`、`feat/cashflow-three`、`feat/daily-feishu10-replay`、`feat/dailywatch20-backfill`、`feat/index-total-return-reconciliation`、`fix/microcap-validity`、`feat/converge-local-research-main`、`feat/daily-watch20-replay-contract`、`fix/materialized-watch20-receipt-clean`。
+- quant-market-data-platform：`fix/evening-index-refresh-existing`。
+
+其中 `quant-intel-deploy` 的 `chore/public-platform-decoupling` 和
+research-workspace 的 daily-feishu10 backtest worktree 仍是 dirty，已另有
+checkpoint，禁止整体提交。quant-research 的开放 PR 以 GitHub 当前状态为准，
+研究类内容需补齐数据版本、复现证据和 production eligibility 后再合并。
