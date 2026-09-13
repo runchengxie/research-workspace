@@ -17,5 +17,7 @@ def test_target_release_manifest_is_promoted_and_rollback_complete() -> None:
     assert payload["targets"]["quant-intel-platform"]["commit"]
     assert payload["production"]["current_switch"] is True
     assert payload["production"]["promoted_release"]
-    assert payload["production"]["previous_current"] == payload["rollback"]["legacy_workspace_commit"]
+    assert (
+        payload["production"]["previous_current"] == payload["rollback"]["legacy_workspace_commit"]
+    )
     assert payload["production"]["observation_window"]["legacy_submodules_retained"] is True
